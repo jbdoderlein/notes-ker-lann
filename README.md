@@ -50,7 +50,7 @@ Il est tout a fait possible de travailler en local, vive `./manage.py runserver`
 
 ## Cahier des Charges 
 
-Il est disponible [ici][https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC]. 
+Il est disponible [ici](https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC). 
 
 ## Documentation
 
