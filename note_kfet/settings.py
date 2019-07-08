@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # Note apps
     'adherents',
+    'note',
 ]
 
 MIDDLEWARE = [
