@@ -1,4 +1,5 @@
 Django==2.2.3
 pytz==2019.1
 sqlparse==0.3.0
+docutils==0.14
 https://gitlab.crans.org/bde/nk20/note-theme/-/jobs/artifacts/master/raw/dist/note-theme-0.1.0.tar.gz?job=build
