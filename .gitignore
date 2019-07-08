@@ -1,19 +1,38 @@
-.DS_Store
-.idea
-*.log
-tmp/
-
-*.py[cod]
-*.egg
+# Byte-compiled / optimized / DLL files
+dist
 build
-htmlcov
-**/auto/
-### Django ###
-*.log
-*.pot
-*.pyc
-__pycache__/
-settings_local.py
+__pycache__
+*.py[cod]
+*$py.class
+*.swp
+*.egg-info
+_build
+.tox
+.coverage
+coverage
 
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# PyCharm project settings
+.idea
+
+# Local data
+settings_local.py
+*.log
+
+# Virtualenv
 env/
+venv/
 db.sqlite3
