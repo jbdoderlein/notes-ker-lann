@@ -33,11 +33,11 @@ class Note(models.Model):
     An abstract model, use to add transactions capabilities to a user
     """
 
-    solde = model.IntegerField(
+    solde = models.IntegerField(
         verbose_name=_('solde du compte'),
         help_text=_("en centime, l' argent crédité pour cette instance")
     )
-    active = model.BooleanField(
+    active = models.BooleanField(
         default = True,
         verbose_name=_('etat du compte')
     )
@@ -60,7 +60,7 @@ class NoteUser(Note):
     def __str__(self):
         return self.user.get_username()
 
-    aliases = model.ForeignKey(Aliases)
+    aliases = models.ForeignKey(Aliases)
 
 
 
@@ -73,7 +73,7 @@ class NoteSpec(Note):
      - Bank Check
      - Refund
     """
-    account_type = model.CharField(
+    account_type = models.CharField(
         max_length = 2,
         choices = (("CH","chèques"),
                    ("CB","Carte Bancaire"),
