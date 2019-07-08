@@ -17,18 +17,53 @@ class Profile(models.Model):
     We do not want to patch the Django Contrib Auth User class
     so this model add an user profile with additional information.
     """
+
+    GENRES = [
+        (None, "ND"),
+        ("M", "M"),
+        ("F", "F"),
+    ]
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    phone_number = models.CharField(
+    avatar = models.ImageField(
         max_length=255,
+        blank=True,
+        verbose_name=_('profile picture')
+    )
+
+    phone_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=False,
+        default='',
         verbose_name=_('phone number'),
     )
     section = models.CharField(
         max_length=255,
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
+    )
+    genre = models.CharField(max_length=1,
+                            blank=False,
+                            null=False,
+                            choices=GENRES
+    )
+    address = models.TextField(
+        blank=True,
+        null=False,
+        default=''
+    )
+    remunere = models.BooleanField(verbose_name=_("rémunéré"),
+                                   default=False,
+    )
+    is_active = models.BooleanField(verbose_name=_("compte actif"),
+                                    default=True
+    )
+    is_deleted = models.BooleanField(verbose_name=_("compte supprimé"),
+                                     default=False
     )
 
     class Meta:
