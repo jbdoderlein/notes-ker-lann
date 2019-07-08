@@ -61,9 +61,6 @@ class NoteUser(Note):
     def __str__(self):
         return self.user.get_username()
 
-    aliases = models.ForeignKey(Aliases)
-
-
 
 class NoteSpec(Note):
     """
