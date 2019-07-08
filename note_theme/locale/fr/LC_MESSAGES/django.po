@@ -1,0 +1,104 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-30 16:26+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/admin/base_site.html:22 templates/base.html:48
+msgid "Welcome,"
+msgstr ""
+
+#: templates/admin/base_site.html:27
+msgid "View site"
+msgstr "Retour au site"
+
+#: templates/admin/base_site.html:32 templates/admin/base_site.html:51
+#: templates/base.html:52
+msgid "View admin"
+msgstr "Administration"
+
+#: templates/admin/base_site.html:44
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin/base_site.html:53 templates/base.html:56
+msgid "Log out"
+msgstr ""
+
+#: templates/base.html:62 templates/registration/login.html:9
+#: templates/registration/login.html:56
+msgid "Log in"
+msgstr ""
+
+#: templates/registration/logged_out.html:9
+#: templates/registration/password_change_done.html:9
+#: templates/registration/password_change_form.html:9
+#: templates/registration/password_reset_complete.html:9
+#: templates/registration/password_reset_confirm.html:9
+#: templates/registration/password_reset_done.html:9
+#: templates/registration/password_reset_form.html:9
+msgid "Home"
+msgstr ""
+
+#: templates/registration/login.html:14
+msgid "Please correct the error below."
+msgstr ""
+
+#: templates/registration/login.html:15
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/registration/login.html:31
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/registration/login.html:52
+msgid "Forgotten your password?"
+msgstr "Mot de passe oublié ?"
+
+#: templates/registration/password_change_done.html:9
+#: templates/registration/password_change_form.html:9
+msgid "Password change"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:9
+#: templates/registration/password_reset_done.html:9
+#: templates/registration/password_reset_form.html:9
+msgid "Password reset"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:9
+msgid "Password reset confirmation"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:9
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:11
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""

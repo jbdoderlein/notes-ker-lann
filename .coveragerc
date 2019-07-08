@@ -1,0 +1,10 @@
+[run]
+source =
+    note_kfet
+    note_theme
+    note_adherents
+omit =
+    note_theme/tests/*.py
+    note_theme/migrations/*.py
+    note_adherents/tests/*.py
+    note_adherents/migrations/*.py
