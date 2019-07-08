@@ -41,25 +41,25 @@ class Profile(models.Model):
 
 class MembershipFee(models.Model):
     """
-    TODO
+    User can become member by paying a membership fee
     """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
     )
-    date = models.CharField(
+    date = models.DateField(
         max_length=255,
-        verbose_name=_('phone number'),
+        verbose_name=_('date'),
     )
-    amount = models.CharField(
-        max_length=255,
-        verbose_name=_('section'),
-        help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
+    amount = models.DecimalField(
+        max_digits=5, # Max 999.99 €
+        decimal_places=2,
+        verbose_name=_('amount'),
     )
 
     class Meta:
-        verbose_name = _('user profile')
-        verbose_name_plural = _('user profile')
+        verbose_name = _('membership fee')
+        verbose_name_plural = _('membership fees')
 
     def __str__(self):
         return self.user.get_username()

@@ -31,7 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'note_theme',
+    # Theme overrides Django Admin templates
+    'theme',
+
+    # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',
@@ -40,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Note apps
+    'adherents',
 ]
 
 MIDDLEWARE = [
