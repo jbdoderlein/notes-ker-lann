@@ -1,4 +1,9 @@
 # NoteKfet 2020
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.txt)
+[![pipeline status](https://gitlab.crans.org/bde/nk20/badges/master/pipeline.svg)](https://gitlab.crans.org/bde/nk20/nk20/commits/master)
+[![coverage report](https://gitlab.crans.org/bde/nk20/badges/master/coverage.svg)](https://gitlab.crans.org/bde/nk20/commits/master)
+
 ## Installation sur un serveur
 
 On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout nu ou bien configuré.
