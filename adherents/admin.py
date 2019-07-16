@@ -11,7 +11,9 @@ from .models import Profile
 
 
 class ProfileInline(admin.StackedInline):
-    """Inline user profile in user admin"""
+    """
+    Inline user profile in user admin
+    """
     model = Profile
     can_delete = False
 

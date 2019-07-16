@@ -17,7 +17,6 @@ class Profile(models.Model):
     We do not want to patch the Django Contrib Auth User class
     so this model add an user profile with additional information.
     """
-
     GENRES = [
         (None, "ND"),
         ("M", "M"),
@@ -31,9 +30,8 @@ class Profile(models.Model):
     avatar = models.ImageField(
         max_length=255,
         blank=True,
-        verbose_name=_('profile picture')
+        verbose_name=_('profile picture'),
     )
-
     phone_number = models.CharField(
         max_length=50,
         blank=True,
@@ -46,24 +44,29 @@ class Profile(models.Model):
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
     )
-    genre = models.CharField(max_length=1,
-                            blank=False,
-                            null=False,
-                            choices=GENRES
+    genre = models.CharField(
+        max_length=1,
+        blank=False,
+        null=False,
+        choices=GENRES,
+        default=None,
     )
     address = models.TextField(
         blank=True,
         null=False,
-        default=''
+        default='',
     )
-    remunere = models.BooleanField(verbose_name=_("rémunéré"),
-                                   default=False,
+    paid = models.BooleanField(
+        verbose_name=_("paid"),
+        default=False,
     )
-    is_active = models.BooleanField(verbose_name=_("compte actif"),
-                                    default=True
+    is_active = models.BooleanField(
+        verbose_name=_("is active"),
+        default=True,
     )
-    is_deleted = models.BooleanField(verbose_name=_("compte supprimé"),
-                                     default=False
+    is_deleted = models.BooleanField(
+        verbose_name=_("is deleted"),
+        default=False,
     )
 
     class Meta:
@@ -87,7 +90,7 @@ class MembershipFee(models.Model):
         verbose_name=_('date'),
     )
     amount = models.DecimalField(
-        max_digits=5, # Max 999.99 €
+        max_digits=5,  # Max 999.99 €
         decimal_places=2,
         verbose_name=_('amount'),
     )
