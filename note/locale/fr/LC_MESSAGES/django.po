@@ -1,14 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-16 13:47+0200\n"
+"POT-Creation-Date: 2019-07-16 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:11 models/notes.py:34
+#: apps.py:11 models/notes.py:39
 msgid "note"
 msgstr "note"
 
@@ -41,47 +36,51 @@ msgid ""
 msgstr ""
 "Indique si la note est active. Désactiver cela plutôt que supprimer la note."
 
-#: models/notes.py:35
+#: models/notes.py:33
+msgid "display image"
+msgstr "image affichée"
+
+#: models/notes.py:40
 msgid "notes"
 msgstr "notes"
 
-#: models/notes.py:49
+#: models/notes.py:54
 msgid "one's note"
 msgstr "note d'un utilisateur"
 
-#: models/notes.py:50
+#: models/notes.py:55
 msgid "users note"
 msgstr "notes des utilisateurs"
 
-#: models/notes.py:64
+#: models/notes.py:69
 msgid "club note"
 msgstr "note d'un club"
 
-#: models/notes.py:65
+#: models/notes.py:70
 msgid "clubs notes"
 msgstr "notes des clubs"
 
-#: models/notes.py:78 models/transactions.py:31 models/transactions.py:64
+#: models/notes.py:83 models/transactions.py:31 models/transactions.py:64
 msgid "type"
 msgstr "type"
 
-#: models/notes.py:84
+#: models/notes.py:89
 msgid "special note"
 msgstr "note spéciale"
 
-#: models/notes.py:85
+#: models/notes.py:90
 msgid "special notes"
 msgstr "notes spéciales"
 
-#: models/notes.py:93 models/transactions.py:18
+#: models/notes.py:98 models/transactions.py:18
 msgid "name"
 msgstr "nom"
 
-#: models/notes.py:103
+#: models/notes.py:108
 msgid "alias"
 msgstr "alias"
 
-#: models/notes.py:104
+#: models/notes.py:109
 msgid "aliases"
 msgstr "alias"
 

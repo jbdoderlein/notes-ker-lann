@@ -29,6 +29,11 @@ class Note(models.Model):
             'Unselect this instead of deleting notes.'
         ),
     )
+    display_image = models.ImageField(
+        verbose_name=_('display image'),
+        max_length=255,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = _("note")
