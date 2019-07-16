@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-16 12:42+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps.py:11
+msgid "note"
+msgstr "note"
+
+#: models/notes.py:19
+msgid "account balance"
+msgstr "solde du compte"
+
+#: models/notes.py:20
+msgid "in centimes, money credited for this instance"
+msgstr "en centimes, argent crédité pour cette instance"
+
+#: models/notes.py:23
+msgid "active"
+msgstr "actif"
+
+#: models/notes.py:26
+msgid ""
+"Designates whether this note should be treated as active. Unselect this "
+"instead of deleting notes."
+msgstr ""
+"Indique si la note est active. Désactiver cela plutôt que supprimer la note."
+
+#: models/notes.py:43
+msgid "one's note"
+msgstr "note d'un utilisateur"
+
+#: models/notes.py:44
+msgid "users note"
+msgstr "notes des utilisateurs"
+
+#: models/notes.py:58
+msgid "club note"
+msgstr "note d'un club"
+
+#: models/notes.py:59
+msgid "clubs notes"
+msgstr "notes des clubs"
+
+#: models/notes.py:72 models/transactions.py:31 models/transactions.py:60
+msgid "type"
+msgstr "type"
+
+#: models/notes.py:83 models/transactions.py:18
+msgid "name"
+msgstr "nom"
+
+#: models/transactions.py:25 models/transactions.py:47
+#: models/transactions.py:50
+msgid "destination"
+msgstr "destination"
+
+#: models/transactions.py:28 models/transactions.py:57
+msgid "amount"
+msgstr "montant"
+
+#: models/transactions.py:41
+msgid "source"
+msgstr "source"
+
+#: models/transactions.py:54
+msgid "quantity"
+msgstr "quantité"
+
+#: models/transactions.py:64
+msgid "description"
+msgstr "description"
+
+#: models/transactions.py:67
+msgid "valid"
+msgstr "valide"

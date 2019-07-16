@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'guardian',
 
     # Note apps
-    'adherents',
+    'activity',
+    'member',
     'note',
 ]
 

@@ -1,0 +1,54 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-16 12:37+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps.py:11
+msgid "activity"
+msgstr "activité"
+
+#: models.py:12 models.py:25
+msgid "name"
+msgstr "nom"
+
+#: models.py:16
+msgid "can invite"
+msgstr "peut inviter"
+
+#: models.py:19
+msgid "guest entry fee"
+msgstr "cotisation de l'entrée invité"
+
+#: models.py:29
+msgid "description"
+msgstr "description"
+
+#: models.py:35
+msgid "type"
+msgstr "type"
+
+#: models.py:41
+msgid "organizer"
+msgstr "organisateur"
+
+#: models.py:47
+msgid "attendees club"
+msgstr ""
+
+#: models.py:50
+msgid "start date"
+msgstr "date de début"
+
+#: models.py:53
+msgid "end date"
+msgstr "date de fin"
