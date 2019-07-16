@@ -15,7 +15,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/',
-        RedirectView.as_view(pattern_name='index')),
+         RedirectView.as_view(pattern_name='index')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
 ]

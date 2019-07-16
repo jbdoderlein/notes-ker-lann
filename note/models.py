@@ -17,71 +17,73 @@ class Alias(models.Model):
     """
     alias = models.TextField(
         "alias",
-        unique = True,
-        blank = False,
-        null = False,
+        unique=True,
+        blank=False,
+        null=False,
     )
-    limit = models.Q(app_label="note", model="NoteUser") | models.Q(app_label="note",model="NoteClub")
 
+    # Owner can be linked to an user note or a club note
+    limit = models.Q(app_label="note", model="NoteUser") | models.Q(app_label="note", model="NoteClub")
     owner_id = models.PositiveIntegerField()
-    owner_type = models.ForeignKey(ContentType,
-                                   on_delete=models.CASCADE,
-                                   limit_choices_to=limit)
-    owner = GenericForeignKey('owner_type','owner_id')
+    owner_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        limit_choices_to=limit
+    )
+    owner = GenericForeignKey('owner_type', 'owner_id')
+
 
 class Note(models.Model):
     """
     An abstract model, use to add transactions capabilities to a user
     """
-
-    solde = models.IntegerField(
-        verbose_name=_('solde du compte'),
-        help_text=_("en centime, l' argent crédité pour cette instance")
+    balance = models.DecimalField(
+        verbose_name=_('account balance'),
+        help_text=_("money credited for this instance"),
+        decimal_places=2,  # Limit to centimes
+        max_digits=8,  # Limit to 999999,99€
+        default=0,
     )
-    active = models.BooleanField(
-        default = True,
-        verbose_name=_('etat du compte')
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('is active')
     )
 
     class Meta:
         abstract = True
 
+
 class NoteUser(Note):
     """
-    A Note associated to a User
+    A Note associated to an User
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    class Meta:
-        verbose_name = _("One's Note")
-        verbose_name_plural = _("Users Note")
 
-    def __str__(self):
-        return self.user.get_username()
+    class Meta:
+        verbose_name = _("one's note")
+        verbose_name_plural = _("users note")
 
 
 class NoteSpec(Note):
     """
-    A Note for special Account, where real money enter or leave the system.
-     - Cash
-     - Credit Card
-     - Bank Transfert
-     - Bank Check
-     - Refund
+    A Note for special account, where real money enter or leave the system
     """
     account_type = models.CharField(
-        max_length = 2,
-        choices = (("CH","chèques"),
-                   ("CB","Carte Bancaire"),
-                   ("VB","Virement Bancaire"),
-                   ("CA","Cash"),
-                   ("RB","Remboursement")
+        max_length=2,
+        choices=(
+            ("CH", _("bank check")),
+            ("CB", _("credit card")),
+            ("VB", _("bank transfer")),
+            ("CA", _("cash")),
+            ("RB", _("refund")),
         ),
-        unique = True
+        unique=True,
     )
 
+
 class NoteClub(Note):
-    #to be added
+    # to be added
     pass

@@ -17,7 +17,6 @@ class Profile(models.Model):
     We do not want to patch the Django Contrib Auth User class
     so this model add an user profile with additional information.
     """
-
     GENRES = [
         (None, "ND"),
         ("M", "M"),
@@ -31,13 +30,12 @@ class Profile(models.Model):
     avatar = models.ImageField(
         max_length=255,
         blank=True,
-        verbose_name=_('profile picture')
+        verbose_name=_('profile picture'),
     )
-
     phone_number = models.CharField(
         max_length=50,
         blank=True,
-        null=False,
+        null=True,
         default='',
         verbose_name=_('phone number'),
     )
@@ -46,32 +44,32 @@ class Profile(models.Model):
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
     )
-    genre = models.CharField(max_length=1,
-                            blank=False,
-                            null=False,
-                            choices=GENRES
+    genre = models.CharField(
+        max_length=1,
+        blank=True,
+        null=True,
+        choices=GENRES,
     )
     address = models.TextField(
         blank=True,
-        null=False,
-        default=''
+        null=True,
     )
-    remunere = models.BooleanField(verbose_name=_("rémunéré"),
-                                   default=False,
+    paid = models.BooleanField(
+        verbose_name=_("paid"),
+        default=False,
     )
-    is_active = models.BooleanField(verbose_name=_("compte actif"),
-                                    default=True
+    is_active = models.BooleanField(
+        verbose_name=_("is active"),
+        default=True,
     )
-    is_deleted = models.BooleanField(verbose_name=_("compte supprimé"),
-                                     default=False
+    is_deleted = models.BooleanField(
+        verbose_name=_("is deleted"),
+        default=False,
     )
 
     class Meta:
         verbose_name = _('user profile')
         verbose_name_plural = _('user profile')
-
-    def __str__(self):
-        return self.user.get_username()
 
 
 class MembershipFee(models.Model):
@@ -87,7 +85,7 @@ class MembershipFee(models.Model):
         verbose_name=_('date'),
     )
     amount = models.DecimalField(
-        max_digits=5, # Max 999.99 €
+        max_digits=5,  # Max 999.99 €
         decimal_places=2,
         verbose_name=_('amount'),
     )
@@ -96,12 +94,9 @@ class MembershipFee(models.Model):
         verbose_name = _('membership fee')
         verbose_name_plural = _('membership fees')
 
-    def __str__(self):
-        return self.user.get_username()
-
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, created, **_kwargs):
+def save_user_profile(instance, created, **_kwargs):
     """
     Hook to save an user profile when an user is updated
     """

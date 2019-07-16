@@ -1,10 +1,11 @@
 [run]
 source =
-    note_kfet
-    note_theme
-    note_adherents
+    adherents
+    note
+    theme
 omit =
-    note_theme/tests/*.py
-    note_theme/migrations/*.py
-    note_adherents/tests/*.py
-    note_adherents/migrations/*.py
+    adherents/tests/*.py
+    adherents/migrations/*.py
+    note/tests/*.py
+    note/migrations/*.py
+    theme/tests/*.py
