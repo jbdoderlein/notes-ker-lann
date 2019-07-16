@@ -17,46 +17,52 @@ class Alias(models.Model):
     """
     alias = models.TextField(
         "alias",
-        unique = True,
-        blank = False,
-        null = False,
+        unique=True,
+        blank=False,
+        null=False,
     )
-    limit = models.Q(app_label="note", model="NoteUser") | models.Q(app_label="note",model="NoteClub")
 
+    # Owner can be linked to an user note or a club note
+    limit = models.Q(app_label="note", model="NoteUser") | models.Q(app_label="note", model="NoteClub")
     owner_id = models.PositiveIntegerField()
-    owner_type = models.ForeignKey(ContentType,
-                                   on_delete=models.CASCADE,
-                                   limit_choices_to=limit)
-    owner = GenericForeignKey('owner_type','owner_id')
+    owner_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        limit_choices_to=limit
+    )
+    owner = GenericForeignKey('owner_type', 'owner_id')
+
 
 class Note(models.Model):
     """
     An abstract model, use to add transactions capabilities to a user
     """
-
-    solde = models.IntegerField(
-        verbose_name=_('solde du compte'),
-        help_text=_("en centime, l' argent crédité pour cette instance")
+    balance = models.DecimalField(
+        verbose_name=_('account balance'),
+        help_text=_("money credited for this instance"),
+        decimal_places=2,  # Limit to centimes
     )
-    active = models.BooleanField(
-        default = True,
-        verbose_name=_('etat du compte')
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('is active')
     )
 
     class Meta:
         abstract = True
 
+
 class NoteUser(Note):
     """
-    A Note associated to a User
+    A Note associated to an User
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
     class Meta:
-        verbose_name = _("One's Note")
-        verbose_name_plural = _("Users Note")
+        verbose_name = _("one's note")
+        verbose_name_plural = _("users note")
 
     def __str__(self):
         return self.user.get_username()
@@ -72,16 +78,18 @@ class NoteSpec(Note):
      - Refund
     """
     account_type = models.CharField(
-        max_length = 2,
-        choices = (("CH","chèques"),
-                   ("CB","Carte Bancaire"),
-                   ("VB","Virement Bancaire"),
-                   ("CA","Cash"),
-                   ("RB","Remboursement")
+        max_length=2,
+        choices=(
+            ("CH", "chèques"),
+            ("CB", "Carte Bancaire"),
+            ("VB", "Virement Bancaire"),
+            ("CA", "Cash"),
+            ("RB", "Remboursement")
         ),
-        unique = True
+        unique=True,
     )
 
+
 class NoteClub(Note):
-    #to be added
+    # to be added
     pass
