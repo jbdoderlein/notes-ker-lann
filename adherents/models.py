@@ -35,7 +35,7 @@ class Profile(models.Model):
     phone_number = models.CharField(
         max_length=50,
         blank=True,
-        null=False,
+        null=True,
         default='',
         verbose_name=_('phone number'),
     )
@@ -46,15 +46,13 @@ class Profile(models.Model):
     )
     genre = models.CharField(
         max_length=1,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         choices=GENRES,
-        default=None,
     )
     address = models.TextField(
         blank=True,
-        null=False,
-        default='',
+        null=True,
     )
     paid = models.BooleanField(
         verbose_name=_("paid"),
@@ -72,9 +70,6 @@ class Profile(models.Model):
     class Meta:
         verbose_name = _('user profile')
         verbose_name_plural = _('user profile')
-
-    def __str__(self):
-        return self.user.get_username()
 
 
 class MembershipFee(models.Model):
@@ -99,12 +94,9 @@ class MembershipFee(models.Model):
         verbose_name = _('membership fee')
         verbose_name_plural = _('membership fees')
 
-    def __str__(self):
-        return self.user.get_username()
-
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, created, **_kwargs):
+def save_user_profile(instance, created, **_kwargs):
     """
     Hook to save an user profile when an user is updated
     """
