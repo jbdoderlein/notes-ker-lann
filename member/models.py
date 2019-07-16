@@ -59,8 +59,9 @@ class Club(models.Model):
     A student club
     """
     name = models.CharField(
-        verbose_name=_('paid'),
+        verbose_name=_('name'),
         max_length=255,
+        unique=True,
     )
     email = models.EmailField(
         verbose_name=_('email'),
@@ -94,6 +95,9 @@ class Club(models.Model):
         verbose_name = _("club")
         verbose_name_plural = _("clubs")
 
+    def __str__(self):
+        return self.name
+
 
 class Role(models.Model):
     """
@@ -102,6 +106,7 @@ class Role(models.Model):
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
+        unique=True,
     )
 
     class Meta:

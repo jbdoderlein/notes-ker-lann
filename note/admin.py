@@ -17,6 +17,8 @@ class NoteClubAdmin(admin.ModelAdmin):
     """
     inlines = (AliasInlines,)
     list_display = ('club', 'balance', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ['club__name']
 
 
 class NoteSpecialAdmin(admin.ModelAdmin):
@@ -32,9 +34,12 @@ class NoteUserAdmin(admin.ModelAdmin):
     """
     inlines = (AliasInlines,)
     list_display = ('user', 'balance', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ['user__username']
 
     # Organize note by registration date
     date_hierarchy = 'user__date_joined'
+    ordering = ['-user__date_joined']
 
 
 # Register your models here.

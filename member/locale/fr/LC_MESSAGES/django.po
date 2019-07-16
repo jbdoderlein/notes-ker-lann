@@ -56,7 +56,7 @@ msgstr "courriel"
 
 #: models.py:70
 msgid "membership fee"
-msgstr "cotisation"
+msgstr "cotisation pour adhérer"
 
 #: models.py:74
 msgid "membership duration"
