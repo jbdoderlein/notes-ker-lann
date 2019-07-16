@@ -41,6 +41,8 @@ class Note(models.Model):
         verbose_name=_('account balance'),
         help_text=_("money credited for this instance"),
         decimal_places=2,  # Limit to centimes
+        max_digits=8,  # Limit to 999999,99€
+        default=0,
     )
     is_active = models.BooleanField(
         default=True,
@@ -64,27 +66,19 @@ class NoteUser(Note):
         verbose_name = _("one's note")
         verbose_name_plural = _("users note")
 
-    def __str__(self):
-        return self.user.get_username()
-
 
 class NoteSpec(Note):
     """
-    A Note for special Account, where real money enter or leave the system.
-     - Cash
-     - Credit Card
-     - Bank Transfert
-     - Bank Check
-     - Refund
+    A Note for special account, where real money enter or leave the system
     """
     account_type = models.CharField(
         max_length=2,
         choices=(
-            ("CH", "chèques"),
-            ("CB", "Carte Bancaire"),
-            ("VB", "Virement Bancaire"),
-            ("CA", "Cash"),
-            ("RB", "Remboursement")
+            ("CH", _("bank check")),
+            ("CB", _("credit card")),
+            ("VB", _("bank transfer")),
+            ("CA", _("cash")),
+            ("RB", _("refund")),
         ),
         unique=True,
     )
