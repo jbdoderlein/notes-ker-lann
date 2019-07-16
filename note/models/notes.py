@@ -13,7 +13,9 @@ Defines each note types
 
 class Note(models.Model):
     """
-    An abstract model, use to add transactions capabilities to a user
+    An model, use to add transactions capabilities
+
+    We do not use an abstract model to simplify the transfer between two notes.
     """
     balance = models.IntegerField(
         verbose_name=_('account balance'),
@@ -27,6 +29,10 @@ class Note(models.Model):
             'Unselect this instead of deleting notes.'
         ),
     )
+
+    class Meta:
+        verbose_name = _("note")
+        verbose_name_plural = _("notes")
 
 
 class NoteUser(Note):
@@ -74,6 +80,10 @@ class NoteSpecial(Note):
         unique=True,
     )
 
+    class Meta:
+        verbose_name = _("special note")
+        verbose_name_plural = _("special notes")
+
 
 class Alias(models.Model):
     """
@@ -88,3 +98,7 @@ class Alias(models.Model):
         Note,
         on_delete=models.PROTECT,
     )
+
+    class Meta:
+        verbose_name = _("alias")
+        verbose_name_plural = _("aliases")

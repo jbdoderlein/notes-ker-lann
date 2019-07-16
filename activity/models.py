@@ -19,6 +19,10 @@ class ActivityType(models.Model):
         verbose_name=_('guest entry fee'),
     )
 
+    class Meta:
+        verbose_name = _("activity type")
+        verbose_name_plural = _("activity types")
+
 
 class Activity(models.Model):
     name = models.CharField(
@@ -53,6 +57,10 @@ class Activity(models.Model):
         verbose_name=_('end date'),
     )
 
+    class Meta:
+        verbose_name = _("activity")
+        verbose_name_plural = _("activities")
+
 
 class Guest(models.Model):
     activity = models.ForeignKey(
@@ -75,3 +83,7 @@ class Guest(models.Model):
         'note.Transaction',
         on_delete=models.PROTECT,
     )
+
+    class Meta:
+        verbose_name = _("guest")
+        verbose_name_plural = _("guests")

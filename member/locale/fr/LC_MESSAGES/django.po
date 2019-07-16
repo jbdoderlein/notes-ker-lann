@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-16 12:37+0200\n"
+"POT-Creation-Date: 2019-07-16 13:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,54 +66,60 @@ msgstr "durée de l'adhésion"
 msgid "The longest time a membership can last (NULL = infinite)."
 msgstr "La durée maximale d'une adhésion (NULL = infinie)."
 
-#: models.py:79
+#: models.py:80
 msgid "membership start"
 msgstr "début de l'adhésion"
 
-#: models.py:80
+#: models.py:81
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 
-#: models.py:84
+#: models.py:86
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
-#: models.py:85
+#: models.py:87
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
 
-#: models.py:95
+#: models.py:93
+msgid "club"
+msgstr "club"
+
+#: models.py:94
+msgid "clubs"
+msgstr "clubs"
+
+#: models.py:102
 msgid "name"
 msgstr "nom"
 
-#: models.py:100
+#: models.py:107
 msgid "role"
 msgstr "rôle"
 
-#: models.py:101
+#: models.py:108
 msgid "roles"
 msgstr "rôles"
 
-#: models.py:118
+#: models.py:125
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: models.py:121
-#, fuzzy
-#| msgid "membership fees"
+#: models.py:128
 msgid "membership ends on"
 msgstr "l'adhésion finie le"
 
-#: models.py:125
+#: models.py:132
 msgid "fee"
 msgstr "cotisation"
 
-#: models.py:129
+#: models.py:136
 msgid "membership"
 msgstr "adhésion"
 
-#: models.py:130
+#: models.py:137
 msgid "memberships"
 msgstr "adhésions"

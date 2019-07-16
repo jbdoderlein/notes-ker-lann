@@ -89,6 +89,10 @@ class Club(models.Model):
                     'membership.'),
     )
 
+    class Meta:
+        verbose_name = _("club")
+        verbose_name_plural = _("clubs")
+
 
 class Role(models.Model):
     """

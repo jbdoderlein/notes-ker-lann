@@ -32,6 +32,10 @@ class TransactionTemplate(models.Model):
         max_length=31
     )
 
+    class Meta:
+        verbose_name = _("transaction template")
+        verbose_name_plural = _("transaction templates")
+
 
 class Transaction(models.Model):
     source = models.ForeignKey(
@@ -67,6 +71,10 @@ class Transaction(models.Model):
         verbose_name=_('valid'),
     )
 
+    class Meta:
+        verbose_name = _("transaction")
+        verbose_name_plural = _("transactions")
+
 
 class MembershipTransaction(Transaction):
     membership = models.OneToOneField(
@@ -74,3 +82,7 @@ class MembershipTransaction(Transaction):
         on_delete=models.PROTECT,
         related_name='transaction',
     )
+
+    class Meta:
+        verbose_name = _("membership transaction")
+        verbose_name_plural = _("membership transactions")

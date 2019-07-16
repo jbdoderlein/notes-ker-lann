@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-16 12:37+0200\n"
+"POT-Creation-Date: 2019-07-16 13:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,11 +13,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:11
+#: apps.py:11 models.py:61
 msgid "activity"
 msgstr "activité"
 
-#: models.py:12 models.py:25
+#: models.py:12 models.py:29
 msgid "name"
 msgstr "nom"
 
@@ -29,26 +29,46 @@ msgstr "peut inviter"
 msgid "guest entry fee"
 msgstr "cotisation de l'entrée invité"
 
-#: models.py:29
+#: models.py:23
+msgid "activity type"
+msgstr "type d'activité"
+
+#: models.py:24
+msgid "activity types"
+msgstr "types d'activité"
+
+#: models.py:33
 msgid "description"
 msgstr "description"
 
-#: models.py:35
+#: models.py:39
 msgid "type"
 msgstr "type"
 
-#: models.py:41
+#: models.py:45
 msgid "organizer"
 msgstr "organisateur"
 
-#: models.py:47
+#: models.py:51
 msgid "attendees club"
 msgstr ""
 
-#: models.py:50
+#: models.py:54
 msgid "start date"
 msgstr "date de début"
 
-#: models.py:53
+#: models.py:57
 msgid "end date"
 msgstr "date de fin"
+
+#: models.py:62
+msgid "activities"
+msgstr "activités"
+
+#: models.py:88
+msgid "guest"
+msgstr "invité"
+
+#: models.py:89
+msgid "guests"
+msgstr "invités"
