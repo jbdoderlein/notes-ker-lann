@@ -30,12 +30,13 @@ class Profile(models.Model):
         max_length=50,
         blank=True,
         null=True,
-        default='',
     )
     section = models.CharField(
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
         max_length=255,
+        blank=True,
+        null=True,
     )
     address = models.CharField(
         verbose_name=_('address'),
