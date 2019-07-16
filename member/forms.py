@@ -10,6 +10,7 @@ class CustomUserChangeForm(UserChangeForm):
     Make first name, last name and email required
     in the default Django Auth User model
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].required = True

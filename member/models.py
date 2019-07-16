@@ -72,18 +72,21 @@ class Club(models.Model):
     membership_duration = models.DurationField(
         null=True,
         verbose_name=_('membership duration'),
-        help_text=_('The longest time a membership can last (NULL = infinite).'),
+        help_text=_('The longest time a membership can last '
+                    '(NULL = infinite).'),
     )
     membership_start = models.DurationField(
         null=True,
         verbose_name=_('membership start'),
-        help_text=_('How long after January 1st the members can renew their membership.'),
+        help_text=_('How long after January 1st the members can renew '
+                    'their membership.'),
     )
     membership_end = models.DurationField(
         null=True,
         verbose_name=_('membership end'),
-        help_text=_('How long the membership can last after January 1st of the next year '
-                    'after members can renew their membership.'),
+        help_text=_('How long the membership can last after January 1st '
+                    'of the next year after members can renew their '
+                    'membership.'),
     )
 
 
