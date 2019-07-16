@@ -20,11 +20,6 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    profile_picture = models.ImageField(
-        verbose_name=_('profile picture'),
-        max_length=255,
-        blank=True,
-    )
     phone_number = models.CharField(
         verbose_name=_('phone number'),
         max_length=50,
