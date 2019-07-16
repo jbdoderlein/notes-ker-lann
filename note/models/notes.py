@@ -54,7 +54,7 @@ class NoteClub(Note):
     """
     A Note associated to a Club
     """
-    user = models.OneToOneField(
+    club = models.OneToOneField(
         'member.Club',
         on_delete=models.PROTECT,
         related_name='note',

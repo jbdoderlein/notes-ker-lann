@@ -71,7 +71,7 @@ msgstr "note spéciale"
 
 #: models/notes.py:85
 msgid "special notes"
-msgstr "notes spéciale"
+msgstr "notes spéciales"
 
 #: models/notes.py:93 models/transactions.py:18
 msgid "name"
