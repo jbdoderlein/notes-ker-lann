@@ -1,6 +1,12 @@
+# -*- mode: python; coding: utf-8 -*-
+# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.contrib import admin
 
 from .models.notes import Alias, NoteClub, NoteSpecial, NoteUser
+from .models.transactions import MembershipTransaction, Transaction, \
+    TransactionTemplate
 
 
 class AliasInlines(admin.TabularInline):
@@ -42,7 +48,18 @@ class NoteUserAdmin(admin.ModelAdmin):
     ordering = ['-user__date_joined']
 
 
+class TransactionTemplateAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for TransactionTemplate
+    """
+    list_display = ('name', 'destination', 'amount', 'template_type')
+    list_filter = ('destination', 'template_type',)
+
+
 # Register your models here.
 admin.site.register(NoteClub, NoteClubAdmin)
 admin.site.register(NoteSpecial, NoteSpecialAdmin)
 admin.site.register(NoteUser, NoteUserAdmin)
+admin.site.register(MembershipTransaction)
+admin.site.register(Transaction)
+admin.site.register(TransactionTemplate, TransactionTemplateAdmin)

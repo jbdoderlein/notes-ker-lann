@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from .forms import CustomUserChangeForm
-from .models import Profile, Club
+from .models import Club, Profile
 
 
 class ProfileInline(admin.StackedInline):
