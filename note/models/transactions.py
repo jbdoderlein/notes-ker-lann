@@ -51,8 +51,8 @@ class Transaction(models.Model):
         related_name='+',
         verbose_name=_('destination'),
     )
-    datetime = models.DateTimeField(
-        verbose_name=_('destination'),
+    created_at = models.DateTimeField(
+        verbose_name=_('created at'),
         default=timezone.now,
     )
     quantity = models.PositiveSmallIntegerField(
