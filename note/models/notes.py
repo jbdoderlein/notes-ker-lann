@@ -4,6 +4,8 @@
 
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 """
@@ -20,6 +22,7 @@ class Note(models.Model):
     balance = models.IntegerField(
         verbose_name=_('account balance'),
         help_text=_('in centimes, money credited for this instance'),
+        default=0,
     )
     is_active = models.BooleanField(
         _('active'),
@@ -107,3 +110,23 @@ class Alias(models.Model):
     class Meta:
         verbose_name = _("alias")
         verbose_name_plural = _("aliases")
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def save_user_note(instance, created, **_kwargs):
+    """
+    Hook to create and save a note when an user is updated
+    """
+    if created:
+        NoteUser.objects.create(user=instance)
+    instance.note.save()
+
+
+@receiver(post_save, sender='member.Club')
+def save_club_note(instance, created, **_kwargs):
+    """
+    Hook to create and save a note when a club is updated
+    """
+    if created:
+        NoteClub.objects.create(club=instance)
+    instance.note.save()
