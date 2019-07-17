@@ -32,6 +32,11 @@ INSTALLED_APPS = [
     # Theme overrides Django Admin templates
     'theme',
 
+    # External apps
+    'polymorphic',
+    'guardian',
+    'reversion',
+
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -41,10 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # External apps
-    'guardian',
-    'reversion',
 
     # Note apps
     'activity',
@@ -119,6 +120,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
 )
+
+GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

@@ -7,17 +7,16 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+from polymorphic.models import PolymorphicModel
 
 """
 Defines each note types
 """
 
 
-class Note(models.Model):
+class Note(PolymorphicModel):
     """
     An model, use to add transactions capabilities
-
-    We do not use an abstract model to simplify the transfer between two notes.
     """
     balance = models.IntegerField(
         verbose_name=_('account balance'),
@@ -56,6 +55,9 @@ class NoteUser(Note):
     class Meta:
         verbose_name = _("one's note")
         verbose_name_plural = _("users note")
+
+    def __str__(self):
+        return _("%(user)s's note") % {'user': str(self.user)}
 
 
 class NoteClub(Note):

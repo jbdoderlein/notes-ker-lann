@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from .models.notes import Alias, NoteClub, NoteSpecial, NoteUser
+from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
 from .models.transactions import MembershipTransaction, Transaction, \
     TransactionTemplate
 
@@ -26,8 +26,8 @@ class NoteClubAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
     search_fields = ['club__name']
 
-    # We can't change club after creation
-    readonly_fields = ('club',)
+    # We can't change club after creation or the balance
+    readonly_fields = ('club', 'balance')
 
     def has_add_permission(self, request):
         """
@@ -62,8 +62,8 @@ class NoteUserAdmin(admin.ModelAdmin):
     date_hierarchy = 'user__date_joined'
     ordering = ['-user__date_joined']
 
-    # We can't change user after creation
-    readonly_fields = ('user',)
+    # We can't change user after creation or the balance
+    readonly_fields = ('user', 'balance')
 
     def has_add_permission(self, request):
         """
