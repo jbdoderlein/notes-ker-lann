@@ -8,8 +8,7 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
-from .models.transactions import MembershipTransaction, Transaction, \
-    TransactionTemplate
+from .models.transactions import Transaction, TransactionTemplate
 
 
 class AliasInlines(admin.TabularInline):

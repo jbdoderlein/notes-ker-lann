@@ -8,5 +8,5 @@ from . import views
 
 app_name = 'note'
 urlpatterns = [
-    path('transfer/', views.transfer, name='transfer'),
+    path('transfer/', views.TransactionCreate.as_view(), name='transfer'),
 ]

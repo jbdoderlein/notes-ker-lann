@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-17 13:32+0200\n"
+"POT-Creation-Date: 2019-07-17 13:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,11 +13,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: admin.py:113 models/transactions.py:46
+#: admin.py:112 models/transactions.py:46
 msgid "source"
 msgstr "source"
 
-#: admin.py:121 admin.py:139 models/transactions.py:25
+#: admin.py:120 admin.py:138 models/transactions.py:25
 #: models/transactions.py:52
 msgid "destination"
 msgstr "destination"
@@ -136,33 +136,37 @@ msgid "quantity"
 msgstr "quantité"
 
 #: models/transactions.py:69
-msgid "description"
-msgstr "description"
+msgid "reason"
+msgstr "raison"
 
-#: models/transactions.py:72
+#: models/transactions.py:73
 msgid "valid"
 msgstr "valide"
 
-#: models/transactions.py:76
+#: models/transactions.py:77
 msgid "transaction"
 msgstr "transaction"
 
-#: models/transactions.py:77
+#: models/transactions.py:78
 msgid "transactions"
 msgstr "transactions"
 
-#: models/transactions.py:88
+#: models/transactions.py:89
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
-#: models/transactions.py:89
+#: models/transactions.py:90
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
-#: templates/note/transfer.html:7
+#: templates/note/transaction_form.html:10
 msgid "Home"
 msgstr "Accueil"
 
-#: views.py:21
+#: templates/note/transaction_form.html:53
+msgid "Transfer"
+msgstr "Virement"
+
+#: views.py:26
 msgid "Transfer money from your account to one or others"
 msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"

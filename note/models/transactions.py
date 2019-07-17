@@ -65,8 +65,9 @@ class Transaction(models.Model):
         verbose_name=_('type'),
         max_length=31,
     )
-    description = models.TextField(
-        verbose_name=_('description'),
+    reason = models.CharField(
+        verbose_name=_('reason'),
+        max_length=255,
     )
     valid = models.NullBooleanField(
         verbose_name=_('valid'),
