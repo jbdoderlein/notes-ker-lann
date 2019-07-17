@@ -135,6 +135,11 @@ input[type=button]:focus, .button:hover, input[type=submit]:hover, input[type=bu
     text-align: center !important;
 }
 
+/* Background on login page */
+body.login {
+    background: #f8f8f8 url("../images/login_bg.svg") no-repeat center top !important;
+}
+
 /* Dashboard should take all page */
 .dashboard #content {
     width: auto;

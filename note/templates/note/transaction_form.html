@@ -13,7 +13,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% endblock %}
 
 {% block extrahead %}{{ block.super }}
-    {# Load Django Admin datetime widget #}
+    {# Load Django Admin widgets #}
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
     <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
     {{ form.media }}
