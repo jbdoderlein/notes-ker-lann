@@ -1,0 +1,134 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-16 15:21+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps.py:11 models/notes.py:39
+msgid "note"
+msgstr "note"
+
+#: models/notes.py:21
+msgid "account balance"
+msgstr "solde du compte"
+
+#: models/notes.py:22
+msgid "in centimes, money credited for this instance"
+msgstr "en centimes, argent crédité pour cette instance"
+
+#: models/notes.py:25
+msgid "active"
+msgstr "actif"
+
+#: models/notes.py:28
+msgid ""
+"Designates whether this note should be treated as active. Unselect this "
+"instead of deleting notes."
+msgstr ""
+"Indique si la note est active. Désactiver cela plutôt que supprimer la note."
+
+#: models/notes.py:33
+msgid "display image"
+msgstr "image affichée"
+
+#: models/notes.py:40
+msgid "notes"
+msgstr "notes"
+
+#: models/notes.py:54
+msgid "one's note"
+msgstr "note d'un utilisateur"
+
+#: models/notes.py:55
+msgid "users note"
+msgstr "notes des utilisateurs"
+
+#: models/notes.py:69
+msgid "club note"
+msgstr "note d'un club"
+
+#: models/notes.py:70
+msgid "clubs notes"
+msgstr "notes des clubs"
+
+#: models/notes.py:83 models/transactions.py:31 models/transactions.py:64
+msgid "type"
+msgstr "type"
+
+#: models/notes.py:89
+msgid "special note"
+msgstr "note spéciale"
+
+#: models/notes.py:90
+msgid "special notes"
+msgstr "notes spéciales"
+
+#: models/notes.py:98 models/transactions.py:18
+msgid "name"
+msgstr "nom"
+
+#: models/notes.py:108
+msgid "alias"
+msgstr "alias"
+
+#: models/notes.py:109
+msgid "aliases"
+msgstr "alias"
+
+#: models/transactions.py:25 models/transactions.py:51
+#: models/transactions.py:54
+msgid "destination"
+msgstr "destination"
+
+#: models/transactions.py:28 models/transactions.py:61
+msgid "amount"
+msgstr "montant"
+
+#: models/transactions.py:36
+msgid "transaction template"
+msgstr "modèle de transaction"
+
+#: models/transactions.py:37
+msgid "transaction templates"
+msgstr "modèles de transaction"
+
+#: models/transactions.py:45
+msgid "source"
+msgstr "source"
+
+#: models/transactions.py:58
+msgid "quantity"
+msgstr "quantité"
+
+#: models/transactions.py:68
+msgid "description"
+msgstr "description"
+
+#: models/transactions.py:71
+msgid "valid"
+msgstr "valide"
+
+#: models/transactions.py:75
+msgid "transaction"
+msgstr "transaction"
+
+#: models/transactions.py:76
+msgid "transactions"
+msgstr "transactions"
+
+#: models/transactions.py:87
+msgid "membership transaction"
+msgstr "transaction d'adhésion"
+
+#: models/transactions.py:88
+msgid "membership transactions"
+msgstr "transactions d'adhésion"

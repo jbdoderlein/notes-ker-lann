@@ -1,11 +1,14 @@
 [run]
 source =
-    adherents
+    activity
+    member
     note
     theme
 omit =
-    adherents/tests/*.py
-    adherents/migrations/*.py
+    activity/tests/*.py
+    activity/migrations/*.py
+    member/tests/*.py
+    member/migrations/*.py
     note/tests/*.py
     note/migrations/*.py
     theme/tests/*.py

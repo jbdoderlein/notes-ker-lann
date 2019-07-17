@@ -44,9 +44,11 @@ INSTALLED_APPS = [
 
     # External apps
     'guardian',
+    'reversion',
 
     # Note apps
-    'adherents',
+    'activity',
+    'member',
     'note',
 ]
 

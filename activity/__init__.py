@@ -2,4 +2,4 @@
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-default_app_config = 'adherents.apps.AdherentsConfig'
+default_app_config = 'activity.apps.ActivityConfig'
