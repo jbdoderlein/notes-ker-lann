@@ -125,6 +125,9 @@ class Alias(models.Model):
         verbose_name = _("alias")
         verbose_name_plural = _("aliases")
 
+    def __str__(self):
+        return self.name
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_note(instance, created, **_kwargs):
