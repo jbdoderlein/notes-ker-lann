@@ -36,6 +36,10 @@ class Note(PolymorphicModel):
         max_length=255,
         blank=True,
     )
+    created_at = models.DateTimeField(
+        verbose_name=_('created at'),
+        auto_now_add=True,
+    )
 
     class Meta:
         verbose_name = _("note")
@@ -50,6 +54,7 @@ class NoteUser(Note):
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name='note',
+        verbose_name=_('user'),
     )
 
     class Meta:
@@ -68,11 +73,15 @@ class NoteClub(Note):
         'member.Club',
         on_delete=models.PROTECT,
         related_name='note',
+        verbose_name=_('club'),
     )
 
     class Meta:
         verbose_name = _("club note")
         verbose_name_plural = _("clubs notes")
+
+    def __str__(self):
+        return _("Note for %(club)s club") % {'club': str(self.club)}
 
 
 class NoteSpecial(Note):
@@ -93,6 +102,9 @@ class NoteSpecial(Note):
     class Meta:
         verbose_name = _("special note")
         verbose_name_plural = _("special notes")
+
+    def __str__(self):
+        return self.special_type
 
 
 class Alias(models.Model):

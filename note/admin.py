@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib import admin
+from polymorphic.admin import PolymorphicParentModelAdmin, \
+    PolymorphicChildModelAdmin, PolymorphicChildModelFilter
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
 from .models.transactions import MembershipTransaction, Transaction, \
@@ -17,14 +19,32 @@ class AliasInlines(admin.TabularInline):
     model = Alias
 
 
-class NoteClubAdmin(admin.ModelAdmin):
+@admin.register(Note)
+class NoteAdmin(PolymorphicParentModelAdmin):
     """
-    Admin customisation for NoteClub
+    Parent regrouping all note types as children
+    """
+    child_models = (NoteClub, NoteSpecial, NoteUser)
+    list_filter = (PolymorphicChildModelFilter, 'is_active',)
+
+    # Use a polymorphic list
+    list_display = ('__str__', 'balance', 'is_active')
+    polymorphic_list = True
+
+    # Organize notes by registration date
+    date_hierarchy = 'created_at'
+    ordering = ['-created_at']
+
+    # Search by aliases
+    search_fields = ['alias__name']
+
+
+@admin.register(NoteClub)
+class NoteClubAdmin(PolymorphicChildModelAdmin):
+    """
+    Child for a club note, see NoteAdmin
     """
     inlines = (AliasInlines,)
-    list_display = ('club', 'balance', 'is_active')
-    list_filter = ('is_active',)
-    search_fields = ['club__name']
 
     # We can't change club after creation or the balance
     readonly_fields = ('club', 'balance')
@@ -42,25 +62,20 @@ class NoteClubAdmin(admin.ModelAdmin):
         return False
 
 
-class NoteSpecialAdmin(admin.ModelAdmin):
+@admin.register(NoteSpecial)
+class NoteSpecialAdmin(PolymorphicChildModelAdmin):
     """
-    Admin customisation for NoteSpecial
+    Child for a special note, see NoteAdmin
     """
-    list_display = ('special_type', 'balance', 'is_active')
+    readonly_fields = ('balance',)
 
 
-class NoteUserAdmin(admin.ModelAdmin):
+@admin.register(NoteUser)
+class NoteUserAdmin(PolymorphicChildModelAdmin):
     """
-    Admin customisation for NoteUser
+    Child for an user note, see NoteAdmin
     """
     inlines = (AliasInlines,)
-    list_display = ('user', 'balance', 'is_active')
-    list_filter = ('is_active',)
-    search_fields = ['user__username']
-
-    # Organize note by registration date
-    date_hierarchy = 'user__date_joined'
-    ordering = ['-user__date_joined']
 
     # We can't change user after creation or the balance
     readonly_fields = ('user', 'balance')
@@ -78,18 +93,16 @@ class NoteUserAdmin(admin.ModelAdmin):
         return False
 
 
+@admin.register(TransactionTemplate)
 class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
     list_display = ('name', 'destination', 'amount', 'template_type')
     list_filter = ('destination', 'template_type',)
+    # autocomplete_fields = ('destination',)
 
 
-# Register your models here.
-admin.site.register(NoteClub, NoteClubAdmin)
-admin.site.register(NoteSpecial, NoteSpecialAdmin)
-admin.site.register(NoteUser, NoteUserAdmin)
+# Register other models here.
 admin.site.register(MembershipTransaction)
 admin.site.register(Transaction)
-admin.site.register(TransactionTemplate, TransactionTemplateAdmin)
