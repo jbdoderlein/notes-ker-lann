@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-16 12:36+0200\n"
+"POT-Creation-Date: 2019-07-17 13:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgid "Welcome,"
 msgstr ""
 
 #: templates/admin/base_site.html:27
-msgid "View site"
-msgstr "Retour au site"
+msgid "Transfer"
+msgstr "Virement"
 
 #: templates/admin/base_site.html:32 templates/admin/base_site.html:51
 msgid "View admin"

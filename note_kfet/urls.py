@@ -7,8 +7,11 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    # No app, so redirect to admin
-    path('', RedirectView.as_view(pattern_name='admin:index'), name='index'),
+    # Dev so redirect to something random
+    path('', RedirectView.as_view(pattern_name='note:transfer'), name='index'),
+
+    # Include project routers
+    path('note/', include('note.urls')),
 
     # Include Django Contrib and Core routers
     # admin/login/ is redirected to the non-admin login page

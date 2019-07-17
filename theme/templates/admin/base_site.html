@@ -9,7 +9,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 {% block branding %}
     <strong id="site-name">
-        <a href="{{ site_url }}">
+        <a href="/">
             {{ request.site.name }}
         </a>
     </strong>
@@ -23,9 +23,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
             {% endblock %}
             {% block userlinks %}
-                {% if site_url %}
-                    <a href="{{ site_url }}">{% trans 'View site' %}</a> /
-                {% endif %}
+                {# Link to our apps outside of admin #}
+                <a href="{% url 'note:transfer' %}">{% trans 'Transfer' %}</a> /
+
                 {% if available_apps %}
                     {# When in admin site, list all admin pages and documentation #}
                     <span class="dropdown">

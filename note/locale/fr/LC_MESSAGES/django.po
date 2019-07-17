@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-17 11:51+0200\n"
+"POT-Creation-Date: 2019-07-17 13:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,7 +13,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: apps.py:11 models/notes.py:41
+#: admin.py:113 models/transactions.py:46
+msgid "source"
+msgstr "source"
+
+#: admin.py:121 admin.py:139 models/transactions.py:25
+#: models/transactions.py:52
+msgid "destination"
+msgstr "destination"
+
+#: apps.py:11 models/notes.py:45
 msgid "note"
 msgstr "note"
 
@@ -40,72 +49,71 @@ msgstr ""
 msgid "display image"
 msgstr "image affichée"
 
-#: models/notes.py:42
+#: models/notes.py:40 models/transactions.py:55
+msgid "created at"
+msgstr "créée le"
+
+#: models/notes.py:46
 msgid "notes"
 msgstr "notes"
 
-#: models/notes.py:53
-msgid "user"
-msgstr ""
-
 #: models/notes.py:57
+msgid "user"
+msgstr "utilisateur"
+
+#: models/notes.py:61
 msgid "one's note"
 msgstr "note d'un utilisateur"
 
-#: models/notes.py:58
+#: models/notes.py:62
 msgid "users note"
 msgstr "notes des utilisateurs"
 
-#: models/notes.py:61
+#: models/notes.py:65
 #, python-format
 msgid "%(user)s's note"
 msgstr "Note de %(user)s"
 
-#: models/notes.py:72
+#: models/notes.py:76
 msgid "club"
 msgstr "club"
 
-#: models/notes.py:76
+#: models/notes.py:80
 msgid "club note"
 msgstr "note d'un club"
 
-#: models/notes.py:77
+#: models/notes.py:81
 msgid "clubs notes"
 msgstr "notes des clubs"
 
-#: models/notes.py:80
+#: models/notes.py:84
 #, python-format
 msgid "Note for %(club)s club"
 msgstr "Note du club %(club)s"
 
-#: models/notes.py:93 models/transactions.py:32 models/transactions.py:65
+#: models/notes.py:97 models/transactions.py:32 models/transactions.py:65
 msgid "type"
 msgstr "type"
 
-#: models/notes.py:99
+#: models/notes.py:103
 msgid "special note"
 msgstr "note spéciale"
 
-#: models/notes.py:100
+#: models/notes.py:104
 msgid "special notes"
 msgstr "notes spéciales"
 
-#: models/notes.py:111 models/transactions.py:18
+#: models/notes.py:115 models/transactions.py:18
 msgid "name"
 msgstr "nom"
 
-#: models/notes.py:121
+#: models/notes.py:125
 msgid "alias"
 msgstr "alias"
 
-#: models/notes.py:122
+#: models/notes.py:126
 msgid "aliases"
 msgstr "alias"
-
-#: models/transactions.py:25 models/transactions.py:52
-#: models/transactions.py:55
-msgid "destination"
-msgstr "destination"
 
 #: models/transactions.py:28 models/transactions.py:62
 msgid "amount"
@@ -122,10 +130,6 @@ msgstr "modèle de transaction"
 #: models/transactions.py:38
 msgid "transaction templates"
 msgstr "modèles de transaction"
-
-#: models/transactions.py:46
-msgid "source"
-msgstr "source"
 
 #: models/transactions.py:59
 msgid "quantity"
@@ -154,3 +158,11 @@ msgstr "transaction d'adhésion"
 #: models/transactions.py:89
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
+
+#: templates/note/transfer.html:7
+msgid "Home"
+msgstr "Accueil"
+
+#: views.py:21
+msgid "Transfer money from your account to one or others"
+msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
