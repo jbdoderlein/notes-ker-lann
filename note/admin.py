@@ -26,6 +26,21 @@ class NoteClubAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
     search_fields = ['club__name']
 
+    # We can't change club after creation
+    readonly_fields = ('club',)
+
+    def has_add_permission(self, request):
+        """
+        A club note should not be manually added
+        """
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        A club note should not be manually removed
+        """
+        return False
+
 
 class NoteSpecialAdmin(admin.ModelAdmin):
     """
@@ -46,6 +61,21 @@ class NoteUserAdmin(admin.ModelAdmin):
     # Organize note by registration date
     date_hierarchy = 'user__date_joined'
     ordering = ['-user__date_joined']
+
+    # We can't change user after creation
+    readonly_fields = ('user',)
+
+    def has_add_permission(self, request):
+        """
+        An user note should not be manually added
+        """
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        An user note should not be manually removed
+        """
+        return False
 
 
 class TransactionTemplateAdmin(admin.ModelAdmin):

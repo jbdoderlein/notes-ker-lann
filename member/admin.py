@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from .forms import CustomUserChangeForm
-from .models import Club, Profile
+from .models import Club, Membership, Profile, Role
 
 
 class ProfileInline(admin.StackedInline):
@@ -33,6 +33,11 @@ class CustomUserAdmin(UserAdmin):
         return super().get_inline_instances(request, obj)
 
 
+# Update Django User with profile
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+# Add other models
 admin.site.register(Club)
+admin.site.register(Membership)
+admin.site.register(Role)
