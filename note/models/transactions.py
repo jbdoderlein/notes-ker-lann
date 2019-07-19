@@ -79,6 +79,28 @@ class Transaction(models.Model):
         verbose_name = _("transaction")
         verbose_name_plural = _("transactions")
 
+    def save(self, *args, **kwargs):
+        """
+        When saving, also transfer money between two notes
+        """
+        created = self.pk is None
+        to_transfer = self.amount * self.quantity
+        if not created:
+            # Revert old transaction
+            old_transaction = Transaction.objects.get(pk=self.pk)
+            if old_transaction.valid:
+                self.source.balance += to_transfer
+                self.destination.balance -= to_transfer
+
+        if self.valid:
+            self.source.balance -= to_transfer
+            self.destination.balance += to_transfer
+
+        # Save notes
+        self.source.save()
+        self.destination.save()
+        super().save(*args, **kwargs)
+
 
 class MembershipTransaction(Transaction):
     membership = models.OneToOneField(

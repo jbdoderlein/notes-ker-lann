@@ -119,6 +119,16 @@ class TransactionAdmin(admin.ModelAdmin):
 
     poly_destination.short_description = _('destination')
 
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Only valid can be edited after creation
+        Else the amount of money would not be transferred
+        """
+        if obj:  # user is editing an existing object
+            return 'created_at', 'source', 'destination', 'quantity',\
+                   'amount', 'transaction_type'
+        return []
+
 
 @admin.register(TransactionTemplate)
 class TransactionTemplateAdmin(admin.ModelAdmin):
