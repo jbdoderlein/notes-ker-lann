@@ -55,8 +55,9 @@ class Transaction(models.Model):
         verbose_name=_('created at'),
         default=timezone.now,
     )
-    quantity = models.PositiveSmallIntegerField(
+    quantity = models.PositiveIntegerField(
         verbose_name=_('quantity'),
+        default=1,
     )
     amount = models.PositiveIntegerField(
         verbose_name=_('amount'),
@@ -69,8 +70,9 @@ class Transaction(models.Model):
         verbose_name=_('reason'),
         max_length=255,
     )
-    valid = models.NullBooleanField(
+    valid = models.BooleanField(
         verbose_name=_('valid'),
+        default=True,
     )
 
     class Meta:
