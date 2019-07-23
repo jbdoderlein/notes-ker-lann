@@ -121,6 +121,8 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
+ANONYMOUS_USER_NAME = None # Disable guardian anonymous user
+
 GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
 # Internationalization
