@@ -2,6 +2,9 @@
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import unicodedata
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -65,15 +68,19 @@ class NoteUser(Note):
     def save(self, *args, **kwargs):
         """
         When saving, also create an alias
-        TODO: check availability of alias
         TODO: remove old alias
         """
         created = self.pk is None
-        if created:
+        try:
+            alias = Alias.objects.get(normalized_name=Alias.normalize(str(self.user)))
+            return
+        except Alias.DoesNotExist:
+            if created:
+                super().save(*args, **kwargs)
             alias = Alias.objects.create(name=str(self.user), note=self)
             alias.save()
-
-        super().save(*args, **kwargs)
+        if not created:
+            super().save(*args, **kwargs)
 
 
 class NoteClub(Note):
@@ -97,15 +104,19 @@ class NoteClub(Note):
     def save(self, *args, **kwargs):
         """
         When saving, also create an alias
-        TODO: check availability of alias
         TODO: remove old alias
         """
         created = self.pk is None
-        if created:
+        try:
+            alias = Alias.objects.get(normalized_name=Alias.normalize(str(self.club)))
+            return
+        except Alias.DoesNotExist:
+            if created:
+                super().save(*args, **kwargs)
             alias = Alias.objects.create(name=str(self.club), note=self)
             alias.save()
-
-        super().save(*args, **kwargs)
+        if not created:
+            super().save(*args, **kwargs)
 
 
 class NoteSpecial(Note):
@@ -133,15 +144,19 @@ class NoteSpecial(Note):
     def save(self, *args, **kwargs):
         """
         When saving, also create an alias
-        TODO: check availability of alias
         TODO: remove old alias
         """
         created = self.pk is None
-        if created:
-            alias = Alias.objects.create(name=str(self.club), note=self)
+        try:
+            alias = Alias.objects.get(normalized_name=Alias.normalize(self.special_type))
+            return
+        except Alias.DoesNotExist:
+            if created:
+                super().save(*args, **kwargs)
+            alias = Alias.objects.create(name=str(self.special_type), note=self)
             alias.save()
-
-        super().save(*args, **kwargs)
+        if not created:
+            super().save(*args, **kwargs)
 
 
 class Alias(models.Model):
@@ -152,6 +167,18 @@ class Alias(models.Model):
         verbose_name=_('name'),
         max_length=255,
         unique=True,
+        validators=[
+            RegexValidator(
+                regex=settings.ALIAS_VALIDATOR_REGEX,
+                message=_('Invalid alias')
+            )
+        ] if settings.ALIAS_VALIDATOR_REGEX else []
+    )
+    normalized_name = models.CharField(
+        max_length=255,
+        unique=True,
+        default='',
+        editable=False
     )
     note = models.ForeignKey(
         Note,
@@ -164,3 +191,32 @@ class Alias(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def normalize(string):
+        """
+        Normalizes a string: removes most diacritics and does casefolding
+        """
+        return ''.join(
+            char
+            for char in unicodedata.normalize('NFKD', string.casefold())
+            if all(not unicodedata.category(char).startswith(cat) for cat in {'M', 'P', 'Z', 'C'})
+        )
+
+    def save(self, *args, **kwargs):
+        """
+        Handle normalized_name
+        """
+        self.normalized_name = Alias.normalize(self.name)
+        if self.normalized_name < 256:
+            super().save(*args, **kwargs)
+
+    def clean(self):
+        normalized_name = Alias.normalize(self.name)
+        if len(normalized_name) >= 255:
+            raise ValidationError(_('Alias too long.'))
+        try:
+            if self != Alias.objects.get(normalized_name=normalized_name):
+                raise ValidationError(_('An alias with a similar name already exists.'))
+        except Alias.DoesNotExist:
+            pass

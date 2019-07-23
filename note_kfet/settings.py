@@ -156,6 +156,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
+ALIAS_VALIDATOR_REGEX = r''
+
 try:
     from .settings_local import *
 except ImportError:
