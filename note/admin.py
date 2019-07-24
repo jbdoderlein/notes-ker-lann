@@ -28,7 +28,7 @@ class NoteAdmin(PolymorphicParentModelAdmin):
     list_filter = (PolymorphicChildModelFilter, 'is_active',)
 
     # Use a polymorphic list
-    list_display = ('__str__', 'balance', 'is_active')
+    list_display = ('pretty', 'balance', 'is_active')
     polymorphic_list = True
 
     # Organize notes by registration date

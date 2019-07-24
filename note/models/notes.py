@@ -3,9 +3,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import unicodedata
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
@@ -46,6 +47,36 @@ class Note(PolymorphicModel):
         verbose_name = _("note")
         verbose_name_plural = _("notes")
 
+    def pretty(self):
+        """
+        :return: Pretty name of this note
+        """
+        return 'Not implemented'
+
+    pretty.short_description = _('Note')
+
+    def save(self, *args, **kwargs):
+        """
+        Save note with it's alias (called in polymorphic children)
+        """
+        aliases = Alias.objects.filter(name=str(self))
+        if aliases.exists():
+            # Alias exists, so check if it is linked to this note
+            if aliases.first().note != self:
+                raise ValidationError
+
+            # Save note
+            super().save(*args, **kwargs)
+        else:
+            # Alias does not exist yet, so check if it can exist
+            a = Alias(name=str(self))
+            a.clean()
+
+            # Save note and alias
+            super().save(*args, **kwargs)
+            a.note = self
+            a.save(force_insert=True)
+
 
 class NoteUser(Note):
     """
@@ -63,24 +94,10 @@ class NoteUser(Note):
         verbose_name_plural = _("users note")
 
     def __str__(self):
-        return _("%(user)s's note") % {'user': str(self.user)}
+        return str(self.user)
 
-    def save(self, *args, **kwargs):
-        """
-        When saving, also create an alias
-        TODO: remove old alias
-        """
-        created = self.pk is None
-        try:
-            alias = Alias.objects.get(normalized_name=Alias.normalize(str(self.user)))
-            return
-        except Alias.DoesNotExist:
-            if created:
-                super().save(*args, **kwargs)
-            alias = Alias.objects.create(name=str(self.user), note=self)
-            alias.save()
-        if not created:
-            super().save(*args, **kwargs)
+    def pretty(self):
+        return _("%(user)s's note") % {'user': str(self.user)}
 
 
 class NoteClub(Note):
@@ -99,24 +116,10 @@ class NoteClub(Note):
         verbose_name_plural = _("clubs notes")
 
     def __str__(self):
-        return _("Note for %(club)s club") % {'club': str(self.club)}
+        return str(self.club)
 
-    def save(self, *args, **kwargs):
-        """
-        When saving, also create an alias
-        TODO: remove old alias
-        """
-        created = self.pk is None
-        try:
-            alias = Alias.objects.get(normalized_name=Alias.normalize(str(self.club)))
-            return
-        except Alias.DoesNotExist:
-            if created:
-                super().save(*args, **kwargs)
-            alias = Alias.objects.create(name=str(self.club), note=self)
-            alias.save()
-        if not created:
-            super().save(*args, **kwargs)
+    def pretty(self):
+        return _("Note for %(club)s club") % {'club': str(self.club)}
 
 
 class NoteSpecial(Note):
@@ -141,22 +144,8 @@ class NoteSpecial(Note):
     def __str__(self):
         return self.special_type
 
-    def save(self, *args, **kwargs):
-        """
-        When saving, also create an alias
-        TODO: remove old alias
-        """
-        created = self.pk is None
-        try:
-            alias = Alias.objects.get(normalized_name=Alias.normalize(self.special_type))
-            return
-        except Alias.DoesNotExist:
-            if created:
-                super().save(*args, **kwargs)
-            alias = Alias.objects.create(name=str(self.special_type), note=self)
-            alias.save()
-        if not created:
-            super().save(*args, **kwargs)
+    def pretty(self):
+        return self.special_type
 
 
 class Alias(models.Model):
@@ -200,7 +189,8 @@ class Alias(models.Model):
         return ''.join(
             char
             for char in unicodedata.normalize('NFKD', string.casefold())
-            if all(not unicodedata.category(char).startswith(cat) for cat in {'M', 'P', 'Z', 'C'})
+            if all(not unicodedata.category(char).startswith(cat)
+                   for cat in {'M', 'P', 'Z', 'C'})
         )
 
     def save(self, *args, **kwargs):
@@ -208,7 +198,7 @@ class Alias(models.Model):
         Handle normalized_name
         """
         self.normalized_name = Alias.normalize(self.name)
-        if self.normalized_name < 256:
+        if len(self.normalized_name) < 256:
             super().save(*args, **kwargs)
 
     def clean(self):
@@ -217,6 +207,7 @@ class Alias(models.Model):
             raise ValidationError(_('Alias too long.'))
         try:
             if self != Alias.objects.get(normalized_name=normalized_name):
-                raise ValidationError(_('An alias with a similar name already exists.'))
+                raise ValidationError(_('An alias with a similar name '
+                                        'already exists.'))
         except Alias.DoesNotExist:
             pass
