@@ -51,7 +51,7 @@ class Note(PolymorphicModel):
         """
         :return: Pretty name of this note
         """
-        return 'Not implemented'
+        return str(self)
 
     pretty.short_description = _('Note')
 
@@ -63,7 +63,7 @@ class Note(PolymorphicModel):
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
-                raise ValidationError
+                raise ValidationError(_('This alias is already taken.'))
 
             # Save note
             super().save(*args, **kwargs)
@@ -76,6 +76,20 @@ class Note(PolymorphicModel):
             super().save(*args, **kwargs)
             a.note = self
             a.save(force_insert=True)
+
+    def clean(self, *args, **kwargs):
+        """
+        Verify alias (simulate save)
+        """
+        aliases = Alias.objects.filter(name=str(self))
+        if aliases.exists():
+            # Alias exists, so check if it is linked to this note
+            if aliases.first().note != self:
+                raise ValidationError(_('This alias is already taken.'))
+        else:
+            # Alias does not exist yet, so check if it can exist
+            a = Alias(name=str(self))
+            a.clean()
 
 
 class NoteUser(Note):
@@ -142,9 +156,6 @@ class NoteSpecial(Note):
         verbose_name_plural = _("special notes")
 
     def __str__(self):
-        return self.special_type
-
-    def pretty(self):
         return self.special_type
 
 
