@@ -1,27 +1,9 @@
-{% extends "admin/base_site.html" %}
+{% extends "base.html" %}
 {% comment %}
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
 
 {% load i18n static %}
-
-{% block breadcrumbs %}
-    <div class="breadcrumbs">
-        <a href="{% url 'index' %}">{% trans 'Home' %}</a>
-        {% if title %} &rsaquo; {{ title }}{% endif %}
-    </div>
-{% endblock %}
-
-{% block extrahead %}{{ block.super }}
-    {# Load Django Admin widgets #}
-    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-    <script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
-    {{ form.media }}
-{% endblock %}
-
-{% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
-{% endblock %}
 
 {% block content %}
     <form method="post" onsubmit="window.onbeforeunload=null">{% csrf_token %}

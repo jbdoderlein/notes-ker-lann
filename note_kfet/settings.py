@@ -30,13 +30,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # Theme overrides Django Admin templates
-    'theme',
+    # 'theme',
 
     # External apps
     'polymorphic',
     'guardian',
     'reversion',
-
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -71,7 +70,7 @@ ROOT_URLCONF = 'note_kfet.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,7 +149,11 @@ USE_TZ = True
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.realpath(__file__)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static')]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
