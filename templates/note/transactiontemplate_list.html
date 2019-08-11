@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table class="table">
+<tr>
+<td>ID</td><td>Link</td>
+    <td>name</td>
+    <td>destinataire</td>
+    <td>montant</td>
+    <td>catégorie</td>
+</tr>
+{% for object in object_list %}
+<tr>
+    <td>{{object.pk}}</td>
+    <td><a href="{{object.get_absolute_url}}">{{object}}</a></td>
+    <td>{{ object.name }}</td>
+    <td>{{ object.destination }}</td>
+    <td>{{ object.amount }}</td>
+    <td>{{ object.template_type }}</td>
+</tr>
+{% endfor %}
+</table>
+<a class="btn btn-primary" href="{% url 'note:template_create' %}">New Template</a>
+{% endblock %}
