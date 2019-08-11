@@ -1,4 +1,4 @@
-{% extends "admin/login.html" %}
+{% extends "base.html" %}
 {% comment %}
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
@@ -6,3 +6,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% load i18n %}
 
 {% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form>
+{% endblock %}
