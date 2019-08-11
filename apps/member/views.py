@@ -6,7 +6,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import CreateView
-
+from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Profile
@@ -27,3 +27,12 @@ class SignUp(CreateView):
         context["user_form"] = self.second_form
 
         return context
+
+    def form_valid(self, form):
+        user_form = UserCreationForm(self.request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            user_profile = form.save(commit=False) # do not save to db
+            user_profile.user = user
+            user_profile.save()
+        return super().form_valid(form)

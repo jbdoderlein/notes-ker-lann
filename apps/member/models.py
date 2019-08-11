@@ -138,11 +138,11 @@ class Membership(models.Model):
         verbose_name_plural = _('memberships')
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def save_user_profile(instance, created, **_kwargs):
-    """
-    Hook to save an user profile when an user is updated
-    """
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def save_user_profile(instance, created, **_kwargs):
+#     """
+#     Hook to save an user profile when an user is updated
+#     """
+#     if created:
+#         Profile.objects.create(user=instance)
+#     instance.profile.save()
