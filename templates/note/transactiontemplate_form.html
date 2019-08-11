@@ -2,7 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-<p><a class="btn btn-default" href="{% url 'note:template_list' %}">book Listing</a></p>
+<p><a class="btn btn-default" href="{% url 'note:template_list' %}">Template Listing</a></p>
 <form method="post">
 {% csrf_token %}
 {{form|crispy}}
