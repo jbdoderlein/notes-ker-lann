@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 <h2>Login</h2>
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form | crispy }}
   <button type="submit">Login</button>
 </form>
 {% endblock %}
