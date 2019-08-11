@@ -9,6 +9,9 @@ from django import forms
 from .models import Profile
 
 class ProfileForm(forms.ModelForm):
+    """
+    Forms pour la création d'un profile utilisateur.
+    """
     class Meta:
         model = Profile
         fields = '__all__'

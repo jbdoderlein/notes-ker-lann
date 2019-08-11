@@ -8,6 +8,9 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ActivityType(models.Model):
+    """
+    Type of Activity, (e.g "Pot", "Soirée Club") and associated properties
+    """
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
@@ -28,6 +31,9 @@ class ActivityType(models.Model):
 
 
 class Activity(models.Model):
+    """
+    An IRL event organized by a club for others.
+    """
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
@@ -66,6 +72,9 @@ class Activity(models.Model):
 
 
 class Guest(models.Model):
+    """
+    People who are not current members of any clubs, and invited by someone who is a current member.
+    """
     activity = models.ForeignKey(
         Activity,
         on_delete=models.PROTECT,

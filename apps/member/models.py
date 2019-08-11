@@ -110,6 +110,9 @@ class Role(models.Model):
 
 
 class Membership(models.Model):
+    """
+    Register the membership of a user to a club, including roles and membership duration.
+    """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT
