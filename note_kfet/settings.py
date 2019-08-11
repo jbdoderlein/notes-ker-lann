@@ -3,11 +3,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import sys
 
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirnam(os.path.realpath(__file__))
+APPS_DIR = os.path.realpath(oas.path.join(BASE_DIR,"apps"))
+sys.path.append(APPS_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
