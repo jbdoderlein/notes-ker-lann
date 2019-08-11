@@ -5,12 +5,13 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.edit import CreateView
+from django.views.generic import CreateView, ListView, DetailView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .models import Profile
-from .forms import ProfileForm
+
+from .models import Profile, Club
+from .forms import ProfileForm, ClubForm
 
 class SignUp(CreateView):
     """
@@ -36,3 +37,25 @@ class SignUp(CreateView):
             user_profile.user = user
             user_profile.save()
         return super().form_valid(form)
+
+
+class ClubCreateView(LoginRequiredMixin,CreateView):
+    """
+    Create Club
+    """
+    model = Club
+    form_class = ClubForm
+
+    def form_valid(self,form):
+        return super().form_valid(form)
+   
+class ClubListView(LoginRequiredMixin,ListView):
+    """
+    List TransactionsTemplates
+    """
+    model = Club
+    form_class = ClubForm
+class ClubDetailView(LoginRequiredMixin,DetailView):
+    """
+    """
+    model = Club

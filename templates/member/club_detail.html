@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<p><a class="btn btn-default" href="{% url 'member:club_list' %}">Clubs</a></p>
+<h5>{{ object.name }}</h5>
+{% endblock %}

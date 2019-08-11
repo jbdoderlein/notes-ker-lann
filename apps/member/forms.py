@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Profile
+from .models import Profile, Club
 
 class ProfileForm(forms.ModelForm):
     """
@@ -16,3 +16,8 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         exclude = ['user']
+
+class ClubForm(forms.ModelForm):
+    class Meta:
+        model = Club
+        fields ='__all__'
