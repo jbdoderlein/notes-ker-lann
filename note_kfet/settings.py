@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'guardian',
     'reversion',
+    'crispy_forms',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
