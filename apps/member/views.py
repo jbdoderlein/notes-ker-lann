@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 from .models import Profile, Club
 from .forms import ProfileForm, ClubForm
 
-class SignUp(CreateView):
+class UserCreateView(CreateView):
     """
     Une vue pour inscrire un utilisateur et lui créer un profile
 
@@ -39,6 +39,11 @@ class SignUp(CreateView):
         return super().form_valid(form)
 
 
+
+class UserDetailView(LoginRequiredMixin,DetailView):
+    model = Profile
+
+
 class ClubCreateView(LoginRequiredMixin,CreateView):
     """
     Create Club
@@ -55,6 +60,7 @@ class ClubListView(LoginRequiredMixin,ListView):
     """
     model = Club
     form_class = ClubForm
+
 class ClubDetailView(LoginRequiredMixin,DetailView):
     """
     """

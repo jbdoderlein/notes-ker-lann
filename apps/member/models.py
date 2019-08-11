@@ -48,6 +48,8 @@ class Profile(models.Model):
         verbose_name = _('user profile')
         verbose_name_plural = _('user profile')
 
+    def get_absolute_url(self):
+        return reverse('user_detail',args=(self.pk,))
 
 class Club(models.Model):
     """

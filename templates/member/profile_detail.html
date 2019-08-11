@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h5>Compte n° {{object.pk}}</h5>
+<table>
+    <tr>
+        <td> <img src="{{ object.note.display_image.url }}" alt="" /> </td>
+    </tr>
+    <tr><th> Nom</th><td>{{ object.user.name }}</td></tr>
+    <tr><th>Prénom </th><td>{{object.user.first_name}}</td></tr>
+    <tr><th>Pseudo</th><td> {{object.user.username}}</td></tr>
+    <tr><th> Aliases</th><td>{{object.user.note.aliases_set.all }}</td></tr>
+    <tr><th>Pseudo</th><td> {{object.user.username}}</td></tr>
+    <tr><th>Section</th><td> {{object.section}}</td></tr>
+    <tr><th>Adresse</th><td> {{object.address}}</td></tr>
+    <tr><th>Solde</th><td> {{object.user.note.balance}}</td></tr>
+</table>
+{% endblock %}

@@ -10,8 +10,9 @@ from . import views
 
 app_name = 'member'
 urlpatterns = [
-    path('signup/',views.SignUp.as_view(),name="signup"),
+    path('signup/',views.UserCreateView.as_view(),name="signup"),
     path('club/',views.ClubListView.as_view(),name="club_list"),
     path('club/<int:pk>/',views.ClubDetailView.as_view(),name="club_detail"),
-    path('club/create/',views.ClubCreateView.as_view(),name="club_create")
+    path('club/create/',views.ClubCreateView.as_view(),name="club_create"),
+    path('user/<int:pk>',views.UserDetailView.as_view(),name="user_detail")
 ]
