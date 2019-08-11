@@ -5,6 +5,7 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 from .notes import Note,NoteClub
 
@@ -36,6 +37,9 @@ class TransactionTemplate(models.Model):
     class Meta:
         verbose_name = _("transaction template")
         verbose_name_plural = _("transaction templates")
+
+    def get_absolute_url(self):
+        return reverse('note:template_update',args=(self.pk,))
 
 
 class Transaction(models.Model):

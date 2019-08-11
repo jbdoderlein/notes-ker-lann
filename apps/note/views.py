@@ -4,7 +4,7 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 from .models import Transaction,TransactionTemplate
 from .forms import TransactionTemplateForm
@@ -33,13 +33,16 @@ class TransactionTemplateCreateView(LoginRequiredMixin,CreateView):
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
+
 class TransactionTemplateListView(LoginRequiredMixin,ListView):
     """
     List TransactionsTemplates
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
-class TransactionTemplateDetailView(LoginRequiredMixin,DetailView):
+
+class TransactionTemplateUpdateView(LoginRequiredMixin,UpdateView):
     """
     """
     model = TransactionTemplate
+    form_class=TransactionTemplateForm

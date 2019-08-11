@@ -10,6 +10,6 @@ app_name = 'note'
 urlpatterns = [
     path('transfer/', views.TransactionCreate.as_view(), name='transfer'),
     path('buttons/create/',views.TransactionTemplateCreateView.as_view(),name='template_create'),
-    path('buttons/detail/<int:pk>/',views.TransactionTemplateDetailView.as_view(),name='template_detail'),
+    path('buttons/update/<int:pk>/',views.TransactionTemplateUpdateView.as_view(),name='template_update'),
     path('buttons/',views.TransactionTemplateListView.as_view(),name='template_list')
 ]
