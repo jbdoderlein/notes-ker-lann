@@ -16,9 +16,8 @@ urlpatterns = [
     # Include Django Contrib and Core routers
     # admin/login/ is redirected to the non-admin login page
     path('i18n/', include('django.conf.urls.i18n')),
+    path('accounts/',include('member.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/profile/',
-         RedirectView.as_view(pattern_name='index')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
 ]
