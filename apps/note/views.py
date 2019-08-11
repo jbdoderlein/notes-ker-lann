@@ -4,10 +4,10 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.edit import CreateView
+from django.views.generic import CreateView, ListView, DetailView
 
-from .models import Transaction
-
+from .models import Transaction,TransactionTemplate
+from .forms import TransactionTemplateForm
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
     """
@@ -26,3 +26,20 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
         context['title'] = _('Transfer money from your account '
                              'to one or others')
         return context
+
+class TransactionTemplateCreateView(LoginRequiredMixin,CreateView):
+    """
+    Create TransactionTemplate
+    """
+    model = TransactionTemplate
+    form_class = TransactionTemplateForm
+class TransactionTemplateListView(LoginRequiredMixin,ListView):
+    """
+    List TransactionsTemplates
+    """
+    model = TransactionTemplate
+    form_class = TransactionTemplateForm
+class TransactionTemplateDetailView(LoginRequiredMixin,DetailView):
+    """
+    """
+    model = TransactionTemplate

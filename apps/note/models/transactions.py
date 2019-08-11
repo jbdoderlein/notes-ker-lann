@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from .notes import Note
+from .notes import Note,NoteClub
 
 """
 Defines transactions
@@ -19,7 +19,7 @@ class TransactionTemplate(models.Model):
         max_length=255,
     )
     destination = models.ForeignKey(
-        Note,
+        NoteClub,
         on_delete=models.PROTECT,
         related_name='+',  # no reverse
         verbose_name=_('destination'),

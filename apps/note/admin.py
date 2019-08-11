@@ -48,7 +48,7 @@ class NoteClubAdmin(PolymorphicChildModelAdmin):
 
     # We can't change club after creation or the balance
     readonly_fields = ('club', 'balance')
-
+    search_fields = ('club',)
     def has_add_permission(self, request):
         """
         A club note should not be manually added
