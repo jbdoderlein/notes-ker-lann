@@ -18,6 +18,7 @@ class TransactionTemplate(models.Model):
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
+        unique=True,
     )
     destination = models.ForeignKey(
         NoteClub,
