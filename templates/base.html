@@ -31,7 +31,7 @@
                         <a class="nav-link" href="#"><i class="fa fa-coffee"></i>Consos</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> Membres</a>
+                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> Clubs</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="#"><i class="fa fa-calendar"></i> Activités</a>
@@ -45,7 +45,7 @@
                     {% if user.is_authenticated%}
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user-circle"> {{ user.username }}</i>
+                           <i class="fa fa-user"></i> {{ user.username }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.profile.pk %}"> <i class="fa fa-user"></i> Mon compte </a>
