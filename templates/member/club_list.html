@@ -1,17 +1,8 @@
 {% extends "base.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 
-<table class="table">
-<tr>
-    <td>ID</td>
-    <td>name</td>
-</tr>
-{% for object in object_list %}
-<tr>
-    <td>{{object.pk}}</td>
-    <td><a href="{{ object.get_absolute_url }}"> {{ object.name }}</a></td>
-</tr>
-{% endfor %}
-</table>
+{% render_table object_list %}
+
 <a class="btn btn-primary" href="{% url 'member:club_create' %}">New Club</a>
 {% endblock %}

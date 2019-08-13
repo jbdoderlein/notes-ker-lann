@@ -8,6 +8,7 @@ django-extensions==2.1.9
 django-guardian==1.4.9
 django-polymorphic==2.0.3
 django-reversion==3.0.3
+django-tables2==2.1.0
 docutils==0.14
 idna==2.8
 oauthlib==3.1.0

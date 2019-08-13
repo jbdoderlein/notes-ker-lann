@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'guardian',
     'reversion',
     'crispy_forms',
+    'django_tables2',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -83,6 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -159,7 +161,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
