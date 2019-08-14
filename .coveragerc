@@ -1,14 +1,12 @@
 [run]
 source =
-    activity
-    member
-    note
-    theme
+    app/activity
+    app/member
+    app/note
 omit =
-    activity/tests/*.py
-    activity/migrations/*.py
-    member/tests/*.py
-    member/migrations/*.py
-    note/tests/*.py
-    note/migrations/*.py
-    theme/tests/*.py
+    app/activity/tests/*.py
+    app/activity/migrations/*.py
+    app/member/tests/*.py
+    app/member/migrations/*.py
+    app/note/tests/*.py
+    app/note/migrations/*.py
