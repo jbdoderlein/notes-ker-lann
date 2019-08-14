@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static %}
+{% load i18n static pretty_money django_tables2 %}
 
 {% block content %}
     <h3>Compte n° {{ object.pk }}</h3>
@@ -20,8 +20,10 @@
         <dt class="col-6 col-md-3">{% trans 'address'|capfirst %}</dt>
         <dd class="col-6 col-md-3">{{ object.address }}</dd>
         <dt class="col-6 col-md-3">{% trans 'balance'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.user.note.balance }}</dd>
+        <dd class="col-6 col-md-3">{{ object.user.note.balance | pretty_money }}</dd>
     </dl>
 
     <a href="{% url "password_change" %}">{% trans 'Change password' %}</a>
+
+    {% render_table history_list %}
 {% endblock %}

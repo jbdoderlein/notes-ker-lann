@@ -9,9 +9,11 @@ from django.views.generic import CreateView, ListView, DetailView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 from .models import Profile, Club
 from .forms import ProfileForm, ClubForm
+from note.models.transactions import Transaction
 
 class UserCreateView(CreateView):
     """
@@ -39,9 +41,16 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-
 class UserDetailView(LoginRequiredMixin,DetailView):
     model = Profile
+    
+    def get_context_data(slef,**kwargs):
+        context = super().get_context_data(**kwargs)
+        user = context['object'].user.note
+        user_transactions = \
+                Transaction.objects.all().filter(Q(source=user) | Q(destination=user))
+        context['history_list'] = user_transactions
+        return context
 
 
 class ClubCreateView(LoginRequiredMixin,CreateView):
