@@ -2,16 +2,24 @@
 {% comment %}
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
+{% load i18n crispy_forms_tags %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
 {% block title %}{% trans "Log in" %}{% endblock %}
+{% block contenttitle %}<h1>{% trans "Log in" %}</h1>{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form | crispy }}
-  <button type="submit">Login</button>
-</form>
+    {% if user.is_authenticated %}
+        <p class="errornote">
+            {% blocktrans trimmed %}
+                You are authenticated as {{ username }}, but are not authorized to
+                access this page. Would you like to login to a different account?
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+        {{ form | crispy }}
+        <input type="submit" value="{% trans 'Log in' %}" class="btn btn-primary">
+        <a href="{% url 'password_reset' %}" class="badge badge-light">{% trans 'Forgotten your password or username?' %}</a>
+    </form>
 {% endblock %}
