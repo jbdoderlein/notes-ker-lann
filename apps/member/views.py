@@ -10,8 +10,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
-from .models import Profile, Club
-from .forms import ProfileForm, ClubForm
+from .models import Profile, Club, Membership
+from .forms import ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
 
 class UserCreateView(CreateView):
     """
@@ -24,7 +24,7 @@ class UserCreateView(CreateView):
     second_form = UserCreationForm
 
     def get_context_data(self,**kwargs):
-        context = super(SignUp,self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["user_form"] = self.second_form
 
         return context
@@ -62,6 +62,25 @@ class ClubListView(LoginRequiredMixin,ListView):
     form_class = ClubForm
 
 class ClubDetailView(LoginRequiredMixin,DetailView):
-    """
-    """
     model = Club
+
+class ClubAddMemberView(LoginRequiredMixin,CreateView):
+    model = Membership
+    form_class = MembershipForm
+    template_name = 'member/add_members.html'
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['formset'] = MemberFormSet()
+        context['helper'] = FormSetHelper()
+        return context
+   
+    def post(self,request,*args,**kwargs):
+        formset = MembershipFormset(request.POST)
+        if formset.is_valid():
+            return self.form_valid(formset)
+        else:
+            return self.form_invalid(formset)
+
+    def form_valid(self,formset):
+        formset.save()
+        return super().form_valid(formset)

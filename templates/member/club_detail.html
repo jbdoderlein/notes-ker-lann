@@ -3,4 +3,6 @@
 {% block content %}
 <p><a class="btn btn-default" href="{% url 'member:club_list' %}">Clubs</a></p>
 <h5>{{ object.name }}</h5>
+
+<a class="btn btn-default" href="{% url 'member:club_add_member' pk=object.pk %}"> Ajouter des membres </a>
 {% endblock %}
