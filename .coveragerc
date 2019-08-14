@@ -3,7 +3,6 @@ source =
     activity
     member
     note
-    theme
 omit =
     activity/tests/*.py
     activity/migrations/*.py
@@ -11,4 +10,3 @@ omit =
     member/migrations/*.py
     note/tests/*.py
     note/migrations/*.py
-    theme/tests/*.py

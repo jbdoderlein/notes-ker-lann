@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
-APPS_DIR = os.path.realpath(os.path.join(BASE_DIR,"apps"))
+APPS_DIR = os.path.realpath(os.path.join(BASE_DIR, "apps"))
 sys.path.append(APPS_DIR)
 
 # Quick-start development settings - unsuitable for production
@@ -76,7 +76,7 @@ ROOT_URLCONF = 'note_kfet.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,7 +127,7 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
-ANONYMOUS_USER_NAME = None # Disable guardian anonymous user
+ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
 
 GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
@@ -149,6 +149,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -158,7 +160,7 @@ USE_TZ = True
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.realpath(__file__)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')]
+    os.path.join(BASE_DIR, 'static')]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
