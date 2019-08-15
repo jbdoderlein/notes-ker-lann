@@ -106,6 +106,10 @@ class Transaction(models.Model):
         self.destination.save()
         super().save(*args, **kwargs)
 
+    @property
+    def total(self):
+        return self.amount*self.quantity
+
 
 class MembershipTransaction(Transaction):
     membership = models.OneToOneField(
