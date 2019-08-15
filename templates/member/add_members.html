@@ -7,7 +7,7 @@
     {% csrf_token %}
     {% crispy formset helper %}
     <div class="form-actions">
-        <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-save">
+        <input type="submit" name="submit" value="Add Members" class="btn btn-primary" id="submit-save">
     </div>
 </form>
 
@@ -16,8 +16,10 @@
 <script src="{% static 'js/dynamic-formset.js' %}"></script>
 <script>
     $('.formset-row').formset({
-        addText: 'add link',
-        deleteText: 'remove'
+        addText: 'add another',          // Text for the add link
+        deleteText: 'remove',            // Text for the delete link
+        addCssClass: 'btn btn-primary',          // CSS class applied to the add link
+        deleteCssClass: 'btn btn-danger h-50 my-auto',
     });
 </script>
 {% endblock %}
