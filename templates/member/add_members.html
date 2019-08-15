@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<form method="post" action="">
+    {% csrf_token %}
+    {% crispy formset helper %}
+    <div class="form-actions">
+        <input type="submit" name="submit" value="Add Members" class="btn btn-primary" id="submit-save">
+    </div>
+</form>
+
+<!-- Include formset plugin - including jQuery dependency -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="{% static 'js/dynamic-formset.js' %}"></script>
+<script>
+    $('.formset-row').formset({
+        addText: 'add another',          // Text for the add link
+        deleteText: 'remove',            // Text for the delete link
+        addCssClass: 'btn btn-primary',          // CSS class applied to the add link
+        deleteCssClass: 'btn btn-danger h-50 my-auto',
+    });
+</script>
+{% endblock %}
