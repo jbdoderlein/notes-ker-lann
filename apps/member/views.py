@@ -18,7 +18,7 @@ from .models import Profile, Club, Membership
 from .forms import ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
 from .tables import ClubTable
 from note.models.transactions import Transaction
-
+from note.tables import HistoryTable
 class UserCreateView(CreateView):
     """
     Une vue pour inscrire un utilisateur et lui créer un profile
@@ -87,10 +87,10 @@ class ClubDetailView(LoginRequiredMixin,DetailView):
         club = context["club"]
         club_transactions =  \
             Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))
-        context['history_list'] = club_transactions
+        context['history_list'] = HistoryTable(club_transactions)
         club_member = \
             Membership.objects.all().filter(club=club)
-        #TODO: consider only valid Membership
+        # TODO: consider only valid Membership
         context['member_list'] = club_member
         return context
   

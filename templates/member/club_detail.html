@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load render_table from django_tables2 %}
+{% load pretty_money %}
 {% block content %}
 <p><a class="btn btn-primary" href="{% url 'member:club_list' %}">Clubs</a></p>
 <h3 class="text-center"> Club {{ object.name }}</h3>
@@ -15,7 +16,7 @@
     <dt> Aliases </dt>
     <dd>{{ club.note.aliases_set.all }}</dd>
     <dt>{% trans 'balance' %}</dt>
-    <dd>{{ club.note.balance }}</dd>
+    <dd>{{ club.note.balance | pretty_money }}</dd>
 
 </dl>
 
