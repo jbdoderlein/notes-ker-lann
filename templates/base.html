@@ -1,60 +1,80 @@
-{% load static %}
+{% load static i18n static %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="position-relative h-100">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-<title>{% block title %}NoteKfet2020{% endblock title %}</title>
-<meta name="description" content="A framework for launching new Django projects quickly.">
-<meta name="author" content="">
-<link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <title>
+        {% block title %}{{ title }}{% endblock title %} - {{ request.site.name }}
+    </title>
+    <meta name="description" content="{% trans "The ENS Paris-Saclay BDE note." %}">
 
-{% block css %}
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-{% endblock %}
+    {# Favicon #}
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+    <link rel="mask-icon" href="{% static "favicon/safari-pinned-tab.svg" %}" color="#5bbad5">
+    <link rel="shortcut icon" href="{% static "favicon/favicon.ico" %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="{% static "favicon/browserconfig.xml" %}">
+    <meta name="theme-color" content="#ffffff">
+
+    {# Bootstrap CSS #}
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    {% block extracss %}{% endblock %}
 </head>
-
 <body>
-    <main>
-        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar">
-            <a class="navbar-brand" href="#">NK20-dev</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-coffee"></i>Consos</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> Clubs</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-calendar"></i> Activités</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:template_list' %}"><i class="fa fa-coffee"></i> Bouton</a>
-                    </li>
-                </ul>
-
-                <ul class="navbar-nav ml-auto">
-                    {% if user.is_authenticated%}
+<main>
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar">
+        <a class="navbar-brand" href="/">{{ request.site.name }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fa fa-coffee"></i> Consos</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> Clubs</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fa fa-calendar"></i> Activités</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'note:template_list' %}"><i class="fa fa-coffee"></i> Bouton</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <i class="fa fa-user"></i> {{ user.username }}
+                            <i class="fa fa-user"></i> {{ user.username }}
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.profile.pk %}"> <i class="fa fa-user"></i> Mon compte </a>
+                        <div class="dropdown-menu dropdown-menu-right"
+                             aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.profile.pk %}">
+                                <i class="fa fa-user"></i> Mon compte
+                            </a>
                             <a class="dropdown-item" href="{% url 'logout' %}">
-                                <i class="fa fa-sign-out"></i>
-                                Se déconnecter</a>
+                                <i class="fa fa-sign-out"></i> Se déconnecter
+                            </a>
                         </div>
                     </li>
-                    {% else%}
+                {% else %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'member:signup' %}">
                             <i class="fa fa-user-plus"></i> S'inscrire
@@ -65,43 +85,74 @@
                             <i class="fa fa-sign-in"></i> Se connecter
                         </a>
                     </li>
-                    {% endif%}
-                </ul>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid mb-5 mt-2">
+        <div class="row">
+            <div class="col-md-2">
+                {% block sidebar %}
+                {% endblock %}
             </div>
-        </nav>
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="col-md-2">
-
-                </div>
-                <div class ="col-md-10 text-justify mt-5">
-                    {% block content %}
+            <div class="col-md-10 text-justify">
+                {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
+                {% block content %}
                     <p>Default content...</p>
-                    {% endblock content %}
-
-                </div>
+                {% endblock content %}
             </div>
         </div>
-    </main>
-    <footer class="footer mt-2">
-        <div class="container">
-            <span class="text-muted"> NoteKfet2020 - Nous contacter - </span>
-            <p class="pull-right"> <a href="#">Retour en haut</a></p>
+    </div>
+</main>
+<footer class="bg-light fixed-bottom position-absolute py-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <form action="{% url 'set_language' %}" method="post"
+                      class="form-inline">
+                    <span class="text-muted mr-1">
+                        NoteKfet2020 -
+                        <a href="mailto:tresorie.bde@lists.crans.org"
+                           class="text-muted">Nous contacter</a> -
+                    </span>
+                    {% csrf_token %}
+                    <select title="language" name="language"
+                            class="custom-select custom-select-sm"
+                            onchange="this.form.submit()">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <option value="{{ language.code }}"
+                                    {% if language.code == LANGUAGE_CODE %}
+                                    selected{% endif %}>
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <noscript>
+                        <input type="submit">
+                    </noscript>
+                </form>
+            </div>
+            <div class="col-sm text-right">
+                <a href="#" class="text-muted">Retour en haut</a>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    {% block javascript %}
-    <!-- Bootstrap JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-    <!-- 3rd party JavaScript -->
-
-    <!-- Project JS -->
-    <script src="{% static 'js/base.js' %}"></script>
-
-    {% endblock javascript %}
-
+{# Bootstrap JavaScript #}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+{% block extrajavascript %}
+{% endblock extrajavascript %}
 </body>
 </html>

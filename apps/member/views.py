@@ -45,9 +45,16 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-
 class UserDetailView(LoginRequiredMixin,DetailView):
     model = Profile
+    
+    def get_context_data(slef,**kwargs):
+        context = super().get_context_data(**kwargs)
+        user = context['object'].user.note
+        user_transactions = \
+                Transaction.objects.all().filter(Q(source=user) | Q(destination=user))
+        context['history_list'] = user_transactions
+        return context
 
 
 class ClubCreateView(LoginRequiredMixin,CreateView):
