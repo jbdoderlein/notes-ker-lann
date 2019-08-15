@@ -2,7 +2,20 @@
 {% load render_table from django_tables2 %}
 {% block content %}
 
-{% render_table object_list %}
+{% render_table  table %}
 
 <a class="btn btn-primary" href="{% url 'member:club_create' %}">New Club</a>
+
+{% endblock %}
+{% block javascript %}
+{{ block.super }}
+<script type="text/javascript">
+
+$(document).ready(function($) {
+    $(".table-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+
+</script>
 {% endblock %}

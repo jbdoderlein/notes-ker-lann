@@ -54,12 +54,12 @@ class ClubCreateView(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         return super().form_valid(form)
    
-class ClubListView(LoginRequiredMixin,ListView):
+class ClubListView(LoginRequiredMixin,SingleTableView):
     """
-    List TransactionsTemplates
+    List existing tables
     """
     model = Club
-    form_class = ClubForm
+    table_class = ClubTable
 
 class ClubDetailView(LoginRequiredMixin,DetailView):
     model = Club
