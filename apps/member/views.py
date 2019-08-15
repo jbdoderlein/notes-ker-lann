@@ -47,13 +47,17 @@ class UserCreateView(CreateView):
 
 class UserDetailView(LoginRequiredMixin,DetailView):
     model = Profile
-    
+    context_object_name = "profile"
     def get_context_data(slef,**kwargs):
         context = super().get_context_data(**kwargs)
-        user = context['object'].user.note
-        user_transactions = \
-                Transaction.objects.all().filter(Q(source=user) | Q(destination=user))
-        context['history_list'] = user_transactions
+        user = context['profile'].user
+       
+        history_list = \
+            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))
+        context['history_list'] = HistoryTable(history_list)
+        club_list = \
+            Membership.objects.all().filter(user=user).only("club")
+        context['club_list'] = ClubTable(club_list)
         return context
 
 
