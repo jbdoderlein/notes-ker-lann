@@ -202,7 +202,7 @@ class Alias(models.Model):
             for char in unicodedata.normalize('NFKD', string.casefold())
             if all(not unicodedata.category(char).startswith(cat)
                    for cat in {'M', 'P', 'Z', 'C'})
-        )
+        ).casefold()
 
     def save(self, *args, **kwargs):
         """

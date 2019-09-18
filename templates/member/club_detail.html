@@ -1,6 +1,62 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load pretty_money %}
 {% block content %}
-<p><a class="btn btn-default" href="{% url 'member:club_list' %}">Clubs</a></p>
-<h5>{{ object.name }}</h5>
-{% endblock %}
+<p><a class="btn btn-primary" href="{% url 'member:club_list' %}">Clubs</a></p>
+<h3 class="text-center"> Club {{ object.name }}</h3>
+<dl>
+    <dt>{% trans 'Membership starts on' %}</dt>
+    <dd>{{ club.membership_start }}</dd>
+    <dt>{% trans 'Membership ends on' %}</dt>
+    <dd>{{ club.membership_end }}</dd>
+    <dt>{% trans 'Membership duration' %}</dt>
+    <dd>{{ club.membership_duration }}</dd>
+    <dt> Aliases </dt>
+    <dd>{{ club.note.aliases_set.all }}</dd>
+    <dt>{% trans 'balance' %}</dt>
+    <dd>{{ club.note.balance | pretty_money }}</dd>
+
+</dl>
+
+
+<div class="btn-group" role="group">
+    <a class="btn btn-primary" href="{% url 'member:club_add_member' pk=object.pk %}"> Ajouter des membres </a>
+    <a class="btn btn-primary" href="{% url 'member:club_add_member' pk=object.pk %}"> Modifier les informations </a>
+    <a class="btn btn-primary" href="{% url 'member:club_add_member' pk=object.pk %}"> Ajouter des roles </a>
+</div>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <i class="fa fa-users"></i> Membres du club
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+
+          {% render_table member_list %}
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <i class="fa fa-euro"></i> Historique des transactions
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+          {% render_table history_list %}
+      </div>
+    </div>
+  </div>
+</div>
+    {% endblock %}

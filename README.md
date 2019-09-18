@@ -22,7 +22,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         $ cd note_kfet
         $ git clone git@gitlab.crans.org:bde/nk20.git .
 3. Environment Virtuel
-   
+
    À la racine du projet:
 
         $ virtualenv env
@@ -35,23 +35,44 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
     On utilise uwsgi et Nginx pour gérer le coté serveu :
 
         $ sudo ln -s /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
-        
+
    **Modifier la config nginx  pour l'adapter à votre server!**
-   
+
    Si l'on a un emperor (plusieurs instance uwsgi):
-    
+
         $ sudo ln -s /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
 
-    Sinon: 
-        
+    Sinon:
+
         $ sudo ln -s /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/apps-enabled/
+        
 5. Base de données
 
     Pour le moment c'est du sqllite, pas de config particulière.
-    
+
 ## Développer en local
 
 Il est tout a fait possible de travailler en local, vive `./manage.py runserver` !
+
+1. Cloner le dépot là ou vous voulez:
+
+        $ git@gitlab.crans.org:bde/nk20.git
+
+2. Environnement Virtuel
+
+        $ virtualenv env
+        $ source /env/bin/activate
+        (env)$ pip install -r requirements.txt
+
+3. Migrations:
+
+        (env)$ ./manage.py makemigrations
+        (env)$ ./manage.py migrate
+
+4. Enjoy:
+
+        (env)$ ./manage.py runserver
+
 
 ## Cahier des Charges 
 
