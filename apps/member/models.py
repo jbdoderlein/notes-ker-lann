@@ -146,7 +146,10 @@ class Membership(models.Model):
     )
 
     def valid(self):
-        return self.date_start <= datetime.datetime.now() < self.date_end
+        if self.date_end is not None:
+            return self.date_start <= datetime.datetime.now() < self.date_end
+        else:
+            return self.date_start <= datetime.datetime.now()
 
     class Meta:
         verbose_name = _('membership')
