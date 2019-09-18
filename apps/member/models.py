@@ -2,12 +2,15 @@
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+
 
 class Profile(models.Model):
     """
@@ -50,6 +53,7 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('user_detail',args=(self.pk,))
+
 
 class Club(models.Model):
     """
@@ -141,9 +145,27 @@ class Membership(models.Model):
         verbose_name=_('fee'),
     )
 
+    def valid(self):
+        return self.date_start <= datetime.datetime.now() < self.date_end
+
     class Meta:
         verbose_name = _('membership')
         verbose_name_plural = _('memberships')
+
+
+class RolePermissions(models.Model):
+    """
+    Permissions associated with a Role
+    """
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.PROTECT,
+        related_name='+',
+        verbose_name=_('role'),
+    )
+    permissions = models.ManyToManyField(
+        'permission.Permission'
+    )
 
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
