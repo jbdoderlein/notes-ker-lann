@@ -54,10 +54,10 @@ class InstancedPermission:
 class Permission(models.Model):
 
     PERMISSION_TYPES = [
-        ('C', 'add'),
-        ('R', 'view'),
-        ('U', 'change'),
-        ('D', 'delete')
+        ('add', 'add'),
+        ('view', 'view'),
+        ('change', 'change'),
+        ('delete', 'delete')
     ]
 
     model = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='+')
@@ -72,7 +72,7 @@ class Permission(models.Model):
         unique_together = ('model', 'permission', 'type', 'field')
 
     def clean(self):
-        if self.field and self.type not in {'R', 'U'}:
+        if self.field and self.type not in {'view', 'change'}:
             raise ValidationError(_("Specifying field applies only to view and change permission types."))
 
     def save(self):
