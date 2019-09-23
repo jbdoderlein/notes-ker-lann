@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
 
@@ -16,9 +17,13 @@ from django_tables2.views import SingleTableView
 
 from .models import Profile, Club, Membership
 from .forms import ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
-from .tables import ClubTable
+from .tables import ClubTable,UserTable
+from .filters import UserFilter, UserFilterFormHelper
+
+
 from note.models.transactions import Transaction
 from note.tables import HistoryTable
+
 class UserCreateView(CreateView):
     """
     Une vue pour inscrire un utilisateur et lui créer un profile
@@ -60,6 +65,28 @@ class UserDetailView(LoginRequiredMixin,DetailView):
         context['club_list'] = ClubTable(club_list)
         return context
 
+class UserListView(LoginRequiredMixin,SingleTableView):
+    model = User
+    table_class = UserTable
+    template_name = 'member/user_list.html'
+    filter_class = UserFilter
+    formhelper_class = UserFilterFormHelper
+   
+    def get_queryset(self,**kwargs):
+        qs = super().get_queryset()
+        self.filter = self.filter_class(self.request.GET,queryset=qs)
+        self.filter.form.helper = self.formhelper_class()
+        return self.filter.qs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
+
+
+###################################
+############## CLUB ###############
+###################################
 
 class ClubCreateView(LoginRequiredMixin,CreateView):
     """
