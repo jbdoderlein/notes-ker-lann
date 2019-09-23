@@ -27,8 +27,8 @@ from note.tables import HistoryTable
 class UserCreateView(CreateView):
     """
     Une vue pour inscrire un utilisateur et lui créer un profile
-
     """
+
     form_class = ProfileForm
     success_url = reverse_lazy('login')
     template_name ='member/signup.html'
@@ -49,14 +49,15 @@ class UserCreateView(CreateView):
             user_profile.save()
         return super().form_valid(form)
 
-
 class UserDetailView(LoginRequiredMixin,DetailView):
+    """
+    Affiche les informations sur un utilisateur, sa note, ses clubs ...
+    """
     model = Profile
     context_object_name = "profile"
     def get_context_data(slef,**kwargs):
         context = super().get_context_data(**kwargs)
         user = context['profile'].user
-       
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))
         context['history_list'] = HistoryTable(history_list)
@@ -66,12 +67,15 @@ class UserDetailView(LoginRequiredMixin,DetailView):
         return context
 
 class UserListView(LoginRequiredMixin,SingleTableView):
+    """
+    Affiche la liste des utilisateurs, avec une fonction de recherche statique
+    """
     model = User
     table_class = UserTable
     template_name = 'member/user_list.html'
     filter_class = UserFilter
     formhelper_class = UserFilterFormHelper
-   
+
     def get_queryset(self,**kwargs):
         qs = super().get_queryset()
         self.filter = self.filter_class(self.request.GET,queryset=qs)
@@ -97,10 +101,10 @@ class ClubCreateView(LoginRequiredMixin,CreateView):
 
     def form_valid(self,form):
         return super().form_valid(form)
-   
+
 class ClubListView(LoginRequiredMixin,SingleTableView):
     """
-    List existing tables
+    List existing Clubs
     """
     model = Club
     table_class = ClubTable
@@ -120,7 +124,7 @@ class ClubDetailView(LoginRequiredMixin,DetailView):
         # TODO: consider only valid Membership
         context['member_list'] = club_member
         return context
-  
+
 class ClubAddMemberView(LoginRequiredMixin,CreateView):
     model = Membership
     form_class = MembershipForm
@@ -130,7 +134,7 @@ class ClubAddMemberView(LoginRequiredMixin,CreateView):
         context['formset'] = MemberFormSet()
         context['helper'] = FormSetHelper()
         return context
-   
+
     def post(self,request,*args,**kwargs):
         formset = MembershipFormset(request.POST)
         if formset.is_valid():
