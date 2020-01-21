@@ -99,9 +99,10 @@ class Guest(models.Model):
         null=True,
     )
     entry_transaction = models.ForeignKey(
-        null=True,
         'note.Transaction',
         on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
 
     class Meta:
