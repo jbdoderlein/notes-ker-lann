@@ -10,8 +10,8 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
 1. Paquets nécessaires
 
-    $ sudo apt install nginx python3 python3-pip python3-dev uwsgi
-    $ sudo apt install uwsgi-plugin-python3 python3-virtualenv git
+        $ sudo apt install nginx python3 python3-pip python3-dev uwsgi
+        $ sudo apt install uwsgi-plugin-python3 python3-virtualenv git
 
 2. Clonage du dépot
 
@@ -50,16 +50,17 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
     Pour le moment c'est du sqllite, pas de config particulière.
 
-## Développer en local
+## Installer en local
 
 Il est tout a fait possible de travailler en local, vive `./manage.py runserver` !
 
 1. Cloner le dépot là ou vous voulez:
 
-        $ git@gitlab.crans.org:bde/nk20.git
+        $ git clone git@gitlab.crans.org:bde/nk20.git
 
-2. Environnement Virtuel
-
+2. Initialiser l'environnement Virtuel
+        
+        $ cd nk20
         $ virtualenv env
         $ source /env/bin/activate
         (env)$ pip install -r requirements.txt
@@ -73,6 +74,14 @@ Il est tout a fait possible de travailler en local, vive `./manage.py runserver`
 
         (env)$ ./manage.py runserver
 
+## Minimal Setup
+
+1. Créer un superuser :
+
+        (env)$ ./manage.py createsuperuser
+
+Avec ce dernier vous pouvez vous connecter à l'interface admin de Django, avoir
+accès à la doc auto-générée du projet, jouer avec des models, etc ...
 
 ## Cahier des Charges 
 
