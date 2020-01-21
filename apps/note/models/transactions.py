@@ -15,6 +15,11 @@ Defines transactions
 
 
 class TransactionTemplate(models.Model):
+    """
+    Defined a reccurent transaction
+
+    associated to selling something (a burger, a beer, ...)
+    """
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
@@ -44,6 +49,15 @@ class TransactionTemplate(models.Model):
 
 
 class Transaction(models.Model):
+    """
+    General transaction between two :model:`note.Note`
+
+    amount is store in centimes of currency, making it a  positive integer
+    value. (from someone to someone else)
+
+    TODO: Ensure source != destination.
+    """
+
     source = models.ForeignKey(
         Note,
         on_delete=models.PROTECT,
@@ -112,6 +126,11 @@ class Transaction(models.Model):
 
 
 class MembershipTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to a :model:`member.Membership`.
+
+    """
+
     membership = models.OneToOneField(
         'member.Membership',
         on_delete=models.PROTECT,

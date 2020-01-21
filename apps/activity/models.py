@@ -9,7 +9,12 @@ from django.utils.translation import gettext_lazy as _
 
 class ActivityType(models.Model):
     """
-    Type of Activity, (e.g "Pot", "Soirée Club") and associated properties
+    Type of Activity, (e.g "Pot", "Soirée Club") and associated properties.
+
+    Activity Type are used as a search field for Activity, and determine how
+    some rules about the activity:
+     - Can people be invited
+     - What is the entrance fee.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -32,7 +37,9 @@ class ActivityType(models.Model):
 
 class Activity(models.Model):
     """
-    An IRL event organized by a club for others.
+    An IRL event organized by a club for other club.
+
+    By default the invited clubs should be the Club containing all the active accounts.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -73,7 +80,7 @@ class Activity(models.Model):
 
 class Guest(models.Model):
     """
-    People who are not current members of any clubs, and invited by someone who is a current member.
+    People who are not current members of any clubs, and are invited by someone who is a current member.
     """
     activity = models.ForeignKey(
         Activity,
@@ -92,6 +99,7 @@ class Guest(models.Model):
         null=True,
     )
     entry_transaction = models.ForeignKey(
+        null=True,
         'note.Transaction',
         on_delete=models.PROTECT,
     )

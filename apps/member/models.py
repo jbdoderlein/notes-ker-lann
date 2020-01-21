@@ -13,8 +13,9 @@ class Profile(models.Model):
     """
     An user profile
 
-    We do not want to patch the Django Contrib Auth User class
+    We do not want to patch the Django Contrib :model:`auth.User`model;
     so this model add an user profile with additional information.
+
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -53,7 +54,8 @@ class Profile(models.Model):
 
 class Club(models.Model):
     """
-    A student club
+    A club is a group of people, whose membership is handle by their
+    :model:`member.Membership`, and gives access to right defined by a :model:`member.Role`.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -101,7 +103,10 @@ class Club(models.Model):
 
 class Role(models.Model):
     """
-    Role that an user can have in a club
+    Role that an :model:`auth.User` can have in a :model:`member.Club`
+
+    TODO: Integrate the right management, and create some standard Roles at the
+    creation of the club.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -117,6 +122,7 @@ class Role(models.Model):
 class Membership(models.Model):
     """
     Register the membership of a user to a club, including roles and membership duration.
+
     """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

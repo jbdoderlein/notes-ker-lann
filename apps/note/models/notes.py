@@ -18,7 +18,11 @@ Defines each note types
 
 class Note(PolymorphicModel):
     """
-    An model, use to add transactions capabilities
+    Gives transactions capabilities. Note is a Polymorphic Model, use as based
+    for the models :model:`note.NoteUser` and :model:`note.NoteClub`.
+    A Note principaly store the actual balance of someone/some club.
+    A Note can be searched find throught an :model:`note.Alias`
+
     """
     balance = models.IntegerField(
         verbose_name=_('account balance'),
@@ -94,7 +98,7 @@ class Note(PolymorphicModel):
 
 class NoteUser(Note):
     """
-    A Note associated to an User
+    A :model:`note.Note` associated to an  unique :model:`auth.User`.
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -116,7 +120,7 @@ class NoteUser(Note):
 
 class NoteClub(Note):
     """
-    A Note associated to a Club
+    A :model:`note.Note` associated to an unique :model:`member.Club`
     """
     club = models.OneToOneField(
         'member.Club',
@@ -133,17 +137,18 @@ class NoteClub(Note):
         return str(self.club)
 
     def pretty(self):
-        return _("Note for %(club)s club") % {'club': str(self.club)}
+        return _("Note of %(club)s club") % {'club': str(self.club)}
 
 
 class NoteSpecial(Note):
     """
-    A Note for special account, where real money enter or leave the system
+    A :model:`note.Note` for special accounts, where real money enter or leave the system
     - bank check
     - credit card
     - bank transfer
     - cash
     - refund
+    This Type of Note is not associated to a :model:`auth.User` or :model:`member.Club` .
     """
     special_type = models.CharField(
         verbose_name=_('type'),
@@ -161,7 +166,13 @@ class NoteSpecial(Note):
 
 class Alias(models.Model):
     """
-    An alias labels a Note instance, only for user and clubs
+    points toward  a :model:`note.NoteUser` or :model;`note.NoteClub` instance.
+    Alias are unique, but a :model:`note.NoteUser` or :model:`note.NoteClub` can
+    have multiples aliases.
+
+    Aliases name are also normalized, two differents :model:`note.Note` can not
+    have the same normalized alias, to avoid confusion when referring orally to
+    it.
     """
     name = models.CharField(
         verbose_name=_('name'),
