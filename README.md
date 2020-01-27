@@ -48,7 +48,71 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         
 5. Base de données
 
-    Pour le moment c'est du sqllite, pas de config particulière.
+    En prod on utilise postgresql. 
+        
+        $ sudo apt-get install postgresql postgresql-contrib libpq-dev
+        (env)$ pip install psycopg2
+    
+    La config de la base de donnée se fait comme suit:
+    
+    a. On se connecte au shell de psql
+    
+        $ sudo su - postgres
+        $ psql
+    
+    b. On sécurise l'utilisateur postgres
+        
+        postgres=# \password
+        Enter new password:
+        
+     Conservez ce mot de passe de la meme manière que tous les autres.
+     
+    c. On créer la basse de donnée, et l'utilisateur associé
+    
+        postgres=# CREATE USER note WITH PASSWORD 'un_mot_de_passe_sur';
+        CREATE ROLE
+        postgres=# CREATE DATABASE note_db OWNER note;
+        CREATE DATABASE
+
+    Si tout va bien:
+        
+        postgres=#\list
+        List of databases
+           Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+        -----------+----------+----------+-------------+-------------+-----------------------
+         note_db   | note     | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | 
+         postgres  | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | 
+         template0 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres+postgres=CTc/postgres
+         template1 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres  +postgres=CTc/postgres
+        (4 rows)
+NB: cette config est en adéquation avec `note_kfet/settings/production.py`. penser à changer le mots de passe dans `note_kfet/settings/secrets.py`
+
+
+6. Variable d'environnement et Migrations
+        
+        on modifie le fichier d'environnement:
+        ```
+        # env/bin/activate:
+        
+        deactivate () {
+        ...
+    
+        # Unset local environment variables
+        unset DJANGO_APP_STAGE
+        }
+        ...
+        #at end of the file:
+        export DJANGO_APP_STAGE="prod"
+        ```
+Ensuite on bascule dans l'environement virtuel et on lance les migrations
+        
+        $ source /env/bin/activate
+        (env)$ ./manage.py makemigrations
+        (env)$ ./manage.py migrate
+
+7. Enjoy
+
+    
 
 ## Installer en local
 
