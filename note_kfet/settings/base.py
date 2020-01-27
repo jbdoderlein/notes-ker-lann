@@ -8,8 +8,8 @@ import sys
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 APPS_DIR = os.path.realpath(os.path.join(BASE_DIR, "apps"))
 sys.path.append(APPS_DIR)
 
@@ -90,16 +90,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'note_kfet.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

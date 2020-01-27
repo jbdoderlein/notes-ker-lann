@@ -29,7 +29,7 @@ coverage
 .idea
 
 # Local data
-settings_local.py
+secrets.py
 *.log
 
 # Virtualenv
