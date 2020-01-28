@@ -7,5 +7,7 @@ if app_stage == 'prod':
     from .production import *
 else:
     from .development import *
-
-from .secrets import *
+try:
+    from .secrets import *
+except:
+    from .secrets_example.py import * 
