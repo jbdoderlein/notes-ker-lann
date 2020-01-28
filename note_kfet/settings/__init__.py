@@ -7,10 +7,11 @@ if app_stage == 'prod':
     from .production import *
 else:
     from .development import *
-# Load password for database and SECRET_KEY
 
-try:
-    from .secrets import *
-except ImportError:
-    from .secrets_example.py import * 
-    print("Use default secrets!")
+# env variables set at the of in /env/bin/activate
+# don't forget to unset in deactivate !
+
+DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD','CHANGE_ME_IN_ENV_SETTINGS');
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','CHANGE_ME_IN_ENV_SETTINGS');
+
+

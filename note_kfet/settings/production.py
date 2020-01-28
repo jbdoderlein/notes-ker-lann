@@ -10,10 +10,10 @@
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'note_db',
         'USER': 'note',
-        'PASSWORD': 'update_in_secrets.py',
+        'PASSWORD': 'update_in_env_variable',
         'HOST': '127.0.0.1',
         'PORT': '',
     }
