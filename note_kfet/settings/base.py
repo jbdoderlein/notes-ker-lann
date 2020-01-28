@@ -159,7 +159,3 @@ STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
 
-try:
-    from .settings_local import *
-except ImportError:
-    pass
