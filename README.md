@@ -34,17 +34,17 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
     On utilise uwsgi et Nginx pour gérer le coté serveu :
 
-        $ sudo ln -s /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
+        $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
 
    **Modifier la config nginx  pour l'adapter à votre server!**
 
    Si l'on a un emperor (plusieurs instance uwsgi):
 
-        $ sudo ln -s /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
+        $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
 
     Sinon:
 
-        $ sudo ln -s /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/apps-enabled/
+        $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/apps-enabled/
         
 5. Base de données
 
@@ -99,11 +99,15 @@ NB: cette config est en adéquation avec `note_kfet/settings/production.py`. pen
     
         # Unset local environment variables
         unset DJANGO_APP_STAGE
+        unset DJANGO_DB_PASSWORD
+        unset DJANGO_SECRET_KEY
         }
         ...
         #at end of the file:
         export DJANGO_APP_STAGE="prod"
-        ```
+        export DJANGO_DB_PASSWORD="a_long_and_secure_password"
+        export DJANGO_SECRET_KEY="a_long_and_secure_secret_key"
+
 Ensuite on bascule dans l'environement virtuel et on lance les migrations
         
         $ source /env/bin/activate
