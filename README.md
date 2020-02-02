@@ -19,6 +19,10 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ cd /var/www/
         $ mkdir note_kfet
+        $ sudo chown www-data:www-data note_kfet
+        $ sudo usermod -a -G www-data $USER
+        $ sudo chmod g+ws note_kfet
+        $ sudo setfacl -d -m "g::rwx" note_kfet
         $ cd note_kfet
         $ git clone git@gitlab.crans.org:bde/nk20.git .
 3. Environment Virtuel
@@ -27,7 +31,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ virtualenv env
         $ source /env/bin/activate
-        (env)$ pip install -r requirements.txt
+        (env)$ pip3 install -r requirements.txt
         (env)$ deactivate
 
 4. uwsgi  et Nginx
@@ -51,7 +55,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
     En prod on utilise postgresql. 
         
         $ sudo apt-get install postgresql postgresql-contrib libpq-dev
-        (env)$ pip install psycopg2
+        (env)$ pip3 install psycopg2
     
     La config de la base de donnée se fait comme suit:
     
@@ -85,32 +89,23 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
          template0 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres+postgres=CTc/postgres
          template1 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres  +postgres=CTc/postgres
         (4 rows)
-NB: cette config est en adéquation avec `note_kfet/settings/production.py`. penser à changer le mots de passe dans `note_kfet/settings/secrets.py`
 
+    Dans un fichier `.env` à la racine du projet on renseigne des secrets:
+    
+        DJANGO_APP_STAGE='prod'
+        DJANGO_DB_PASSWORD='le_mot_de_passe_de_la_bdd'
+        DJANGO_SECRET_KEY='une_secret_key_longue_et_compliquee'
+
+    
 
 6. Variable d'environnement et Migrations
         
-        on modifie le fichier d'environnement:
-        ```
-        # env/bin/activate:
-        
-        deactivate () {
-        ...
-    
-        # Unset local environment variables
-        unset DJANGO_APP_STAGE
-        unset DJANGO_DB_PASSWORD
-        unset DJANGO_SECRET_KEY
-        }
-        ...
-        #at end of the file:
-        export DJANGO_APP_STAGE="prod"
-        export DJANGO_DB_PASSWORD="a_long_and_secure_password"
-        export DJANGO_SECRET_KEY="a_long_and_secure_secret_key"
+     
 
-Ensuite on bascule dans l'environement virtuel et on lance les migrations
+Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
         
         $ source /env/bin/activate
+        (env)$ ./manage.py check # pas de bétise qui traine
         (env)$ ./manage.py makemigrations
         (env)$ ./manage.py migrate
 
