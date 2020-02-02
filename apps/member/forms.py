@@ -16,9 +16,15 @@ from crispy_forms.bootstrap import InlineField, FormActions, StrictButton, Div, 
 from crispy_forms.layout import Layout
 
 
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['first_name','last_name','username','email']
+
 class ProfileForm(forms.ModelForm):
     """
-    Forms pour la création d'un profile utilisateur.
+    A form for the extras field provided by the :model:`member.Profile` model.
     """
     class Meta:
         model = Profile

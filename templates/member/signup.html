@@ -1,14 +1,17 @@
 <!-- templates/signup.html -->
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
   <h2>Sign up</h2>
   <form method="post">
-    {% csrf_token %}
-    {{ user_form|crispy }}
-    {{ form|crispy }}
-      <button type="submit">Sign up</button>
+      {% csrf_token %}
+      {{ form|crispy }}
+      {{ user_form|crispy }}
+      <button class="btn btn-link" type="submit">
+          {% trans "Sign Up" %}
+      </button>
   </form>
 {% endblock %}

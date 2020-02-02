@@ -16,7 +16,7 @@ from django_tables2.views import SingleTableView
 
 
 from .models import Profile, Club, Membership
-from .forms import ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
+from .forms import  SignUpForm, ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
 from .tables import ClubTable,UserTable
 from .filters import UserFilter, UserFilterFormHelper
 
@@ -29,10 +29,10 @@ class UserCreateView(CreateView):
     Une vue pour inscrire un utilisateur et lui créer un profile
     """
 
-    form_class = ProfileForm
+    form_class = SignUpForm
     success_url = reverse_lazy('login')
     template_name ='member/signup.html'
-    second_form = UserCreationForm
+    second_form = ProfileForm
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,12 +41,12 @@ class UserCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        user_form = UserCreationForm(self.request.POST)
-        if user_form.is_valid():
-            user = user_form.save()
-            user_profile = form.save(commit=False) # do not save to db
-            user_profile.user = user
-            user_profile.save()
+        profile_form = ProfileForm(self.request.POST)
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
         return super().form_valid(form)
 
 class UserDetailView(LoginRequiredMixin,DetailView):
