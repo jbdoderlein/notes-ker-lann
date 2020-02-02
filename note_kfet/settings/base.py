@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'member',
     'note',
 ]
+LOGIN_REDIRECT_URL = '/note/transfer/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
