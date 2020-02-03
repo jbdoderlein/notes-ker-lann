@@ -24,7 +24,7 @@ DATABASES = {
 DEBUG = True
 
 # Mandatory !
-ALLOWED_HOSTS = ['127.0.0.1','note.comby.xyz']
+ALLOWED_HOSTS = ['*']
 
 # Emails
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
