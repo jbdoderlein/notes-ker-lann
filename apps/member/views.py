@@ -5,7 +5,7 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -48,6 +48,33 @@ class UserCreateView(CreateView):
             profile.user = user
             profile.save()
         return super().form_valid(form)
+
+class UserUpdateView(LoginRequiredMixin,UpdateView):
+    model = User
+    fields = ['first_name','last_name','username','email']
+    template_name = 'member/profile_update.html'
+
+    second_form = ProfileForm
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile_form"] = self.second_form(instance=context['user'].profile)
+
+        return context
+
+    def form_valid(self, form):
+        profile_form = ProfileForm(data=self.request.POST,instance=self.request.user.profile)
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save()
+            profile  = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+        return super().form_valid(form)
+
+    def get_success_url(self, **kwargs):
+        if  kwargs:
+            return reverse_lazy('member:user_detail', kwargs = {'pk': kwargs['id']})
+        else:
+            return reverse_lazy('member:user_detail', args = (self.object.id,))
 
 class UserDetailView(LoginRequiredMixin,DetailView):
     """

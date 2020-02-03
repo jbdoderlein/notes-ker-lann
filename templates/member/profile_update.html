@@ -1,0 +1,17 @@
+<!doctype html>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n static pretty_money django_tables2 %}
+
+{% block content %}
+
+<form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      {{ profile_form|crispy }}
+      <button class="btn btn-link" type="submit">
+          {% trans "Save Changes" %}
+      </button>
+  </form>
+
+{% endblock %}

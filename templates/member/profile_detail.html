@@ -22,10 +22,12 @@
         <dt class="col-6 col-md-3">{% trans 'balance'|capfirst %}</dt>
         <dd class="col-6 col-md-3">{{ object.user.note.balance | pretty_money }}</dd>
     </dl>
+    <center>
+        <a class="btn btn-primary" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+        <a class="btn btn-primary" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
+    </center>
 
-    <a class="btn btn-primary" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
-
-<div class="accordion" id="accordionExample">
+<div class="accordion" id="accordionProfile">
   <div class="card">
     <div class="card-header" id="headingOne">
       <h5 class="mb-0">
@@ -35,7 +37,7 @@
       </h5>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionProfile">
       <div class="card-body">
         {% render_table club_list %}
       </div>
@@ -49,7 +51,7 @@
         </button>
       </h5>
     </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionProfile">
       <div class="card-body">
           {% render_table history_list %}
       </div>
