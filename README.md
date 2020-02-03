@@ -118,13 +118,36 @@ Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 
 7. Enjoy
 
+
+## Installer avec Docker
+
+Il est possible de travailler sur une instance Docker.
+
+1. Cloner le dépôt là où vous voulez :
     
+        $ git clone git@gitlab.crans.org:bde/nk20.git
+
+2. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré, ajouter les lignes suivantes, en les adaptant à la configuration voulue :
+
+        nk20:
+          build: /chemin/vers/nk20
+          volumes:
+            - /chemin/vers/nk20:/code/
+          restart: always
+          labels:
+            - traefik.domain=ndd.exemple.com
+            - traefik.frontend.rule=Host:ndd.exemple.com
+            - traefik.port=8000
+
+3. Enjoy :
+
+        $ docker-compose up -d nk20
 
 ## Installer en local
 
-Il est tout a fait possible de travailler en local, vive `./manage.py runserver` !
+Il est tout-à-fait possible de travailler en local, vive `./manage.py runserver` !
 
-1. Cloner le dépot là ou vous voulez:
+1. Cloner le dépôt là où vous voulez :
 
         $ git clone git@gitlab.crans.org:bde/nk20.git
 
