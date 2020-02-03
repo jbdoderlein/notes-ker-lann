@@ -36,13 +36,18 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
 4. uwsgi  et Nginx
 
+    Un exemple de conf est disponible :
+
+        $ cp nginx_note.conf_example nginx_note.conf
+
+*** Modifier le fichier pour etre en accord avec le reste de votre config ***
+
     On utilise uwsgi et Nginx pour gérer le coté serveu :
 
         $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
 
-   **Modifier la config nginx  pour l'adapter à votre server!**
 
-   Si l'on a un emperor (plusieurs instance uwsgi):
+    Si l'on a un emperor (plusieurs instance uwsgi):
 
         $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
 
@@ -50,6 +55,8 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/apps-enabled/
         
+    Le touch-reload est activé par défault, pour redémarrer la note il suffit donc de faire `touch uwsgi_note.ini`.
+
 5. Base de données
 
     En prod on utilise postgresql. 
@@ -95,7 +102,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         DJANGO_APP_STAGE='prod'
         DJANGO_DB_PASSWORD='le_mot_de_passe_de_la_bdd'
         DJANGO_SECRET_KEY='une_secret_key_longue_et_compliquee'
-
+	ALLOWED_HOSTS='le_ndd_de_votre_instance'
     
 
 6. Variable d'environnement et Migrations
@@ -111,13 +118,36 @@ Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 
 7. Enjoy
 
+
+## Installer avec Docker
+
+Il est possible de travailler sur une instance Docker.
+
+1. Cloner le dépôt là où vous voulez :
     
+        $ git clone git@gitlab.crans.org:bde/nk20.git
+
+2. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré, ajouter les lignes suivantes, en les adaptant à la configuration voulue :
+
+        nk20:
+          build: /chemin/vers/nk20
+          volumes:
+            - /chemin/vers/nk20:/code/
+          restart: always
+          labels:
+            - traefik.domain=ndd.exemple.com
+            - traefik.frontend.rule=Host:ndd.exemple.com
+            - traefik.port=8000
+
+3. Enjoy :
+
+        $ docker-compose up -d nk20
 
 ## Installer en local
 
-Il est tout a fait possible de travailler en local, vive `./manage.py runserver` !
+Il est tout-à-fait possible de travailler en local, vive `./manage.py runserver` !
 
-1. Cloner le dépot là ou vous voulez:
+1. Cloner le dépôt là où vous voulez :
 
         $ git clone git@gitlab.crans.org:bde/nk20.git
 
