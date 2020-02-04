@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load i18n static pretty_money %}
+
+{% block content %}
+    <fieldset class="module aligned">
+        {% for type in template_types %}
+            <a href="{% url 'note:consos' template_type=type %}"><button>{{ type }}</button></a>
+        {% endfor %}
+    </fieldset>
+    <form method="post" onsubmit="window.onbeforeunload=null">{% csrf_token %}
+        {% if form.non_field_errors %}
+            <p class="errornote">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </p>
+        {% endif %}
+        <fieldset class="module aligned">
+            {% for field in form %}
+                <div class="form-row{% if field.errors %} errors{% endif %}">
+                    {{ field.errors }}
+                    <div>
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <div class="readonly">{{ field.contents }}</div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.field.help_text %}
+                            <div class="help">{{ field.field.help_text|safe }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for button in buttons %}
+                <button name="button" value="{{ button.name }}">{{ button.name }} ({{ button.amount | pretty_money }})</button>
+            {% endfor %}
+        </fieldset>
+    </form>
+{% endblock %}

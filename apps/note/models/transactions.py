@@ -13,10 +13,28 @@ from .notes import Note,NoteClub
 Defines transactions
 """
 
+class TransactionCategory(models.Model):
+    """
+    Defined a recurrent transaction category
+
+    Example: food, softs, ...
+    """
+    name = models.CharField(
+        verbose_name=_("name"),
+        max_length=31,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = _("transaction category")
+        verbose_name_plural = _("transaction categories")
+
+    def __str__(self):
+        return str(self.name)
 
 class TransactionTemplate(models.Model):
     """
-    Defined a reccurent transaction
+    Defined a recurrent transaction
 
     associated to selling something (a burger, a beer, ...)
     """
@@ -35,7 +53,9 @@ class TransactionTemplate(models.Model):
         verbose_name=_('amount'),
         help_text=_('in centimes'),
     )
-    template_type = models.CharField(
+    template_type = models.ForeignKey(
+        TransactionCategory,
+        on_delete=models.PROTECT,
         verbose_name=_('type'),
         max_length=31
     )
