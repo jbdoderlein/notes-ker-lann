@@ -127,6 +127,7 @@ GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_c
 LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
+    ('de', _('German')),
     ('en', _('English')),
     ('fr', _('French')),
 ]
