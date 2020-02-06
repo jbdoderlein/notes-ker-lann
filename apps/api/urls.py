@@ -6,6 +6,7 @@ from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from member.serializers import ProfileViewSet, ClubViewSet, RoleViewSet, MembershipViewSet
+from activity.serializers import ActivityTypeViewSet, ActivityViewSet, GuestViewSet
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -19,10 +20,15 @@ class UserViewSet(viewsets.ModelViewSet):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'profiles', ProfileViewSet)
-router.register(r'clubs', ClubViewSet)
-router.register(r'roles', RoleViewSet)
-router.register(r'memberships', MembershipViewSet)
+
+router.register(r'members/profiles', ProfileViewSet)
+router.register(r'members/clubs', ClubViewSet)
+router.register(r'members/roles', RoleViewSet)
+router.register(r'members/memberships', MembershipViewSet)
+
+router.register(r'activity/activity_types', ActivityTypeViewSet)
+router.register(r'activity/activities', ActivityViewSet)
+router.register(r'activity/guests', GuestViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
