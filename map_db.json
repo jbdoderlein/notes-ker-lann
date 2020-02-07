@@ -1,0 +1,50 @@
+[
+    "comptes": {
+	"idbde":"Note.id",
+	"type": null,
+	"pseudo":"User.username",
+	"passwd":"User.password",
+	"solde":"Note.solde",
+	"nom":"User.first_name",
+	"prenom":"User.last_name",
+	"tel":"Profile.phone_number",
+	"mail":"User.email",
+	"adresse":"Profile.address",
+	"fonction": null,
+	"normalien": "Profile.paid",
+	"pbsante": null,
+	"droit": null,
+	"surdroit": null,
+	"supreme": null,
+	"bloque": null,
+	"last_adhesion": null
+    },
+    "transaction":{
+    	"id":"Transaction.id",
+	"date":"Transaction.created_at",
+	"type": null,
+	"emetteur":"Transaction.source_id",
+	"destinataire":"Transaction.destination_id",
+	"quantite":"Transaction.quantity",
+	"montant":"Transaction.amount",
+	"description":"Transaction.reason",
+	"valide":"Transaction.valid",
+	"cantinvalidate": null,
+	"categorie":"Transaction.transaction_type"
+    },
+    "boutons":{
+	"id":"TransactionTemplate.id",
+	"label":"TransactionTemplate.name",
+	"montant":"TransactionTemplate.amount",
+	"destinataire":"TransactionTemplate.destination_id",
+	"categorie":null,
+	"affiche":null,
+	"description":null,
+	"consigne":null
+    },
+    "aliases":{
+    	"id":"Alias.id",
+	"alias":"Alias.name",
+	"idbde":"Alias.note_id"
+    }
+]
