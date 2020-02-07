@@ -27,16 +27,6 @@ class NoteClubSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('balance', 'is_active', 'display_image', 'created_at', 'club',)
 
 
-class NoteClubViewSet(viewsets.ModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `NoteClub` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/club/
-    """
-    queryset = NoteClub.objects.all()
-    serializer_class = NoteClubSerializer
-
-
 class NoteSpecialSerializer(serializers.HyperlinkedModelSerializer):
     """
     REST API Serializer for special notes.
