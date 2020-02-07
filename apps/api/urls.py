@@ -5,10 +5,9 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from member.serializers import ProfileViewSet, ClubViewSet, RoleViewSet, MembershipViewSet
-from activity.serializers import ActivityTypeViewSet, ActivityViewSet, GuestViewSet
-from note.serializers import NoteViewSet, NoteClubViewSet, NoteUserViewSet, NoteSpecialViewSet, \
-                            TransactionViewSet, TransactionTemplateViewSet, MembershipTransactionViewSet
+from .activity.urls import register_activity_urls
+from .members.urls import register_members_urls
+from .note.urls import register_note_urls
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -33,25 +32,13 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
 # Routers for members app
-router.register(r'members/profile', ProfileViewSet)
-router.register(r'members/club', ClubViewSet)
-router.register(r'members/role', RoleViewSet)
-router.register(r'members/membership', MembershipViewSet)
+register_members_urls(router, r'members/')
 
 # Routers for activity app
-router.register(r'activity/activity', ActivityViewSet)
-router.register(r'activity/type', ActivityTypeViewSet)
-router.register(r'activity/guest', GuestViewSet)
+register_activity_urls(router, r'activity/')
 
 # Routers for note app
-router.register(r'note/note', NoteViewSet)
-router.register(r'note/club', NoteClubViewSet)
-router.register(r'note/user', NoteUserViewSet)
-router.register(r'note/special', NoteSpecialViewSet)
-
-router.register(r'note/transaction/transaction', TransactionViewSet)
-router.register(r'note/transaction/template', TransactionTemplateViewSet)
-router.register(r'note/transaction/membership', MembershipTransactionViewSet)
+register_note_urls(router, r'note/')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
