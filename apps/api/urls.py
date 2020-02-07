@@ -9,7 +9,7 @@ from .activity.urls import register_activity_urls
 from .members.urls import register_members_urls
 from .note.urls import register_note_urls
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Users.
     The djangorestframework plugin will analyse the model `User` and parse all fields in the API.

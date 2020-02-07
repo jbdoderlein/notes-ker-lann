@@ -4,7 +4,7 @@
 
 from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser
 from note.models.transactions import TransactionTemplate, Transaction, MembershipTransaction
-from .serializers import NoteSerializer, NoteClubSerializer, NoteSpecialSerializer, NoteUserSerializer, \
+from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, NoteUserSerializer, \
                         TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
 from rest_framework import viewsets
 
@@ -47,6 +47,16 @@ class NoteUserViewSet(viewsets.ModelViewSet):
     """
     queryset = NoteUser.objects.all()
     serializer_class = NoteUserSerializer
+
+
+class NotePolymorphicViewSet(viewsets.ModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `NoteUser` objects, serialize it to JSON with the given serializer,
+    then render it on /api/note/user/
+    """
+    queryset = Note.objects.all()
+    serializer_class = NotePolymorphicSerializer
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):

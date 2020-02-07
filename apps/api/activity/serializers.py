@@ -5,7 +5,7 @@
 from activity.models import ActivityType, Activity, Guest
 from rest_framework import serializers
 
-class ActivityTypeSerializer(serializers.HyperlinkedModelSerializer):
+class ActivityTypeSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Activity types.
     The djangorestframework plugin will analyse the model `ActivityType` and parse all fields in the API.
@@ -15,7 +15,7 @@ class ActivityTypeSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class ActivitySerializer(serializers.HyperlinkedModelSerializer):
+class ActivitySerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Activities.
     The djangorestframework plugin will analyse the model `Activity` and parse all fields in the API.
@@ -25,7 +25,7 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class GuestSerializer(serializers.HyperlinkedModelSerializer):
+class GuestSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Guests.
     The djangorestframework plugin will analyse the model `Guest` and parse all fields in the API.

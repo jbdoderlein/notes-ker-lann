@@ -5,49 +5,60 @@
 from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser
 from note.models.transactions import TransactionTemplate, Transaction, MembershipTransaction
 from rest_framework import serializers
+from rest_polymorphic.serializers import PolymorphicSerializer
 
 
-class NoteSerializer(serializers.HyperlinkedModelSerializer):
+class NoteSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Notes.
     The djangorestframework plugin will analyse the model `Note` and parse all fields in the API.
     """
     class Meta:
         model = Note
-        fields = ('balance', 'is_active', 'display_image', 'created_at',)
+        fields = '__all__'
+        extra_kwargs = {
+            'url': {'view_name': 'project-detail', 'lookup_field': 'pk'},
+        }
 
 
-class NoteClubSerializer(serializers.HyperlinkedModelSerializer):
+class NoteClubSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Club's notes.
     The djangorestframework plugin will analyse the model `NoteClub` and parse all fields in the API.
     """
     class Meta:
         model = NoteClub
-        fields = ('balance', 'is_active', 'display_image', 'created_at', 'club',)
+        fields = '__all__'
 
 
-class NoteSpecialSerializer(serializers.HyperlinkedModelSerializer):
+class NoteSpecialSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for special notes.
     The djangorestframework plugin will analyse the model `NoteSpecial` and parse all fields in the API.
     """
     class Meta:
         model = NoteSpecial
-        fields = ('balance', 'is_active', 'display_image', 'created_at', 'club', 'special_type',)
+        fields = '__all__'
 
 
-class NoteUserSerializer(serializers.HyperlinkedModelSerializer):
+class NoteUserSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for User's notes.
     The djangorestframework plugin will analyse the model `NoteUser` and parse all fields in the API.
     """
     class Meta:
         model = NoteUser
-        fields = ('balance', 'is_active', 'display_image', 'created_at', 'user',)
+        fields = '__all__'
 
+class NotePolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Note: NoteSerializer,
+        NoteUser: NoteUserSerializer,
+        NoteClub: NoteClubSerializer,
+        NoteSpecial: NoteSpecialSerializer
+    }
 
-class TransactionTemplateSerializer(serializers.HyperlinkedModelSerializer):
+class TransactionTemplateSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Transaction templates.
     The djangorestframework plugin will analyse the model `TransactionTemplate` and parse all fields in the API.
@@ -57,7 +68,7 @@ class TransactionTemplateSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Transactions.
     The djangorestframework plugin will analyse the model `Transaction` and parse all fields in the API.
@@ -67,7 +78,7 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class MembershipTransactionSerializer(serializers.HyperlinkedModelSerializer):
+class MembershipTransactionSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Membership transactions.
     The djangorestframework plugin will analyse the model `MembershipTransaction` and parse all fields in the API.
