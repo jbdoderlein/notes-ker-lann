@@ -32,13 +32,13 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
 # Routers for members app
-register_members_urls(router, r'members/')
+register_members_urls(router, r'members')
 
 # Routers for activity app
-register_activity_urls(router, r'activity/')
+register_activity_urls(router, r'activity')
 
 # Routers for note app
-register_note_urls(router, r'note/')
+register_note_urls(router, r'note')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

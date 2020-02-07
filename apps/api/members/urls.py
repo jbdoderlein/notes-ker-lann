@@ -9,7 +9,7 @@ def register_members_urls(router, path):
     """
     Configure router for Member REST API.
     """
-    router.register(path + r'profile', ProfileViewSet)
-    router.register(path + r'club', ClubViewSet)
-    router.register(path + r'role', RoleViewSet)
-    router.register(path + r'membership', MembershipViewSet)
+    router.register(path + '/profile', ProfileViewSet)
+    router.register(path + '/club', ClubViewSet)
+    router.register(path + '/role', RoleViewSet)
+    router.register(path + '/membership', MembershipViewSet)

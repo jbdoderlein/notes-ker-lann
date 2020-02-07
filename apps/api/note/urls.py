@@ -10,11 +10,8 @@ def register_note_urls(router, path):
     """
     Configure router for Note REST API.
     """
-    router.register(path + r'note', NotePolymorphicViewSet)
-    router.register(path + r'club', NoteClubViewSet)
-    router.register(path + r'user', NoteUserViewSet)
-    router.register(path + r'special', NoteSpecialViewSet)
+    router.register(path + '', NotePolymorphicViewSet)
 
-    router.register(path + r'transaction/transaction', TransactionViewSet)
-    router.register(path + r'transaction/template', TransactionTemplateViewSet)
-    router.register(path + r'transaction/membership', MembershipTransactionViewSet)
+    router.register(path + '/transaction/transaction', TransactionViewSet)
+    router.register(path + '/transaction/template', TransactionTemplateViewSet)
+    router.register(path + '/transaction/membership', MembershipTransactionViewSet)

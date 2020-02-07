@@ -9,6 +9,6 @@ def register_activity_urls(router, path):
     """
     Configure router for Activity REST API.
     """
-    router.register(path + r'activity', ActivityViewSet)
-    router.register(path + r'type', ActivityTypeViewSet)
-    router.register(path + r'guest', GuestViewSet)
+    router.register(path + '/activity', ActivityViewSet)
+    router.register(path + '/type', ActivityTypeViewSet)
+    router.register(path + '/guest', GuestViewSet)
