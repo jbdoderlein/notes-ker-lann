@@ -34,7 +34,12 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
     """
     Auto complete note by aliases
     """
+
     def get_queryset(self):
+        """
+        Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
+        Cette fonction récupère la requête, et renvoie la liste filtrée des notes par aliases.
+        """
         qs = Note.objects.all()
 
         if self.q:

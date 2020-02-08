@@ -9,6 +9,9 @@ class TransactionTemplateForm(forms.ModelForm):
         model = TransactionTemplate
         fields ='__all__'
 
+        # Le champ de destination est remplacé par un champ d'auto-complétion.
+        # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
+        # et récupère les aliases valides
         widgets = {
             'destination': autocomplete.ModelSelect2(url='note:note_autocomplete',
                                                      attrs={
@@ -23,6 +26,7 @@ class TransactionForm(forms.ModelForm):
         model = Transaction
         fields = ('destination', 'reason', 'amount',)
 
+        # Voir ci-dessus
         widgets = {
             'source': autocomplete.ModelSelect2(url='note:note_autocomplete',
                                                      attrs={

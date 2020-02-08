@@ -44,6 +44,9 @@ class MembershipForm(forms.ModelForm):
     class Meta:
         model = Membership
         fields = ('user','roles','date_start')
+        # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
+        # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
+        # et récupère les noms d'utilisateur valides
         widgets = {
             'user': autocomplete.ModelSelect2(url='member:user_autocomplete',
                                                      attrs={

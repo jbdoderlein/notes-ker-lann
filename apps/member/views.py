@@ -117,9 +117,14 @@ class UserListView(LoginRequiredMixin,SingleTableView):
 
 class UserAutocomplete(autocomplete.Select2QuerySetView):
     """
-    Auto complete note by aliases
+    Auto complete users by usernames
     """
+
     def get_queryset(self):
+        """
+        Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
+        Cette fonction récupère la requête, et renvoie la liste filtrée des utilisateurs par pseudos.
+        """
         qs = User.objects.all()
 
         if self.q:
