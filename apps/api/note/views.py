@@ -69,10 +69,6 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(Q(alias__name__regex=alias) | Q(alias__normalized_name__regex=alias))
 
-        note_id = self.request.query_params.get("id", None)
-        if note_id:
-            queryset = queryset.filter(id=note_id)
-
         note_type = self.request.query_params.get("type", None)
         if note_type:
             l = str(note_type).lower()
