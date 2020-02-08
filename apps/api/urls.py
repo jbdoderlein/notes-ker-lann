@@ -6,7 +6,6 @@ from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 
-from note.models import Alias
 from .activity.urls import register_activity_urls
 from .members.urls import register_members_urls
 from .note.urls import register_note_urls
@@ -18,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = '__all__'
+        exclude = ('password', 'groups', 'user_permissions',)
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -34,17 +33,17 @@ router = routers.DefaultRouter()
 router.register('user', UserViewSet)
 
 # Routers for members app
-register_members_urls(router, r'members')
+register_members_urls(router, 'members')
 
 # Routers for activity app
-register_activity_urls(router, r'activity')
+register_activity_urls(router, 'activity')
 
 # Routers for note app
-register_note_urls(router, r'note')
+register_note_urls(router, 'note')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url('^', include(router.urls)),
+    url('^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

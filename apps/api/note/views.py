@@ -2,6 +2,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.db.models import Q
 from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from note.models.transactions import TransactionTemplate, Transaction, MembershipTransaction
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, NoteUserSerializer, AliasSerializer, \
@@ -52,11 +53,39 @@ class NoteUserViewSet(viewsets.ModelViewSet):
 class NotePolymorphicViewSet(viewsets.ModelViewSet):
     """
     REST API View set.
-    The djangorestframework plugin will get all `NoteUser` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/user/
+    The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
+    then render it on /api/note/note/
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
+
+    def get_queryset(self):
+        """
+        Parse query and apply filters.
+        :return: The filtered set of requested notes
+        """
+        queryset = Note.objects.all()
+
+        alias = self.request.query_params.get("alias", ".*")
+        queryset = queryset.filter(Q(alias__name__regex=alias) | Q(alias__normalized_name__regex=alias))
+
+        note_id = self.request.query_params.get("id", None)
+        if note_id:
+            queryset = queryset.filter(id=note_id)
+
+        note_type = self.request.query_params.get("type", None)
+        if note_type:
+            l = str(note_type).lower()
+            if "user" in l:
+                queryset = queryset.filter(polymorphic_ctype__model="noteuser")
+            elif "club" in l:
+                queryset = queryset.filter(polymorphic_ctype__model="noteclub")
+            elif "special" in l:
+                queryset = queryset.filter(polymorphic_ctype__model="notespecial")
+            else:
+                queryset = queryset.none()
+
+        return queryset
 
 
 class AliasViewSet(viewsets.ModelViewSet):
@@ -67,6 +96,35 @@ class AliasViewSet(viewsets.ModelViewSet):
     """
     queryset = Alias.objects.all()
     serializer_class = AliasSerializer
+
+    def get_queryset(self):
+        """
+        Parse query and apply filters.
+        :return: The filtered set of requested aliases
+        """
+
+        queryset = Alias.objects.all()
+
+        alias = self.request.query_params.get("alias", ".*")
+        queryset = queryset.filter(Q(name__regex=alias) | Q(normalized_name__regex=alias))
+
+        note_id = self.request.query_params.get("note", None)
+        if note_id:
+            queryset = queryset.filter(id=note_id)
+
+        note_type = self.request.query_params.get("type", None)
+        if note_type:
+            l = str(note_type).lower()
+            if "user" in l:
+                queryset = queryset.filter(note__polymorphic_ctype__model="noteuser")
+            elif "club" in l:
+                queryset = queryset.filter(note__polymorphic_ctype__model="noteclub")
+            elif "special" in l:
+                queryset = queryset.filter(note__polymorphic_ctype__model="notespecial")
+            else:
+                queryset = queryset.none()
+
+        return queryset
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
