@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # API
     'rest_framework',
+    # Autocomplete
+    'dal',
+    'dal_select2',
 
     # Note apps
     'activity',

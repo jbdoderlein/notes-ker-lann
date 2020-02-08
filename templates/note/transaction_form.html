@@ -35,3 +35,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         <input type="submit" value="{% trans 'Transfer' %}">
     </form>
 {% endblock %}
+
+{% block extracss %}
+    {{ form.media }}
+{% endblock extracss %}
