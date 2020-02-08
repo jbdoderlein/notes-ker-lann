@@ -5,6 +5,8 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+
+from note.models import Alias
 from .activity.urls import register_activity_urls
 from .members.urls import register_members_urls
 from .note.urls import register_note_urls
@@ -16,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'is_staff',)
+        fields = '__all__'
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -29,7 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register('user', UserViewSet)
 
 # Routers for members app
 register_members_urls(router, r'members')

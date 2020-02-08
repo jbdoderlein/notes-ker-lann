@@ -2,9 +2,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser
+from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from note.models.transactions import TransactionTemplate, Transaction, MembershipTransaction
-from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, NoteUserSerializer, \
+from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, NoteUserSerializer, AliasSerializer, \
                         TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
 from rest_framework import viewsets
 
@@ -57,6 +57,16 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
+
+
+class AliasViewSet(viewsets.ModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
+    then render it on /api/aliases/
+    """
+    queryset = Alias.objects.all()
+    serializer_class = AliasSerializer
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
