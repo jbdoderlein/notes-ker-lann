@@ -30,6 +30,27 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
         return context
 
 
+    def get_form(self, form_class=None):
+        """
+        If the user has no right to transfer funds, then it won't have the choice of the source of the transfer.
+        """
+        form = super().get_form(form_class)
+
+        if False: # TODO: fix it with "if %user has no right to transfer funds"
+            del form.fields['source']
+
+        return form
+
+    def form_valid(self, form):
+        """
+        If the user has no right to transfer funds, then it will be the source of the transfer by default.
+        """
+        if False: # TODO: fix it with "if %user has no right to transfer funds"
+            form.instance.source = self.request.user.note
+
+        return super().form_valid(form)
+
+
 class NoteAutocomplete(autocomplete.Select2QuerySetView):
     """
     Auto complete note by aliases
@@ -40,10 +61,28 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
         Cette fonction récupère la requête, et renvoie la liste filtrée des notes par aliases.
         """
+        #  Un utilisateur non connecté n'a accès à aucune information
+        if not self.request.user.is_authenticated:
+            return Note.objects.none()
+
         qs = Note.objects.all()
 
+        # self.q est le paramètre de la recherche
         if self.q:
             qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=self.q))
+
+        # Filtrage par type de note (user, club, special)
+        note_type = self.forwarded.get("note_type", None)
+        if note_type:
+            l = str(note_type).lower()
+            if "user" in l:
+                qs = qs.filter(polymorphic_ctype__model="noteuser")
+            elif "club" in l:
+                qs = qs.filter(polymorphic_ctype__model="noteclub")
+            elif "special" in l:
+                qs = qs.filter(polymorphic_ctype__model="notespecial")
+            else:
+                qs = qs.none()
 
         return qs
 

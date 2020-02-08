@@ -125,6 +125,10 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
         Cette fonction récupère la requête, et renvoie la liste filtrée des utilisateurs par pseudos.
         """
+        #  Un utilisateur non connecté n'a accès à aucune information
+        if not self.request.user.is_authenticated:
+            return User.objects.none()
+
         qs = User.objects.all()
 
         if self.q:

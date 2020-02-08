@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from dal import autocomplete
+from dal import autocomplete, forward
 from django import forms
 from .models import Transaction, TransactionTemplate
 
@@ -12,6 +12,8 @@ class TransactionTemplateForm(forms.ModelForm):
         # Le champ de destination est remplacé par un champ d'auto-complétion.
         # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
         # et récupère les aliases valides
+        # Pour force le type d'une note, il faut rajouter le paramètre :
+        # forward=(forward.Const('TYPE', 'note_type') où TYPE est dans {user, club, special}
         widgets = {
             'destination': autocomplete.ModelSelect2(url='note:note_autocomplete',
                                                      attrs={
@@ -22,9 +24,14 @@ class TransactionTemplateForm(forms.ModelForm):
 
 
 class TransactionForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.transaction_type = 'transfert'
+
+        super().save(commit)
+
     class Meta:
         model = Transaction
-        fields = ('destination', 'reason', 'amount',)
+        fields = ('source', 'destination', 'reason', 'amount',)
 
         # Voir ci-dessus
         widgets = {
@@ -32,11 +39,10 @@ class TransactionForm(forms.ModelForm):
                                                      attrs={
                                                          'data-placeholder': 'Note ...',
                                                          'data-minimum-input-length': 1,
-                                                     }),
+                                                     },),
             'destination': autocomplete.ModelSelect2(url='note:note_autocomplete',
                                                      attrs={
                                                          'data-placeholder': 'Note ...',
                                                          'data-minimum-input-length': 1,
-                                                     }),
+                                                     },),
         }
-
