@@ -2,7 +2,7 @@
 
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
@@ -114,6 +114,18 @@ class UserListView(LoginRequiredMixin,SingleTableView):
         context["filter"] = self.filter
         return context
 
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    Auto complete note by aliases
+    """
+    def get_queryset(self):
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__regex=self.q)
+
+        return qs
 
 ###################################
 ############## CLUB ###############

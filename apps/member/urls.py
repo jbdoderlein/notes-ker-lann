@@ -18,4 +18,5 @@ urlpatterns = [
     path('user/',views.UserListView.as_view(),name="user_list"),
     path('user/<int:pk>',views.UserDetailView.as_view(),name="user_detail"),
     path('user/<int:pk>/update',views.UserUpdateView.as_view(),name="user_update_profile"),
+    path('user/user-autocomplete',views.UserAutocomplete.as_view(),name="user_autocomplete"),
 ]

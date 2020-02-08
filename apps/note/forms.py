@@ -24,6 +24,11 @@ class TransactionForm(forms.ModelForm):
         fields = ('destination', 'reason', 'amount',)
 
         widgets = {
+            'source': autocomplete.ModelSelect2(url='note:note_autocomplete',
+                                                     attrs={
+                                                         'data-placeholder': 'Note ...',
+                                                         'data-minimum-input-length': 1,
+                                                     }),
             'destination': autocomplete.ModelSelect2(url='note:note_autocomplete',
                                                      attrs={
                                                          'data-placeholder': 'Note ...',
