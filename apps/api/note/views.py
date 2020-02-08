@@ -67,7 +67,7 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
         queryset = Note.objects.all()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(Q(alias__name__regex=alias) | Q(alias__normalized_name__regex=alias))
+        queryset = queryset.filter(Q(alias__name__regex=alias) | Q(alias__normalized_name__regex=alias.lower()))
 
         note_type = self.request.query_params.get("type", None)
         if note_type:
@@ -102,7 +102,7 @@ class AliasViewSet(viewsets.ModelViewSet):
         queryset = Alias.objects.all()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(Q(name__regex=alias) | Q(normalized_name__regex=alias))
+        queryset = queryset.filter(Q(name__regex=alias) | Q(normalized_name__regex=alias.lower()))
 
         note_id = self.request.query_params.get("note", None)
         if note_id:
