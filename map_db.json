@@ -1,50 +1,161 @@
-[
-    "comptes": {
-	"idbde":"Note.id",
-	"type": null,
-	"pseudo":"User.username",
-	"passwd":"User.password",
-	"solde":"Note.solde",
-	"nom":"User.first_name",
-	"prenom":"User.last_name",
-	"tel":"Profile.phone_number",
-	"mail":"User.email",
-	"adresse":"Profile.address",
-	"fonction": null,
-	"normalien": "Profile.paid",
-	"pbsante": null,
-	"droit": null,
-	"surdroit": null,
-	"supreme": null,
-	"bloque": null,
-	"last_adhesion": null
+{
+    "comptes":{
+        "idbde":{
+            "app":"note",
+            "model":"Note",
+            "field":"id"
+        },
+        "type": null,
+        "pseudo":{
+            "app":"member",
+            "model":"User",
+            "field":"username"
+        },
+        "passwd":{
+            "app":"member",
+            "model":"User",
+            "field":"password"
+        },
+        "solde":{
+            "app":"note",
+            "model":"Note",
+            "field":"solde"
+        },
+        "nom":{
+            "app":"member",
+            "model":"User",
+            "field":"first_name",
+        },
+        "prenom":{
+            "app":"member",
+            "model":"User",
+            "field":"last_name"
+        },
+        "tel":{
+            "app":"member",
+            "model":"Profile",
+            "field":"phone_number",
+        },
+        "mail":{
+            "app":"member",
+            "model":"User",
+            "field":"email"
+        },
+        "adresse":{
+            "app":"member",
+            "model":"Profile",
+            "field":"address"
+        },
+        "fonction": null,
+        "normalien":{
+            "app":"member",
+            "model":"Profile",
+            "field":"paid"
+        },
+        "pbsante": null,
+        "droit": null,
+        "surdroit": null,
+        "supreme": null,
+        "bloque": null,
+        "last_adhesion": null,
+        "commentaire":null,
+        "last_negatif": null,
+        "deleted":null
     },
-    "transaction":{
-    	"id":"Transaction.id",
-	"date":"Transaction.created_at",
-	"type": null,
-	"emetteur":"Transaction.source_id",
-	"destinataire":"Transaction.destination_id",
-	"quantite":"Transaction.quantity",
-	"montant":"Transaction.amount",
-	"description":"Transaction.reason",
-	"valide":"Transaction.valid",
-	"cantinvalidate": null,
-	"categorie":"Transaction.transaction_type"
+    "transactions":{
+        "id":{
+            "app":"note",
+            "model":"Transaction",
+            "field":""
+        },"Transaction.id",
+        "date":{
+            "app":"note",
+            "model":"Transaction",
+            "field":""
+        }"Transaction.created_at",
+        "type":{
+            "app":"note",
+            "model":"Transaction",
+            "field":""
+        } null,
+        "emetteur":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"id"
+        },
+        "destinataire":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"destination_id"
+        },
+        "quantite":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"quantity"
+        },
+        "montant":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"amount"
+        },
+        "description":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"reason"
+        },
+        "valide":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"valid"
+        },
+        "cantinvalidate": null,
+        "categorie":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"transaction_type"
+        }
     },
     "boutons":{
-	"id":"TransactionTemplate.id",
-	"label":"TransactionTemplate.name",
-	"montant":"TransactionTemplate.amount",
-	"destinataire":"TransactionTemplate.destination_id",
-	"categorie":null,
-	"affiche":null,
-	"description":null,
-	"consigne":null
+        "id":{
+            "app":"note",
+            "model":"Transaction",
+            "field":"transaction_type"
+        }"TransactionTemplate.id",
+        "label":{
+            "app":"note",
+            "model":"TransactionTemplate",
+            "field":"name"
+        },
+        "montant":{
+            "app":"note",
+            "model":"TransactionTemplate",
+            "field":"amount"
+        },
+        "destinataire":{
+            "app":"note",
+            "model":"TransactionTemplate",
+            "field":"destination_id"
+        },
+        "categorie":null,
+        "affiche":null,
+        "description":null,
+        "consigne":null
     },
     "aliases":{
-    	"id":"Alias.id",
-	"alias":"Alias.name",
-	"idbde":"Alias.note_id"
+        "id":{
+            "app":"note",
+            "model":"Alias",
+            "field":"id"
+        },
+        "alias":{
+            "app":"note",
+            "model":"Alias",
+            "field":"name"
+        },
+        "idbde":{
+            "app":"note",
+            "model":"Alias",
+            "field":"note_id"
+        }
     }
-]
+}

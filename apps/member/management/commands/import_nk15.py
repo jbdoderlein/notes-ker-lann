@@ -3,6 +3,7 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 import psycopg2 as  pg
+import psycopg2.extras as pge
 import json
 
 
@@ -19,12 +20,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         map_file= options.get("map",None)
-        with open(map_file,'rb') as f:
+        with open(map_file,'r') as f:
             map_dict = json.load(f);
         
-       #conn = pg.connect(database="nk15",user="nk_15")
-       #cur = conn.cursor()
+        conn = pg.connect(database="nk15",user="nk15_user")
+        cur = conn.cursor(cursor_factory = pge.DictCursor)
 
-        for old_table in map_dict:
-            print(old_table)
+        #  Start with comptes table.
+        cur.execute("SELECT * FROM comptes ORDER BY -idbde LIMIT 5")
+        old_fields = [d[0] for d in cur.description]
 
+
+        print(type(old_fields))
+        for row in cur:
+            for old_field in old_fields:
+
+                print(old_field,row[old_field])
