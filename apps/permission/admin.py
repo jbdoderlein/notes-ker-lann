@@ -8,4 +8,4 @@ class PermissionAdmin(admin.ModelAdmin):
     """
     Admin customisation for Permission
     """
-    list_display = ('type', 'model', 'field', 'permission')
+    list_display = ('type', 'model', 'field', 'description')
