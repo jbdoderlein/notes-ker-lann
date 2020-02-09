@@ -57,26 +57,28 @@ class Permission(models.Model):
     model = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='+')
 
     # A json encoded Q object with the following grammar
-    #  permission -> [] | {}  (the empty permission representing all objects)
-    #  permission -> ['AND', permission, …]
-    #             -> ['OR', permission, …]
-    #             -> ['NOT', permission]
-    #  permission -> {key: value, …}
-    #  key        -> string
-    #  value      -> int | string | bool | null
-    #             -> [parameter]
+    #  query -> [] | {}  (the empty query representing all objects)
+    #  query -> ['AND', query, …]
+    #        -> ['OR', query, …]
+    #        -> ['NOT', query]
+    #  query -> {key: value, …}
+    #  key   -> string
+    #  value -> int | string | bool | null
+    #        -> [parameter]
     #
     # Examples:
     #  Q(is_admin=True)  := {'is_admin': ['TYPE', 'bool', 'True']}
     #  ~Q(is_admin=True) := ['NOT', {'is_admin': ['TYPE', 'bool', 'True']}]
-    permission = models.TextField()
+    query = models.TextField()
 
-    type = models.CharField(max_length=16, choices=PERMISSION_TYPES)
+    type = models.CharField(max_length=15, choices=PERMISSION_TYPES)
 
-    field = models.CharField(max_length=256, blank=True)
+    field = models.CharField(max_length=255, blank=True)
+
+    description = models.CharField(max_length=255, blank=True)
 
     class Meta:
-        unique_together = ('model', 'permission', 'type', 'field')
+        unique_together = ('model', 'query', 'type', 'field')
 
     def clean(self):
         if self.field and self.type not in {'view', 'change'}:
@@ -86,25 +88,25 @@ class Permission(models.Model):
         self.full_clean()
         super().save()
 
-    def _about(_self, _permission, **kwargs):
+    def _about(_self, _query, **kwargs):
         self = _self
-        permission = _permission
-        if len(permission) == 0:
-            # The permission is either [] or {} and
+        query = _query
+        if len(query) == 0:
+            # The query is either [] or {} and
             # applies to all objects of the model
             # to represent this we return None
             return None
-        if isinstance(permission, list):
-            if permission[0] == 'AND':
-                return functools.reduce(operator.and_, [self._about(permission, **kwargs) for permission in permission[1:]])
-            elif permission[0] == 'OR':
-                return functools.reduce(operator.or_, [self._about(permission, **kwargs) for permission in permission[1:]])
-            elif permission[0] == 'NOT':
-                return ~self._about(permission[1], **kwargs)
-        elif isinstance(permission, dict):
+        if isinstance(query, list):
+            if query[0] == 'AND':
+                return functools.reduce(operator.and_, [self._about(query, **kwargs) for query in query[1:]])
+            elif query[0] == 'OR':
+                return functools.reduce(operator.or_, [self._about(query, **kwargs) for query in query[1:]])
+            elif query[0] == 'NOT':
+                return ~self._about(query[1], **kwargs)
+        elif isinstance(query, dict):
             q_kwargs = {}
-            for key in permission:
-                value = permission[key]
+            for key in query:
+                value = query[key]
                 if isinstance(value, list):
                     # It is a parameter we query its primary key
                     q_kwargs[key] = kwargs[value[0]].pk
@@ -113,18 +115,22 @@ class Permission(models.Model):
             return Q(**q_kwargs)
         else:
             # TODO: find a better way to crash here
-            raise Exception("Permission {} is wrong".format(self.permission))
+            raise Exception("query {} is wrong".format(self.query))
 
     def about(self, **kwargs):
-        permission = json.loads(self.permission)
-        query = self._about(permission, **kwargs)
+        """
+        Return an InstancedPermission with the parameters
+        replaced by their values and the query interpreted
+        """
+        query = json.loads(self.query)
+        query = self._about(query, **kwargs)
         return InstancedPermission(self.model, query, self.type, self.field)
 
     def __str__(self):
         if self.field:
-            return _("Can {type} {model}.{field} in {permission}").format(type=self.type, model=self.model, field=self.field, permission=self.permission)
+            return _("Can {type} {model}.{field} in {query}").format(type=self.type, model=self.model, field=self.field, query=self.query)
         else:
-            return _("Can {type} {model} in {permission}").format(type=self.type, model=self.model, permission=self.permission)
+            return _("Can {type} {model} in {query}").format(type=self.type, model=self.model, query=self.query)
 
 
 class UserPermission(models.Model):
