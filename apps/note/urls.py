@@ -11,5 +11,7 @@ urlpatterns = [
     path('transfer/', views.TransactionCreate.as_view(), name='transfer'),
     path('buttons/create/',views.TransactionTemplateCreateView.as_view(),name='template_create'),
     path('buttons/update/<int:pk>/',views.TransactionTemplateUpdateView.as_view(),name='template_update'),
-    path('buttons/',views.TransactionTemplateListView.as_view(),name='template_list')
+    path('buttons/',views.TransactionTemplateListView.as_view(),name='template_list'),
+    path('consos/<str:template_type>/',views.ConsoView.as_view(),name='consos'),
+    path('consos/',views.ConsoView.as_view(),name='consos'),
 ]
