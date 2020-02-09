@@ -1,4 +1,6 @@
+import functools
 import json
+import operator
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -9,15 +11,19 @@ from django.utils.translation import gettext_lazy as _
 
 class InstancedPermission:
 
-    def __init__(self, model, permission, type, field):
+    def __init__(self, model, query, type, field):
         self.model = model
-        self.permission = permission
+        self.query = query
         self.type = type
         self.field = field
 
     def applies(self, obj, permission_type, field_name=None):
+        """
+        Returns True if the permission applies to
+        the field `field_name` object `obj`
+        """
         if ContentType.objects.get_for_model(obj) != self.model:
-            # The permission does not apply to the object
+            # The permission does not apply to the model
             return False
         if self.permission is None:
             if permission_type == self.type:
@@ -27,22 +33,10 @@ class InstancedPermission:
                     return True
             else:
                 return False
-        elif isinstance(self.permission, dict):
-            for field in self.permission:
-                value = getattr(obj, field)
-                if isinstance(value, models.Model):
-                    value = value.pk
-                if value != self.permission[field]:
-                    return False
-        elif isinstance(self.permission, type(obj.pk)):
-            if obj.pk != self.permission:
-                return False
-        if permission_type == self.type:
-            if field_name:
-                return field_name == self.field
-            else:
-                return True
-        return False
+        elif obj in self.model.objects.get(self.query):
+            return True
+        else:
+            return False
 
     def __repr__(self):
         if self.field:
@@ -62,11 +56,24 @@ class Permission(models.Model):
 
     model = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='+')
 
+    # A json encoded Q object with the following grammar
+    #  permission -> [] | {}  (the empty permission representing all objects)
+    #  permission -> ['AND', permission, …]
+    #             -> ['OR', permission, …]
+    #             -> ['NOT', permission]
+    #  permission -> {key: value, …}
+    #  key        -> string
+    #  value      -> int | string | bool | null
+    #             -> [parameter]
+    #
+    # Examples:
+    #  Q(is_admin=True)  := {'is_admin': ['TYPE', 'bool', 'True']}
+    #  ~Q(is_admin=True) := ['NOT', {'is_admin': ['TYPE', 'bool', 'True']}]
     permission = models.TextField()
 
-    type = models.CharField(max_length=15, choices=PERMISSION_TYPES)
+    type = models.CharField(max_length=16, choices=PERMISSION_TYPES)
 
-    field = models.CharField(max_length=255, blank=True)
+    field = models.CharField(max_length=256, blank=True)
 
     class Meta:
         unique_together = ('model', 'permission', 'type', 'field')
@@ -80,22 +87,38 @@ class Permission(models.Model):
         super().save()
 
     def _about(_self, _permission, **kwargs):
-        if _permission[0] == 'all':
+        self = _self
+        permission = _permission
+        if len(permission) == 0:
+            # The permission is either [] or {} and
+            # applies to all objects of the model
+            # to represent this we return None
             return None
-        elif _permission[0] == 'pk':
-            if _permission[1] in kwargs:
-                return kwargs[_permission[1]].pk
-            else:
-                return None
-        elif _permission[0] == 'filter':
-            return {field: _self._about(_permission[1][field], **kwargs) for field in _permission[1]}
+        if isinstance(permission, list):
+            if permission[0] == 'AND':
+                return functools.reduce(operator.and_, [self._about(permission, **kwargs) for permission in permission[1:]])
+            elif permission[0] == 'OR':
+                return functools.reduce(operator.or_, [self._about(permission, **kwargs) for permission in permission[1:]])
+            elif permission[0] == 'NOT':
+                return ~self._about(permission[1], **kwargs)
+        elif isinstance(permission, dict):
+            q_kwargs = {}
+            for key in permission:
+                value = permission[key]
+                if isinstance(value, list):
+                    # It is a parameter we query its primary key
+                    q_kwargs[key] = kwargs[value[0]].pk
+                else:
+                    q_kwargs[key] = value
+            return Q(**q_kwargs)
         else:
-            return _permission
+            # TODO: find a better way to crash here
+            raise Exception("Permission {} is wrong".format(self.permission))
 
     def about(self, **kwargs):
         permission = json.loads(self.permission)
-        permission = self._about(permission, **kwargs)
-        return InstancedPermission(self.model, permission, self.type, self.field)
+        query = self._about(permission, **kwargs)
+        return InstancedPermission(self.model, query, self.type, self.field)
 
     def __str__(self):
         if self.field:
