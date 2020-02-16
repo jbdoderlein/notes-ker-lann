@@ -48,6 +48,7 @@ class TransactionForm(forms.ModelForm):
         }
 
 class ConsoForm(forms.ModelForm):
+
     def save(self, commit=True):
         button: TransactionTemplate = TransactionTemplate.objects.filter(name=self.data['button']).get()
         self.instance.destination = button.destination
@@ -59,3 +60,14 @@ class ConsoForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ('source',)
+
+        # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
+        # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
+        # et récupère les aliases de note valides
+        widgets = {
+            'source': autocomplete.ModelSelect2(url='note:note_autocomplete',
+                                                attrs={
+                                                    'data-placeholder': 'Note ...',
+                                                    'data-minimum-input-length': 1,
+                                                }),
+        }
