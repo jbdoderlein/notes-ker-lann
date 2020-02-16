@@ -9,7 +9,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
-from .models import Note, Transaction, TransactionCategory, TransactionTemplate
+from .models import Note, Transaction, TransactionCategory, TransactionTemplate, Alias
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
@@ -70,7 +70,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=self.q.lower()))
+            qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=Alias.normalize(self.q)))
 
         # Filtrage par type de note (user, club, special)
         note_type = self.forwarded.get("note_type", None)
