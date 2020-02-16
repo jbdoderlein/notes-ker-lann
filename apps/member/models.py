@@ -118,6 +118,9 @@ class Role(models.Model):
         verbose_name = _('role')
         verbose_name_plural = _('roles')
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Membership(models.Model):
     """

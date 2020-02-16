@@ -5,11 +5,12 @@
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
-from .models import Transaction, TransactionTemplate, Note
-from .forms import TransactionForm, TransactionTemplateForm
+from .models import Note, Transaction, TransactionCategory, TransactionTemplate
+from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
     """
@@ -105,4 +106,31 @@ class TransactionTemplateUpdateView(LoginRequiredMixin,UpdateView):
     """
     """
     model = TransactionTemplate
-    form_class=TransactionTemplateForm
+    form_class = TransactionTemplateForm
+
+class ConsoView(LoginRequiredMixin,CreateView):
+    """
+    Consume
+    """
+    model = Transaction
+    template_name = "note/conso_form.html"
+    form_class = ConsoForm
+
+    def get_context_data(self, **kwargs):
+        """
+        Add some context variables in template such as page title
+        """
+        context = super().get_context_data(**kwargs)
+        context['template_types'] = TransactionCategory.objects.all()
+
+        if 'template_type' not in self.kwargs.keys():
+            return context
+
+        template_type = TransactionCategory.objects.filter(name=self.kwargs.get('template_type')).get()
+        context['buttons'] = TransactionTemplate.objects.filter(template_type=template_type)
+        context['title'] = template_type
+
+        return context
+
+    def get_success_url(self):
+        return reverse('note:consos',args=(self.kwargs.get('template_type'),))

@@ -46,3 +46,16 @@ class TransactionForm(forms.ModelForm):
                                                          'data-minimum-input-length': 1,
                                                      },),
         }
+
+class ConsoForm(forms.ModelForm):
+    def save(self, commit=True):
+        button: TransactionTemplate = TransactionTemplate.objects.filter(name=self.data['button']).get()
+        self.instance.destination = button.destination
+        self.instance.amount = button.amount
+        self.instance.transaction_type = 'bouton'
+        self.instance.reason = button.name
+        super().save(commit)
+
+    class Meta:
+        model = Transaction
+        fields = ('source',)
