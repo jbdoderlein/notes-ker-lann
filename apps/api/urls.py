@@ -46,6 +46,8 @@ register_activity_urls(router, 'activity')
 # Routers for note app
 register_note_urls(router, 'note')
 
+app_name = 'api'
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [

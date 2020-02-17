@@ -3,4 +3,20 @@
 
 {% block content %}
     Jeton : <strong>{{ token }}</strong>
+
+    <div class="alert alert-danger">
+    Conservez bien précieusement ce jeton d'authentification, car il ne vous sera jamais donné de nouveau.
+    Revenir sur cette page aura pour conséquence de révoquer tout ancien jeton d'authentification.
+    Cela peut entre autres mener à des plantages d'autres applications qui pouvaient utiliser ce jeton.
+    </div>
+
+    <div class="alert alert-info">
+    <h4>À quoi sert ce jeton ?</h4>
+
+    Ce jeton vous permet de vous connecter à <a href="/api/">l'API de la Note Kfet</a>.
+    Il suffit pour cela d'ajouter en en-tête de vos requêtes <code>Authorization: Token &lt;TOKEN&gt;</code>
+    pour pouvoir vous identifier.
+
+    Une documentation de l'API arrivera ultérieurement.
+    </div>
 {% endblock %}

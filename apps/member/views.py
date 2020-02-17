@@ -142,7 +142,7 @@ class UserListView(LoginRequiredMixin,SingleTableView):
 
 class GenerateAuthTokenView(LoginRequiredMixin, TemplateView):
     """
-    Génère un jeton d'authentification pour un utilisateur
+    Génère un jeton d'authentification pour un utilisateur et détruit l'ancien
     """
     template_name = "member/generate_auth_token.html"
 

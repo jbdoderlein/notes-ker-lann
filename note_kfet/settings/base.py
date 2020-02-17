@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'activity',
     'member',
     'note',
+    'api',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 
@@ -127,6 +128,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
+        # TODO Maybe replace it with our custom permissions system
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
