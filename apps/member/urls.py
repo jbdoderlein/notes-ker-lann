@@ -18,7 +18,7 @@ urlpatterns = [
     path('user/',views.UserListView.as_view(),name="user_list"),
     path('user/<int:pk>',views.UserDetailView.as_view(),name="user_detail"),
     path('user/<int:pk>/update',views.UserUpdateView.as_view(),name="user_update_profile"),
-    path('generate-auth-token/', views.GenerateAuthTokenView.as_view(), name='generate_auth_token'),
+    path('manage-auth-token/', views.ManageAuthTokens.as_view(), name='auth_token'),
 
     # API for the user autocompleter
     path('user/user-autocomplete',views.UserAutocomplete.as_view(),name="user_autocomplete"),

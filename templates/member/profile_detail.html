@@ -23,7 +23,9 @@
         <dd class="col-6 col-md-3">{{ object.user.note.balance | pretty_money }}</dd>
     </dl>
     <center>
-        <a class="btn btn-primary" href="{% url 'member:generate_auth_token' %}">{% trans 'Generate auth token' %}</a>
+        {% if object.user.pk == user.pk %}
+            <a class="btn btn-primary" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
+        {% endif %}
         <a class="btn btn-primary" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
         <a class="btn btn-primary" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
     </center>

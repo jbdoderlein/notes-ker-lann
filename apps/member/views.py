@@ -5,7 +5,7 @@
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, RedirectView, TemplateView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -140,20 +140,21 @@ class UserListView(LoginRequiredMixin,SingleTableView):
         return context
 
 
-class GenerateAuthTokenView(LoginRequiredMixin, TemplateView):
+class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
-    Génère un jeton d'authentification pour un utilisateur et détruit l'ancien
+    Affiche le jeton d'authentification, et permet de le regénérer
     """
-    template_name = "member/generate_auth_token.html"
+    model = Token
+    template_name = "member/manage_auth_tokens.html"
 
-    def get_context_data(self):
-        context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-        if Token.objects.filter(user=self.request.user).exists():
+        if 'regenerate' in self.request.GET and Token.objects.filter(user=self.request.user).exists():
             Token.objects.get(user=self.request.user).delete()
-        token = Token.objects.create(user=self.request.user)
 
-        context['token'] = token.key
+        context['token'] = Token.objects.get_or_create(user=self.request.user)[0]
+
         return context
 
 class UserAutocomplete(autocomplete.Select2QuerySetView):
