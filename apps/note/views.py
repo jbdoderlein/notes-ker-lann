@@ -64,39 +64,39 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         """
         #  Un utilisateur non connecté n'a accès à aucune information
         if not self.request.user.is_authenticated:
-            return Note.objects.none()
+            return Alias.objects.none()
 
-        qs = Note.objects.all()
+        qs = Alias.objects.all()
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=Alias.normalize(self.q))).distinct()
+            qs = qs.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q)))\
+                .order_by('normalized_name').distinct()
 
         # Filtrage par type de note (user, club, special)
         note_type = self.forwarded.get("note_type", None)
         if note_type:
             l = str(note_type).lower()
             if "user" in l:
-                qs = qs.filter(polymorphic_ctype__model="noteuser")
+                qs = qs.filter(note__polymorphic_ctype__model="noteuser")
             elif "club" in l:
-                qs = qs.filter(polymorphic_ctype__model="noteclub")
+                qs = qs.filter(note__polymorphic_ctype__model="noteclub")
             elif "special" in l:
-                qs = qs.filter(polymorphic_ctype__model="notespecial")
+                qs = qs.filter(note__polymorphic_ctype__model="notespecial")
             else:
                 qs = qs.none()
 
         return qs
 
     def get_result_label(self, result):
-        aliases = Alias.objects.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q))).all()
-        res = str(result)
-        if aliases.count() > 1 or (aliases.count() == 1 and aliases.get().name != str(result)):
-            res += " (alias "
-            for alias in aliases:
-                if alias.name != str(result):
-                    res += alias.name + ", "
-            res = res[:-2] + ")"
+        res = result.name
+        note_name = str(result.note)
+        if res != note_name:
+            res += " (aka. " + note_name + ")"
         return res
+
+    def get_result_value(self, result):
+        return str(result.note.pk)
 
 
 class TransactionTemplateCreateView(LoginRequiredMixin,CreateView):
