@@ -4,11 +4,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from django.http import HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -65,13 +62,13 @@ class UserUpdateView(LoginRequiredMixin,UpdateView):
         return context
 
     def get_form(self, form_class=None):
-        from django.forms import forms
-        form: forms.Form = super().get_form(form_class)
+        form = super().get_form(form_class)
         if 'username' not in form.data:
             return form
 
         new_username = form.data['username']
 
+        # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(alias__normalized_name=Alias.normalize(new_username))
         if note.exists() and note.get().user != self.request.user:
             form.add_error('username', _("An alias with a similar name already exists."))
@@ -84,16 +81,17 @@ class UserUpdateView(LoginRequiredMixin,UpdateView):
         if form.is_valid() and profile_form.is_valid():
             new_username = form.data['username']
             alias = Alias.objects.filter(name=new_username)
+            # Si le nouveau pseudo n'est pas un de nos alias, on supprime éventuellement un alias similaire pour le remplacer
             if not alias.exists():
                 similar = Alias.objects.filter(normalized_name=Alias.normalize(new_username))
                 if similar.exists():
                     similar.delete()
-                note = NoteUser.objects.filter(alias__normalized_name=Alias.normalize(self.request.user.username)).get()
-                Alias(name=new_username, note=note).save()
-            user = form.save()
+
+            user = form.save(commit=False)
             profile  = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            user.save()
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):

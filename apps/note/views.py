@@ -60,7 +60,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """
         Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
-        Cette fonction récupère la requête, et renvoie la liste filtrée des notes par aliases.
+        Cette fonction récupère la requête, et renvoie la liste filtrée des aliases.
         """
         #  Un utilisateur non connecté n'a accès à aucune information
         if not self.request.user.is_authenticated:
@@ -89,6 +89,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
     def get_result_label(self, result):
+        # Gère l'affichage de l'alias dans la recherche
         res = result.name
         note_name = str(result.note)
         if res != note_name:
@@ -96,6 +97,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         return res
 
     def get_result_value(self, result):
+        # Le résultat renvoyé doit être l'identifiant de la note, et non de l'alias
         return str(result.note.pk)
 
 
