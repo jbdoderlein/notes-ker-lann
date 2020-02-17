@@ -2,9 +2,10 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from rest_framework import viewsets
+
 from member.models import Profile, Club, Role, Membership
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
-from rest_framework import viewsets
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

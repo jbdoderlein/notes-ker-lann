@@ -10,14 +10,17 @@ from .activity.urls import register_activity_urls
 from .members.urls import register_members_urls
 from .note.urls import register_note_urls
 
+
 class UserSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Users.
     The djangorestframework plugin will analyse the model `User` and parse all fields in the API.
     """
+
     class Meta:
         model = User
         exclude = ('password', 'groups', 'user_permissions',)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -27,6 +30,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()

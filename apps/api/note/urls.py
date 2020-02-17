@@ -2,8 +2,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from .views import NoteViewSet, NotePolymorphicViewSet, NoteClubViewSet, NoteUserViewSet, NoteSpecialViewSet, AliasViewSet, \
-                            TransactionViewSet, TransactionTemplateViewSet, MembershipTransactionViewSet
+from .views import NotePolymorphicViewSet, AliasViewSet, \
+    TransactionViewSet, TransactionTemplateViewSet, MembershipTransactionViewSet
 
 
 def register_note_urls(router, path):

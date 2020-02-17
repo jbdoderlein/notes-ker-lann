@@ -2,9 +2,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from rest_framework import viewsets
+
 from activity.models import ActivityType, Activity, Guest
 from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer
-from rest_framework import viewsets
+
 
 class ActivityTypeViewSet(viewsets.ModelViewSet):
     """
