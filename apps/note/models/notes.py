@@ -85,7 +85,7 @@ class Note(PolymorphicModel):
         """
         Verify alias (simulate save)
         """
-        aliases = Alias.objects.filter(name=str(self))
+        aliases = Alias.objects.filter(normalized_name=Alias.normalize(str(self)))
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
@@ -233,3 +233,8 @@ class Alias(models.Model):
                                         'already exists.'))
         except Alias.DoesNotExist:
             pass
+
+    def delete(self, using=None, keep_parents=False):
+        if self.name == str(self.note):
+            raise ValidationError(_("You can't delete your main alias."))
+        return super().delete(using, keep_parents)
