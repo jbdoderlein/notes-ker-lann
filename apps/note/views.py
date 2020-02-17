@@ -70,7 +70,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=Alias.normalize(self.q)))
+            qs = qs.filter(Q(alias__name__regex=self.q) | Q(alias__normalized_name__regex=Alias.normalize(self.q))).distinct()
 
         # Filtrage par type de note (user, club, special)
         note_type = self.forwarded.get("note_type", None)
@@ -86,6 +86,17 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
                 qs = qs.none()
 
         return qs
+
+    def get_result_label(self, result):
+        aliases = Alias.objects.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q))).all()
+        res = str(result)
+        if aliases.count() > 1 or (aliases.count() == 1 and aliases.get().name != str(result)):
+            res += " (alias "
+            for alias in aliases:
+                if alias.name != str(result):
+                    res += alias.name + ", "
+            res = res[:-2] + ")"
+        return res
 
 
 class TransactionTemplateCreateView(LoginRequiredMixin,CreateView):
