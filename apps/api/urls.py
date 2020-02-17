@@ -5,6 +5,7 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+from rest_framework.authtoken import views as token_views
 
 from .activity.urls import register_activity_urls
 from .members.urls import register_members_urls
@@ -49,5 +50,5 @@ register_note_urls(router, 'note')
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url('^', include(router.urls)),
-    url('^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url('^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
