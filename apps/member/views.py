@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, RedirectView, TemplateView
 from django.contrib.auth.models import User
@@ -147,14 +148,16 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     model = Token
     template_name = "member/manage_auth_tokens.html"
 
+    def get(self, request, *args, **kwargs):
+        if 'regenerate' in request.GET and Token.objects.filter(user=request.user).exists():
+            Token.objects.get(user=self.request.user).delete()
+            return redirect(reverse_lazy('member:auth_token') + "?show", permanent=True)
+
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        if 'regenerate' in self.request.GET and Token.objects.filter(user=self.request.user).exists():
-            Token.objects.get(user=self.request.user).delete()
-
         context['token'] = Token.objects.get_or_create(user=self.request.user)[0]
-
         return context
 
 class UserAutocomplete(autocomplete.Select2QuerySetView):

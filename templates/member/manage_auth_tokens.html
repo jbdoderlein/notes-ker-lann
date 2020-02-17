@@ -13,7 +13,13 @@
     </div>
 
     <div class="alert alert-info">
-        <strong>{%trans  'Token' %} :</strong> {{ token.key }}<br />
+        <strong>{%trans  'Token' %} :</strong>
+        {% if 'show' in request.GET %}
+            {{ token.key }} (<a href="?">cacher</a>)
+        {% else %}
+            <em>caché</em> (<a href="?show">montrer</a>)
+        {% endif %}
+        <br />
         <strong>{%trans  'Created' %} :</strong> {{ token.created }}
     </div>
 
@@ -21,7 +27,7 @@
         <strong>Attention :</strong> regénérer le jeton va révoquer tout accès autorisé à l'API via ce jeton !
     </div>
 
-    <a href="{% url 'member:auth_token' %}?regenerate">
+    <a href="?regenerate">
         <button class="btn btn-primary">{% trans 'Regenerate token' %}</button>
     </a>
 {% endblock %}
