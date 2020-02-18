@@ -30,11 +30,16 @@ read_env()
 app_stage = os.environ.get('DJANGO_APP_STAGE', 'dev')
 if app_stage == 'prod':
     from .production import *
-    DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD','CHANGE_ME_IN_ENV_SETTINGS');
-    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','CHANGE_ME_IN_ENV_SETTINGS');
-    ALLOWED_HOSTS.append(os.environ.get('ALLOWED_HOSTS','localhost'));
+    DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD','CHANGE_ME_IN_ENV_SETTINGS')
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','CHANGE_ME_IN_ENV_SETTINGS')
+    ALLOWED_HOSTS.append(os.environ.get('ALLOWED_HOSTS','localhost'))
 else:
     from .development import *
+
+try:
+    from .secrets import *
+except ImportError:
+    pass
 
 # env variables set at the of in /env/bin/activate
 # don't forget to unset in deactivate !

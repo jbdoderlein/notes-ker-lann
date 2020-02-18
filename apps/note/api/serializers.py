@@ -1,11 +1,11 @@
-# -*- mode: python; coding: utf-8 -*-
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
+
+from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -17,7 +17,10 @@ class NoteSerializer(serializers.ModelSerializer):
         model = Note
         fields = '__all__'
         extra_kwargs = {
-            'url': {'view_name': 'project-detail', 'lookup_field': 'pk'},
+            'url': {
+                'view_name': 'project-detail',
+                'lookup_field': 'pk'
+            },
         }
 
 
@@ -68,6 +71,7 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteClub: NoteClubSerializer,
         NoteSpecial: NoteSpecialSerializer
     }
+
 
 class TransactionTemplateSerializer(serializers.ModelSerializer):
     """

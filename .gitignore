@@ -31,6 +31,9 @@ coverage
 # PyCharm project settings
 .idea
 
+# VSCode project settings
+.vscode
+
 # Local data
 secrets.py
 *.log

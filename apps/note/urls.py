@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.urls import path
@@ -10,12 +9,12 @@ from .models import Note
 app_name = 'note'
 urlpatterns = [
     path('transfer/', views.TransactionCreate.as_view(), name='transfer'),
-    path('buttons/create/',views.TransactionTemplateCreateView.as_view(),name='template_create'),
-    path('buttons/update/<int:pk>/',views.TransactionTemplateUpdateView.as_view(),name='template_update'),
-    path('buttons/',views.TransactionTemplateListView.as_view(),name='template_list'),
-    path('consos/<str:template_type>/',views.ConsoView.as_view(),name='consos'),
-    path('consos/',views.ConsoView.as_view(),name='consos'),
+    path('buttons/create/', views.TransactionTemplateCreateView.as_view(), name='template_create'),
+    path('buttons/update/<int:pk>/', views.TransactionTemplateUpdateView.as_view(), name='template_update'),
+    path('buttons/', views.TransactionTemplateListView.as_view(), name='template_list'),
+    path('consos/<str:template_type>/', views.ConsoView.as_view(), name='consos'),
+    path('consos/', views.ConsoView.as_view(), name='consos'),
 
     # API for the note autocompleter
-    path('note-autocomplete/', views.NoteAutocomplete.as_view(model=Note),name='note_autocomplete'),
+    path('note-autocomplete/', views.NoteAutocomplete.as_view(model=Note), name='note_autocomplete'),
 ]

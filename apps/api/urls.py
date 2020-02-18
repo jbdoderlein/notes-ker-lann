@@ -1,12 +1,9 @@
-# -*- mode: python; coding: utf-8 -*-
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from rest_framework.authtoken import views as token_views
-
 from activity.api.urls import register_activity_urls
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
@@ -17,10 +14,13 @@ class UserSerializer(serializers.ModelSerializer):
     REST API Serializer for Users.
     The djangorestframework plugin will analyse the model `User` and parse all fields in the API.
     """
-
     class Meta:
         model = User
-        exclude = ('password', 'groups', 'user_permissions',)
+        exclude = (
+            'password',
+            'groups',
+            'user_permissions',
+        )
 
 
 class UserViewSet(viewsets.ModelViewSet):

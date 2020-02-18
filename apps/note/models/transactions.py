@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
@@ -7,11 +6,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
-from .notes import Note,NoteClub
+from .notes import Note, NoteClub
 
 """
 Defines transactions
 """
+
 
 class TransactionCategory(models.Model):
     """
@@ -31,6 +31,7 @@ class TransactionCategory(models.Model):
 
     def __str__(self):
         return str(self.name)
+
 
 class TransactionTemplate(models.Model):
     """
@@ -57,7 +58,7 @@ class TransactionTemplate(models.Model):
         TransactionCategory,
         on_delete=models.PROTECT,
         verbose_name=_('type'),
-        max_length=31
+        max_length=31,
     )
 
     class Meta:
@@ -65,7 +66,7 @@ class TransactionTemplate(models.Model):
         verbose_name_plural = _("transaction templates")
 
     def get_absolute_url(self):
-        return reverse('note:template_update',args=(self.pk,))
+        return reverse('note:template_update', args=(self.pk, ))
 
 
 class Transaction(models.Model):
@@ -98,9 +99,7 @@ class Transaction(models.Model):
         verbose_name=_('quantity'),
         default=1,
     )
-    amount = models.PositiveIntegerField(
-        verbose_name=_('amount'),
-    )
+    amount = models.PositiveIntegerField(verbose_name=_('amount'), )
     transaction_type = models.CharField(
         verbose_name=_('type'),
         max_length=31,
@@ -142,7 +141,7 @@ class Transaction(models.Model):
 
     @property
     def total(self):
-        return self.amount*self.quantity
+        return self.amount * self.quantity
 
 
 class MembershipTransaction(Transaction):
