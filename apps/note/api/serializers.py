@@ -17,7 +17,10 @@ class NoteSerializer(serializers.ModelSerializer):
         model = Note
         fields = '__all__'
         extra_kwargs = {
-            'url': {'view_name': 'project-detail', 'lookup_field': 'pk'},
+            'url': {
+                'view_name': 'project-detail',
+                'lookup_field': 'pk'
+            },
         }
 
 
@@ -68,6 +71,7 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteClub: NoteClubSerializer,
         NoteSpecial: NoteSpecialSerializer
     }
+
 
 class TransactionTemplateSerializer(serializers.ModelSerializer):
     """

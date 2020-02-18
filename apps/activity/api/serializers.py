@@ -5,6 +5,7 @@
 from ..models import ActivityType, Activity, Guest
 from rest_framework import serializers
 
+
 class ActivityTypeSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Activity types.

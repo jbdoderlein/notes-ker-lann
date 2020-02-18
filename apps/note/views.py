@@ -12,6 +12,7 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from .models import Note, Transaction, TransactionCategory, TransactionTemplate, Alias
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
+
 class TransactionCreate(LoginRequiredMixin, CreateView):
     """
     Show transfer page
@@ -30,14 +31,13 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
                              'to one or others')
         return context
 
-
     def get_form(self, form_class=None):
         """
         If the user has no right to transfer funds, then it won't have the choice of the source of the transfer.
         """
         form = super().get_form(form_class)
 
-        if False: # TODO: fix it with "if %user has no right to transfer funds"
+        if False:  # TODO: fix it with "if %user has no right to transfer funds"
             del form.fields['source']
 
         return form
@@ -46,7 +46,7 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
         """
         If the user has no right to transfer funds, then it will be the source of the transfer by default.
         """
-        if False: # TODO: fix it with "if %user has no right to transfer funds"
+        if False:  # TODO: fix it with "if %user has no right to transfer funds"
             form.instance.source = self.request.user.note
 
         return super().form_valid(form)
@@ -56,7 +56,6 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
     """
     Auto complete note by aliases
     """
-
     def get_queryset(self):
         """
         Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
@@ -101,27 +100,30 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         return str(result.note.pk)
 
 
-class TransactionTemplateCreateView(LoginRequiredMixin,CreateView):
+class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     """
     Create TransactionTemplate
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
 
-class TransactionTemplateListView(LoginRequiredMixin,ListView):
+
+class TransactionTemplateListView(LoginRequiredMixin, ListView):
     """
     List TransactionsTemplates
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
 
-class TransactionTemplateUpdateView(LoginRequiredMixin,UpdateView):
+
+class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
     """
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
 
-class ConsoView(LoginRequiredMixin,CreateView):
+
+class ConsoView(LoginRequiredMixin, CreateView):
     """
     Consume
     """
@@ -139,11 +141,14 @@ class ConsoView(LoginRequiredMixin,CreateView):
         if 'template_type' not in self.kwargs.keys():
             return context
 
-        template_type = TransactionCategory.objects.filter(name=self.kwargs.get('template_type')).get()
-        context['buttons'] = TransactionTemplate.objects.filter(template_type=template_type)
+        template_type = TransactionCategory.objects.filter(
+            name=self.kwargs.get('template_type')).get()
+        context['buttons'] = TransactionTemplate.objects.filter(
+            template_type=template_type)
         context['title'] = template_type
 
         return context
 
     def get_success_url(self):
-        return reverse('note:consos',args=(self.kwargs.get('template_type'),))
+        return reverse('note:consos',
+                       args=(self.kwargs.get('template_type'), ))

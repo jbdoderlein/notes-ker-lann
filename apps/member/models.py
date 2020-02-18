@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
 
+
 class Profile(models.Model):
     """
     An user profile
@@ -50,7 +51,8 @@ class Profile(models.Model):
         verbose_name_plural = _('user profile')
 
     def get_absolute_url(self):
-        return reverse('user_detail',args=(self.pk,))
+        return reverse('user_detail', args=(self.pk, ))
+
 
 class Club(models.Model):
     """
@@ -98,7 +100,7 @@ class Club(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse_lazy('member:club_detail', args=(self.pk,))
+        return reverse_lazy('member:club_detail', args=(self.pk, ))
 
 
 class Role(models.Model):
@@ -129,15 +131,15 @@ class Membership(models.Model):
     """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     club = models.ForeignKey(
         Club,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     roles = models.ForeignKey(
         Role,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     date_start = models.DateField(
         verbose_name=_('membership starts on'),

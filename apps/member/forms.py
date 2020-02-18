@@ -16,11 +16,11 @@ from crispy_forms.bootstrap import InlineField, FormActions, StrictButton, Div, 
 from crispy_forms.layout import Layout
 
 
-
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['first_name','last_name','username','email']
+        fields = ['first_name', 'last_name', 'username', 'email']
+
 
 class ProfileForm(forms.ModelForm):
     """
@@ -31,48 +31,56 @@ class ProfileForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['user']
 
+
 class ClubForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields ='__all__'
+        fields = '__all__'
+
 
 class AddMembersForm(forms.Form):
     class Meta:
-        fields = ('',)
+        fields = ('', )
+
 
 class MembershipForm(forms.ModelForm):
     class Meta:
         model = Membership
-        fields = ('user','roles','date_start')
+        fields = ('user', 'roles', 'date_start')
         # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
         # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
         # et récupère les noms d'utilisateur valides
         widgets = {
-            'user': autocomplete.ModelSelect2(url='member:user_autocomplete',
-                                                     attrs={
-                                                         'data-placeholder': 'Nom ...',
-                                                         'data-minimum-input-length': 1,
-                                                     }),
+            'user':
+            autocomplete.ModelSelect2(
+                url='member:user_autocomplete',
+                attrs={
+                    'data-placeholder': 'Nom ...',
+                    'data-minimum-input-length': 1,
+                },
+            ),
         }
 
 
-MemberFormSet = forms.modelformset_factory(Membership,
-                                           form=MembershipForm,
-                                           extra=2,
-                                           can_delete=True)
+MemberFormSet = forms.modelformset_factory(
+    Membership,
+    form=MembershipForm,
+    extra=2,
+    can_delete=True,
+)
+
 
 class FormSetHelper(FormHelper):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.form_tag = False
         self.form_method = 'POST'
-        self.form_class='form-inline'
+        self.form_class = 'form-inline'
         # self.template = 'bootstrap/table_inline_formset.html'
         self.layout = Layout(
             Div(
-                Div('user',css_class='col-sm-2'),
-                Div('roles',css_class='col-sm-2'),
-                Div('date_start',css_class='col-sm-2'),
+                Div('user', css_class='col-sm-2'),
+                Div('roles', css_class='col-sm-2'),
+                Div('date_start', css_class='col-sm-2'),
                 css_class="row formset-row",
-            )
-        )
+            ))

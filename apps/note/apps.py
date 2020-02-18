@@ -20,9 +20,9 @@ class NoteConfig(AppConfig):
         """
         post_save.connect(
             signals.save_user_note,
-            sender=settings.AUTH_USER_MODEL
+            sender=settings.AUTH_USER_MODEL,
         )
         post_save.connect(
             signals.save_club_note,
-            sender='member.Club'
+            sender='member.Club',
         )

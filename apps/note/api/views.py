@@ -69,7 +69,9 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
         queryset = Note.objects.all()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(Q(alias__name__regex=alias) | Q(alias__normalized_name__regex=alias.lower()))
+        queryset = queryset.filter(
+            Q(alias__name__regex=alias)
+            | Q(alias__normalized_name__regex=alias.lower()))
 
         note_type = self.request.query_params.get("type", None)
         if note_type:
@@ -79,7 +81,8 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
             elif "club" in l:
                 queryset = queryset.filter(polymorphic_ctype__model="noteclub")
             elif "special" in l:
-                queryset = queryset.filter(polymorphic_ctype__model="notespecial")
+                queryset = queryset.filter(
+                    polymorphic_ctype__model="notespecial")
             else:
                 queryset = queryset.none()
 
@@ -104,7 +107,8 @@ class AliasViewSet(viewsets.ModelViewSet):
         queryset = Alias.objects.all()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(Q(name__regex=alias) | Q(normalized_name__regex=alias.lower()))
+        queryset = queryset.filter(
+            Q(name__regex=alias) | Q(normalized_name__regex=alias.lower()))
 
         note_id = self.request.query_params.get("note", None)
         if note_id:
@@ -114,11 +118,14 @@ class AliasViewSet(viewsets.ModelViewSet):
         if note_type:
             l = str(note_type).lower()
             if "user" in l:
-                queryset = queryset.filter(note__polymorphic_ctype__model="noteuser")
+                queryset = queryset.filter(
+                    note__polymorphic_ctype__model="noteuser")
             elif "club" in l:
-                queryset = queryset.filter(note__polymorphic_ctype__model="noteclub")
+                queryset = queryset.filter(
+                    note__polymorphic_ctype__model="noteclub")
             elif "special" in l:
-                queryset = queryset.filter(note__polymorphic_ctype__model="notespecial")
+                queryset = queryset.filter(
+                    note__polymorphic_ctype__model="notespecial")
             else:
                 queryset = queryset.none()
 
