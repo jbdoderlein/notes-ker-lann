@@ -4,7 +4,7 @@
 
 from rest_framework import viewsets
 
-from member.models import Profile, Club, Role, Membership
+from ..models import Profile, Club, Role, Membership
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
 
 

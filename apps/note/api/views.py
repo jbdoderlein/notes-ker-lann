@@ -5,8 +5,8 @@
 from django.db.models import Q
 from rest_framework import viewsets
 
-from note.models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from note.models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
     TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer

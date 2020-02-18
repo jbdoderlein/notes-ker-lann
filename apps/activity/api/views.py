@@ -4,7 +4,7 @@
 
 from rest_framework import viewsets
 
-from activity.models import ActivityType, Activity, Guest
+from ..models import ActivityType, Activity, Guest
 from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer
 
 

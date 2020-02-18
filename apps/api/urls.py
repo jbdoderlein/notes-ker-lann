@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from rest_framework.authtoken import views as token_views
 
-from .activity.urls import register_activity_urls
-from .members.urls import register_members_urls
-from .note.urls import register_note_urls
+from activity.api.urls import register_activity_urls
+from member.api.urls import register_members_urls
+from note.api.urls import register_note_urls
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,16 +34,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 # Routers provide an easy way of automatically determining the URL conf.
+# Register each app API router and user viewset
 router = routers.DefaultRouter()
 router.register('user', UserViewSet)
-
-# Routers for members app
 register_members_urls(router, 'members')
-
-# Routers for activity app
 register_activity_urls(router, 'activity')
-
-# Routers for note app
 register_note_urls(router, 'note')
 
 app_name = 'api'
