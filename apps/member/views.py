@@ -2,19 +2,19 @@
 
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from django.http import HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, RedirectView, TemplateView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
 
 from django_tables2.views import SingleTableView
+from rest_framework.authtoken.models import Token
 
-
+from note.models import Alias, Note, NoteUser
 from .models import Profile, Club, Membership
 from .forms import  SignUpForm, ProfileForm, ClubForm,MembershipForm, MemberFormSet,FormSetHelper
 from .tables import ClubTable,UserTable
@@ -57,17 +57,43 @@ class UserUpdateView(LoginRequiredMixin,UpdateView):
     second_form = ProfileForm
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form(instance=context['user'].profile)
+        context['user_modified'] = context['user']
+        context['user'] = self.request.user
+        context["profile_form"] = self.second_form(instance=context['user_modified'].profile)
 
         return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'username' not in form.data:
+            return form
+
+        new_username = form.data['username']
+
+        # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
+        note = NoteUser.objects.filter(alias__normalized_name=Alias.normalize(new_username))
+        if note.exists() and note.get().user != self.request.user:
+            form.add_error('username', _("An alias with a similar name already exists."))
+
+        return form
+
 
     def form_valid(self, form):
         profile_form = ProfileForm(data=self.request.POST,instance=self.request.user.profile)
         if form.is_valid() and profile_form.is_valid():
-            user = form.save()
+            new_username = form.data['username']
+            alias = Alias.objects.filter(name=new_username)
+            # Si le nouveau pseudo n'est pas un de nos alias, on supprime éventuellement un alias similaire pour le remplacer
+            if not alias.exists():
+                similar = Alias.objects.filter(normalized_name=Alias.normalize(new_username))
+                if similar.exists():
+                    similar.delete()
+
+            user = form.save(commit=False)
             profile  = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            user.save()
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -114,6 +140,46 @@ class UserListView(LoginRequiredMixin,SingleTableView):
         context["filter"] = self.filter
         return context
 
+
+class ManageAuthTokens(LoginRequiredMixin, TemplateView):
+    """
+    Affiche le jeton d'authentification, et permet de le regénérer
+    """
+    model = Token
+    template_name = "member/manage_auth_tokens.html"
+
+    def get(self, request, *args, **kwargs):
+        if 'regenerate' in request.GET and Token.objects.filter(user=request.user).exists():
+            Token.objects.get(user=self.request.user).delete()
+            return redirect(reverse_lazy('member:auth_token') + "?show", permanent=True)
+
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['token'] = Token.objects.get_or_create(user=self.request.user)[0]
+        return context
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    Auto complete users by usernames
+    """
+
+    def get_queryset(self):
+        """
+        Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
+        Cette fonction récupère la requête, et renvoie la liste filtrée des utilisateurs par pseudos.
+        """
+        #  Un utilisateur non connecté n'a accès à aucune information
+        if not self.request.user.is_authenticated:
+            return User.objects.none()
+
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__regex=self.q)
+
+        return qs
 
 ###################################
 ############## CLUB ###############

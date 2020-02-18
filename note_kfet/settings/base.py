@@ -50,11 +50,18 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # API
+    'rest_framework',
+    'rest_framework.authtoken',
+    # Autocomplete
+    'dal',
+    'dal_select2',
 
     # Note apps
     'activity',
     'member',
     'note',
+    'api',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 
@@ -116,6 +123,18 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
 )
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        # TODO Maybe replace it with our custom permissions system
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
 

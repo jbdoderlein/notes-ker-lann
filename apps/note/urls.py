@@ -5,6 +5,7 @@
 from django.urls import path
 
 from . import views
+from .models import Note
 
 app_name = 'note'
 urlpatterns = [
@@ -14,4 +15,7 @@ urlpatterns = [
     path('buttons/',views.TransactionTemplateListView.as_view(),name='template_list'),
     path('consos/<str:template_type>/',views.ConsoView.as_view(),name='consos'),
     path('consos/',views.ConsoView.as_view(),name='consos'),
+
+    # API for the note autocompleter
+    path('note-autocomplete/', views.NoteAutocomplete.as_view(model=Note),name='note_autocomplete'),
 ]

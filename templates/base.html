@@ -31,6 +31,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
           crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+
     {% block extracss %}{% endblock %}
 </head>
 <body>

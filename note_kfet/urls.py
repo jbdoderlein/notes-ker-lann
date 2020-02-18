@@ -19,4 +19,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
+
+    # Include Django REST API
+    path('api/', include('api.urls')),
 ]

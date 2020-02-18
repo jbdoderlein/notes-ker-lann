@@ -1,7 +1,7 @@
 # -*- mode: python; coding: utf-8 -*-
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from dal import autocomplete
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
@@ -44,6 +44,17 @@ class MembershipForm(forms.ModelForm):
     class Meta:
         model = Membership
         fields = ('user','roles','date_start')
+        # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
+        # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
+        # et récupère les noms d'utilisateur valides
+        widgets = {
+            'user': autocomplete.ModelSelect2(url='member:user_autocomplete',
+                                                     attrs={
+                                                         'data-placeholder': 'Nom ...',
+                                                         'data-minimum-input-length': 1,
+                                                     }),
+        }
+
 
 MemberFormSet = forms.modelformset_factory(Membership,
                                            form=MembershipForm,
