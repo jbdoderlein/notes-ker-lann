@@ -247,11 +247,13 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        formset = MembershipFormset(request.POST)
-        if formset.is_valid():
-            return self.form_valid(formset)
-        else:
-            return self.form_invalid(formset)
+        return
+        # TODO: Implement POST
+        # formset = MembershipFormset(request.POST)
+        # if formset.is_valid():
+        #     return self.form_valid(formset)
+        # else:
+        #     return self.form_invalid(formset)
 
     def form_valid(self, formset):
         formset.save()
