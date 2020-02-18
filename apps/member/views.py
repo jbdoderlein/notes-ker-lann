@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
