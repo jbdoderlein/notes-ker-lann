@@ -5,8 +5,6 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from rest_framework.authtoken import views as token_views
-
 from activity.api.urls import register_activity_urls
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls

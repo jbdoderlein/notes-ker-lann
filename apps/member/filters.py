@@ -2,13 +2,11 @@
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django_filters import FilterSet, CharFilter, NumberFilter
+from django_filters import FilterSet, CharFilter
 from django.contrib.auth.models import User
 from django.db.models import CharField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
-
-from .models import Club
 
 
 class UserFilter(FilterSet):

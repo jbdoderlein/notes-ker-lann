@@ -5,11 +5,11 @@
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView
 
-from .models import Note, Transaction, TransactionCategory, TransactionTemplate, Alias
+from .models import Transaction, TransactionCategory, TransactionTemplate, Alias
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
 
@@ -75,12 +75,12 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         # Filtrage par type de note (user, club, special)
         note_type = self.forwarded.get("note_type", None)
         if note_type:
-            l = str(note_type).lower()
-            if "user" in l:
+            types = str(note_type).lower()
+            if "user" in types:
                 qs = qs.filter(note__polymorphic_ctype__model="noteuser")
-            elif "club" in l:
+            elif "club" in types:
                 qs = qs.filter(note__polymorphic_ctype__model="noteclub")
-            elif "special" in l:
+            elif "special" in types:
                 qs = qs.filter(note__polymorphic_ctype__model="notespecial")
             else:
                 qs = qs.none()

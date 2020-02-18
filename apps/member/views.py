@@ -6,22 +6,20 @@ from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, RedirectView, TemplateView
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
-
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
+from note.models import Alias, NoteUser
+from note.models.transactions import Transaction
+from note.tables import HistoryTable
 
-from note.models import Alias, Note, NoteUser
 from .models import Profile, Club, Membership
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
 from .tables import ClubTable, UserTable
 from .filters import UserFilter, UserFilterFormHelper
-
-from note.models.transactions import Transaction
-from note.tables import HistoryTable
 
 
 class UserCreateView(CreateView):
@@ -197,9 +195,9 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
-###################################
-############## CLUB ###############
-###################################
+# ******************************* #
+#              CLUB               #
+# ******************************* #
 
 
 class ClubCreateView(LoginRequiredMixin, CreateView):

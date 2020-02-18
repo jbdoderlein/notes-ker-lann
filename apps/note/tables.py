@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import django_tables2 as tables
 from django.db.models import F
 
@@ -15,11 +14,10 @@ class HistoryTable(tables.Table):
         template_name = 'django_tables2/bootstrap.html'
         sequence = ('...', 'total', 'valid')
 
-    total = tables.Column()  #will use Transaction.total() !!
+    total = tables.Column()  # will use Transaction.total() !!
 
-    def order_total(self, QuerySet, is_descending):
+    def order_total(self, queryset, is_descending):
         # needed for rendering
-        QuerySet = QuerySet.annotate(
-            total=F('amount') *
-            F('quantity')).order_by(('-' if is_descending else '') + 'total')
-        return (QuerySet, True)
+        queryset = queryset.annotate(total=F('amount') * F('quantity')) \
+            .order_by(('-' if is_descending else '') + 'total')
+        return (queryset, True)

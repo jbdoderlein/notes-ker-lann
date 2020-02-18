@@ -2,17 +2,14 @@
 # Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 from dal import autocomplete
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
 from .models import Profile, Club, Membership
 
-from django.utils.translation import gettext_lazy as _
-
 from crispy_forms.helper import FormHelper
-from crispy_forms import layout, bootstrap
-from crispy_forms.bootstrap import InlineField, FormActions, StrictButton, Div, Field
+from crispy_forms.bootstrap import Div
 from crispy_forms.layout import Layout
 
 

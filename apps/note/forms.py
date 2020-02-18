@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from dal import autocomplete, forward
+from dal import autocomplete
 from django import forms
+
 from .models import Transaction, TransactionTemplate
 
 
