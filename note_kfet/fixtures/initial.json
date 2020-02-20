@@ -1,0 +1,10 @@
+[
+    {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "localhost",
+            "name": "La Note Kfet \ud83c\udf7b"
+        }
+    }
+]
