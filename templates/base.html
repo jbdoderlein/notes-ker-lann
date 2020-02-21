@@ -31,18 +31,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-    {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
-    {% if form.media %}
-        {{ form.media }}
-    {% endif %}
-
-    {# Select2 JavaScript #}
-    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
-    <script type="text/javascript" src="/static/admin/js/vendor/select2/select2.full.js"></script>
-    <script type="text/javascript" src="/static/admin/js/vendor/select2/i18n/fr.js"></script>
-    <script type="text/javascript" src="/static/admin/js/vendor/select2/i18n/en.js"></script>
-    <script type="text/javascript" src="/static/admin/js/vendor/select2/i18n/de.js"></script>
-
     {# Bootstrap JavaScript #}
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -58,6 +46,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
         crossorigin="anonymous"></script>
+
+    {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
 
     {% block extracss %}{% endblock %}
 </head>
