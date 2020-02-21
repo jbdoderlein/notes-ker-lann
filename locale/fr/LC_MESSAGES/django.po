@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 10:36+0100\n"
+"POT-Creation-Date: 2020-02-21 11:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,7 +127,9 @@ msgstr "début de l'adhésion"
 
 #: apps/member/models.py:81
 msgid "How long after January 1st the members can renew their membership."
-msgstr "Combien de temps après le 1er Janvier les adhérents peuvent renouveler leur adhésion."
+msgstr ""
+"Combien de temps après le 1er Janvier les adhérents peuvent renouveler leur "
+"adhésion."
 
 #: apps/member/models.py:86
 msgid "membership end"
@@ -138,8 +140,8 @@ msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
-"Combien de temps l'adhésion peut durer après le 1er Janvier de l'année suivante "
-"avant que les adhérents peuvent renouveler leur adhésion."
+"Combien de temps l'adhésion peut durer après le 1er Janvier de l'année "
+"suivante avant que les adhérents peuvent renouveler leur adhésion."
 
 #: apps/member/models.py:93 apps/note/models/notes.py:127
 msgid "club"
@@ -177,7 +179,11 @@ msgstr "adhésion"
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/views.py:78 apps/note/models/notes.py:229
+#: apps/member/views.py:63 templates/member/profile_detail.html:29
+msgid "Update Profile"
+msgstr "Modifier le profil"
+
+#: apps/member/views.py:79 apps/note/models/notes.py:229
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
@@ -359,7 +365,7 @@ msgstr ""
 msgid "French"
 msgstr ""
 
-#: templates/base.html:14
+#: templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
@@ -402,10 +408,6 @@ msgstr "nom d'utilisateur"
 #: templates/member/profile_detail.html:27
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
-
-#: templates/member/profile_detail.html:29
-msgid "Update Profile"
-msgstr "Modifier le profil"
 
 #: templates/member/profile_detail.html:30
 msgid "Change password"

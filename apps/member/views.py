@@ -60,6 +60,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         context['user'] = self.request.user
         context["profile_form"] = self.second_form(
             instance=context['user_modified'].profile)
+        context['title'] = _("Update Profile")
 
         return context
 
