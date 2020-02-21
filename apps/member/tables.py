@@ -10,11 +10,10 @@ from .models import Club
 class ClubTable(tables.Table):
     class Meta:
         attrs = {
-            'class':
-            'table table-bordered table-condensed table-striped table-hover'
+            'class': 'table table-condensed table-striped table-hover'
         }
         model = Club
-        template_name = 'django_tables2/bootstrap.html'
+        template_name = 'django_tables2/bootstrap4.html'
         fields = ('id', 'name', 'email')
         row_attrs = {
             'class': 'table-row',
@@ -28,9 +27,8 @@ class UserTable(tables.Table):
 
     class Meta:
         attrs = {
-            'class':
-            'table table-bordered table-condensed table-striped table-hover'
+            'class': 'table table-condensed table-striped table-hover'
         }
-        template_name = 'django_tables2/bootstrap.html'
+        template_name = 'django_tables2/bootstrap4.html'
         fields = ('last_name', 'first_name', 'username', 'email')
         model = User
