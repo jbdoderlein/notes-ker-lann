@@ -11,10 +11,10 @@ class HistoryTable(tables.Table):
     class Meta:
         attrs = {
             'class':
-            'table table-bordered table-condensed table-striped table-hover'
+            'table table-condensed table-striped table-hover'
         }
         model = Transaction
-        template_name = 'django_tables2/bootstrap.html'
+        template_name = 'django_tables2/bootstrap4.html'
         sequence = ('...', 'total', 'valid')
 
     total = tables.Column()  # will use Transaction.total() !!
