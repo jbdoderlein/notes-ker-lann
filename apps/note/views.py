@@ -140,6 +140,8 @@ class ConsoView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['template_types'] = TransactionCategory.objects.all()
 
+        context['no_cache'] = True
+
         if 'template_type' not in self.kwargs.keys():
             return context
 
@@ -148,8 +150,6 @@ class ConsoView(LoginRequiredMixin, CreateView):
         context['buttons'] = TransactionTemplate.objects.filter(
             template_type=template_type)
         context['title'] = template_type
-
-        context['no_cache'] = True
 
         return context
 
