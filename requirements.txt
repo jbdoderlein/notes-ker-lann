@@ -13,7 +13,9 @@ djangorestframework==3.9.0
 django-rest-polymorphic==0.1.8
 django-reversion==3.0.3
 django-tables2==2.1.0
+django-turbolinks==0.5.1
 docutils==0.14
+psycopg2==2.8.4
 idna==2.8
 oauthlib==3.1.0
 Pillow==6.1.0
