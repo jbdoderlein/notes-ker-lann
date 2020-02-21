@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 
-from .models import Transaction, TransactionCategory, TransactionTemplate, Alias
+from .models import Transaction, TransactionTemplate, Alias
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
 
@@ -135,19 +135,13 @@ class ConsoView(LoginRequiredMixin, CreateView):
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['template_types'] = TransactionCategory.objects.all()
-
-        if 'template_type' not in self.kwargs.keys():
-            return context
-
-        template_type = TransactionCategory.objects.filter(
-            name=self.kwargs.get('template_type')).get()
-        context['buttons'] = TransactionTemplate.objects.filter(
-            template_type=template_type)
-        context['title'] = template_type
-
+        context['transaction_templates'] = TransactionTemplate.objects.all() \
+            .order_by('template_type')
+        context['title'] = _("Consommations")
         return context
 
     def get_success_url(self):
-        return reverse('note:consos',
-                       args=(self.kwargs.get('template_type'), ))
+        """
+        When clicking a button, reload the same page
+        """
+        return reverse('note:consos')
