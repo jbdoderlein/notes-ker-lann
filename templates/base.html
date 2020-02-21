@@ -36,6 +36,33 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {{ form.media }}
     {% endif %}
 
+    {# Select2 JavaScript #}
+    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/select2/select2.full.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/select2/i18n/fr.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/autocomplete.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/autocomplete.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/forward.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/select2.js"></script>
+
+    {# Bootstrap JavaScript #}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+
+    {# Turbolinks JavaScript #}
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
+        crossorigin="anonymous"></script>
+
     {% block extracss %}{% endblock %}
 </head>
 <body class="d-flex w-100 h-100 flex-column">
@@ -139,19 +166,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
     </div>
 </footer>
 
-{# Bootstrap JavaScript #}
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
-    crossorigin="anonymous"></script>
 {% block extrajavascript %}
 {% endblock extrajavascript %}
 </body>
