@@ -40,7 +40,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 </head>
 <body class="d-flex w-100 h-100 flex-column">
 <main class="mb-auto">
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar">
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar shadow-sm">
         <a class="navbar-brand" href="/">{{ request.site.name }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarNavAltMarkup"
@@ -94,19 +94,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
             </ul>
         </div>
     </nav>
-    <div class="container-fluid mb-5 mt-2">
-        <div class="row">
-            <div class="col-md-1">
-                {% block sidebar %}
-                {% endblock %}
-            </div>
-            <div class="col-md-10">
-                {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
-                {% block content %}
-                    <p>Default content...</p>
-                {% endblock content %}
-            </div>
-        </div>
+    <div class="container-fluid my-3" style="max-width: 1600px;">
+        {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
+        {% block content %}
+            <p>Default content...</p>
+        {% endblock content %}
     </div>
 </main>
 <footer class="bg-light mt-auto py-2">
@@ -116,9 +108,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <form action="{% url 'set_language' %}" method="post"
                       class="form-inline">
                     <span class="text-muted mr-1">
-                        NoteKfet2020 -
+                        NoteKfet2020 &mdash;
                         <a href="mailto:tresorie.bde@lists.crans.org"
-                           class="text-muted">Nous contacter</a> -
+                           class="text-muted">Nous contacter</a> &mdash;
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"
