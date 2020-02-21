@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 11:16+0100\n"
+"POT-Creation-Date: 2020-02-21 11:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgstr ""
 msgid "phone number"
 msgstr ""
 
-#: apps/member/models.py:29 templates/member/profile_detail.html:18
+#: apps/member/models.py:29 templates/member/profile_detail.html:23
 msgid "section"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr ""
 
-#: apps/member/models.py:36 templates/member/profile_detail.html:20
+#: apps/member/models.py:36 templates/member/profile_detail.html:26
 msgid "address"
 msgstr ""
 
@@ -180,12 +180,17 @@ msgstr ""
 msgid "memberships"
 msgstr ""
 
-#: apps/member/views.py:63 templates/member/profile_detail.html:29
+#: apps/member/views.py:63 templates/member/profile_detail.html:39
 msgid "Update Profile"
 msgstr ""
 
 #: apps/member/views.py:79 apps/note/models/notes.py:229
 msgid "An alias with a similar name already exists."
+msgstr ""
+
+#: apps/member/views.py:129
+#, python-format
+msgid "Account #%(id)s: %(username)s"
 msgstr ""
 
 #: apps/note/admin.py:118 apps/note/models/transactions.py:86
@@ -285,7 +290,7 @@ msgstr ""
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:199
+#: apps/note/models/notes.py:199 templates/member/profile_detail.html:32
 msgid "aliases"
 msgstr ""
 
@@ -381,7 +386,7 @@ msgstr ""
 msgid "Membership duration"
 msgstr ""
 
-#: templates/member/club_detail.html:18 templates/member/profile_detail.html:22
+#: templates/member/club_detail.html:18 templates/member/profile_detail.html:29
 msgid "balance"
 msgstr ""
 
@@ -397,23 +402,27 @@ msgstr ""
 msgid "Regenerate token"
 msgstr ""
 
-#: templates/member/profile_detail.html:12
+#: templates/member/profile_detail.html:10
 msgid "first name"
 msgstr ""
 
-#: templates/member/profile_detail.html:14
+#: templates/member/profile_detail.html:13
 msgid "username"
 msgstr ""
 
-#: templates/member/profile_detail.html:27
-msgid "Manage auth token"
+#: templates/member/profile_detail.html:16
+msgid "password"
 msgstr ""
 
-#: templates/member/profile_detail.html:30
+#: templates/member/profile_detail.html:19
 msgid "Change password"
 msgstr ""
 
-#: templates/member/profile_detail.html:38
+#: templates/member/profile_detail.html:37
+msgid "Manage auth token"
+msgstr ""
+
+#: templates/member/profile_detail.html:49
 msgid "View my memberships"
 msgstr ""
 

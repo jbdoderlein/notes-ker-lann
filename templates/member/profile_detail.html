@@ -2,67 +2,77 @@
 {% load i18n static pretty_money django_tables2 %}
 
 {% block content %}
-    <h3>Compte n° {{ object.pk }}</h3>
+<div class="row mt-4">
+    <div class="col-md-3">
+        <img src="{{ object.note.display_image.url }}" alt=""/>
 
-    <img src="{{ object.note.display_image.url }}" alt=""/>
+        <dl class="row table">
+            <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+            <dd class="col-xl-6">{{ object.user.last_name }} {{ object.user.first_name }}</dd>
 
-    <dl class="row">
-        <dt class="col-6 col-md-3">{% trans 'name'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.user.last_name }}</dd>
-        <dt class="col-6 col-md-3">{% trans 'first name'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.user.first_name }}</dd>
-        <dt class="col-6 col-md-3">{% trans 'username'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.user.username }}</dd>
-        <dt class="col-6 col-md-3">Aliases</dt>
-        <dd class="col-6 col-md-3">{{ object.user.note.alias_set.all }}</dd>
-        <dt class="col-6 col-md-3">{% trans 'section'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.section }}</dd>
-        <dt class="col-6 col-md-3">{% trans 'address'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.address }}</dd>
-        <dt class="col-6 col-md-3">{% trans 'balance'|capfirst %}</dt>
-        <dd class="col-6 col-md-3">{{ object.user.note.balance | pretty_money }}</dd>
-    </dl>
-    <center>
-        {% if object.user.pk == user.pk %}
-            <a class="btn btn-primary" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
-        {% endif %}
-        <a class="btn btn-primary" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
-        <a class="btn btn-primary" href="{% url 'password_change' %}">{% trans 'Change password' %}</a>
-    </center>
+            <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.user.username }}</dd>
 
-<div class="accordion" id="accordionProfile">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h5 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            <i class="fa fa-users"></i> {% trans "View my memberships" %}
-        </button>
-      </h5>
+            <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+            <dd class="col-xl-6">
+                <a class="badge badge-primary" href="{% url 'password_change' %}">
+                    {% trans 'Change password' %}
+                </a>
+            </dd>
+
+            <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.section }}</dd>
+
+            <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.address }}</dd>
+
+            <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.user.note.balance | pretty_money }}</dd>
+
+            <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.user.note.alias_set.all|join:", " }}</dd>
+        </dl>
+        <p class="text-center">
+            {% if object.user.pk == user.pk %}
+                <a class="btn btn-info btn-sm" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
+            {% endif %}
+            <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+        </p>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionProfile">
-      <div class="card-body">
-        {% render_table club_list %}
-      </div>
+    <div class="col-9">
+        <div class="accordion" id="accordionProfile">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="fa fa-users"></i> {% trans "View my memberships" %}
+                        </button>
+                </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionProfile">
+                    <div class="card-body">
+                        {% render_table club_list %}
+                </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <i class="fa fa-euro"></i> Historique des transactions
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionProfile">
+                    <div class="card-body">
+                        {% render_table history_list %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h5 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            <i class="fa fa-euro"></i> Historique des transactions
-        </button>
-      </h5>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionProfile">
-      <div class="card-body">
-          {% render_table history_list %}
-      </div>
-    </div>
-  </div>
 </div>
-
-
-
-
-    {% endblock %}
+{% endblock %}

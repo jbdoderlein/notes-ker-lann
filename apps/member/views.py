@@ -112,7 +112,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     """
-    Affiche les informations sur un utilisateur, sa note, ses clubs ...
+    Affiche les informations sur un utilisateur, sa note, ses clubs...
     """
     model = Profile
     context_object_name = "profile"
@@ -126,6 +126,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
         context['club_list'] = ClubTable(club_list)
+        context['title'] = _("Account #%(id)s: %(username)s") % {
+            'id': user.pk,
+            'username': user.username,
+        }
         return context
 
 
