@@ -28,6 +28,9 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = _('Transfer money from your account '
                              'to one or others')
+
+        context['no_cache'] = True
+
         return context
 
     def get_form(self, form_class=None):
@@ -145,6 +148,8 @@ class ConsoView(LoginRequiredMixin, CreateView):
         context['buttons'] = TransactionTemplate.objects.filter(
             template_type=template_type)
         context['title'] = template_type
+
+        context['no_cache'] = True
 
         return context
 

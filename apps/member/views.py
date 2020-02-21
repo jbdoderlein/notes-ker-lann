@@ -249,6 +249,9 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['formset'] = MemberFormSet()
         context['helper'] = FormSetHelper()
+
+        context['no_cache'] = True
+
         return context
 
     def post(self, request, *args, **kwargs):
