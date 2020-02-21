@@ -55,8 +55,6 @@ INSTALLED_APPS = [
     # Autocomplete
     'dal',
     'dal_select2',
-    # turbolinks
-    'turbolinks',
 
     # Note apps
     'activity',
@@ -77,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-    'turbolinks.middleware.TurbolinksMiddleware',
+    'note_kfet.middlewares.TurbolinksMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
