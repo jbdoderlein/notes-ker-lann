@@ -75,7 +75,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-    'note_kfet.middlewares.SmoothNavigationMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
 ]
 
