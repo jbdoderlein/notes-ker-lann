@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 11:52+0100\n"
+"POT-Creation-Date: 2020-02-21 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr "activité"
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:60 apps/member/models.py:111
 #: apps/note/models/notes.py:176 apps/note/models/transactions.py:23
-#: apps/note/models/transactions.py:43 templates/member/profile_detail.html:10
+#: apps/note/models/transactions.py:43 templates/member/profile_detail.html:11
 msgid "name"
 msgstr "nom"
 
@@ -85,7 +85,7 @@ msgstr "adhérent"
 msgid "phone number"
 msgstr "numéro de téléphone"
 
-#: apps/member/models.py:29 templates/member/profile_detail.html:23
+#: apps/member/models.py:29 templates/member/profile_detail.html:24
 msgid "section"
 msgstr "section"
 
@@ -93,7 +93,7 @@ msgstr "section"
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
-#: apps/member/models.py:36 templates/member/profile_detail.html:26
+#: apps/member/models.py:36 templates/member/profile_detail.html:27
 msgid "address"
 msgstr "adresse"
 
@@ -179,7 +179,7 @@ msgstr "adhésion"
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/views.py:63 templates/member/profile_detail.html:39
+#: apps/member/views.py:63 templates/member/profile_detail.html:42
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
@@ -290,7 +290,7 @@ msgstr "Alias invalide"
 msgid "alias"
 msgstr "alias"
 
-#: apps/note/models/notes.py:199 templates/member/profile_detail.html:32
+#: apps/note/models/notes.py:199 templates/member/profile_detail.html:33
 msgid "aliases"
 msgstr "alias"
 
@@ -386,7 +386,7 @@ msgstr "L'adhésion finie le"
 msgid "Membership duration"
 msgstr "Durée de l'adhésion"
 
-#: templates/member/club_detail.html:18 templates/member/profile_detail.html:29
+#: templates/member/club_detail.html:18 templates/member/profile_detail.html:30
 msgid "balance"
 msgstr "solde du compte"
 
@@ -402,29 +402,29 @@ msgstr "Créé le"
 msgid "Regenerate token"
 msgstr "Regénérer le jeton"
 
-#: templates/member/profile_detail.html:10
+#: templates/member/profile_detail.html:11
 msgid "first name"
 msgstr ""
 
-#: templates/member/profile_detail.html:13
+#: templates/member/profile_detail.html:14
 msgid "username"
 msgstr "nom d'utilisateur"
 
-#: templates/member/profile_detail.html:16
+#: templates/member/profile_detail.html:17
 #, fuzzy
 #| msgid "Change password"
 msgid "password"
 msgstr "Changer le mot de passe"
 
-#: templates/member/profile_detail.html:19
+#: templates/member/profile_detail.html:20
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: templates/member/profile_detail.html:37
+#: templates/member/profile_detail.html:38
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: templates/member/profile_detail.html:49
+#: templates/member/profile_detail.html:53
 msgid "View my memberships"
 msgstr "Voir mes adhésions"
 

@@ -3,41 +3,45 @@
 
 {% block content %}
 <div class="row mt-4">
-    <div class="col-md-3">
-        <img src="{{ object.note.display_image.url }}" alt=""/>
+    <div class="col-md-3 mb-4">
+        <div class="card bg-light">
+            <img src="{{ object.note.display_image.url }}" class="card-img-top" alt="">
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+                    <dd class="col-xl-6">{{ object.user.last_name }} {{ object.user.first_name }}</dd>
 
-        <dl class="row table">
-            <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
-            <dd class="col-xl-6">{{ object.user.last_name }} {{ object.user.first_name }}</dd>
+                    <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.user.username }}</dd>
 
-            <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.user.username }}</dd>
+                    <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+                    <dd class="col-xl-6">
+                        <a class="small" href="{% url 'password_change' %}">
+                            {% trans 'Change password' %}
+                        </a>
+                    </dd>
 
-            <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
-            <dd class="col-xl-6">
-                <a class="badge badge-primary" href="{% url 'password_change' %}">
-                    {% trans 'Change password' %}
-                </a>
-            </dd>
+                    <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.section }}</dd>
 
-            <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.section }}</dd>
+                    <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.address }}</dd>
 
-            <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.address }}</dd>
+                    <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.user.note.balance | pretty_money }}</dd>
 
-            <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.user.note.balance | pretty_money }}</dd>
+                    <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.user.note.alias_set.all|join:", " }}</dd>
+                </dl>
 
-            <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.user.note.alias_set.all|join:", " }}</dd>
-        </dl>
-        <p class="text-center">
-            {% if object.user.pk == user.pk %}
-                <a class="btn btn-info btn-sm" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
-            {% endif %}
-            <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
-        </p>
+                {% if object.user.pk == user.pk %}
+                    <a class="small" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+            </div>
+        </div>
     </div>
 
     <div class="col-md-9">
