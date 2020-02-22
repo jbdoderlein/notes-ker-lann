@@ -40,6 +40,11 @@ class TransactionTemplate(models.Model):
         max_length=31
     )
 
+    description = models.CharField(
+        verbose_name=_('description'),
+        max_length=255,
+    )
+
     class Meta:
         verbose_name = _("transaction template")
         verbose_name_plural = _("transaction templates")
