@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'dal_select2',
     # CAS
     'cas_server',
+    'cas',
 
     # Note apps
     'activity',
@@ -78,6 +79,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
+    'cas.middleware.CASMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
@@ -124,6 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
+    'cas.backends.CASBackend',
 )
 
 REST_FRAMEWORK = {
