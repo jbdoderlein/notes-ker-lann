@@ -1,13 +1,11 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
+
 
 class Profile(models.Model):
     """
@@ -50,7 +48,8 @@ class Profile(models.Model):
         verbose_name_plural = _('user profile')
 
     def get_absolute_url(self):
-        return reverse('user_detail',args=(self.pk,))
+        return reverse('user_detail', args=(self.pk, ))
+
 
 class Club(models.Model):
     """
@@ -98,7 +97,7 @@ class Club(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse_lazy('member:club_detail', args=(self.pk,))
+        return reverse_lazy('member:club_detail', args=(self.pk, ))
 
 
 class Role(models.Model):
@@ -118,6 +117,9 @@ class Role(models.Model):
         verbose_name = _('role')
         verbose_name_plural = _('roles')
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Membership(models.Model):
     """
@@ -126,15 +128,15 @@ class Membership(models.Model):
     """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     club = models.ForeignKey(
         Club,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     roles = models.ForeignKey(
         Role,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     date_start = models.DateField(
         verbose_name=_('membership starts on'),

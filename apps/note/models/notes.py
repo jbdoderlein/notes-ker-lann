@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import unicodedata
@@ -10,7 +9,6 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
-
 """
 Defines each note types
 """
@@ -34,8 +32,7 @@ class Note(PolymorphicModel):
         default=True,
         help_text=_(
             'Designates whether this note should be treated as active. '
-            'Unselect this instead of deleting notes.'
-        ),
+            'Unselect this instead of deleting notes.'),
     )
     display_image = models.ImageField(
         verbose_name=_('display image'),
@@ -85,7 +82,8 @@ class Note(PolymorphicModel):
         """
         Verify alias (simulate save)
         """
-        aliases = Alias.objects.filter(name=str(self))
+        aliases = Alias.objects.filter(
+            normalized_name=Alias.normalize(str(self)))
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
@@ -181,15 +179,15 @@ class Alias(models.Model):
         validators=[
             RegexValidator(
                 regex=settings.ALIAS_VALIDATOR_REGEX,
-                message=_('Invalid alias')
+                message=_('Invalid alias'),
             )
-        ] if settings.ALIAS_VALIDATOR_REGEX else []
+        ] if settings.ALIAS_VALIDATOR_REGEX else [],
     )
     normalized_name = models.CharField(
         max_length=255,
         unique=True,
         default='',
-        editable=False
+        editable=False,
     )
     note = models.ForeignKey(
         Note,
@@ -209,11 +207,9 @@ class Alias(models.Model):
         Normalizes a string: removes most diacritics and does casefolding
         """
         return ''.join(
-            char
-            for char in unicodedata.normalize('NFKD', string.casefold())
+            char for char in unicodedata.normalize('NFKD', string.casefold())
             if all(not unicodedata.category(char).startswith(cat)
-                   for cat in {'M', 'P', 'Z', 'C'})
-        ).casefold()
+                   for cat in {'M', 'P', 'Z', 'C'})).casefold()
 
     def save(self, *args, **kwargs):
         """
@@ -229,7 +225,13 @@ class Alias(models.Model):
             raise ValidationError(_('Alias too long.'))
         try:
             if self != Alias.objects.get(normalized_name=normalized_name):
-                raise ValidationError(_('An alias with a similar name '
-                                        'already exists.'))
+                raise ValidationError(
+                    _('An alias with a similar name '
+                      'already exists.'))
         except Alias.DoesNotExist:
             pass
+
+    def delete(self, using=None, keep_parents=False):
+        if self.name == str(self.note):
+            raise ValidationError(_("You can't delete your main alias."))
+        return super().delete(using, keep_parents)

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% load i18n static pretty_money %}
+
+{# Remove page title #}
+{% block contenttitle %}{% endblock %}
+
+{% block content %}
+    {# Regroup buttons under categories #}
+    {% regroup transaction_templates by template_type as template_types %}
+
+    <form method="post" onsubmit="window.onbeforeunload=null">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-5 mb-4">
+                {% if form.non_field_errors %}
+                    <p class="errornote">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-row{% if field.errors %} errors{% endif %}">
+                        {{ field.errors }}
+                        <div>
+                            {{ field.label_tag }}
+                            {% if field.is_readonly %}
+                                <div class="readonly">{{ field.contents }}</div>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            {% if field.field.help_text %}
+                                <div class="help">{{ field.field.help_text|safe }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-sm-7">
+                <div class="card text-center shadow">
+                    {# Tabs for button categories #}
+                    <div class="card-header">
+                        <ul class="nav nav-tabs nav-fill card-header-tabs">
+                            {% for template_type in template_types %}
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#{{ template_type.grouper|slugify }}">
+                                        {{ template_type.grouper }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    {# Tabs content #}
+                    <div class="card-body">
+                        <div class="tab-content">
+                            {% for template_type in template_types %}
+                                <div class="tab-pane" id="{{ template_type.grouper|slugify }}">
+                                    <div class="d-inline-flex flex-wrap justify-content-center">
+                                        {% for button in template_type.list %}
+                                            <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                                    name="button" value="{{ button.name }}">
+                                                {{ button.name }} ({{ button.amount | pretty_money }})
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // If hash of a category in the URL, then select this category
+            // else select the first one
+            if (location.hash) {
+                $("a[href='" + location.hash + "']").tab("show");
+            } else {
+                $("a[data-toggle='tab']").first().tab("show");
+            }
+
+            // When selecting a category, change URL
+            $(document.body).on("click", "a[data-toggle='tab']", function(event) {
+                location.hash = this.getAttribute("href");
+            });
+        });
+    </script>
+{% endblock %}

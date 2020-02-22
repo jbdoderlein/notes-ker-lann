@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -50,11 +49,18 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # API
+    'rest_framework',
+    'rest_framework.authtoken',
+    # Autocomplete
+    'dal',
+    'dal_select2',
 
     # Note apps
     'activity',
     'member',
     'note',
+    'api',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 
@@ -69,6 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'note_kfet.middlewares.TurbolinksMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
@@ -117,6 +124,18 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        # TODO Maybe replace it with our custom permissions system
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
 ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
 
 GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
@@ -127,6 +146,7 @@ GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_c
 LANGUAGE_CODE = 'en'
 
 LANGUAGES = [
+    ('de', _('German')),
     ('en', _('English')),
     ('fr', _('French')),
 ]

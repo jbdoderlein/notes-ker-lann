@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib import admin
@@ -19,4 +18,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
+
+    # Include Django REST API
+    path('api/', include('api.urls')),
 ]
