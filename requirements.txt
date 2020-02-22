@@ -4,6 +4,7 @@ defusedxml==0.6.0
 Django~=2.2
 django-allauth==0.39.1
 django-autocomplete-light==3.5.1
+django-cas-server==1.1.0
 django-crispy-forms==1.7.2
 django-extensions==2.1.9
 django-filter==2.2.0

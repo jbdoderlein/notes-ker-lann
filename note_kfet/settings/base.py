@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     # Autocomplete
     'dal',
     'dal_select2',
+    # CAS
+    'cas_server',
 
     # Note apps
     'activity',
@@ -179,4 +181,8 @@ DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
+
+# CAS Settings
+CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
+CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
 
