@@ -54,7 +54,7 @@
                         <i class="fa fa-users"></i> {% trans "View my memberships" %}
                     </a>
                 </div>
-                <div id="clubListCollapse" class="collapse overflow-auto show" aria-labelledby="clubListHeading" data-parent="#accordionProfile">
+                <div id="clubListCollapse" class="collapse show" style="overflow:auto hidden" aria-labelledby="clubListHeading" data-parent="#accordionProfile">
                     {% render_table club_list %}
                 </div>
             </div>
@@ -67,7 +67,7 @@
                         <i class="fa fa-euro"></i> Historique des transactions
                     </a>
                 </div>
-                <div id="historyListCollapse" class="collapse overflow-auto" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
+                <div id="historyListCollapse" class="collapse" style="overflow:auto hidden" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
                     {% render_table history_list %}
                 </div>
             </div>
