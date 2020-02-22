@@ -13,7 +13,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-5 mb-4">
                 {% if form.non_field_errors %}
                     <p class="errornote">
                         {% for error in form.non_field_errors %}
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-sm-7">
-                <div class="card text-center">
+                <div class="card text-center shadow">
                     {# Tabs for button categories #}
                     <div class="card-header">
                         <ul class="nav nav-tabs nav-fill card-header-tabs">
@@ -59,11 +59,14 @@
                         <div class="tab-content">
                             {% for template_type in template_types %}
                                 <div class="tab-pane" id="{{ template_type.grouper|slugify }}">
-                                    {% for button in template_type.list %}
-                                        <button class="btn btn-outline-dark" name="button" value="{{ button.name }}">
-                                            {{ button.name }} ({{ button.amount | pretty_money }})
-                                        </button>
-                                    {% endfor %}
+                                    <div class="d-inline-flex flex-wrap justify-content-center">
+                                        {% for button in template_type.list %}
+                                            <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                                    name="button" value="{{ button.name }}">
+                                                {{ button.name }} ({{ button.amount | pretty_money }})
+                                            </button>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -72,9 +75,10 @@
             </div>
         </div>
     </form>
+{% endblock %}
 
+{% block extrajavascript %}
     <script type="text/javascript">
-        $ = django.jQuery;
         $(document).ready(function() {
             // If hash of a category in the URL, then select this category
             // else select the first one
