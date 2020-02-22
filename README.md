@@ -40,7 +40,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ cp nginx_note.conf_example nginx_note.conf
 
-*** Modifier le fichier pour etre en accord avec le reste de votre config ***
+***Modifier le fichier pour être en accord avec le reste de votre config***
 
     On utilise uwsgi et Nginx pour gérer le coté serveu :
 
@@ -107,10 +107,9 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
 6. Variable d'environnement et Migrations
         
-     
 
 Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
-        
+
         $ source /env/bin/activate
         (env)$ ./manage.py check # pas de bétise qui traine
         (env)$ ./manage.py makemigrations
@@ -127,7 +126,8 @@ Il est possible de travailler sur une instance Docker.
     
         $ git clone git@gitlab.crans.org:bde/nk20.git
 
-2. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré, ajouter les lignes suivantes, en les adaptant à la configuration voulue :
+2. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré,
+   ajouter les lignes suivantes, en les adaptant à la configuration voulue :
 
         nk20:
           build: /chemin/vers/nk20
@@ -143,38 +143,39 @@ Il est possible de travailler sur une instance Docker.
 
         $ docker-compose up -d nk20
 
-## Installer en local
+## Installer un serveur de développement
 
-Il est tout-à-fait possible de travailler en local, vive `./manage.py runserver` !
+Avec `./manage.py runserver` il est très rapide de mettre en place
+un serveur de développement par exemple sur son ordinateur.
 
 1. Cloner le dépôt là où vous voulez :
 
-        $ git clone git@gitlab.crans.org:bde/nk20.git
+        $ git clone git@gitlab.crans.org:bde/nk20.git && cd nk20
 
-2. Initialiser l'environnement Virtuel
-        
-        $ cd nk20
-        $ virtualenv env
-        $ source /env/bin/activate
+2. Créer un environnement Python isolé
+   pour ne pas interférer avec les versions de paquets systèmes :
+
+        $ python3 -m venv venv
+        $ source venv/bin/activate
         (env)$ pip install -r requirements.txt
 
-3. Migrations:
+3. Migrations et chargement des données initiales :
 
         (env)$ ./manage.py makemigrations
         (env)$ ./manage.py migrate
+        (env)$ ./manage.py loaddata initial
 
-4. Enjoy:
-
-        (env)$ ./manage.py runserver
-
-## Minimal Setup
-
-1. Créer un superuser :
+4. Créer un super-utilisateur :
 
         (env)$ ./manage.py createsuperuser
 
-Avec ce dernier vous pouvez vous connecter à l'interface admin de Django, avoir
-accès à la doc auto-générée du projet, jouer avec des models, etc ...
+5. Enjoy :
+
+        (env)$ ./manage.py runserver 0.0.0.0:8000
+
+En mettant `0.0.0.0:8000` après `runserver`, vous rendez votre instance Django
+accessible depuis l'ensemble de votre réseau, pratique pour tester le rendu
+de la note sur un téléphone !
 
 ## Cahier des Charges 
 
@@ -182,4 +183,5 @@ Il est disponible [ici](https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC).
 
 ## Documentation
 
-La documentation est générée par django et son module admindocs. **Commenter votre code !*
+La documentation est générée par django et son module admindocs.
+**Commenter votre code !**

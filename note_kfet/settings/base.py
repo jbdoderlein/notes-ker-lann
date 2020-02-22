@@ -161,6 +161,8 @@ USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
+FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
