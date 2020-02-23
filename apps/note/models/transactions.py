@@ -43,6 +43,7 @@ class TransactionTemplate(models.Model):
         verbose_name=_('name'),
         max_length=255,
         unique=True,
+        error_messages={'unique':_("A template with this name already exist")},
     )
     destination = models.ForeignKey(
         NoteClub,

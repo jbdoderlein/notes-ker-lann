@@ -5,10 +5,11 @@ from django.utils import timezone
 import psycopg2 as  pg
 import psycopg2.extras as pge
 from django.db import transaction
-import json
-import collections
-from django.core.exceptions import ValidationError
 
+import collections
+
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.contrib.auth.models import User
 from note.models import Note, NoteSpecial, NoteUser, NoteClub
 from note.models import Transaction, TransactionTemplate, TransactionCategory, TransactionType
@@ -64,46 +65,44 @@ def import_comptes(cur,map_idbde):
             else:
                 passwd_nk15 = ''
             try:
-                user = User.objects.create(
-                    username =row["pseudo"],
-                    password = passwd_nk15,
-                    first_name = row["nom"],
-                    last_name = row["prenom"],
-                    email = row["mail"],
-                )
-                #sanitize duplicate aliases (nk12)
+                obj_dict = {
+                    "username": row["pseudo"],
+                    "password": passwd_nk15,
+                    "first_name": row["nom"],
+                    "last_name": row["prenom"],
+                    "email":  row["mail"],
+                }
+                user = User.objects.create(**obj_dict)
+               #sanitize duplicate aliases (nk12)
             except ValidationError as e:
                 if e.code == 'same_alias':
-                    user = User.objects.create(
-                        username = row["pseudo"]+str(row["idbde"]),
-                        password = row["passwd"] if row["passwd"] != '*|*' else '',
-                        first_name = row["nom"],
-                        last_name = row["prenom"],
-                        email = row["mail"],
-                    )
+                    obj_dict["username"] = row["pseudo"]+str(row["idbde"])
+                    user = User.objects.create(**obj_dict)
                 else:
                     raise(e)
             else:
                 pass
-            profile = Profile.objects.create(
-                phone_number = row["tel"],
-                address = row["adresse"],
-                paid = row["normalien"],
-                user = user,
-            )
+            obj_dict ={
+                "phone_number": row["tel"],
+                "address":  row["adresse"],
+                "paid": row["normalien"],
+                "user": user,
+            }
+            profile = Profile.objects.create(**obj_dict)
             note = user.note
             note.balance = row["solde"]
-
             obj_list =[user, profile, note]
-        else:#club
-            club,c = Club.objects.get_or_create(pk=pkclub,
-                                                name = row["pseudo"],
-                                                email = row["mail"],
-                                                membership_duration = "396 00:00:00",
-                                                membership_start = "213 00:00:00",
-                                                membership_end = "273 00:00:00",
-                                                membership_fee =0,
-            )
+        else: # club
+            obj_dict = {
+                "pk":pkclub,
+                "name": row["pseudo"],
+                "email": row["mail"],
+                "membership_duration": "396 00:00:00",
+                "membership_start": "213 00:00:00",
+                "membership_end": "273 00:00:00",
+                "membership_fee": 0,
+            }
+            club,c = Club.objects.get_or_create(**obj_dict)
             pkclub +=1
             note = club.note
             note.balance = row["solde"]
@@ -111,26 +110,45 @@ def import_comptes(cur,map_idbde):
         for obj in obj_list:
             obj.save()
             map_idbde[row["idbde"]] = note.pk
-            #
     return map_idbde
+
 
 @transaction.atomic
 def import_boutons(cur,map_idbde):
     cur.execute("SELECT * FROM boutons;")
     for row in cur:
         cat, created = TransactionCategory.objects.get_or_create(name=row["categorie"])
-
-        button = TransactionTemplate.objects.create(pk=row["id"],
-                                            name=row["label"],
-                                            amount=row["montant"],
-                                            destination_id=map_idbde[row["destinataire"]],
-                                            category = cat,
-                                            display = row["affiche"],
-                                            description = row["description"],
-        )
+        try:
+            obj_dict = {
+                "pk": row["id"],
+                "name": row["label"],
+                "amount": row["montant"],
+                "destination_id": map_idbde[row["destinataire"]],
+                "category": cat,
+                "display" : row["affiche"],
+                "description": row["description"],
+            }
+            with transaction.atomic(): # required for error management
+                button = TransactionTemplate.objects.create(**obj_dict)
+        except IntegrityError as e:
+            if "unique" in e.args[0]:
+                qs = Club.objects.filter(note__id=map_idbde[row["destinataire"]]).values('name')
+                note_name = qs[0]["name"]
+                obj_dict["name"] = ' '.join([obj_dict["name"],note_name])
+                button = TransactionTemplate.objects.create(**obj_dict)
+            else:
+                raise(e)
         if created:
             cat.save()
         button.save()
+
+@transaction.atomic
+def import_transaction(cur, map_idbde):
+    cur.execute("SELECT * FROM transactions;")
+    for row in cur:
+        obj_dict = {
+            "pk":row["id"],
+        }
 
 
 class Command(BaseCommand):
@@ -142,7 +160,7 @@ class Command(BaseCommand):
         parser.add_argument('-s', '--special', action = 'store_true')
         parser.add_argument('-c', '--comptes', action = 'store_true')
         parser.add_argument('-b', '--boutons', action = 'store_true')
-
+        parser.add_argument('-t', '--transactions', action = 'store_true')
 
     def handle(self, *args, **kwargs):
         conn = pg.connect(database="nk15",user="nk15_user")
@@ -159,5 +177,5 @@ class Command(BaseCommand):
         if kwargs["boutons"]:
             import_boutons(cur,map_idbde)
             print("boutons table imported")
-        if kwargs["transaction"]:
+        if kwargs["transactions"]:
             import_transaction(cur)
