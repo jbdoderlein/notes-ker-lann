@@ -152,6 +152,7 @@ def import_boutons(cur,map_idbde):
             cat.save()
         button.save()
 
+
 @transaction.atomic
 def import_transaction(cur, map_idbde):
     cur.execute("SELECT * FROM transactions;")
@@ -159,6 +160,26 @@ def import_transaction(cur, map_idbde):
         obj_dict = {
             "pk":row["id"],
         }
+       
+@transaction.atomic
+def import_aliases(cur,map_idbde):
+    cur.execute("SELECT * FROM aliases ORDER by id")
+    for row in cur:
+        alias_name = row["alias"]
+        alias_name_good = (alias_name[:252]+'...') if len(alias_name) > 255 else alias_name
+        obj_dict = {
+            "note_id":map_idbde[row["idbde"]],
+            "name":alias_name_good,
+        }
+        try:
+            with transaction.atomic():
+                alias =  Alias.objects.create(**obj_dict)
+        except IntegrityError as e:
+            if "unique" in e.args[0]:
+                continue
+            else:
+                raise(e)
+        alias.save()
 
 
 class Command(BaseCommand):
@@ -171,7 +192,8 @@ class Command(BaseCommand):
         parser.add_argument('-c', '--comptes', action = 'store_true')
         parser.add_argument('-b', '--boutons', action = 'store_true')
         parser.add_argument('-t', '--transactions', action = 'store_true')
-
+        parser.add_argument('-a', '--aliases', action = 'store_true')
+       
     def handle(self, *args, **kwargs):
         conn = pg.connect(database="nk15",user="nk15_user")
         cur = conn.cursor(cursor_factory = pge.DictCursor)
@@ -189,3 +211,6 @@ class Command(BaseCommand):
             print("boutons table imported")
         if kwargs["transactions"]:
             import_transaction(cur)
+        if kwargs["aliases"]:
+            import_aliases(cur,map_idbde)
+            print("aliases imported")
