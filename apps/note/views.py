@@ -138,8 +138,8 @@ class ConsoView(LoginRequiredMixin, CreateView):
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['transaction_templates'] = TransactionTemplate.objects.all() \
-            .order_by('template_type')
+        context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
+            .order_by('category')
         context['title'] = _("Consommations")
 
         # select2 compatibility
