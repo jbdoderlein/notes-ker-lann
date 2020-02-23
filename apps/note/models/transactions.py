@@ -54,13 +54,15 @@ class TransactionTemplate(models.Model):
         verbose_name=_('amount'),
         help_text=_('in centimes'),
     )
-    template_type = models.ForeignKey(
+    category = models.ForeignKey(
         TransactionCategory,
         on_delete=models.PROTECT,
         verbose_name=_('type'),
         max_length=31,
     )
-
+    display = models.BooleanField(
+        default = True,
+    )
     description = models.CharField(
         verbose_name=_('description'),
         max_length=255,

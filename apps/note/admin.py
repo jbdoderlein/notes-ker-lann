@@ -141,8 +141,8 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
-    list_display = ('name', 'poly_destination', 'amount', 'template_type')
-    list_filter = ('template_type', )
+    list_display = ('name', 'poly_destination', 'amount', 'category', 'display', )
+    list_filter = ('category', 'display')
     autocomplete_fields = ('destination', )
 
     def poly_destination(self, obj):
