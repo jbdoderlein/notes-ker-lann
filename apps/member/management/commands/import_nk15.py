@@ -12,10 +12,19 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from note.models import Note, NoteSpecial, NoteUser, NoteClub
-from note.models import Transaction, TransactionTemplate, TransactionCategory, TransactionType
+from note.models import Alias
+from note.models import Transaction, TransactionTemplate, TemplateCategory, TransactionType
 from member.models import Profile, Club
 
+"""
+Script d'import de la nk15:
+TODO: import aliases
+TODO: import transactions
+TODO: import adhesion
+TODO: import activite
+TODO: import
 
+"""
 @transaction.atomic
 def import_special(cur):
     cur.execute("SELECT * FROM comptes WHERE idbde <0 ORDER BY idbde;")
@@ -71,6 +80,7 @@ def import_comptes(cur,map_idbde):
                     "first_name": row["nom"],
                     "last_name": row["prenom"],
                     "email":  row["mail"],
+                    "is_active" : False, # temporary
                 }
                 user = User.objects.create(**obj_dict)
                #sanitize duplicate aliases (nk12)
@@ -117,17 +127,17 @@ def import_comptes(cur,map_idbde):
 def import_boutons(cur,map_idbde):
     cur.execute("SELECT * FROM boutons;")
     for row in cur:
-        cat, created = TransactionCategory.objects.get_or_create(name=row["categorie"])
+        cat, created = TemplateCategory.objects.get_or_create(name=row["categorie"])
+        obj_dict = {
+            "pk": row["id"],
+            "name": row["label"],
+            "amount": row["montant"],
+            "destination_id": map_idbde[row["destinataire"]],
+            "category": cat,
+            "display" : row["affiche"],
+            "description": row["description"],
+        }
         try:
-            obj_dict = {
-                "pk": row["id"],
-                "name": row["label"],
-                "amount": row["montant"],
-                "destination_id": map_idbde[row["destinataire"]],
-                "category": cat,
-                "display" : row["affiche"],
-                "description": row["description"],
-            }
             with transaction.atomic(): # required for error management
                 button = TransactionTemplate.objects.create(**obj_dict)
         except IntegrityError as e:
