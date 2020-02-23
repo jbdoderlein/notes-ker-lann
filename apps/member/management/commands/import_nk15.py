@@ -62,14 +62,20 @@ class Command(BaseCommand):
             for row in cur:
                 row["idbde"] += 7 # do not overwrite the already populated id.
                 if row["type"] == "personne":
+                    #sanitize password
+                    if row["passwd"] != "*|*":
+                        passwd_nk15 = "$".join(["custom_nk15","1",row["passwd"]])
+                    else:
+                        passwd_nk15 = ''
                     try:
                         user = User.objects.create(
                             username =row["pseudo"],
-                            password = row["passwd"] if row["passwd"] != '*|*' else '',
+                            password = passwd_nk15,
                             first_name = row["nom"],
                             last_name = row["prenom"],
                             email = row["mail"],
                         )
+                    #sanitize duplicate aliases (nk12)
                     except ValidationError as e:
                         if e.code == 'same_alias':
                             user = User.objects.create(
@@ -79,8 +85,6 @@ class Command(BaseCommand):
                                 last_name = row["prenom"],
                                 email = row["mail"],
                             )
-
-
                     profile = Profile.objects.create(
                         phone_number = row["tel"],
                         address = row["adresse"],
