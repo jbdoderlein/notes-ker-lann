@@ -13,7 +13,7 @@ Defines transactions
 """
 
 
-class TransactionCategory(models.Model):
+class TemplateCategory(models.Model):
     """
     Defined a recurrent transaction category
 
@@ -55,7 +55,7 @@ class TransactionTemplate(models.Model):
         help_text=_('in centimes'),
     )
     category = models.ForeignKey(
-        TransactionCategory,
+        TemplateCategory,
         on_delete=models.PROTECT,
         verbose_name=_('type'),
         max_length=31,
@@ -171,6 +171,26 @@ class Transaction(models.Model):
     @property
     def total(self):
         return self.amount * self.quantity
+
+
+class TemplateTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
+
+    """
+
+    template = models.ForeignKey(
+        TransactionTemplate,
+        null=True
+        on_delete=models.SET_NULL
+    )
+    category = models.ForeignKey(
+        TemplateCategory,
+        on_delete=models.PROTECT
+    )
+    name = models.CharField(
+        max_length=255
+    )
 
 
 class MembershipTransaction(Transaction):
