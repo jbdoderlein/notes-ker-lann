@@ -7,7 +7,7 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
-from .models.transactions import Transaction, TransactionCategory, TransactionTemplate, TransactionType
+from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, TransactionType
 
 
 class AliasInlines(admin.TabularInline):
@@ -154,8 +154,8 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     poly_destination.short_description = _('destination')
 
 
-@admin.register(TransactionCategory)
-class TransactionCategoryAdmin(admin.ModelAdmin):
+@admin.register(TemplateCategory)
+class TemplateCategoryAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
