@@ -7,7 +7,7 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
-from .models.transactions import Transaction, TransactionCategory, TransactionTemplate
+from .models.transactions import Transaction, TransactionCategory, TransactionTemplate, TransactionType
 
 
 class AliasInlines(admin.TabularInline):
@@ -156,6 +156,14 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
 
 @admin.register(TransactionCategory)
 class TransactionCategoryAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for TransactionTemplate
+    """
+    list_display = ('name', )
+    list_filter = ('name', )
+
+@admin.register(TransactionType)
+class TransactionTypeAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """

@@ -76,6 +76,26 @@ class TransactionTemplate(models.Model):
         return reverse('note:template_update', args=(self.pk, ))
 
 
+class TransactionType(models.Model):
+    """
+    Defined a recurrent transaction category
+
+     Example: food, softs, ...
+     """
+    name = models.CharField(
+        verbose_name=_("name"),
+        max_length=31,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = _("transaction type")
+        verbose_name_plural = _("transaction types")
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Transaction(models.Model):
     """
     General transaction between two :model:`note.Note`
@@ -107,7 +127,9 @@ class Transaction(models.Model):
         default=1,
     )
     amount = models.PositiveIntegerField(verbose_name=_('amount'), )
-    transaction_type = models.CharField(
+    transaction_type = models.ForeignKey(
+        TransactionType,
+        on_delete=models.PROTECT,
         verbose_name=_('type'),
         max_length=31,
     )
