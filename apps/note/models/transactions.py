@@ -182,15 +182,15 @@ class TemplateTransaction(Transaction):
 
     template = models.ForeignKey(
         TransactionTemplate,
-        null=True
-        on_delete=models.SET_NULL
+        null=True,
+        on_delete=models.SET_NULL,
     )
     category = models.ForeignKey(
         TemplateCategory,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     name = models.CharField(
-        max_length=255
+        max_length=255,
     )
 
 
