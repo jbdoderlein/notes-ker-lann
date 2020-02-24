@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 13:50+0100\n"
+"POT-Creation-Date: 2020-02-24 17:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,6 +80,46 @@ msgstr ""
 
 #: apps/activity/models.py:109
 msgid "guests"
+msgstr ""
+
+#: apps/api/apps.py:10
+msgid "API"
+msgstr ""
+
+#: apps/logs/apps.py:10
+msgid "Logs"
+msgstr ""
+
+#: apps/logs/models.py:20 apps/note/models/notes.py:105
+msgid "user"
+msgstr ""
+
+#: apps/logs/models.py:27
+msgid "model"
+msgstr ""
+
+#: apps/logs/models.py:34
+msgid "identifier"
+msgstr ""
+
+#: apps/logs/models.py:39
+msgid "previous data"
+msgstr ""
+
+#: apps/logs/models.py:44
+msgid "new data"
+msgstr ""
+
+#: apps/logs/models.py:51
+msgid "action"
+msgstr ""
+
+#: apps/logs/models.py:59
+msgid "timestamp"
+msgstr ""
+
+#: apps/logs/models.py:63
+msgid "Logs cannot be destroyed."
 msgstr ""
 
 #: apps/member/apps.py:10
@@ -244,10 +284,6 @@ msgstr ""
 msgid "This alias is already taken."
 msgstr ""
 
-#: apps/note/models/notes.py:105
-msgid "user"
-msgstr ""
-
 #: apps/note/models/notes.py:109
 msgid "one's note"
 msgstr ""
@@ -358,15 +394,19 @@ msgstr ""
 msgid "Transfer money from your account to one or others"
 msgstr ""
 
-#: note_kfet/settings/base.py:148
-msgid "German"
-msgstr ""
-
-#: note_kfet/settings/base.py:149
-msgid "English"
+#: apps/note/views.py:143
+msgid "Consommations"
 msgstr ""
 
 #: note_kfet/settings/base.py:150
+msgid "German"
+msgstr ""
+
+#: note_kfet/settings/base.py:151
+msgid "English"
+msgstr ""
+
+#: note_kfet/settings/base.py:152
 msgid "French"
 msgstr ""
 

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'member',
     'note',
     'api',
+    'logs',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 

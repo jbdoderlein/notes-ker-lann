@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 13:50+0100\n"
+"POT-Creation-Date: 2020-02-24 17:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,50 @@ msgstr "invité"
 #: apps/activity/models.py:109
 msgid "guests"
 msgstr "invités"
+
+#: apps/api/apps.py:10
+msgid "API"
+msgstr ""
+
+#: apps/logs/apps.py:10
+msgid "Logs"
+msgstr ""
+
+#: apps/logs/models.py:20 apps/note/models/notes.py:105
+msgid "user"
+msgstr "utilisateur"
+
+#: apps/logs/models.py:27
+msgid "model"
+msgstr "Modèle"
+
+#: apps/logs/models.py:34
+msgid "identifier"
+msgstr "Identifiant"
+
+#: apps/logs/models.py:39
+msgid "previous data"
+msgstr "Données précédentes"
+
+#: apps/logs/models.py:44
+#, fuzzy
+#| msgid "end date"
+msgid "new data"
+msgstr "Nouvelles données"
+
+#: apps/logs/models.py:51
+#, fuzzy
+#| msgid "section"
+msgid "action"
+msgstr "Action"
+
+#: apps/logs/models.py:59
+msgid "timestamp"
+msgstr "Date"
+
+#: apps/logs/models.py:63
+msgid "Logs cannot be destroyed."
+msgstr "Les logs ne peuvent pas être détruits."
 
 #: apps/member/apps.py:10
 msgid "member"
@@ -244,10 +288,6 @@ msgstr "Note"
 msgid "This alias is already taken."
 msgstr "Cet alias est déjà pris."
 
-#: apps/note/models/notes.py:105
-msgid "user"
-msgstr "utilisateur"
-
 #: apps/note/models/notes.py:109
 msgid "one's note"
 msgstr "note d'un utilisateur"
@@ -358,15 +398,21 @@ msgstr "transactions d'adhésion"
 msgid "Transfer money from your account to one or others"
 msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
 
-#: note_kfet/settings/base.py:148
+#: apps/note/views.py:143
+#, fuzzy
+#| msgid "transactions"
+msgid "Consommations"
+msgstr "transactions"
+
+#: note_kfet/settings/base.py:150
 msgid "German"
 msgstr ""
 
-#: note_kfet/settings/base.py:149
+#: note_kfet/settings/base.py:151
 msgid "English"
 msgstr ""
 
-#: note_kfet/settings/base.py:150
+#: note_kfet/settings/base.py:152
 msgid "French"
 msgstr ""
 

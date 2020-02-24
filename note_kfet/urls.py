@@ -21,4 +21,6 @@ urlpatterns = [
 
     # Include Django REST API
     path('api/', include('api.urls')),
+
+    path('logs/', include('logs.urls')),
 ]
