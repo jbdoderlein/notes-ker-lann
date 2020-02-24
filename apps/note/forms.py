@@ -31,8 +31,6 @@ class TransactionTemplateForm(forms.ModelForm):
 
 class TransactionForm(forms.ModelForm):
     def save(self, commit=True):
-        self.instance.transaction_type = 'transfert'
-
         super().save(commit)
 
     class Meta:
