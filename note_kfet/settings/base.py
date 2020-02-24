@@ -117,6 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Use our custom hasher in order to import NK15 passwords
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'member.hashers.CustomNK15Hasher',
+]
+
 # Django Guardian object permissions
 
 AUTHENTICATION_BACKENDS = (

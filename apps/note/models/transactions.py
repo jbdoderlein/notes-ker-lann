@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from polymorphic.models import PolymorphicModel
 
 from .notes import Note, NoteClub
 
@@ -13,7 +14,7 @@ Defines transactions
 """
 
 
-class TransactionCategory(models.Model):
+class TemplateCategory(models.Model):
     """
     Defined a recurrent transaction category
 
@@ -43,6 +44,7 @@ class TransactionTemplate(models.Model):
         verbose_name=_('name'),
         max_length=255,
         unique=True,
+        error_messages={'unique':_("A template with this name already exist")},
     )
     destination = models.ForeignKey(
         NoteClub,
@@ -54,11 +56,18 @@ class TransactionTemplate(models.Model):
         verbose_name=_('amount'),
         help_text=_('in centimes'),
     )
-    template_type = models.ForeignKey(
-        TransactionCategory,
+    category = models.ForeignKey(
+        TemplateCategory,
         on_delete=models.PROTECT,
         verbose_name=_('type'),
         max_length=31,
+    )
+    display = models.BooleanField(
+        default = True,
+    )
+    description = models.CharField(
+        verbose_name=_('description'),
+        max_length=255,
     )
 
     class Meta:
@@ -69,7 +78,7 @@ class TransactionTemplate(models.Model):
         return reverse('note:template_update', args=(self.pk, ))
 
 
-class Transaction(models.Model):
+class Transaction(PolymorphicModel):
     """
     General transaction between two :model:`note.Note`
 
@@ -100,10 +109,6 @@ class Transaction(models.Model):
         default=1,
     )
     amount = models.PositiveIntegerField(verbose_name=_('amount'), )
-    transaction_type = models.CharField(
-        verbose_name=_('type'),
-        max_length=31,
-    )
     reason = models.CharField(
         verbose_name=_('reason'),
         max_length=255,
@@ -142,6 +147,26 @@ class Transaction(models.Model):
     @property
     def total(self):
         return self.amount * self.quantity
+
+
+class TemplateTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
+
+    """
+
+    template = models.ForeignKey(
+        TransactionTemplate,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    category = models.ForeignKey(
+        TemplateCategory,
+        on_delete=models.PROTECT,
+    )
+    name = models.CharField(
+        max_length=255,
+    )
 
 
 class MembershipTransaction(Transaction):

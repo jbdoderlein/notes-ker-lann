@@ -162,56 +162,56 @@
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 1,
         "fields": {
             "name": "Soft"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 2,
         "fields": {
             "name": "Pulls"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 3,
         "fields": {
             "name": "Gala"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 4,
         "fields": {
             "name": "Clubs"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 5,
         "fields": {
             "name": "Bouffe"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 6,
         "fields": {
             "name": "BDA"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 7,
         "fields": {
             "name": "Autre"
         }
     },
     {
-        "model": "note.transactioncategory",
+        "model": "note.templatecategory",
         "pk": 8,
         "fields": {
             "name": "Alcool"

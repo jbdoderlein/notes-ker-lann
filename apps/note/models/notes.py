@@ -64,7 +64,8 @@ class Note(PolymorphicModel):
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'))
+                raise ValidationError(_('This alias is already taken.'),
+                                      code="same_alias")
 
             # Save note
             super().save(*args, **kwargs)
@@ -87,7 +88,8 @@ class Note(PolymorphicModel):
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'))
+                raise ValidationError(_('This alias is already taken.'),
+                                      code="same_alias",)
         else:
             # Alias does not exist yet, so check if it can exist
             a = Alias(name=str(self))
@@ -222,16 +224,19 @@ class Alias(models.Model):
     def clean(self):
         normalized_name = Alias.normalize(self.name)
         if len(normalized_name) >= 255:
-            raise ValidationError(_('Alias too long.'))
+            raise ValidationError(_('Alias is too long.'),
+                                  code='alias_too_long')
         try:
-            if self != Alias.objects.get(normalized_name=normalized_name):
-                raise ValidationError(
-                    _('An alias with a similar name '
-                      'already exists.'))
+            sim_alias = Alias.objects.get(normalized_name=normalized_name)
+            if self != sim_alias:
+                raise ValidationError(_('An alias with a similar name already exists:'),
+                                       code="same_alias"
+                )
         except Alias.DoesNotExist:
             pass
 
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
-            raise ValidationError(_("You can't delete your main alias."))
+            raise ValidationError(_("You can't delete your main alias."),
+                                  code="cant_delete_main_alias")
         return super().delete(using, keep_parents)
