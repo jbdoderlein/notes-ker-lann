@@ -164,10 +164,6 @@ class TemplateTransaction(Transaction):
         TemplateCategory,
         on_delete=models.PROTECT,
     )
-    name = models.CharField(
-        max_length=255,
-    )
-
 
 class MembershipTransaction(Transaction):
     """
