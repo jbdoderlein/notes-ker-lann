@@ -87,7 +87,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         </a>
                         <div class="dropdown-menu dropdown-menu-right"
                              aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.profile.pk %}">
+                            <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.pk %}">
                                 <i class="fa fa-user"></i> Mon compte
                             </a>
                             <a class="dropdown-item" href="{% url 'logout' %}">
