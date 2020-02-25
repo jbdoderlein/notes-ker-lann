@@ -176,7 +176,7 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.realpath(__file__)
+STATIC_ROOT = os.path.join(BASE_DIR,"static/") 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')]
 
