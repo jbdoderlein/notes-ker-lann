@@ -27,6 +27,12 @@ class Note(PolymorphicModel):
         help_text=_('in centimes, money credited for this instance'),
         default=0,
     )
+    last_negative= models.DateTimeField(
+        verbose_name=_('last negative date'),
+        help_text=_('last time the balance was negative'),
+        null=True,
+        blank=True,
+    )
     is_active = models.BooleanField(
         _('active'),
         default=True,
