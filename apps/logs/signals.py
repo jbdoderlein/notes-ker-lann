@@ -3,6 +3,7 @@
 
 import inspect
 
+from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
@@ -44,7 +45,7 @@ def save_object(sender, instance, **kwargs):
         previous_json = None
     instance_json = serializers.serialize('json', [instance, ],)[1:-1]
     Changelog.objects.create(user=user,
-                                        model=model_name,
+                                        model=ContentType.objects.get_for_model(instance),
                                         instance_pk=instance.pk,
                                         previous=previous_json,
                                         data=instance_json,

@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -20,8 +21,9 @@ class Changelog(models.Model):
         verbose_name=_('user'),
     )
 
-    model = models.CharField(
-        max_length=255,
+    model = models.ForeignKey(
+        ContentType,
+        on_delete=models.PROTECT,
         null=False,
         blank=False,
         verbose_name=_('model'),
