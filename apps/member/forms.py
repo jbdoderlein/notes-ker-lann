@@ -14,6 +14,11 @@ from crispy_forms.layout import Layout
 
 
 class SignUpForm(UserCreationForm):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['username'].widget.attrs.pop("autofocus", None)
+        self.fields['first_name'].widget.attrs.update({"autofocus":"autofocus"})
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email']
