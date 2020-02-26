@@ -25,15 +25,17 @@ def get_user_in_signal(sender, **kwargs):
     return user
 
 EXCLUDED = [
-        'Changelog',
-        'Migration',
-        'Session',
+        'changelog',
+        'migration',
+        'revision',
+        'session',
+        'version',
     ]
 
 @receiver(pre_save)
 def save_object(sender, instance, **kwargs):
     model_name = sender.__name__
-    if model_name in EXCLUDED:
+    if model_name.lower() in EXCLUDED:
         return
 
     previous = sender.objects.filter(pk=instance.pk).all()
@@ -55,13 +57,13 @@ def save_object(sender, instance, **kwargs):
 @receiver(pre_delete)
 def delete_object(sender, instance, **kwargs):
     model_name = sender.__name__
-    if model_name in EXCLUDED:
+    if model_name.lower() in EXCLUDED:
         return
 
     user = get_user_in_signal(sender, **kwargs)
     instance_json = serializers.serialize('json', [instance, ])[1:-1]
     Changelog.objects.create(user=user,
-                                        model=model_name,
+                                        model=ContentType.objects.get_for_model(instance),
                                         instance_pk=instance.pk,
                                         previous=instance_json,
                                         data=None,
