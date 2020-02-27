@@ -51,15 +51,13 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
-
+    context_object_name = 'user_object'
     second_form = ProfileForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_modified'] = context['user']
-        context['user'] = self.request.user
         context["profile_form"] = self.second_form(
-            instance=context['user_modified'].profile)
+            instance=context['user_object'].profile)
         context['title'] = _("Update Profile")
 
         return context
@@ -74,7 +72,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(
             alias__normalized_name=Alias.normalize(new_username))
-        if note.exists() and note.get().user != self.request.user:
+        if note.exists() and note.get().user != self.object:
             form.add_error('username',
                            _("An alias with a similar name already exists."))
 
@@ -83,7 +81,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         profile_form = ProfileForm(
             data=self.request.POST,
-            instance=self.request.user.profile,
+            instance=self.object.profile,
         )
         if form.is_valid() and profile_form.is_valid():
             new_username = form.data['username']
