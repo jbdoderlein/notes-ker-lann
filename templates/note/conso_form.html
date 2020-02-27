@@ -7,7 +7,7 @@
 
 {% block content %}
     {# Regroup buttons under categories #}
-    {% regroup transaction_templates by template_type as template_types %}
+    {% regroup transaction_templates by category as categories %}
 
     <form method="post" onsubmit="window.onbeforeunload=null">
         {% csrf_token %}
@@ -44,10 +44,10 @@
                     {# Tabs for button categories #}
                     <div class="card-header">
                         <ul class="nav nav-tabs nav-fill card-header-tabs">
-                            {% for template_type in template_types %}
+                            {% for category in categories %}
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#{{ template_type.grouper|slugify }}">
-                                        {{ template_type.grouper }}
+                                    <a class="nav-link" data-toggle="tab" href="#{{ category.grouper|slugify }}">
+                                        {{ category.grouper }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -57,10 +57,10 @@
                     {# Tabs content #}
                     <div class="card-body">
                         <div class="tab-content">
-                            {% for template_type in template_types %}
-                                <div class="tab-pane" id="{{ template_type.grouper|slugify }}">
+                            {% for category in categories %}
+                                <div class="tab-pane" id="{{ category.grouper|slugify }}">
                                     <div class="d-inline-flex flex-wrap justify-content-center">
-                                        {% for button in template_type.list %}
+                                        {% for button in category.list %}
                                             <button class="btn btn-outline-dark rounded-0 flex-fill"
                                                     name="button" value="{{ button.name }}">
                                                 {{ button.name }} ({{ button.amount | pretty_money }})

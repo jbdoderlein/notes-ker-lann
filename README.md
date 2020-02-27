@@ -11,7 +11,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 1. Paquets nécessaires
 
         $ sudo apt install nginx python3 python3-pip python3-dev uwsgi
-        $ sudo apt install uwsgi-plugin-python3 python3-virtualenv git
+        $ sudo apt install uwsgi-plugin-python3 python3-venv git acl
 
 2. Clonage du dépot
 
@@ -29,8 +29,8 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
    À la racine du projet:
 
-        $ virtualenv env
-        $ source /env/bin/activate
+        $ python3 -m venv env
+        $ source env/bin/activate
         (env)$ pip3 install -r requirements.txt
         (env)$ deactivate
 

@@ -7,7 +7,8 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
-from .models.transactions import Transaction, TransactionCategory, TransactionTemplate
+from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, \
+    TemplateTransaction, MembershipTransaction
 
 
 class AliasInlines(admin.TabularInline):
@@ -97,13 +98,14 @@ class NoteUserAdmin(PolymorphicChildModelAdmin):
 
 
 @admin.register(Transaction)
-class TransactionAdmin(admin.ModelAdmin):
+class TransactionAdmin(PolymorphicParentModelAdmin):
     """
     Admin customisation for Transaction
     """
+    child_models = (TemplateTransaction, MembershipTransaction)
     list_display = ('created_at', 'poly_source', 'poly_destination',
-                    'quantity', 'amount', 'transaction_type', 'valid')
-    list_filter = ('transaction_type', 'valid')
+                    'quantity', 'amount', 'valid')
+    list_filter = ('valid',)
     autocomplete_fields = (
         'source',
         'destination',
@@ -132,7 +134,7 @@ class TransactionAdmin(admin.ModelAdmin):
         """
         if obj:  # user is editing an existing object
             return 'created_at', 'source', 'destination', 'quantity',\
-                   'amount', 'transaction_type'
+                   'amount'
         return []
 
 
@@ -141,8 +143,8 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
-    list_display = ('name', 'poly_destination', 'amount', 'template_type')
-    list_filter = ('template_type', )
+    list_display = ('name', 'poly_destination', 'amount', 'category', 'display', )
+    list_filter = ('category', 'display')
     autocomplete_fields = ('destination', )
 
     def poly_destination(self, obj):
@@ -154,8 +156,8 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     poly_destination.short_description = _('destination')
 
 
-@admin.register(TransactionCategory)
-class TransactionCategoryAdmin(admin.ModelAdmin):
+@admin.register(TemplateCategory)
+class TemplateCategoryAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
