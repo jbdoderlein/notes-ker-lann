@@ -5,7 +5,7 @@ import inspect
 
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from .models import Changelog
 
@@ -58,22 +58,32 @@ EXCLUDED = [
         'reversion.version',
     ]
 
+
 @receiver(pre_save)
+def pre_save_object(sender, instance, **kwargs):
+    qs = sender.objects.filter(pk=instance.pk).all()
+    if qs.exists():
+        instance._previous = qs.get()
+    else:
+        instance._previous = None
+
+
+@receiver(post_save)
 def save_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    previous = sender.objects.filter(pk=instance.pk).all()
+    previous = instance._previous
 
     user, ip = get_user_and_ip(sender)
 
-    if user is not None and instance._meta.label_lower == "auth.user" and previous.exists():
+    if user is not None and instance._meta.label_lower == "auth.user" and previous:
         # Don't save last login modifications
-        if instance.last_login != previous.get().last_login:
+        if instance.last_login != previous.last_login:
             return
 
-    previous_json = serializers.serialize('json', previous)[1:-1] if previous.exists() else None
+    previous_json = serializers.serialize('json', [previous, ])[1:-1] if previous else None
     instance_json = serializers.serialize('json', [instance, ])[1:-1]
 
     if previous_json == instance_json:
@@ -86,11 +96,11 @@ def save_object(sender, instance, **kwargs):
                              instance_pk=instance.pk,
                              previous=previous_json,
                              data=instance_json,
-                             action=("edit" if previous.exists() else "create")
+                             action=("edit" if previous else "create")
                              ).save()
 
 
-@receiver(pre_delete)
+@receiver(post_delete)
 def delete_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
