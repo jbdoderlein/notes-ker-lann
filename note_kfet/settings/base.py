@@ -194,6 +194,7 @@ STATIC_URL = '/static/'
 ALIAS_VALIDATOR_REGEX = r''
 
 # CAS Settings
+CAS_AUTO_CREATE_USER = False
 CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
 CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
 
