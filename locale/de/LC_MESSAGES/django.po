@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 13:50+0100\n"
+"POT-Creation-Date: 2020-02-27 17:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,8 +24,8 @@ msgstr ""
 
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:60 apps/member/models.py:111
-#: apps/note/models/notes.py:176 apps/note/models/transactions.py:23
-#: apps/note/models/transactions.py:43 templates/member/profile_detail.html:11
+#: apps/note/models/notes.py:184 apps/note/models/transactions.py:24
+#: apps/note/models/transactions.py:44 templates/member/profile_detail.html:11
 msgid "name"
 msgstr ""
 
@@ -45,12 +45,12 @@ msgstr ""
 msgid "activity types"
 msgstr ""
 
-#: apps/activity/models.py:48
+#: apps/activity/models.py:48 apps/note/models/transactions.py:69
 msgid "description"
 msgstr ""
 
-#: apps/activity/models.py:54 apps/note/models/notes.py:152
-#: apps/note/models/transactions.py:60 apps/note/models/transactions.py:104
+#: apps/activity/models.py:54 apps/note/models/notes.py:160
+#: apps/note/models/transactions.py:62
 msgid "type"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgid ""
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:93 apps/note/models/notes.py:127
+#: apps/member/models.py:93 apps/note/models/notes.py:135
 msgid "club"
 msgstr ""
 
@@ -184,26 +184,30 @@ msgstr ""
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:79 apps/note/models/notes.py:229
+#: apps/member/views.py:79
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/views.py:129
+#: apps/member/views.py:130
 #, python-format
 msgid "Account #%(id)s: %(username)s"
 msgstr ""
 
-#: apps/note/admin.py:118 apps/note/models/transactions.py:86
+#: apps/note/admin.py:120 apps/note/models/transactions.py:93
 msgid "source"
 msgstr ""
 
-#: apps/note/admin.py:126 apps/note/admin.py:154
-#: apps/note/models/transactions.py:51 apps/note/models/transactions.py:92
+#: apps/note/admin.py:128 apps/note/admin.py:156
+#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:99
 msgid "destination"
 msgstr ""
 
-#: apps/note/apps.py:14 apps/note/models/notes.py:48
+#: apps/note/apps.py:14 apps/note/models/notes.py:54
 msgid "note"
+msgstr ""
+
+#: apps/note/forms.py:49
+msgid "Source and destination must be different."
 msgstr ""
 
 #: apps/note/models/notes.py:26
@@ -215,142 +219,158 @@ msgid "in centimes, money credited for this instance"
 msgstr ""
 
 #: apps/note/models/notes.py:31
+msgid "last negative date"
+msgstr ""
+
+#: apps/note/models/notes.py:32
+msgid "last time the balance was negative"
+msgstr ""
+
+#: apps/note/models/notes.py:37
 msgid "active"
 msgstr ""
 
-#: apps/note/models/notes.py:34
+#: apps/note/models/notes.py:40
 msgid ""
 "Designates whether this note should be treated as active. Unselect this "
 "instead of deleting notes."
 msgstr ""
 
-#: apps/note/models/notes.py:38
+#: apps/note/models/notes.py:44
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:43 apps/note/models/transactions.py:95
+#: apps/note/models/notes.py:49 apps/note/models/transactions.py:102
 msgid "created at"
 msgstr ""
 
-#: apps/note/models/notes.py:49
+#: apps/note/models/notes.py:55
 msgid "notes"
 msgstr ""
 
-#: apps/note/models/notes.py:57
+#: apps/note/models/notes.py:63
 msgid "Note"
 msgstr ""
 
-#: apps/note/models/notes.py:67 apps/note/models/notes.py:90
+#: apps/note/models/notes.py:73 apps/note/models/notes.py:97
 msgid "This alias is already taken."
 msgstr ""
 
-#: apps/note/models/notes.py:105
+#: apps/note/models/notes.py:113
 msgid "user"
 msgstr ""
 
-#: apps/note/models/notes.py:109
+#: apps/note/models/notes.py:117
 msgid "one's note"
 msgstr ""
 
-#: apps/note/models/notes.py:110
+#: apps/note/models/notes.py:118
 msgid "users note"
 msgstr ""
 
-#: apps/note/models/notes.py:116
+#: apps/note/models/notes.py:124
 #, python-format
 msgid "%(user)s's note"
 msgstr ""
 
-#: apps/note/models/notes.py:131
+#: apps/note/models/notes.py:139
 msgid "club note"
 msgstr ""
 
-#: apps/note/models/notes.py:132
+#: apps/note/models/notes.py:140
 msgid "clubs notes"
 msgstr ""
 
-#: apps/note/models/notes.py:138
+#: apps/note/models/notes.py:146
 #, python-format
 msgid "Note of %(club)s club"
 msgstr ""
 
-#: apps/note/models/notes.py:158
+#: apps/note/models/notes.py:166
 msgid "special note"
 msgstr ""
 
-#: apps/note/models/notes.py:159
+#: apps/note/models/notes.py:167
 msgid "special notes"
 msgstr ""
 
-#: apps/note/models/notes.py:182
+#: apps/note/models/notes.py:190
 msgid "Invalid alias"
 msgstr ""
 
-#: apps/note/models/notes.py:198
+#: apps/note/models/notes.py:206
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:199 templates/member/profile_detail.html:33
+#: apps/note/models/notes.py:207 templates/member/profile_detail.html:33
 msgid "aliases"
 msgstr ""
 
-#: apps/note/models/notes.py:225
-msgid "Alias too long."
+#: apps/note/models/notes.py:233
+msgid "Alias is too long."
 msgstr ""
 
-#: apps/note/models/notes.py:236
+#: apps/note/models/notes.py:238
+msgid "An alias with a similar name already exists:"
+msgstr ""
+
+#: apps/note/models/notes.py:246
 msgid "You can't delete your main alias."
 msgstr ""
 
-#: apps/note/models/transactions.py:29
+#: apps/note/models/transactions.py:30
 msgid "transaction category"
 msgstr ""
 
-#: apps/note/models/transactions.py:30
+#: apps/note/models/transactions.py:31
 msgid "transaction categories"
 msgstr ""
 
-#: apps/note/models/transactions.py:54 apps/note/models/transactions.py:102
+#: apps/note/models/transactions.py:47
+msgid "A template with this name already exist"
+msgstr ""
+
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
 msgid "amount"
 msgstr ""
 
-#: apps/note/models/transactions.py:55
+#: apps/note/models/transactions.py:57
 msgid "in centimes"
 msgstr ""
 
-#: apps/note/models/transactions.py:65
+#: apps/note/models/transactions.py:74
 msgid "transaction template"
 msgstr ""
 
-#: apps/note/models/transactions.py:66
+#: apps/note/models/transactions.py:75
 msgid "transaction templates"
 msgstr ""
 
-#: apps/note/models/transactions.py:99
+#: apps/note/models/transactions.py:106
 msgid "quantity"
 msgstr ""
 
-#: apps/note/models/transactions.py:108
+#: apps/note/models/transactions.py:111
 msgid "reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:112
+#: apps/note/models/transactions.py:115
 msgid "valid"
 msgstr ""
 
-#: apps/note/models/transactions.py:117
+#: apps/note/models/transactions.py:120
 msgid "transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:118
+#: apps/note/models/transactions.py:121
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:160
+#: apps/note/models/transactions.py:184
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:161
+#: apps/note/models/transactions.py:185
 msgid "membership transactions"
 msgstr ""
 
@@ -358,15 +378,19 @@ msgstr ""
 msgid "Transfer money from your account to one or others"
 msgstr ""
 
-#: note_kfet/settings/base.py:148
+#: apps/note/views.py:138
+msgid "Consommations"
+msgstr ""
+
+#: note_kfet/settings/base.py:155
 msgid "German"
 msgstr ""
 
-#: note_kfet/settings/base.py:149
+#: note_kfet/settings/base.py:156
 msgid "English"
 msgstr ""
 
-#: note_kfet/settings/base.py:150
+#: note_kfet/settings/base.py:157
 msgid "French"
 msgstr ""
 

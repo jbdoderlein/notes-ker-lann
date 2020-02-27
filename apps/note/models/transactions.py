@@ -84,8 +84,6 @@ class Transaction(PolymorphicModel):
 
     amount is store in centimes of currency, making it a  positive integer
     value. (from someone to someone else)
-
-    TODO: Ensure source != destination.
     """
 
     source = models.ForeignKey(
@@ -126,6 +124,11 @@ class Transaction(PolymorphicModel):
         """
         When saving, also transfer money between two notes
         """
+
+        if self.source.pk == self.destination.pk:
+            # When source == destination, no money is transfered
+            return
+
         created = self.pk is None
         to_transfer = self.amount * self.quantity
         if not created:
