@@ -5,7 +5,7 @@ import inspect
 
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from .models import Changelog
 
@@ -58,7 +58,7 @@ EXCLUDED = [
         'reversion.version',
     ]
 
-@receiver(post_save)
+@receiver(pre_save)
 def save_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
@@ -68,8 +68,18 @@ def save_object(sender, instance, **kwargs):
 
     user, ip = get_user_and_ip(sender)
 
-    previous_json = serializers.serialize('json', previous)[1:-1] if previous.exists else None
+    if user is not None and instance._meta.label_lower == "auth.user" and previous.exists():
+        # Don't save last login modifications
+        if instance.last_login != previous.get().last_login:
+            return
+
+    previous_json = serializers.serialize('json', previous)[1:-1] if previous.exists() else None
     instance_json = serializers.serialize('json', [instance, ])[1:-1]
+
+    if previous_json == instance_json:
+        # No modification
+        return
+
     Changelog.objects.create(user=user,
                              ip=ip,
                              model=ContentType.objects.get_for_model(instance),
@@ -80,7 +90,7 @@ def save_object(sender, instance, **kwargs):
                              ).save()
 
 
-@receiver(post_delete)
+@receiver(pre_delete)
 def delete_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
