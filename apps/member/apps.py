@@ -3,7 +3,7 @@
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
 from django.utils.translation import gettext_lazy as _
 
 from .signals import save_user_note
@@ -17,7 +17,7 @@ class MemberConfig(AppConfig):
         """
         Define app internal signals to interact with other apps
         """
-        pre_save.connect(
+        post_save.connect(
             save_user_note,
             sender=settings.AUTH_USER_MODEL,
         )
