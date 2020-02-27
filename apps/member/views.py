@@ -114,12 +114,13 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     """
     Affiche les informations sur un utilisateur, sa note, ses clubs...
     """
-    model = Profile
-    context_object_name = "profile"
+    model = User
+    context_object_name = "user_object"
+    template_name = "member/profile_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = context['profile'].user
+        user = context['user_object']
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))
         context['history_list'] = HistoryTable(history_list)

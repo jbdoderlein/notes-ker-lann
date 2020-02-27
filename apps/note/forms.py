@@ -4,7 +4,7 @@
 from dal import autocomplete
 from django import forms
 
-from .models import Transaction, TransactionTemplate
+from .models import Transaction, TransactionTemplate, TemplateTransaction
 
 
 class TransactionTemplateForm(forms.ModelForm):
@@ -31,8 +31,6 @@ class TransactionTemplateForm(forms.ModelForm):
 
 class TransactionForm(forms.ModelForm):
     def save(self, commit=True):
-        self.instance.transaction_type = 'transfert'
-
         super().save(commit)
 
     class Meta:
@@ -71,12 +69,13 @@ class ConsoForm(forms.ModelForm):
             name=self.data['button']).get()
         self.instance.destination = button.destination
         self.instance.amount = button.amount
-        self.instance.transaction_type = 'bouton'
-        self.instance.reason = button.name
+        self.instance.reason = '{} ({})'.format(button.name, button.category)
+        self.instance.name = button.name
+        self.instance.category = button.category
         super().save(commit)
 
     class Meta:
-        model = Transaction
+        model = TemplateTransaction
         fields = ('source', )
 
         # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.

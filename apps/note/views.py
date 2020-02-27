@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 
-from .models import Transaction, TransactionTemplate, Alias
+from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 
 
@@ -129,7 +129,7 @@ class ConsoView(LoginRequiredMixin, CreateView):
     """
     Consume
     """
-    model = Transaction
+    model = TemplateTransaction
     template_name = "note/conso_form.html"
     form_class = ConsoForm
 
@@ -138,8 +138,8 @@ class ConsoView(LoginRequiredMixin, CreateView):
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['transaction_templates'] = TransactionTemplate.objects.all() \
-            .order_by('template_type')
+        context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
+            .order_by('category')
         context['title'] = _("Consommations")
 
         # select2 compatibility
@@ -152,3 +152,4 @@ class ConsoView(LoginRequiredMixin, CreateView):
         When clicking a button, reload the same page
         """
         return reverse('note:consos')
+
