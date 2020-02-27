@@ -43,17 +43,25 @@ def get_user_and_ip(sender):
 
 
 EXCLUDED = [
-        'changelog',
-        'migration',
-        'revision',
-        'session',
-        'version',
+        'admin.logentry',
+        'authtoken.token',
+        'cas_server.user',
+        'cas_server.userattributes',
+        'contenttypes.contenttype',
+        'logs.changelog',
+        'migrations.migration',
+        'note.noteuser',
+        'note.noteclub',
+        'note.notespecial',
+        'sessions.session',
+        'reversion.revision',
+        'reversion.version',
     ]
 
 @receiver(pre_save)
 def save_object(sender, instance, **kwargs):
-    model_name = sender.__name__
-    if model_name.lower() in EXCLUDED:
+    # noinspection PyProtectedMember
+    if instance._meta.label_lower in EXCLUDED:
         return
 
     previous = sender.objects.filter(pk=instance.pk).all()
@@ -74,8 +82,8 @@ def save_object(sender, instance, **kwargs):
 
 @receiver(pre_delete)
 def delete_object(sender, instance, **kwargs):
-    model_name = sender.__name__
-    if model_name.lower() in EXCLUDED:
+    # noinspection PyProtectedMember
+    if instance._meta.label_lower in EXCLUDED:
         return
 
     user, ip = get_user_and_ip(sender)
