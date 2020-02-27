@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from .models import Changelog
 
 
-def get_request_in_signal(sender, **kwargs):
+def get_request_in_signal(sender):
     req = None
     for entry in reversed(inspect.stack()):
         try:
@@ -26,6 +26,20 @@ def get_request_in_signal(sender, **kwargs):
         print("WARNING: Attempt to save " + str(sender) + " with no user")
 
     return req
+
+
+def get_user_and_ip(sender):
+    req = get_request_in_signal(sender)
+    try:
+        user = req.user
+        if 'HTTP_X_FORWARDED_FOR' in req.META:
+            ip = req.META.get('HTTP_X_FORWARDED_FOR')
+        else:
+            ip = req.META.get('REMOTE_ADDR')
+    except:
+        user = None
+        ip = None
+    return user, ip
 
 
 EXCLUDED = [
@@ -44,29 +58,19 @@ def save_object(sender, instance, **kwargs):
 
     previous = sender.objects.filter(pk=instance.pk).all()
 
-    req = get_request_in_signal(sender, **kwargs)
-    try:
-        user = req.user
-        if 'X-Real-Ip' in req.headers:
-            ip = req.headers.get('X-Real-Ip')
-        else:
-            ip = req.headers.get('REMOTE_ADDR')
-        print(ip)
-        print(req.headers)
-    except:
-        user = None
-        ip = None
+    user, ip = get_user_and_ip(sender)
 
     from rest_framework.renderers import JSONRenderer
     previous_json = JSONRenderer().render(previous)
     instance_json = JSONRenderer().render(instance)
     Changelog.objects.create(user=user,
-                                        model=ContentType.objects.get_for_model(instance),
-                                        instance_pk=instance.pk,
-                                        previous=previous_json,
-                                        data=instance_json,
-                                        action=("edit" if previous.exists() else "create")
-                                        )#.save()
+                             ip=ip,
+                             model=ContentType.objects.get_for_model(instance),
+                             instance_pk=instance.pk,
+                             previous=previous_json,
+                             data=instance_json,
+                             action=("edit" if previous.exists() else "create")
+                             ).save()
 
 
 @receiver(pre_delete)
@@ -75,24 +79,14 @@ def delete_object(sender, instance, **kwargs):
     if model_name.lower() in EXCLUDED:
         return
 
-    req = get_request_in_signal(sender, **kwargs)
-    try:
-        user = req.user
-        if 'X-Real-Ip' in req.headers:
-            ip = req.headers.get('X-Real-Ip')
-        else:
-            ip = req.headers.get('REMOTE_ADDR')
-        print(ip)
-        print(req.headers)
-    except:
-        user = None
-        ip = None
+    user, ip = get_user_and_ip(sender)
 
     instance_json = serializers.serialize('json', [instance, ])[1:-1]
     Changelog.objects.create(user=user,
-                                        model=ContentType.objects.get_for_model(instance),
-                                        instance_pk=instance.pk,
-                                        previous=instance_json,
-                                        data=None,
-                                        action="delete"
-                                        ).save()
+                             ip=ip,
+                             model=ContentType.objects.get_for_model(instance),
+                             instance_pk=instance.pk,
+                             previous=instance_json,
+                             data=None,
+                             action="delete"
+                             ).save()

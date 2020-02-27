@@ -21,6 +21,12 @@ class Changelog(models.Model):
         verbose_name=_('user'),
     )
 
+    ip = models.GenericIPAddressField(
+        null=True,
+        blank=True,
+        verbose_name=_("IP Address")
+    )
+
     model = models.ForeignKey(
         ContentType,
         on_delete=models.PROTECT,
