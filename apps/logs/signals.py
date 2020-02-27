@@ -60,9 +60,8 @@ def save_object(sender, instance, **kwargs):
 
     user, ip = get_user_and_ip(sender)
 
-    from rest_framework.renderers import JSONRenderer
-    previous_json = JSONRenderer().render(previous)
-    instance_json = JSONRenderer().render(instance)
+    previous_json = serializers.serialize('json', previous)[1:-1] if previous.exists else None
+    instance_json = serializers.serialize('json', [instance, ])[1:-1]
     Changelog.objects.create(user=user,
                              ip=ip,
                              model=ContentType.objects.get_for_model(instance),
