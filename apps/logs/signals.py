@@ -5,7 +5,7 @@ import inspect
 
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import Changelog
 
@@ -58,7 +58,7 @@ EXCLUDED = [
         'reversion.version',
     ]
 
-@receiver(pre_save)
+@receiver(post_save)
 def save_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
@@ -80,7 +80,7 @@ def save_object(sender, instance, **kwargs):
                              ).save()
 
 
-@receiver(pre_delete)
+@receiver(post_delete)
 def delete_object(sender, instance, **kwargs):
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
