@@ -35,5 +35,5 @@ class AliasTable(tables.Table):
         fields = ('name',)
         template_name = 'django_tables2/bootstrap4.html'
 
-    delete = tables.LinkColumn('member:user_alias_delete', args=[A('id')], attrs={
-        'a': {'class': 'btn'} })
+    # delete = tables.LinkColumn('member:user_alias_delete', args=[A('id')], attrs={
+    #     'a': {'class': 'btn'} })
