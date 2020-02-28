@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static pretty_money django_tables2 %}
+{% load i18n static pretty_money django_tables2 crispy_forms_tags %}
 
 {% block content %}
 <div class="row mt-4">
@@ -30,7 +30,7 @@
                     <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ object.note.balance | pretty_money }}</dd>
 
-                    <dt class="col-xl-6"> <a href="{% url 'member:user_alias' object.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
+                    <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ object.note.alias_set.all|join:", " }}</dd>
                 </dl>
 
@@ -38,38 +38,26 @@
                     <a class="small" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
                 {% endif %}
             </div>
-            <div class="card-footer">
+            <div class="card-footer text-center">
                 <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'member:user_detail' object.pk %}">{% trans 'View Profile' %}</a>
             </div>
         </div>
     </div>
 
     <div class="col-md-9">
-        <div class="accordion shadow" id="accordionProfile">
-            <div class="card">
-                <div class="card-header position-relative" id="clubListHeading">
-                    <a class="btn btn-link stretched-link font-weight-bold"
-                       data-toggle="collapse" data-target="#clubListCollapse"
-                       aria-expanded="true" aria-controls="clubListCollapse">
-                        <i class="fa fa-users"></i> {% trans "View my memberships" %}
-                    </a>
-                </div>
-                <div id="clubListCollapse" class="collapse show" style="overflow:auto hidden" aria-labelledby="clubListHeading" data-parent="#accordionProfile">
-                    {% render_table club_list %}
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header position-relative" id="historyListHeading">
-                    <a class="btn btn-link stretched-link collapsed font-weight-bold"
-                       data-toggle="collapse" data-target="#historyListCollapse"
-                       aria-expanded="false" aria-controls="historyListCollapse">
-                        <i class="fa fa-euro"></i> {% trans "Transaction history" %}
-                    </a>
-                </div>
-                <div id="historyListCollapse" class="collapse" style="overflow:auto hidden" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
-                    {% render_table history_list %}
-                </div>
+        <div class="d-flex justify-content-center">
+            <form method="post">
+                {% csrf_token %}
+                {{ alias_form |crispy }}
+                <button class="btn btn-primary" type="submit">
+                    {% trans "Add alias" %}
+                </button>
+            </form>
+        </div>
+        <div class="card bg-light shadow">
+            <div class="card-body">
+                {% render_table aliases %}
             </div>
         </div>
     </div>

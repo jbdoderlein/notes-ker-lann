@@ -6,14 +6,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
+
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
-from note.tables import HistoryTable
+from note.tables import HistoryTable, AliasTable
+from note.forms import AliasForm
 
 from .models import Profile, Club, Membership
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
@@ -153,6 +156,36 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         context["filter"] = self.filter
         return context
 
+class AliasView(LoginRequiredMixin,FormMixin,DetailView):
+    model = User
+    template_name = 'member/user_alias.html'
+    context_object_name = 'user_object'
+    form_class = AliasForm
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["aliases"] = AliasTable(context['user_object'].note.alias_set.all())
+        context["alias_form"] = AliasForm()
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('member:user_alias', kwargs={'pk': self.object.id})
+
+    def post(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        alias = form.save(commit=False)
+        alias.note = self.object.note
+        alias.save()
+        alias.note.save()
+        print(alias,alias.pk)
+        return super().form_valid(form)
 
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """

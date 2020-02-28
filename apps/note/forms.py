@@ -6,6 +6,12 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from .models import Transaction, TransactionTemplate, TemplateTransaction
+from .models import Alias
+
+class AliasForm(forms.ModelForm):
+    class Meta:
+        model = Alias
+        fields = ("name",)
 
 
 class TransactionTemplateForm(forms.ModelForm):
