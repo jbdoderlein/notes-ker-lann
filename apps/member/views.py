@@ -164,8 +164,8 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context["aliases"] = AliasTable(context['user_object'].note.alias_set.all())
-        context["alias_form"] = AliasForm()
+        note = context['user_object'].note
+        context["aliases"] = AliasTable(note.alias_set.all())
         return context
 
     def get_success_url(self):
