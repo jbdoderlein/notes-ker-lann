@@ -5,7 +5,7 @@ from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView,DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -186,6 +186,10 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
         alias.note.save()
         print(alias,alias.pk)
         return super().form_valid(form)
+
+class DeleteAliasView(DeleteView):
+     model = Alias
+     success_url = reverse_lazy('member:user_alias')
 
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
