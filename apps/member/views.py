@@ -187,10 +187,13 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
         print(alias,alias.pk)
         return super().form_valid(form)
 
-class DeleteAliasView(DeleteView):
-     model = Alias
-     success_url = reverse_lazy('member:user_alias')
-
+class DeleteAliasView(LoginRequiredMixin, DeleteView):
+    model = Alias
+    def get_success_url(self):
+        return reverse_lazy('member:user_alias',kwargs={'pk':self.object.note.user.pk})
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+   
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     Affiche le jeton d'authentification, et permet de le regénérer

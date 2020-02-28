@@ -3,7 +3,7 @@
 
 import django_tables2 as tables
 from django.db.models import F
-
+from django_tables2.utils import A
 from .models.transactions import Transaction
 from .models.notes import Alias
 
@@ -32,8 +32,8 @@ class AliasTable(tables.Table):
             'table table condensed table-striped table-hover'
         }
         model = Alias
-        fields = ('name',)
+        fields = ('name','pk')
         template_name = 'django_tables2/bootstrap4.html'
 
-    # delete = tables.LinkColumn('member:user_alias_delete', args=[A('id')], attrs={
-    #     'a': {'class': 'btn'} })
+    delete = tables.LinkColumn('member:user_alias_delete', args=[A('pk')], attrs={
+        'a': {'class': 'btn btn-danger'} },text='delete')
