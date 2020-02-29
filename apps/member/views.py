@@ -8,11 +8,14 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView,DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+
 from django.db.models import Q
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
-
+from django.core.exceptions import ValidationError
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
@@ -189,8 +192,22 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
 
 class DeleteAliasView(LoginRequiredMixin, DeleteView):
     model = Alias
+
+    def delete(self,request,*args,**kwargs):
+        try:
+            self.object = self.get_object()
+            self.object.delete()
+        except ValidationError as e:
+            # TODO: pass message to redirected view.
+            messages.error(self.request,str(e))
+        else:
+            messages.success(self.request,_("Alias successfully deleted"))
+        return HttpResponseRedirect(get_success_url)
+    
     def get_success_url(self):
+        print(self.request)
         return reverse_lazy('member:user_alias',kwargs={'pk':self.object.note.user.pk})
+
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
    

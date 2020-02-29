@@ -219,14 +219,6 @@ class Alias(models.Model):
             if all(not unicodedata.category(char).startswith(cat)
                    for cat in {'M', 'P', 'Z', 'C'})).casefold()
 
-    def save(self, *args, **kwargs):
-        """
-        Handle normalized_name
-        """
-        self.normalized_name = Alias.normalize(self.name)
-        if len(self.normalized_name) < 256:
-            super().save(*args, **kwargs)
-
     def clean(self):
         normalized_name = Alias.normalize(self.name)
         if len(normalized_name) >= 255:
