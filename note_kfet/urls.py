@@ -11,10 +11,11 @@ urlpatterns = [
 
     # Include project routers
     path('note/', include('note.urls')),
+    path('accounts/', include('member.urls')),
+    path('activity/', include('activity.urls')),
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),
-    path('accounts/', include('member.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
