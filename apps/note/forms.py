@@ -12,8 +12,12 @@ class AliasForm(forms.ModelForm):
     class Meta:
         model = Alias
         fields = ("name",)
-
-
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["name"].label = False
+        self.fields["name"].widget.attrs={"placeholder":_('New Alias')}
+        
+        
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:
         model = TransactionTemplate

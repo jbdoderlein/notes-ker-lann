@@ -32,8 +32,14 @@ class AliasTable(tables.Table):
             'table table condensed table-striped table-hover'
         }
         model = Alias
-        fields = ('name','pk')
+        fields =('name',)
         template_name = 'django_tables2/bootstrap4.html'
 
-    delete = tables.LinkColumn('member:user_alias_delete', args=[A('pk')], attrs={
-        'a': {'class': 'btn btn-danger'} },text='delete',accessor='pk')
+    show_header = False
+    name = tables.Column(attrs={'td':{'class':'text-center'}})
+    delete = tables.LinkColumn('member:user_alias_delete',
+                               args=[A('pk')],
+                               attrs={
+                                   'td': {'class':'col-sm-2'},
+                                   'a': {'class': 'btn btn-danger'} },
+                               text='delete',accessor='pk')

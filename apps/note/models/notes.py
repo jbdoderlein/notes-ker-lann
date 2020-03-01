@@ -227,12 +227,13 @@ class Alias(models.Model):
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
-                raise ValidationError(_('An alias with a similar name already exists:'),
+                raise ValidationError(_('An alias with a similar name already exists: {} '.format(sim_alias)),
                                        code="same_alias"
                 )
         except Alias.DoesNotExist:
             pass
-
+        self.normalized_name = normalized_name
+        
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
             raise ValidationError(_("You can't delete your main alias."),

@@ -186,7 +186,6 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
         alias = form.save(commit=False)
         alias.note = self.object.note
         alias.save()
-        alias.note.save()
         print(alias,alias.pk)
         return super().form_valid(form)
 
@@ -202,7 +201,7 @@ class DeleteAliasView(LoginRequiredMixin, DeleteView):
             messages.error(self.request,str(e))
         else:
             messages.success(self.request,_("Alias successfully deleted"))
-        return HttpResponseRedirect(get_success_url)
+        return HttpResponseRedirect(self.get_success_url())
     
     def get_success_url(self):
         print(self.request)

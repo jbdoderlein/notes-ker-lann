@@ -47,10 +47,10 @@
 
     <div class="col-md-9">
         <div class="d-flex justify-content-center">
-            <form action="" method="post">
+            <form class=" text-center form my-2" action="" method="post">
                 {% csrf_token %}
                 {{ form |crispy }}
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary mx-2" type="submit">
                     {% trans "Add alias" %}
                 </button>
             </form>
