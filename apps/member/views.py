@@ -58,14 +58,12 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
     context_object_name = 'user_object'
-    second_form = ProfileForm
+    profile_form = ProfileForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form(
-            instance=context['user_object'].profile)
+        context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
         context['title'] = _("Update Profile")
-
         return context
 
     def get_form(self, form_class=None):
