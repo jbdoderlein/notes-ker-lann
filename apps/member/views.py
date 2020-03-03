@@ -161,7 +161,7 @@ class UserListView(LoginRequiredMixin, SingleTableView):
 
 class AliasView(LoginRequiredMixin,FormMixin,DetailView):
     model = User
-    template_name = 'member/user_alias.html'
+    template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
     form_class = AliasForm
 
