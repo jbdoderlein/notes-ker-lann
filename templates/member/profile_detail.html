@@ -5,7 +5,9 @@
 <div class="row mt-4">
     <div class="col-md-3 mb-4">
         <div class="card bg-light shadow">
-            <img src="{{ object.note.display_image }}" class="card-img-top" alt="">
+            <div class="card-top text-center">
+                <img src="{{ object.note.display_image.url }}" class="img-thumbnail mt-2" >
+            </div>
             <div class="card-body">
                 <dl class="row">
                     <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
