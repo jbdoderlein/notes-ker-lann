@@ -5,19 +5,34 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.bootstrap import Div
+from crispy_forms.layout import Layout, HTML
+
 from .models import Transaction, TransactionTemplate, TemplateTransaction
-from .models import Alias
+from .models import Note, Alias
 
 class AliasForm(forms.ModelForm):
     class Meta:
         model = Alias
         fields = ("name",)
+
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["name"].label = False
         self.fields["name"].widget.attrs={"placeholder":_('New Alias')}
         
-        
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ('display_image',)
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["display_image"].label = _("select an image")
+        self.fields["display_image"].widget.attrs={"help_text":_('Maximal size: 2MB')}
+
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:
         model = TransactionTemplate
