@@ -46,6 +46,7 @@
                 {%if request.get_full_path != user_profile_url %}
                 <a class="btn btn-primary btn-sm" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
                 {% endif %}
+                <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_pic' object.pk  %}">{% trans 'Change Avatar' %}</a>
             </div>
         </div>
     </div>
