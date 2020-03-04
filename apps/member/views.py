@@ -1,7 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
@@ -11,15 +10,17 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-
 from django.db.models import Q
+from django.core.exceptions import ValidationError
+
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
-from django.core.exceptions import ValidationError
+from dal import autocomplete
+
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
-from note.forms import AliasForm
+from note.forms import AliasForm, ImageForm
 
 from .models import Profile, Club, Membership
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
@@ -70,16 +71,13 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         form = super().get_form(form_class)
         if 'username' not in form.data:
             return form
-
         new_username = form.data['username']
-
         # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(
             alias__normalized_name=Alias.normalize(new_username))
         if note.exists() and note.get().user != self.object:
             form.add_error('username',
                            _("An alias with a similar name already exists."))
-
         return form
 
     def form_valid(self, form):
@@ -184,7 +182,6 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
         alias = form.save(commit=False)
         alias.note = self.object.note
         alias.save()
-        print(alias,alias.pk)
         return super().form_valid(form)
 
 class DeleteAliasView(LoginRequiredMixin, DeleteView):
