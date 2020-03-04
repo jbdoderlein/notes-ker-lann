@@ -6,7 +6,9 @@
     <div class="col-md-3 mb-4">
         <div class="card bg-light shadow">
             <div class="card-top text-center">
-                <img src="{{ object.note.display_image.url }}" class="img-thumbnail mt-2" >
+                <a  href="{% url 'member:user_update_pic' object.pk  %}">
+                    <img src="{{ object.note.display_image.url }}" class="img-thumbnail mt-2" >
+                </a>
             </div>
             <div class="card-body">
                 <dl class="row">
@@ -46,7 +48,6 @@
                 {%if request.get_full_path != user_profile_url %}
                 <a class="btn btn-primary btn-sm" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
                 {% endif %}
-                <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_pic' object.pk  %}">{% trans 'Change Avatar' %}</a>
             </div>
         </div>
     </div>

@@ -207,7 +207,36 @@ class DeleteAliasView(LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
-   
+
+class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
+    model = User
+    template_name = 'member/profile_picture_update.html'
+    context_object_name = 'user_object'
+    form_class = ImageForm
+    def get_context_data(self,*args,**kwargs):
+        context = super().get_context_data(*args,**kwargs)
+        context['form'] = self.form_class(self.request.POST,self.request.FILES)
+        return context
+        
+    def get_success_url(self):
+        return reverse_lazy('member:user_detail', kwargs={'pk': self.object.id})
+
+    def post(self,request,*args,**kwargs):
+        form  = self.get_form()
+        self.object = self.get_object()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print('is_invalid')
+            print(form)
+            return self.form_invalid(form)
+
+    def form_valid(self,form):
+        print(form)
+        self.object.note.display_image = form.cleaned_data.get("image","pic/default.png")
+        self.object.note.save()
+        return super().form_valid(form)
+
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     Affiche le jeton d'authentification, et permet de le regénérer

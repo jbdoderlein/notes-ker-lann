@@ -23,15 +23,11 @@ class AliasForm(forms.ModelForm):
         self.fields["name"].widget.attrs={"placeholder":_('New Alias')}
         
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Note
-        fields = ('display_image',)
+class ImageForm(forms.Form):
+    image = forms.ImageField(required = False,
+                             label=_('select an image'),
+                             help_text=_('Maximal size: 2MB'))
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields["display_image"].label = _("select an image")
-        self.fields["display_image"].widget.attrs={"help_text":_('Maximal size: 2MB')}
 
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:

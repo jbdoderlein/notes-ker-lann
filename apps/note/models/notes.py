@@ -43,7 +43,8 @@ class Note(PolymorphicModel):
     display_image = models.ImageField(
         verbose_name=_('display image'),
         max_length=255,
-        blank=True,
+        blank=False,
+        null=False,
         default='pic/default.png'
     )
     created_at = models.DateTimeField(
