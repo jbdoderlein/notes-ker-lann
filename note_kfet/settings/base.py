@@ -176,10 +176,10 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.realpath(__file__)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')]
-
+STATIC_ROOT = os.path.join(BASE_DIR,"static/") 
+# STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = []
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 # URL prefix for static files.
