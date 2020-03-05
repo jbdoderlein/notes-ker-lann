@@ -16,6 +16,7 @@ from django.core.exceptions import ValidationError
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from dal import autocomplete
+from PIL import Image
 
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
@@ -229,8 +230,16 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self,form):
-        print(form)
-        self.object.note.display_image = form.cleaned_data.get("image","pic/default.png")
+        image_file_field = form.cleaned_data['image']
+        x = form.cleaned_data['x']
+        y = form.cleaned_data['y']
+        w = form.cleaned_data['width']
+        h = form.cleaned_data['height']
+        with Image.open(image_file_field.name) as image:
+            image = image.crop((x, y, w+x, h+y))
+            image.thumbnail((256, 256), Image.ANTIALIAS)
+            image.save(image_file_field.name,format=image.format)
+        self.object.note.display_image = image_file_field
         self.object.note.save()
         return super().form_valid(form)
 

@@ -3,7 +3,10 @@
 
 from dal import autocomplete
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+
+import os
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import Div
@@ -27,8 +30,12 @@ class ImageForm(forms.Form):
     image = forms.ImageField(required = False,
                              label=_('select an image'),
                              help_text=_('Maximal size: 2MB'))
+    x = forms.FloatField(widget=forms.HiddenInput())
+    y = forms.FloatField(widget=forms.HiddenInput())
+    width = forms.FloatField(widget=forms.HiddenInput())
+    height = forms.FloatField(widget=forms.HiddenInput())
 
-
+   
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:
         model = TransactionTemplate

@@ -191,3 +191,7 @@ ALIAS_VALIDATOR_REGEX = r''
 
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
+
+# Profile Picture Settings
+PIC_WIDTH = 200
+PIC_RATIO = 1

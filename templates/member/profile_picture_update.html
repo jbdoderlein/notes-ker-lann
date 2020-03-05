@@ -2,62 +2,94 @@
 {% load i18n static pretty_money django_tables2 crispy_forms_tags %}
 
 {% block profile_content %}
-<div class="row">
-<div class="col-sm-4 text-center">
-    <img class="img-thumbnail" alt="" src="{{user_object.note.display_image.url }}"/>
-    <p class=""> {% trans "current image" %} </p>
-</div>
-<div class="col-sm-4 justify-content-center">
-    <form class=" text-center form my-2" action="" enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        {{ form |crispy }}
-        <button class="btn btn-primary mx-2" type="submit">
-            {% trans "Change image" %}
-        </button>
-    </form>
-</div>
-<div class="col-sm-4">
-    <div id="image-holder"></div>
-</div>
+<form method="post" enctype="multipart/form-data" id="formUpload">
+  {% csrf_token %}
+  {{ form |crispy }}
+</form>
+<!-- MODAL TO CROP THE IMAGE -->
+<div class="modal fade" id="modalCrop">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img src="" id="modal-image" style="max-width: 100%;">
+      </div>
+      <div class="modal-footer">
+        <div class="btn-group pull-left" role="group">
+          <button type="button" class="btn btn-default" id="js-zoom-in">
+            <span class="glyphicon glyphicon-zoom-in"></span>
+          </button>
+          <button type="button" class="btn btn-default js-zoom-out">
+            <span class="glyphicon glyphicon-zoom-out"></span>
+          </button>
+        </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Nevermind</button>
+        <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
+{% block extracss %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block extrajavascript%}
-<script>
-// https://codepedia.info/upload-image-using-jquery-ajax-asp-net-c-sharp/
- $("#id_image").on('change', function () {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-cropper@1.0.1/dist/jquery-cropper.min.js"></script>
+    <script>
+     $(function () {
 
-     //Get count of selected files
-     var countFiles = $(this)[0].files.length;
-
-     var imgPath = $(this)[0].value;
-     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-     var image_holder = $("#image-holder");
-     image_holder.empty();
-
-     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-         if (typeof (FileReader) != "undefined") {
-
-             //loop for each file selected for uploaded.
-             for (var i = 0; i < countFiles; i++) {
-
+         /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+         $("#id_image").change(function (e) {
+             if (this.files && this.files[0]) {
                  var reader = new FileReader();
                  reader.onload = function (e) {
-                     $("<img />", {
-                         "src": e.target.result,
-                         "class": "img-thumbnail"
-                     }).appendTo(image_holder);
+                     $("#modal-image").attr("src", e.target.result);
+                     $("#modalCrop").modal("show");
                  }
-
-                 image_holder.show();
-                 reader.readAsDataURL($(this)[0].files[i]);
+                 reader.readAsDataURL(this.files[0]);
              }
+         });
 
-         } else {
-             alert("{% trans 'This browser does not support FileReader.' %}");
-         }
-     } else {
-         alert("{% trans 'Please select only images' %}");
-     }
- });
-</script>
+         /* SCRIPTS TO HANDLE THE CROPPER BOX */
+         var $image = $("#modal-image");
+         var cropBoxData;
+         var canvasData;
+         $("#modalCrop").on("shown.bs.modal", function () {
+             $image.cropper({
+                 viewMode: 1,
+                 aspectRatio: 1/1,
+                 minCropBoxWidth: 200,
+                 minCropBoxHeight: 200,
+                 ready: function () {
+                     $image.cropper("setCanvasData", canvasData);
+                     $image.cropper("setCropBoxData", cropBoxData);
+                 }
+             });
+         }).on("hidden.bs.modal", function () {
+             cropBoxData = $image.cropper("getCropBoxData");
+             canvasData = $image.cropper("getCanvasData");
+             $image.cropper("destroy");
+         });
+
+         $(".js-zoom-in").click(function () {
+             $image.cropper("zoom", 0.1);
+         });
+
+         $(".js-zoom-out").click(function () {
+             $image.cropper("zoom", -0.1);
+         });
+
+         /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+         $(".js-crop-and-upload").click(function () {
+             var cropData = $image.cropper("getData");
+             $("#id_x").val(cropData["x"]);
+             $("#id_y").val(cropData["y"]);
+             $("#id_height").val(cropData["height"]);
+             $("#id_width").val(cropData["width"]);
+             $("#formUpload").submit();
+         });
+
+     });
+    </script>
 {% endblock %}
