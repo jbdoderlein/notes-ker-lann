@@ -45,6 +45,7 @@ class Note(PolymorphicModel):
         max_length=255,
         blank=False,
         null=False,
+        upload_to='pic/',
         default='pic/default.png'
     )
     created_at = models.DateTimeField(

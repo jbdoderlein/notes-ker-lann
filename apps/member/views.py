@@ -12,11 +12,12 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.core.exceptions import ValidationError
-
+from django.conf import settings
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from dal import autocomplete
 from PIL import Image
+import io
 
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
@@ -230,19 +231,30 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self,form):
-        image_file_field = form.cleaned_data['image']
+        image_field = form.cleaned_data['image']
         x = form.cleaned_data['x']
         y = form.cleaned_data['y']
         w = form.cleaned_data['width']
         h = form.cleaned_data['height']
-        with Image.open(image_file_field.name) as image:
-            image = image.crop((x, y, w+x, h+y))
-            image.thumbnail((256, 256), Image.ANTIALIAS)
-            image.save(image_file_field.name,format=image.format)
-        self.object.note.display_image = image_file_field
+        # image crop and resize
+        image_file = io.BytesIO(image_field.read())
+        ext = image_field.name.split('.')[-1]
+        image = Image.open(image_file)
+        image = image.crop((x, y, x+w, y+h))
+        image_clean = image.resize((settings.PIC_WIDTH,
+                             settings.PIC_RATIO*settings.PIC_WIDTH),
+                             Image.ANTIALIAS)
+        image_file = io.BytesIO()
+        image_clean.save(image_file,ext)
+        image_field.file = image_file
+        # renaming
+        filename = "{}_pic.{}".format(self.object.note.pk, ext)
+        image_field.name = filename
+        self.object.note.display_image = image_field
         self.object.note.save()
         return super().form_valid(form)
 
+    
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     Affiche le jeton d'authentification, et permet de le regénérer

@@ -37,7 +37,7 @@ coverage
 # Local data
 secrets.py
 *.log
-
+media/
 # Virtualenv
 env/
 venv/
