@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     # Autocomplete
     'dal',
     'dal_select2',
+    # CAS
+    'cas_server',
+    'cas',
 
     # Note apps
     'activity',
@@ -76,6 +79,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
+    'cas.middleware.CASMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
@@ -128,6 +132,7 @@ PASSWORD_HASHERS = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
+    'cas.backends.CASBackend',
 )
 
 REST_FRAMEWORK = {
@@ -187,4 +192,9 @@ DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
+
+# CAS Settings
+CAS_AUTO_CREATE_USER = False
+CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
+CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
 
