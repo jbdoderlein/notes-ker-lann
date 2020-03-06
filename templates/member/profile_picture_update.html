@@ -2,10 +2,12 @@
 {% load i18n static pretty_money django_tables2 crispy_forms_tags %}
 
 {% block profile_content %}
+<div class="text-center">
 <form method="post" enctype="multipart/form-data" id="formUpload">
   {% csrf_token %}
   {{ form |crispy }}
 </form>
+</div>
 <!-- MODAL TO CROP THE IMAGE -->
 <div class="modal fade" id="modalCrop">
   <div class="modal-dialog">
