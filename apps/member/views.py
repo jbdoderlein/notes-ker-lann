@@ -1,19 +1,28 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView,DeleteView
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.db.models import Q
+from django.core.exceptions import ValidationError
+from django.conf import settings
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
+from dal import autocomplete
+from PIL import Image
+import io
+
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
-from note.tables import HistoryTable
+from note.tables import HistoryTable, AliasTable
+from note.forms import AliasForm, ImageForm
 
 from .models import Profile, Club, Membership
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
@@ -52,30 +61,25 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
     context_object_name = 'user_object'
-    second_form = ProfileForm
+    profile_form = ProfileForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form(
-            instance=context['user_object'].profile)
+        context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
         context['title'] = _("Update Profile")
-
         return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         if 'username' not in form.data:
             return form
-
         new_username = form.data['username']
-
         # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(
             alias__normalized_name=Alias.normalize(new_username))
         if note.exists() and note.get().user != self.object:
             form.add_error('username',
                            _("An alias with a similar name already exists."))
-
         return form
 
     def form_valid(self, form):
@@ -153,7 +157,104 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         context["filter"] = self.filter
         return context
 
+class AliasView(LoginRequiredMixin,FormMixin,DetailView):
+    model = User
+    template_name = 'member/profile_alias.html'
+    context_object_name = 'user_object'
+    form_class = AliasForm
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        note = context['user_object'].note
+        context["aliases"] = AliasTable(note.alias_set.all())
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('member:user_alias', kwargs={'pk': self.object.id})
+
+    def post(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        alias = form.save(commit=False)
+        alias.note = self.object.note
+        alias.save()
+        return super().form_valid(form)
+
+class DeleteAliasView(LoginRequiredMixin, DeleteView):
+    model = Alias
+
+    def delete(self,request,*args,**kwargs):
+        try:
+            self.object = self.get_object()
+            self.object.delete()
+        except ValidationError as e:
+            # TODO: pass message to redirected view.
+            messages.error(self.request,str(e))
+        else:
+            messages.success(self.request,_("Alias successfully deleted"))
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def get_success_url(self):
+        print(self.request)
+        return reverse_lazy('member:user_alias',kwargs={'pk':self.object.note.user.pk})
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
+    model = User
+    template_name = 'member/profile_picture_update.html'
+    context_object_name = 'user_object'
+    form_class = ImageForm
+    def get_context_data(self,*args,**kwargs):
+        context = super().get_context_data(*args,**kwargs)
+        context['form'] = self.form_class(self.request.POST,self.request.FILES)
+        return context
+        
+    def get_success_url(self):
+        return reverse_lazy('member:user_detail', kwargs={'pk': self.object.id})
+
+    def post(self,request,*args,**kwargs):
+        form  = self.get_form()
+        self.object = self.get_object()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print('is_invalid')
+            print(form)
+            return self.form_invalid(form)
+
+    def form_valid(self,form):
+        image_field = form.cleaned_data['image']
+        x = form.cleaned_data['x']
+        y = form.cleaned_data['y']
+        w = form.cleaned_data['width']
+        h = form.cleaned_data['height']
+        # image crop and resize
+        image_file = io.BytesIO(image_field.read())
+        ext = image_field.name.split('.')[-1]
+        image = Image.open(image_file)
+        image = image.crop((x, y, x+w, y+h))
+        image_clean = image.resize((settings.PIC_WIDTH,
+                             settings.PIC_RATIO*settings.PIC_WIDTH),
+                             Image.ANTIALIAS)
+        image_file = io.BytesIO()
+        image_clean.save(image_file,ext)
+        image_field.file = image_file
+        # renaming
+        filename = "{}_pic.{}".format(self.object.note.pk, ext)
+        image_field.name = filename
+        self.object.note.display_image = image_field
+        self.object.note.save()
+        return super().form_valid(form)
+
+    
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     Affiche le jeton d'authentification, et permet de le regénérer
