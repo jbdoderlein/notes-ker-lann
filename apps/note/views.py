@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 
-from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
+from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
 
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
@@ -53,6 +53,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
     """
     Auto complete note by aliases
     """
+
     def get_queryset(self):
         """
         Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
@@ -66,7 +67,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q)))\
+            qs = qs.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q))) \
                 .order_by('normalized_name').distinct()
 
         # Filtrage par type de note (user, club, special)
@@ -147,4 +148,3 @@ class ConsoView(LoginRequiredMixin, CreateView):
         When clicking a button, reload the same page
         """
         return reverse('note:consos')
-

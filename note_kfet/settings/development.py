@@ -11,10 +11,11 @@
 #  - and more ...
 
 
+import os
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 from . import *
-import os
 
 DATABASES = {
     'default': {
@@ -53,8 +54,6 @@ SESSION_COOKIE_AGE = 60 * 60 * 3
 # Can be modified in secrets.py
 CAS_SERVER_URL = "http://localhost:8000/cas/"
 
-
-STATIC_ROOT = '' # not needed in development settings
+STATIC_ROOT = ''  # not needed in development settings
 STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, 'static')]
-
+    os.path.join(BASE_DIR, 'static')]

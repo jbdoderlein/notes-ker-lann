@@ -3,8 +3,8 @@
 
 from rest_framework import viewsets
 
-from ..models import ActivityType, Activity, Guest
 from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer
+from ..models import ActivityType, Activity, Guest
 
 
 class ActivityTypeViewSet(viewsets.ModelViewSet):

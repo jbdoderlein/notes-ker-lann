@@ -1,33 +1,33 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView,DeleteView
-from django.views.generic.edit import FormMixin
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
-from django.db.models import Q
-from django.core.exceptions import ValidationError
-from django.conf import settings
-from django_tables2.views import SingleTableView
-from rest_framework.authtoken.models import Token
-from dal import autocomplete
-from PIL import Image
 import io
 
+from PIL import Image
+from dal import autocomplete
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView, DeleteView
+from django.views.generic.edit import FormMixin
+from django_tables2.views import SingleTableView
+from rest_framework.authtoken.models import Token
+from note.forms import AliasForm, ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
-from note.forms import AliasForm, ImageForm
 
-from .models import Profile, Club, Membership
-from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
-from .tables import ClubTable, UserTable
 from .filters import UserFilter, UserFilterFormHelper
+from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
+from .models import Club, Membership
+from .tables import ClubTable, UserTable
 
 
 class UserCreateView(CreateView):
@@ -109,7 +109,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             return reverse_lazy('member:user_detail',
                                 kwargs={'pk': kwargs['id']})
         else:
-            return reverse_lazy('member:user_detail', args=(self.object.id, ))
+            return reverse_lazy('member:user_detail', args=(self.object.id,))
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -157,13 +157,14 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         context["filter"] = self.filter
         return context
 
-class AliasView(LoginRequiredMixin,FormMixin,DetailView):
+
+class AliasView(LoginRequiredMixin, FormMixin, DetailView):
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
     form_class = AliasForm
 
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         note = context['user_object'].note
         context["aliases"] = AliasTable(note.alias_set.all())
@@ -172,7 +173,7 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
     def get_success_url(self):
         return reverse_lazy('member:user_alias', kwargs={'pk': self.object.id})
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -186,42 +187,45 @@ class AliasView(LoginRequiredMixin,FormMixin,DetailView):
         alias.save()
         return super().form_valid(form)
 
+
 class DeleteAliasView(LoginRequiredMixin, DeleteView):
     model = Alias
 
-    def delete(self,request,*args,**kwargs):
+    def delete(self, request, *args, **kwargs):
         try:
             self.object = self.get_object()
             self.object.delete()
         except ValidationError as e:
             # TODO: pass message to redirected view.
-            messages.error(self.request,str(e))
+            messages.error(self.request, str(e))
         else:
-            messages.success(self.request,_("Alias successfully deleted"))
+            messages.success(self.request, _("Alias successfully deleted"))
         return HttpResponseRedirect(self.get_success_url())
-    
+
     def get_success_url(self):
         print(self.request)
-        return reverse_lazy('member:user_alias',kwargs={'pk':self.object.note.user.pk})
+        return reverse_lazy('member:user_alias', kwargs={'pk': self.object.note.user.pk})
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
 
 class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
     model = User
     template_name = 'member/profile_picture_update.html'
     context_object_name = 'user_object'
     form_class = ImageForm
-    def get_context_data(self,*args,**kwargs):
-        context = super().get_context_data(*args,**kwargs)
-        context['form'] = self.form_class(self.request.POST,self.request.FILES)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['form'] = self.form_class(self.request.POST, self.request.FILES)
         return context
-        
+
     def get_success_url(self):
         return reverse_lazy('member:user_detail', kwargs={'pk': self.object.id})
 
-    def post(self,request,*args,**kwargs):
-        form  = self.get_form()
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
         self.object = self.get_object()
         if form.is_valid():
             return self.form_valid(form)
@@ -230,7 +234,7 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
             print(form)
             return self.form_invalid(form)
 
-    def form_valid(self,form):
+    def form_valid(self, form):
         image_field = form.cleaned_data['image']
         x = form.cleaned_data['x']
         y = form.cleaned_data['y']
@@ -238,15 +242,15 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
         h = form.cleaned_data['height']
         # image crop and resize
         image_file = io.BytesIO(image_field.read())
-        ext = image_field.name.split('.')[-1].lower()
-        #TODO: support GIF format        
+        # ext = image_field.name.split('.')[-1].lower()
+        # TODO: support GIF format
         image = Image.open(image_file)
-        image = image.crop((x, y, x+w, y+h))
+        image = image.crop((x, y, x + w, y + h))
         image_clean = image.resize((settings.PIC_WIDTH,
-                             settings.PIC_RATIO*settings.PIC_WIDTH),
-                             Image.ANTIALIAS)
+                                    settings.PIC_RATIO * settings.PIC_WIDTH),
+                                   Image.ANTIALIAS)
         image_file = io.BytesIO()
-        image_clean.save(image_file,"PNG")
+        image_clean.save(image_file, "PNG")
         image_field.file = image_file
         # renaming
         filename = "{}_pic.png".format(self.object.note.pk)
@@ -255,7 +259,7 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
         self.object.note.save()
         return super().form_valid(form)
 
-    
+
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     Affiche le jeton d'authentification, et permet de le regénérer
@@ -283,6 +287,7 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
     """
     Auto complete users by usernames
     """
+
     def get_queryset(self):
         """
         Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
@@ -331,7 +336,7 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         club = context["club"]
-        club_transactions =  \
+        club_transactions = \
             Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))
         context['history_list'] = HistoryTable(club_transactions)
         club_member = \

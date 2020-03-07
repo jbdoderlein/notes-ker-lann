@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
+
 from .models import Changelog
 
 
@@ -43,20 +44,20 @@ def get_user_and_ip(sender):
 
 
 EXCLUDED = [
-        'admin.logentry',
-        'authtoken.token',
-        'cas_server.user',
-        'cas_server.userattributes',
-        'contenttypes.contenttype',
-        'logs.changelog',
-        'migrations.migration',
-        'note.noteuser',
-        'note.noteclub',
-        'note.notespecial',
-        'sessions.session',
-        'reversion.revision',
-        'reversion.version',
-    ]
+    'admin.logentry',
+    'authtoken.token',
+    'cas_server.user',
+    'cas_server.userattributes',
+    'contenttypes.contenttype',
+    'logs.changelog',
+    'migrations.migration',
+    'note.noteuser',
+    'note.noteclub',
+    'note.notespecial',
+    'sessions.session',
+    'reversion.revision',
+    'reversion.version',
+]
 
 
 @receiver(pre_save)

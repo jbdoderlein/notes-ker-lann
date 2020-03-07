@@ -3,8 +3,8 @@
 
 from rest_framework import viewsets
 
-from ..models import Profile, Club, Role, Membership
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
+from ..models import Profile, Club, Role, Membership
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

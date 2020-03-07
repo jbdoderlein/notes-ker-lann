@@ -3,31 +3,25 @@
 
 from dal import autocomplete
 from django import forms
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-import os
-
-from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import Div
-from crispy_forms.layout import Layout, HTML
-
+from .models import Alias
 from .models import Transaction, TransactionTemplate, TemplateTransaction
-from .models import Note, Alias
+
 
 class AliasForm(forms.ModelForm):
     class Meta:
         model = Alias
         fields = ("name",)
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields["name"].label = False
-        self.fields["name"].widget.attrs={"placeholder":_('New Alias')}
-        
+        self.fields["name"].widget.attrs = {"placeholder": _('New Alias')}
+
 
 class ImageForm(forms.Form):
-    image = forms.ImageField(required = False,
+    image = forms.ImageField(required=False,
                              label=_('select an image'),
                              help_text=_('Maximal size: 2MB'))
     x = forms.FloatField(widget=forms.HiddenInput())
@@ -35,7 +29,7 @@ class ImageForm(forms.Form):
     width = forms.FloatField(widget=forms.HiddenInput())
     height = forms.FloatField(widget=forms.HiddenInput())
 
-   
+
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:
         model = TransactionTemplate
@@ -48,20 +42,19 @@ class TransactionTemplateForm(forms.ModelForm):
         # forward=(forward.Const('TYPE', 'note_type') où TYPE est dans {user, club, special}
         widgets = {
             'destination':
-            autocomplete.ModelSelect2(
-                url='note:note_autocomplete',
-                attrs={
-                    'data-placeholder': 'Note ...',
-                    'data-minimum-input-length': 1,
-                },
-            ),
+                autocomplete.ModelSelect2(
+                    url='note:note_autocomplete',
+                    attrs={
+                        'data-placeholder': 'Note ...',
+                        'data-minimum-input-length': 1,
+                    },
+                ),
         }
 
 
 class TransactionForm(forms.ModelForm):
     def save(self, commit=True):
         super().save(commit)
-
 
     def clean(self):
         """
@@ -70,14 +63,13 @@ class TransactionForm(forms.ModelForm):
         """
 
         cleaned_data = super().clean()
-        if not "source" in cleaned_data: # TODO Replace it with "if %user has no right to transfer funds"
+        if "source" not in cleaned_data:  # TODO Replace it with "if %user has no right to transfer funds"
             cleaned_data["source"] = self.user.note
 
         if cleaned_data["source"].pk == cleaned_data["destination"].pk:
             self.add_error("destination", _("Source and destination must be different."))
 
         return cleaned_data
-
 
     class Meta:
         model = Transaction
@@ -91,21 +83,21 @@ class TransactionForm(forms.ModelForm):
         # Voir ci-dessus
         widgets = {
             'source':
-            autocomplete.ModelSelect2(
-                url='note:note_autocomplete',
-                attrs={
-                    'data-placeholder': 'Note ...',
-                    'data-minimum-input-length': 1,
-                },
-            ),
+                autocomplete.ModelSelect2(
+                    url='note:note_autocomplete',
+                    attrs={
+                        'data-placeholder': 'Note ...',
+                        'data-minimum-input-length': 1,
+                    },
+                ),
             'destination':
-            autocomplete.ModelSelect2(
-                url='note:note_autocomplete',
-                attrs={
-                    'data-placeholder': 'Note ...',
-                    'data-minimum-input-length': 1,
-                },
-            ),
+                autocomplete.ModelSelect2(
+                    url='note:note_autocomplete',
+                    attrs={
+                        'data-placeholder': 'Note ...',
+                        'data-minimum-input-length': 1,
+                    },
+                ),
         }
 
 
@@ -122,18 +114,18 @@ class ConsoForm(forms.ModelForm):
 
     class Meta:
         model = TemplateTransaction
-        fields = ('source', )
+        fields = ('source',)
 
         # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
         # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
         # et récupère les aliases de note valides
         widgets = {
             'source':
-            autocomplete.ModelSelect2(
-                url='note:note_autocomplete',
-                attrs={
-                    'data-placeholder': 'Note ...',
-                    'data-minimum-input-length': 1,
-                },
-            ),
+                autocomplete.ModelSelect2(
+                    url='note:note_autocomplete',
+                    attrs={
+                        'data-placeholder': 'Note ...',
+                        'data-minimum-input-length': 1,
+                    },
+                ),
         }
