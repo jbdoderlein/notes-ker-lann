@@ -121,7 +121,7 @@ class Permission(models.Model):
     def _about(_self, _query, **kwargs):
         self = _self
         query = _query
-        if self.type == 'add'):
+        if self.type == 'add':
             # Handle add permission differently
             return self._about_add(query, **kwargs)
         if len(query) == 0:
