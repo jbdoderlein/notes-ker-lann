@@ -77,6 +77,50 @@ msgstr "invité"
 msgid "guests"
 msgstr "invités"
 
+#: apps/api/apps.py:10
+msgid "API"
+msgstr ""
+
+#: apps/logs/apps.py:10
+msgid "Logs"
+msgstr ""
+
+#: apps/logs/models.py:20 apps/note/models/notes.py:105
+msgid "user"
+msgstr "utilisateur"
+
+#: apps/logs/models.py:27
+msgid "model"
+msgstr "Modèle"
+
+#: apps/logs/models.py:34
+msgid "identifier"
+msgstr "Identifiant"
+
+#: apps/logs/models.py:39
+msgid "previous data"
+msgstr "Données précédentes"
+
+#: apps/logs/models.py:44
+#, fuzzy
+#| msgid "end date"
+msgid "new data"
+msgstr "Nouvelles données"
+
+#: apps/logs/models.py:51
+#, fuzzy
+#| msgid "section"
+msgid "action"
+msgstr "Action"
+
+#: apps/logs/models.py:59
+msgid "timestamp"
+msgstr "Date"
+
+#: apps/logs/models.py:63
+msgid "Logs cannot be destroyed."
+msgstr "Les logs ne peuvent pas être détruits."
+
 #: apps/member/apps.py:10
 msgid "member"
 msgstr "adhérent"

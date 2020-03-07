@@ -32,6 +32,8 @@ urlpatterns = [
 
     # Include Django REST API
     path('api/', include('api.urls')),
+
+    path('logs/', include('logs.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
