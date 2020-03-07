@@ -21,7 +21,7 @@ class PermissionBackend(object):
     def has_perm(self, user_obj, perm, obj=None):
         if obj is None:
             return False
-        perm = perm.split('_')
+        perm = perm.split('_', 3)
         perm_type = perm[1]
         perm_field = perm[2] if len(perm) == 3 else None
         return any(permission.applies(obj, perm_type, perm_field) for obj in self.permissions(user_obj, obj))
