@@ -1,0 +1,59 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Header />
+  <SOAP-ENV:Body>
+    <Response xmlns="urn:oasis:names:tc:SAML:1.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:1.0:protocol" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" IssueInstant="{{IssueInstant}}"
+    MajorVersion="1" MinorVersion="1" Recipient="{{Recipient}}"
+    ResponseID="{{ResponseID}}">
+      <Status>
+        <StatusCode Value="samlp:Success">
+        </StatusCode>
+      </Status>
+      <Assertion xmlns="urn:oasis:names:tc:SAML:1.0:assertion" AssertionID="{{ResponseID}}"
+      IssueInstant="{{IssueInstant}}" Issuer="localhost" MajorVersion="1"
+      MinorVersion="1">
+        <Conditions NotBefore="{{IssueInstant}}" NotOnOrAfter="{{expireInstant}}">
+          <AudienceRestrictionCondition>
+            <Audience>
+              {{Recipient}}
+            </Audience>
+          </AudienceRestrictionCondition>
+        </Conditions>
+        <AttributeStatement>
+          <Subject>
+            <NameIdentifier>{{username}}</NameIdentifier>
+            <SubjectConfirmation>
+              <ConfirmationMethod>
+                urn:oasis:names:tc:SAML:1.0:cm:artifact
+              </ConfirmationMethod>
+            </SubjectConfirmation>
+          </Subject>
+          <Attribute AttributeName="authenticationDate" AttributeNamespace="http://www.ja-sig.org/products/cas/">
+            <AttributeValue>{{auth_date}}</AttributeValue>
+          </Attribute>
+          <Attribute AttributeName="longTermAuthenticationRequestTokenUsed" AttributeNamespace="http://www.ja-sig.org/products/cas/">
+            <AttributeValue>false</AttributeValue>{# we do not support long-term (Remember-Me) auth #}
+          </Attribute>
+          <Attribute AttributeName="isFromNewLogin" AttributeNamespace="http://www.ja-sig.org/products/cas/">
+            <AttributeValue>{{is_new_login}}</AttributeValue>
+          </Attribute>
+{% for name, value in attributes %}          <Attribute AttributeName="{{name}}" AttributeNamespace="http://www.ja-sig.org/products/cas/">
+            <AttributeValue>{{value}}</AttributeValue>
+          </Attribute>
+{% endfor %}        </AttributeStatement>
+        <AuthenticationStatement AuthenticationInstant="{{IssueInstant}}"
+        AuthenticationMethod="urn:oasis:names:tc:SAML:1.0:am:password">
+          <Subject>
+            <NameIdentifier>{{username}}</NameIdentifier>
+            <SubjectConfirmation>
+              <ConfirmationMethod>
+                urn:oasis:names:tc:SAML:1.0:cm:artifact
+              </ConfirmationMethod>
+            </SubjectConfirmation>
+          </Subject>
+        </AuthenticationStatement>
+      </Assertion>
+    </Response>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
