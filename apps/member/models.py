@@ -3,8 +3,8 @@
 
 from django.conf import settings
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 
 class Profile(models.Model):
@@ -48,7 +48,7 @@ class Profile(models.Model):
         verbose_name_plural = _('user profile')
 
     def get_absolute_url(self):
-        return reverse('user_detail', args=(self.pk, ))
+        return reverse('user_detail', args=(self.pk,))
 
 
 class Club(models.Model):
@@ -97,7 +97,7 @@ class Club(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse_lazy('member:club_detail', args=(self.pk, ))
+        return reverse_lazy('member:club_detail', args=(self.pk,))
 
 
 class Role(models.Model):
@@ -152,7 +152,6 @@ class Membership(models.Model):
     class Meta:
         verbose_name = _('membership')
         verbose_name_plural = _('memberships')
-
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def save_user_profile(instance, created, **_kwargs):

@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 from polymorphic.models import PolymorphicModel
 
 from .notes import Note, NoteClub
@@ -44,7 +44,7 @@ class TransactionTemplate(models.Model):
         verbose_name=_('name'),
         max_length=255,
         unique=True,
-        error_messages={'unique':_("A template with this name already exist")},
+        error_messages={'unique': _("A template with this name already exist")},
     )
     destination = models.ForeignKey(
         NoteClub,
@@ -63,7 +63,7 @@ class TransactionTemplate(models.Model):
         max_length=31,
     )
     display = models.BooleanField(
-        default = True,
+        default=True,
     )
     description = models.CharField(
         verbose_name=_('description'),
@@ -75,7 +75,7 @@ class TransactionTemplate(models.Model):
         verbose_name_plural = _("transaction templates")
 
     def get_absolute_url(self):
-        return reverse('note:template_update', args=(self.pk, ))
+        return reverse('note:template_update', args=(self.pk,))
 
 
 class Transaction(PolymorphicModel):
@@ -167,6 +167,7 @@ class TemplateTransaction(Transaction):
         TemplateCategory,
         on_delete=models.PROTECT,
     )
+
 
 class MembershipTransaction(Transaction):
     """

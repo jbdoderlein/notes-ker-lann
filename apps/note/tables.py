@@ -4,14 +4,16 @@
 import django_tables2 as tables
 from django.db.models import F
 from django_tables2.utils import A
-from .models.transactions import Transaction
+
 from .models.notes import Alias
+from .models.transactions import Transaction
+
 
 class HistoryTable(tables.Table):
     class Meta:
         attrs = {
             'class':
-            'table table-condensed table-striped table-hover'
+                'table table-condensed table-striped table-hover'
         }
         model = Transaction
         template_name = 'django_tables2/bootstrap4.html'
@@ -25,21 +27,22 @@ class HistoryTable(tables.Table):
             .order_by(('-' if is_descending else '') + 'total')
         return (queryset, True)
 
+
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
             'class':
-            'table table condensed table-striped table-hover'
+                'table table condensed table-striped table-hover'
         }
         model = Alias
-        fields =('name',)
+        fields = ('name',)
         template_name = 'django_tables2/bootstrap4.html'
 
     show_header = False
-    name = tables.Column(attrs={'td':{'class':'text-center'}})
+    name = tables.Column(attrs={'td': {'class': 'text-center'}})
     delete = tables.LinkColumn('member:user_alias_delete',
                                args=[A('pk')],
                                attrs={
-                                   'td': {'class':'col-sm-2'},
-                                   'a': {'class': 'btn btn-danger'} },
-                               text='delete',accessor='pk')
+                                   'td': {'class': 'col-sm-2'},
+                                   'a': {'class': 'btn btn-danger'}},
+                               text='delete', accessor='pk')

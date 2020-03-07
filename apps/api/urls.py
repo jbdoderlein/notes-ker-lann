@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
     REST API Serializer for Users.
     The djangorestframework plugin will analyse the model `User` and parse all fields in the API.
     """
+
     class Meta:
         model = User
         exclude = (

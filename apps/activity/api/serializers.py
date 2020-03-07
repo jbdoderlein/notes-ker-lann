@@ -11,6 +11,7 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
     REST API Serializer for Activity types.
     The djangorestframework plugin will analyse the model `ActivityType` and parse all fields in the API.
     """
+
     class Meta:
         model = ActivityType
         fields = '__all__'
@@ -21,6 +22,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     REST API Serializer for Activities.
     The djangorestframework plugin will analyse the model `Activity` and parse all fields in the API.
     """
+
     class Meta:
         model = Activity
         fields = '__all__'
@@ -31,6 +33,7 @@ class GuestSerializer(serializers.ModelSerializer):
     REST API Serializer for Guests.
     The djangorestframework plugin will analyse the model `Guest` and parse all fields in the API.
     """
+
     class Meta:
         model = Guest
         fields = '__all__'

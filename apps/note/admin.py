@@ -47,11 +47,11 @@ class NoteClubAdmin(PolymorphicChildModelAdmin):
     """
     Child for a club note, see NoteAdmin
     """
-    inlines = (AliasInlines, )
+    inlines = (AliasInlines,)
 
     # We can't change club after creation or the balance
     readonly_fields = ('club', 'balance')
-    search_fields = ('club', )
+    search_fields = ('club',)
 
     def has_add_permission(self, request):
         """
@@ -71,7 +71,7 @@ class NoteSpecialAdmin(PolymorphicChildModelAdmin):
     """
     Child for a special note, see NoteAdmin
     """
-    readonly_fields = ('balance', )
+    readonly_fields = ('balance',)
 
 
 @admin.register(NoteUser)
@@ -79,7 +79,7 @@ class NoteUserAdmin(PolymorphicChildModelAdmin):
     """
     Child for an user note, see NoteAdmin
     """
-    inlines = (AliasInlines, )
+    inlines = (AliasInlines,)
 
     # We can't change user after creation or the balance
     readonly_fields = ('user', 'balance')
@@ -133,7 +133,7 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
         Else the amount of money would not be transferred
         """
         if obj:  # user is editing an existing object
-            return 'created_at', 'source', 'destination', 'quantity',\
+            return 'created_at', 'source', 'destination', 'quantity', \
                    'amount'
         return []
 
@@ -143,9 +143,9 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
-    list_display = ('name', 'poly_destination', 'amount', 'category', 'display', )
+    list_display = ('name', 'poly_destination', 'amount', 'category', 'display',)
     list_filter = ('category', 'display')
-    autocomplete_fields = ('destination', )
+    autocomplete_fields = ('destination',)
 
     def poly_destination(self, obj):
         """
@@ -161,5 +161,5 @@ class TemplateCategoryAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
-    list_display = ('name', )
-    list_filter = ('name', )
+    list_display = ('name',)
+    list_filter = ('name',)

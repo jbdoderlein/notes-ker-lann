@@ -1,7 +1,5 @@
-import os
-import re
-
 from .base import *
+
 
 def read_env():
     """Pulled from Honcho code with minor updates, reads local default
@@ -25,14 +23,16 @@ def read_env():
                 val = re.sub(r'\\(.)', r'\1', m3.group(1))
             os.environ.setdefault(key, val)
 
+
 read_env()
 
 app_stage = os.environ.get('DJANGO_APP_STAGE', 'dev')
 if app_stage == 'prod':
     from .production import *
-    DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD','CHANGE_ME_IN_ENV_SETTINGS')
-    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','CHANGE_ME_IN_ENV_SETTINGS')
-    ALLOWED_HOSTS.append(os.environ.get('ALLOWED_HOSTS','localhost'))
+
+    DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS')
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
+    ALLOWED_HOSTS.append(os.environ.get('ALLOWED_HOSTS', 'localhost'))
 else:
     from .development import *
 
@@ -43,4 +43,3 @@ except ImportError:
 
 # env variables set at the of in /env/bin/activate
 # don't forget to unset in deactivate !
-

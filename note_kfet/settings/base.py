@@ -97,7 +97,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
-              #  'django.template.context_processors.media',
+                #  'django.template.context_processors.media',
             ],
         },
     },
@@ -183,7 +183,7 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR,"static/") 
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # STATICFILES_DIRS = [
 #    os.path.join(BASE_DIR, 'static')]
 STATICFILES_DIRS = []
@@ -195,8 +195,8 @@ STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
 
-MEDIA_ROOT=os.path.join(BASE_DIR,"media")
-MEDIA_URL='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
 
 # Profile Picture Settings
 PIC_WIDTH = 200
@@ -211,7 +211,7 @@ CAS_SHOW_POWERED = False
 CAS_REDIRECT_TO_LOGIN_AFTER_LOGOUT = False
 CAS_INFO_MESSAGES = {
     "cas_explained": {
-        "message":_(
+        "message": _(
             u"The Central Authentication Service grants you access to most of our websites by "
             u"authenticating only once, so you don't need to type your credentials again unless "
             u"your session expires or you logout."
@@ -224,4 +224,3 @@ CAS_INFO_MESSAGES = {
 CAS_INFO_MESSAGES_ORDER = [
     'cas_explained',
 ]
-
