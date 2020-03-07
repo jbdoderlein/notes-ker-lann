@@ -1,3 +1,6 @@
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import functools
 import json
 import operator
@@ -24,28 +27,25 @@ class InstancedPermission:
         """
         if self.type == 'add':
             if permission_type == self.type:
-                return self.query(obj)
+                return obj in self.model.modelclass().objects.get(self.query)
         if ContentType.objects.get_for_model(obj) != self.model:
             # The permission does not apply to the model
             return False
-        if self.permission is None:
-            if permission_type == self.type:
-                if field_name is not None:
-                    return field_name == self.field
-                else:
-                    return True
-            else:
+        if permission_type == self.type:
+            if field_name and field_name != self.field:
                 return False
-        elif obj in self.model.objects.get(self.query):
-            return True
+            return obj in self.model.model_class().objects.filter(self.query).all()
         else:
             return False
 
     def __repr__(self):
         if self.field:
-            return _("Can {type} {model}.{field} in {permission}").format(type=self.type, model=self.model, field=self.field, permission=self.permission)
+            return _("Can {type} {model}.{field} in {query}").format(type=self.type, model=self.model, field=self.field, query=self.query)
         else:
-            return _("Can {type} {model} in {permission}").format(type=self.type, model=self.model, permission=self.permission)
+            return _("Can {type} {model} in {query}").format(type=self.type, model=self.model, query=self.query)
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class Permission(models.Model):
@@ -61,24 +61,24 @@ class Permission(models.Model):
 
     # A json encoded Q object with the following grammar
     #  query -> [] | {}  (the empty query representing all objects)
-    #  query -> ['AND', query, …]            AND multiple queries
-    #         | ['OR', query, …]             OR multiple queries
-    #         | ['NOT', query]               Opposite of query
+    #  query -> ["AND", query, …]            AND multiple queries
+    #         | ["OR", query, …]             OR multiple queries
+    #         | ["NOT", query]               Opposite of query
     #  query -> {key: value, …}              A list of fields and values of a Q object
     #  key   -> string                       A field name
     #  value -> int | string | bool | null   Literal values
     #         | [parameter]                  A parameter
-    #         | {'F': oper}                  An F object
+    #         | {"F": oper}                  An F object
     #  oper  -> [string]                     A parameter
-    #         | ['ADD', oper, …]             Sum multiple F objects or literal
-    #         | ['SUB', oper, oper]          Substract two F objects or literal
-    #         | ['MUL', oper, …]             Multiply F objects or literals
+    #         | ["ADD", oper, …]             Sum multiple F objects or literal
+    #         | ["SUB", oper, oper]          Substract two F objects or literal
+    #         | ["MUL", oper, …]             Multiply F objects or literals
     #         | int | string | bool | null   Literal values
-    #         | ['F', string]                A field
+    #         | ["F", string]                A field
     #
     # Examples:
-    #  Q(is_admin=True)  := {'is_admin': ['TYPE', 'bool', 'True']}
-    #  ~Q(is_admin=True) := ['NOT', {'is_admin': ['TYPE', 'bool', 'True']}]
+    #  Q(is_superuser=True)  := {"is_superuser": true}
+    #  ~Q(is_superuser=True) := ["NOT", {"is_superuser": true}]
     query = models.TextField()
 
     type = models.CharField(max_length=15, choices=PERMISSION_TYPES)
@@ -94,23 +94,22 @@ class Permission(models.Model):
         if self.field and self.type not in {'view', 'change'}:
             raise ValidationError(_("Specifying field applies only to view and change permission types."))
 
-    def save(self):
+    def save(self, **kwargs):
         self.full_clean()
         super().save()
 
     @staticmethod
-    def compute_f(_oper, **kwargs):
-        oper = _oper
+    def compute_f(oper, **kwargs):
         if isinstance(oper, list):
             if len(oper) == 1:
                 return kwargs[oper[0]].pk
             elif len(oper) >= 2:
                 if oper[0] == 'ADD':
-                    return functools.reduce(operator.add, [compute_f(oper, **kwargs) for oper in oper[1:]])
+                    return functools.reduce(operator.add, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
                 elif oper[0] == 'SUB':
-                    return compute_f(oper[1], **kwargs) - compute_f(oper[2], **kwargs)
+                    return Permission.compute_f(oper[1], **kwargs) - Permission.compute_f(oper[2], **kwargs)
                 elif oper[0] == 'MUL':
-                    return functools.reduce(operator.mul, [compute_f(oper, **kwargs) for oper in oper[1:]])
+                    return functools.reduce(operator.mul, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
                 elif oper[0] == 'F':
                     return F(oper[1])
         else:
@@ -118,9 +117,7 @@ class Permission(models.Model):
         # TODO: find a better way to crash here
         raise Exception("F is wrong")
 
-    def _about(_self, _query, **kwargs):
-        self = _self
-        query = _query
+    def _about(self, query, **kwargs):
         if self.type == 'add':
             # Handle add permission differently
             return self._about_add(query, **kwargs)
@@ -145,7 +142,7 @@ class Permission(models.Model):
                     q_kwargs[key] = kwargs[value[0]].pk
                 elif isinstance(value, dict):
                     # It is an F object
-                    q_kwargs[key] = compute_f(query['F'], **kwargs)
+                    q_kwargs[key] = Permission.compute_f(query['F'], **kwargs)
                 else:
                     q_kwargs[key] = value
             return Q(**q_kwargs)
@@ -153,16 +150,15 @@ class Permission(models.Model):
             # TODO: find a better way to crash here
             raise Exception("query {} is wrong".format(self.query))
 
-    def _about_add(_self, _query, **kwargs):
-        self = _self
+    def _about_add(self, _query, **kwargs):
         query = _query
         if len(query) == 0:
             return lambda _: True
         if isinstance(query, list):
             if query[0] == 'AND':
-                return lambda obj: functools.reduce(operator.and_, [self._about_add(query, **kwargs)(obj) for query in query[1:]])
+                return lambda obj: functools.reduce(operator.and_, [self._about_add(q, **kwargs)(obj) for q in query[1:]])
             elif query[0] == 'OR':
-                return lambda obj: functools.reduce(operator.or_, [self._about_add(query, **kwargs)(obj) for query in query[1:]])
+                return lambda obj: functools.reduce(operator.or_, [self._about_add(q, **kwargs)(obj) for q in query[1:]])
             elif query[0] == 'NOT':
                 return lambda obj: not self._about_add(query[1], **kwargs)(obj)
         elif isinstance(query, dict):
@@ -174,7 +170,7 @@ class Permission(models.Model):
                     q_kwargs[key] = kwargs[value[0]].pk
                 elif isinstance(value, dict):
                     # It is an F object
-                    q_kwargs[key] = compute_f(query['F'], **kwargs)
+                    q_kwargs[key] = Permission.compute_f(query['F'], **kwargs)
                 else:
                     q_kwargs[key] = value
             def func(obj):

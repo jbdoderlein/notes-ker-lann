@@ -154,9 +154,9 @@ class Membership(models.Model):
 
     def valid(self):
         if self.date_end is not None:
-            return self.date_start <= datetime.datetime.now() < self.date_end
+            return self.date_start.toordinal() <= datetime.datetime.now().toordinal() < self.date_end.toordinal()
         else:
-            return self.date_start <= datetime.datetime.now()
+            return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
 
     class Meta:
         verbose_name = _('membership')

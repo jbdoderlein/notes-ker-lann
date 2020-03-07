@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 
     # External apps
     'polymorphic',
-    'guardian',
     'reversion',
     'crispy_forms',
     'django_tables2',
@@ -134,8 +133,8 @@ PASSWORD_HASHERS = [
 # Django Guardian object permissions
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # this is default
-    'guardian.backends.ObjectPermissionBackend',
+    #'django.contrib.auth.backends.ModelBackend',  # this is default
+    'member.backends.PermissionBackend',
     'cas.backends.CASBackend',
 )
 
@@ -152,8 +151,6 @@ REST_FRAMEWORK = {
 }
 
 ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
-
-GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
