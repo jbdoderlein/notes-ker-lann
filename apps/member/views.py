@@ -238,17 +238,18 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
         h = form.cleaned_data['height']
         # image crop and resize
         image_file = io.BytesIO(image_field.read())
-        ext = image_field.name.split('.')[-1]
+        ext = image_field.name.split('.')[-1].lower()
+        #TODO: support GIF format        
         image = Image.open(image_file)
         image = image.crop((x, y, x+w, y+h))
         image_clean = image.resize((settings.PIC_WIDTH,
                              settings.PIC_RATIO*settings.PIC_WIDTH),
                              Image.ANTIALIAS)
         image_file = io.BytesIO()
-        image_clean.save(image_file,ext)
+        image_clean.save(image_file,"PNG")
         image_field.file = image_file
         # renaming
-        filename = "{}_pic.{}".format(self.object.note.pk, ext)
+        filename = "{}_pic.png".format(self.object.note.pk)
         image_field.name = filename
         self.object.note.display_image = image_field
         self.object.note.save()
