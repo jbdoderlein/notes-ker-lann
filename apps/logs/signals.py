@@ -78,6 +78,10 @@ def save_object(sender, instance, **kwargs):
 
     user, ip = get_user_and_ip(sender)
 
+    from django.contrib.auth.models import AnonymousUser
+    if isinstance(user, AnonymousUser):
+        user = None
+
     if user is not None and instance._meta.label_lower == "auth.user" and previous:
         # Don't save last login modifications
         if instance.last_login != previous.last_login:
