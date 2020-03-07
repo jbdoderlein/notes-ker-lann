@@ -22,6 +22,9 @@ class InstancedPermission:
         Returns True if the permission applies to
         the field `field_name` object `obj`
         """
+        if self.type == 'add':
+            if permission_type == self.type:
+                return self.query(obj)
         if ContentType.objects.get_for_model(obj) != self.model:
             # The permission does not apply to the model
             return False
@@ -118,6 +121,9 @@ class Permission(models.Model):
     def _about(_self, _query, **kwargs):
         self = _self
         query = _query
+        if self.type == 'add'):
+            # Handle add permission differently
+            return self._about_add(query, **kwargs)
         if len(query) == 0:
             # The query is either [] or {} and
             # applies to all objects of the model
@@ -146,6 +152,38 @@ class Permission(models.Model):
         else:
             # TODO: find a better way to crash here
             raise Exception("query {} is wrong".format(self.query))
+
+    def _about_add(_self, _query, **kwargs):
+        self = _self
+        query = _query
+        if len(query) == 0:
+            return lambda _: True
+        if isinstance(query, list):
+            if query[0] == 'AND':
+                return lambda obj: functools.reduce(operator.and_, [self._about_add(query, **kwargs)(obj) for query in query[1:]])
+            elif query[0] == 'OR':
+                return lambda obj: functools.reduce(operator.or_, [self._about_add(query, **kwargs)(obj) for query in query[1:]])
+            elif query[0] == 'NOT':
+                return lambda obj: not self._about_add(query[1], **kwargs)(obj)
+        elif isinstance(query, dict):
+            q_kwargs = {}
+            for key in query:
+                value = query[key]
+                if isinstance(value, list):
+                    # It is a parameter we query its primary key
+                    q_kwargs[key] = kwargs[value[0]].pk
+                elif isinstance(value, dict):
+                    # It is an F object
+                    q_kwargs[key] = compute_f(query['F'], **kwargs)
+                else:
+                    q_kwargs[key] = value
+            def func(obj):
+                nonlocal q_kwargs
+                for arg in q_kwargs:
+                    if getattr(obj, arg) != q_kwargs(arg):
+                        return False
+                return True
+            return func
 
     def about(self, **kwargs):
         """
