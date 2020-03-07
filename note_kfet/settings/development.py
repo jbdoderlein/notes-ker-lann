@@ -51,9 +51,10 @@ SESSION_COOKIE_AGE = 60 * 60 * 3
 
 # CAS Client settings
 # Can be modified in secrets.py
-CAS_SERVER_URL = "https://note.comby.xyz/cas/"
+CAS_SERVER_URL = "http://localhost:8000/cas/"
 
 
 STATIC_ROOT = '' # not needed in development settings
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'static')]
+
