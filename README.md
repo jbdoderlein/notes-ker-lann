@@ -42,7 +42,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
 ***Modifier le fichier pour être en accord avec le reste de votre config***
 
-    On utilise uwsgi et Nginx pour gérer le coté serveu :
+    On utilise uwsgi et Nginx pour gérer le coté serveur :
 
         $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
 
