@@ -41,17 +41,12 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
 
         if False:  # TODO: fix it with "if %user has no right to transfer funds"
             del form.fields['source']
+            form.user = self.request.user
 
         return form
 
-    def form_valid(self, form):
-        """
-        If the user has no right to transfer funds, then it will be the source of the transfer by default.
-        """
-        if False:  # TODO: fix it with "if %user has no right to transfer funds"
-            form.instance.source = self.request.user.note
-
-        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse('note:transfer')
 
 
 class NoteAutocomplete(autocomplete.Select2QuerySetView):

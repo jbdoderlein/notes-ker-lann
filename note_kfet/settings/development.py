@@ -48,3 +48,7 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_AGE = 60 * 60 * 3
+
+# CAS Client settings
+# Can be modified in secrets.py
+CAS_SERVER_URL = "https://note.comby.xyz/cas/"

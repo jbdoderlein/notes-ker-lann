@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     # Autocomplete
     'dal',
     'dal_select2',
+    # CAS
+    'cas_server',
+    'cas',
 
     # Note apps
     'activity',
@@ -77,6 +80,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
+    'cas.middleware.CASMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
@@ -93,6 +97,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+              #  'django.template.context_processors.media',
             ],
         },
     },
@@ -129,6 +134,7 @@ PASSWORD_HASHERS = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
     'guardian.backends.ObjectPermissionBackend',
+    'cas.backends.CASBackend',
 )
 
 REST_FRAMEWORK = {
@@ -177,10 +183,10 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.realpath(__file__)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')]
-
+STATIC_ROOT = os.path.join(BASE_DIR,"static/") 
+# STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = []
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 # URL prefix for static files.
@@ -188,4 +194,16 @@ DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
+
+MEDIA_ROOT=os.path.join(BASE_DIR,"media")
+MEDIA_URL='/media/'
+
+# Profile Picture Settings
+PIC_WIDTH = 200
+PIC_RATIO = 1
+
+# CAS Settings
+CAS_AUTO_CREATE_USER = False
+CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
+CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
 
