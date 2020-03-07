@@ -1,0 +1,581 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-27 17:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/activity/apps.py:10 apps/activity/models.py:76
+msgid "activity"
+msgstr ""
+
+#: apps/activity/models.py:19 apps/activity/models.py:44
+#: apps/member/models.py:60 apps/member/models.py:111
+#: apps/note/models/notes.py:184 apps/note/models/transactions.py:24
+#: apps/note/models/transactions.py:44 templates/member/profile_detail.html:11
+msgid "name"
+msgstr ""
+
+#: apps/activity/models.py:23
+msgid "can invite"
+msgstr ""
+
+#: apps/activity/models.py:26
+msgid "guest entry fee"
+msgstr ""
+
+#: apps/activity/models.py:30
+msgid "activity type"
+msgstr ""
+
+#: apps/activity/models.py:31
+msgid "activity types"
+msgstr ""
+
+#: apps/activity/models.py:48 apps/note/models/transactions.py:69
+msgid "description"
+msgstr ""
+
+#: apps/activity/models.py:54 apps/note/models/notes.py:160
+#: apps/note/models/transactions.py:62
+msgid "type"
+msgstr ""
+
+#: apps/activity/models.py:60
+msgid "organizer"
+msgstr ""
+
+#: apps/activity/models.py:66
+msgid "attendees club"
+msgstr ""
+
+#: apps/activity/models.py:69
+msgid "start date"
+msgstr ""
+
+#: apps/activity/models.py:72
+msgid "end date"
+msgstr ""
+
+#: apps/activity/models.py:77
+msgid "activities"
+msgstr ""
+
+#: apps/activity/models.py:108
+msgid "guest"
+msgstr ""
+
+#: apps/activity/models.py:109
+msgid "guests"
+msgstr ""
+
+#: apps/api/apps.py:10
+msgid "API"
+msgstr ""
+
+#: apps/logs/apps.py:10
+msgid "Logs"
+msgstr ""
+
+#: apps/logs/models.py:20 apps/note/models/notes.py:105
+msgid "user"
+msgstr ""
+
+#: apps/logs/models.py:27
+msgid "model"
+msgstr ""
+
+#: apps/logs/models.py:34
+msgid "identifier"
+msgstr ""
+
+#: apps/logs/models.py:39
+msgid "previous data"
+msgstr ""
+
+#: apps/logs/models.py:44
+msgid "new data"
+msgstr ""
+
+#: apps/logs/models.py:51
+msgid "action"
+msgstr ""
+
+#: apps/logs/models.py:59
+msgid "timestamp"
+msgstr ""
+
+#: apps/logs/models.py:63
+msgid "Logs cannot be destroyed."
+msgstr ""
+
+#: apps/member/apps.py:10
+msgid "member"
+msgstr ""
+
+#: apps/member/models.py:23
+msgid "phone number"
+msgstr ""
+
+#: apps/member/models.py:29 templates/member/profile_detail.html:24
+msgid "section"
+msgstr ""
+
+#: apps/member/models.py:30
+msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
+msgstr ""
+
+#: apps/member/models.py:36 templates/member/profile_detail.html:27
+msgid "address"
+msgstr ""
+
+#: apps/member/models.py:42
+msgid "paid"
+msgstr ""
+
+#: apps/member/models.py:47 apps/member/models.py:48
+msgid "user profile"
+msgstr ""
+
+#: apps/member/models.py:65
+msgid "email"
+msgstr ""
+
+#: apps/member/models.py:70
+msgid "membership fee"
+msgstr ""
+
+#: apps/member/models.py:74
+msgid "membership duration"
+msgstr ""
+
+#: apps/member/models.py:75
+msgid "The longest time a membership can last (NULL = infinite)."
+msgstr ""
+
+#: apps/member/models.py:80
+msgid "membership start"
+msgstr ""
+
+#: apps/member/models.py:81
+msgid "How long after January 1st the members can renew their membership."
+msgstr ""
+
+#: apps/member/models.py:86
+msgid "membership end"
+msgstr ""
+
+#: apps/member/models.py:87
+msgid ""
+"How long the membership can last after January 1st of the next year after "
+"members can renew their membership."
+msgstr ""
+
+#: apps/member/models.py:93 apps/note/models/notes.py:135
+msgid "club"
+msgstr ""
+
+#: apps/member/models.py:94
+msgid "clubs"
+msgstr ""
+
+#: apps/member/models.py:117
+msgid "role"
+msgstr ""
+
+#: apps/member/models.py:118
+msgid "roles"
+msgstr ""
+
+#: apps/member/models.py:142
+msgid "membership starts on"
+msgstr ""
+
+#: apps/member/models.py:145
+msgid "membership ends on"
+msgstr ""
+
+#: apps/member/models.py:149
+msgid "fee"
+msgstr ""
+
+#: apps/member/models.py:153
+msgid "membership"
+msgstr ""
+
+#: apps/member/models.py:154
+msgid "memberships"
+msgstr ""
+
+#: apps/member/views.py:63 templates/member/profile_detail.html:42
+msgid "Update Profile"
+msgstr ""
+
+#: apps/member/views.py:79
+msgid "An alias with a similar name already exists."
+msgstr ""
+
+#: apps/member/views.py:130
+#, python-format
+msgid "Account #%(id)s: %(username)s"
+msgstr ""
+
+#: apps/note/admin.py:120 apps/note/models/transactions.py:93
+msgid "source"
+msgstr ""
+
+#: apps/note/admin.py:128 apps/note/admin.py:156
+#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:99
+msgid "destination"
+msgstr ""
+
+#: apps/note/apps.py:14 apps/note/models/notes.py:54
+msgid "note"
+msgstr ""
+
+#: apps/note/forms.py:49
+msgid "Source and destination must be different."
+msgstr ""
+
+#: apps/note/models/notes.py:26
+msgid "account balance"
+msgstr ""
+
+#: apps/note/models/notes.py:27
+msgid "in centimes, money credited for this instance"
+msgstr ""
+
+#: apps/note/models/notes.py:31
+msgid "last negative date"
+msgstr ""
+
+#: apps/note/models/notes.py:32
+msgid "last time the balance was negative"
+msgstr ""
+
+#: apps/note/models/notes.py:37
+msgid "active"
+msgstr ""
+
+#: apps/note/models/notes.py:40
+msgid ""
+"Designates whether this note should be treated as active. Unselect this "
+"instead of deleting notes."
+msgstr ""
+
+#: apps/note/models/notes.py:44
+msgid "display image"
+msgstr ""
+
+#: apps/note/models/notes.py:49 apps/note/models/transactions.py:102
+msgid "created at"
+msgstr ""
+
+#: apps/note/models/notes.py:55
+msgid "notes"
+msgstr ""
+
+#: apps/note/models/notes.py:63
+msgid "Note"
+msgstr ""
+
+#: apps/note/models/notes.py:73 apps/note/models/notes.py:97
+msgid "This alias is already taken."
+msgstr ""
+
+#: apps/note/models/notes.py:113
+msgid "user"
+msgstr ""
+
+#: apps/note/models/notes.py:117
+msgid "one's note"
+msgstr ""
+
+#: apps/note/models/notes.py:118
+msgid "users note"
+msgstr ""
+
+#: apps/note/models/notes.py:124
+#, python-format
+msgid "%(user)s's note"
+msgstr ""
+
+#: apps/note/models/notes.py:139
+msgid "club note"
+msgstr ""
+
+#: apps/note/models/notes.py:140
+msgid "clubs notes"
+msgstr ""
+
+#: apps/note/models/notes.py:146
+#, python-format
+msgid "Note of %(club)s club"
+msgstr ""
+
+#: apps/note/models/notes.py:166
+msgid "special note"
+msgstr ""
+
+#: apps/note/models/notes.py:167
+msgid "special notes"
+msgstr ""
+
+#: apps/note/models/notes.py:190
+msgid "Invalid alias"
+msgstr ""
+
+#: apps/note/models/notes.py:206
+msgid "alias"
+msgstr ""
+
+#: apps/note/models/notes.py:207 templates/member/profile_detail.html:33
+msgid "aliases"
+msgstr ""
+
+#: apps/note/models/notes.py:233
+msgid "Alias is too long."
+msgstr ""
+
+#: apps/note/models/notes.py:238
+msgid "An alias with a similar name already exists:"
+msgstr ""
+
+#: apps/note/models/notes.py:246
+msgid "You can't delete your main alias."
+msgstr ""
+
+#: apps/note/models/transactions.py:30
+msgid "transaction category"
+msgstr ""
+
+#: apps/note/models/transactions.py:31
+msgid "transaction categories"
+msgstr ""
+
+#: apps/note/models/transactions.py:47
+msgid "A template with this name already exist"
+msgstr ""
+
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
+msgid "amount"
+msgstr ""
+
+#: apps/note/models/transactions.py:57
+msgid "in centimes"
+msgstr ""
+
+#: apps/note/models/transactions.py:74
+msgid "transaction template"
+msgstr ""
+
+#: apps/note/models/transactions.py:75
+msgid "transaction templates"
+msgstr ""
+
+#: apps/note/models/transactions.py:106
+msgid "quantity"
+msgstr ""
+
+#: apps/note/models/transactions.py:111
+msgid "reason"
+msgstr ""
+
+#: apps/note/models/transactions.py:115
+msgid "valid"
+msgstr ""
+
+#: apps/note/models/transactions.py:120
+msgid "transaction"
+msgstr ""
+
+#: apps/note/models/transactions.py:121
+msgid "transactions"
+msgstr ""
+
+#: apps/note/models/transactions.py:184
+msgid "membership transaction"
+msgstr ""
+
+#: apps/note/models/transactions.py:185
+msgid "membership transactions"
+msgstr ""
+
+#: apps/note/views.py:29
+msgid "Transfer money from your account to one or others"
+msgstr ""
+
+#: apps/note/views.py:138
+msgid "Consommations"
+msgstr ""
+
+#: note_kfet/settings/base.py:155
+msgid "German"
+msgstr ""
+
+#: note_kfet/settings/base.py:156
+msgid "English"
+msgstr ""
+
+#: note_kfet/settings/base.py:157
+msgid "French"
+msgstr ""
+
+#: templates/base.html:13
+msgid "The ENS Paris-Saclay BDE note."
+msgstr ""
+
+#: templates/member/club_detail.html:10
+msgid "Membership starts on"
+msgstr ""
+
+#: templates/member/club_detail.html:12
+msgid "Membership ends on"
+msgstr ""
+
+#: templates/member/club_detail.html:14
+msgid "Membership duration"
+msgstr ""
+
+#: templates/member/club_detail.html:18 templates/member/profile_detail.html:30
+msgid "balance"
+msgstr ""
+
+#: templates/member/manage_auth_tokens.html:16
+msgid "Token"
+msgstr ""
+
+#: templates/member/manage_auth_tokens.html:23
+msgid "Created"
+msgstr ""
+
+#: templates/member/manage_auth_tokens.html:31
+msgid "Regenerate token"
+msgstr ""
+
+#: templates/member/profile_detail.html:11
+msgid "first name"
+msgstr ""
+
+#: templates/member/profile_detail.html:14
+msgid "username"
+msgstr ""
+
+#: templates/member/profile_detail.html:17
+msgid "password"
+msgstr ""
+
+#: templates/member/profile_detail.html:20
+msgid "Change password"
+msgstr ""
+
+#: templates/member/profile_detail.html:38
+msgid "Manage auth token"
+msgstr ""
+
+#: templates/member/profile_detail.html:54
+msgid "View my memberships"
+msgstr ""
+
+#: templates/member/profile_update.html:13
+msgid "Save Changes"
+msgstr ""
+
+#: templates/member/signup.html:14
+msgid "Sign Up"
+msgstr ""
+
+#: templates/note/transaction_form.html:35
+msgid "Transfer"
+msgstr ""
+
+#: templates/registration/logged_out.html:8
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: templates/registration/logged_out.html:9
+msgid "Log in again"
+msgstr ""
+
+#: templates/registration/login.html:7 templates/registration/login.html:8
+#: templates/registration/login.html:22
+#: templates/registration/password_reset_complete.html:10
+msgid "Log in"
+msgstr ""
+
+#: templates/registration/login.html:13
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/registration/login.html:23
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: templates/registration/password_change_done.html:8
+msgid "Your password was changed."
+msgstr ""
+
+#: templates/registration/password_change_form.html:9
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/registration/password_change_form.html:11
+#: templates/registration/password_reset_confirm.html:12
+msgid "Change my password"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:8
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:9
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:15
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:8
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:9
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:11
+msgid "Reset my password"
+msgstr ""

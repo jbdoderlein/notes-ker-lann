@@ -1,13 +1,10 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
 
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
 
@@ -16,8 +13,9 @@ class Profile(models.Model):
     """
     An user profile
 
-    We do not want to patch the Django Contrib Auth User class
+    We do not want to patch the Django Contrib :model:`auth.User`model;
     so this model add an user profile with additional information.
+
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -52,12 +50,14 @@ class Profile(models.Model):
         verbose_name_plural = _('user profile')
 
     def get_absolute_url(self):
-        return reverse('user_detail',args=(self.pk,))
+        return reverse('user_detail', args=(self.pk, ))
+
 
 
 class Club(models.Model):
     """
-    A student club
+    A club is a group of people, whose membership is handle by their
+    :model:`member.Membership`, and gives access to right defined by a :model:`member.Role`.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -100,12 +100,15 @@ class Club(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse_lazy('member:club_detail', args=(self.pk,))
+        return reverse_lazy('member:club_detail', args=(self.pk, ))
 
 
 class Role(models.Model):
     """
-    Role that an user can have in a club
+    Role that an :model:`auth.User` can have in a :model:`member.Club`
+
+    TODO: Integrate the right management, and create some standard Roles at the
+    creation of the club.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -117,22 +120,26 @@ class Role(models.Model):
         verbose_name = _('role')
         verbose_name_plural = _('roles')
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Membership(models.Model):
     """
     Register the membership of a user to a club, including roles and membership duration.
+
     """
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     club = models.ForeignKey(
         Club,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     roles = models.ForeignKey(
         Role,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     date_start = models.DateField(
         verbose_name=_('membership starts on'),

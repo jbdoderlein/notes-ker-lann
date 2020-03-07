@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags%}
+{% block content %}
+
+<a class="btn btn-primary" href="{% url 'member:signup' %}">New User</a>
+
+<div class="row">
+{% crispy filter.form filter.form.helper %}
+</div>
+<div class="row">
+    <div id="replaceable-content" class="col-6">
+        {% render_table  table %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+
+$(document).ready(function($) {
+    $(".table-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+});
+
+</script>
+{% endblock %}

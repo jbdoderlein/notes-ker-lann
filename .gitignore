@@ -1,3 +1,6 @@
+# Server config files
+nginx_note.conf
+
 # Byte-compiled / optimized / DLL files
 dist
 build
@@ -28,10 +31,13 @@ coverage
 # PyCharm project settings
 .idea
 
-# Local data
-settings_local.py
-*.log
+# VSCode project settings
+.vscode
 
+# Local data
+secrets.py
+*.log
+media/
 # Virtualenv
 env/
 venv/

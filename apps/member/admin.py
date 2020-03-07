@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib import admin
@@ -19,9 +18,9 @@ class ProfileInline(admin.StackedInline):
 
 
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline,)
+    inlines = (ProfileInline, )
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
-    list_select_related = ('profile',)
+    list_select_related = ('profile', )
     form = ProfileForm
 
     def get_inline_instances(self, request, obj=None):

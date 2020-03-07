@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib import admin
@@ -8,7 +7,8 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
-from .models.transactions import Transaction, TransactionTemplate
+from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, \
+    TemplateTransaction, MembershipTransaction
 
 
 class AliasInlines(admin.TabularInline):
@@ -25,7 +25,10 @@ class NoteAdmin(PolymorphicParentModelAdmin):
     Parent regrouping all note types as children
     """
     child_models = (NoteClub, NoteSpecial, NoteUser)
-    list_filter = (PolymorphicChildModelFilter, 'is_active',)
+    list_filter = (
+        PolymorphicChildModelFilter,
+        'is_active',
+    )
 
     # Use a polymorphic list
     list_display = ('pretty', 'balance', 'is_active')
@@ -44,11 +47,12 @@ class NoteClubAdmin(PolymorphicChildModelAdmin):
     """
     Child for a club note, see NoteAdmin
     """
-    inlines = (AliasInlines,)
+    inlines = (AliasInlines, )
 
     # We can't change club after creation or the balance
     readonly_fields = ('club', 'balance')
-    search_fields = ('club',)
+    search_fields = ('club', )
+
     def has_add_permission(self, request):
         """
         A club note should not be manually added
@@ -67,7 +71,7 @@ class NoteSpecialAdmin(PolymorphicChildModelAdmin):
     """
     Child for a special note, see NoteAdmin
     """
-    readonly_fields = ('balance',)
+    readonly_fields = ('balance', )
 
 
 @admin.register(NoteUser)
@@ -75,7 +79,7 @@ class NoteUserAdmin(PolymorphicChildModelAdmin):
     """
     Child for an user note, see NoteAdmin
     """
-    inlines = (AliasInlines,)
+    inlines = (AliasInlines, )
 
     # We can't change user after creation or the balance
     readonly_fields = ('user', 'balance')
@@ -94,14 +98,18 @@ class NoteUserAdmin(PolymorphicChildModelAdmin):
 
 
 @admin.register(Transaction)
-class TransactionAdmin(admin.ModelAdmin):
+class TransactionAdmin(PolymorphicParentModelAdmin):
     """
     Admin customisation for Transaction
     """
+    child_models = (TemplateTransaction, MembershipTransaction)
     list_display = ('created_at', 'poly_source', 'poly_destination',
-                    'quantity', 'amount', 'transaction_type', 'valid')
-    list_filter = ('transaction_type', 'valid')
-    autocomplete_fields = ('source', 'destination',)
+                    'quantity', 'amount', 'valid')
+    list_filter = ('valid',)
+    autocomplete_fields = (
+        'source',
+        'destination',
+    )
 
     def poly_source(self, obj):
         """
@@ -126,7 +134,7 @@ class TransactionAdmin(admin.ModelAdmin):
         """
         if obj:  # user is editing an existing object
             return 'created_at', 'source', 'destination', 'quantity',\
-                   'amount', 'transaction_type'
+                   'amount'
         return []
 
 
@@ -135,9 +143,9 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
     """
-    list_display = ('name', 'poly_destination', 'amount', 'template_type')
-    list_filter = ('template_type',)
-    autocomplete_fields = ('destination',)
+    list_display = ('name', 'poly_destination', 'amount', 'category', 'display', )
+    list_filter = ('category', 'display')
+    autocomplete_fields = ('destination', )
 
     def poly_destination(self, obj):
         """
@@ -146,3 +154,12 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
         return str(obj.destination)
 
     poly_destination.short_description = _('destination')
+
+
+@admin.register(TemplateCategory)
+class TemplateCategoryAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for TransactionTemplate
+    """
+    list_display = ('name', )
+    list_filter = ('name', )

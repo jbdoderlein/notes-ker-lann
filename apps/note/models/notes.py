@@ -1,5 +1,4 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import unicodedata
@@ -10,7 +9,6 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
-
 """
 Defines each note types
 """
@@ -18,25 +16,37 @@ Defines each note types
 
 class Note(PolymorphicModel):
     """
-    An model, use to add transactions capabilities
+    Gives transactions capabilities. Note is a Polymorphic Model, use as based
+    for the models :model:`note.NoteUser` and :model:`note.NoteClub`.
+    A Note principaly store the actual balance of someone/some club.
+    A Note can be searched find throught an :model:`note.Alias`
+
     """
     balance = models.IntegerField(
         verbose_name=_('account balance'),
         help_text=_('in centimes, money credited for this instance'),
         default=0,
     )
+    last_negative= models.DateTimeField(
+        verbose_name=_('last negative date'),
+        help_text=_('last time the balance was negative'),
+        null=True,
+        blank=True,
+    )
     is_active = models.BooleanField(
         _('active'),
         default=True,
         help_text=_(
             'Designates whether this note should be treated as active. '
-            'Unselect this instead of deleting notes.'
-        ),
+            'Unselect this instead of deleting notes.'),
     )
     display_image = models.ImageField(
         verbose_name=_('display image'),
         max_length=255,
-        blank=True,
+        blank=False,
+        null=False,
+        upload_to='pic/',
+        default='pic/default.png'
     )
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
@@ -63,7 +73,8 @@ class Note(PolymorphicModel):
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'))
+                raise ValidationError(_('This alias is already taken.'),
+                                      code="same_alias")
 
             # Save note
             super().save(*args, **kwargs)
@@ -81,11 +92,13 @@ class Note(PolymorphicModel):
         """
         Verify alias (simulate save)
         """
-        aliases = Alias.objects.filter(name=str(self))
+        aliases = Alias.objects.filter(
+            normalized_name=Alias.normalize(str(self)))
         if aliases.exists():
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'))
+                raise ValidationError(_('This alias is already taken.'),
+                                      code="same_alias",)
         else:
             # Alias does not exist yet, so check if it can exist
             a = Alias(name=str(self))
@@ -94,7 +107,7 @@ class Note(PolymorphicModel):
 
 class NoteUser(Note):
     """
-    A Note associated to an User
+    A :model:`note.Note` associated to an  unique :model:`auth.User`.
     """
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -116,7 +129,7 @@ class NoteUser(Note):
 
 class NoteClub(Note):
     """
-    A Note associated to a Club
+    A :model:`note.Note` associated to an unique :model:`member.Club`
     """
     club = models.OneToOneField(
         'member.Club',
@@ -133,17 +146,18 @@ class NoteClub(Note):
         return str(self.club)
 
     def pretty(self):
-        return _("Note for %(club)s club") % {'club': str(self.club)}
+        return _("Note of %(club)s club") % {'club': str(self.club)}
 
 
 class NoteSpecial(Note):
     """
-    A Note for special account, where real money enter or leave the system
+    A :model:`note.Note` for special accounts, where real money enter or leave the system
     - bank check
     - credit card
     - bank transfer
     - cash
     - refund
+    This Type of Note is not associated to a :model:`auth.User` or :model:`member.Club` .
     """
     special_type = models.CharField(
         verbose_name=_('type'),
@@ -161,7 +175,13 @@ class NoteSpecial(Note):
 
 class Alias(models.Model):
     """
-    An alias labels a Note instance, only for user and clubs
+    points toward  a :model:`note.NoteUser` or :model;`note.NoteClub` instance.
+    Alias are unique, but a :model:`note.NoteUser` or :model:`note.NoteClub` can
+    have multiples aliases.
+
+    Aliases name are also normalized, two differents :model:`note.Note` can not
+    have the same normalized alias, to avoid confusion when referring orally to
+    it.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -170,15 +190,15 @@ class Alias(models.Model):
         validators=[
             RegexValidator(
                 regex=settings.ALIAS_VALIDATOR_REGEX,
-                message=_('Invalid alias')
+                message=_('Invalid alias'),
             )
-        ] if settings.ALIAS_VALIDATOR_REGEX else []
+        ] if settings.ALIAS_VALIDATOR_REGEX else [],
     )
     normalized_name = models.CharField(
         max_length=255,
         unique=True,
         default='',
-        editable=False
+        editable=False,
     )
     note = models.ForeignKey(
         Note,
@@ -198,27 +218,27 @@ class Alias(models.Model):
         Normalizes a string: removes most diacritics and does casefolding
         """
         return ''.join(
-            char
-            for char in unicodedata.normalize('NFKD', string.casefold())
+            char for char in unicodedata.normalize('NFKD', string.casefold())
             if all(not unicodedata.category(char).startswith(cat)
-                   for cat in {'M', 'P', 'Z', 'C'})
-        ).casefold()
-
-    def save(self, *args, **kwargs):
-        """
-        Handle normalized_name
-        """
-        self.normalized_name = Alias.normalize(self.name)
-        if len(self.normalized_name) < 256:
-            super().save(*args, **kwargs)
+                   for cat in {'M', 'P', 'Z', 'C'})).casefold()
 
     def clean(self):
         normalized_name = Alias.normalize(self.name)
         if len(normalized_name) >= 255:
-            raise ValidationError(_('Alias too long.'))
+            raise ValidationError(_('Alias is too long.'),
+                                  code='alias_too_long')
         try:
-            if self != Alias.objects.get(normalized_name=normalized_name):
-                raise ValidationError(_('An alias with a similar name '
-                                        'already exists.'))
+            sim_alias = Alias.objects.get(normalized_name=normalized_name)
+            if self != sim_alias:
+                raise ValidationError(_('An alias with a similar name already exists: {} '.format(sim_alias)),
+                                       code="same_alias"
+                )
         except Alias.DoesNotExist:
             pass
+        self.normalized_name = normalized_name
+        
+    def delete(self, using=None, keep_parents=False):
+        if self.name == str(self.note):
+            raise ValidationError(_("You can't delete your main alias."),
+                                  code="cant_delete_main_alias")
+        return super().delete(using, keep_parents)

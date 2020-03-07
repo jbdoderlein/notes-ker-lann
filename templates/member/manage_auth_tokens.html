@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n static pretty_money django_tables2 %}
+
+{% block content %}
+    <div class="alert alert-info">
+    <h4>À quoi sert un jeton d'authentification ?</h4>
+
+    Un jeton vous permet de vous connecter à <a href="/api/">l'API de la Note Kfet</a>.<br />
+    Il suffit pour cela d'ajouter en en-tête de vos requêtes <code>Authorization: Token &lt;TOKEN&gt;</code>
+    pour pouvoir vous identifier.<br /><br />
+
+    Une documentation de l'API arrivera ultérieurement.
+    </div>
+
+    <div class="alert alert-info">
+        <strong>{%trans  'Token' %} :</strong>
+        {% if 'show' in request.GET %}
+            {{ token.key }} (<a href="?">cacher</a>)
+        {% else %}
+            <em>caché</em> (<a href="?show">montrer</a>)
+        {% endif %}
+        <br />
+        <strong>{%trans  'Created' %} :</strong> {{ token.created }}
+    </div>
+
+    <div class="alert alert-warning">
+        <strong>Attention :</strong> regénérer le jeton va révoquer tout accès autorisé à l'API via ce jeton !
+    </div>
+
+    <a href="?regenerate">
+        <button class="btn btn-primary">{% trans 'Regenerate token' %}</button>
+    </a>
+{% endblock %}

@@ -1,20 +1,45 @@
-#!/usr/bin/env python
-import django_tables2 as tables
-from .models.transactions import Transaction
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# SPDX-License-Identifier: GPL-3.0-or-later
 
+import django_tables2 as tables
+from django.db.models import F
+from django_tables2.utils import A
+from .models.transactions import Transaction
+from .models.notes import Alias
 
 class HistoryTable(tables.Table):
     class Meta:
-        attrs = {'class':'table table-bordered table-condensed table-striped table-hover'}
+        attrs = {
+            'class':
+            'table table-condensed table-striped table-hover'
+        }
         model = Transaction
-        template_name = 'django_tables2/bootstrap.html'
-        sequence = ('...','total','valid')
+        template_name = 'django_tables2/bootstrap4.html'
+        sequence = ('...', 'total', 'valid')
 
-    total = tables.Column() #will use Transaction.total() !!
+    total = tables.Column()  # will use Transaction.total() !!
 
-    def order_total(self, QuerySet, is_descending):
+    def order_total(self, queryset, is_descending):
         # needed for rendering
-        QuerySet = QuerySet.annotate(
-            total=F('amount') * F('quantity')
-        ).order_by(('-' if is_descending else '') + 'total')
-        return (QuerySet, True)
+        queryset = queryset.annotate(total=F('amount') * F('quantity')) \
+            .order_by(('-' if is_descending else '') + 'total')
+        return (queryset, True)
+
+class AliasTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class':
+            'table table condensed table-striped table-hover'
+        }
+        model = Alias
+        fields =('name',)
+        template_name = 'django_tables2/bootstrap4.html'
+
+    show_header = False
+    name = tables.Column(attrs={'td':{'class':'text-center'}})
+    delete = tables.LinkColumn('member:user_alias_delete',
+                               args=[A('pk')],
+                               attrs={
+                                   'td': {'class':'col-sm-2'},
+                                   'a': {'class': 'btn btn-danger'} },
+                               text='delete',accessor='pk')

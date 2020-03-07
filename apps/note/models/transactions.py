@@ -1,24 +1,50 @@
-# -*- mode: python; coding: utf-8 -*-
-# Copyright (C) 2018-2019 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from polymorphic.models import PolymorphicModel
 
-from .notes import Note,NoteClub
+from .notes import Note, NoteClub
 
 """
 Defines transactions
 """
 
 
+class TemplateCategory(models.Model):
+    """
+    Defined a recurrent transaction category
+
+    Example: food, softs, ...
+    """
+    name = models.CharField(
+        verbose_name=_("name"),
+        max_length=31,
+        unique=True,
+    )
+
+    class Meta:
+        verbose_name = _("transaction category")
+        verbose_name_plural = _("transaction categories")
+
+    def __str__(self):
+        return str(self.name)
+
+
 class TransactionTemplate(models.Model):
+    """
+    Defined a recurrent transaction
+
+    associated to selling something (a burger, a beer, ...)
+    """
     name = models.CharField(
         verbose_name=_('name'),
         max_length=255,
         unique=True,
+        error_messages={'unique':_("A template with this name already exist")},
     )
     destination = models.ForeignKey(
         NoteClub,
@@ -30,9 +56,18 @@ class TransactionTemplate(models.Model):
         verbose_name=_('amount'),
         help_text=_('in centimes'),
     )
-    template_type = models.CharField(
+    category = models.ForeignKey(
+        TemplateCategory,
+        on_delete=models.PROTECT,
         verbose_name=_('type'),
-        max_length=31
+        max_length=31,
+    )
+    display = models.BooleanField(
+        default = True,
+    )
+    description = models.CharField(
+        verbose_name=_('description'),
+        max_length=255,
     )
 
     class Meta:
@@ -40,10 +75,17 @@ class TransactionTemplate(models.Model):
         verbose_name_plural = _("transaction templates")
 
     def get_absolute_url(self):
-        return reverse('note:template_update',args=(self.pk,))
+        return reverse('note:template_update', args=(self.pk, ))
 
 
-class Transaction(models.Model):
+class Transaction(PolymorphicModel):
+    """
+    General transaction between two :model:`note.Note`
+
+    amount is store in centimes of currency, making it a  positive integer
+    value. (from someone to someone else)
+    """
+
     source = models.ForeignKey(
         Note,
         on_delete=models.PROTECT,
@@ -64,13 +106,7 @@ class Transaction(models.Model):
         verbose_name=_('quantity'),
         default=1,
     )
-    amount = models.PositiveIntegerField(
-        verbose_name=_('amount'),
-    )
-    transaction_type = models.CharField(
-        verbose_name=_('type'),
-        max_length=31,
-    )
+    amount = models.PositiveIntegerField(verbose_name=_('amount'), )
     reason = models.CharField(
         verbose_name=_('reason'),
         max_length=255,
@@ -88,6 +124,11 @@ class Transaction(models.Model):
         """
         When saving, also transfer money between two notes
         """
+
+        if self.source.pk == self.destination.pk:
+            # When source == destination, no money is transfered
+            return
+
         created = self.pk is None
         to_transfer = self.amount * self.quantity
         if not created:
@@ -108,10 +149,31 @@ class Transaction(models.Model):
 
     @property
     def total(self):
-        return self.amount*self.quantity
+        return self.amount * self.quantity
 
+
+class TemplateTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
+
+    """
+
+    template = models.ForeignKey(
+        TransactionTemplate,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    category = models.ForeignKey(
+        TemplateCategory,
+        on_delete=models.PROTECT,
+    )
 
 class MembershipTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to a :model:`member.Membership`.
+
+    """
+
     membership = models.OneToOneField(
         'member.Membership',
         on_delete=models.PROTECT,
