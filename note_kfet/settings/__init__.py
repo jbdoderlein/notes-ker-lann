@@ -33,14 +33,42 @@ if app_stage == 'prod':
 
     DATABASES["default"]["PASSWORD"] = os.environ.get('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS')
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
-    ALLOWED_HOSTS.append(os.environ.get('ALLOWED_HOSTS', 'localhost'))
+    ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', 'localhost')]
 else:
     from .development import *
 
 try:
+    #in secrets.py defines everything you want
     from .secrets import *
 except ImportError:
     pass
 
-# env variables set at the of in /env/bin/activate
-# don't forget to unset in deactivate !
+if "cas" in INSTALLED_APPS:
+    MIDDLEWARE += ['cas.middleware.CASMiddleware']
+    # CAS Settings
+    CAS_AUTO_CREATE_USER = False
+    CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
+    CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
+    CAS_SHOW_SERVICE_MESSAGES = True
+    CAS_SHOW_POWERED = False
+    CAS_REDIRECT_TO_LOGIN_AFTER_LOGOUT = False
+    CAS_INFO_MESSAGES = {
+        "cas_explained": {
+            "message": _(
+                u"The Central Authentication Service grants you access to most of our websites by "
+                u"authenticating only once, so you don't need to type your credentials again unless "
+                u"your session expires or you logout."
+            ),
+           "discardable": True,
+            "type": "info",  # one of info, success, info, warning, danger
+       },
+    }
+
+    CAS_INFO_MESSAGES_ORDER = [
+        'cas_explained',
+    ]
+    AUTHENTICATION_BACKENDS += ('cas.backends.CASBackend',)
+    
+if "debug_toolbar" in INSTALLED_APPS:
+    MIDDLEWARE.insert(1,"debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = [ '127.0.0.1']
