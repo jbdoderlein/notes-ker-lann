@@ -1,0 +1,3 @@
+djangorestframework==3.9.0
+django-rest-polymorphic==0.1.8
+

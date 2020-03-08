@@ -31,7 +31,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ python3 -m venv env
         $ source env/bin/activate
-        (env)$ pip3 install -r requirements.txt
+        (env)$ pip3 install -r requirements/base.txt
         (env)$ deactivate
 
 4. uwsgi  et Nginx

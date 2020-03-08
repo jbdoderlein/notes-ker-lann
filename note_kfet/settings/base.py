@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 
     # External apps
     'polymorphic',
-    'reversion',
     'crispy_forms',
     'django_tables2',
     # Django contrib

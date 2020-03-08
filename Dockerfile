@@ -10,7 +10,10 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+RUN pip install -r requirements/base.txt
+RUN pip install -r requirements/api.txt
+RUN pip install -r requirements/cas.txt
+RUN pip install -r requirements/production.txt
 
 COPY . /code/
 
