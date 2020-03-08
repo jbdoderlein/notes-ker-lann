@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Changelog(models.Model):
     """
-    Store each modification on the database (except sessions and logging),
+    Store each modification in the database (except sessions and logging),
     including creating, editing and deleting models.
     """
 
