@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     path('logs/', include('logs.urls')),
+    path('api/', include('api.urls')),  
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -45,9 +46,3 @@ if "debug_toolbar" in settings.INSTALLED_APPS:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
-
-if "api" in settings.INSTALLED_APPS:
-    # Include Django REST API
-    urlpatterns += [
-        path('api/', include('api.urls')),
-    ]
