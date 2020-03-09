@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'polymorphic',
     'crispy_forms',
     'django_tables2',
+    'cas_server',
+    'cas',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
