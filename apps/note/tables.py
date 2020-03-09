@@ -7,7 +7,7 @@ from django_tables2.utils import A
 
 from .models.notes import Alias
 from .models.transactions import Transaction
-
+from .templatetags.pretty_money import pretty_money
 
 class HistoryTable(tables.Table):
     class Meta:
@@ -28,6 +28,11 @@ class HistoryTable(tables.Table):
             .order_by(('-' if is_descending else '') + 'total')
         return (queryset, True)
 
+    def render_amount(self,value):
+        return pretty_money(value)
+
+    def render_total(self,value):
+        return pretty_money(value)
 
 class AliasTable(tables.Table):
     class Meta:
