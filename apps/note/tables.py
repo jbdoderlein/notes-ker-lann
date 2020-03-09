@@ -16,6 +16,7 @@ class HistoryTable(tables.Table):
                 'table table-condensed table-striped table-hover'
         }
         model = Transaction
+        exclude = ("polymorphic_ctype",)
         template_name = 'django_tables2/bootstrap4.html'
         sequence = ('...', 'total', 'valid')
 
