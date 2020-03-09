@@ -128,7 +128,6 @@ PASSWORD_HASHERS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # this is default
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 REST_FRAMEWORK = {
@@ -142,10 +141,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
-
-ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
-
-GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

@@ -6,7 +6,8 @@ from django.db.models import F
 from django_tables2.utils import A
 
 from .models.notes import Alias
-from .models.transactions import Transaction
+from .models.transactions import Transaction, TransactionTemplate
+from .templatetags.pretty_money import pretty_money
 
 
 class HistoryTable(tables.Table):
@@ -16,6 +17,7 @@ class HistoryTable(tables.Table):
                 'table table-condensed table-striped table-hover'
         }
         model = Transaction
+        exclude = ("polymorphic_ctype", )
         template_name = 'django_tables2/bootstrap4.html'
         sequence = ('...', 'total', 'valid')
 
@@ -26,6 +28,12 @@ class HistoryTable(tables.Table):
         queryset = queryset.annotate(total=F('amount') * F('quantity')) \
             .order_by(('-' if is_descending else '') + 'total')
         return (queryset, True)
+
+    def render_amount(self, value):
+        return pretty_money(value)
+
+    def render_total(self, value):
+        return pretty_money(value)
 
 
 class AliasTable(tables.Table):

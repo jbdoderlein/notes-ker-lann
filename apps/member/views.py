@@ -49,10 +49,10 @@ class UserCreateView(CreateView):
     def form_valid(self, form):
         profile_form = ProfileForm(self.request.POST)
         if form.is_valid() and profile_form.is_valid():
-            user = form.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
+            user = form.save(commit=False)
+            user.profile = profile_form.save(commit=False)
+            user.save()
+            user.profile.save()
         return super().form_valid(form)
 
 
