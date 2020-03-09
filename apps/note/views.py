@@ -8,9 +8,11 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 
+from django_tables2 import SingleTableView
+
 from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
 from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
-
+from .tables import ButtonTable
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
     """
@@ -106,12 +108,12 @@ class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     form_class = TransactionTemplateForm
 
 
-class TransactionTemplateListView(LoginRequiredMixin, ListView):
+class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
     List TransactionsTemplates
     """
     model = TransactionTemplate
-    form_class = TransactionTemplateForm
+    table = ButtonTable
 
 
 class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):

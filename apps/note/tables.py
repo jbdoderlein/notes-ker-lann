@@ -54,3 +54,14 @@ class AliasTable(tables.Table):
                                    'td': {'class': 'col-sm-2'},
                                    'a': {'class': 'btn btn-danger'}},
                                text='delete', accessor='pk')
+
+class ButtonTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class':
+                'table table condensed table-striped table-hover'
+        }
+        model = TransactionTemplate
+
+    def render_amount(self, value):
+        return pretty_money(value)
