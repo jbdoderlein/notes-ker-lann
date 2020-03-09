@@ -6,14 +6,5 @@
             "domain": "localhost",
             "name": "La Note Kfet \ud83c\udf7b"
         }
-    },
-    {
-        "model": "cas_server.servicepattern",
-        "pk": 1,
-        "fields": {
-            "pos": 1,
-            "pattern": ".*",
-            "name": "REPLACEME"
-        }
     }
 ]
