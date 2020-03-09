@@ -42,7 +42,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
 ***Modifier le fichier pour être en accord avec le reste de votre config***
 
-    On utilise uwsgi et Nginx pour gérer le coté serveu :
+    On utilise uwsgi et Nginx pour gérer le coté serveur :
 
         $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
 
@@ -102,7 +102,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         DJANGO_APP_STAGE='prod'
         DJANGO_DB_PASSWORD='le_mot_de_passe_de_la_bdd'
         DJANGO_SECRET_KEY='une_secret_key_longue_et_compliquee'
-	ALLOWED_HOSTS='le_ndd_de_votre_instance'
+        ALLOWED_HOSTS='le_ndd_de_votre_instance'
     
 
 6. Variable d'environnement et Migrations
