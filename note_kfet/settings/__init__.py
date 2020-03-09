@@ -73,7 +73,11 @@ if "cas" in INSTALLED_APPS:
         'cas_explained',
     ]
     AUTHENTICATION_BACKENDS += ('cas.backends.CASBackend',)
-    
+
+
+if "logs" in INSTALLED_APPS:
+    MIDDLEWARE += ('logs.middlewares.LogsMiddleware',)
+
 if "debug_toolbar" in INSTALLED_APPS:
     MIDDLEWARE.insert(1,"debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = [ '127.0.0.1']
