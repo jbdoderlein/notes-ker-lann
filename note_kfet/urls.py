@@ -37,8 +37,8 @@ if "cas" in settings.INSTALLED_APPS:
     from cas import views as cas_views
     urlpatterns += [
         # Include CAS Client routers
-        path('accounts/login/', cas_views.login, name='login'),
-        path('accounts/logout/', cas_views.logout, name='logout'),
+        path('accounts/login/cas/', cas_views.login, name='cas_login'),
+        path('accounts/logout/cas/', cas_views.logout, name='cas_logout'),
        
     ]
 if "debug_toolbar" in settings.INSTALLED_APPS:
