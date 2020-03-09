@@ -108,7 +108,7 @@ class ConsoForm(forms.ModelForm):
         self.instance.destination = button.destination
         self.instance.amount = button.amount
         self.instance.reason = '{} ({})'.format(button.name, button.category)
-        self.instance.name = button.name
+        self.instance.template = button
         self.instance.category = button.category
         super().save(commit)
 
