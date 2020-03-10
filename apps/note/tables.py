@@ -6,7 +6,7 @@ from django.db.models import F
 from django_tables2.utils import A
 
 from .models.notes import Alias
-from .models.transactions import Transaction, TransactionTemplate
+from .models.transactions import Transaction
 from .templatetags.pretty_money import pretty_money
 
 
