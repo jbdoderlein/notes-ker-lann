@@ -113,7 +113,7 @@ class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     List TransactionsTemplates
     """
     model = TransactionTemplate
-    table = ButtonTable
+    table_class = ButtonTable
 
 
 class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
