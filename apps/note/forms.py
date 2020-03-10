@@ -6,7 +6,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from .models import Alias
-from .models import Transaction, TransactionTemplate, TemplateTransaction
+from .models import Transaction, TransactionTemplate
 
 
 class AliasForm(forms.ModelForm):
@@ -91,36 +91,6 @@ class TransactionForm(forms.ModelForm):
                     },
                 ),
             'destination':
-                autocomplete.ModelSelect2(
-                    url='note:note_autocomplete',
-                    attrs={
-                        'data-placeholder': 'Note ...',
-                        'data-minimum-input-length': 1,
-                    },
-                ),
-        }
-
-
-class ConsoForm(forms.ModelForm):
-    def save(self, commit=True):
-        button: TransactionTemplate = TransactionTemplate.objects.filter(
-            name=self.data['button']).get()
-        self.instance.destination = button.destination
-        self.instance.amount = button.amount
-        self.instance.reason = '{} ({})'.format(button.name, button.category)
-        self.instance.template = button
-        self.instance.category = button.category
-        super().save(commit)
-
-    class Meta:
-        model = TemplateTransaction
-        fields = ('source',)
-
-        # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
-        # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
-        # et récupère les aliases de note valides
-        widgets = {
-            'source':
                 autocomplete.ModelSelect2(
                     url='note:note_autocomplete',
                     attrs={
