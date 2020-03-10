@@ -6,75 +6,129 @@
 {% block contenttitle %}{% endblock %}
 
 {% block content %}
-    {# Regroup buttons under categories #}
-    {% regroup transaction_templates by category as categories %}
-
-    <form method="post" onsubmit="window.onbeforeunload=null">
-        {% csrf_token %}
-
-        <div class="row">
-            <div class="col-sm-5 mb-4">
-                {% if form.non_field_errors %}
-                    <p class="errornote">
-                        {% for error in form.non_field_errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </p>
-                {% endif %}
-                {% for field in form %}
-                    <div class="form-row{% if field.errors %} errors{% endif %}">
-                        {{ field.errors }}
-                        <div>
-                            {{ field.label_tag }}
-                            {% if field.is_readonly %}
-                                <div class="readonly">{{ field.contents }}</div>
-                            {% else %}
-                                {{ field }}
-                            {% endif %}
-                            {% if field.field.help_text %}
-                                <div class="help">{{ field.field.help_text|safe }}</div>
-                            {% endif %}
+    <div class="row mt-4">
+        <div class="col-sm-5 col-md-4">
+            <div class="row">
+                {# User details column #}
+                <div class="col-xl-5">
+                    <div class="card border-success shadow mb-4">
+                        <img src="https://perso.crans.org/erdnaxe/site-crans/img/logo.svg"
+                            alt="" class="img-fluid rounded mx-auto d-block">
+                        <div class="card-body text-center">
+                            Paquito (aka. PAC) : -230 €
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
 
-            <div class="col-sm-7">
-                <div class="card text-center shadow">
-                    {# Tabs for button categories #}
-                    <div class="card-header">
-                        <ul class="nav nav-tabs nav-fill card-header-tabs">
-                            {% for category in categories %}
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#{{ category.grouper|slugify }}">
-                                        {{ category.grouper }}
-                                    </a>
-                                </li>
-                            {% endfor %}
+                {# User selection column #}
+                <div class="col-xl-7">
+                    <div class="card border-success shadow mb-4">
+                        <div class="card-header">
+                            <p class="card-text font-weight-bold">
+                                Sélection des émitteurs
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
+                                Cras justo odio
+                                <span class="badge badge-dark badge-pill">14</span>
+                            </li>
+                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
+                                Dapibus ac facilisis in
+                                <span class="badge badge-dark badge-pill">1</span>
+                            </li>
                         </ul>
-                    </div>
-
-                    {# Tabs content #}
-                    <div class="card-body">
-                        <div class="tab-content">
-                            {% for category in categories %}
-                                <div class="tab-pane" id="{{ category.grouper|slugify }}">
-                                    <div class="d-inline-flex flex-wrap justify-content-center">
-                                        {% for button in category.list %}
-                                            <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                                    name="button" value="{{ button.name }}">
-                                                {{ button.name }} ({{ button.amount | pretty_money }})
-                                            </button>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
+                        <div class="card-body">
+                            TODO: reimplement select2 here in JS
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+
+        {# Buttons column #}
+        <div class="col-sm-7 col-md-8">
+            {# Show last used buttons #}
+            <div class="card shadow mb-4">
+                <div class="card-body text-nowrap" style="overflow:auto hidden">
+                    <p class="card-text text-muted font-weight-light font-italic">
+                        Les boutons les plus utilisés s'afficheront ici.
+                    </p>
+                </div>
+            </div>
+
+            {# Regroup buttons under categories #}
+            {% regroup transaction_templates by template_type as template_types %}
+
+            <div class="card border-primary text-center shadow mb-4">
+                {# Tabs for button categories #}
+                <div class="card-header">
+                    <ul class="nav nav-tabs nav-fill card-header-tabs">
+                        {% for template_type in template_types %}
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" data-toggle="tab" href="#{{ template_type.grouper|slugify }}">
+                                    {{ template_type.grouper }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {# Tabs content #}
+                <div class="card-body">
+                    <div class="tab-content">
+                        {% for template_type in template_types %}
+                            <div class="tab-pane" id="{{ template_type.grouper|slugify }}">
+                                <div class="d-inline-flex flex-wrap justify-content-center">
+                                    {% for button in template_type.list %}
+                                        <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                                name="button" value="{{ button.name }}">
+                                            {{ button.name }} ({{ button.amount | pretty_money }})
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {# Mode switch #}
+                <div class="card-footer border-primary">
+                    <a class="btn btn-sm btn-secondary float-left" href="{% url 'note:template_list' %}">
+                        <i class="fa fa-edit"></i> Éditer
+                    </a>
+                    <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-primary active">
+                            <input type="radio" name="options" id="option1" checked>
+                            Consomations simples
+                        </label>
+                        <label class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="options" id="option2">
+                            Consomations doubles
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <p class="card-text font-weight-bold">
+                Historique des transactions récentes
+            </p>
+        </div>
+        {% render_table table %}
+    </div>
+{% endblock %}
+
+{% block extracss %}
+    <style>
+        .select2-container{
+            max-width: 100%;
+            min-width: 100%;
+        }
+    </style>
 {% endblock %}
 
 {% block extrajavascript %}
