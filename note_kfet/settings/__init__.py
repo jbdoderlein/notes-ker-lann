@@ -79,5 +79,5 @@ if "logs" in INSTALLED_APPS:
     MIDDLEWARE += ('logs.middlewares.LogsMiddleware',)
 
 if "debug_toolbar" in INSTALLED_APPS:
-    MIDDLEWARE.insert(1,"debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = [ '127.0.0.1']
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ['127.0.0.1']
