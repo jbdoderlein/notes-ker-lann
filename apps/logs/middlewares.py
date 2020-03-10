@@ -13,11 +13,6 @@ _thread_locals = local()
 
 
 def _set_current_user_and_ip(user=None, ip=None):
-    """
-    Sets current user in local thread.
-    Can be used as a hook e.g. for shell jobs (when request object is not
-    available).
-    """
     setattr(_thread_locals, USER_ATTR_NAME, user)
     setattr(_thread_locals, IP_ATTR_NAME, ip)
 
@@ -38,6 +33,10 @@ def get_current_authenticated_user():
 
 
 class LogsMiddleware(object):
+    """
+    Ce middleware permet de récupérer l'utilisateur actif ainsi que son adresse IP à chaque connexion.
+    """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -49,7 +48,7 @@ class LogsMiddleware(object):
             ip = request.META.get('REMOTE_ADDR')
 
         _set_current_user_and_ip(user, ip)
-
         response = self.get_response(request)
+        _set_current_user_and_ip(None, None)
 
         return response
