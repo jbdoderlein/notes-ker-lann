@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.contenttypes.models import ContentType
-from django.core import serializers
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
+from rest_framework.renderers import JSONRenderer
+from rest_framework.serializers import ModelSerializer
 import getpass
 
 from note.models import NoteUser, Alias
@@ -19,11 +20,10 @@ EXCLUDED = [
     'cas_server.user',
     'cas_server.userattributes',
     'contenttypes.contenttype',
-    'logs.changelog',
+    'logs.changelog', # Never remove this line
     'migrations.migration',
-    'note.noteuser',
-    'note.noteclub',
-    'note.notespecial',
+    'note.note' # We only store the subclasses
+    'note.transaction',
     'sessions.session',
 ]
 
@@ -63,7 +63,7 @@ def save_object(sender, instance, **kwargs):
         # IMPORTANT : l'utilisateur dans la VM doit être un des alias note du respo info
         ip = "127.0.0.1"
         username = Alias.normalize(getpass.getuser())
-        note = NoteUser.objects.filter(alias__normalized_name="^" + username + "$")
+        note = NoteUser.objects.filter(alias__normalized_name=username)
         if not note.exists():
             print("WARNING: A model attempted to be saved in the DB, but the actor is unknown: " + username)
         else:
@@ -74,9 +74,14 @@ def save_object(sender, instance, **kwargs):
         if instance.last_login != previous.last_login:
             return
 
-    # Les modèles sont sauvegardés au format JSON
-    previous_json = serializers.serialize('json', [previous, ])[1:-1] if previous else None
-    instance_json = serializers.serialize('json', [instance, ])[1:-1]
+    # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
+    class CustomSerializer(ModelSerializer):
+        class Meta:
+            model = instance.__class__
+            fields = '__all__'
+
+    previous_json = JSONRenderer().render(CustomSerializer(previous).data)
+    instance_json = JSONRenderer().render(CustomSerializer(instance).data)
 
     if previous_json == instance_json:
         # Pas de log s'il n'y a pas de modification
@@ -104,7 +109,14 @@ def delete_object(sender, instance, **kwargs):
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
     user, ip = get_current_authenticated_user(), get_current_ip()
 
-    instance_json = serializers.serialize('json', [instance, ])[1:-1]
+    # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
+    class CustomSerializer(ModelSerializer):
+        class Meta:
+            model = instance.__class__
+            fields = '__all__'
+
+    instance_json = JSONRenderer().render(CustomSerializer(instance).data)
+
     Changelog.objects.create(user=user,
                              ip=ip,
                              model=ContentType.objects.get_for_model(instance),
