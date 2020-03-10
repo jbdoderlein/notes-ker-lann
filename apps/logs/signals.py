@@ -63,7 +63,7 @@ def save_object(sender, instance, **kwargs):
         # IMPORTANT : l'utilisateur dans la VM doit être un des alias note du respo info
         ip = "127.0.0.1"
         username = Alias.normalize(getpass.getuser())
-        note = NoteUser.objects.filter(alias__normalized_name__regex="^" + username + "$")
+        note = NoteUser.objects.filter(alias__normalized_name="^" + username + "$")
         if not note.exists():
             print("WARNING: A model attempted to be saved in the DB, but the actor is unknown: " + username)
         else:
