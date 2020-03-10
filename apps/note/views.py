@@ -67,7 +67,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q))) \
+            qs = qs.filter(Q(name__regex="^" + self.q) | Q(normalized_name__regex="^" + Alias.normalize(self.q))) \
                 .order_by('normalized_name').distinct()
 
         # Filtrage par type de note (user, club, special)

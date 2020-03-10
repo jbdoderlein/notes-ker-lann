@@ -300,7 +300,7 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         qs = User.objects.all()
 
         if self.q:
-            qs = qs.filter(username__regex=self.q)
+            qs = qs.filter(username__regex="^" + self.q)
 
         return qs
 
