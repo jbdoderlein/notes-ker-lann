@@ -3,6 +3,7 @@
 
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +11,7 @@ from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
 
 from .forms import TransactionForm, TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, Alias
+from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
 from .tables import HistoryTable
 
 
@@ -142,6 +143,7 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
         context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
             .order_by('category')
         context['title'] = _("Consumptions")
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(TemplateTransaction).pk
 
         # select2 compatibility
         context['no_cache'] = True

@@ -15,7 +15,9 @@
                         <img src="https://perso.crans.org/erdnaxe/site-crans/img/logo.svg"
                             alt="" class="img-fluid rounded mx-auto d-block">
                         <div class="card-body text-center">
-                            Paquito (aka. PAC) : -230 €
+                            <span id="user_note">
+                                Paquito (aka. PAC) : -230 €
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -82,7 +84,7 @@
                                 <div class="d-inline-flex flex-wrap justify-content-center">
                                     {% for button in category.list %}
                                         <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                                name="button" value="{{ button.name }}">
+                                                id="button{{ button.id }}" name="button" value="{{ button.name }}">
                                             {{ button.name }} ({{ button.amount | pretty_money }})
                                         </button>
                                     {% endfor %}
@@ -146,6 +148,46 @@
             $(document.body).on("click", "a[data-toggle='tab']", function(event) {
                 location.hash = this.getAttribute("href");
             });
+
+            {% for button in transaction_templates %}
+                $("#button{{ button.id }}").click(function() {
+                $.post("/api/note/transaction/transaction/",
+                    {
+                        "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        "quantity": 1,
+                        "amount": {{ button.amount }},
+                        "reason": "{{ button.name }} ({{ button.category.name }})",
+                        "valid": true,
+                        "polymorphic_ctype": {{ polymorphic_ctype }},
+                        "resourcetype": "TemplateTransaction",
+                        "source": 6,
+                        "destination": 7,
+                        "category": {{ button.category.id }},
+                        "template": {{ button.id }}
+                    },
+                    function(data, status) {
+                        reloadWithTurbolinks();
+                    });
+                });
+            {% endfor %}
         });
+
+        var reloadWithTurbolinks = (function () {
+            var scrollPosition;
+
+            function reload () {
+                scrollPosition = [window.scrollX, window.scrollY];
+                Turbolinks.visit(window.location.toString(), { action: 'replace' })
+            }
+
+            document.addEventListener('turbolinks:load', function () {
+                if (scrollPosition) {
+                    window.scrollTo.apply(window, scrollPosition);
+                    scrollPosition = null;
+                }
+            });
+
+            return reload;
+        })();
     </script>
 {% endblock %}
