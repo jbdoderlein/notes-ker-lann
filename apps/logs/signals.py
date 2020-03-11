@@ -69,6 +69,7 @@ def save_object(sender, instance, **kwargs):
         else:
             user = note.get().user
 
+    # noinspection PyProtectedMember
     if user is not None and instance._meta.label_lower == "auth.user" and previous:
         # On n'enregistre pas les connexions
         if instance.last_login != previous.last_login:
@@ -80,8 +81,8 @@ def save_object(sender, instance, **kwargs):
             model = instance.__class__
             fields = '__all__'
 
-    previous_json = JSONRenderer().render(CustomSerializer(previous).data)
-    instance_json = JSONRenderer().render(CustomSerializer(instance).data)
+    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8")
+    instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
 
     if previous_json == instance_json:
         # Pas de log s'il n'y a pas de modification
@@ -115,7 +116,7 @@ def delete_object(sender, instance, **kwargs):
             model = instance.__class__
             fields = '__all__'
 
-    instance_json = JSONRenderer().render(CustomSerializer(instance).data)
+    instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
 
     Changelog.objects.create(user=user,
                              ip=ip,

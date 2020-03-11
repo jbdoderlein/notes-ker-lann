@@ -7,6 +7,7 @@ from rest_framework import routers, serializers, viewsets
 from activity.api.urls import register_activity_urls
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
+from logs.api.urls import register_logs_urls
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,6 +42,7 @@ router.register('user', UserViewSet)
 register_members_urls(router, 'members')
 register_activity_urls(router, 'activity')
 register_note_urls(router, 'note')
+register_logs_urls(router, 'logs')
 
 app_name = 'api'
 
