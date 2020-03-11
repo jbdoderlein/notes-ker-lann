@@ -209,6 +209,10 @@ class Alias(models.Model):
     class Meta:
         verbose_name = _("alias")
         verbose_name_plural = _("aliases")
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['normalized_name']),
+        ]
 
     def __str__(self):
         return self.name
