@@ -3,6 +3,7 @@
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 
 from .serializers import ChangelogSerializer
 from ..models import Changelog
@@ -16,5 +17,7 @@ class ChangelogViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Changelog.objects.all()
     serializer_class = ChangelogSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['model', 'action', "instance_pk", 'user', 'ip',]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['model', 'action', "instance_pk", 'user', 'ip', ]
+    ordering_fields = ['timestamp', ]
+    ordering = ['-timestamp', ]

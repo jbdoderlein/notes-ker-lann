@@ -27,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
             'user_permissions',
         )
 
+
 class ContentTypeSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Users.
