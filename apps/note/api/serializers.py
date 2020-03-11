@@ -5,7 +5,8 @@ from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
+    TemplateTransaction
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -78,6 +79,17 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
     }
 
 
+class TemplateCategorySerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Transaction templates.
+    The djangorestframework plugin will analyse the model `TemplateCategory` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = TemplateCategory
+        fields = '__all__'
+
+
 class TransactionTemplateSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Transaction templates.
@@ -100,6 +112,17 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TemplateTransactionSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Transactions.
+    The djangorestframework plugin will analyse the model `TemplateTransaction` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = TemplateTransaction
+        fields = '__all__'
+
+
 class MembershipTransactionSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Membership transactions.
@@ -109,3 +132,11 @@ class MembershipTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MembershipTransaction
         fields = '__all__'
+
+
+class TransactionPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Transaction: TransactionSerializer,
+        TemplateTransaction: TemplateTransactionSerializer,
+        MembershipTransaction: MembershipTransactionSerializer,
+    }

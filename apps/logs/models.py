@@ -56,6 +56,12 @@ class Changelog(models.Model):
         max_length=16,
         null=False,
         blank=False,
+        choices=[
+            ('create', _('create')),
+            ('edit', _('edit')),
+            ('delete', _('delete')),
+        ],
+        default='edit',
         verbose_name=_('action'),
     )
 

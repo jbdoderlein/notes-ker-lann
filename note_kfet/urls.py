@@ -20,8 +20,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('logs/', include('logs.urls')),
-    path('api/', include('api.urls')),  
+    path('api/', include('api.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -37,8 +36,8 @@ if "cas" in settings.INSTALLED_APPS:
     from cas import views as cas_views
     urlpatterns += [
         # Include CAS Client routers
-        path('accounts/login/', cas_views.login, name='login'),
-        path('accounts/logout/', cas_views.logout, name='logout'),
+        path('accounts/login/cas/', cas_views.login, name='cas_login'),
+        path('accounts/logout/cas/', cas_views.logout, name='cas_logout'),
        
     ]
 if "debug_toolbar" in settings.INSTALLED_APPS:

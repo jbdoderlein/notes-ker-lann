@@ -1,4 +1,4 @@
-{% load static i18n pretty_money static %}
+{% load static i18n pretty_money static getenv %}
 {% comment %}
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
@@ -76,6 +76,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     <a class="nav-link" href="#"><i class="fa fa-calendar"></i> {% trans 'Activities' %}</a>
                 </li>
                 <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'note:template_list' %}"><i class="fa fa-coffee"></i> {% trans 'Buttons' %}</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fa fa-exchange"></i>{% trans 'Transfer' %} </a>
                 </li>
             </ul>
@@ -125,7 +128,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                       class="form-inline">
                     <span class="text-muted mr-1">
                         NoteKfet2020 &mdash;
-                        <a href="mailto:tresorie.bde@lists.crans.org"
+                        <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
                            class="text-muted">Nous contacter</a> &mdash;
                     </span>
                     {% csrf_token %}

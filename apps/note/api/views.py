@@ -2,13 +2,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
-    TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
+    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -69,8 +71,8 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(alias__name__regex=alias)
-            | Q(alias__normalized_name__regex=alias.lower()))
+            Q(alias__name__regex="^" + alias)
+            | Q(alias__normalized_name__regex="^" + alias.lower()))
 
         note_type = self.request.query_params.get("type", None)
         if note_type:
@@ -107,7 +109,7 @@ class AliasViewSet(viewsets.ModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(name__regex=alias) | Q(normalized_name__regex=alias.lower()))
+            Q(name__regex="^" + alias) | Q(normalized_name__regex="^" + alias.lower()))
 
         note_id = self.request.query_params.get("note", None)
         if note_id:
@@ -131,6 +133,18 @@ class AliasViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class TemplateCategoryViewSet(viewsets.ModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
+    then render it on /api/note/transaction/category/
+    """
+    queryset = TemplateCategory.objects.all()
+    serializer_class = TemplateCategorySerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$name', ]
+
+
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     REST API View set.
@@ -139,6 +153,8 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     queryset = TransactionTemplate.objects.all()
     serializer_class = TransactionTemplateSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'amount', 'display', 'category', ]
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -148,14 +164,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
     then render it on /api/note/transaction/transaction/
     """
     queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-
-
-class MembershipTransactionViewSet(viewsets.ModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `MembershipTransaction` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/transaction/membership/
-    """
-    queryset = MembershipTransaction.objects.all()
-    serializer_class = MembershipTransactionSerializer
+    serializer_class = TransactionPolymorphicSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$reason', ]

@@ -17,12 +17,24 @@ import os
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 from . import *
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.getenv("DJANGO_DEV_STORE_METHOD", "sqllite") == "postgresql":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DJANGO_DB_NAME', 'note_db'),
+            'USER': os.environ.get('DJANGO_DB_USER', 'note'),
+            'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS'),
+            'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DJANGO_DB_PORT', ''),  # Use default port
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Break it, fix it!
 DEBUG = True
@@ -39,7 +51,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'change_me'
 # EMAIL_HOST_PASSWORD = 'change_me'
 
-SERVER_EMAIL = 'no-reply@example.org'
+SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN", "example.com")
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False

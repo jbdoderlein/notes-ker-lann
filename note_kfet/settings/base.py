@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'polymorphic',
     'crispy_forms',
     'django_tables2',
+    'cas_server',
+    'cas',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -135,11 +137,14 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         # TODO Maybe replace it with our custom permissions system
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
 }
 
 # Internationalization
