@@ -153,6 +153,7 @@ class Membership(models.Model):
     class Meta:
         verbose_name = _('membership')
         verbose_name_plural = _('memberships')
+        indexes = [ models.Index(fields=['user']) ]
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def save_user_profile(instance, created, **_kwargs):
