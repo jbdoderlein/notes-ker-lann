@@ -20,8 +20,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('logs/', include('logs.urls')),
-    path('api/', include('api.urls')),  
+    path('api/', include('api.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

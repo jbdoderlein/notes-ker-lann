@@ -3,7 +3,9 @@
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import routers, serializers, viewsets
+from rest_framework.filters import SearchFilter
 from activity.api.urls import register_activity_urls
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
@@ -33,6 +35,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active', ]
+    search_fields = ['$username', '$first_name', '$last_name', ]
 
 
 # Routers provide an easy way of automatically determining the URL conf.

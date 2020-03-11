@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
 from ..models import Profile, Club, Role, Membership
@@ -25,6 +26,8 @@ class ClubViewSet(viewsets.ModelViewSet):
     """
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$name', ]
 
 
 class RoleViewSet(viewsets.ModelViewSet):
@@ -35,6 +38,8 @@ class RoleViewSet(viewsets.ModelViewSet):
     """
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$name', ]
 
 
 class MembershipViewSet(viewsets.ModelViewSet):

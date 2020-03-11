@@ -2,13 +2,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
-    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
+    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory
+from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -139,6 +141,8 @@ class TemplateCategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = TemplateCategory.objects.all()
     serializer_class = TemplateCategorySerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$name', ]
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
@@ -149,6 +153,8 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     queryset = TransactionTemplate.objects.all()
     serializer_class = TransactionTemplateSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'amount', 'display', 'category', ]
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -158,14 +164,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
     then render it on /api/note/transaction/transaction/
     """
     queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-
-
-class MembershipTransactionViewSet(viewsets.ModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `MembershipTransaction` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/transaction/membership/
-    """
-    queryset = MembershipTransaction.objects.all()
-    serializer_class = MembershipTransactionSerializer
+    serializer_class = TransactionPolymorphicSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$reason', ]

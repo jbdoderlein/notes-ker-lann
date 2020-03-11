@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .views import NotePolymorphicViewSet, AliasViewSet, \
-    TemplateCategoryViewSet, TransactionViewSet, TransactionTemplateViewSet, MembershipTransactionViewSet
+    TemplateCategoryViewSet, TransactionViewSet, TransactionTemplateViewSet
 
 
 def register_note_urls(router, path):
@@ -15,4 +15,3 @@ def register_note_urls(router, path):
     router.register(path + '/transaction/category', TemplateCategoryViewSet)
     router.register(path + '/transaction/transaction', TransactionViewSet)
     router.register(path + '/transaction/template', TransactionTemplateViewSet)
-    router.register(path + '/transaction/membership', MembershipTransactionViewSet)

@@ -81,7 +81,7 @@ def save_object(sender, instance, **kwargs):
             model = instance.__class__
             fields = '__all__'
 
-    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8")
+    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else None
     instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
 
     if previous_json == instance_json:
