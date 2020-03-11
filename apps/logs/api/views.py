@@ -8,7 +8,7 @@ from .serializers import ChangelogSerializer
 from ..models import Changelog
 
 
-class ChangelogViewSet(viewsets.ModelViewSet):
+class ChangelogViewSet(viewsets.ReadOnlyModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Changelog` objects, serialize it to JSON with the given serializer,
