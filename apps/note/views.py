@@ -136,7 +136,7 @@ class ConsoView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
             .order_by('category')
-        context['title'] = _("Consommations")
+        context['title'] = _("Consumptions")
 
         # select2 compatibility
         context['no_cache'] = True

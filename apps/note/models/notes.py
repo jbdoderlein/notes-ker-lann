@@ -231,7 +231,7 @@ class Alias(models.Model):
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
-                raise ValidationError(_('An alias with a similar name already exists: {} '.format(sim_alias)),
+                raise ValidationError(_('An alias with a similar name already exists: {} ').format(sim_alias),
                                       code="same_alias"
                                       )
         except Alias.DoesNotExist:
