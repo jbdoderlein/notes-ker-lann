@@ -3,6 +3,7 @@
 
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import routers, serializers, viewsets
 from rest_framework.filters import SearchFilter
@@ -26,6 +27,16 @@ class UserSerializer(serializers.ModelSerializer):
             'user_permissions',
         )
 
+class ContentTypeSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Users.
+    The djangorestframework plugin will analyse the model `User` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = ContentType
+        fields = '__all__'
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -40,9 +51,20 @@ class UserViewSet(viewsets.ModelViewSet):
     search_fields = ['$username', '$first_name', '$last_name', ]
 
 
+class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `User` objects, serialize it to JSON with the given serializer,
+    then render it on /api/users/
+    """
+    queryset = ContentType.objects.all()
+    serializer_class = ContentTypeSerializer
+
+
 # Routers provide an easy way of automatically determining the URL conf.
 # Register each app API router and user viewset
 router = routers.DefaultRouter()
+router.register('models', ContentTypeViewSet)
 router.register('user', UserViewSet)
 register_members_urls(router, 'members')
 register_activity_urls(router, 'activity')
