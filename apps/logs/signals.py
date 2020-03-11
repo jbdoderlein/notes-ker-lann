@@ -67,9 +67,10 @@ def save_object(sender, instance, **kwargs):
         ip = "127.0.0.1"
         username = Alias.normalize(getpass.getuser())
         note = NoteUser.objects.filter(alias__normalized_name=username)
-        if not note.exists():
-            print("WARNING: A model attempted to be saved in the DB, but the actor is unknown: " + username)
-        else:
+        # if not note.exists():
+        #     print("WARNING: A model attempted to be saved in the DB, but the actor is unknown: " + username)
+        # else:
+        if note.exists():
             user = note.get().user
 
     # noinspection PyProtectedMember
@@ -112,6 +113,19 @@ def delete_object(sender, instance, **kwargs):
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
     user, ip = get_current_authenticated_user(), get_current_ip()
+
+    if user is None:
+        # Si la modification n'a pas été faite via le client Web, on suppose que c'est du à `manage.py`
+        # On récupère alors l'utilisateur·trice connecté·e à la VM, et on récupère la note associée
+        # IMPORTANT : l'utilisateur dans la VM doit être un des alias note du respo info
+        ip = "127.0.0.1"
+        username = Alias.normalize(getpass.getuser())
+        note = NoteUser.objects.filter(alias__normalized_name=username)
+        # if not note.exists():
+        #     print("WARNING: A model attempted to be saved in the DB, but the actor is unknown: " + username)
+        # else:
+        if note.exists():
+            user = note.get().user
 
     # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
     class CustomSerializer(ModelSerializer):
