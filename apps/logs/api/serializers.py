@@ -15,3 +15,5 @@ class ChangelogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Changelog
         fields = '__all__'
+        # noinspection PyProtectedMember
+        read_only_fields = [f.name for f in model._meta.get_fields()] # Changelogs are read-only protected
