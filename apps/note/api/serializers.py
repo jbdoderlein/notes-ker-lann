@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -76,6 +76,17 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteClub: NoteClubSerializer,
         NoteSpecial: NoteSpecialSerializer
     }
+
+
+class TemplateCategorySerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Transaction templates.
+    The djangorestframework plugin will analyse the model `TemplateCategory` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = TemplateCategory
+        fields = '__all__'
 
 
 class TransactionTemplateSerializer(serializers.ModelSerializer):

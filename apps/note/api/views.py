@@ -6,9 +6,9 @@ from rest_framework import viewsets
 
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
-    TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
+    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionSerializer, MembershipTransactionSerializer
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -129,6 +129,16 @@ class AliasViewSet(viewsets.ModelViewSet):
                 queryset = queryset.none()
 
         return queryset
+
+
+class TemplateCategoryViewSet(viewsets.ModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
+    then render it on /api/note/transaction/category/
+    """
+    queryset = TemplateCategory.objects.all()
+    serializer_class = TemplateCategorySerializer
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
