@@ -39,7 +39,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'change_me'
 # EMAIL_HOST_PASSWORD = 'change_me'
 
-SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN")
+SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN", "example.com")
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False
@@ -51,4 +51,4 @@ X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_AGE = 60 * 60 * 3
 
 # CAS Client settings
-CAS_SERVER_URL = "https://" + os.getenv("NOTE_URL") + "/cas/"
+CAS_SERVER_URL = "https://" + os.getenv("NOTE_URL", "note.example.com") + "/cas/"

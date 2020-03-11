@@ -17,6 +17,9 @@ from .models import Changelog
 EXCLUDED = [
     'admin.logentry',
     'authtoken.token',
+    'cas_server.proxygrantingticket',
+    'cas_server.proxyticket',
+    'cas_server.serviceticket',
     'cas_server.user',
     'cas_server.userattributes',
     'contenttypes.contenttype',
