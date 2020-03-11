@@ -46,6 +46,7 @@ class Profile(models.Model):
     class Meta:
         verbose_name = _('user profile')
         verbose_name_plural = _('user profile')
+        indexes = [ models.Index(fields=['user']) ]
 
     def get_absolute_url(self):
         return reverse('user_detail', args=(self.pk,))
@@ -152,6 +153,7 @@ class Membership(models.Model):
     class Meta:
         verbose_name = _('membership')
         verbose_name_plural = _('memberships')
+        indexes = [ models.Index(fields=['user']) ]
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def save_user_profile(instance, created, **_kwargs):

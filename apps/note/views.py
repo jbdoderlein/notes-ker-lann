@@ -7,9 +7,11 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
+from django_tables2 import SingleTableView
 
-from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
-from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
+from .forms import TransactionForm, TransactionTemplateForm
+from .models import Transaction, TransactionTemplate, Alias
+from .tables import HistoryTable
 
 
 class TransactionCreate(LoginRequiredMixin, CreateView):
@@ -121,13 +123,16 @@ class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TransactionTemplateForm
 
 
-class ConsoView(LoginRequiredMixin, CreateView):
+class ConsoView(LoginRequiredMixin, SingleTableView):
     """
     Consume
     """
-    model = TemplateTransaction
+    model = Transaction
     template_name = "note/conso_form.html"
-    form_class = ConsoForm
+
+    # Transaction history table
+    table_class = HistoryTable
+    table_pagination = {"per_page": 10}
 
     def get_context_data(self, **kwargs):
         """
@@ -142,9 +147,3 @@ class ConsoView(LoginRequiredMixin, CreateView):
         context['no_cache'] = True
 
         return context
-
-    def get_success_url(self):
-        """
-        When clicking a button, reload the same page
-        """
-        return reverse('note:consos')
