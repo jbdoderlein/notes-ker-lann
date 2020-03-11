@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.signals import pre_save, post_save, post_delete
-from django.dispatch import receiver
 from rest_framework.renderers import JSONRenderer
 from rest_framework.serializers import ModelSerializer
+
 import getpass
 
 from note.models import NoteUser, Alias
+
 from .middlewares import get_current_authenticated_user, get_current_ip
 from .models import Changelog
 
@@ -23,15 +23,14 @@ EXCLUDED = [
     'cas_server.user',
     'cas_server.userattributes',
     'contenttypes.contenttype',
-    'logs.changelog', # Never remove this line
+    'logs.changelog',  # Never remove this line
     'migrations.migration',
-    'note.note' # We only store the subclasses
+    'note.note'  # We only store the subclasses
     'note.transaction',
     'sessions.session',
 ]
 
 
-@receiver(pre_save)
 def pre_save_object(sender, instance, **kwargs):
     """
     Avant la sauvegarde d'un modèle, on récupère l'ancienne instance actuellement en base de données
@@ -44,7 +43,6 @@ def pre_save_object(sender, instance, **kwargs):
         instance._previous = None
 
 
-@receiver(post_save)
 def save_object(sender, instance, **kwargs):
     """
     Dès qu'un modèle est sauvegardé, une entrée dans la table `Changelog` est ajouté dans la base de données
@@ -102,7 +100,6 @@ def save_object(sender, instance, **kwargs):
                              ).save()
 
 
-@receiver(post_delete)
 def delete_object(sender, instance, **kwargs):
     """
     Dès qu'un modèle est supprimé, une entrée dans la table `Changelog` est ajouté dans la base de données
