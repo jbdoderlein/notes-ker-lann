@@ -30,18 +30,15 @@
                                 Sélection des émitteurs
                             </p>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-                                Cras justo odio
-                                <span class="badge badge-dark badge-pill">14</span>
-                            </li>
-                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-                                Dapibus ac facilisis in
-                                <span class="badge badge-dark badge-pill">1</span>
-                            </li>
+                        <ul class="list-group list-group-flush" id="note_list">
                         </ul>
                         <div class="card-body">
-                            TODO: reimplement select2 here in JS
+                            <select name="source" data-placeholder="Note ..." data-minimum-input-length="1"
+                                    required id="note" data-autocomplete-light-language="fr"
+                                    data-autocomplete-light-url="/note/note-autocomplete/"
+                                    data-autocomplete-light-function="select2">
+                                <option value="" selected>---------</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -83,10 +80,12 @@
                             <div class="tab-pane" id="{{ category.grouper|slugify }}">
                                 <div class="d-inline-flex flex-wrap justify-content-center">
                                     {% for button in category.list %}
+                                        {% if button.display %}
                                         <button class="btn btn-outline-dark rounded-0 flex-fill"
                                                 id="button{{ button.id }}" name="button" value="{{ button.name }}">
                                             {{ button.name }} ({{ button.amount | pretty_money }})
                                         </button>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
@@ -131,10 +130,23 @@
             min-width: 100%;
         }
     </style>
+
+    <link href="/static/vendor/select2/dist/css/select2.css" type="text/css" media="screen" rel="stylesheet">
+    <link href="/static/admin/css/autocomplete.css" type="text/css" media="screen" rel="stylesheet">
+    <link href="/static/autocomplete_light/select2.css" type="text/css" media="screen" rel="stylesheet">
+    <script type="text/javascript" src="/static/autocomplete_light/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/vendor/select2/dist/js/select2.full.js"></script>
+    <script type="text/javascript" src="/static/vendor/select2/dist/js/i18n/fr.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/autocomplete.init.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/forward.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/select2.js"></script>
+    <script type="text/javascript" src="/static/autocomplete_light/jquery.post-setup.js"></script>
 {% endblock %}
 
 {% block extrajavascript %}
     <script type="text/javascript">
+        var consos = [];
+
         $(document).ready(function() {
             // If hash of a category in the URL, then select this category
             // else select the first one
@@ -149,26 +161,45 @@
                 location.hash = this.getAttribute("href");
             });
 
+            $("#note").change(function(obj) {
+                let name = $("#note option:selected").text();
+                note_obj = $("#note");
+                note = note_obj.val();
+                note_obj.val(0);
+                note_obj.text("");
+                consos = consos.concat([[name, note]]);
+                note_list = $("#note_list");
+                note_list.html(note_list.html() +
+                    "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\">\n" +
+                    "                                " + name + "\n" +
+                    "                                <span class=\"badge badge-dark badge-pill\">1</span>\n" +
+                    "                            </li>");
+            });
+
             {% for button in transaction_templates %}
+                {% if button.display %}
                 $("#button{{ button.id }}").click(function() {
-                $.post("/api/note/transaction/transaction/",
-                    {
-                        "csrfmiddlewaretoken": "{{ csrf_token }}",
-                        "quantity": 1,
-                        "amount": {{ button.amount }},
-                        "reason": "{{ button.name }} ({{ button.category.name }})",
-                        "valid": true,
-                        "polymorphic_ctype": {{ polymorphic_ctype }},
-                        "resourcetype": "TemplateTransaction",
-                        "source": 6,
-                        "destination": 7,
-                        "category": {{ button.category.id }},
-                        "template": {{ button.id }}
-                    },
-                    function(data, status) {
-                        reloadWithTurbolinks();
+                    consos.forEach(function(conso) {
+                        console.log(conso);
+                        $.post("/api/note/transaction/transaction/",
+                        {
+                            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                            "quantity": 1,
+                            "amount": {{ button.amount }},
+                            "reason": "{{ button.name }} ({{ button.category.name }})",
+                            "valid": true,
+                            "polymorphic_ctype": {{ polymorphic_ctype }},
+                            "resourcetype": "TemplateTransaction",
+                            "source": conso[1],
+                            "destination": {{ button.destination.pk }},
+                            "category": {{ button.category.id }},
+                            "template": {{ button.id }}
+                        }, reloadWithTurbolinks);
                     });
+
+                    reloadWithTurbolinks();
                 });
+                {% endif %}
             {% endfor %}
         });
 

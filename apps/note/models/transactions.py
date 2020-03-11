@@ -132,6 +132,7 @@ class Transaction(PolymorphicModel):
 
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transfered
+            super().save(*args, **kwargs)
             return
 
         created = self.pk is None
