@@ -119,6 +119,11 @@ class Transaction(PolymorphicModel):
     class Meta:
         verbose_name = _("transaction")
         verbose_name_plural = _("transactions")
+        indexes = [
+            models.Index(fields=['created_at']),
+            models.Index(fields=['source']),
+            models.Index(fields=['destination']),
+        ]
 
     def save(self, *args, **kwargs):
         """
