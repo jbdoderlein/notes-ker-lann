@@ -133,10 +133,14 @@ Il est possible de travailler sur une instance Docker.
           build: /chemin/vers/nk20
           volumes:
             - /chemin/vers/nk20:/code/
+          environment:
+            MAILING_LIST_DOMAIN: lists.example.com
+            NOTE_URL: nk20.example.com
+            DOMAIN: example.com
           restart: always
           labels:
-            - traefik.domain=ndd.exemple.com
-            - traefik.frontend.rule=Host:ndd.exemple.com
+            - traefik.domain=ndd.example.com
+            - traefik.frontend.rule=Host:ndd.example.com
             - traefik.port=8000
 
 3. Enjoy :

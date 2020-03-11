@@ -1,4 +1,4 @@
-{% load static i18n pretty_money static %}
+{% load static i18n pretty_money static getenv %}
 {% comment %}
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
@@ -128,7 +128,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                       class="form-inline">
                     <span class="text-muted mr-1">
                         NoteKfet2020 &mdash;
-                        <a href="mailto:tresorie.bde@lists.crans.org"
+                        <a href="mailto:tresorie.bde@{{ "MAILING_LIST_DOMAIN" | getenv }}"
                            class="text-muted">Nous contacter</a> &mdash;
                     </span>
                     {% csrf_token %}

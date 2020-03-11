@@ -1,8 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django import template
-
 
 def pretty_money(value):
     if value % 100 == 0:
@@ -16,7 +14,3 @@ def pretty_money(value):
             abs(value) // 100,
             abs(value) % 100,
         )
-
-
-register = template.Library()
-register.filter('pretty_money', pretty_money)

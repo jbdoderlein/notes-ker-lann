@@ -51,12 +51,14 @@ except ImportError:
 if "cas" in INSTALLED_APPS:
     MIDDLEWARE += ['cas.middleware.CASMiddleware']
     # CAS Settings
+    CAS_SERVER_URL = "https://" + os.getenv("NOTE_URL") + "/cas/"
     CAS_AUTO_CREATE_USER = False
     CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
     CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
     CAS_SHOW_SERVICE_MESSAGES = True
     CAS_SHOW_POWERED = False
     CAS_REDIRECT_TO_LOGIN_AFTER_LOGOUT = False
+    CAS_PROVIDE_URL_TO_LOGOUT = True
     CAS_INFO_MESSAGES = {
         "cas_explained": {
             "message": _(

@@ -39,7 +39,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'change_me'
 # EMAIL_HOST_PASSWORD = 'change_me'
 
-SERVER_EMAIL = 'no-reply@example.org'
+SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN")
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False
