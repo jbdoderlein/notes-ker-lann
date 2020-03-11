@@ -111,7 +111,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         DJANGO_SECRET_KEY="CHANGE_ME"
         DJANGO_SETTINGS_MODULE="note_kfet.settings"
         DOMAIN="localhost"
-        MAILING_LIST_DOMAIN="localhost"
+        CONTACT_EMAIL="tresorerie.bde@localhost"
         NOTE_URL="localhost"
 
     Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
