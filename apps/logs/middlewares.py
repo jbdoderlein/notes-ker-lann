@@ -35,7 +35,7 @@ def get_current_authenticated_user():
 
 class LogsMiddleware(object):
     """
-    Ce middleware permet de récupérer l'utilisateur actif ainsi que son adresse IP à chaque connexion.
+    This middleware get the current user with his or her IP address on each request.
     """
 
     def __init__(self, get_response):

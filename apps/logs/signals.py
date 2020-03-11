@@ -33,8 +33,7 @@ EXCLUDED = [
 
 def pre_save_object(sender, instance, **kwargs):
     """
-    Avant la sauvegarde d'un modèle, on récupère l'ancienne instance actuellement en base de données
-    que l'on garde en mémoire
+    Before a model get saved, we get the previous instance that is currently in the database
     """
     qs = sender.objects.filter(pk=instance.pk).all()
     if qs.exists():
@@ -45,8 +44,8 @@ def pre_save_object(sender, instance, **kwargs):
 
 def save_object(sender, instance, **kwargs):
     """
-    Dès qu'un modèle est sauvegardé, une entrée dans la table `Changelog` est ajouté dans la base de données
-    afin de répertorier chaque modification effectuée
+    Each time a model is saved, an entry in the table `Changelog` is added in the database
+    in order to store each modification made
     """
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
@@ -102,7 +101,7 @@ def save_object(sender, instance, **kwargs):
 
 def delete_object(sender, instance, **kwargs):
     """
-    Dès qu'un modèle est supprimé, une entrée dans la table `Changelog` est ajouté dans la base de données
+    Each time a model is deleted, an entry in the table `Changelog` is added in the database
     """
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
