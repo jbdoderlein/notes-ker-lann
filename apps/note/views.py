@@ -5,24 +5,22 @@ from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 from django_tables2 import SingleTableView
 
-from .forms import TransactionForm, TransactionTemplateForm
+from .forms import TransactionTemplateForm
 from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
 from .tables import HistoryTable
 
 
-class TransactionCreate(LoginRequiredMixin, CreateView):
+class TransactionCreate(LoginRequiredMixin, TemplateView):
     """
     Show transfer page
 
     TODO: If user have sufficient rights, they can transfer from an other note
     """
-    model = Transaction
-    form_class = TransactionForm
+    template_name = "note/transaction_form.html"
 
     def get_context_data(self, **kwargs):
         """
@@ -31,25 +29,9 @@ class TransactionCreate(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = _('Transfer money from your account '
                              'to one or others')
-
-        context['no_cache'] = True
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
 
         return context
-
-    def get_form(self, form_class=None):
-        """
-        If the user has no right to transfer funds, then it won't have the choice of the source of the transfer.
-        """
-        form = super().get_form(form_class)
-
-        if False:  # TODO: fix it with "if %user has no right to transfer funds"
-            del form.fields['source']
-            form.user = self.request.user
-
-        return form
-
-    def get_success_url(self):
-        return reverse('note:transfer')
 
 
 class NoteAutocomplete(autocomplete.Select2QuerySetView):

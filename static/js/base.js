@@ -26,7 +26,8 @@ function pretty_money(value) {
     if (value % 100 === 0)
         return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " €";
     else
-        return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + "." + (Math.abs(value) % 100) + " €";
+        return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + "."
+            + (Math.abs(value) % 100 < 10 ? "0" : "") + (Math.abs(value) % 100) + " €";
 }
 
 /**
@@ -47,7 +48,6 @@ function getMatchedNotes(pattern, fun) {
         aliases.results.forEach(function(alias) {
             getJSONSync("/api/note/note/" + alias.note + "/?format=json", function (note) {
                 fun(note, alias);
-                console.log(alias.name);
             });
         });
     });
@@ -85,13 +85,14 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
  * @param d The note to remove
  * @param note_prefix The prefix of the identifiers of the <li> blocks of the emitters
  * @param notes_display An array containing the infos of the buyers: [alias, note id, note object, quantity]
+ * @param note_list_id The div block identifier where the notes of the buyers are displayed
  * @param user_note_field The identifier of the field that display the note of the hovered note (useful in
  *                        consumptions, put null if not used)
  * @param profile_pic_field The identifier of the field that display the profile picture of the hovered note
  *                          (useful in consumptions, put null if not used)
  * @returns an anonymous function to be compatible with jQuery events
  */
-function removeNote(d, note_prefix="note", notes_display, user_note_field=null, profile_pic_field=null) {
+function removeNote(d, note_prefix="note", notes_display, note_list_id, user_note_field=null, profile_pic_field=null) {
     return (function() {
         let new_notes_display = [];
         let html = "";
@@ -103,15 +104,20 @@ function removeNote(d, note_prefix="note", notes_display, user_note_field=null, 
                     + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
             }
         });
-        $("#note_list").html(html);
+
+        notes_display.length = 0;
+        new_notes_display.forEach(function(disp) {
+            notes_display.push(disp);
+        });
+
+        $("#" + note_list_id).html(html);
         notes_display.forEach(function (disp) {
-            obj = $("#" + note_prefix + "_" + disp[1]);
-            obj.click(removeNote(disp, note_prefix, notes_display, user_note_field, profile_pic_field));
+            let obj = $("#" + note_prefix + "_" + disp[1]);
+            obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field, profile_pic_field));
             obj.hover(function() {
                 displayNote(disp[2], disp[0], user_note_field, profile_pic_field);
             });
         });
-        notes_display = new_notes_display;
     });
 }
 
@@ -155,7 +161,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
         let aliases_matched_html = "";
         // Get matched notes with the given pattern
         getMatchedNotes(pattern, function(note, alias) {
-            aliases_matched_html += li("alias_" + alias.normalized_name, alias.name);
+            aliases_matched_html += li(alias_prefix + "_" + alias.normalized_name, alias.name);
             note.alias = alias;
             notes.push(note);
         });
@@ -189,7 +195,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                 let note_list = $("#" + note_list_id);
                 let html = "";
                 notes_display.forEach(function(disp) {
-                   html += li("note_" + disp[1], disp[0]
+                   html += li(note_prefix + "_" + disp[1], disp[0]
                         + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
                 });
 
@@ -204,7 +210,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                     });
 
                     // When an emitter is clicked, it is removed
-                    line_obj.click(removeNote(disp, note_prefix, notes_display, user_note_field, profile_pic_field));
+                    line_obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field, profile_pic_field));
                 });
             });
         });

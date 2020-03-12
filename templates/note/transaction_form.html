@@ -6,32 +6,133 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% load i18n static %}
 
 {% block content %}
-    <form method="post" onsubmit="window.onbeforeunload=null">{% csrf_token %}
-        {% if form.non_field_errors %}
-            <p class="errornote">
-                {% for error in form.non_field_errors %}
-                    {{ error }}
-                {% endfor %}
-            </p>
-        {% endif %}
-        <fieldset class="module aligned">
-            {% for field in form %}
-                <div class="form-row{% if field.errors %} errors{% endif %}">
-                    {{ field.errors }}
-                    <div>
-                        {{ field.label_tag }}
-                        {% if field.is_readonly %}
-                            <div class="readonly">{{ field.contents }}</div>
-                        {% else %}
-                            {{ field }}
-                        {% endif %}
-                        {% if field.field.help_text %}
-                            <div class="help">{{ field.field.help_text|safe }}</div>
-                        {% endif %}
-                    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card border-success shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        Sélection des émetteurs
+                    </p>
                 </div>
-            {% endfor %}
-        </fieldset>
-        <input type="submit" value="{% trans 'Transfer' %}">
-    </form>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <input class="form-control mx-auto d-block" type="text" id="source_note" />
+                    <ul class="list-group list-group-flush" id="source_alias_matched">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-info shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        Sélection des destinataires
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="dest_note_list">
+                </ul>
+                <div class="card-body">
+                    <input class="form-control mx-auto d-block" type="text" id="dest_note" />
+                    <ul class="list-group list-group-flush" id="dest_alias_matched">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="amount">{% trans "Amount" %} :</label>
+            <input class="form-control mx-auto d-block" type="number" min="-20" id="amount" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="reason">{% trans "Reason" %} :</label>
+            <input class="form-control mx-auto d-block" type="text" id="reason" />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-12">
+            <button id="transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        var CSRF_TOKEN = "{{ csrf_token }}";
+
+        var sources = [];
+        var sources_notes_display = [];
+        var dests = [];
+        var dests_notes_display = [];
+
+        $(document).ready(function() {
+           autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
+                "source_alias", "source_note");
+           autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
+                "dest_alias", "dest_note");
+        });
+
+        $("#transfer").click(function() {
+            sources_notes_display.forEach(function(source) {
+                dests_notes_display.forEach(function(dest) {
+                    $.post("/api/note/transaction/transaction/",
+                    {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "quantity": source[3] * dest[3],
+                        "amount": $("#amount").val(),
+                        "reason": $("#reason").val() + " (Transfert)",
+                        "valid": true,
+                        "polymorphic_ctype": {{ polymorphic_ctype }},
+                        "resourcetype": "Transaction",
+                        "source": source[1],
+                        "destination": dest[1]
+                    }, function() {
+                        sources_notes_display.length = 0;
+                        sources.length = 0;
+                        dests_notes_display.length = 0;
+                        dests.length = 0;
+                        $("#source_note_list").html("");
+                        $("#dest_note_list").html("");
+                        $("#source_alias_matched").html("");
+                        $("#dest_alias_matched").html("");
+                        $("#amount").val("");
+                        $("#reason").val("");
+                        refreshBalance();
+
+                        let msgDiv = $("#messages");
+                        let html = msgDiv.html();
+                        html += "<div class=\"alert alert-success\">Le transfert de "
+                            + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
+                            + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
+                        msgDiv.html(html);
+                    }).fail(function (err) {
+                        sources_notes_display.length = 0;
+                        sources.length = 0;
+                        dests_notes_display.length = 0;
+                        dests.length = 0;
+                        $("#source_note_list").html("");
+                        $("#dest_note_list").html("");
+                        $("#source_alias_matched").html("");
+                        $("#dest_alias_matched").html("");
+                        $("#amount").val("");
+                        $("#reason").val("");
+                        refreshBalance();
+
+                        let msgDiv = $("#messages");
+                        let html = msgDiv.html();
+                        html += "<div class=\"alert alert-danger\">Le transfert de "
+                            + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
+                            + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
+                        msgDiv.html(html);
+                    });
+                });
+            });
+        });
+    </script>
 {% endblock %}

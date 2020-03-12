@@ -130,7 +130,7 @@
 {% block extrajavascript %}
     <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
-        let CSRF_TOKEN = "{{ csrf_token }}";
+        var CSRF_TOKEN = "{{ csrf_token }}";
 
         {% for button in transaction_templates %}
             {% if button.display %}

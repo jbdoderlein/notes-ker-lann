@@ -408,6 +408,10 @@ msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 msgid "amount"
 msgstr "montant"
 
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
+msgid "Amount"
+msgstr "Montant"
+
 #: apps/note/models/transactions.py:57
 msgid "in centimes"
 msgstr "en centimes"
@@ -427,6 +431,9 @@ msgstr "quantité"
 #: apps/note/models/transactions.py:111
 msgid "reason"
 msgstr "raison"
+
+msgid "Reason"
+msgstr "Raison"
 
 #: apps/note/models/transactions.py:115
 msgid "valid"
