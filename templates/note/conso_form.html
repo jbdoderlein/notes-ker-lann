@@ -7,10 +7,10 @@
 
 {% block content %}
     <div class="row mt-4">
-        <div class="col-sm-5 col-md-4">
+        <div class="col-sm-5 col-md-4" id="infos_div">
             <div class="row">
                 {# User details column #}
-                <div class="col-xl-5">
+                <div class="col-xl-5" id="note_infos_div">
                     <div class="card border-success shadow mb-4">
                         <img src="/media/pic/default.png"
                             id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
@@ -21,7 +21,7 @@
                 </div>
 
                 {# User selection column #}
-                <div class="col-xl-7">
+                <div class="col-xl-7" id="user_select_div">
                     <div class="card border-success shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
@@ -37,11 +37,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-xl-5" id="consos_list_div">
+                    <div class="card border-info shadow mb-4">
+                        <div class="card-header">
+                            <p class="card-text font-weight-bold">
+                                Sélection des consommations
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush" id="consos_list">
+                        </ul>
+                        <button id="consume" class="form-control btn btn-primary">Consommer !</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         {# Buttons column #}
-        <div class="col-sm-7 col-md-8">
+        <div class="col-sm-7 col-md-8" id="buttons_div">
             {# Show last used buttons #}
             <div class="card shadow mb-4">
                 <div class="card-body text-nowrap" style="overflow:auto hidden">
@@ -95,11 +108,11 @@
                     </a>
                     <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
                         <label class="btn btn-sm btn-outline-primary active">
-                            <input type="radio" name="options" id="option1" checked>
+                            <input type="radio" name="conso_type" id="single_conso" checked>
                             Consomations simples
                         </label>
                         <label class="btn btn-sm btn-outline-primary">
-                            <input type="radio" name="options" id="option2">
+                            <input type="radio" name="conso_type" id="double_conso">
                             Consomations doubles
                         </label>
                     </div>
@@ -131,6 +144,24 @@
     <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
         var CSRF_TOKEN = "{{ csrf_token }}";
+
+        $("#double_conso").click(function() {
+            $("#consos_list_div").show();
+            $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
+            $("#note_infos_div").attr('class', 'col-xl-3');
+            $("#user_select_div").attr('class', 'col-xl-4');
+            $("#buttons_div").attr('class', 'col-sm-7 col-xl-6');
+        });
+
+        $("#single_conso").click(function() {
+            $("#consos_list_div").hide();
+            $("#infos_div").attr('class', 'col-sm-5 col-md-4');
+            $("#note_infos_div").attr('class', 'col-xl-5');
+            $("#user_select_div").attr('class', 'col-xl-7');
+            $("#buttons_div").attr('class', 'col-sm-7 col-md-8');
+        });
+
+        $("#consos_list_div").hide();
 
         {% for button in transaction_templates %}
             {% if button.display %}
