@@ -86,7 +86,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user"></i> {{ user.username }} ({{ user.note.balance | pretty_money }})
+                            <i class="fa fa-user"></i>
+                            <span id="user_balance">{{ user.username }} ({{ user.note.balance | pretty_money }})</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right"
                              aria-labelledby="navbarDropdownMenuLink">
