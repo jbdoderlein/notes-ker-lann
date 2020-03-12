@@ -31,12 +31,9 @@
                         <ul class="list-group list-group-flush" id="note_list">
                         </ul>
                         <div class="card-body">
-                            <select name="source" data-placeholder="Note ..." data-minimum-input-length="1"
-                                    required id="note" data-autocomplete-light-language="fr"
-                                    data-autocomplete-light-url="/note/note-autocomplete/"
-                                    data-autocomplete-light-function="select2">
-                                <option value="" selected>---------</option>
-                            </select>
+                            <input class="rounded mx-auto d-block" type="text" id="note" />
+                            <ul class="list-group list-group-flush" id="alias_matched">
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -79,10 +76,10 @@
                                 <div class="d-inline-flex flex-wrap justify-content-center">
                                     {% for button in category.list %}
                                         {% if button.display %}
-                                        <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                                id="button{{ button.id }}" name="button" value="{{ button.name }}">
-                                            {{ button.name }} ({{ button.amount | pretty_money }})
-                                        </button>
+                                            <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                                    id="button{{ button.id }}" name="button" value="{{ button.name }}">
+                                                {{ button.name }} ({{ button.amount | pretty_money }})
+                                            </button>
                                         {% endif %}
                                     {% endfor %}
                                 </div>
@@ -145,12 +142,14 @@
     <script type="text/javascript">
         function pretty_money(value) {
             if (value % 100 === 0)
-                return (value < 0 ? "- " : "") + Math.round(Math.abs(value) / 100) + " €";
+                return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " €";
             else
-                return (value < 0 ? "- " : "") + Math.round(Math.abs(value) / 100) + " € " + (Math.abs(value) % 100);
+                return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " € " + (Math.abs(value) % 100);
         }
 
-        var consos = [];
+        let old_pattern = null;
+        let notes = [];
+        let consos = [];
 
         $(document).ready(function() {
             // If hash of a category in the URL, then select this category
@@ -167,34 +166,99 @@
             });
 
             let note_obj = $("#note");
-            note_obj.change(function() {
-                let name = $("#note option:selected").text();
-                let note = note_obj.val();
-                note_obj.val(0);
-                note_obj.text("");
-                var conso = null;
-                consos.forEach(function(c) {
-                    if (c[1] === note) {
-                        c[2] += 1;
-                        conso = c;
-                    }
-                });
-                if (conso == null)
-                    consos = consos.concat([[name, note, 1]]);
-                let note_list = $("#note_list");
-                var html = "";
-                consos.forEach(function(conso) {
-                   html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\">" + conso[0] + "<span class=\"badge badge-dark badge-pill\">" + conso[2] + "</span></li>\n";
-                });
-                note_list.html(html);
+            note_obj.click(function() {
+                note_obj.val("");
+            });
+            note_obj.keyup(function() {
+                let pattern = note_obj.val();
+                if (pattern === old_pattern || pattern === "")
+                    return;
 
-                $.getJSON("/api/note/note/" + note + "/?format=json", function(note) {
-                    console.log(note);
-                    $("#user_note").text(name + " : " + pretty_money(note.balance));
-                    if (note.display_image == null)
-                        $("#profile_pic").attr('src', '/media/pic/default.png');
-                    else
-                        $("#profile_pic").attr('src', note.display_image);
+                old_pattern = pattern;
+
+                notes = [];
+                let aliases_matched_obj = $("#alias_matched");
+                let aliases_matched_html = "";
+                $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club", function(aliases) {
+                    aliases.results.forEach(function(alias) {
+                        aliases_matched_html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
+                            " id=\"alias_" + alias.normalized_name + "\">" + alias.name + "</li>\n";
+                        $.getJSON("/api/note/note/" + alias.note + "/?format=json", function(note) {
+                            notes += note;
+                            let alias_obj = $("#alias_" + alias.normalized_name);
+                            alias_obj.hover(function() {
+                                $("#user_note").text(alias.name + " : " + pretty_money(note.balance));
+                            if (note.display_image == null)
+                                $("#profile_pic").attr('src', '/media/pic/default.png');
+                            else
+                                $("#profile_pic").attr('src', note.display_image);
+                            });
+
+                            alias_obj.click(function() {
+                                note_obj.val("");
+                                var conso = null;
+                                consos.forEach(function(c) {
+                                    if (c[1] === note.id) {
+                                        c[3] += 1;
+                                        conso = c;
+                                    }
+                                });
+                                if (conso == null)
+                                    consos = consos.concat([[alias.name, note.id, note, 1]]);
+                                let note_list = $("#note_list");
+                                let html = "";
+                                consos.forEach(function(conso) {
+                                   html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
+                                       " id=\"note_" + conso[1] + "\">" + conso[0] + "<span class=\"badge badge-dark badge-pill\">"
+                                       + conso[3] + "</span></li>\n";
+                                });
+
+                                note_list.html(html);
+
+                                consos.forEach(function(conso) {
+                                    let line_obj = $("#note_" + conso[1]);
+                                    line_obj.hover(function() {
+                                        $("#user_note").text(conso[0] + " : " + pretty_money(conso[2].balance));
+                                        if (conso[2].display_image == null)
+                                            $("#profile_pic").attr('src', '/media/pic/default.png');
+                                        else
+                                            $("#profile_pic").attr('src', conso[2].display_image);
+                                    });
+
+                                    function line_obj_click(c) {
+                                        return (function() {
+                                            let new_consos = [];
+                                            let html = "";
+                                            consos.forEach(function (conso) {
+                                                if (conso[3] > 1 || conso[1] !== c[1]) {
+                                                    conso[3] -= conso[1] === c[1] ? 1 : 0;
+                                                    new_consos = new_consos.concat([conso]);
+                                                    html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
+                                                        " id=\"note_" + conso[1] + "\">" + conso[0] + "<span class=\"badge badge-dark badge-pill\">"
+                                                        + conso[3] + "</span></li>\n";
+                                                }
+                                            });
+                                            note_list.html(html);
+                                            consos.forEach(function (conso) {
+                                                $("#note_" + conso[1]).click(line_obj_click(conso));
+                                                line_obj.hover(function() {
+                                                    $("#user_note").text(conso[0] + " : " + pretty_money(conso[2].balance));
+                                                    if (conso[2].display_image == null)
+                                                        $("#profile_pic").attr('src', '/media/pic/default.png');
+                                                    else
+                                                        $("#profile_pic").attr('src', conso[2].display_image);
+                                                });
+                                            });
+                                            consos = new_consos;
+                                        });
+                                    }
+
+                                    line_obj.click(line_obj_click(conso));
+                                });
+                            });
+                        });
+                        aliases_matched_obj.html(aliases_matched_html);
+                    });
                 });
             });
 
@@ -205,7 +269,7 @@
                             $.post("/api/note/transaction/transaction/",
                             {
                                 "csrfmiddlewaretoken": "{{ csrf_token }}",
-                                "quantity": conso[2],
+                                "quantity": conso[3],
                                 "amount": {{ button.amount }},
                                 "reason": "{{ button.name }} ({{ button.category.name }})",
                                 "valid": true,

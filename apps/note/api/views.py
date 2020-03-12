@@ -82,8 +82,7 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
             elif "club" in types:
                 queryset = queryset.filter(polymorphic_ctype__model="noteclub")
             elif "special" in types:
-                queryset = queryset.filter(
-                    polymorphic_ctype__model="notespecial")
+                queryset = queryset.filter(polymorphic_ctype__model="notespecial")
             else:
                 queryset = queryset.none()
 
@@ -98,6 +97,8 @@ class AliasViewSet(viewsets.ModelViewSet):
     """
     queryset = Alias.objects.all()
     serializer_class = AliasSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
 
     def get_queryset(self):
         """
