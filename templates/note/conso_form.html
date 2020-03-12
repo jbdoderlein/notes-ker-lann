@@ -25,7 +25,7 @@
                     <div class="card border-success shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
-                                Sélection des émitteurs
+                                Sélection des émetteurs
                             </p>
                         </div>
                         <ul class="list-group list-group-flush" id="note_list">
@@ -125,184 +125,21 @@
             min-width: 100%;
         }
     </style>
-
-    <link href="/static/vendor/select2/dist/css/select2.css" type="text/css" media="screen" rel="stylesheet">
-    <link href="/static/admin/css/autocomplete.css" type="text/css" media="screen" rel="stylesheet">
-    <link href="/static/autocomplete_light/select2.css" type="text/css" media="screen" rel="stylesheet">
-    <script type="text/javascript" src="/static/autocomplete_light/jquery.init.js"></script>
-    <script type="text/javascript" src="/static/vendor/select2/dist/js/select2.full.js"></script>
-    <script type="text/javascript" src="/static/vendor/select2/dist/js/i18n/fr.js"></script>
-    <script type="text/javascript" src="/static/autocomplete_light/autocomplete.init.js"></script>
-    <script type="text/javascript" src="/static/autocomplete_light/forward.js"></script>
-    <script type="text/javascript" src="/static/autocomplete_light/select2.js"></script>
-    <script type="text/javascript" src="/static/autocomplete_light/jquery.post-setup.js"></script>
 {% endblock %}
 
 {% block extrajavascript %}
+    <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
-        function pretty_money(value) {
-            if (value % 100 === 0)
-                return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " €";
-            else
-                return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " € " + (Math.abs(value) % 100);
-        }
+        let CSRF_TOKEN = "{{ csrf_token }}";
 
-        let old_pattern = null;
-        let notes = [];
-        let consos = [];
-
-        $(document).ready(function() {
-            // If hash of a category in the URL, then select this category
-            // else select the first one
-            if (location.hash) {
-                $("a[href='" + location.hash + "']").tab("show");
-            } else {
-                $("a[data-toggle='tab']").first().tab("show");
-            }
-
-            // When selecting a category, change URL
-            $(document.body).on("click", "a[data-toggle='tab']", function(event) {
-                location.hash = this.getAttribute("href");
-            });
-
-            let note_obj = $("#note");
-            note_obj.click(function() {
-                note_obj.val("");
-            });
-            note_obj.keyup(function() {
-                let pattern = note_obj.val();
-                if (pattern === old_pattern || pattern === "")
-                    return;
-
-                old_pattern = pattern;
-
-                notes = [];
-                let aliases_matched_obj = $("#alias_matched");
-                let aliases_matched_html = "";
-                $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club", function(aliases) {
-                    aliases.results.forEach(function(alias) {
-                        aliases_matched_html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
-                            " id=\"alias_" + alias.normalized_name + "\">" + alias.name + "</li>\n";
-                        $.getJSON("/api/note/note/" + alias.note + "/?format=json", function(note) {
-                            notes += note;
-                            let alias_obj = $("#alias_" + alias.normalized_name);
-                            alias_obj.hover(function() {
-                                var name = alias.name;
-                                if (name !== note.name)
-                                    name += " (aka. " + note.name + ")";
-                                $("#user_note").text(name + " : " + pretty_money(note.balance));
-                            if (note.display_image == null)
-                                $("#profile_pic").attr('src', '/media/pic/default.png');
-                            else
-                                $("#profile_pic").attr('src', note.display_image);
-                            });
-
-                            alias_obj.click(function() {
-                                note_obj.val("");
-                                var conso = null;
-                                consos.forEach(function(c) {
-                                    if (c[1] === note.id) {
-                                        c[3] += 1;
-                                        conso = c;
-                                    }
-                                });
-                                if (conso == null)
-                                    consos = consos.concat([[alias.name, note.id, note, 1]]);
-                                let note_list = $("#note_list");
-                                let html = "";
-                                consos.forEach(function(conso) {
-                                   html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
-                                       " id=\"note_" + conso[1] + "\">" + conso[0] + "<span class=\"badge badge-dark badge-pill\">"
-                                       + conso[3] + "</span></li>\n";
-                                });
-
-                                note_list.html(html);
-
-                                consos.forEach(function(conso) {
-                                    let line_obj = $("#note_" + conso[1]);
-                                    line_obj.hover(function() {
-                                        $("#user_note").text(conso[0] + " : " + pretty_money(conso[2].balance));
-                                        if (conso[2].display_image == null)
-                                            $("#profile_pic").attr('src', '/media/pic/default.png');
-                                        else
-                                            $("#profile_pic").attr('src', conso[2].display_image);
-                                    });
-
-                                    function line_obj_click(c) {
-                                        return (function() {
-                                            let new_consos = [];
-                                            let html = "";
-                                            consos.forEach(function (conso) {
-                                                if (conso[3] > 1 || conso[1] !== c[1]) {
-                                                    conso[3] -= conso[1] === c[1] ? 1 : 0;
-                                                    new_consos = new_consos.concat([conso]);
-                                                    html += "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center\"" +
-                                                        " id=\"note_" + conso[1] + "\">" + conso[0] + "<span class=\"badge badge-dark badge-pill\">"
-                                                        + conso[3] + "</span></li>\n";
-                                                }
-                                            });
-                                            note_list.html(html);
-                                            consos.forEach(function (conso) {
-                                                $("#note_" + conso[1]).click(line_obj_click(conso));
-                                                line_obj.hover(function() {
-                                                    $("#user_note").text(conso[0] + " : " + pretty_money(conso[2].balance));
-                                                    if (conso[2].display_image == null)
-                                                        $("#profile_pic").attr('src', '/media/pic/default.png');
-                                                    else
-                                                        $("#profile_pic").attr('src', conso[2].display_image);
-                                                });
-                                            });
-                                            consos = new_consos;
-                                        });
-                                    }
-
-                                    line_obj.click(line_obj_click(conso));
-                                });
-                            });
-                        });
-                    });
-                    aliases_matched_obj.html(aliases_matched_html);
+        {% for button in transaction_templates %}
+            {% if button.display %}
+                $("#button{{ button.id }}").click(function() {
+                    addConso({{ button.destination.id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                        {{ button.id }}, "{{ button.name }}");
                 });
-            });
-
-            {% for button in transaction_templates %}
-                {% if button.display %}
-                    $("#button{{ button.id }}").click(function() {
-                        consos.forEach(function(conso) {
-                            $.post("/api/note/transaction/transaction/",
-                            {
-                                "csrfmiddlewaretoken": "{{ csrf_token }}",
-                                "quantity": conso[3],
-                                "amount": {{ button.amount }},
-                                "reason": "{{ button.name }} ({{ button.category.name }})",
-                                "valid": true,
-                                "polymorphic_ctype": {{ polymorphic_ctype }},
-                                "resourcetype": "TemplateTransaction",
-                                "source": conso[1],
-                                "destination": {{ button.destination.pk }},
-                                "category": {{ button.category.id }},
-                                "template": {{ button.id }}
-                            }, function () {
-                                consos = [];
-                                $("#note_list").html("");
-                                $("#alias_matched").html("");
-                                $("#profile_pic").attr("src", "/media/pic/default.png");
-                                $("#user_note").text("");
-                                refreshHistory();
-                                refreshBalance();
-                            });
-                        });
-                    });
-                {% endif %}
-            {% endfor %}
-        });
-
-        function refreshBalance() {
-            $("#user_balance").load("/ #user_balance");
-        }
-
-        function refreshHistory() {
-            $("#history").load("/note/consos/ #history");
-        }
+            {% endif %}
+        {% endfor %}
     </script>
 {% endblock %}

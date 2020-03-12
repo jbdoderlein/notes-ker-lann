@@ -141,7 +141,7 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
         """
         context = super().get_context_data(**kwargs)
         context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
-            .order_by('category').order_by('name')
+            .order_by('category__name', 'name')
         context['title'] = _("Consumptions")
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(TemplateTransaction).pk
 
