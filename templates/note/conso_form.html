@@ -187,7 +187,10 @@
                             notes += note;
                             let alias_obj = $("#alias_" + alias.normalized_name);
                             alias_obj.hover(function() {
-                                $("#user_note").text(alias.name + " : " + pretty_money(note.balance));
+                                var name = alias.name;
+                                if (name !== note.name)
+                                    name += " (aka. " + note.name + ")";
+                                $("#user_note").text(name + " : " + pretty_money(note.balance));
                             if (note.display_image == null)
                                 $("#profile_pic").attr('src', '/media/pic/default.png');
                             else
@@ -257,8 +260,8 @@
                                 });
                             });
                         });
-                        aliases_matched_obj.html(aliases_matched_html);
                     });
+                    aliases_matched_obj.html(aliases_matched_html);
                 });
             });
 
@@ -283,6 +286,8 @@
                                 consos = [];
                                 $("#note_list").html("");
                                 $("#alias_matched").html("");
+                                $("#profile_pic").attr("src", "/media/pic/default.png");
+                                $("#user_note").text("");
                                 refreshHistory();
                                 refreshBalance();
                             });

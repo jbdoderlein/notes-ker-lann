@@ -86,7 +86,7 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
             else:
                 queryset = queryset.none()
 
-        return queryset
+        return queryset.distinct()
 
 
 class AliasViewSet(viewsets.ModelViewSet):
