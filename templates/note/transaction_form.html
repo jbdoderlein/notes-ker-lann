@@ -71,13 +71,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 {% block extrajavascript %}
     <script>
-        var CSRF_TOKEN = "{{ csrf_token }}";
-
-        var sources = [];
-        var sources_notes_display = [];
-        var dests = [];
-        var dests_notes_display = [];
-        var transfer_mode = false;
+        sources = [];
+        sources_notes_display = [];
+        dests = [];
+        dests_notes_display = [];
+        transfer_mode = false;
 
         $(document).ready(function() {
            autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,

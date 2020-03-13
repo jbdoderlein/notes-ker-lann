@@ -23,14 +23,14 @@ $(document).ready(function() {
     });
 });
 
-let notes = [];
-let notes_display = [];
-let buttons = [];
+notes = [];
+notes_display = [];
+buttons = [];
 
 // When the user searches an alias, we update the auto-completion
 autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
     "alias", "note", "user_note", "profile_pic", function() {
-        if (buttons.length > 0) {
+        if (buttons.length > 0 && $("#single_conso").is(":checked")) {
             consumeAll();
             return false;
         }
@@ -58,7 +58,7 @@ function addConso(dest, amount, type, category_id, category_name, template_id, t
     if (button == null)
         buttons.push([dest, 1, amount, type, category_id, category_name, template_id, template_name]);
 
-    if ($("#double_conso:checked").length > 0) {
+    if ($("#double_conso").is(":checked")) {
         let html = "";
         buttons.forEach(function(button) {
             html += li("conso_button_" + button[6], button[7]

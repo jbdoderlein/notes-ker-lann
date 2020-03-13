@@ -17,8 +17,8 @@ class HistoryTable(tables.Table):
                 'table table-condensed table-striped table-hover'
         }
         model = Transaction
-        exclude = ("polymorphic_ctype", )
-        order_by = ('-id', )
+        exclude = ("id", "polymorphic_ctype", )
+        order_by = ('-created_at', )
         template_name = 'django_tables2/bootstrap4.html'
         sequence = ('...', 'total', 'valid')
 

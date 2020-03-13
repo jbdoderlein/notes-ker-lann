@@ -115,7 +115,7 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
 
     # Transaction history table
     table_class = HistoryTable
-    table_pagination = {"per_page": 10}
+    table_pagination = {"per_page": 20}
 
     def get_context_data(self, **kwargs):
         """
