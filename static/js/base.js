@@ -126,8 +126,18 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
     let old_pattern = null;
 
+    // When the user type "Enter", the first alias is clicked
+    field.keypress(function(event) {
+        console.log(event.originalEvent);
+        if (event.originalEvent.charCode === 13)
+            $("#" + alias_matched_id + " li").first().trigger("click");
+    });
+
     // When the user type something, the matched aliases are refreshed
-    field.keyup(function() {
+    field.keyup(function(e) {
+        if (e.originalEvent.charCode === 13)
+            return;
+
         let pattern = field.val();
         // If the pattern is not modified, or if the field is empty, we don't query the API
         if (pattern === old_pattern || pattern === "")
