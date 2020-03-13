@@ -1,21 +1,6 @@
 // Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-/**
- * Perform a request on an URL and get result
- * @param url The url where the request is performed
- * @param success The function to call with the request
- * @param data The data for the request (optional)
- */
-function getJSONSync(url, success, data) {
-    $.ajax({
-        url: url,
-        dataType: 'json',
-        data: data,
-        async: false,
-        success: success
-    });
-}
 
 /**
  * Convert balance in cents to a human readable amount
@@ -41,14 +26,9 @@ function refreshBalance() {
  * Query the 20 first matched notes with a given pattern
  * @param pattern The pattern that is queried
  * @param fun For each found note with the matched alias `alias`, fun(note, alias) is called.
- * This function is synchronous.
  */
 function getMatchedNotes(pattern, fun) {
-    getJSONSync("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", function(aliases) {
-        aliases.results.forEach(function(alias) {
-            fun(alias.note, alias);
-        });
-    });
+    $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", fun);
 }
 
 /**
@@ -161,63 +141,71 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
         let aliases_matched_obj = $("#" + alias_matched_id);
         let aliases_matched_html = "";
         // Get matched notes with the given pattern
-        getMatchedNotes(pattern, function(note, alias) {
-            aliases_matched_html += li(alias_prefix + "_" + alias.normalized_name, alias.name);
-            note.alias = alias;
-            notes.push(note);
-        });
+        getMatchedNotes(pattern, function(aliases) {
+            // The response arrived too late, we stop the request
+            if (pattern !== $("#" + field_id).val())
+                return;
 
-        // Display the list of matched aliases
-        aliases_matched_obj.html(aliases_matched_html);
-
-        notes.forEach(function (note) {
-            let alias = note.alias;
-            let alias_obj = $("#" + alias_prefix + "_" + alias.normalized_name);
-            // When an alias is hovered, the profile picture and the balance are displayed at the right place
-            alias_obj.hover(function() {
-                displayNote(note, alias.name, user_note_field, profile_pic_field);
+            aliases.results.forEach(function (alias) {
+                let note = alias.note;
+                aliases_matched_html += li(alias_prefix + "_" + alias.id, alias.name);
+                note.alias = alias;
+                notes.push(note);
             });
 
-            // When the user click on an alias, the associated note is added to the emitters
-            alias_obj.click(function() {
-                field.val("");
-                // If the note is already an emitter, we increase the quantity
-                var disp = null;
-                notes_display.forEach(function(d) {
-                    // We compare the note ids
-                    if (d[1] === note.id) {
-                        d[3] += 1;
-                        disp = d;
-                    }
-                });
-                // In the other case, we add a new emitter
-                if (disp == null)
-                    notes_display.push([alias.name, note.id, note, 1]);
+            // Display the list of matched aliases
+            aliases_matched_obj.html(aliases_matched_html);
 
-                // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
-                // note displayed. Useful for a consumption when a button is already clicked
-                if (alias_click && !alias_click())
-                    return;
-
-                let note_list = $("#" + note_list_id);
-                let html = "";
-                notes_display.forEach(function(disp) {
-                   html += li(note_prefix + "_" + disp[1], disp[0]
-                        + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
+            notes.forEach(function (note) {
+                let alias = note.alias;
+                let alias_obj = $("#" + alias_prefix + "_" + alias.id);
+                // When an alias is hovered, the profile picture and the balance are displayed at the right place
+                alias_obj.hover(function () {
+                    displayNote(note, alias.name, user_note_field, profile_pic_field);
                 });
 
-                // Emitters are displayed
-                note_list.html(html);
+                // When the user click on an alias, the associated note is added to the emitters
+                alias_obj.click(function () {
+                    field.val("");
+                    // If the note is already an emitter, we increase the quantity
+                    var disp = null;
+                    notes_display.forEach(function (d) {
+                        // We compare the note ids
+                        if (d[1] === note.id) {
+                            d[3] += 1;
+                            disp = d;
+                        }
+                    });
+                    // In the other case, we add a new emitter
+                    if (disp == null)
+                        notes_display.push([alias.name, note.id, note, 1]);
 
-                notes_display.forEach(function(disp) {
-                    let line_obj = $("#" + note_prefix + "_" + disp[1]);
-                    // Hover an emitter display also the profile picture
-                    line_obj.hover(function() {
-                        displayNote(disp[2], disp[0], user_note_field, profile_pic_field);
+                    // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
+                    // note displayed. Useful for a consumption when a button is already clicked
+                    if (alias_click && !alias_click())
+                        return;
+
+                    let note_list = $("#" + note_list_id);
+                    let html = "";
+                    notes_display.forEach(function (disp) {
+                        html += li(note_prefix + "_" + disp[1], disp[0]
+                            + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
                     });
 
-                    // When an emitter is clicked, it is removed
-                    line_obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field, profile_pic_field));
+                    // Emitters are displayed
+                    note_list.html(html);
+
+                    notes_display.forEach(function (disp) {
+                        let line_obj = $("#" + note_prefix + "_" + disp[1]);
+                        // Hover an emitter display also the profile picture
+                        line_obj.hover(function () {
+                            displayNote(disp[2], disp[0], user_note_field, profile_pic_field);
+                        });
+
+                        // When an emitter is clicked, it is removed
+                        line_obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field,
+                            profile_pic_field));
+                    });
                 });
             });
         });
