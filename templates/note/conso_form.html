@@ -47,7 +47,7 @@
                         </div>
                         <ul class="list-group list-group-flush" id="consos_list">
                         </ul>
-                        <button id="consume" class="form-control btn btn-primary">Consommer !</button>
+                        <button id="consume_all" class="form-control btn btn-primary">Consommer !</button>
                     </div>
                 </div>
             </div>
@@ -162,6 +162,8 @@
         });
 
         $("#consos_list_div").hide();
+
+        $("#consume_all").click(consumeAll);
 
         {% for button in transaction_templates %}
             {% if button.display %}

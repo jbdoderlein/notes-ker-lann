@@ -29,7 +29,13 @@ let buttons = [];
 
 // When the user searches an alias, we update the auto-completion
 autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
-    "alias", "note", "user_note", "profile_pic");
+    "alias", "note", "user_note", "profile_pic", function() {
+        if (buttons.length > 0) {
+            consumeAll();
+            return false;
+        }
+        return true;
+    });
 
 /**
  * Add a transaction from a button.
@@ -44,7 +50,7 @@ autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
 function addConso(dest, amount, type, category_id, category_name, template_id, template_name) {
     var button = null;
     buttons.forEach(function(b) {
-        if (b[5] === template_id) {
+        if (b[6] === template_id) {
             b[1] += 1;
             button = b;
         }
@@ -52,9 +58,24 @@ function addConso(dest, amount, type, category_id, category_name, template_id, t
     if (button == null)
         buttons.push([dest, 1, amount, type, category_id, category_name, template_id, template_name]);
 
-    // TODO Only in simple consumption mode
-    if (notes.length > 0)
+    if ($("#double_conso:checked").length > 0) {
+        let html = "";
+        buttons.forEach(function(button) {
+            html += li("conso_button_" + button[6], button[7]
+                + "<span class=\"badge badge-dark badge-pill\">" + button[1] + "</span>");
+        });
+        $("#consos_list").html(html);
+    }
+    else if (notes_display.length > 0)
         consumeAll();
+    else {
+        let html = "";
+        buttons.forEach(function(button) {
+            html += li("conso_button_" + button[6], button[7]
+                + "<span class=\"badge badge-dark badge-pill\">" + button[1] + "</span>");
+        });
+        $("#note_list").html(html);
+    }
 }
 
 /**
@@ -100,6 +121,7 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             buttons.length = 0;
             $("#note_list").html("");
             $("#alias_matched").html("");
+            $("#consos_list").html("");
             displayNote(null, "");
             refreshHistory();
             refreshBalance();

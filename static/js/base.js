@@ -134,9 +134,12 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
  *                        consumptions, put null if not used)
  * @param profile_pic_field The identifier of the field that display the profile picture of the hovered note
  *                          (useful in consumptions, put null if not used)
+ * @param alias_click Function that is called when an alias is clicked. If this method exists and doesn't return true,
+ *                    the associated note is not displayed.
+ *                    Useful for a consumption if the item is selected before.
  */
 function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes_display, alias_prefix="alias",
-                          note_prefix="note", user_note_field=null, profile_pic_field=null) {
+                          note_prefix="note", user_note_field=null, profile_pic_field=null, alias_click=null) {
     let field = $("#" + field_id);
     // When the user clicks on the search field, it is immediately cleared
     field.click(function() {
@@ -192,6 +195,12 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                 // In the other case, we add a new emitter
                 if (disp == null)
                     notes_display.push([alias.name, note.id, note, 1]);
+
+                // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
+                // note displayed. Useful for a consumption when a button is already clicked
+                if (alias_click && !alias_click())
+                    return;
+
                 let note_list = $("#" + note_list_id);
                 let html = "";
                 notes_display.forEach(function(disp) {
