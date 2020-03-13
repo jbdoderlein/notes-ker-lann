@@ -4,7 +4,7 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
@@ -61,6 +61,9 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model', ]
+    ordering_fields = ['alias__name', 'alias__normalized_name']
 
     def get_queryset(self):
         """
@@ -97,8 +100,9 @@ class AliasViewSet(viewsets.ModelViewSet):
     """
     queryset = Alias.objects.all()
     serializer_class = AliasSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name']
 
     def get_queryset(self):
         """

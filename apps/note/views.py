@@ -110,12 +110,12 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
     """
     Consume
     """
-    model = Transaction
+    queryset = Transaction.objects.order_by("-id").all()[:50]
     template_name = "note/conso_form.html"
 
     # Transaction history table
     table_class = HistoryTable
-    table_pagination = {"per_page": 20}
+    table_pagination = {"per_page": 50}
 
     def get_context_data(self, **kwargs):
         """

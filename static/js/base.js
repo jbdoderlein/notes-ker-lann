@@ -44,11 +44,9 @@ function refreshBalance() {
  * This function is synchronous.
  */
 function getMatchedNotes(pattern, fun) {
-    getJSONSync("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club", function(aliases) {
+    getJSONSync("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", function(aliases) {
         aliases.results.forEach(function(alias) {
-            getJSONSync("/api/note/note/" + alias.note + "/?format=json", function (note) {
-                fun(note, alias);
-            });
+            fun(alias, alias.note);
         });
     });
 }
