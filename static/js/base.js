@@ -128,7 +128,6 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
     // When the user type "Enter", the first alias is clicked
     field.keypress(function(event) {
-        console.log(event.originalEvent);
         if (event.originalEvent.charCode === 13)
             $("#" + alias_matched_id + " li").first().trigger("click");
     });
@@ -139,8 +138,8 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
             return;
 
         let pattern = field.val();
-        // If the pattern is not modified, or if the field is empty, we don't query the API
-        if (pattern === old_pattern || pattern === "")
+        // If the pattern is not modified, we don't query the API
+        if (pattern === old_pattern)
             return;
 
         old_pattern = pattern;
@@ -150,6 +149,12 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
         let aliases_matched_obj = $("#" + alias_matched_id);
         let aliases_matched_html = "";
+
+        if (pattern === "") {
+            aliases_matched_obj.html("");
+            return;
+        }
+
         // Get matched notes with the given pattern
         getMatchedNotes(pattern, function(aliases) {
             // The response arrived too late, we stop the request
