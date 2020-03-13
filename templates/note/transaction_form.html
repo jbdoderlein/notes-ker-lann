@@ -6,8 +6,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% load i18n static %}
 
 {% block content %}
+
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-xl-12">
+            <button id="switch_mode" class="form-control btn btn-secondary">Passer en mode transfert</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6" id="emitters_div" style="display: none;">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
@@ -24,7 +31,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-12" id="dests_div">
             <div class="card border-info shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
@@ -70,6 +77,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         var sources_notes_display = [];
         var dests = [];
         var dests_notes_display = [];
+        var transfer_mode = false;
 
         $(document).ready(function() {
            autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
@@ -78,61 +86,131 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 "dest_alias", "dest_note");
         });
 
+        $("#switch_mode").click(function () {
+            transfer_mode ^= true;
+            if (transfer_mode) {
+                $("#switch_mode").text("Passer en mode virement");
+                $("#emitters_div").show();
+                $("#dests_div").attr('class', 'col-md-6');
+            }
+            else {
+                $("#switch_mode").text("Passer en mode transfert");
+                $("#emitters_div").hide();
+                $("#dests_div").attr('class', 'col-md-12');
+            }
+        });
+
         $("#transfer").click(function() {
-            sources_notes_display.forEach(function(source) {
-                dests_notes_display.forEach(function(dest) {
+            if (sources.length === 0) {
+                dests_notes_display.forEach(function (dest) {
                     $.post("/api/note/transaction/transaction/",
-                    {
-                        "csrfmiddlewaretoken": CSRF_TOKEN,
-                        "quantity": source[3] * dest[3],
-                        "amount": $("#amount").val(),
-                        "reason": $("#reason").val() + " (Transfert)",
-                        "valid": true,
-                        "polymorphic_ctype": {{ polymorphic_ctype }},
-                        "resourcetype": "Transaction",
-                        "source": source[1],
-                        "destination": dest[1]
-                    }, function() {
-                        sources_notes_display.length = 0;
-                        sources.length = 0;
-                        dests_notes_display.length = 0;
-                        dests.length = 0;
-                        $("#source_note_list").html("");
-                        $("#dest_note_list").html("");
-                        $("#source_alias_matched").html("");
-                        $("#dest_alias_matched").html("");
-                        $("#amount").val("");
-                        $("#reason").val("");
-                        refreshBalance();
+                        {
+                            "csrfmiddlewaretoken": CSRF_TOKEN,
+                            "quantity": dest[3],
+                            "amount": $("#amount").val(),
+                            "reason": $("#reason").val() + " (Don)",
+                            "valid": true,
+                            "polymorphic_ctype": {{ polymorphic_ctype }},
+                            "resourcetype": "Transaction",
+                            "source": {{ user.note.id }},
+                            "destination": dest[1]
+                        }, function () {
+                            let msgDiv = $("#messages");
+                            let html = msgDiv.html();
+                            html += "<div class=\"alert alert-success\">Le transfert de "
+                                + pretty_money(dest[3] * $("#amount").val()) + " de votre note "
+                                + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
+                            msgDiv.html(html);
 
-                        let msgDiv = $("#messages");
-                        let html = msgDiv.html();
-                        html += "<div class=\"alert alert-success\">Le transfert de "
-                            + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
-                            + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
-                        msgDiv.html(html);
-                    }).fail(function (err) {
-                        sources_notes_display.length = 0;
-                        sources.length = 0;
-                        dests_notes_display.length = 0;
-                        dests.length = 0;
-                        $("#source_note_list").html("");
-                        $("#dest_note_list").html("");
-                        $("#source_alias_matched").html("");
-                        $("#dest_alias_matched").html("");
-                        $("#amount").val("");
-                        $("#reason").val("");
-                        refreshBalance();
-
+                            sources_notes_display.length = 0;
+                            sources.length = 0;
+                            dests_notes_display.length = 0;
+                            dests.length = 0;
+                            $("#source_note_list").html("");
+                            $("#dest_note_list").html("");
+                            $("#source_alias_matched").html("");
+                            $("#dest_alias_matched").html("");
+                            $("#amount").val("");
+                            $("#reason").val("");
+                            refreshBalance();
+                        }).fail(function (err) {
                         let msgDiv = $("#messages");
                         let html = msgDiv.html();
                         html += "<div class=\"alert alert-danger\">Le transfert de "
-                            + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
+                            + pretty_money(dest[3] * $("#amount").val()) + " de votre note "
                             + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
                         msgDiv.html(html);
+
+                        sources_notes_display.length = 0;
+                        sources.length = 0;
+                        dests_notes_display.length = 0;
+                        dests.length = 0;
+                        $("#source_note_list").html("");
+                        $("#dest_note_list").html("");
+                        $("#source_alias_matched").html("");
+                        $("#dest_alias_matched").html("");
+                        $("#amount").val("");
+                        $("#reason").val("");
+                        refreshBalance();
                     });
                 });
-            });
+            }
+            else {
+                sources_notes_display.forEach(function (source) {
+                    dests_notes_display.forEach(function (dest) {
+                        $.post("/api/note/transaction/transaction/",
+                            {
+                                "csrfmiddlewaretoken": CSRF_TOKEN,
+                                "quantity": source[3] * dest[3],
+                                "amount": $("#amount").val(),
+                                "reason": $("#reason").val() + " (Transfert)",
+                                "valid": true,
+                                "polymorphic_ctype": {{ polymorphic_ctype }},
+                                "resourcetype": "Transaction",
+                                "source": source[1],
+                                "destination": dest[1]
+                            }, function () {
+                                let msgDiv = $("#messages");
+                                let html = msgDiv.html();
+                                html += "<div class=\"alert alert-success\">Le transfert de "
+                                    + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
+                                    + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
+                                msgDiv.html(html);
+
+                                sources_notes_display.length = 0;
+                                sources.length = 0;
+                                dests_notes_display.length = 0;
+                                dests.length = 0;
+                                $("#source_note_list").html("");
+                                $("#dest_note_list").html("");
+                                $("#source_alias_matched").html("");
+                                $("#dest_alias_matched").html("");
+                                $("#amount").val("");
+                                $("#reason").val("");
+                                refreshBalance();
+                            }).fail(function (err) {
+                                let msgDiv = $("#messages");
+                                let html = msgDiv.html();
+                                html += "<div class=\"alert alert-danger\">Le transfert de "
+                                    + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
+                                    + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
+                                msgDiv.html(html);
+
+                                sources_notes_display.length = 0;
+                                sources.length = 0;
+                                dests_notes_display.length = 0;
+                                dests.length = 0;
+                                $("#source_note_list").html("");
+                                $("#dest_note_list").html("");
+                                $("#source_alias_matched").html("");
+                                $("#dest_alias_matched").html("");
+                                $("#amount").val("");
+                                $("#reason").val("");
+                                refreshBalance();
+                        });
+                    });
+                });
+            }
         });
     </script>
 {% endblock %}
