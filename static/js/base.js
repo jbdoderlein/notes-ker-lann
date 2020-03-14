@@ -139,7 +139,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
         let pattern = field.val();
         // If the pattern is not modified, we don't query the API
-        if (pattern === old_pattern)
+        if (pattern === old_pattern || pattern === "")
             return;
 
         old_pattern = pattern;
@@ -149,11 +149,6 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
         let aliases_matched_obj = $("#" + alias_matched_id);
         let aliases_matched_html = "";
-
-        if (pattern === "") {
-            aliases_matched_obj.html("");
-            return;
-        }
 
         // Get matched notes with the given pattern
         getMatchedNotes(pattern, function(aliases) {

@@ -133,9 +133,9 @@
 
 {% block extracss %}
     <style>
-        .select2-container{
-            max-width: 100%;
-            min-width: 100%;
+        .validate:hover {
+            cursor: pointer;
+            text-decoration: underline;
         }
     </style>
 {% endblock %}
@@ -143,6 +143,7 @@
 {% block extrajavascript %}
     <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
+        // Switching in double consumptions mode should update the layout
         $("#double_conso").click(function() {
             $("#consos_list_div").show();
             $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
@@ -190,5 +191,28 @@
                 });
             {% endif %}
         {% endfor %}
+
+        // When we click on the validate button, the validation status is switched
+        $(".validate").click(function(e) {
+            let id = e.target.id.substring(9);
+            let validated = e.target.classList.contains("true");
+
+            // Perform a PATCH request to the API in order to update the transaction
+            // If the user has insuffisent rights, an error message will appear
+            // TODO: Add this error message
+            $.ajax({
+                "url": "/api/note/transaction/transaction/" + id + "/",
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "X-CSRFTOKEN": CSRF_TOKEN
+                },
+                data: {
+                    "resourcetype": "TemplateTransaction",
+                    valid: !validated
+                },
+                success: refreshHistory
+            });
+        });
     </script>
 {% endblock %}
