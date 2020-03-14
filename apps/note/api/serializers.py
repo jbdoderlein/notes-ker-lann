@@ -6,7 +6,7 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
-    TemplateTransaction
+    TemplateTransaction, SpecialTransaction
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -144,9 +144,21 @@ class MembershipTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SpecialTransactionSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Special transactions.
+    The djangorestframework plugin will analyse the model `SpecialTransaction` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = SpecialTransaction
+        fields = '__all__'
+
+
 class TransactionPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Transaction: TransactionSerializer,
         TemplateTransaction: TemplateTransactionSerializer,
         MembershipTransaction: MembershipTransactionSerializer,
+        SpecialTransaction: SpecialTransactionSerializer,
     }

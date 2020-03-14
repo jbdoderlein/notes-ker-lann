@@ -9,7 +9,24 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
     <div class="row">
         <div class="col-xl-12">
-            <button id="switch_mode" class="form-control btn btn-secondary">Passer en mode transfert</button>
+            <div class="btn-group btn-group-toggle" style="width: 100%" data-toggle="buttons">
+                <label class="btn btn-sm btn-outline-primary active">
+                    <input type="radio" name="transaction_type" id="type_gift" checked>
+                    Virement
+                </label>
+                <label class="btn btn-sm btn-outline-primary">
+                    <input type="radio" name="transaction_type" id="type_transfer">
+                    Transfert
+                </label>
+                <label class="btn btn-sm btn-outline-primary">
+                    <input type="radio" name="transaction_type" id="type_credit">
+                    Crédit
+                </label>
+                <label class="btn btn-sm btn-outline-primary">
+                    <input type="radio" name="transaction_type" id="type_debit">
+                    Retrait
+                </label>
+            </div>
         </div>
     </div>
 
@@ -27,6 +44,48 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     <input class="form-control mx-auto d-block" type="text" id="source_note" />
                     <ul class="list-group list-group-flush" id="source_alias_matched">
                     </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" id="external_div" style="display: none;">
+            <div class="card border-success shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        Paiement externe
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="credit_type">Type de transfert :</label>
+                            <select id="credit_type" class="custom-select">
+                                {% for special_type in special_types %}
+                                    <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="last_name">Nom :</label>
+                            <input type="text" id="last_name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="first_name">Prénom :</label>
+                            <input type="text" id="first_name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="bank">Banque :</label>
+                            <input type="text" id="bank" class="form-control" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,7 +134,23 @@ SPDX-License-Identifier: GPL-2.0-or-later
         sources_notes_display = [];
         dests = [];
         dests_notes_display = [];
-        transfer_mode = false;
+
+        function reset() {
+            sources_notes_display.length = 0;
+            sources.length = 0;
+            dests_notes_display.length = 0;
+            dests.length = 0;
+            $("#source_note_list").html("");
+            $("#dest_note_list").html("");
+            $("#source_alias_matched").html("");
+            $("#dest_alias_matched").html("");
+            $("#amount").val("");
+            $("#reason").val("");
+            $("#last_name").val("");
+            $("#first_name").val("");
+            $("#bank").val("");
+            refreshBalance();
+        }
 
         $(document).ready(function() {
            autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
@@ -84,22 +159,32 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 "dest_alias", "dest_note");
         });
 
-        $("#switch_mode").click(function () {
-            transfer_mode ^= true;
-            if (transfer_mode) {
-                $("#switch_mode").text("Passer en mode virement");
-                $("#emitters_div").show();
-                $("#dests_div").attr('class', 'col-md-6');
-            }
-            else {
-                $("#switch_mode").text("Passer en mode transfert");
-                $("#emitters_div").hide();
-                $("#dests_div").attr('class', 'col-md-12');
-            }
+        $("#type_gift").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").hide();
+            $("#dests_div").attr('class', 'col-md-12');
+        });
+
+        $("#type_transfer").click(function() {
+            $("#emitters_div").show();
+            $("#external_div").hide();
+            $("#dests_div").attr('class', 'col-md-6');
+        });
+
+        $("#type_credit").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").show();
+            $("#dests_div").attr('class', 'col-md-6');
+        });
+
+        $("#type_debit").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").show();
+            $("#dests_div").attr('class', 'col-md-6');
         });
 
         $("#transfer").click(function() {
-            if (sources_notes_display.length === 0) {
+            if ($("#type_gift").is(':checked')) {
                 dests_notes_display.forEach(function (dest) {
                     $.post("/api/note/transaction/transaction/",
                         {
@@ -120,17 +205,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                                 + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
                             msgDiv.html(html);
 
-                            sources_notes_display.length = 0;
-                            sources.length = 0;
-                            dests_notes_display.length = 0;
-                            dests.length = 0;
-                            $("#source_note_list").html("");
-                            $("#dest_note_list").html("");
-                            $("#source_alias_matched").html("");
-                            $("#dest_alias_matched").html("");
-                            $("#amount").val("");
-                            $("#reason").val("");
-                            refreshBalance();
+                            reset();
                         }).fail(function (err) {
                         let msgDiv = $("#messages");
                         let html = msgDiv.html();
@@ -139,21 +214,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
                         msgDiv.html(html);
 
-                        sources_notes_display.length = 0;
-                        sources.length = 0;
-                        dests_notes_display.length = 0;
-                        dests.length = 0;
-                        $("#source_note_list").html("");
-                        $("#dest_note_list").html("");
-                        $("#source_alias_matched").html("");
-                        $("#dest_alias_matched").html("");
-                        $("#amount").val("");
-                        $("#reason").val("");
-                        refreshBalance();
+                        reset();
                     });
                 });
             }
-            else {
+            else if ($("#type_transfer").is(':checked')) {
                 sources_notes_display.forEach(function (source) {
                     dests_notes_display.forEach(function (dest) {
                         $.post("/api/note/transaction/transaction/",
@@ -175,17 +240,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                                     + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
                                 msgDiv.html(html);
 
-                                sources_notes_display.length = 0;
-                                sources.length = 0;
-                                dests_notes_display.length = 0;
-                                dests.length = 0;
-                                $("#source_note_list").html("");
-                                $("#dest_note_list").html("");
-                                $("#source_alias_matched").html("");
-                                $("#dest_alias_matched").html("");
-                                $("#amount").val("");
-                                $("#reason").val("");
-                                refreshBalance();
+                                reset();
                             }).fail(function (err) {
                                 let msgDiv = $("#messages");
                                 let html = msgDiv.html();
@@ -194,19 +249,52 @@ SPDX-License-Identifier: GPL-2.0-or-later
                                     + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
                                 msgDiv.html(html);
 
-                                sources_notes_display.length = 0;
-                                sources.length = 0;
-                                dests_notes_display.length = 0;
-                                dests.length = 0;
-                                $("#source_note_list").html("");
-                                $("#dest_note_list").html("");
-                                $("#source_alias_matched").html("");
-                                $("#dest_alias_matched").html("");
-                                $("#amount").val("");
-                                $("#reason").val("");
-                                refreshBalance();
+                                reset();
                         });
                     });
+                });
+            } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
+                let special_note = $("#credit_type").val();
+                let user_note = dests_notes_display[0][1];
+                let source, dest, reason;
+                if ($("#type_credit").is(':checked')) {
+                    source = special_note;
+                    dest = user_note;
+                    reason = $("#reason").val() + " (Crédit " + $("#credit_type option:selected").text().toLowerCase() + ")";
+                }
+                else {
+                    source = user_note;
+                    dest = special_note;
+                    reason = $("#reason").val() + " (Retrait " + $("#credit_type option:selected").text().toLowerCase() + ")";
+                }
+                $.post("/api/note/transaction/transaction/",
+                    {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "quantity": dest[3],
+                        "amount": $("#amount").val(),
+                        "reason": reason,
+                        "valid": true,
+                        "polymorphic_ctype": {{ special_polymorphic_ctype }},
+                        "resourcetype": "SpecialTransaction",
+                        "source": source,
+                        "destination": dest,
+                        "last_name": $("#last_name").val(),
+                        "first_name": $("#first_name").val(),
+                        "bank": $("#bank").val()
+                    }, function () {
+                        let msgDiv = $("#messages");
+                        let html = msgDiv.html();
+                        html += "<div class=\"alert alert-success\">Le crédit/retrait a bien été effectué !</div>\n";
+                        msgDiv.html(html);
+
+                        reset();
+                    }).fail(function (err) {
+                    let msgDiv = $("#messages");
+                    let html = msgDiv.html();
+                    html += "<div class=\"alert alert-danger\">Le crédit/transfert a échoué : " + err.responseText + "</div>\n";
+                    msgDiv.html(html);
+
+                    reset();
                 });
             }
         });

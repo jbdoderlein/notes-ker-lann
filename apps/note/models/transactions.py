@@ -165,7 +165,6 @@ class Transaction(PolymorphicModel):
 class TemplateTransaction(Transaction):
     """
     Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
-
     """
 
     template = models.ForeignKey(
@@ -181,6 +180,27 @@ class TemplateTransaction(Transaction):
     @property
     def type(self):
         return _('template')
+
+
+class SpecialTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to transactions with special notes
+    """
+
+    last_name = models.CharField(
+        max_length=255,
+        verbose_name=_("name"),
+    )
+
+    first_name = models.CharField(
+        max_length=255,
+        verbose_name=_("first_name"),
+    )
+
+    bank = models.CharField(
+        max_length=255,
+        verbose_name=_("bank")
+    )
 
 
 class MembershipTransaction(Transaction):

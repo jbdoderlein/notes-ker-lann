@@ -10,7 +10,8 @@ from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 from django_tables2 import SingleTableView
 
 from .forms import TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
+from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction, NoteSpecial
+from .models.transactions import SpecialTransaction
 from .tables import HistoryTable
 
 
@@ -30,6 +31,8 @@ class TransactionCreate(LoginRequiredMixin, TemplateView):
         context['title'] = _('Transfer money from your account '
                              'to one or others')
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
+        context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
+        context['special_types'] = NoteSpecial.objects.order_by("special_type").all()
 
         return context
 

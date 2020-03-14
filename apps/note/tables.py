@@ -37,19 +37,15 @@ class HistoryTable(tables.Table):
             .order_by(('-' if is_descending else '') + 'total')
         return queryset, True
 
-
     def render_amount(self, value):
         return pretty_money(value)
-
 
     def render_total(self, value):
         return pretty_money(value)
 
-
     # Django-tables escape strings. That's a wrong thing.
     def render_reason(self, value):
         return html.unescape(value)
-
 
     def render_valid(self, value):
         return "✔" if value else "✖"
