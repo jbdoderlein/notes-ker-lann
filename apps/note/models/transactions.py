@@ -157,6 +157,10 @@ class Transaction(PolymorphicModel):
     def total(self):
         return self.amount * self.quantity
 
+    @property
+    def type(self):
+        return _('transfert')
+
 
 class TemplateTransaction(Transaction):
     """
@@ -174,6 +178,10 @@ class TemplateTransaction(Transaction):
         on_delete=models.PROTECT,
     )
 
+    @property
+    def type(self):
+        return _('template')
+
 
 class MembershipTransaction(Transaction):
     """
@@ -190,3 +198,7 @@ class MembershipTransaction(Transaction):
     class Meta:
         verbose_name = _("membership transaction")
         verbose_name_plural = _("membership transactions")
+
+    @property
+    def type(self):
+        return _('membership')
