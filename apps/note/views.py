@@ -124,8 +124,11 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
-            .order_by('category__name', 'name')
+        from django.db.models import Count
+        buttons = TransactionTemplate.objects.filter(display=True) \
+            .annotate(clicks=Count('templatetransaction')).order_by('category__name', 'name')
+        context['transaction_templates'] = buttons
+        context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
         context['title'] = _("Consumptions")
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(TemplateTransaction).pk
 

@@ -59,10 +59,22 @@
         <div class="col-sm-7 col-md-8" id="buttons_div">
             {# Show last used buttons #}
             <div class="card shadow mb-4">
-                <div class="card-body text-nowrap" style="overflow:auto hidden">
-                    <p class="card-text text-muted font-weight-light font-italic">
-                        {% trans "The most used buttons will display here." %}
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        {% trans "Most used buttons" %}
                     </p>
+                </div>
+                <div class="card-body text-nowrap" style="overflow:auto hidden">
+                    <div class="d-inline-flex flex-wrap justify-content-center" id="most_used">
+                        {% for button in most_used %}
+                            {% if button.display %}
+                                <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                        id="button{{ button.id }}" name="button" value="{{ button.name }}">
+                                    {{ button.name }} ({{ button.amount | pretty_money }})
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 

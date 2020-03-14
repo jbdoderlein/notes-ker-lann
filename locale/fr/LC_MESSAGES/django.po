@@ -651,8 +651,8 @@ msgid "Consume!"
 msgstr "Consommer !"
 
 #: templates/note/conso_form.html:62
-msgid "The most used buttons will display here."
-msgstr "Les boutons les plus utilisés apparaîtront ici."
+msgid "Most used buttons"
+msgstr "Boutons les plus utilisés"
 
 #: templates/note/conso_form.html:107
 msgid "Edit"

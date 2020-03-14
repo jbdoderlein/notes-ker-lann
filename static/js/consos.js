@@ -6,6 +6,7 @@
  */
 function refreshHistory() {
     $("#history").load("/note/consos/ #history");
+    $("#most_used").load("/note/consos/ #most_used");
 }
 
 $(document).ready(function() {

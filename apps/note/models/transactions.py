@@ -68,6 +68,7 @@ class TransactionTemplate(models.Model):
     description = models.CharField(
         verbose_name=_('description'),
         max_length=255,
+        blank=True,
     )
 
     class Meta:
