@@ -25,7 +25,7 @@
                     <div class="card border-success shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
-                                Sélection des émetteurs
+                                {% trans "Select emitters" %}
                             </p>
                         </div>
                         <ul class="list-group list-group-flush" id="note_list">
@@ -42,12 +42,14 @@
                     <div class="card border-info shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
-                                Sélection des consommations
+                                {% trans "Select consumptions" %}
                             </p>
                         </div>
                         <ul class="list-group list-group-flush" id="consos_list">
                         </ul>
-                        <button id="consume_all" class="form-control btn btn-primary">Consommer !</button>
+                        <button id="consume_all" class="form-control btn btn-primary">
+                            {% trans "Consume!" %}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -59,7 +61,7 @@
             <div class="card shadow mb-4">
                 <div class="card-body text-nowrap" style="overflow:auto hidden">
                     <p class="card-text text-muted font-weight-light font-italic">
-                        Les boutons les plus utilisés s'afficheront ici.
+                        {% trans "The most used buttons will display here." %}
                     </p>
                 </div>
             </div>
@@ -104,16 +106,16 @@
                 {# Mode switch #}
                 <div class="card-footer border-primary">
                     <a class="btn btn-sm btn-secondary float-left" href="{% url 'note:template_list' %}">
-                        <i class="fa fa-edit"></i> Éditer
+                        <i class="fa fa-edit"></i> {% trans "Edit" %}
                     </a>
                     <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
                         <label class="btn btn-sm btn-outline-primary active">
                             <input type="radio" name="conso_type" id="single_conso" checked>
-                            Consomations simples
+                            {% trans "Single consumptions" %}
                         </label>
                         <label class="btn btn-sm btn-outline-primary">
                             <input type="radio" name="conso_type" id="double_conso">
-                            Consomations doubles
+                            {% trans "Double consumptions" %}
                         </label>
                     </div>
                 </div>
@@ -124,7 +126,7 @@
     <div class="card shadow mb-4" id="history">
         <div class="card-header">
             <p class="card-text font-weight-bold">
-                Historique des transactions récentes
+                {% trans "Recent transactions history" %}
             </p>
         </div>
         {% render_table table %}

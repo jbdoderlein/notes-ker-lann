@@ -12,19 +12,19 @@ SPDX-License-Identifier: GPL-2.0-or-later
             <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
                 <label class="btn btn-sm btn-outline-primary active">
                     <input type="radio" name="transaction_type" id="type_gift" checked>
-                    Virement
+                    {% trans "Gift" %}
                 </label>
                 <label class="btn btn-sm btn-outline-primary">
                     <input type="radio" name="transaction_type" id="type_transfer">
-                    Transfert
+                    {% trans "Transfer" %}
                 </label>
                 <label class="btn btn-sm btn-outline-primary">
                     <input type="radio" name="transaction_type" id="type_credit">
-                    Crédit
+                    {% trans "Credit" %}
                 </label>
                 <label class="btn btn-sm btn-outline-primary">
                     <input type="radio" name="transaction_type" id="type_debit">
-                    Retrait
+                    {% trans "Debit" %}
                 </label>
             </div>
         </div>
@@ -35,7 +35,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
-                        Sélection des émetteurs
+                        {% trans "Select emitters" %}
                     </p>
                 </div>
                 <ul class="list-group list-group-flush" id="source_note_list">
@@ -52,7 +52,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
-                        Paiement externe
+                        {% trans "External payment" %}
                     </p>
                 </div>
                 <ul class="list-group list-group-flush" id="source_note_list">
@@ -60,7 +60,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 <div class="card-body">
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="credit_type">Type de transfert :</label>
+                            <label for="credit_type">{% trans "Transfer type" %} :</label>
                             <select id="credit_type" class="custom-select">
                                 {% for special_type in special_types %}
                                     <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
@@ -70,19 +70,19 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     </div>
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="last_name">Nom :</label>
+                            <label for="last_name">{% trans "Name" %} :</label>
                             <input type="text" id="last_name" class="form-control" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="first_name">Prénom :</label>
+                            <label for="first_name">{% trans "First name" %} :</label>
                             <input type="text" id="first_name" class="form-control" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-md-12">
-                            <label for="bank">Banque :</label>
+                            <label for="bank">{% trans "Bank" %} :</label>
                             <input type="text" id="bank" class="form-control" />
                         </div>
                     </div>
@@ -94,7 +94,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             <div class="card border-info shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold" id="dest_title">
-                        Sélection des destinataires
+                        {% trans "Select receivers" %}
                     </p>
                 </div>
                 <ul class="list-group list-group-flush" id="dest_note_list">
@@ -176,28 +176,28 @@ SPDX-License-Identifier: GPL-2.0-or-later
             $("#emitters_div").hide();
             $("#external_div").hide();
             $("#dests_div").attr('class', 'col-md-12');
-            $("#dest_title").text("Sélection des destinataires");
+            $("#dest_title").text("{% trans "Select receivers" %}");
         });
 
         $("#type_transfer").click(function() {
             $("#emitters_div").show();
             $("#external_div").hide();
             $("#dests_div").attr('class', 'col-md-6');
-            $("#dest_title").text("Sélection des destinataires");
+            $("#dest_title").text("{% trans "Select receivers" %}");
         });
 
         $("#type_credit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
             $("#dests_div").attr('class', 'col-md-6');
-            $("#dest_title").text("Note à créditer");
+            $("#dest_title").text("{% trans "Credit note" %}");
         });
 
         $("#type_debit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
             $("#dests_div").attr('class', 'col-md-6');
-            $("#dest_title").text("Note à prélever");
+            $("#dest_title").text("{% trans "Debit note" %}");
         });
 
         $("#transfer").click(function() {
