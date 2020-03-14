@@ -27,7 +27,9 @@ class HistoryTable(tables.Table):
     total = tables.Column()  # will use Transaction.total() !!
 
     valid = tables.Column(attrs={"td": {"id": lambda record: "validate_" + str(record.id),
-                                        "class": lambda record: str(record.valid).lower() + ' validate'}})
+                                        "class": lambda record: str(record.valid).lower() + ' validate',
+                                        "onclick": lambda record: 'de_validate(' + str(record.id) + ', '
+                                                                  + str(record.valid).lower() + ')'}})
 
     def order_total(self, queryset, is_descending):
         # needed for rendering

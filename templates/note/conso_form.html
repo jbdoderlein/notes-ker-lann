@@ -192,10 +192,9 @@
             {% endif %}
         {% endfor %}
 
-        // When we click on the validate button, the validation status is switched
-        $(".validate").click(function(e) {
-            let id = e.target.id.substring(9);
-            let validated = e.target.classList.contains("true");
+        // When a validate button is clicked, we switch the validation status
+        function de_validate(id, validated) {
+            $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
 
             // Perform a PATCH request to the API in order to update the transaction
             // If the user has insuffisent rights, an error message will appear
@@ -211,11 +210,14 @@
                     "resourcetype": "TemplateTransaction",
                     valid: !validated
                 },
-                success: function() {
+                success: function () {
                     refreshHistory();
                     refreshBalance();
+
+                    // Refresh jQuery objects
+                    $(".validate").click(de_validate);
                 }
             });
-        });
+        }
     </script>
 {% endblock %}
