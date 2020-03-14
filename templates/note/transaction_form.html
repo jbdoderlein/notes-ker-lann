@@ -9,7 +9,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
     <div class="row">
         <div class="col-xl-12">
-            <div class="btn-group btn-group-toggle" style="width: 100%" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
                 <label class="btn btn-sm btn-outline-primary active">
                     <input type="radio" name="transaction_type" id="type_gift" checked>
                     Virement
@@ -93,7 +93,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         <div class="col-md-12" id="dests_div">
             <div class="card border-info shadow mb-4">
                 <div class="card-header">
-                    <p class="card-text font-weight-bold">
+                    <p class="card-text font-weight-bold" id="dest_title">
                         Sélection des destinataires
                     </p>
                 </div>
@@ -153,34 +153,51 @@ SPDX-License-Identifier: GPL-2.0-or-later
         }
 
         $(document).ready(function() {
-           autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
+            autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
                 "source_alias", "source_note");
-           autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
-                "dest_alias", "dest_note");
+            autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
+                "dest_alias", "dest_note", null, null, function() {
+                    let last = dests_notes_display[dests_notes_display.length - 1];
+                    dests_notes_display.length = 0;
+                    dests_notes_display.push(last);
+
+                    last[3] = 1;
+
+                    $.getJSON("/api/user/" + last[2].user + "/", function(user) {
+                        $("#last_name").val(user.last_name);
+                        $("#first_name").val(user.first_name);
+                    });
+
+                    return true;
+               });
         });
 
         $("#type_gift").click(function() {
             $("#emitters_div").hide();
             $("#external_div").hide();
             $("#dests_div").attr('class', 'col-md-12');
+            $("#dest_title").text("Sélection des destinataires");
         });
 
         $("#type_transfer").click(function() {
             $("#emitters_div").show();
             $("#external_div").hide();
             $("#dests_div").attr('class', 'col-md-6');
+            $("#dest_title").text("Sélection des destinataires");
         });
 
         $("#type_credit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
             $("#dests_div").attr('class', 'col-md-6');
+            $("#dest_title").text("Note à créditer");
         });
 
         $("#type_debit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
             $("#dests_div").attr('class', 'col-md-6');
+            $("#dest_title").text("Note à prélever");
         });
 
         $("#transfer").click(function() {

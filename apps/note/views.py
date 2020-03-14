@@ -28,8 +28,7 @@ class TransactionCreate(LoginRequiredMixin, TemplateView):
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Transfer money from your account '
-                             'to one or others')
+        context['title'] = _('Transfer money')
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
         context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
         context['special_types'] = NoteSpecial.objects.order_by("special_type").all()

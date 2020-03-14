@@ -456,8 +456,8 @@ msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
 #: apps/note/views.py:29
-msgid "Transfer money from your account to one or others"
-msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
+msgid "Transfer money"
+msgstr "Transferts d'argent"
 
 #: note_kfet/settings/__init__.py:63
 msgid ""

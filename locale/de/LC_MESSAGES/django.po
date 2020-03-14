@@ -443,7 +443,7 @@ msgid "membership transactions"
 msgstr ""
 
 #: apps/note/views.py:29
-msgid "Transfer money from your account to one or others"
+msgid "Transfer money"
 msgstr ""
 
 #: apps/note/views.py:139
