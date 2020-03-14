@@ -211,7 +211,10 @@
                     "resourcetype": "TemplateTransaction",
                     valid: !validated
                 },
-                success: refreshHistory
+                success: function() {
+                    refreshHistory();
+                    refreshBalance();
+                }
             });
         });
     </script>
