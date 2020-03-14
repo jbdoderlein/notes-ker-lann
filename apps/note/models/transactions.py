@@ -159,7 +159,7 @@ class Transaction(PolymorphicModel):
 
     @property
     def type(self):
-        return _('transfert')
+        return _('transfer')
 
 
 class TemplateTransaction(Transaction):
