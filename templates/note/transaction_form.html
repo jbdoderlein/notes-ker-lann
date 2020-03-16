@@ -31,7 +31,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
     </div>
 
     <div class="row">
-        <div class="col-md-6" id="emitters_div" style="display: none;">
+        <div class="col-md-4" id="emitters_div" style="display: none;">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
@@ -48,7 +48,17 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
 
-        <div class="col-md-6" id="external_div" style="display: none;">
+        <div class="col-xl-4" id="note_infos_div">
+            <div class="card border-success shadow mb-4">
+                <img src="/media/pic/default.png"
+                    id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
+                <div class="card-body text-center">
+                    <span id="user_note"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" id="external_div" style="display: none;">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
@@ -90,7 +100,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
 
-        <div class="col-md-12" id="dests_div">
+        <div class="col-md-8" id="dests_div">
             <div class="card border-info shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold" id="dest_title">
@@ -168,9 +178,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
         $(document).ready(function() {
             autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
-                "source_alias", "source_note");
+                "source_alias", "source_note", "user_note", "profile_pic");
             autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
-                "dest_alias", "dest_note", null, null, function() {
+                "dest_alias", "dest_note", "user_note", "profile_pic", function() {
                     let last = dests_notes_display[dests_notes_display.length - 1];
                     dests_notes_display.length = 0;
                     dests_notes_display.push(last);
@@ -189,28 +199,28 @@ SPDX-License-Identifier: GPL-2.0-or-later
         $("#type_gift").click(function() {
             $("#emitters_div").hide();
             $("#external_div").hide();
-            $("#dests_div").attr('class', 'col-md-12');
+            $("#dests_div").attr('class', 'col-md-8');
             $("#dest_title").text("{% trans "Select receivers" %}");
         });
 
         $("#type_transfer").click(function() {
             $("#emitters_div").show();
             $("#external_div").hide();
-            $("#dests_div").attr('class', 'col-md-6');
+            $("#dests_div").attr('class', 'col-md-4');
             $("#dest_title").text("{% trans "Select receivers" %}");
         });
 
         $("#type_credit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
-            $("#dests_div").attr('class', 'col-md-6');
+            $("#dests_div").attr('class', 'col-md-4');
             $("#dest_title").text("{% trans "Credit note" %}");
         });
 
         $("#type_debit").click(function() {
             $("#emitters_div").hide();
             $("#external_div").show();
-            $("#dests_div").attr('class', 'col-md-6');
+            $("#dests_div").attr('class', 'col-md-4');
             $("#dest_title").text("{% trans "Debit note" %}");
         });
 
