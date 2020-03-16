@@ -24,39 +24,55 @@ $(document).ready(function() {
     });
 
     // Switching in double consumptions mode should update the layout
-    $("#double_conso").click(function() {
+    let double_conso_obj = $("#double_conso");
+    double_conso_obj.click(function() {
         $("#consos_list_div").show();
         $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
         $("#note_infos_div").attr('class', 'col-xl-3');
         $("#user_select_div").attr('class', 'col-xl-4');
         $("#buttons_div").attr('class', 'col-sm-7 col-xl-6');
 
-        if (buttons.length > 0) {
-            let note_list_obj = $("#note_list");
+        let note_list_obj = $("#note_list");
+        if (buttons.length > 0 && note_list_obj.text().length > 0) {
             $("#consos_list").html(note_list_obj.html());
             note_list_obj.html("");
+
+            buttons.forEach(function(button) {
+                $("#conso_button_" + button.id).click(removeNote(button, "conso_button", buttons,
+                    "consos_list"));
+            });
         }
     });
 
-    $("#single_conso").click(function() {
+    let single_conso_obj = $("#single_conso");
+    single_conso_obj.click(function() {
         $("#consos_list_div").hide();
         $("#infos_div").attr('class', 'col-sm-5 col-md-4');
         $("#note_infos_div").attr('class', 'col-xl-5');
         $("#user_select_div").attr('class', 'col-xl-7');
         $("#buttons_div").attr('class', 'col-sm-7 col-md-8');
 
+        let consos_list_obj = $("#consos_list");
         if (buttons.length > 0) {
-            if (notes_display.length === 0) {
-                let consos_list_obj = $("#consos_list");
+            if (notes_display.length === 0 && consos_list_obj.text().length > 0) {
                 $("#note_list").html(consos_list_obj.html());
                 consos_list_obj.html("");
+                buttons.forEach(function(button) {
+                    $("#conso_button_" + button.id).click(removeNote(button, "conso_button", buttons,
+                        "note_list"));
+                });
             }
             else {
                 buttons.length = 0;
-                $("#consos_list").html("");
+                consos_list_obj.html("");
             }
         }
     });
+
+    // Ensure we begin in single consumption. Removing these lines may cause problems when reloading.
+    single_conso_obj.prop('checked', 'true');
+    double_conso_obj.removeAttr('checked');
+    $("label[for='double_conso']").attr('class', 'btn btn-sm btn-outline-primary');
 
     $("#consos_list_div").hide();
 
