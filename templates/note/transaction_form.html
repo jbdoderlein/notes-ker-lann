@@ -201,8 +201,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
             $("#type_transfer").removeAttr('checked');
             $("#type_credit").removeAttr('checked');
             $("#type_debit").removeAttr('checked');
-            $("label[for='type_gift']").attr('class', 'btn btn-sm btn-outline-primary');
             $("label[for='type_transfer']").attr('class', 'btn btn-sm btn-outline-primary');
+            $("label[for='type_credit']").attr('class', 'btn btn-sm btn-outline-primary');
             $("label[for='type_debit']").attr('class', 'btn btn-sm btn-outline-primary');
         });
 
@@ -246,7 +246,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             "valid": true,
                             "polymorphic_ctype": {{ polymorphic_ctype }},
                             "resourcetype": "Transaction",
-                            "type": "gift",
                             "source": {{ user.note.id }},
                             "destination": dest.id
                         }, function () {
@@ -276,7 +275,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
                                 "valid": true,
                                 "polymorphic_ctype": {{ polymorphic_ctype }},
                                 "resourcetype": "Transaction",
-                                "type": "transfer",
                                 "source": source.id,
                                 "destination": dest.id
                             }, function () {
@@ -298,11 +296,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 let special_note = $("#credit_type").val();
                 let user_note = dests_notes_display[0].id;
                 let given_reason = $("#reason").val();
-                let source, dest, reason, type;
+                let source, dest, reason;
                 if ($("#type_credit").is(':checked')) {
                     source = special_note;
                     dest = user_note;
-                    type = "credit";
                     reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
                     if (given_reason.length > 0)
                         reason += " (" + given_reason + ")";
@@ -324,7 +321,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
                         "valid": true,
                         "polymorphic_ctype": {{ special_polymorphic_ctype }},
                         "resourcetype": "SpecialTransaction",
-                        "type": type,
                         "source": source,
                         "destination": dest,
                         "last_name": $("#last_name").val(),

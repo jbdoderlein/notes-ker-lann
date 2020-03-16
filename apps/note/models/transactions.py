@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
-from .notes import Note, NoteClub
+from .notes import Note, NoteClub, NoteSpecial
 
 """
 Defines transactions
@@ -111,20 +111,6 @@ class Transaction(PolymorphicModel):
         verbose_name=_('amount'),
     )
 
-    type = models.CharField(
-        verbose_name=_('type'),
-        choices=(
-            ('gift', _('Gift')),
-            ('transfer', _('Transfer')),
-            ('template', _('Template')),
-            ('credit', _('Credit')),
-            ('debit', _('Debit')),
-            ('membership', _('membership transaction')),
-        ),
-        default='transfer',
-        max_length=10,
-    )
-
     reason = models.CharField(
         verbose_name=_('reason'),
         max_length=255,
@@ -175,6 +161,10 @@ class Transaction(PolymorphicModel):
     def total(self):
         return self.amount * self.quantity
 
+    @property
+    def type(self):
+        return _('Transfer')
+
 
 class TemplateTransaction(Transaction):
     """
@@ -190,6 +180,10 @@ class TemplateTransaction(Transaction):
         TemplateCategory,
         on_delete=models.PROTECT,
     )
+
+    @property
+    def type(self):
+        return _('Template')
 
 
 class SpecialTransaction(Transaction):
@@ -213,6 +207,10 @@ class SpecialTransaction(Transaction):
         blank=True,
     )
 
+    @property
+    def type(self):
+        return _('Credit') if isinstance(self.source, NoteSpecial) else _("Debit")
+
 
 class MembershipTransaction(Transaction):
     """
@@ -229,3 +227,7 @@ class MembershipTransaction(Transaction):
     class Meta:
         verbose_name = _("membership transaction")
         verbose_name_plural = _("membership transactions")
+
+    @property
+    def type(self):
+        return _('membership transaction')

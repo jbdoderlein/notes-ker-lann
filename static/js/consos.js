@@ -193,7 +193,6 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "valid": true,
             "polymorphic_ctype": type,
             "resourcetype": "TemplateTransaction",
-            "type": "template",
             "source": source,
             "destination": dest,
             "category": category,
