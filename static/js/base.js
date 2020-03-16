@@ -75,11 +75,11 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
         let new_notes_display = [];
         let html = "";
         notes_display.forEach(function (disp) {
-            if (disp[3] > 1 || disp[1] !== d[1]) {
-                disp[3] -= disp[1] === d[1] ? 1 : 0;
+            if (disp.quantity > 1 || disp.id !== d.id) {
+                disp.quantity -= disp.id === d.id ? 1 : 0;
                 new_notes_display.push(disp);
-                html += li(note_prefix + "_" + disp[1], disp[0]
-                    + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
+                html += li(note_prefix + "_" + disp.id, disp.name
+                    + "<span class=\"badge badge-dark badge-pill\">" + disp.quantity + "</span>");
             }
         });
 
@@ -90,10 +90,11 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
 
         $("#" + note_list_id).html(html);
         notes_display.forEach(function (disp) {
-            let obj = $("#" + note_prefix + "_" + disp[1]);
+            let obj = $("#" + note_prefix + "_" + disp.id);
             obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field, profile_pic_field));
             obj.hover(function() {
-                displayNote(disp[2], disp[0], user_note_field, profile_pic_field);
+                if (disp.note)
+                    displayNote(disp.note, disp.name, user_note_field, profile_pic_field);
             });
         });
     });
@@ -181,14 +182,21 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                     var disp = null;
                     notes_display.forEach(function (d) {
                         // We compare the note ids
-                        if (d[1] === note.id) {
-                            d[3] += 1;
+                        if (d.id === note.id) {
+                            d.quantity += 1;
                             disp = d;
                         }
                     });
                     // In the other case, we add a new emitter
-                    if (disp == null)
-                        notes_display.push([alias.name, note.id, note, 1]);
+                    if (disp == null) {
+                        disp = {
+                            name: alias.name,
+                            id: note.id,
+                            note: note,
+                            quantity: 1
+                        };
+                        notes_display.push(disp);
+                    }
 
                     // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
                     // note displayed. Useful for a consumption when a button is already clicked
@@ -198,18 +206,18 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                     let note_list = $("#" + note_list_id);
                     let html = "";
                     notes_display.forEach(function (disp) {
-                        html += li(note_prefix + "_" + disp[1], disp[0]
-                            + "<span class=\"badge badge-dark badge-pill\">" + disp[3] + "</span>");
+                        html += li(note_prefix + "_" + disp.id, disp.name
+                            + "<span class=\"badge badge-dark badge-pill\">" + disp.quantity + "</span>");
                     });
 
                     // Emitters are displayed
                     note_list.html(html);
 
                     notes_display.forEach(function (disp) {
-                        let line_obj = $("#" + note_prefix + "_" + disp[1]);
+                        let line_obj = $("#" + note_prefix + "_" + disp.id);
                         // Hover an emitter display also the profile picture
                         line_obj.hover(function () {
-                            displayNote(disp[2], disp[0], user_note_field, profile_pic_field);
+                            displayNote(disp.note, disp.name, user_note_field, profile_pic_field);
                         });
 
                         // When an emitter is clicked, it is removed

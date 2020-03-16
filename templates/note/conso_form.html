@@ -69,7 +69,7 @@
                         {% for button in most_used %}
                             {% if button.display %}
                                 <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                        id="button{{ button.id }}" name="button" value="{{ button.name }}">
+                                        id="most_used_button{{ button.id }}" name="button" value="{{ button.name }}">
                                     {{ button.name }} ({{ button.amount | pretty_money }})
                                 </button>
                             {% endif %}
@@ -157,44 +157,15 @@
 {% block extrajavascript %}
     <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
-        // Switching in double consumptions mode should update the layout
-        $("#double_conso").click(function() {
-            $("#consos_list_div").show();
-            $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
-            $("#note_infos_div").attr('class', 'col-xl-3');
-            $("#user_select_div").attr('class', 'col-xl-4');
-            $("#buttons_div").attr('class', 'col-sm-7 col-xl-6');
-
-            if (buttons.length > 0) {
-                let note_list_obj = $("#note_list");
-                $("#consos_list").html(note_list_obj.html());
-                note_list_obj.html("");
-            }
-        });
-
-        $("#single_conso").click(function() {
-            $("#consos_list_div").hide();
-            $("#infos_div").attr('class', 'col-sm-5 col-md-4');
-            $("#note_infos_div").attr('class', 'col-xl-5');
-            $("#user_select_div").attr('class', 'col-xl-7');
-            $("#buttons_div").attr('class', 'col-sm-7 col-md-8');
-
-            if (buttons.length > 0) {
-                if (notes_display.length === 0) {
-                    let consos_list_obj = $("#consos_list");
-                    $("#note_list").html(consos_list_obj.html());
-                    consos_list_obj.html("");
-                }
-                else {
-                    buttons.length = 0;
-                    $("#consos_list").html("");
-                }
-            }
-        });
-
-        $("#consos_list_div").hide();
-
-        $("#consume_all").click(consumeAll);
+        {% for button in most_used %}
+            {% if button.display %}
+                $("#most_used_button{{ button.id }}").click(function() {
+                    addConso({{ button.destination.id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                        {{ button.id }}, "{{ button.name }}");
+                });
+            {% endif %}
+        {% endfor %}
 
         {% for button in transaction_templates %}
             {% if button.display %}
@@ -205,33 +176,5 @@
                 });
             {% endif %}
         {% endfor %}
-
-        // When a validate button is clicked, we switch the validation status
-        function de_validate(id, validated) {
-            $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
-
-            // Perform a PATCH request to the API in order to update the transaction
-            // If the user has insuffisent rights, an error message will appear
-            // TODO: Add this error message
-            $.ajax({
-                "url": "/api/note/transaction/transaction/" + id + "/",
-                type: "PATCH",
-                dataType: "json",
-                headers: {
-                    "X-CSRFTOKEN": CSRF_TOKEN
-                },
-                data: {
-                    "resourcetype": "TemplateTransaction",
-                    valid: !validated
-                },
-                success: function () {
-                    refreshHistory();
-                    refreshBalance();
-
-                    // Refresh jQuery objects
-                    $(".validate").click(de_validate);
-                }
-            });
-        }
     </script>
 {% endblock %}
