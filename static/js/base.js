@@ -16,6 +16,18 @@ function pretty_money(value) {
 }
 
 /**
+ * Add a message on the top of the page.
+ * @param msg The message to display
+ * @param alert_type The type of the alert. Choices: info, success, warning, danger
+ */
+function addMsg(msg, alert_type) {
+    let msgDiv = $("#messages");
+    let html = msgDiv.html();
+    html += "<div class=\"alert alert-" + alert_type + "\">" + msg + "</div>\n";
+    msgDiv.html(html);
+}
+
+/**
  * Reload the balance of the user on the right top corner
  */
 function refreshBalance() {
@@ -256,11 +268,8 @@ function de_validate(id, validated) {
             refreshHistory();
         },
         error: function(err) {
-            let msgDiv = $("#messages");
-            let html = msgDiv.html();
-            html += "<div class='alert alert-danger'>Une erreur est survenue lors de la validation/dévalidation " +
-                "de cette transaction : " + err.responseText + "</div>";
-            msgDiv.html(html);
+            addMsg("Une erreur est survenue lors de la validation/dévalidation " +
+                "de cette transaction : " + err.responseText, "danger");
 
             refreshBalance();
             // error if this method doesn't exist. Please define it.

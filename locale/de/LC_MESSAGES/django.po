@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-14 17:20+0100\n"
+"POT-Creation-Date: 2020-03-16 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:61 apps/member/models.py:112
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:184
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:202
 #: templates/member/profile_detail.html:15
 msgid "name"
 msgstr ""
@@ -51,7 +51,7 @@ msgid "description"
 msgstr ""
 
 #: apps/activity/models.py:54 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:62
+#: apps/note/models/transactions.py:62 apps/note/models/transactions.py:115
 msgid "type"
 msgstr ""
 
@@ -254,12 +254,12 @@ msgstr ""
 msgid "Alias successfully deleted"
 msgstr ""
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:93
+#: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
 msgstr ""
 
 #: apps/note/admin.py:128 apps/note/admin.py:156
-#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:99
+#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:100
 msgid "destination"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgstr ""
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:102
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:103
 msgid "created at"
 msgstr ""
 
@@ -395,7 +395,7 @@ msgstr ""
 msgid "A template with this name already exist"
 msgstr ""
 
-#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:111
 msgid "amount"
 msgstr ""
 
@@ -403,47 +403,69 @@ msgstr ""
 msgid "in centimes"
 msgstr ""
 
-#: apps/note/models/transactions.py:74
+#: apps/note/models/transactions.py:75
 msgid "transaction template"
 msgstr ""
 
-#: apps/note/models/transactions.py:75
+#: apps/note/models/transactions.py:76
 msgid "transaction templates"
 msgstr ""
 
-#: apps/note/models/transactions.py:106
+#: apps/note/models/transactions.py:107
 msgid "quantity"
 msgstr ""
 
-#: apps/note/models/transactions.py:111
-msgid "reason"
+#: apps/note/models/transactions.py:117 templates/note/transaction_form.html:15
+msgid "Gift"
 msgstr ""
 
-#: apps/note/models/transactions.py:115
-msgid "valid"
+#: apps/note/models/transactions.py:118 templates/base.html:90
+#: templates/note/transaction_form.html:19
+#: templates/note/transaction_form.html:126
+msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:120
-msgid "transaction"
+#: apps/note/models/transactions.py:119
+msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:121
-msgid "transactions"
+#: apps/note/models/transactions.py:120 templates/note/transaction_form.html:23
+msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:189
-msgid "first_name"
+#: apps/note/models/transactions.py:121 templates/note/transaction_form.html:27
+msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:194
-msgid "bank"
-msgstr ""
-
-#: apps/note/models/transactions.py:211
+#: apps/note/models/transactions.py:122 apps/note/models/transactions.py:230
 msgid "membership transaction"
 msgstr ""
 
+#: apps/note/models/transactions.py:129
+msgid "reason"
+msgstr ""
+
+#: apps/note/models/transactions.py:133
+msgid "valid"
+msgstr ""
+
+#: apps/note/models/transactions.py:138
+msgid "transaction"
+msgstr ""
+
+#: apps/note/models/transactions.py:139
+msgid "transactions"
+msgstr ""
+
+#: apps/note/models/transactions.py:207
+msgid "first_name"
+msgstr ""
+
 #: apps/note/models/transactions.py:212
+msgid "bank"
+msgstr ""
+
+#: apps/note/models/transactions.py:231
 msgid "membership transactions"
 msgstr ""
 
@@ -451,7 +473,7 @@ msgstr ""
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:129 templates/base.html:71
+#: apps/note/views.py:132 templates/base.html:78
 msgid "Consumptions"
 msgstr ""
 
@@ -478,21 +500,16 @@ msgstr ""
 msgid "The ENS Paris-Saclay BDE note."
 msgstr ""
 
-#: templates/base.html:74
+#: templates/base.html:81
 msgid "Clubs"
 msgstr ""
 
-#: templates/base.html:77
+#: templates/base.html:84
 msgid "Activities"
 msgstr ""
 
-#: templates/base.html:80
+#: templates/base.html:87
 msgid "Buttons"
-msgstr ""
-
-#: templates/base.html:83 templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:126
-msgid "Transfer"
 msgstr ""
 
 #: templates/cas_server/base.html:7
@@ -644,40 +661,28 @@ msgstr ""
 msgid "Select consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:50
+#: templates/note/conso_form.html:51
 msgid "Consume!"
 msgstr ""
 
-#: templates/note/conso_form.html:62
-msgid "The most used buttons will display here."
+#: templates/note/conso_form.html:64
+msgid "Most used buttons"
 msgstr ""
 
-#: templates/note/conso_form.html:107
+#: templates/note/conso_form.html:121
 msgid "Edit"
 msgstr ""
 
-#: templates/note/conso_form.html:112
+#: templates/note/conso_form.html:126
 msgid "Single consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:116
+#: templates/note/conso_form.html:130
 msgid "Double consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:127
+#: templates/note/conso_form.html:141
 msgid "Recent transactions history"
-msgstr ""
-
-#: templates/note/transaction_form.html:15
-msgid "Gift"
-msgstr ""
-
-#: templates/note/transaction_form.html:23
-msgid "Credit"
-msgstr ""
-
-#: templates/note/transaction_form.html:27
-msgid "Debit"
 msgstr ""
 
 #: templates/note/transaction_form.html:55

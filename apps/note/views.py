@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, UpdateView, TemplateView
+from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
 
 from .forms import TransactionTemplateForm
@@ -15,13 +15,18 @@ from .models.transactions import SpecialTransaction
 from .tables import HistoryTable
 
 
-class TransactionCreate(LoginRequiredMixin, TemplateView):
+class TransactionCreate(LoginRequiredMixin, SingleTableView):
     """
     Show transfer page
 
     TODO: If user have sufficient rights, they can transfer from an other note
     """
+    queryset = Transaction.objects.order_by("-id").all()[:50]
     template_name = "note/transaction_form.html"
+
+    # Transaction history table
+    table_class = HistoryTable
+    table_pagination = {"per_page": 50}
 
     def get_context_data(self, **kwargs):
         """

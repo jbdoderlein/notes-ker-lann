@@ -107,7 +107,24 @@ class Transaction(PolymorphicModel):
         verbose_name=_('quantity'),
         default=1,
     )
-    amount = models.PositiveIntegerField(verbose_name=_('amount'), )
+    amount = models.PositiveIntegerField(
+        verbose_name=_('amount'),
+    )
+
+    type = models.CharField(
+        verbose_name=_('type'),
+        choices=(
+            ('gift', _('Gift')),
+            ('transfer', _('Transfer')),
+            ('template', _('Template')),
+            ('credit', _('Credit')),
+            ('debit', _('Debit')),
+            ('membership', _('membership transaction')),
+        ),
+        default='transfer',
+        max_length=10,
+    )
+
     reason = models.CharField(
         verbose_name=_('reason'),
         max_length=255,
@@ -158,10 +175,6 @@ class Transaction(PolymorphicModel):
     def total(self):
         return self.amount * self.quantity
 
-    @property
-    def type(self):
-        return _('transfer')
-
 
 class TemplateTransaction(Transaction):
     """
@@ -177,10 +190,6 @@ class TemplateTransaction(Transaction):
         TemplateCategory,
         on_delete=models.PROTECT,
     )
-
-    @property
-    def type(self):
-        return _('template')
 
 
 class SpecialTransaction(Transaction):
@@ -200,7 +209,8 @@ class SpecialTransaction(Transaction):
 
     bank = models.CharField(
         max_length=255,
-        verbose_name=_("bank")
+        verbose_name=_("bank"),
+        blank=True,
     )
 
 
@@ -219,7 +229,3 @@ class MembershipTransaction(Transaction):
     class Meta:
         verbose_name = _("membership transaction")
         verbose_name_plural = _("membership transactions")
-
-    @property
-    def type(self):
-        return _('membership')

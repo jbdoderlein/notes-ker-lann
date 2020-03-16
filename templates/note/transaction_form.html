@@ -3,7 +3,7 @@
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
 
-{% load i18n static %}
+{% load i18n static django_tables2 %}
 
 {% block content %}
 
@@ -126,6 +126,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
             <button id="transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
         </div>
     </div>
+
+    <div class="card shadow mb-4" id="history">
+        <div class="card-header">
+            <p class="card-text font-weight-bold">
+                {% trans "Recent transactions history" %}
+            </p>
+        </div>
+        {% render_table table %}
+    </div>
 {% endblock %}
 
 {% block extrajavascript %}
@@ -134,6 +143,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
         sources_notes_display = [];
         dests = [];
         dests_notes_display = [];
+
+        function refreshHistory() {
+            $("#history").load("/note/transfer/ #history");
+        }
 
         function reset() {
             sources_notes_display.length = 0;
@@ -150,6 +163,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             $("#first_name").val("");
             $("#bank").val("");
             refreshBalance();
+            refreshHistory();
         }
 
         $(document).ready(function() {
@@ -161,9 +175,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     dests_notes_display.length = 0;
                     dests_notes_display.push(last);
 
-                    last[3] = 1;
+                    last.quantity = 1;
 
-                    $.getJSON("/api/user/" + last[2].user + "/", function(user) {
+                    $.getJSON("/api/user/" + last.note.user + "/", function(user) {
                         $("#last_name").val(user.last_name);
                         $("#first_name").val(user.first_name);
                     });
@@ -206,30 +220,25 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     $.post("/api/note/transaction/transaction/",
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
-                            "quantity": dest[3],
+                            "quantity": dest.quantity,
                             "amount": $("#amount").val(),
-                            "reason": $("#reason").val() + " (Don)",
+                            "reason": $("#reason").val(),
                             "valid": true,
                             "polymorphic_ctype": {{ polymorphic_ctype }},
                             "resourcetype": "Transaction",
+                            "type": "gift",
                             "source": {{ user.note.id }},
-                            "destination": dest[1]
+                            "destination": dest.id
                         }, function () {
-                            let msgDiv = $("#messages");
-                            let html = msgDiv.html();
-                            html += "<div class=\"alert alert-success\">Le transfert de "
-                                + pretty_money(dest[3] * $("#amount").val()) + " de votre note "
-                                + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
-                            msgDiv.html(html);
+                            addMsg("Le transfert de "
+                                + pretty_money(dest.quantity * $("#amount").val()) + " de votre note "
+                                + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                             reset();
                         }).fail(function (err) {
-                        let msgDiv = $("#messages");
-                        let html = msgDiv.html();
-                        html += "<div class=\"alert alert-danger\">Le transfert de "
-                            + pretty_money(dest[3] * $("#amount").val()) + " de votre note "
-                            + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
-                        msgDiv.html(html);
+                            addMsg("Le transfert de "
+                                + pretty_money(dest.quantity * $("#amount").val()) + " de votre note "
+                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
 
                         reset();
                     });
@@ -241,30 +250,25 @@ SPDX-License-Identifier: GPL-2.0-or-later
                         $.post("/api/note/transaction/transaction/",
                             {
                                 "csrfmiddlewaretoken": CSRF_TOKEN,
-                                "quantity": source[3] * dest[3],
+                                "quantity": source.quantity * dest.quantity,
                                 "amount": $("#amount").val(),
-                                "reason": $("#reason").val() + " (Transfert)",
+                                "reason": $("#reason").val(),
                                 "valid": true,
                                 "polymorphic_ctype": {{ polymorphic_ctype }},
                                 "resourcetype": "Transaction",
-                                "source": source[1],
-                                "destination": dest[1]
+                                "type": "transfer",
+                                "source": source.id,
+                                "destination": dest.id
                             }, function () {
-                                let msgDiv = $("#messages");
-                                let html = msgDiv.html();
-                                html += "<div class=\"alert alert-success\">Le transfert de "
-                                    + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
-                                    + " vers la note " + dest[0] + " a été fait avec succès !</div>\n";
-                                msgDiv.html(html);
+                                addMsg("Le transfert de "
+                                    + pretty_money(source.quantity * dest.quantity * $("#amount").val()) + " de la note " + source.name
+                                    + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                                 reset();
                             }).fail(function (err) {
-                                let msgDiv = $("#messages");
-                                let html = msgDiv.html();
-                                html += "<div class=\"alert alert-danger\">Le transfert de "
-                                    + pretty_money(source[3] * dest[3] * $("#amount").val()) + " de la note " + source[0]
-                                    + " vers la note " + dest[0] + " a échoué : " + err.responseText + "</div>\n";
-                                msgDiv.html(html);
+                                addMsg("Le transfert de "
+                                    + pretty_money(source.quantity * dest.quantity * $("#amount").val()) + " de la note " + source.name
+                                    + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
 
                                 reset();
                         });
@@ -272,46 +276,46 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 });
             } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
                 let special_note = $("#credit_type").val();
-                let user_note = dests_notes_display[0][1];
-                let source, dest, reason;
+                let user_note = dests_notes_display[0].id;
+                let given_reason = $("#reason").val();
+                let source, dest, reason, type;
                 if ($("#type_credit").is(':checked')) {
                     source = special_note;
                     dest = user_note;
-                    reason = $("#reason").val() + " (Crédit " + $("#credit_type option:selected").text().toLowerCase() + ")";
+                    type = "credit";
+                    reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
+                    if (given_reason.length > 0)
+                        reason += " (" + given_reason + ")";
                 }
                 else {
                     source = user_note;
                     dest = special_note;
-                    reason = $("#reason").val() + " (Retrait " + $("#credit_type option:selected").text().toLowerCase() + ")";
+                    type = "debit";
+                    reason = "Retrait " + $("#credit_type option:selected").text().toLowerCase();
+                    if (given_reason.length > 0)
+                        reason += " (" + given_reason + ")";
                 }
                 $.post("/api/note/transaction/transaction/",
                     {
                         "csrfmiddlewaretoken": CSRF_TOKEN,
-                        "quantity": dest[3],
+                        "quantity": 1,
                         "amount": $("#amount").val(),
                         "reason": reason,
                         "valid": true,
                         "polymorphic_ctype": {{ special_polymorphic_ctype }},
                         "resourcetype": "SpecialTransaction",
+                        "type": type,
                         "source": source,
                         "destination": dest,
                         "last_name": $("#last_name").val(),
                         "first_name": $("#first_name").val(),
                         "bank": $("#bank").val()
                     }, function () {
-                        let msgDiv = $("#messages");
-                        let html = msgDiv.html();
-                        html += "<div class=\"alert alert-success\">Le crédit/retrait a bien été effectué !</div>\n";
-                        msgDiv.html(html);
-
+                        addMsg("Le crédit/retrait a bien été effectué !", "success");
                         reset();
                     }).fail(function (err) {
-                    let msgDiv = $("#messages");
-                    let html = msgDiv.html();
-                    html += "<div class=\"alert alert-danger\">Le crédit/transfert a échoué : " + err.responseText + "</div>\n";
-                    msgDiv.html(html);
-
-                    reset();
+                        addMsg("Le crédit/transfert a échoué : " + err.responseText, "danger");
+                        reset();
                 });
             }
         });

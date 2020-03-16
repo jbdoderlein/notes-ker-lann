@@ -6,6 +6,7 @@ import html
 import django_tables2 as tables
 from django.db.models import F
 from django_tables2.utils import A
+from django.utils.translation import gettext_lazy as _
 
 from .models.notes import Alias
 from .models.transactions import Transaction
@@ -21,8 +22,10 @@ class HistoryTable(tables.Table):
         model = Transaction
         exclude = ("id", "polymorphic_ctype", )
         template_name = 'django_tables2/bootstrap4.html'
-        sequence = ('...', 'total', 'valid', )
+        sequence = ('...', 'type', 'total', 'valid', )
         orderable = False
+
+    type = tables.Column()
 
     total = tables.Column()  # will use Transaction.total() !!
 
@@ -42,6 +45,9 @@ class HistoryTable(tables.Table):
 
     def render_total(self, value):
         return pretty_money(value)
+
+    def render_type(self, value):
+        return _(value)
 
     # Django-tables escape strings. That's a wrong thing.
     def render_reason(self, value):

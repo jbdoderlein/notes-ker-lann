@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-14 17:20+0100\n"
+"POT-Creation-Date: 2020-03-16 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr "activité"
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:61 apps/member/models.py:112
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:184
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:202
 #: templates/member/profile_detail.html:15
 msgid "name"
 msgstr "nom"
@@ -46,7 +46,7 @@ msgid "description"
 msgstr "description"
 
 #: apps/activity/models.py:54 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:62
+#: apps/note/models/transactions.py:62 apps/note/models/transactions.py:115
 msgid "type"
 msgstr "type"
 
@@ -253,12 +253,12 @@ msgstr "Compte n°%(id)s : %(username)s"
 msgid "Alias successfully deleted"
 msgstr "L'alias a bien été supprimé"
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:93
+#: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
 msgstr "source"
 
 #: apps/note/admin.py:128 apps/note/admin.py:156
-#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:99
+#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:100
 msgid "destination"
 msgstr "destination"
 
@@ -309,7 +309,7 @@ msgstr ""
 msgid "display image"
 msgstr "image affichée"
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:102
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:103
 msgid "created at"
 msgstr "créée le"
 
@@ -395,7 +395,7 @@ msgstr "catégories de transaction"
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:111
 msgid "amount"
 msgstr "montant"
 
@@ -403,47 +403,69 @@ msgstr "montant"
 msgid "in centimes"
 msgstr "en centimes"
 
-#: apps/note/models/transactions.py:74
+#: apps/note/models/transactions.py:75
 msgid "transaction template"
 msgstr "modèle de transaction"
 
-#: apps/note/models/transactions.py:75
+#: apps/note/models/transactions.py:76
 msgid "transaction templates"
 msgstr "modèles de transaction"
 
-#: apps/note/models/transactions.py:106
+#: apps/note/models/transactions.py:107
 msgid "quantity"
 msgstr "quantité"
 
-#: apps/note/models/transactions.py:111
-msgid "reason"
-msgstr "raison"
+#: apps/note/models/transactions.py:117 templates/note/transaction_form.html:15
+msgid "Gift"
+msgstr "Don"
 
-#: apps/note/models/transactions.py:115
-msgid "valid"
-msgstr "valide"
+#: apps/note/models/transactions.py:118 templates/base.html:90
+#: templates/note/transaction_form.html:19
+#: templates/note/transaction_form.html:126
+msgid "Transfer"
+msgstr "Virement"
 
-#: apps/note/models/transactions.py:120
-msgid "transaction"
-msgstr "transaction"
+#: apps/note/models/transactions.py:119
+msgid "Template"
+msgstr "Bouton"
 
-#: apps/note/models/transactions.py:121
-msgid "transactions"
-msgstr "transactions"
+#: apps/note/models/transactions.py:120 templates/note/transaction_form.html:23
+msgid "Credit"
+msgstr "Crédit"
 
-#: apps/note/models/transactions.py:189
-msgid "first_name"
-msgstr ""
+#: apps/note/models/transactions.py:121 templates/note/transaction_form.html:27
+msgid "Debit"
+msgstr "Retrait"
 
-#: apps/note/models/transactions.py:194
-msgid "bank"
-msgstr ""
-
-#: apps/note/models/transactions.py:211
+#: apps/note/models/transactions.py:122 apps/note/models/transactions.py:230
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
+#: apps/note/models/transactions.py:129
+msgid "reason"
+msgstr "raison"
+
+#: apps/note/models/transactions.py:133
+msgid "valid"
+msgstr "valide"
+
+#: apps/note/models/transactions.py:138
+msgid "transaction"
+msgstr "transaction"
+
+#: apps/note/models/transactions.py:139
+msgid "transactions"
+msgstr "transactions"
+
+#: apps/note/models/transactions.py:207
+msgid "first_name"
+msgstr "Prénom"
+
 #: apps/note/models/transactions.py:212
+msgid "bank"
+msgstr "Banque"
+
+#: apps/note/models/transactions.py:231
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
@@ -451,7 +473,7 @@ msgstr "transactions d'adhésion"
 msgid "Transfer money"
 msgstr "Transferts d'argent"
 
-#: apps/note/views.py:129 templates/base.html:71
+#: apps/note/views.py:132 templates/base.html:78
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -478,22 +500,17 @@ msgstr ""
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: templates/base.html:74
+#: templates/base.html:81
 msgid "Clubs"
 msgstr "Clubs"
 
-#: templates/base.html:77
+#: templates/base.html:84
 msgid "Activities"
 msgstr "Activités"
 
-#: templates/base.html:80
+#: templates/base.html:87
 msgid "Buttons"
 msgstr "Boutons"
-
-#: templates/base.html:83 templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:126
-msgid "Transfer"
-msgstr "Virement"
 
 #: templates/cas_server/base.html:7
 msgid "Central Authentication Service"
@@ -555,7 +572,7 @@ msgstr ""
 #: templates/django_filters/rest_framework/form.html:5
 #: templates/member/club_form.html:10
 msgid "Submit"
-msgstr ""
+msgstr "Envoyer"
 
 #: templates/member/club_detail.html:10
 msgid "Membership starts on"
@@ -646,42 +663,29 @@ msgstr "Sélection des émetteurs"
 msgid "Select consumptions"
 msgstr "Consommations"
 
-#: templates/note/conso_form.html:50
+#: templates/note/conso_form.html:51
 msgid "Consume!"
 msgstr "Consommer !"
 
-#: templates/note/conso_form.html:62
+#: templates/note/conso_form.html:64
 msgid "Most used buttons"
 msgstr "Boutons les plus utilisés"
 
-#: templates/note/conso_form.html:107
+#: templates/note/conso_form.html:121
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/note/conso_form.html:112
-#| msgid "Consumptions"
+#: templates/note/conso_form.html:126
 msgid "Single consumptions"
 msgstr "Consos simples"
 
-#: templates/note/conso_form.html:116
+#: templates/note/conso_form.html:130
 msgid "Double consumptions"
 msgstr "Consos doubles"
 
-#: templates/note/conso_form.html:127
+#: templates/note/conso_form.html:141
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
-
-#: templates/note/transaction_form.html:15
-msgid "Gift"
-msgstr "Don"
-
-#: templates/note/transaction_form.html:23
-msgid "Credit"
-msgstr "Crédit"
-
-#: templates/note/transaction_form.html:27
-msgid "Debit"
-msgstr "Retrait"
 
 #: templates/note/transaction_form.html:55
 msgid "External payment"

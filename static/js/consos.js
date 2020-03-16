@@ -129,6 +129,22 @@ function addConso(dest, amount, type, category_id, category_name, template_id, t
 }
 
 /**
+ * Reset the page as its initial state.
+ */
+function reset() {
+    notes_display.length = 0;
+    notes.length = 0;
+    buttons.length = 0;
+    $("#note_list").html("");
+    $("#alias_matched").html("");
+    $("#consos_list").html("");
+    displayNote(null, "");
+    refreshHistory();
+    refreshBalance();
+}
+
+
+/**
  * Apply all transactions: all notes in `notes` buy each item in `buttons`
  */
 function consumeAll() {
@@ -161,19 +177,14 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "valid": true,
             "polymorphic_ctype": type,
             "resourcetype": "TemplateTransaction",
+            "type": "template",
             "source": source,
             "destination": dest,
             "category": category,
             "template": template
-        }, function() {
-            notes_display.length = 0;
-            notes.length = 0;
-            buttons.length = 0;
-            $("#note_list").html("");
-            $("#alias_matched").html("");
-            $("#consos_list").html("");
-            displayNote(null, "");
-            refreshHistory();
-            refreshBalance();
-        });
+        }, reset).fail(function (e) {
+            reset();
+
+            addMsg("Une erreur est survenue lors de la transaction : " + e.responseText, "danger");
+    });
 }
