@@ -229,3 +229,42 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
         });
     });
 }
+
+// When a validate button is clicked, we switch the validation status
+function de_validate(id, validated) {
+    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
+
+    // Perform a PATCH request to the API in order to update the transaction
+    // If the user has insuffisent rights, an error message will appear
+    $.ajax({
+        "url": "/api/note/transaction/transaction/" + id + "/",
+        type: "PATCH",
+        dataType: "json",
+        headers: {
+            "X-CSRFTOKEN": CSRF_TOKEN
+        },
+        data: {
+            "resourcetype": "TemplateTransaction",
+            valid: !validated
+        },
+        success: function () {
+            // Refresh jQuery objects
+            $(".validate").click(de_validate);
+
+            refreshBalance();
+            // error if this method doesn't exist. Please define it.
+            refreshHistory();
+        },
+        error: function(err) {
+            let msgDiv = $("#messages");
+            let html = msgDiv.html();
+            html += "<div class='alert alert-danger'>Une erreur est survenue lors de la validation/dévalidation " +
+                "de cette transaction : " + err.responseText + "</div>";
+            msgDiv.html(html);
+
+            refreshBalance();
+            // error if this method doesn't exist. Please define it.
+            refreshHistory();
+        }
+    });
+}

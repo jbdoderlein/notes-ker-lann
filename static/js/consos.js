@@ -177,31 +177,3 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             refreshBalance();
         });
 }
-
-// When a validate button is clicked, we switch the validation status
-function de_validate(id, validated) {
-    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
-
-    // Perform a PATCH request to the API in order to update the transaction
-    // If the user has insuffisent rights, an error message will appear
-    // TODO: Add this error message
-    $.ajax({
-        "url": "/api/note/transaction/transaction/" + id + "/",
-        type: "PATCH",
-        dataType: "json",
-        headers: {
-            "X-CSRFTOKEN": CSRF_TOKEN
-        },
-        data: {
-            "resourcetype": "TemplateTransaction",
-            valid: !validated
-        },
-        success: function () {
-            refreshHistory();
-            refreshBalance();
-
-            // Refresh jQuery objects
-            $(".validate").click(de_validate);
-        }
-    });
-}

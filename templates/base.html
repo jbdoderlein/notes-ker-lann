@@ -53,6 +53,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {{ form.media }}
     {% endif %}
 
+    <style>
+        .validate:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+
     {% block extracss %}{% endblock %}
 </head>
 <body class="d-flex w-100 h-100 flex-column">

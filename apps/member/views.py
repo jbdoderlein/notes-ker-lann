@@ -124,7 +124,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         user = context['user_object']
         history_list = \
-            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))
+            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")
         context['history_list'] = HistoryTable(history_list)
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
