@@ -23,7 +23,9 @@ function pretty_money(value) {
 function addMsg(msg, alert_type) {
     let msgDiv = $("#messages");
     let html = msgDiv.html();
-    html += "<div class=\"alert alert-" + alert_type + "\">" + msg + "</div>\n";
+    html += "<div class=\"alert alert-" + alert_type + " alert-dismissible\">" +
+        "<button class=\"close\" data-dismiss=\"alert\" href=\"#\"><span aria-hidden=\"true\">×</span></button>"
+        + msg + "</div>\n";
     msgDiv.html(html);
 }
 
