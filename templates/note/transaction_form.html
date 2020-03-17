@@ -122,7 +122,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="amount">{% trans "Amount" %} :</label>
-            <input class="form-control mx-auto d-block" type="number" min="-20" id="amount" />
+            <div class="input-group">
+                <input class="form-control mx-auto d-block" type="number" min="0" step="0.01" id="amount" />
+                <div class="input-group-append">
+                    <span class="input-group-text">€</span>
+                </div>
+            </div>
         </div>
 
         <div class="form-group col-md-6">
@@ -241,7 +246,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
                             "quantity": dest.quantity,
-                            "amount": $("#amount").val(),
+                            "amount": 100 * $("#amount").val(),
                             "reason": $("#reason").val(),
                             "valid": true,
                             "polymorphic_ctype": {{ polymorphic_ctype }},
@@ -250,13 +255,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             "destination": dest.id
                         }, function () {
                             addMsg("Le transfert de "
-                                + pretty_money(dest.quantity * $("#amount").val()) + " de votre note "
+                                + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
                                 + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                             reset();
                         }).fail(function (err) {
                             addMsg("Le transfert de "
-                                + pretty_money(dest.quantity * $("#amount").val()) + " de votre note "
+                                + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
                                 + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
 
                         reset();
@@ -270,7 +275,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             {
                                 "csrfmiddlewaretoken": CSRF_TOKEN,
                                 "quantity": source.quantity * dest.quantity,
-                                "amount": $("#amount").val(),
+                                "amount": 100 * $("#amount").val(),
                                 "reason": $("#reason").val(),
                                 "valid": true,
                                 "polymorphic_ctype": {{ polymorphic_ctype }},
@@ -279,13 +284,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
                                 "destination": dest.id
                             }, function () {
                                 addMsg("Le transfert de "
-                                    + pretty_money(source.quantity * dest.quantity * $("#amount").val()) + " de la note " + source.name
+                                    + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
                                     + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                                 reset();
                             }).fail(function (err) {
                                 addMsg("Le transfert de "
-                                    + pretty_money(source.quantity * dest.quantity * $("#amount").val()) + " de la note " + source.name
+                                    + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
                                     + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
 
                                 reset();
@@ -316,7 +321,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     {
                         "csrfmiddlewaretoken": CSRF_TOKEN,
                         "quantity": 1,
-                        "amount": $("#amount").val(),
+                        "amount": 100 * $("#amount").val(),
                         "reason": reason,
                         "valid": true,
                         "polymorphic_ctype": {{ special_polymorphic_ctype }},
