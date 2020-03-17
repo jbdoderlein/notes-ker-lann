@@ -1,23 +1,22 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from crispy_forms.bootstrap import Div
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 from dal import autocomplete
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
 
 from .models import Profile, Club, Membership
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import Div
-from crispy_forms.layout import Layout
-
 
 class SignUpForm(UserCreationForm):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.pop("autofocus", None)
-        self.fields['first_name'].widget.attrs.update({"autofocus":"autofocus"})
+        self.fields['first_name'].widget.attrs.update({"autofocus": "autofocus"})
 
     class Meta:
         model = User
@@ -28,6 +27,7 @@ class ProfileForm(forms.ModelForm):
     """
     A form for the extras field provided by the :model:`member.Profile` model.
     """
+
     class Meta:
         model = Profile
         fields = '__all__'
@@ -42,7 +42,7 @@ class ClubForm(forms.ModelForm):
 
 class AddMembersForm(forms.Form):
     class Meta:
-        fields = ('', )
+        fields = ('',)
 
 
 class MembershipForm(forms.ModelForm):
@@ -54,13 +54,13 @@ class MembershipForm(forms.ModelForm):
         # et récupère les noms d'utilisateur valides
         widgets = {
             'user':
-            autocomplete.ModelSelect2(
-                url='member:user_autocomplete',
-                attrs={
-                    'data-placeholder': 'Nom ...',
-                    'data-minimum-input-length': 1,
-                },
-            ),
+                autocomplete.ModelSelect2(
+                    url='member:user_autocomplete',
+                    attrs={
+                        'data-placeholder': 'Nom ...',
+                        'data-minimum-input-length': 1,
+                    },
+                ),
         }
 
 

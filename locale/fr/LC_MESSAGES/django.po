@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-27 17:39+0100\n"
+"POT-Creation-Date: 2020-03-16 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,10 @@ msgid "activity"
 msgstr "activité"
 
 #: apps/activity/models.py:19 apps/activity/models.py:44
-#: apps/member/models.py:60 apps/member/models.py:111
-#: apps/note/models/notes.py:184 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 templates/member/profile_detail.html:11
+#: apps/member/models.py:61 apps/member/models.py:112
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:202
+#: templates/member/profile_detail.html:15
 msgid "name"
 msgstr "nom"
 
@@ -44,8 +45,8 @@ msgstr "types d'activité"
 msgid "description"
 msgstr "description"
 
-#: apps/activity/models.py:54 apps/note/models/notes.py:160
-#: apps/note/models/transactions.py:62
+#: apps/activity/models.py:54 apps/note/models/notes.py:164
+#: apps/note/models/transactions.py:62 apps/note/models/transactions.py:115
 msgid "type"
 msgstr "type"
 
@@ -81,47 +82,59 @@ msgstr "invités"
 msgid "API"
 msgstr ""
 
-#: apps/logs/apps.py:10
+#: apps/logs/apps.py:11
 msgid "Logs"
 msgstr ""
 
-#: apps/logs/models.py:20 apps/note/models/notes.py:105
+#: apps/logs/models.py:21 apps/note/models/notes.py:117
 msgid "user"
 msgstr "utilisateur"
 
 #: apps/logs/models.py:27
+msgid "IP Address"
+msgstr "Adresse IP"
+
+#: apps/logs/models.py:35
 msgid "model"
 msgstr "Modèle"
 
-#: apps/logs/models.py:34
+#: apps/logs/models.py:42
 msgid "identifier"
 msgstr "Identifiant"
 
-#: apps/logs/models.py:39
+#: apps/logs/models.py:47
 msgid "previous data"
 msgstr "Données précédentes"
 
-#: apps/logs/models.py:44
-#, fuzzy
-#| msgid "end date"
+#: apps/logs/models.py:52
 msgid "new data"
 msgstr "Nouvelles données"
 
-#: apps/logs/models.py:51
-#, fuzzy
-#| msgid "section"
+#: apps/logs/models.py:60
+msgid "create"
+msgstr "Créer"
+
+#: apps/logs/models.py:61
+msgid "edit"
+msgstr "Modifier"
+
+#: apps/logs/models.py:62
+msgid "delete"
+msgstr "Supprimer"
+
+#: apps/logs/models.py:65
 msgid "action"
 msgstr "Action"
 
-#: apps/logs/models.py:59
+#: apps/logs/models.py:73
 msgid "timestamp"
 msgstr "Date"
 
-#: apps/logs/models.py:63
+#: apps/logs/models.py:77
 msgid "Logs cannot be destroyed."
 msgstr "Les logs ne peuvent pas être détruits."
 
-#: apps/member/apps.py:10
+#: apps/member/apps.py:14
 msgid "member"
 msgstr "adhérent"
 
@@ -129,7 +142,7 @@ msgstr "adhérent"
 msgid "phone number"
 msgstr "numéro de téléphone"
 
-#: apps/member/models.py:29 templates/member/profile_detail.html:24
+#: apps/member/models.py:29 templates/member/profile_detail.html:28
 msgid "section"
 msgstr "section"
 
@@ -137,7 +150,7 @@ msgstr "section"
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
-#: apps/member/models.py:36 templates/member/profile_detail.html:27
+#: apps/member/models.py:36 templates/member/profile_detail.html:31
 msgid "address"
 msgstr "adresse"
 
@@ -149,37 +162,37 @@ msgstr "payé"
 msgid "user profile"
 msgstr "profil utilisateur"
 
-#: apps/member/models.py:65
+#: apps/member/models.py:66
 msgid "email"
 msgstr "courriel"
 
-#: apps/member/models.py:70
+#: apps/member/models.py:71
 msgid "membership fee"
 msgstr "cotisation pour adhérer"
 
-#: apps/member/models.py:74
+#: apps/member/models.py:75
 msgid "membership duration"
 msgstr "durée de l'adhésion"
 
-#: apps/member/models.py:75
+#: apps/member/models.py:76
 msgid "The longest time a membership can last (NULL = infinite)."
 msgstr "La durée maximale d'une adhésion (NULL = infinie)."
 
-#: apps/member/models.py:80
+#: apps/member/models.py:81
 msgid "membership start"
 msgstr "début de l'adhésion"
 
-#: apps/member/models.py:81
+#: apps/member/models.py:82
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 "Combien de temps après le 1er Janvier les adhérents peuvent renouveler leur "
 "adhésion."
 
-#: apps/member/models.py:86
+#: apps/member/models.py:87
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
-#: apps/member/models.py:87
+#: apps/member/models.py:88
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
@@ -187,166 +200,174 @@ msgstr ""
 "Combien de temps l'adhésion peut durer après le 1er Janvier de l'année "
 "suivante avant que les adhérents peuvent renouveler leur adhésion."
 
-#: apps/member/models.py:93 apps/note/models/notes.py:135
+#: apps/member/models.py:94 apps/note/models/notes.py:139
 msgid "club"
 msgstr "club"
 
-#: apps/member/models.py:94
+#: apps/member/models.py:95
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:117
+#: apps/member/models.py:118
 msgid "role"
 msgstr "rôle"
 
-#: apps/member/models.py:118
+#: apps/member/models.py:119
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/models.py:142
+#: apps/member/models.py:143
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:145
+#: apps/member/models.py:146
 msgid "membership ends on"
 msgstr "l'adhésion finie le"
 
-#: apps/member/models.py:149
+#: apps/member/models.py:150
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:153
+#: apps/member/models.py:154
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:154
+#: apps/member/models.py:155
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/views.py:63 templates/member/profile_detail.html:42
+#: apps/member/views.py:69 templates/member/profile_detail.html:46
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
-#: apps/member/views.py:79
+#: apps/member/views.py:82
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
-#: apps/member/views.py:130
+#: apps/member/views.py:132
 #, python-format
 msgid "Account #%(id)s: %(username)s"
 msgstr "Compte n°%(id)s : %(username)s"
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:93
+#: apps/member/views.py:202
+msgid "Alias successfully deleted"
+msgstr "L'alias a bien été supprimé"
+
+#: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
 msgstr "source"
 
 #: apps/note/admin.py:128 apps/note/admin.py:156
-#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:99
+#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:100
 msgid "destination"
 msgstr "destination"
 
-#: apps/note/apps.py:14 apps/note/models/notes.py:54
+#: apps/note/apps.py:14 apps/note/models/notes.py:58
 msgid "note"
 msgstr "note"
 
-#: apps/note/forms.py:49
-msgid "Source and destination must be different."
-msgstr "La source et la destination doivent être différentes."
+#: apps/note/forms.py:20
+msgid "New Alias"
+msgstr "Nouvel alias"
 
-#: apps/note/models/notes.py:26
+#: apps/note/forms.py:25
+msgid "select an image"
+msgstr "Choisissez une image"
+
+#: apps/note/forms.py:26
+msgid "Maximal size: 2MB"
+msgstr "Taille maximale : 2 Mo"
+
+#: apps/note/models/notes.py:27
 msgid "account balance"
 msgstr "solde du compte"
 
-#: apps/note/models/notes.py:27
+#: apps/note/models/notes.py:28
 msgid "in centimes, money credited for this instance"
 msgstr "en centimes, argent crédité pour cette instance"
 
-#: apps/note/models/notes.py:31
+#: apps/note/models/notes.py:32
 msgid "last negative date"
 msgstr "dernier date de négatif"
 
-#: apps/note/models/notes.py:32
+#: apps/note/models/notes.py:33
 msgid "last time the balance was negative"
 msgstr "dernier instant où la note était en négatif"
 
-#: apps/note/models/notes.py:37
+#: apps/note/models/notes.py:38
 msgid "active"
 msgstr "actif"
 
-#: apps/note/models/notes.py:40
+#: apps/note/models/notes.py:41
 msgid ""
 "Designates whether this note should be treated as active. Unselect this "
 "instead of deleting notes."
 msgstr ""
 "Indique si la note est active. Désactiver cela plutôt que supprimer la note."
 
-#: apps/note/models/notes.py:44
+#: apps/note/models/notes.py:45
 msgid "display image"
 msgstr "image affichée"
 
-#: apps/note/models/notes.py:49 apps/note/models/transactions.py:102
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:103
 msgid "created at"
 msgstr "créée le"
 
-#: apps/note/models/notes.py:55
+#: apps/note/models/notes.py:59
 msgid "notes"
 msgstr "notes"
 
-#: apps/note/models/notes.py:63
+#: apps/note/models/notes.py:67
 msgid "Note"
 msgstr "Note"
 
-#: apps/note/models/notes.py:73 apps/note/models/notes.py:97
+#: apps/note/models/notes.py:77 apps/note/models/notes.py:101
 msgid "This alias is already taken."
 msgstr "Cet alias est déjà pris."
 
-#: apps/note/models/notes.py:113
-msgid "user"
-msgstr "utilisateur"
-
-#: apps/note/models/notes.py:117
+#: apps/note/models/notes.py:121
 msgid "one's note"
 msgstr "note d'un utilisateur"
 
-#: apps/note/models/notes.py:118
+#: apps/note/models/notes.py:122
 msgid "users note"
 msgstr "notes des utilisateurs"
 
-#: apps/note/models/notes.py:124
+#: apps/note/models/notes.py:128
 #, python-format
 msgid "%(user)s's note"
 msgstr "Note de %(user)s"
 
-#: apps/note/models/notes.py:139
+#: apps/note/models/notes.py:143
 msgid "club note"
 msgstr "note d'un club"
 
-#: apps/note/models/notes.py:140
+#: apps/note/models/notes.py:144
 msgid "clubs notes"
 msgstr "notes des clubs"
 
-#: apps/note/models/notes.py:146
+#: apps/note/models/notes.py:150
 #, python-format
 msgid "Note of %(club)s club"
 msgstr "Note du club %(club)s"
 
-#: apps/note/models/notes.py:166
+#: apps/note/models/notes.py:170
 msgid "special note"
 msgstr "note spéciale"
 
-#: apps/note/models/notes.py:167
+#: apps/note/models/notes.py:171
 msgid "special notes"
 msgstr "notes spéciales"
 
-#: apps/note/models/notes.py:190
+#: apps/note/models/notes.py:194
 msgid "Invalid alias"
 msgstr "Alias invalide"
 
-#: apps/note/models/notes.py:206
+#: apps/note/models/notes.py:210
 msgid "alias"
 msgstr "alias"
 
-#: apps/note/models/notes.py:207 templates/member/profile_detail.html:33
+#: apps/note/models/notes.py:211 templates/member/profile_detail.html:37
 msgid "aliases"
 msgstr "alias"
 
@@ -355,10 +376,10 @@ msgid "Alias is too long."
 msgstr "L'alias est trop long."
 
 #: apps/note/models/notes.py:238
-msgid "An alias with a similar name already exists:"
-msgstr "Un alias avec un nom similaire existe déjà."
+msgid "An alias with a similar name already exists: {} "
+msgstr "Un alias avec un nom similaire existe déjà : {}"
 
-#: apps/note/models/notes.py:246
+#: apps/note/models/notes.py:247
 msgid "You can't delete your main alias."
 msgstr "Vous ne pouvez pas supprimer votre alias principal."
 
@@ -371,11 +392,10 @@ msgid "transaction categories"
 msgstr "catégories de transaction"
 
 #: apps/note/models/transactions.py:47
-#, fuzzy
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:109
+#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:111
 msgid "amount"
 msgstr "montant"
 
@@ -383,65 +403,176 @@ msgstr "montant"
 msgid "in centimes"
 msgstr "en centimes"
 
-#: apps/note/models/transactions.py:74
+#: apps/note/models/transactions.py:75
 msgid "transaction template"
 msgstr "modèle de transaction"
 
-#: apps/note/models/transactions.py:75
+#: apps/note/models/transactions.py:76
 msgid "transaction templates"
 msgstr "modèles de transaction"
 
-#: apps/note/models/transactions.py:106
+#: apps/note/models/transactions.py:107
 msgid "quantity"
 msgstr "quantité"
 
-#: apps/note/models/transactions.py:111
-msgid "reason"
-msgstr "raison"
+#: apps/note/models/transactions.py:117 templates/note/transaction_form.html:15
+msgid "Gift"
+msgstr "Don"
 
-#: apps/note/models/transactions.py:115
-msgid "valid"
-msgstr "valide"
+#: apps/note/models/transactions.py:118 templates/base.html:90
+#: templates/note/transaction_form.html:19
+#: templates/note/transaction_form.html:126
+msgid "Transfer"
+msgstr "Virement"
 
-#: apps/note/models/transactions.py:120
-msgid "transaction"
-msgstr "transaction"
+#: apps/note/models/transactions.py:119
+msgid "Template"
+msgstr "Bouton"
 
-#: apps/note/models/transactions.py:121
-msgid "transactions"
-msgstr "transactions"
+#: apps/note/models/transactions.py:120 templates/note/transaction_form.html:23
+msgid "Credit"
+msgstr "Crédit"
 
-#: apps/note/models/transactions.py:184
+#: apps/note/models/transactions.py:121 templates/note/transaction_form.html:27
+msgid "Debit"
+msgstr "Retrait"
+
+#: apps/note/models/transactions.py:122 apps/note/models/transactions.py:230
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
-#: apps/note/models/transactions.py:185
+#: apps/note/models/transactions.py:129
+msgid "reason"
+msgstr "raison"
+
+#: apps/note/models/transactions.py:133
+msgid "valid"
+msgstr "valide"
+
+#: apps/note/models/transactions.py:138
+msgid "transaction"
+msgstr "transaction"
+
+#: apps/note/models/transactions.py:139
+msgid "transactions"
+msgstr "transactions"
+
+#: apps/note/models/transactions.py:207
+msgid "first_name"
+msgstr "Prénom"
+
+#: apps/note/models/transactions.py:212
+msgid "bank"
+msgstr "Banque"
+
+#: apps/note/models/transactions.py:231
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
-#: apps/note/views.py:29
-msgid "Transfer money from your account to one or others"
-msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
+#: apps/note/views.py:31
+msgid "Transfer money"
+msgstr "Transferts d'argent"
 
-#: apps/note/views.py:138
-msgid "Consommations"
-msgstr "transactions"
+#: apps/note/views.py:132 templates/base.html:78
+msgid "Consumptions"
+msgstr "Consommations"
 
-#: note_kfet/settings/base.py:155
-msgid "German"
+#: note_kfet/settings/__init__.py:61
+msgid ""
+"The Central Authentication Service grants you access to most of our websites "
+"by authenticating only once, so you don't need to type your credentials "
+"again unless your session expires or you logout."
 msgstr ""
 
 #: note_kfet/settings/base.py:156
-msgid "English"
+msgid "German"
 msgstr ""
 
 #: note_kfet/settings/base.py:157
+msgid "English"
+msgstr ""
+
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr ""
 
 #: templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
+
+#: templates/base.html:81
+msgid "Clubs"
+msgstr "Clubs"
+
+#: templates/base.html:84
+msgid "Activities"
+msgstr "Activités"
+
+#: templates/base.html:87
+msgid "Buttons"
+msgstr "Boutons"
+
+#: templates/cas_server/base.html:7
+msgid "Central Authentication Service"
+msgstr ""
+
+#: templates/cas_server/base.html:43
+#, python-format
+msgid ""
+"A new version of the application is available. This instance runs "
+"%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
+"upgrading."
+msgstr ""
+
+#: templates/cas_server/logged.html:4
+msgid ""
+"<h3>Log In Successful</h3>You have successfully logged into the Central "
+"Authentication Service.<br/>For security reasons, please Log Out and Exit "
+"your web browser when you are done accessing services that require "
+"authentication!"
+msgstr ""
+
+#: templates/cas_server/logged.html:8
+msgid "Log me out from all my sessions"
+msgstr ""
+
+#: templates/cas_server/logged.html:14
+msgid "Forget the identity provider"
+msgstr ""
+
+#: templates/cas_server/logged.html:18
+msgid "Logout"
+msgstr ""
+
+#: templates/cas_server/login.html:6
+msgid "Please log in"
+msgstr ""
+
+#: templates/cas_server/login.html:11
+msgid ""
+"If you don't have any Note Kfet account, please follow <a href='/accounts/"
+"signup'>this link to sign up</a>."
+msgstr ""
+"Si vous n'avez pas de compte Note Kfet, veuillez suivre <a href='/accounts/"
+"signup'>ce lien pour vous inscrire</a>."
+
+#: templates/cas_server/login.html:17
+msgid "Login"
+msgstr ""
+
+#: templates/cas_server/warn.html:9
+msgid "Connect to the service"
+msgstr ""
+
+#: templates/django_filters/rest_framework/crispy_form.html:4
+#: templates/django_filters/rest_framework/form.html:2
+msgid "Field filters"
+msgstr ""
+
+#: templates/django_filters/rest_framework/form.html:5
+#: templates/member/club_form.html:10
+msgid "Submit"
+msgstr "Envoyer"
 
 #: templates/member/club_detail.html:10
 msgid "Membership starts on"
@@ -455,9 +586,21 @@ msgstr "L'adhésion finie le"
 msgid "Membership duration"
 msgstr "Durée de l'adhésion"
 
-#: templates/member/club_detail.html:18 templates/member/profile_detail.html:30
+#: templates/member/club_detail.html:18 templates/member/profile_detail.html:34
 msgid "balance"
 msgstr "solde du compte"
+
+#: templates/member/club_detail.html:51 templates/member/profile_detail.html:75
+msgid "Transaction history"
+msgstr "Historique des transactions"
+
+#: templates/member/club_form.html:6
+msgid "Clubs list"
+msgstr "Liste des clubs"
+
+#: templates/member/club_list.html:8
+msgid "New club"
+msgstr "Nouveau club"
 
 #: templates/member/manage_auth_tokens.html:16
 msgid "Token"
@@ -471,33 +614,35 @@ msgstr "Créé le"
 msgid "Regenerate token"
 msgstr "Regénérer le jeton"
 
-#: templates/member/profile_detail.html:11
+#: templates/member/profile_alias.html:10
+msgid "Add alias"
+msgstr "Ajouter un alias"
+
+#: templates/member/profile_detail.html:15
 msgid "first name"
 msgstr ""
 
-#: templates/member/profile_detail.html:14
+#: templates/member/profile_detail.html:18
 msgid "username"
 msgstr ""
 
-#: templates/member/profile_detail.html:17
-#, fuzzy
-#| msgid "Change password"
+#: templates/member/profile_detail.html:21
 msgid "password"
 msgstr ""
 
-#: templates/member/profile_detail.html:20
+#: templates/member/profile_detail.html:24
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: templates/member/profile_detail.html:38
+#: templates/member/profile_detail.html:42
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: templates/member/profile_detail.html:51
-msgid "Transaction history"
-msgstr "Historique des transactions"
+#: templates/member/profile_detail.html:49
+msgid "View Profile"
+msgstr "Voir le profil"
 
-#: templates/member/profile_detail.html:54
+#: templates/member/profile_detail.html:62
 msgid "View my memberships"
 msgstr "Voir mes adhésions"
 
@@ -505,13 +650,88 @@ msgstr "Voir mes adhésions"
 msgid "Save Changes"
 msgstr "Sauvegarder les changements"
 
+#: templates/member/signup.html:5 templates/member/signup.html:8
 #: templates/member/signup.html:14
-msgid "Sign Up"
-msgstr ""
+msgid "Sign up"
+msgstr "Inscription"
 
-#: templates/note/transaction_form.html:35
-msgid "Transfer"
-msgstr "Virement"
+#: templates/note/conso_form.html:28 templates/note/transaction_form.html:38
+msgid "Select emitters"
+msgstr "Sélection des émetteurs"
+
+#: templates/note/conso_form.html:45
+msgid "Select consumptions"
+msgstr "Consommations"
+
+#: templates/note/conso_form.html:51
+msgid "Consume!"
+msgstr "Consommer !"
+
+#: templates/note/conso_form.html:64
+msgid "Most used buttons"
+msgstr "Boutons les plus utilisés"
+
+#: templates/note/conso_form.html:121
+msgid "Edit"
+msgstr "Éditer"
+
+#: templates/note/conso_form.html:126
+msgid "Single consumptions"
+msgstr "Consos simples"
+
+#: templates/note/conso_form.html:130
+msgid "Double consumptions"
+msgstr "Consos doubles"
+
+#: templates/note/conso_form.html:141
+msgid "Recent transactions history"
+msgstr "Historique des transactions récentes"
+
+#: templates/note/transaction_form.html:55
+msgid "External payment"
+msgstr "Paiement extérieur"
+
+#: templates/note/transaction_form.html:63
+msgid "Transfer type"
+msgstr "Type de transfert"
+
+#: templates/note/transaction_form.html:73
+msgid "Name"
+msgstr "Nom"
+
+#: templates/note/transaction_form.html:79
+msgid "First name"
+msgstr "Prénom"
+
+#: templates/note/transaction_form.html:85
+msgid "Bank"
+msgstr "Banque"
+
+#: templates/note/transaction_form.html:97
+#: templates/note/transaction_form.html:179
+#: templates/note/transaction_form.html:186
+msgid "Select receivers"
+msgstr "Sélection des destinataires"
+
+#: templates/note/transaction_form.html:114
+msgid "Amount"
+msgstr "Montant"
+
+#: templates/note/transaction_form.html:119
+msgid "Reason"
+msgstr "Raison"
+
+#: templates/note/transaction_form.html:193
+msgid "Credit note"
+msgstr "Note à créditer"
+
+#: templates/note/transaction_form.html:200
+msgid "Debit note"
+msgstr "Note à débiter"
+
+#: templates/note/transactiontemplate_form.html:6
+msgid "Buttons list"
+msgstr "Liste des boutons"
 
 #: templates/registration/logged_out.html:8
 msgid "Thanks for spending some quality time with the Web site today."
@@ -522,7 +742,7 @@ msgid "Log in again"
 msgstr ""
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:22
+#: templates/registration/login.html:26
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr ""
@@ -534,7 +754,7 @@ msgid ""
 "page. Would you like to login to a different account?"
 msgstr ""
 
-#: templates/registration/login.html:23
+#: templates/registration/login.html:27
 msgid "Forgotten your password or username?"
 msgstr ""
 

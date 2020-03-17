@@ -10,7 +10,7 @@
                     <img src="{{ object.note.display_image.url }}" class="img-thumbnail mt-2" >
                 </a>
             </div>
-            <div class="card-body">
+            <div class="card-body" id="profile_infos">
                 <dl class="row">
                     <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
                     <dd class="col-xl-6">{{ object.last_name }} {{ object.first_name }}</dd>
@@ -76,11 +76,22 @@
                     </a>
                 </div>
                 <div id="historyListCollapse" class="collapse" style="overflow:auto hidden" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
-                    {% render_table history_list %}
+                    <div id="history_list">
+                        {% render_table history_list %}
+                    </div>
                 </div>
             </div>
         </div>
     {% endblock %}
     </div>
 </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+    function refreshHistory() {
+        $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
+    }
+    </script>
 {% endblock %}

@@ -1,0 +1,3 @@
+[submodule "apps/scripts"]
+	path = apps/scripts
+	url = git@gitlab.crans.org:bde/nk20-scripts.git

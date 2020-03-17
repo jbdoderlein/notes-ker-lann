@@ -1,11 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django_filters import FilterSet, CharFilter
-from django.contrib.auth.models import User
-from django.db.models import CharField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
+from django.contrib.auth.models import User
+from django.db.models import CharField
+from django_filters import FilterSet, CharFilter
 
 
 class UserFilter(FilterSet):

@@ -1,16 +1,16 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Changelog(models.Model):
     """
-    Store each modification on the database (except sessions and logging),
+    Store each modification in the database (except sessions and logging),
     including creating, editing and deleting models.
     """
 
@@ -56,6 +56,12 @@ class Changelog(models.Model):
         max_length=16,
         null=False,
         blank=False,
+        choices=[
+            ('create', _('create')),
+            ('edit', _('edit')),
+            ('delete', _('delete')),
+        ],
+        default='edit',
         verbose_name=_('action'),
     )
 

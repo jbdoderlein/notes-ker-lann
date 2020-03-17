@@ -1,10 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.http import HttpResponseRedirect
-
-from urllib.parse import urlencode, parse_qs, urlsplit, urlunsplit
-
 
 class TurbolinksMiddleware(object):
     """
@@ -35,4 +31,3 @@ class TurbolinksMiddleware(object):
                     location = request.session.pop('_turbolinks_redirect_to')
                     response['Turbolinks-Location'] = location
         return response
-

@@ -3,7 +3,7 @@
         "model": "note.note",
         "pk": 1,
         "fields": {
-            "polymorphic_ctype": 22,
+            "polymorphic_ctype": 40,
             "balance": 0,
             "is_active": true,
             "display_image": "",
@@ -14,7 +14,7 @@
         "model": "note.note",
         "pk": 2,
         "fields": {
-            "polymorphic_ctype": 22,
+            "polymorphic_ctype": 40,
             "balance": 0,
             "is_active": true,
             "display_image": "",
@@ -25,7 +25,7 @@
         "model": "note.note",
         "pk": 3,
         "fields": {
-            "polymorphic_ctype": 22,
+            "polymorphic_ctype": 40,
             "balance": 0,
             "is_active": true,
             "display_image": "",
@@ -36,7 +36,7 @@
         "model": "note.note",
         "pk": 4,
         "fields": {
-            "polymorphic_ctype": 22,
+            "polymorphic_ctype": 40,
             "balance": 0,
             "is_active": true,
             "display_image": "",
@@ -47,7 +47,7 @@
         "model": "note.note",
         "pk": 5,
         "fields": {
-            "polymorphic_ctype": 21,
+            "polymorphic_ctype": 39,
             "balance": 0,
             "is_active": true,
             "display_image": "",
@@ -58,7 +58,7 @@
         "model": "note.note",
         "pk": 6,
         "fields": {
-            "polymorphic_ctype": 21,
+            "polymorphic_ctype": 39,
             "balance": 0,
             "is_active": true,
             "display_image": "",

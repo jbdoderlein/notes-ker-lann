@@ -9,10 +9,13 @@ RUN apt update && \
     apt install -y gettext nginx uwsgi uwsgi-plugin-python3 && \
     rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
-
 COPY . /code/
+
+# Comment what is not needed
+RUN pip install -r requirements/base.txt
+RUN pip install -r requirements/api.txt
+RUN pip install -r requirements/cas.txt
+RUN pip install -r requirements/production.txt
 
 ENTRYPOINT ["/code/entrypoint.sh"]
 EXPOSE 8000

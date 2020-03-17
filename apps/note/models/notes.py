@@ -9,6 +9,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
+
 """
 Defines each note types
 """
@@ -27,7 +28,7 @@ class Note(PolymorphicModel):
         help_text=_('in centimes, money credited for this instance'),
         default=0,
     )
-    last_negative= models.DateTimeField(
+    last_negative = models.DateTimeField(
         verbose_name=_('last negative date'),
         help_text=_('last time the balance was negative'),
         null=True,
@@ -98,7 +99,7 @@ class Note(PolymorphicModel):
             # Alias exists, so check if it is linked to this note
             if aliases.first().note != self:
                 raise ValidationError(_('This alias is already taken.'),
-                                      code="same_alias",)
+                                      code="same_alias", )
         else:
             # Alias does not exist yet, so check if it can exist
             a = Alias(name=str(self))
@@ -208,6 +209,10 @@ class Alias(models.Model):
     class Meta:
         verbose_name = _("alias")
         verbose_name_plural = _("aliases")
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['normalized_name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -230,13 +235,13 @@ class Alias(models.Model):
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
-                raise ValidationError(_('An alias with a similar name already exists: {} '.format(sim_alias)),
-                                       code="same_alias"
-                )
+                raise ValidationError(_('An alias with a similar name already exists: {} ').format(sim_alias),
+                                      code="same_alias"
+                                      )
         except Alias.DoesNotExist:
             pass
         self.normalized_name = normalized_name
-        
+
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
             raise ValidationError(_("You can't delete your main alias."),

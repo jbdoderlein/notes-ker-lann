@@ -18,9 +18,9 @@ class ProfileInline(admin.StackedInline):
 
 
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline,)
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
-    list_select_related = ('profile', )
+    list_select_related = ('profile',)
     form = ProfileForm
 
     def get_inline_instances(self, request, obj=None):

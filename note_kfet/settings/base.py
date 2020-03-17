@@ -37,9 +37,10 @@ INSTALLED_APPS = [
 
     # External apps
     'polymorphic',
-    'reversion',
     'crispy_forms',
     'django_tables2',
+    'cas_server',
+    'cas',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -55,9 +56,6 @@ INSTALLED_APPS = [
     # Autocomplete
     'dal',
     'dal_select2',
-    # CAS
-    'cas_server',
-    'cas',
 
     # Note apps
     'activity',
@@ -81,7 +79,6 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
-    'cas.middleware.CASMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
@@ -98,7 +95,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
-              #  'django.template.context_processors.media',
+                #  'django.template.context_processors.media',
             ],
         },
     },
@@ -133,7 +130,7 @@ PASSWORD_HASHERS = [
 # Django Guardian object permissions
 
 AUTHENTICATION_BACKENDS = (
-    #'django.contrib.auth.backends.ModelBackend',  # this is default
+    #  'django.contrib.auth.backends.ModelBackend',  # this is default
     'member.backends.PermissionBackend',
     'cas.backends.CASBackend',
 )
@@ -146,11 +143,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
 }
-
-ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -182,7 +180,7 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR,"static/")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # STATICFILES_DIRS = [
 #    os.path.join(BASE_DIR, 'static')]
 STATICFILES_DIRS = []
@@ -194,15 +192,9 @@ STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
 
-MEDIA_ROOT=os.path.join(BASE_DIR,"media")
-MEDIA_URL='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
 
 # Profile Picture Settings
 PIC_WIDTH = 200
 PIC_RATIO = 1
-
-# CAS Settings
-CAS_AUTO_CREATE_USER = False
-CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
-CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
-

@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 from polymorphic.models import PolymorphicModel
 
-from .notes import Note, NoteClub
+from .notes import Note, NoteClub, NoteSpecial
 
 """
 Defines transactions
@@ -44,7 +44,7 @@ class TransactionTemplate(models.Model):
         verbose_name=_('name'),
         max_length=255,
         unique=True,
-        error_messages={'unique':_("A template with this name already exist")},
+        error_messages={'unique': _("A template with this name already exist")},
     )
     destination = models.ForeignKey(
         NoteClub,
@@ -63,11 +63,12 @@ class TransactionTemplate(models.Model):
         max_length=31,
     )
     display = models.BooleanField(
-        default = True,
+        default=True,
     )
     description = models.CharField(
         verbose_name=_('description'),
         max_length=255,
+        blank=True,
     )
 
     class Meta:
@@ -75,7 +76,7 @@ class TransactionTemplate(models.Model):
         verbose_name_plural = _("transaction templates")
 
     def get_absolute_url(self):
-        return reverse('note:template_update', args=(self.pk, ))
+        return reverse('note:template_update', args=(self.pk,))
 
 
 class Transaction(PolymorphicModel):
@@ -106,7 +107,10 @@ class Transaction(PolymorphicModel):
         verbose_name=_('quantity'),
         default=1,
     )
-    amount = models.PositiveIntegerField(verbose_name=_('amount'), )
+    amount = models.PositiveIntegerField(
+        verbose_name=_('amount'),
+    )
+
     reason = models.CharField(
         verbose_name=_('reason'),
         max_length=255,
@@ -119,6 +123,11 @@ class Transaction(PolymorphicModel):
     class Meta:
         verbose_name = _("transaction")
         verbose_name_plural = _("transactions")
+        indexes = [
+            models.Index(fields=['created_at']),
+            models.Index(fields=['source']),
+            models.Index(fields=['destination']),
+        ]
 
     def save(self, *args, **kwargs):
         """
@@ -127,6 +136,7 @@ class Transaction(PolymorphicModel):
 
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transfered
+            super().save(*args, **kwargs)
             return
 
         created = self.pk is None
@@ -151,11 +161,14 @@ class Transaction(PolymorphicModel):
     def total(self):
         return self.amount * self.quantity
 
+    @property
+    def type(self):
+        return _('Transfer')
+
 
 class TemplateTransaction(Transaction):
     """
     Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
-
     """
 
     template = models.ForeignKey(
@@ -167,6 +180,37 @@ class TemplateTransaction(Transaction):
         TemplateCategory,
         on_delete=models.PROTECT,
     )
+
+    @property
+    def type(self):
+        return _('Template')
+
+
+class SpecialTransaction(Transaction):
+    """
+    Special type of :model:`note.Transaction` associated to transactions with special notes
+    """
+
+    last_name = models.CharField(
+        max_length=255,
+        verbose_name=_("name"),
+    )
+
+    first_name = models.CharField(
+        max_length=255,
+        verbose_name=_("first_name"),
+    )
+
+    bank = models.CharField(
+        max_length=255,
+        verbose_name=_("bank"),
+        blank=True,
+    )
+
+    @property
+    def type(self):
+        return _('Credit') if isinstance(self.source, NoteSpecial) else _("Debit")
+
 
 class MembershipTransaction(Transaction):
     """
@@ -183,3 +227,7 @@ class MembershipTransaction(Transaction):
     class Meta:
         verbose_name = _("membership transaction")
         verbose_name_plural = _("membership transactions")
+
+    @property
+    def type(self):
+        return _('membership transaction')
