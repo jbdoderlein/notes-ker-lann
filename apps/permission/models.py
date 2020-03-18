@@ -25,13 +25,14 @@ class InstancedPermission:
         Returns True if the permission applies to
         the field `field_name` object `obj`
         """
+        if ContentType.objects.get_for_model(obj) != self.model:
+            # The permission does not apply to the model
+            return False
+
         if self.type == 'add':
             if permission_type == self.type:
                 return self.query(obj)
 
-        if ContentType.objects.get_for_model(obj) != self.model:
-            # The permission does not apply to the model
-            return False
         if permission_type == self.type:
             if self.field and field_name != self.field:
                 return False
@@ -202,7 +203,18 @@ class Permission(models.Model):
             def func(obj):
                 nonlocal q_kwargs
                 for arg in q_kwargs:
-                    if getattr(obj, arg) != q_kwargs[arg]:
+                    spl = arg.split('__')
+                    value = obj
+                    last = None
+                    for s in spl:
+                        if not hasattr(obj, s):
+                            last = s
+                            break
+                        value = getattr(obj, s)
+                    if last == "lte":  # TODO Add more filters
+                        if value > q_kwargs[arg]:
+                            return False
+                    elif value != q_kwargs[arg]:
                         return False
                 return True
             return func

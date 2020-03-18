@@ -14,6 +14,10 @@ EXCLUDED = [
     'contenttypes.contenttype',
     'logs.changelog',
     'migrations.migration',
+    'note.note',
+    'note.noteuser',
+    'note.noteclub',
+    'note.notespecial',
     'sessions.session',
 ]
 
