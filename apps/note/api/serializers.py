@@ -88,6 +88,9 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteSpecial: NoteSpecialSerializer
     }
 
+    class Meta:
+        model = Note
+
 
 class TemplateCategorySerializer(serializers.ModelSerializer):
     """
@@ -162,3 +165,6 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
         MembershipTransaction: MembershipTransactionSerializer,
         SpecialTransaction: SpecialTransactionSerializer,
     }
+
+    class Meta:
+        model = Transaction

@@ -1,14 +1,14 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 
+from api.viewsets import ReadProtectedModelViewSet
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
 from ..models import Profile, Club, Role, Membership
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Profile` objects, serialize it to JSON with the given serializer,
@@ -18,7 +18,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
 
-class ClubViewSet(viewsets.ModelViewSet):
+class ClubViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Club` objects, serialize it to JSON with the given serializer,
@@ -30,7 +30,7 @@ class ClubViewSet(viewsets.ModelViewSet):
     search_fields = ['$name', ]
 
 
-class RoleViewSet(viewsets.ModelViewSet):
+class RoleViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Role` objects, serialize it to JSON with the given serializer,
@@ -42,7 +42,7 @@ class RoleViewSet(viewsets.ModelViewSet):
     search_fields = ['$name', ]
 
 
-class MembershipViewSet(viewsets.ModelViewSet):
+class MembershipViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Membership` objects, serialize it to JSON with the given serializer,

@@ -203,7 +203,6 @@ class DeleteAliasView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        print(self.request)
         return reverse_lazy('member:user_alias', kwargs={'pk': self.object.note.user.pk})
 
     def get(self, request, *args, **kwargs):

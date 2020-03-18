@@ -3,9 +3,9 @@
 
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 
+from api.viewsets import ReadProtectedModelViewSet
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -13,7 +13,7 @@ from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
-class NoteViewSet(viewsets.ModelViewSet):
+class NoteViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Note` objects, serialize it to JSON with the given serializer,
@@ -23,7 +23,7 @@ class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
 
 
-class NoteClubViewSet(viewsets.ModelViewSet):
+class NoteClubViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `NoteClub` objects, serialize it to JSON with the given serializer,
@@ -33,7 +33,7 @@ class NoteClubViewSet(viewsets.ModelViewSet):
     serializer_class = NoteClubSerializer
 
 
-class NoteSpecialViewSet(viewsets.ModelViewSet):
+class NoteSpecialViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `NoteSpecial` objects, serialize it to JSON with the given serializer,
@@ -43,7 +43,7 @@ class NoteSpecialViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSpecialSerializer
 
 
-class NoteUserViewSet(viewsets.ModelViewSet):
+class NoteUserViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `NoteUser` objects, serialize it to JSON with the given serializer,
@@ -53,7 +53,7 @@ class NoteUserViewSet(viewsets.ModelViewSet):
     serializer_class = NoteUserSerializer
 
 
-class NotePolymorphicViewSet(viewsets.ModelViewSet):
+class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
@@ -70,7 +70,7 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = Note.objects.all()
+        queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
@@ -92,7 +92,7 @@ class NotePolymorphicViewSet(viewsets.ModelViewSet):
         return queryset.distinct()
 
 
-class AliasViewSet(viewsets.ModelViewSet):
+class AliasViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
@@ -110,7 +110,7 @@ class AliasViewSet(viewsets.ModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = Alias.objects.all()
+        queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
@@ -138,7 +138,7 @@ class AliasViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class TemplateCategoryViewSet(viewsets.ModelViewSet):
+class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
@@ -150,7 +150,7 @@ class TemplateCategoryViewSet(viewsets.ModelViewSet):
     search_fields = ['$name', ]
 
 
-class TransactionTemplateViewSet(viewsets.ModelViewSet):
+class TransactionTemplateViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
@@ -162,7 +162,7 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name', 'amount', 'display', 'category', ]
 
 
-class TransactionViewSet(viewsets.ModelViewSet):
+class TransactionViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Transaction` objects, serialize it to JSON with the given serializer,

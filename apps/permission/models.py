@@ -27,12 +27,13 @@ class InstancedPermission:
         """
         if self.type == 'add':
             if permission_type == self.type:
-                return obj in self.model.modelclass().objects.get(self.query)
+                return self.query(obj)
+
         if ContentType.objects.get_for_model(obj) != self.model:
             # The permission does not apply to the model
             return False
         if permission_type == self.type:
-            if field_name and field_name != self.field:
+            if self.field and field_name != self.field:
                 return False
             return obj in self.model.model_class().objects.filter(self.query).all()
         else:
@@ -91,6 +92,7 @@ class Permission(models.Model):
         unique_together = ('model', 'query', 'type', 'field')
 
     def clean(self):
+        self.query = json.dumps(json.loads(self.query))
         if self.field and self.type not in {'view', 'change'}:
             raise ValidationError(_("Specifying field applies only to view and change permission types."))
 
@@ -101,21 +103,45 @@ class Permission(models.Model):
     @staticmethod
     def compute_f(oper, **kwargs):
         if isinstance(oper, list):
-            if len(oper) == 1:
-                return kwargs[oper[0]].pk
-            elif len(oper) >= 2:
-                if oper[0] == 'ADD':
-                    return functools.reduce(operator.add, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
-                elif oper[0] == 'SUB':
-                    return Permission.compute_f(oper[1], **kwargs) - Permission.compute_f(oper[2], **kwargs)
-                elif oper[0] == 'MUL':
-                    return functools.reduce(operator.mul, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
-                elif oper[0] == 'F':
-                    return F(oper[1])
+            if oper[0] == 'ADD':
+                return functools.reduce(operator.add, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
+            elif oper[0] == 'SUB':
+                return Permission.compute_f(oper[1], **kwargs) - Permission.compute_f(oper[2], **kwargs)
+            elif oper[0] == 'MUL':
+                return functools.reduce(operator.mul, [Permission.compute_f(oper, **kwargs) for oper in oper[1:]])
+            elif oper[0] == 'F':
+                return F(oper[1])
+            else:
+                field = kwargs[oper[0]]
+                for i in range(1, len(oper)):
+                    field = getattr(field, oper[i])
+                return field
         else:
             return oper
-        # TODO: find a better way to crash here
-        raise Exception("F is wrong")
+
+    @staticmethod
+    def compute_param(value, **kwargs):
+        if not isinstance(value, list):
+            return value
+
+        field = kwargs[value[0]]
+        for i in range(1, len(value)):
+            if isinstance(value[i], list):
+                field = getattr(field, value[i][0])
+                params = []
+                call_kwargs = {}
+                for j in range(1, len(value[i])):
+                    param = Permission.compute_param(value[i][j], **kwargs)
+                    if isinstance(param, dict):
+                        for key in param:
+                            val = Permission.compute_param(param[key], **kwargs)
+                            call_kwargs[key] = val
+                    else:
+                        params.append(param)
+                field = field(*params, **call_kwargs)
+            else:
+                field = getattr(field, value[i])
+        return field
 
     def _about(self, query, **kwargs):
         if self.type == 'add':
@@ -124,8 +150,8 @@ class Permission(models.Model):
         if len(query) == 0:
             # The query is either [] or {} and
             # applies to all objects of the model
-            # to represent this we return None
-            return None
+            # to represent this we return a trivial request
+            return Q(pk=F("pk"))
         if isinstance(query, list):
             if query[0] == 'AND':
                 return functools.reduce(operator.and_, [self._about(query, **kwargs) for query in query[1:]])
@@ -138,11 +164,11 @@ class Permission(models.Model):
             for key in query:
                 value = query[key]
                 if isinstance(value, list):
-                    # It is a parameter we query its primary key
-                    q_kwargs[key] = kwargs[value[0]].pk
+                    # It is a parameter we query its return value
+                    q_kwargs[key] = Permission.compute_param(value, **kwargs)
                 elif isinstance(value, dict):
                     # It is an F object
-                    q_kwargs[key] = Permission.compute_f(query['F'], **kwargs)
+                    q_kwargs[key] = Permission.compute_f(value['F'], **kwargs)
                 else:
                     q_kwargs[key] = value
             return Q(**q_kwargs)
@@ -167,7 +193,7 @@ class Permission(models.Model):
                 value = query[key]
                 if isinstance(value, list):
                     # It is a parameter we query its primary key
-                    q_kwargs[key] = kwargs[value[0]].pk
+                    q_kwargs[key] = Permission.compute_param(value, **kwargs)
                 elif isinstance(value, dict):
                     # It is an F object
                     q_kwargs[key] = Permission.compute_f(query['F'], **kwargs)
@@ -176,7 +202,7 @@ class Permission(models.Model):
             def func(obj):
                 nonlocal q_kwargs
                 for arg in q_kwargs:
-                    if getattr(obj, arg) != q_kwargs(arg):
+                    if getattr(obj, arg) != q_kwargs[arg]:
                         return False
                 return True
             return func

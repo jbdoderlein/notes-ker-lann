@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 
+from api.viewsets import ReadOnlyProtectedModelViewSet
 from .serializers import ChangelogSerializer
 from ..models import Changelog
 
 
-class ChangelogViewSet(viewsets.ReadOnlyModelViewSet):
+class ChangelogViewSet(ReadOnlyProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Changelog` objects, serialize it to JSON with the given serializer,
