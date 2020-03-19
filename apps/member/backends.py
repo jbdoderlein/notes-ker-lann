@@ -7,7 +7,8 @@ from django.db.models import Q, F
 
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
-from .models import Membership, RolePermissions, Club
+from permission.models import Permission
+from .models import Membership, Club
 from django.contrib.auth.backends import ModelBackend
 
 
@@ -17,28 +18,31 @@ class PermissionBackend(ModelBackend):
     supports_inactive_user = False
 
     @staticmethod
-    def permissions(user):
+    def permissions(user, model, type):
         for membership in Membership.objects.filter(user=user).all():
             if not membership.valid() or membership.roles is None:
                 continue
 
-            for role_permissions in RolePermissions.objects.filter(role=membership.roles).all():
-                for permission in role_permissions.permissions.all():
-                    permission = permission.about(
-                        user=user,
-                        club=membership.club,
-                        User=User,
-                        Club=Club,
-                        Membership=Membership,
-                        Note=Note,
-                        NoteUser=NoteUser,
-                        NoteClub=NoteClub,
-                        NoteSpecial=NoteSpecial,
-                        F=F,
-                        Q=Q
-                    )
-                    if permission.mask.rank <= get_current_session().get("permission_mask", 0):
-                        yield permission
+            for permission in Permission.objects.filter(
+                    rolepermissions__role=membership.roles,
+                    model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
+                    type=type
+            ).all():
+                permission = permission.about(
+                    user=user,
+                    club=membership.club,
+                    User=User,
+                    Club=Club,
+                    Membership=Membership,
+                    Note=Note,
+                    NoteUser=NoteUser,
+                    NoteClub=NoteClub,
+                    NoteSpecial=NoteSpecial,
+                    F=F,
+                    Q=Q
+                )
+                if permission.mask.rank <= get_current_session().get("permission_mask", 0):
+                    yield permission
 
     @staticmethod
     def filter_queryset(user, model, t, field=None):
@@ -60,10 +64,10 @@ class PermissionBackend(ModelBackend):
 
         # Never satisfied
         query = Q(pk=-1)
-        for perm in PermissionBackend.permissions(user):
+        for perm in PermissionBackend.permissions(user, model, t):
             if perm.field and field != perm.field:
                 continue
-            if perm.model != model or perm.type != t:
+            if perm.type != t or perm.model != model:
                 continue
             query = query | perm.query
         return query
@@ -78,7 +82,9 @@ class PermissionBackend(ModelBackend):
         perm = perm.split('.')[-1].split('_', 2)
         perm_type = perm[0]
         perm_field = perm[2] if len(perm) == 3 else None
-        if any(permission.applies(obj, perm_type, perm_field) for permission in self.permissions(user_obj)):
+        ct = ContentType.objects.get_for_model(obj)
+        if any(permission.applies(obj, perm_type, perm_field)
+               for permission in self.permissions(user_obj, ct, perm_type)):
             return True
         return False
 
@@ -86,4 +92,5 @@ class PermissionBackend(ModelBackend):
         return False
 
     def get_all_permissions(self, user_obj, obj=None):
-        return list(self.permissions(user_obj))
+        ct = ContentType.objects.get_for_model(obj)
+        return list(self.permissions(user_obj, ct, "view"))

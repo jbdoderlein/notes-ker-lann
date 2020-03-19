@@ -8,7 +8,7 @@ import operator
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F, Q, Model
 from django.utils.translation import gettext_lazy as _
 
 
@@ -33,7 +33,14 @@ class InstancedPermission:
 
         if self.type == 'add':
             if permission_type == self.type:
-                return self.query(obj)
+                # Don't increase indexes
+                obj.pk = 0
+                # Force insertion, no data verification, no trigger
+                Model.save(obj, force_insert=True)
+                ret = obj in self.model.model_class().objects.filter(self.query).all()
+                # Delete testing object
+                Model.delete(obj)
+                return ret
 
         if permission_type == self.type:
             if self.field and field_name != self.field:
@@ -151,6 +158,10 @@ class Permission(models.Model):
         field = kwargs[value[0]]
         for i in range(1, len(value)):
             if isinstance(value[i], list):
+                if value[i][0] in kwargs:
+                    field = Permission.compute_param(value[i], **kwargs)
+                    continue
+
                 field = getattr(field, value[i][0])
                 params = []
                 call_kwargs = {}
@@ -168,9 +179,6 @@ class Permission(models.Model):
         return field
 
     def _about(self, query, **kwargs):
-        if self.type == 'add':
-            # Handle add permission differently
-            return self._about_add(query, **kwargs)
         if len(query) == 0:
             # The query is either [] or {} and
             # applies to all objects of the model
@@ -199,48 +207,6 @@ class Permission(models.Model):
         else:
             # TODO: find a better way to crash here
             raise Exception("query {} is wrong".format(self.query))
-
-    def _about_add(self, _query, **kwargs):
-        query = _query
-        if len(query) == 0:
-            return lambda _: True
-        if isinstance(query, list):
-            if query[0] == 'AND':
-                return lambda obj: functools.reduce(operator.and_, [self._about_add(q, **kwargs)(obj) for q in query[1:]])
-            elif query[0] == 'OR':
-                return lambda obj: functools.reduce(operator.or_, [self._about_add(q, **kwargs)(obj) for q in query[1:]])
-            elif query[0] == 'NOT':
-                return lambda obj: not self._about_add(query[1], **kwargs)(obj)
-        elif isinstance(query, dict):
-            q_kwargs = {}
-            for key in query:
-                value = query[key]
-                if isinstance(value, list):
-                    # It is a parameter we query its primary key
-                    q_kwargs[key] = Permission.compute_param(value, **kwargs)
-                elif isinstance(value, dict):
-                    # It is an F object
-                    q_kwargs[key] = Permission.compute_f(query['F'], **kwargs)
-                else:
-                    q_kwargs[key] = value
-            def func(obj):
-                nonlocal q_kwargs
-                for arg in q_kwargs:
-                    spl = arg.split('__')
-                    value = obj
-                    last = None
-                    for s in spl:
-                        if not hasattr(obj, s):
-                            last = s
-                            break
-                        value = getattr(obj, s)
-                    if last == "lte":  # TODO Add more filters
-                        if value > q_kwargs[arg]:
-                            return False
-                    elif value != q_kwargs[arg]:
-                        return False
-                return True
-            return func
 
     def about(self, **kwargs):
         """
