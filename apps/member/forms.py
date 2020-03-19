@@ -6,10 +6,19 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from dal import autocomplete
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
+from permission.models import PermissionMask
 from .models import Profile, Club, Membership
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    permission_mask = forms.ModelChoiceField(
+        label="Masque de permissions",
+        queryset=PermissionMask.objects.order_by("rank"),
+        empty_label=None,
+    )
 
 
 class SignUpForm(UserCreationForm):

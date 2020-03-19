@@ -3,10 +3,10 @@
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q, F
 
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
+from note_kfet.middlewares import get_current_session
 from .models import Membership, RolePermissions, Club
 from django.contrib.auth.backends import ModelBackend
 
@@ -37,7 +37,8 @@ class PermissionBackend(ModelBackend):
                         F=F,
                         Q=Q
                     )
-                    yield permission
+                    if permission.mask.rank <= get_current_session().get("permission_mask", 0):
+                        yield permission
 
     @staticmethod
     def filter_queryset(user, model, t, field=None):
@@ -50,7 +51,7 @@ class PermissionBackend(ModelBackend):
         :return: A query that corresponds to the filter to give to a queryset
         """
 
-        if user.is_superuser:
+        if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -68,7 +69,7 @@ class PermissionBackend(ModelBackend):
         return query
 
     def has_perm(self, user_obj, perm, obj=None):
-        if user_obj.is_superuser:
+        if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             return True
 
         if obj is None:

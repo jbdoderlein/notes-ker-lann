@@ -4,7 +4,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import stringfilter
 
-from logs.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 from django import template
 
 from member.backends import PermissionBackend
@@ -19,7 +19,7 @@ def not_empty_model_list(model_name):
     user = get_current_authenticated_user()
     if user is None:
         return False
-    elif user.is_superuser:
+    elif user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
         return True
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])
@@ -32,7 +32,7 @@ def not_empty_model_change_list(model_name):
     user = get_current_authenticated_user()
     if user is None:
         return False
-    elif user.is_superuser:
+    elif user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
         return True
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])

@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -26,9 +27,18 @@ from note.tables import HistoryTable, AliasTable
 from .backends import PermissionBackend
 
 from .filters import UserFilter, UserFilterFormHelper
-from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
+from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
+    CustomAuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable
+
+
+class CustomLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+
+    def form_valid(self, form):
+        self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
+        return super().form_valid(form)
 
 
 class UserCreateView(CreateView):

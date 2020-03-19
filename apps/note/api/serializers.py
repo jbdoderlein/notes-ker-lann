@@ -4,7 +4,7 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from logs.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_authenticated_user
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
     TemplateTransaction, SpecialTransaction

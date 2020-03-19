@@ -50,6 +50,20 @@ class InstancedPermission:
         return self.__repr__()
 
 
+class PermissionMask(models.Model):
+    rank = models.PositiveSmallIntegerField(
+        verbose_name=_('rank'),
+    )
+
+    description = models.CharField(
+        max_length=255,
+        verbose_name=_('description'),
+    )
+
+    def __str__(self):
+        return self.description
+
+
 class Permission(models.Model):
 
     PERMISSION_TYPES = [
@@ -84,6 +98,11 @@ class Permission(models.Model):
     query = models.TextField()
 
     type = models.CharField(max_length=15, choices=PERMISSION_TYPES)
+
+    mask = models.ForeignKey(
+        PermissionMask,
+        on_delete=models.PROTECT,
+    )
 
     field = models.CharField(max_length=255, blank=True)
 

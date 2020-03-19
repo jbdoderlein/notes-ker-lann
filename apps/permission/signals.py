@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.core.exceptions import PermissionDenied
-from logs.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_authenticated_user
 
 
 EXCLUDED = [

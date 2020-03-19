@@ -3,7 +3,15 @@
 
 from django.contrib import admin
 
-from .models import Permission
+from .models import Permission, PermissionMask
+
+
+@admin.register(PermissionMask)
+class PermissionMaskAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Permission
+    """
+    list_display = ('rank', 'description')
 
 
 @admin.register(Permission)
