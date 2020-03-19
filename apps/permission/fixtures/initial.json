@@ -228,6 +228,18 @@
     }
   },
   {
+    "model": "permission.permission",
+    "pk": 18,
+    "fields": {
+      "model": 35,
+      "query": "{}",
+      "type": "change",
+      "mask": 1,
+      "field": "balance",
+      "description": "Update a note balance with a transaction"
+    }
+  },
+  {
     "model": "member.role",
     "pk": 1,
     "fields": {
@@ -279,7 +291,8 @@
         14,
         15,
         16,
-        17
+        17,
+        18
       ]
     }
   }

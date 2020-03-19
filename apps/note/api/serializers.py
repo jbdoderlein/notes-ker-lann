@@ -20,6 +20,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = '__all__'
+        read_only_fields = [f.name for f in model._meta.get_fields()]  # Notes are read-only protected
 
 
 class NoteClubSerializer(serializers.ModelSerializer):
@@ -32,6 +33,7 @@ class NoteClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteClub
         fields = '__all__'
+        read_only_fields = ('note', 'club', )
 
     def get_name(self, obj):
         return str(obj)
@@ -47,6 +49,7 @@ class NoteSpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteSpecial
         fields = '__all__'
+        read_only_fields = ('note', )
 
     def get_name(self, obj):
         return str(obj)
@@ -62,6 +65,7 @@ class NoteUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteUser
         fields = '__all__'
+        read_only_fields = ('note', 'user', )
 
     def get_name(self, obj):
         return str(obj)

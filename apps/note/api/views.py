@@ -5,56 +5,15 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
-from api.viewsets import ReadProtectedModelViewSet
+from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 from member.backends import PermissionBackend
-from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
-    NoteUserSerializer, AliasSerializer, \
-    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
-from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
+from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
+    TransactionTemplateSerializer, TransactionPolymorphicSerializer
+from ..models.notes import Note, Alias
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
-class NoteViewSet(ReadProtectedModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `Note` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/note/
-    """
-    queryset = Note.objects.all()
-    serializer_class = NoteSerializer
-
-
-class NoteClubViewSet(ReadProtectedModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `NoteClub` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/club/
-    """
-    queryset = NoteClub.objects.all()
-    serializer_class = NoteClubSerializer
-
-
-class NoteSpecialViewSet(ReadProtectedModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `NoteSpecial` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/special/
-    """
-    queryset = NoteSpecial.objects.all()
-    serializer_class = NoteSpecialSerializer
-
-
-class NoteUserViewSet(ReadProtectedModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `NoteUser` objects, serialize it to JSON with the given serializer,
-    then render it on /api/note/user/
-    """
-    queryset = NoteUser.objects.all()
-    serializer_class = NoteUserSerializer
-
-
-class NotePolymorphicViewSet(ReadProtectedModelViewSet):
+class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
