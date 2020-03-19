@@ -1,0 +1,286 @@
+[
+  {
+    "model": "permission.permissionmask",
+    "pk": 1,
+    "fields": {
+      "rank": 0,
+      "description": "Droits basiques"
+    }
+  },
+  {
+    "model": "permission.permissionmask",
+    "pk": 2,
+    "fields": {
+      "rank": 1,
+      "description": "Droits note seulement"
+    }
+  },
+  {
+    "model": "permission.permissionmask",
+    "pk": 3,
+    "fields": {
+      "rank": 42,
+      "description": "Tous mes droits"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 1,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our User object"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 2,
+    "fields": {
+      "model": 31,
+      "query": "{\"user\": [\"user\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our profile"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 3,
+    "fields": {
+      "model": 35,
+      "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our own note"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 4,
+    "fields": {
+      "model": 25,
+      "query": "{\"user\": [\"user\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our API token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 5,
+    "fields": {
+      "model": 37,
+      "query": "[\"OR\", {\"source\": [\"user\", \"note\"]}, {\"destination\": [\"user\", \"note\"]}]",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our own transactions"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 6,
+    "fields": {
+      "model": 34,
+      "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View aliases of clubs and members of Kfet club"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 7,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "last_login",
+      "description": "Change myself's last login"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 8,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "username",
+      "description": "Change myself's username"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 9,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "first_name",
+      "description": "Change myself's first name"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 10,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "last_name",
+      "description": "Change myself's last name"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 11,
+    "fields": {
+      "model": 21,
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "email",
+      "description": "Change myself's email"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 12,
+    "fields": {
+      "model": 25,
+      "query": "{\"user\": [\"user\"]}",
+      "type": "delete",
+      "mask": 1,
+      "field": "",
+      "description": "Delete API Token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 13,
+    "fields": {
+      "model": 25,
+      "query": "{\"user\": [\"user\"]}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Create API Token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 14,
+    "fields": {
+      "model": 34,
+      "query": "{\"note\": [\"user\", \"note\"]}",
+      "type": "delete",
+      "mask": 1,
+      "field": "",
+      "description": "Remove alias"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 15,
+    "fields": {
+      "model": 34,
+      "query": "{\"note\": [\"user\", \"note\"]}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Add alias"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 16,
+    "fields": {
+      "model": 35,
+      "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "display_image",
+      "description": "Change myself's display image"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 17,
+    "fields": {
+      "model": 37,
+      "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, {\"amount__lte\": [\"user\", \"note\", \"balance\"]}]",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Transfer from myself's note"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 1,
+    "fields": {
+      "name": "Adh\u00e9rent BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 2,
+    "fields": {
+      "name": "Adh\u00e9rent Kfet"
+    }
+  },
+  {
+    "model": "member.rolepermissions",
+    "pk": 1,
+    "fields": {
+      "role": 1,
+      "permissions": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "model": "member.rolepermissions",
+    "pk": 2,
+    "fields": {
+      "role": 2,
+      "permissions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    }
+  }
+]

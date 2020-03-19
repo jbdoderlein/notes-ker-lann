@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.core.exceptions import PermissionDenied
+
+from member.backends import PermissionBackend
 from note_kfet.middlewares import get_current_authenticated_user
 
 
@@ -14,10 +16,6 @@ EXCLUDED = [
     'contenttypes.contenttype',
     'logs.changelog',
     'migrations.migration',
-    'note.note',
-    'note.noteuser',
-    'note.noteclub',
-    'note.notespecial',
     'sessions.session',
 ]
 
@@ -41,7 +39,7 @@ def pre_save_object(sender, instance, **kwargs):
     model_name = model_name_full[1]
 
     if qs.exists():
-        if user.has_perm(app_label + ".change_" + model_name, instance):
+        if PermissionBackend().has_perm(user, app_label + ".change_" + model_name, instance):
             return
 
         previous = qs.get()
@@ -51,10 +49,10 @@ def pre_save_object(sender, instance, **kwargs):
             new_value = getattr(instance, field.name)
             if old_value == new_value:
                 continue
-            if not user.has_perm(app_label + ".change_" + model_name + "_" + field_name, instance):
+            if not PermissionBackend().has_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
                 raise PermissionDenied
     else:
-        if not user.has_perm(app_label + ".add_" + model_name, instance):
+        if not PermissionBackend().has_perm(user, app_label + ".add_" + model_name, instance):
             raise PermissionDenied
 
 
@@ -75,5 +73,5 @@ def pre_delete_object(sender, instance, **kwargs):
     app_label = model_name_full[0]
     model_name = model_name_full[1]
 
-    if not user.has_perm(app_label + ".delete_" + model_name, instance):
+    if not PermissionBackend().has_perm(user, app_label + ".delete_" + model_name, instance):
         raise PermissionDenied

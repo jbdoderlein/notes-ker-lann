@@ -14,18 +14,20 @@ from django.utils.translation import gettext_lazy as _
 
 class InstancedPermission:
 
-    def __init__(self, model, query, type, field):
+    def __init__(self, model, query, type, field, mask):
         self.model = model
         self.query = query
         self.type = type
         self.field = field
+        self.mask = mask
 
     def applies(self, obj, permission_type, field_name=None):
         """
         Returns True if the permission applies to
         the field `field_name` object `obj`
         """
-        if ContentType.objects.get_for_model(obj) != self.model:
+
+        if not isinstance(obj, self.model.model_class()):
             # The permission does not apply to the model
             return False
 
@@ -247,7 +249,7 @@ class Permission(models.Model):
         """
         query = json.loads(self.query)
         query = self._about(query, **kwargs)
-        return InstancedPermission(self.model, query, self.type, self.field)
+        return InstancedPermission(self.model, query, self.type, self.field, self.mask)
 
     def __str__(self):
         if self.field:

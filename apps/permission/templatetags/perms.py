@@ -10,10 +10,6 @@ from django import template
 from member.backends import PermissionBackend
 
 
-def has_perm(value):
-    return get_current_authenticated_user().has_perm(value)
-
-
 @stringfilter
 def not_empty_model_list(model_name):
     user = get_current_authenticated_user()
@@ -41,6 +37,5 @@ def not_empty_model_change_list(model_name):
 
 
 register = template.Library()
-register.filter('has_perm', has_perm)
 register.filter('not_empty_model_list', not_empty_model_list)
 register.filter('not_empty_model_change_list', not_empty_model_change_list)

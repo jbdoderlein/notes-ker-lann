@@ -4,6 +4,7 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
+from member.backends import PermissionBackend
 from note_kfet.middlewares import get_current_authenticated_user
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
@@ -76,9 +77,10 @@ class AliasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alias
         fields = '__all__'
+        read_only_fields = ('note', )
 
     def get_note(self, alias):
-        if get_current_authenticated_user().has_perm("note.view_note", alias.note):
+        if PermissionBackend().has_perm(get_current_authenticated_user(), "note.view_note", alias.note):
             return NotePolymorphicSerializer().to_representation(alias.note)
         else:
             return alias.note.id

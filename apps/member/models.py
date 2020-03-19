@@ -178,6 +178,9 @@ class RolePermissions(models.Model):
         'permission.Permission'
     )
 
+    def __str__(self):
+        return str(self.role)
+
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def save_user_profile(instance, created, **_kwargs):
