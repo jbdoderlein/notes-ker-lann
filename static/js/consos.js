@@ -154,7 +154,8 @@ function reset() {
     $("#note_list").html("");
     $("#alias_matched").html("");
     $("#consos_list").html("");
-    displayNote(null, "");
+    $("#user_note").text("");
+    $("#profile_pic").attr("src", "/media/pic/default.png");
     refreshHistory();
     refreshBalance();
 }

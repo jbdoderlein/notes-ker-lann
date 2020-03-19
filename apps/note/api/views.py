@@ -75,20 +75,7 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(alias__name__regex="^" + alias)
-            | Q(alias__normalized_name__regex="^" + alias.lower()))
-
-        note_type = self.request.query_params.get("type", None)
-        if note_type:
-            types = str(note_type).lower()
-            if "user" in types:
-                queryset = queryset.filter(polymorphic_ctype__model="noteuser")
-            elif "club" in types:
-                queryset = queryset.filter(polymorphic_ctype__model="noteclub")
-            elif "special" in types:
-                queryset = queryset.filter(polymorphic_ctype__model="notespecial")
-            else:
-                queryset = queryset.none()
+            Q(alias__name__regex="^" + alias) | Q(alias__normalized_name__regex="^" + alias.lower()))
 
         return queryset.distinct()
 
@@ -116,25 +103,6 @@ class AliasViewSet(ReadProtectedModelViewSet):
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
             Q(name__regex="^" + alias) | Q(normalized_name__regex="^" + alias.lower()))
-
-        note_id = self.request.query_params.get("note", None)
-        if note_id:
-            queryset = queryset.filter(id=note_id)
-
-        note_type = self.request.query_params.get("type", None)
-        if note_type:
-            types = str(note_type).lower()
-            if "user" in types:
-                queryset = queryset.filter(
-                    note__polymorphic_ctype__model="noteuser")
-            elif "club" in types:
-                queryset = queryset.filter(
-                    note__polymorphic_ctype__model="noteclub")
-            elif "special" in types:
-                queryset = queryset.filter(
-                    note__polymorphic_ctype__model="notespecial")
-            else:
-                queryset = queryset.none()
 
         return queryset
 

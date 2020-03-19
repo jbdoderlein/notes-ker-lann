@@ -4,6 +4,7 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
+from logs.middlewares import get_current_authenticated_user
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
     TemplateTransaction, SpecialTransaction
@@ -77,7 +78,10 @@ class AliasSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_note(self, alias):
-        return NotePolymorphicSerializer().to_representation(alias.note)
+        if get_current_authenticated_user().has_perm("note.view_note", alias.note):
+            return NotePolymorphicSerializer().to_representation(alias.note)
+        else:
+            return alias.note.id
 
 
 class NotePolymorphicSerializer(PolymorphicSerializer):

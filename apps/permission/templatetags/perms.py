@@ -17,7 +17,9 @@ def has_perm(value):
 @stringfilter
 def not_empty_model_list(model_name):
     user = get_current_authenticated_user()
-    if user.is_superuser:
+    if user is None:
+        return False
+    elif user.is_superuser:
         return True
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])
@@ -28,7 +30,9 @@ def not_empty_model_list(model_name):
 @stringfilter
 def not_empty_model_change_list(model_name):
     user = get_current_authenticated_user()
-    if user.is_superuser:
+    if user is None:
+        return False
+    elif user.is_superuser:
         return True
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])

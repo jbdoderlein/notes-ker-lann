@@ -67,7 +67,7 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
     if (note !== null && alias !== note.name)
         alias += " (aka. " + note.name + ")";
     if (note !== null && user_note_field !== null)
-        $("#" + user_note_field).text(alias + " : " + pretty_money(note.balance));
+        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" : " + pretty_money(note.balance))));
     if (profile_pic_field != null)
         $("#" + profile_pic_field).attr('src', img);
 }
@@ -173,6 +173,13 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
             aliases.results.forEach(function (alias) {
                 let note = alias.note;
+                if (typeof note === "number") {
+                    note = {
+                        id: note,
+                        name: alias.name,
+                        balance: null
+                    };
+                }
                 aliases_matched_html += li(alias_prefix + "_" + alias.id, alias.name);
                 note.alias = alias;
                 notes.push(note);
