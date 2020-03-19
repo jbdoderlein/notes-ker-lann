@@ -52,11 +52,13 @@ class InstancedPermission:
 
 class PermissionMask(models.Model):
     rank = models.PositiveSmallIntegerField(
+        unique=True,
         verbose_name=_('rank'),
     )
 
     description = models.CharField(
         max_length=255,
+        unique=True,
         verbose_name=_('description'),
     )
 
