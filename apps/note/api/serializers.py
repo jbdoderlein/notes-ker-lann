@@ -8,7 +8,7 @@ from member.backends import PermissionBackend
 from note_kfet.middlewares import get_current_authenticated_user
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
-    TemplateTransaction, SpecialTransaction
+    RecurrentTransaction, SpecialTransaction
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -135,14 +135,14 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TemplateTransactionSerializer(serializers.ModelSerializer):
+class RecurrentTransactionSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Transactions.
-    The djangorestframework plugin will analyse the model `TemplateTransaction` and parse all fields in the API.
+    The djangorestframework plugin will analyse the model `RecurrentTransaction` and parse all fields in the API.
     """
 
     class Meta:
-        model = TemplateTransaction
+        model = RecurrentTransaction
         fields = '__all__'
 
 
@@ -171,7 +171,7 @@ class SpecialTransactionSerializer(serializers.ModelSerializer):
 class TransactionPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Transaction: TransactionSerializer,
-        TemplateTransaction: TemplateTransactionSerializer,
+        RecurrentTransaction: RecurrentTransactionSerializer,
         MembershipTransaction: MembershipTransactionSerializer,
         SpecialTransaction: SpecialTransactionSerializer,
     }

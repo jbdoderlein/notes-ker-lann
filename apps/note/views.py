@@ -11,7 +11,7 @@ from django_tables2 import SingleTableView
 
 from member.backends import PermissionBackend
 from .forms import TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction, NoteSpecial
+from .models import Transaction, TransactionTemplate, Alias, RecurrentTransaction, NoteSpecial
 from .models.transactions import SpecialTransaction
 from .tables import HistoryTable
 
@@ -139,11 +139,11 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
         from django.db.models import Count
         buttons = TransactionTemplate.objects.filter(PermissionBackend()
                                                      .filter_queryset(self.request.user, TransactionTemplate, "view")) \
-            .filter(display=True).annotate(clicks=Count('templatetransaction')).order_by('category__name', 'name')
+            .filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
         context['transaction_templates'] = buttons
         context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
         context['title'] = _("Consumptions")
-        context['polymorphic_ctype'] = ContentType.objects.get_for_model(TemplateTransaction).pk
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
         # select2 compatibility
         context['no_cache'] = True

@@ -168,7 +168,7 @@ class Transaction(PolymorphicModel):
         return _('Transfer')
 
 
-class TemplateTransaction(Transaction):
+class RecurrentTransaction(Transaction):
     """
     Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
     """

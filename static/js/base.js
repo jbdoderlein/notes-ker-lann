@@ -265,7 +265,7 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            "resourcetype": "TemplateTransaction",
+            "resourcetype": "RecurrentTransaction",
             valid: !validated
         },
         success: function () {
