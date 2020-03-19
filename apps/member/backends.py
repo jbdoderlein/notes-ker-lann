@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, F
 
@@ -15,7 +16,8 @@ class PermissionBackend(ModelBackend):
     supports_anonymous_user = False
     supports_inactive_user = False
 
-    def permissions(self, user):
+    @staticmethod
+    def permissions(user):
         for membership in Membership.objects.filter(user=user).all():
             if not membership.valid() or membership.roles is None:
                 continue
@@ -37,12 +39,13 @@ class PermissionBackend(ModelBackend):
                     )
                     yield permission
 
-    def filter_queryset(self, user, model, type, field=None):
+    @staticmethod
+    def filter_queryset(user, model, t, field=None):
         """
         Filter a queryset by considering the permissions of a given user.
         :param user: The owner of the permissions that are fetched
         :param model: The concerned model of the queryset
-        :param type: The type of modification (view, add, change, delete)
+        :param t: The type of modification (view, add, change, delete)
         :param field: The field of the model to test, if concerned
         :return: A query that corresponds to the filter to give to a queryset
         """
@@ -51,12 +54,15 @@ class PermissionBackend(ModelBackend):
             # Superusers have all rights
             return Q()
 
+        if not isinstance(model, ContentType):
+            model = ContentType.objects.get_for_model(model)
+
         # Never satisfied
         query = Q(pk=-1)
-        for perm in self.permissions(user):
-            if field and field != perm.field:
+        for perm in PermissionBackend.permissions(user):
+            if perm.field and field != perm.field:
                 continue
-            if perm.model != model or perm.type != type:
+            if perm.model != model or perm.type != t:
                 continue
             query = query | perm.query
         return query

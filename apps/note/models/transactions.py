@@ -129,13 +129,14 @@ class Transaction(PolymorphicModel):
             models.Index(fields=['destination']),
         ]
 
-    def post_save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
         """
         When saving, also transfer money between two notes
         """
 
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transfered
+            super().save(*args, **kwargs)
             return
 
         created = self.pk is None

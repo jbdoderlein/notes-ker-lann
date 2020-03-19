@@ -13,7 +13,7 @@ class ReadProtectedModelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         model = ContentType.objects.get_for_model(self.serializer_class.Meta.model)
-        return super().get_queryset().filter(PermissionBackend().filter_queryset(self.request.user, model, "view"))
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, model, "view"))
 
 
 class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -23,4 +23,4 @@ class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         model = ContentType.objects.get_for_model(self.serializer_class.Meta.model)
-        return super().get_queryset().filter(PermissionBackend().filter_queryset(self.request.user, model, "view"))
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, model, "view"))

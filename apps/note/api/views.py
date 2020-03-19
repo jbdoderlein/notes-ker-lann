@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.viewsets import ReadProtectedModelViewSet
+from member.backends import PermissionBackend
 from .serializers import NoteSerializer, NotePolymorphicSerializer, NoteClubSerializer, NoteSpecialSerializer, \
     NoteUserSerializer, AliasSerializer, \
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -70,7 +71,7 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Note, "view"))
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
@@ -110,7 +111,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
