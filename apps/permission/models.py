@@ -257,10 +257,3 @@ class Permission(models.Model):
         else:
             return _("Can {type} {model} in {query}").format(type=self.type, model=self.model, query=self.query)
 
-
-class UserPermission(models.Model):
-
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
-    permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
-
