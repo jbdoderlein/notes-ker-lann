@@ -3,9 +3,11 @@
 
 from django.urls import path
 
-from .views import BillingListView
+from .views import BillingCreateView, BillingListView, BillingUpdateView
 
 app_name = 'treasury'
 urlpatterns = [
     path('billing/', BillingListView.as_view(), name='billing'),
+    path('billing/create/', BillingCreateView.as_view(), name='billing_create'),
+    path('billing/<int:pk>/', BillingUpdateView.as_view(), name='billing_update'),
 ]
