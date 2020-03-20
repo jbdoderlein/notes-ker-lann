@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
-
 from member.backends import PermissionBackend
+
 from .forms import TransactionTemplateForm
 from .models import Transaction, TransactionTemplate, Alias, RecurrentTransaction, NoteSpecial
 from .models.transactions import SpecialTransaction
@@ -27,9 +27,9 @@ class TransactionCreate(LoginRequiredMixin, SingleTableView):
     table_pagination = {"per_page": 50}
 
     def get_queryset(self):
-        return Transaction.objects.filter(PermissionBackend
-                                          .filter_queryset(self.request.user, Transaction, "view")) \
-                                            .order_by("-id").all()[:50]
+        return Transaction.objects.filter(PermissionBackend.filter_queryset(
+            self.request.user, Transaction, "view")
+        ).order_by("-id").all()[:50]
 
     def get_context_data(self, **kwargs):
         """
@@ -137,9 +137,9 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
         """
         context = super().get_context_data(**kwargs)
         from django.db.models import Count
-        buttons = TransactionTemplate.objects.filter(PermissionBackend()
-                                                     .filter_queryset(self.request.user, TransactionTemplate, "view")) \
-            .filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
+        buttons = TransactionTemplate.objects.filter(
+            PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+        ).filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
         context['transaction_templates'] = buttons
         context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
         context['title'] = _("Consumptions")

@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from rest_framework.filters import SearchFilter
-
 from api.viewsets import ReadProtectedModelViewSet
+
 from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
 from ..models import Profile, Club, Role, Membership
 

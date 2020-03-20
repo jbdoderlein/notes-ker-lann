@@ -4,8 +4,6 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from member.backends import PermissionBackend
-from note_kfet.middlewares import get_current_authenticated_user
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
     RecurrentTransaction, SpecialTransaction
@@ -82,9 +80,6 @@ class AliasSerializer(serializers.ModelSerializer):
         model = Alias
         fields = '__all__'
         read_only_fields = ('note', )
-
-    def get_note(self, alias):
-        return alias.note.id
 
 
 class NotePolymorphicSerializer(PolymorphicSerializer):

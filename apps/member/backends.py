@@ -1,15 +1,15 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
-
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from permission.models import Permission
+
 from .models import Membership, Club
-from django.contrib.auth.backends import ModelBackend
 
 
 class PermissionBackend(ModelBackend):
@@ -52,9 +52,6 @@ class PermissionBackend(ModelBackend):
         :param field: The field of the model to test, if concerned
         :return: A query that corresponds to the filter to give to a queryset
         """
-
-        from time import time
-        ti = time()
 
         if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             # Superusers have all rights

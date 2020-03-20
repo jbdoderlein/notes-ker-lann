@@ -54,7 +54,6 @@ class Profile(models.Model):
         return reverse('user_detail', args=(self.pk,))
 
 
-
 class Club(models.Model):
     """
     A club is a group of people, whose membership is handle by their
@@ -164,6 +163,7 @@ class Membership(models.Model):
         verbose_name_plural = _('memberships')
         indexes = [models.Index(fields=['user'])]
 
+
 class RolePermissions(models.Model):
     """
     Permissions associated with a Role
@@ -180,13 +180,3 @@ class RolePermissions(models.Model):
 
     def __str__(self):
         return str(self.role)
-
-
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def save_user_profile(instance, created, **_kwargs):
-#     """
-#     Hook to save an user profile when an user is updated
-#     """
-#     if created:
-#         Profile.objects.create(user=instance)
-#     instance.profile.save()

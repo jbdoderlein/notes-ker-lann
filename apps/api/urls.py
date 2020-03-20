@@ -8,7 +8,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import routers, serializers
 from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
-
 from activity.api.urls import register_activity_urls
 from api.viewsets import ReadProtectedModelViewSet
 from member.api.urls import register_members_urls

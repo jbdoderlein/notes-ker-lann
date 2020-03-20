@@ -3,8 +3,8 @@
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-
 from api.viewsets import ReadProtectedModelViewSet
+
 from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer
 from ..models import ActivityType, Activity, Guest
 

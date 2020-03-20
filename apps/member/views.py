@@ -24,8 +24,8 @@ from note.forms import AliasForm, ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
-from .backends import PermissionBackend
 
+from .backends import PermissionBackend
 from .filters import UserFilter, UserFilterFormHelper
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
     CustomAuthenticationForm

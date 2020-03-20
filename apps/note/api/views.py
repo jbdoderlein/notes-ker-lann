@@ -4,8 +4,8 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
+
 from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
     TransactionTemplateSerializer, TransactionPolymorphicSerializer
 from ..models.notes import Note, Alias
