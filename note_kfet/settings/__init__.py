@@ -41,6 +41,8 @@ else:
 try:
     #in secrets.py defines everything you want
     from .secrets import *
+    INSTALLED_APPS += OPTIONAL_APPS
+
 except ImportError:
     pass
 
