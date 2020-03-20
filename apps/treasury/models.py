@@ -11,6 +11,20 @@ class Billing(models.Model):
         verbose_name=_("Billing identifier"),
     )
 
+    bde = models.CharField(
+        max_length=32,
+        default='Saperlistpopette.png',
+        choices=(
+            ('Saperlistpopette.png', 'Saper[list]popette'),
+            ('Finalist.png', 'Fina[list]'),
+            ('Listorique.png', '[List]orique'),
+            ('Satellist.png', 'Satel[list]'),
+            ('Monopolist.png', 'Monopo[list]'),
+            ('Kataclist.png', 'Katac[list]'),
+        ),
+        verbose_name=_("BDE"),
+    )
+
     subject = models.CharField(
         max_length=255,
         verbose_name=_("Subject"),
