@@ -1,5 +1,61 @@
 [
   {
+    "model": "member.role",
+    "pk": 1,
+    "fields": {
+      "name": "Adh\u00e9rent BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 2,
+    "fields": {
+      "name": "Adh\u00e9rent Kfet"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 3,
+    "fields": {
+      "name": "Pr\u00e9sident\u00b7e BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 4,
+    "fields": {
+      "name": "Tr\u00e9sorier\u00b7\u00e8re BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 5,
+    "fields": {
+      "name": "Respo info"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 6,
+    "fields": {
+      "name": "GC Kfet"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 7,
+    "fields": {
+      "name": "Pr\u00e9sident\u00b7e de club"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 8,
+    "fields": {
+      "name": "Tr\u00e9sorier\u00b7\u00e8re de club"
+    }
+  },
+  {
     "model": "permission.permissionmask",
     "pk": 1,
     "fields": {
@@ -51,7 +107,7 @@
     "model": "permission.permission",
     "pk": 3,
     "fields": {
-      "model": 35,
+      "model": 34,
       "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
       "type": "view",
       "mask": 1,
@@ -75,7 +131,7 @@
     "model": "permission.permission",
     "pk": 5,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "[\"OR\", {\"source\": [\"user\", \"note\"]}, {\"destination\": [\"user\", \"note\"]}]",
       "type": "view",
       "mask": 1,
@@ -87,7 +143,7 @@
     "model": "permission.permission",
     "pk": 6,
     "fields": {
-      "model": 34,
+      "model": 33,
       "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
       "type": "view",
       "mask": 1,
@@ -183,7 +239,7 @@
     "model": "permission.permission",
     "pk": 14,
     "fields": {
-      "model": 34,
+      "model": 33,
       "query": "{\"note\": [\"user\", \"note\"]}",
       "type": "delete",
       "mask": 1,
@@ -195,7 +251,7 @@
     "model": "permission.permission",
     "pk": 15,
     "fields": {
-      "model": 34,
+      "model": 33,
       "query": "{\"note\": [\"user\", \"note\"]}",
       "type": "add",
       "mask": 1,
@@ -207,7 +263,7 @@
     "model": "permission.permission",
     "pk": 16,
     "fields": {
-      "model": 35,
+      "model": 34,
       "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -219,7 +275,7 @@
     "model": "permission.permission",
     "pk": 17,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, {\"amount__lte\": [\"user\", \"note\", \"balance\"]}]",
       "type": "add",
       "mask": 1,
@@ -231,7 +287,7 @@
     "model": "permission.permission",
     "pk": 18,
     "fields": {
-      "model": 35,
+      "model": 34,
       "query": "{}",
       "type": "change",
       "mask": 1,
@@ -243,7 +299,7 @@
     "model": "permission.permission",
     "pk": 19,
     "fields": {
-      "model": 35,
+      "model": 34,
       "query": "[\"OR\", {\"pk\": [\"club\", \"note\", \"pk\"]}, {\"pk__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club\": [\"club\"]}], [\"all\"]]}]",
       "type": "view",
       "mask": 2,
@@ -255,7 +311,7 @@
     "model": "permission.permission",
     "pk": 20,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
       "type": "add",
       "mask": 2,
@@ -267,7 +323,7 @@
     "model": "permission.permission",
     "pk": 21,
     "fields": {
-      "model": 44,
+      "model": 42,
       "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 50]}}]",
       "type": "add",
       "mask": 2,
@@ -291,7 +347,7 @@
     "model": "permission.permission",
     "pk": 23,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "{}",
       "type": "change",
       "mask": 1,
@@ -303,7 +359,7 @@
     "model": "permission.permission",
     "pk": 24,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -315,7 +371,7 @@
     "model": "permission.permission",
     "pk": 25,
     "fields": {
-      "model": 43,
+      "model": 40,
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -339,7 +395,7 @@
     "model": "permission.permission",
     "pk": 27,
     "fields": {
-      "model": 36,
+      "model": 35,
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -351,7 +407,7 @@
     "model": "permission.permission",
     "pk": 28,
     "fields": {
-      "model": 36,
+      "model": 35,
       "query": "{}",
       "type": "change",
       "mask": 3,
@@ -363,7 +419,7 @@
     "model": "permission.permission",
     "pk": 29,
     "fields": {
-      "model": 36,
+      "model": 35,
       "query": "{}",
       "type": "add",
       "mask": 3,
@@ -375,7 +431,7 @@
     "model": "permission.permission",
     "pk": 30,
     "fields": {
-      "model": 38,
+      "model": 37,
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -387,7 +443,7 @@
     "model": "permission.permission",
     "pk": 31,
     "fields": {
-      "model": 38,
+      "model": 37,
       "query": "{}",
       "type": "add",
       "mask": 3,
@@ -399,7 +455,7 @@
     "model": "permission.permission",
     "pk": 32,
     "fields": {
-      "model": 38,
+      "model": 37,
       "query": "{}",
       "type": "change",
       "mask": 3,
@@ -411,7 +467,7 @@
     "model": "permission.permission",
     "pk": 33,
     "fields": {
-      "model": 37,
+      "model": 36,
       "query": "{}",
       "type": "add",
       "mask": 2,
@@ -420,63 +476,7 @@
     }
   },
   {
-    "model": "member.role",
-    "pk": 1,
-    "fields": {
-      "name": "Adh\u00e9rent BDE"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 2,
-    "fields": {
-      "name": "Adh\u00e9rent Kfet"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 3,
-    "fields": {
-      "name": "Pr\u00e9sident\u00b7e BDE"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 4,
-    "fields": {
-      "name": "Tr\u00e9sorier\u00b7\u00e8re BDE"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 5,
-    "fields": {
-      "name": "Respo info"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 6,
-    "fields": {
-      "name": "GC Kfet"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 7,
-    "fields": {
-      "name": "Pr\u00e9sident\u00b7e de club"
-    }
-  },
-  {
-    "model": "member.role",
-    "pk": 8,
-    "fields": {
-      "name": "Tr\u00e9sorier\u00b7\u00e8re de club"
-    }
-  },
-  {
-    "model": "member.rolepermissions",
+    "model": "permission.rolepermissions",
     "pk": 1,
     "fields": {
       "role": 1,
@@ -492,7 +492,7 @@
     }
   },
   {
-    "model": "member.rolepermissions",
+    "model": "permission.rolepermissions",
     "pk": 2,
     "fields": {
       "role": 2,
@@ -519,7 +519,7 @@
     }
   },
   {
-    "model": "member.rolepermissions",
+    "model": "permission.rolepermissions",
     "pk": 3,
     "fields": {
       "role": 8,
@@ -532,7 +532,7 @@
     }
   },
   {
-    "model": "member.rolepermissions",
+    "model": "permission.rolepermissions",
     "pk": 4,
     "fields": {
       "role": 4,

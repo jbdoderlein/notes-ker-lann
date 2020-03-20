@@ -7,7 +7,7 @@ from django.template.defaultfilters import stringfilter
 from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 from django import template
 
-from member.backends import PermissionBackend
+from permission.backends import PermissionBackend
 
 
 @stringfilter
@@ -22,7 +22,7 @@ def not_empty_model_list(model_name):
         return session.get("not_empty_model_list_" + model_name, None) == 1
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])
-    qs = ct.model_class().objects.filter(PermissionBackend.filter_queryset(user, ct, "view"))
+    qs = ct.model_class().objects.filter(PermissionBackend.filter_queryset(user, ct, "view")).all()
     session["not_empty_model_list_" + model_name] = 1 if qs.exists() else 2
     return session.get("not_empty_model_list_" + model_name) == 1
 

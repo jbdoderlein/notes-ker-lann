@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models.signals import pre_save, pre_delete, post_save, post_delete
 
 from logs import signals as logs_signals
-from member.backends import PermissionBackend
+from permission.backends import PermissionBackend
 from note_kfet.middlewares import get_current_authenticated_user
 
 

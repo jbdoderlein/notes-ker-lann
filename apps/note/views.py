@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
-from member.backends import PermissionBackend
+from permission.backends import PermissionBackend
 
 from .forms import TransactionTemplateForm
 from .models import Transaction, TransactionTemplate, Alias, RecurrentTransaction, NoteSpecial

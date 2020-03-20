@@ -11,6 +11,8 @@ from django.db import models
 from django.db.models import F, Q, Model
 from django.utils.translation import gettext_lazy as _
 
+from member.models import Role
+
 
 class InstancedPermission:
 
@@ -233,4 +235,22 @@ class Permission(models.Model):
             return _("Can {type} {model}.{field} in {query}").format(type=self.type, model=self.model, field=self.field, query=self.query)
         else:
             return _("Can {type} {model} in {query}").format(type=self.type, model=self.model, query=self.query)
+
+
+class RolePermissions(models.Model):
+    """
+    Permissions associated with a Role
+    """
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.PROTECT,
+        related_name='+',
+        verbose_name=_('role'),
+    )
+    permissions = models.ManyToManyField(
+        Permission,
+    )
+
+    def __str__(self):
+        return str(self.role)
 

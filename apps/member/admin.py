@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from .forms import ProfileForm
-from .models import Club, Membership, Profile, Role, RolePermissions
+from .models import Club, Membership, Profile, Role
 
 
 class ProfileInline(admin.StackedInline):
@@ -40,4 +40,3 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Club)
 admin.site.register(Membership)
 admin.site.register(Role)
-admin.site.register(RolePermissions)

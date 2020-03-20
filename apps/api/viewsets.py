@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.contenttypes.models import ContentType
-from member.backends import PermissionBackend
+from permission.backends import PermissionBackend
 from rest_framework import viewsets
 from note_kfet.middlewares import get_current_authenticated_user
 

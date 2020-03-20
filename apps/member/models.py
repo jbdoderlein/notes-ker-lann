@@ -162,21 +162,3 @@ class Membership(models.Model):
         verbose_name = _('membership')
         verbose_name_plural = _('memberships')
         indexes = [models.Index(fields=['user'])]
-
-
-class RolePermissions(models.Model):
-    """
-    Permissions associated with a Role
-    """
-    role = models.ForeignKey(
-        Role,
-        on_delete=models.PROTECT,
-        related_name='+',
-        verbose_name=_('role'),
-    )
-    permissions = models.ManyToManyField(
-        'permission.Permission'
-    )
-
-    def __str__(self):
-        return str(self.role)

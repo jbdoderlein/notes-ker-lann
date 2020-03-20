@@ -33,7 +33,9 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(alias__name__regex="^" + alias) | Q(alias__normalized_name__regex="^" + alias.lower()))
+            Q(alias__name__regex="^" + alias)
+            | Q(alias__normalized_name__regex="^" + Alias.normalize(alias))
+            | Q(alias__normalized_name__regex="^" + alias.lower()))
 
         return queryset.distinct()
 
@@ -60,7 +62,9 @@ class AliasViewSet(ReadProtectedModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(name__regex="^" + alias) | Q(normalized_name__regex="^" + alias.lower()))
+            Q(name__regex="^" + alias)
+            | Q(normalized_name__regex="^" + Alias.normalize(alias))
+            | Q(normalized_name__regex="^" + alias.lower()))
 
         return queryset
 

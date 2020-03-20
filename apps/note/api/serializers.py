@@ -74,7 +74,6 @@ class AliasSerializer(serializers.ModelSerializer):
     REST API Serializer for Aliases.
     The djangorestframework plugin will analyse the model `Alias` and parse all fields in the API.
     """
-    note = serializers.SerializerMethodField()
 
     class Meta:
         model = Alias

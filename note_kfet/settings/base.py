@@ -130,7 +130,7 @@ PASSWORD_HASHERS = [
 # Django Guardian object permissions
 
 AUTHENTICATION_BACKENDS = (
-    'member.backends.PermissionBackend',
+    'permission.backends.PermissionBackend',
     'cas.backends.CASBackend',
 )
 

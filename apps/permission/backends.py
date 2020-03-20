@@ -9,7 +9,7 @@ from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from permission.models import Permission
 
-from .models import Membership, Club
+from member.models import Membership, Club
 
 
 class PermissionBackend(ModelBackend):
