@@ -127,9 +127,9 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
     table_pagination = {"per_page": 50}
 
     def get_queryset(self):
-        return Transaction.objects.filter(PermissionBackend
-                                          .filter_queryset(self.request.user, Transaction, "view")) \
-                                            .order_by("-id").all()[:50]
+        return Transaction.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+        ).order_by("-id").all()[:50]
 
     def get_context_data(self, **kwargs):
         """
