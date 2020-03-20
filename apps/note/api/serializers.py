@@ -84,10 +84,7 @@ class AliasSerializer(serializers.ModelSerializer):
         read_only_fields = ('note', )
 
     def get_note(self, alias):
-        if PermissionBackend().has_perm(get_current_authenticated_user(), "note.view_note", alias.note):
-            return NotePolymorphicSerializer().to_representation(alias.note)
-        else:
-            return alias.note.id
+        return alias.note.id
 
 
 class NotePolymorphicSerializer(PolymorphicSerializer):

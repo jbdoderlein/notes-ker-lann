@@ -61,12 +61,22 @@ function li(id, text) {
  * @param profile_pic_field
  */
 function displayNote(note, alias, user_note_field=null, profile_pic_field=null) {
-    let img = note == null ? null : note.display_image;
-    if (img == null)
-        img = '/media/pic/default.png';
-    if (note !== null && alias !== note.name)
+    if (!note.display_image) {
+        note.display_image = 'https://nk20.ynerant.fr/media/pic/default.png';
+        $.getJSON("/api/note/note/" + note.id + "/?format=json", function(new_note) {
+            note.display_image = new_note.display_image.replace("http:", "https:");
+            note.name = new_note.name;
+            note.balance = new_note.balance;
+
+            displayNote(note, alias, user_note_field, profile_pic_field);
+        });
+        return;
+    }
+
+    let img = note.display_image;
+    if (alias !== note.name)
         alias += " (aka. " + note.name + ")";
-    if (note !== null && user_note_field !== null)
+    if (user_note_field !== null)
         $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" : " + pretty_money(note.balance))));
     if (profile_pic_field != null)
         $("#" + profile_pic_field).attr('src', img);
@@ -173,15 +183,13 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
             aliases.results.forEach(function (alias) {
                 let note = alias.note;
-                if (typeof note === "number") {
-                    note = {
-                        id: note,
-                        name: alias.name,
-                        balance: null
-                    };
-                }
+                note = {
+                    id: note,
+                    name: alias.name,
+                    alias: alias,
+                    balance: null
+                };
                 aliases_matched_html += li(alias_prefix + "_" + alias.id, alias.name);
-                note.alias = alias;
                 notes.push(note);
             });
 
