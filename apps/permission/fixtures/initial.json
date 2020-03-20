@@ -324,7 +324,7 @@
     "pk": 21,
     "fields": {
       "model": 42,
-      "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 50]}}]",
+      "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
       "type": "add",
       "mask": 2,
       "field": "",
