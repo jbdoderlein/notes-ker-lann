@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
-from permission.models import Permission
-
 from member.models import Membership, Club
+
+from .models import Permission
 
 
 class PermissionBackend(ModelBackend):
@@ -66,6 +66,10 @@ class PermissionBackend(ModelBackend):
         :return: A query that corresponds to the filter to give to a queryset
         """
 
+        if user is None or isinstance(user, AnonymousUser):
+            # Anonymous users can't do anything
+            return Q(pk=-1)
+
         if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             # Superusers have all rights
             return Q()
@@ -86,6 +90,9 @@ class PermissionBackend(ModelBackend):
         return query
 
     def has_perm(self, user_obj, perm, obj=None):
+        if user_obj is None or isinstance(user_obj, AnonymousUser):
+            return False
+
         if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             return True
 
