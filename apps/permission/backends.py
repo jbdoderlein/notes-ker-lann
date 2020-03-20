@@ -13,18 +13,31 @@ from member.models import Membership, Club
 
 
 class PermissionBackend(ModelBackend):
+    """
+    Manage permissions of users
+    """
     supports_object_permissions = True
     supports_anonymous_user = False
     supports_inactive_user = False
 
     @staticmethod
     def permissions(user, model, type):
+        """
+        List all permissions of the given user that applies to a given model and a give type
+        :param user: The owner of the permissions
+        :param model: The model that the permissions shoud apply
+        :param type: The type of the permissions: view, change, add or delete
+        :return: A generator of the requested permissions
+        """
         for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
                 .filter(
             rolepermissions__role__membership__user=user,
             model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
             type=type,
         ).all():
+            if not isinstance(model, permission.model.__class__):
+                continue
+
             club = Club.objects.get(pk=permission.club)
             permission = permission.about(
                 user=user,

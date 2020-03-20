@@ -12,6 +12,9 @@ from permission.backends import PermissionBackend
 
 @stringfilter
 def not_empty_model_list(model_name):
+    """
+    Return True if and only if the current user has right to see any object of the given model.
+    """
     user = get_current_authenticated_user()
     session = get_current_session()
     if user is None:
@@ -29,6 +32,9 @@ def not_empty_model_list(model_name):
 
 @stringfilter
 def not_empty_model_change_list(model_name):
+    """
+    Return True if and only if the current user has right to change any object of the given model.
+    """
     user = get_current_authenticated_user()
     session = get_current_session()
     if user is None:

@@ -7,6 +7,11 @@ SAFE_METHODS = ('HEAD', 'OPTIONS', )
 
 
 class StrongDjangoObjectPermissions(DjangoObjectPermissions):
+    """
+    Default DjangoObjectPermissions grant view permission to all.
+    This is a simple patch of this class that controls view access.
+    """
+
     perms_map = {
         'GET': ['%(app_label)s.view_%(model_name)s'],
         'OPTIONS': [],

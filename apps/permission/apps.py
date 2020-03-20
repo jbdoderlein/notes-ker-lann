@@ -9,7 +9,6 @@ class PermissionConfig(AppConfig):
     name = 'permission'
 
     def ready(self):
-        # noinspection PyUnresolvedReferences
         from . import signals
         pre_save.connect(signals.pre_save_object)
         pre_delete.connect(signals.pre_delete_object)

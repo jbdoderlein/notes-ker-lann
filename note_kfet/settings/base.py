@@ -127,17 +127,14 @@ PASSWORD_HASHERS = [
     'member.hashers.CustomNK15Hasher',
 ]
 
-# Django Guardian object permissions
-
 AUTHENTICATION_BACKENDS = (
-    'permission.backends.PermissionBackend',
-    'cas.backends.CASBackend',
+    'permission.backends.PermissionBackend',  # Custom role-based permission system
+    'cas.backends.CASBackend',  # For CAS connections
 )
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
+        # Control API access with our role-based permission system
         'permission.permissions.StrongDjangoObjectPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [

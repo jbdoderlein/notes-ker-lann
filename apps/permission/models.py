@@ -57,6 +57,10 @@ class InstancedPermission:
             return False
 
     def update_query(self):
+        """
+        The query is not analysed in a first time. It is analysed at most once if needed.
+        :return:
+        """
         if not self.query:
             # noinspection PyProtectedMember
             self.query = Permission._about(self.raw_query, **self.kwargs)
@@ -72,6 +76,10 @@ class InstancedPermission:
 
 
 class PermissionMask(models.Model):
+    """
+    Permissions that are hidden behind a mask
+    """
+
     rank = models.PositiveSmallIntegerField(
         unique=True,
         verbose_name=_('rank'),
@@ -106,9 +114,9 @@ class Permission(models.Model):
     #  query -> {key: value, …}              A list of fields and values of a Q object
     #  key   -> string                       A field name
     #  value -> int | string | bool | null   Literal values
-    #         | [parameter]                  A parameter
+    #         | [parameter, …]               A parameter. See compute_param for more details.
     #         | {"F": oper}                  An F object
-    #  oper  -> [string]                     A parameter
+    #  oper  -> [string, …]                  A parameter. See compute_param for more details.
     #         | ["ADD", oper, …]             Sum multiple F objects or literal
     #         | ["SUB", oper, oper]          Substract two F objects or literal
     #         | ["MUL", oper, …]             Multiply F objects or literals
@@ -164,6 +172,18 @@ class Permission(models.Model):
 
     @staticmethod
     def compute_param(value, **kwargs):
+        """
+        A parameter is given by a list. The first argument is the name of the parameter.
+        The parameters are the user, the club, and some classes (Note, ...)
+        If there are more arguments in the list, then attributes are queried.
+        For example, ["user", "note", "balance"] will return the balance of the note of the user.
+        If an argument is a list, then this is interpreted with a function call:
+            First argument is the name of the function, next arguments are parameters, and if there is a dict,
+            then the dict is given as kwargs.
+            For example: NoteUser.objects.filter(user__memberships__club__name="Kfet").all() is translated by:
+            ["NoteUser", "objects", ["filter", {"user__memberships__club__name": "Kfet"}], ["all"]]
+        """
+
         if not isinstance(value, list):
             return value
 
@@ -192,6 +212,12 @@ class Permission(models.Model):
 
     @staticmethod
     def _about(query, **kwargs):
+        """
+        Translate JSON query into a Q query.
+        :param query: The JSON query
+        :param kwargs: Additional params
+        :return: A Q object
+        """
         if len(query) == 0:
             # The query is either [] or {} and
             # applies to all objects of the model
@@ -204,6 +230,8 @@ class Permission(models.Model):
                 return functools.reduce(operator.or_, [Permission._about(query, **kwargs) for query in query[1:]])
             elif query[0] == 'NOT':
                 return ~Permission._about(query[1], **kwargs)
+            else:
+                return Q(pk=F("pk"))
         elif isinstance(query, dict):
             q_kwargs = {}
             for key in query:
