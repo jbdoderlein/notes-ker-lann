@@ -81,6 +81,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fa fa-exchange"></i>{% trans 'Transfer' %} </a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'treasury:billing' %}"><i class="fa fa-money"></i>{% trans 'Treasury' %} </a>
+                </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}

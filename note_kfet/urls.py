@@ -13,6 +13,7 @@ urlpatterns = [
 
     # Include project routers
     path('note/', include('note.urls')),
+    path('treasury/', include('treasury.urls')),
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),

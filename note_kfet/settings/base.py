@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'activity',
     'member',
     'note',
+    'treasury',
     'api',
     'logs',
 ]
