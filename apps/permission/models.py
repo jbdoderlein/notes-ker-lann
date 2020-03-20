@@ -14,12 +14,14 @@ from django.utils.translation import gettext_lazy as _
 
 class InstancedPermission:
 
-    def __init__(self, model, query, type, field, mask):
+    def __init__(self, model, query, type, field, mask, **kwargs):
         self.model = model
-        self.query = query
+        self.raw_query = query
+        self.query = None
         self.type = type
         self.field = field
         self.mask = mask
+        self.kwargs = kwargs
 
     def applies(self, obj, permission_type, field_name=None):
         """
@@ -33,6 +35,8 @@ class InstancedPermission:
 
         if self.type == 'add':
             if permission_type == self.type:
+                self.update_query()
+
                 # Don't increase indexes
                 obj.pk = 0
                 # Force insertion, no data verification, no trigger
@@ -45,9 +49,15 @@ class InstancedPermission:
         if permission_type == self.type:
             if self.field and field_name != self.field:
                 return False
+            self.update_query()
             return obj in self.model.model_class().objects.filter(self.query).all()
         else:
             return False
+
+    def update_query(self):
+        if not self.query:
+            # noinspection PyProtectedMember
+            self.query = Permission._about(self.raw_query, **self.kwargs)
 
     def __repr__(self):
         if self.field:
@@ -178,7 +188,8 @@ class Permission(models.Model):
                 field = getattr(field, value[i])
         return field
 
-    def _about(self, query, **kwargs):
+    @staticmethod
+    def _about(query, **kwargs):
         if len(query) == 0:
             # The query is either [] or {} and
             # applies to all objects of the model
@@ -186,11 +197,11 @@ class Permission(models.Model):
             return Q(pk=F("pk"))
         if isinstance(query, list):
             if query[0] == 'AND':
-                return functools.reduce(operator.and_, [self._about(query, **kwargs) for query in query[1:]])
+                return functools.reduce(operator.and_, [Permission._about(query, **kwargs) for query in query[1:]])
             elif query[0] == 'OR':
-                return functools.reduce(operator.or_, [self._about(query, **kwargs) for query in query[1:]])
+                return functools.reduce(operator.or_, [Permission._about(query, **kwargs) for query in query[1:]])
             elif query[0] == 'NOT':
-                return ~self._about(query[1], **kwargs)
+                return ~Permission._about(query[1], **kwargs)
         elif isinstance(query, dict):
             q_kwargs = {}
             for key in query:
@@ -206,7 +217,7 @@ class Permission(models.Model):
             return Q(**q_kwargs)
         else:
             # TODO: find a better way to crash here
-            raise Exception("query {} is wrong".format(self.query))
+            raise Exception("query {} is wrong".format(query))
 
     def about(self, **kwargs):
         """
@@ -214,8 +225,8 @@ class Permission(models.Model):
         replaced by their values and the query interpreted
         """
         query = json.loads(self.query)
-        query = self._about(query, **kwargs)
-        return InstancedPermission(self.model, query, self.type, self.field, self.mask)
+        # query = self._about(query, **kwargs)
+        return InstancedPermission(self.model, query, self.type, self.field, self.mask, **kwargs)
 
     def __str__(self):
         if self.field:

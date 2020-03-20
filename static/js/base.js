@@ -199,6 +199,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                 // When the user click on an alias, the associated note is added to the emitters
                 alias_obj.click(function () {
                     field.val("");
+                    old_pattern = "";
                     // If the note is already an emitter, we increase the quantity
                     var disp = null;
                     notes_display.forEach(function (d) {

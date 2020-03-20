@@ -19,30 +19,28 @@ class PermissionBackend(ModelBackend):
 
     @staticmethod
     def permissions(user, model, type):
-        for membership in Membership.objects.filter(user=user).all():
-            if not membership.valid() or membership.roles is None:
-                continue
-
-            for permission in Permission.objects.filter(
-                    rolepermissions__role=membership.roles,
-                    model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
-                    type=type
-            ).all():
-                permission = permission.about(
-                    user=user,
-                    club=membership.club,
-                    User=User,
-                    Club=Club,
-                    Membership=Membership,
-                    Note=Note,
-                    NoteUser=NoteUser,
-                    NoteClub=NoteClub,
-                    NoteSpecial=NoteSpecial,
-                    F=F,
-                    Q=Q
-                )
-                if permission.mask.rank <= get_current_session().get("permission_mask", 0):
-                    yield permission
+        for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
+                .filter(
+            rolepermissions__role__membership__user=user,
+            model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
+            type=type,
+        ).all():
+            club = Club.objects.get(pk=permission.club)
+            permission = permission.about(
+                user=user,
+                club=club,
+                User=User,
+                Club=Club,
+                Membership=Membership,
+                Note=Note,
+                NoteUser=NoteUser,
+                NoteClub=NoteClub,
+                NoteSpecial=NoteSpecial,
+                F=F,
+                Q=Q
+            )
+            if permission.mask.rank <= get_current_session().get("permission_mask", 0):
+                yield permission
 
     @staticmethod
     def filter_queryset(user, model, t, field=None):
@@ -55,6 +53,9 @@ class PermissionBackend(ModelBackend):
         :return: A query that corresponds to the filter to give to a queryset
         """
 
+        from time import time
+        ti = time()
+
         if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             # Superusers have all rights
             return Q()
@@ -64,11 +65,13 @@ class PermissionBackend(ModelBackend):
 
         # Never satisfied
         query = Q(pk=-1)
-        for perm in PermissionBackend.permissions(user, model, t):
+        perms = PermissionBackend.permissions(user, model, t)
+        for perm in perms:
             if perm.field and field != perm.field:
                 continue
             if perm.type != t or perm.model != model:
                 continue
+            perm.update_query()
             query = query | perm.query
         return query
 
