@@ -21,6 +21,8 @@ function reset() {
     $("#last_name").val("");
     $("#first_name").val("");
     $("#bank").val("");
+    $("#user_note").val("");
+    $("#profile_pic").attr("src", "/media/pic/default.png");
     refreshBalance();
     refreshHistory();
 }
@@ -30,16 +32,18 @@ $(document).ready(function() {
         "source_alias", "source_note", "user_note", "profile_pic");
     autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
         "dest_alias", "dest_note", "user_note", "profile_pic", function() {
-            let last = dests_notes_display[dests_notes_display.length - 1];
-            dests_notes_display.length = 0;
-            dests_notes_display.push(last);
+            if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
+                let last = dests_notes_display[dests_notes_display.length - 1];
+                dests_notes_display.length = 0;
+                dests_notes_display.push(last);
 
-            last.quantity = 1;
+                last.quantity = 1;
 
-            $.getJSON("/api/user/" + last.note.user + "/", function(user) {
-                $("#last_name").val(user.last_name);
-                $("#first_name").val(user.first_name);
-            });
+                $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                    $("#last_name").val(user.last_name);
+                    $("#first_name").val(user.first_name);
+                });
+            }
 
             return true;
        });

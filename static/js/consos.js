@@ -97,7 +97,7 @@ autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
  * Add a transaction from a button.
  * @param dest Where the money goes
  * @param amount The price of the item
- * @param type The type of the transaction (content type id for TemplateTransaction)
+ * @param type The type of the transaction (content type id for RecurrentTransaction)
  * @param category_id The category identifier
  * @param category_name The category name
  * @param template_id The identifier of the button
@@ -154,7 +154,8 @@ function reset() {
     $("#note_list").html("");
     $("#alias_matched").html("");
     $("#consos_list").html("");
-    displayNote(null, "");
+    $("#user_note").text("");
+    $("#profile_pic").attr("src", "/media/pic/default.png");
     refreshHistory();
     refreshBalance();
 }
@@ -179,7 +180,7 @@ function consumeAll() {
  * @param quantity The quantity sold (type: int)
  * @param amount The price of one item, in cents (type: int)
  * @param reason The transaction details (type: str)
- * @param type The type of the transaction (content type id for TemplateTransaction)
+ * @param type The type of the transaction (content type id for RecurrentTransaction)
  * @param category The category id of the button (type: int)
  * @param template The button id (type: int)
  */
@@ -192,7 +193,7 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "reason": reason,
             "valid": true,
             "polymorphic_ctype": type,
-            "resourcetype": "TemplateTransaction",
+            "resourcetype": "RecurrentTransaction",
             "source": source,
             "destination": dest,
             "category": category,

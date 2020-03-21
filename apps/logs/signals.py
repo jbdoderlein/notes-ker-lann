@@ -4,13 +4,12 @@
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.renderers import JSONRenderer
 from rest_framework.serializers import ModelSerializer
+from note.models import NoteUser, Alias
+from note_kfet.middlewares import get_current_authenticated_user, get_current_ip
+
+from .models import Changelog
 
 import getpass
-
-from note.models import NoteUser, Alias
-
-from .middlewares import get_current_authenticated_user, get_current_ip
-from .models import Changelog
 
 
 # Ces modèles ne nécessitent pas de logs

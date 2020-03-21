@@ -7,6 +7,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from member.views import CustomLoginView
+
 urlpatterns = [
     # Dev so redirect to something random
     path('', RedirectView.as_view(pattern_name='note:transfer'), name='index'),
@@ -16,10 +18,11 @@ urlpatterns = [
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),
-    path('accounts/', include('member.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('member.urls')),
+    path('accounts/login/', CustomLoginView.as_view()),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
 ]
 

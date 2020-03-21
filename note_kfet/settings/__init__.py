@@ -76,7 +76,7 @@ if "cas" in INSTALLED_APPS:
 
 
 if "logs" in INSTALLED_APPS:
-    MIDDLEWARE += ('logs.middlewares.LogsMiddleware',)
+    MIDDLEWARE += ('note_kfet.middlewares.SessionMiddleware',)
 
 if "debug_toolbar" in INSTALLED_APPS:
     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")

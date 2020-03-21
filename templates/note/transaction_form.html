@@ -3,7 +3,7 @@
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
 
-{% load i18n static django_tables2 %}
+{% load i18n static django_tables2 perms %}
 
 {% block content %}
 
@@ -18,14 +18,16 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     <input type="radio" name="transaction_type" id="type_transfer">
                     {% trans "Transfer" %}
                 </label>
-                <label for="type_credit" class="btn btn-sm btn-outline-primary">
-                    <input type="radio" name="transaction_type" id="type_credit">
-                    {% trans "Credit" %}
-                </label>
-                <label type="type_debit" class="btn btn-sm btn-outline-primary">
-                    <input type="radio" name="transaction_type" id="type_debit">
-                    {% trans "Debit" %}
-                </label>
+                {% if "note.notespecial"|not_empty_model_list %}
+                    <label for="type_credit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_credit">
+                        {% trans "Credit" %}
+                    </label>
+                    <label type="type_debit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_debit">
+                        {% trans "Debit" %}
+                    </label>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -58,47 +60,49 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
 
-        <div class="col-md-4" id="external_div" style="display: none;">
-            <div class="card border-success shadow mb-4">
-                <div class="card-header">
-                    <p class="card-text font-weight-bold">
-                        {% trans "External payment" %}
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush" id="source_note_list">
-                </ul>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <label for="credit_type">{% trans "Transfer type" %} :</label>
-                            <select id="credit_type" class="custom-select">
-                                {% for special_type in special_types %}
-                                    <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+        {% if "note.notespecial"|not_empty_model_list %}
+            <div class="col-md-4" id="external_div" style="display: none;">
+                <div class="card border-success shadow mb-4">
+                    <div class="card-header">
+                        <p class="card-text font-weight-bold">
+                            {% trans "External payment" %}
+                        </p>
                     </div>
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <label for="last_name">{% trans "Name" %} :</label>
-                            <input type="text" id="last_name" class="form-control" />
+                    <ul class="list-group list-group-flush" id="source_note_list">
+                    </ul>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="credit_type">{% trans "Transfer type" %} :</label>
+                                <select id="credit_type" class="custom-select">
+                                    {% for special_type in special_types %}
+                                        <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <label for="first_name">{% trans "First name" %} :</label>
-                            <input type="text" id="first_name" class="form-control" />
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="last_name">{% trans "Name" %} :</label>
+                                <input type="text" id="last_name" class="form-control" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <label for="bank">{% trans "Bank" %} :</label>
-                            <input type="text" id="bank" class="form-control" />
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="first_name">{% trans "First name" %} :</label>
+                                <input type="text" id="first_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="bank">{% trans "Bank" %} :</label>
+                                <input type="text" id="bank" class="form-control" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="col-md-8" id="dests_div">
             <div class="card border-info shadow mb-4">

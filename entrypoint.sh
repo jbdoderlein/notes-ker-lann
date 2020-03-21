@@ -7,7 +7,7 @@ if [ -z ${NOTE_URL+x} ]; then
 else
   sed -i -e "s/example.com/$DOMAIN/g" /code/apps/member/fixtures/initial.json
   sed -i -e "s/localhost/$NOTE_URL/g" /code/note_kfet/fixtures/initial.json
-  sed -i -e "s/\.\*/https?:\/\/$NOTE_URL\/.*/g" /code/note_kfet/fixtures/cas.json
+  sed -i -e "s/\"\.\*\"/\"https?:\/\/$NOTE_URL\/.*\"/g" /code/note_kfet/fixtures/cas.json
   sed -i -e "s/REPLACEME/La Note Kfet \\\\ud83c\\\\udf7b/g" /code/note_kfet/fixtures/cas.json
 fi
 

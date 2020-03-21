@@ -152,10 +152,12 @@ class Transaction(PolymorphicModel):
             self.source.balance -= to_transfer
             self.destination.balance += to_transfer
 
+        # We save first the transaction, in case of the user has no right to transfer money
+        super().save(*args, **kwargs)
+
         # Save notes
         self.source.save()
         self.destination.save()
-        super().save(*args, **kwargs)
 
     @property
     def total(self):
@@ -166,7 +168,7 @@ class Transaction(PolymorphicModel):
         return _('Transfer')
 
 
-class TemplateTransaction(Transaction):
+class RecurrentTransaction(Transaction):
     """
     Special type of :model:`note.Transaction` associated to a :model:`note.TransactionTemplate`.
     """

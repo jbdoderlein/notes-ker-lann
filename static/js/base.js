@@ -61,13 +61,23 @@ function li(id, text) {
  * @param profile_pic_field
  */
 function displayNote(note, alias, user_note_field=null, profile_pic_field=null) {
-    let img = note == null ? null : note.display_image;
-    if (img == null)
-        img = '/media/pic/default.png';
-    if (note !== null && alias !== note.name)
+    if (!note.display_image) {
+        note.display_image = 'https://nk20.ynerant.fr/media/pic/default.png';
+        $.getJSON("/api/note/note/" + note.id + "/?format=json", function(new_note) {
+            note.display_image = new_note.display_image.replace("http:", "https:");
+            note.name = new_note.name;
+            note.balance = new_note.balance;
+
+            displayNote(note, alias, user_note_field, profile_pic_field);
+        });
+        return;
+    }
+
+    let img = note.display_image;
+    if (alias !== note.name)
         alias += " (aka. " + note.name + ")";
-    if (note !== null && user_note_field !== null)
-        $("#" + user_note_field).text(alias + " : " + pretty_money(note.balance));
+    if (user_note_field !== null)
+        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" : " + pretty_money(note.balance))));
     if (profile_pic_field != null)
         $("#" + profile_pic_field).attr('src', img);
 }
@@ -173,8 +183,13 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
             aliases.results.forEach(function (alias) {
                 let note = alias.note;
+                note = {
+                    id: note,
+                    name: alias.name,
+                    alias: alias,
+                    balance: null
+                };
                 aliases_matched_html += li(alias_prefix + "_" + alias.id, alias.name);
-                note.alias = alias;
                 notes.push(note);
             });
 
@@ -192,6 +207,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                 // When the user click on an alias, the associated note is added to the emitters
                 alias_obj.click(function () {
                     field.val("");
+                    old_pattern = "";
                     // If the note is already an emitter, we increase the quantity
                     var disp = null;
                     notes_display.forEach(function (d) {
@@ -258,7 +274,7 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            "resourcetype": "TemplateTransaction",
+            "resourcetype": "RecurrentTransaction",
             valid: !validated
         },
         success: function () {
