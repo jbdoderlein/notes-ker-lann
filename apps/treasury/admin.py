@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from treasury.models import Billing, Product
+from .models import Billing, Product
 
 
 @admin.register(Billing)

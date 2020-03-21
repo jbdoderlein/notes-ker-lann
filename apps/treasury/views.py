@@ -15,7 +15,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View
 from django_tables2 import SingleTableView
-
 from note_kfet.settings.base import BASE_DIR
 
 from .forms import BillingForm, ProductFormSet, ProductFormSetHelper
@@ -130,30 +129,39 @@ class BillingRenderView(LoginRequiredMixin, View):
             pass
         tmp_dir = mkdtemp(prefix=BASE_DIR + "/tmp/")
 
-        with open("{}/billing-{:d}.tex".format(tmp_dir, pk), "wb") as f:
-            f.write(tex.encode("UTF-8"))
-        del tex
+        try:
+            with open("{}/billing-{:d}.tex".format(tmp_dir, pk), "wb") as f:
+                f.write(tex.encode("UTF-8"))
+            del tex
 
-        error = subprocess.Popen(
-            ["pdflatex", "billing-{}.tex".format(pk)],
-            cwd=tmp_dir,
-            stdin=open(os.devnull, "r"),
-            stderr=open(os.devnull, "wb"),
-            stdout=open(os.devnull, "wb")
-        ).wait()
+            error = subprocess.Popen(
+                ["pdflatex", "billing-{}.tex".format(pk)],
+                cwd=tmp_dir,
+                stdin=open(os.devnull, "r"),
+                stderr=open(os.devnull, "wb"),
+                stdout=open(os.devnull, "wb")
+            ).wait()
 
-        error = subprocess.Popen(
-            ["pdflatex", "billing-{}.tex".format(pk)],
-            cwd=tmp_dir,
-            stdin=open(os.devnull, "r"),
-            stderr=open(os.devnull, "wb"),
-            stdout=open(os.devnull, "wb")
-        ).wait()
+            if error:
+                raise IOError("An error attempted while generating a billing:", error)
 
-        pdf = open("{}/billing-{}.pdf".format(tmp_dir, pk), 'rb').read()
-        shutil.rmtree(tmp_dir)
+            error = subprocess.Popen(
+                ["pdflatex", "billing-{}.tex".format(pk)],
+                cwd=tmp_dir,
+                stdin=open(os.devnull, "r"),
+                stderr=open(os.devnull, "wb"),
+                stdout=open(os.devnull, "wb")
+            ).wait()
 
-        response = HttpResponse(pdf, content_type="application/pdf")
-        response['Content-Disposition'] = "inline;filename=billing-{:d}.pdf".format(pk)
+            if error:
+                raise IOError("An error attempted while generating a billing:", error)
+
+            pdf = open("{}/billing-{}.pdf".format(tmp_dir, pk), 'rb').read()
+            response = HttpResponse(pdf, content_type="application/pdf")
+            response['Content-Disposition'] = "inline;filename=billing-{:d}.pdf".format(pk)
+        except IOError as e:
+            raise e
+        finally:
+            shutil.rmtree(tmp_dir)
 
         return response

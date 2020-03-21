@@ -1,8 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
 from .models import Billing
@@ -11,17 +11,17 @@ from .models import Billing
 class BillingTable(tables.Table):
     id = tables.LinkColumn("treasury:billing_update",
                            args=[A("pk")],
-                           text=lambda record: _("Billing #{:d}").format(record.id),)
+                           text=lambda record: _("Billing #{:d}").format(record.id), )
 
     billing = tables.LinkColumn("treasury:billing_render",
-                               verbose_name=_("Billing"),
-                               args=[A("pk")],
-                               accessor="pk",
-                               text="",
-                               attrs={
-                                   'a': {'class': 'fa fa-file-pdf-o'},
-                                   'td': {'data-turbolinks': 'false'}
-                               })
+                                verbose_name=_("Billing"),
+                                args=[A("pk")],
+                                accessor="pk",
+                                text="",
+                                attrs={
+                                    'a': {'class': 'fa fa-file-pdf-o'},
+                                    'td': {'data-turbolinks': 'false'}
+                                })
 
     class Meta:
         attrs = {
@@ -29,4 +29,4 @@ class BillingTable(tables.Table):
         }
         model = Billing
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'name', 'subject', 'acquitted', 'billing', )
+        fields = ('id', 'name', 'subject', 'acquitted', 'billing',)

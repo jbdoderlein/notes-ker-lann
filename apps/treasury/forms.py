@@ -20,6 +20,7 @@ ProductFormSet = forms.inlineformset_factory(
     extra=1,
 )
 
+
 class ProductFormSetHelper(FormHelper):
     def __init__(self, form=None):
         super().__init__(form)
