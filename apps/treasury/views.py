@@ -44,7 +44,15 @@ class BillingCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        formset = ProductFormSet(self.request.POST, instance=form.instance)
+        kwargs = {}
+        for key in self.request.POST:
+            value = self.request.POST[key]
+            if key.endswith("amount"):
+                kwargs[key] = str(int(100 * float(value)))
+            else:
+                kwargs[key] = value
+
+        formset = ProductFormSet(kwargs, instance=form.instance)
         if formset.is_valid():
             for f in formset:
                 if f.is_valid() and f.instance.designation:
@@ -89,8 +97,17 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        formset = ProductFormSet(self.request.POST, instance=form.instance)
+        kwargs = {}
+        for key in self.request.POST:
+            value = self.request.POST[key]
+            if key.endswith("amount"):
+                kwargs[key] = str(int(100 * float(value)))
+            else:
+                kwargs[key] = value
+
+        formset = ProductFormSet(kwargs, instance=form.instance)
         saved = []
+        print(formset.errors)
         if formset.is_valid():
             for f in formset:
                 if f.is_valid() and f.instance.designation:
