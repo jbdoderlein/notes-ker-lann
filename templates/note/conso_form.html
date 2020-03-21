@@ -7,67 +7,88 @@
 
 {% block content %}
     <div class="row mt-4">
-        <div class="col-sm-5 col-md-4">
+        <div class="col-sm-5 col-md-4" id="infos_div">
             <div class="row">
                 {# User details column #}
-                <div class="col-xl-5">
+                <div class="col-xl-5" id="note_infos_div">
                     <div class="card border-success shadow mb-4">
-                        <img src="https://perso.crans.org/erdnaxe/site-crans/img/logo.svg"
-                            alt="" class="img-fluid rounded mx-auto d-block">
+                        <img src="/media/pic/default.png"
+                            id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
                         <div class="card-body text-center">
-                            Paquito (aka. PAC) : -230 €
+                            <span id="user_note"></span>
                         </div>
                     </div>
                 </div>
 
                 {# User selection column #}
-                <div class="col-xl-7">
+                <div class="col-xl-7" id="user_select_div">
                     <div class="card border-success shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
-                                Sélection des émitteurs
+                                {% trans "Select emitters" %}
                             </p>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-                                Cras justo odio
-                                <span class="badge badge-dark badge-pill">14</span>
-                            </li>
-                            <li class="list-group-item py-1 d-flex justify-content-between align-items-center">
-                                Dapibus ac facilisis in
-                                <span class="badge badge-dark badge-pill">1</span>
-                            </li>
+                        <ul class="list-group list-group-flush" id="note_list">
                         </ul>
                         <div class="card-body">
-                            TODO: reimplement select2 here in JS
+                            <input class="form-control mx-auto d-block" type="text" id="note" />
+                            <ul class="list-group list-group-flush" id="alias_matched">
+                            </ul>
                         </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-5" id="consos_list_div">
+                    <div class="card border-info shadow mb-4">
+                        <div class="card-header">
+                            <p class="card-text font-weight-bold">
+                                {% trans "Select consumptions" %}
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush" id="consos_list">
+                        </ul>
+                        <button id="consume_all" class="form-control btn btn-primary">
+                            {% trans "Consume!" %}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         {# Buttons column #}
-        <div class="col-sm-7 col-md-8">
+        <div class="col-sm-7 col-md-8" id="buttons_div">
             {# Show last used buttons #}
             <div class="card shadow mb-4">
-                <div class="card-body text-nowrap" style="overflow:auto hidden">
-                    <p class="card-text text-muted font-weight-light font-italic">
-                        Les boutons les plus utilisés s'afficheront ici.
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        {% trans "Most used buttons" %}
                     </p>
+                </div>
+                <div class="card-body text-nowrap" style="overflow:auto hidden">
+                    <div class="d-inline-flex flex-wrap justify-content-center" id="most_used">
+                        {% for button in most_used %}
+                            {% if button.display %}
+                                <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                        id="most_used_button{{ button.id }}" name="button" value="{{ button.name }}">
+                                    {{ button.name }} ({{ button.amount | pretty_money }})
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
             {# Regroup buttons under categories #}
-            {% regroup transaction_templates by template_type as template_types %}
+            {% regroup transaction_templates by category as categories %}
 
             <div class="card border-primary text-center shadow mb-4">
                 {# Tabs for button categories #}
                 <div class="card-header">
                     <ul class="nav nav-tabs nav-fill card-header-tabs">
-                        {% for template_type in template_types %}
+                        {% for category in categories %}
                             <li class="nav-item">
-                                <a class="nav-link font-weight-bold" data-toggle="tab" href="#{{ template_type.grouper|slugify }}">
-                                    {{ template_type.grouper }}
+                                <a class="nav-link font-weight-bold" data-toggle="tab" href="#{{ category.grouper|slugify }}">
+                                    {{ category.grouper }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -77,14 +98,16 @@
                 {# Tabs content #}
                 <div class="card-body">
                     <div class="tab-content">
-                        {% for template_type in template_types %}
-                            <div class="tab-pane" id="{{ template_type.grouper|slugify }}">
+                        {% for category in categories %}
+                            <div class="tab-pane" id="{{ category.grouper|slugify }}">
                                 <div class="d-inline-flex flex-wrap justify-content-center">
-                                    {% for button in template_type.list %}
-                                        <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                                name="button" value="{{ button.name }}">
-                                            {{ button.name }} ({{ button.amount | pretty_money }})
-                                        </button>
+                                    {% for button in category.list %}
+                                        {% if button.display %}
+                                            <button class="btn btn-outline-dark rounded-0 flex-fill"
+                                                    id="button{{ button.id }}" name="button" value="{{ button.name }}">
+                                                {{ button.name }} ({{ button.amount | pretty_money }})
+                                            </button>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
@@ -95,16 +118,16 @@
                 {# Mode switch #}
                 <div class="card-footer border-primary">
                     <a class="btn btn-sm btn-secondary float-left" href="{% url 'note:template_list' %}">
-                        <i class="fa fa-edit"></i> Éditer
+                        <i class="fa fa-edit"></i> {% trans "Edit" %}
                     </a>
                     <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                        <label class="btn btn-sm btn-outline-primary active">
-                            <input type="radio" name="options" id="option1" checked>
-                            Consomations simples
+                        <label for="single_conso" class="btn btn-sm btn-outline-primary active">
+                            <input type="radio" name="conso_type" id="single_conso" checked>
+                            {% trans "Single consumptions" %}
                         </label>
-                        <label class="btn btn-sm btn-outline-primary">
-                            <input type="radio" name="options" id="option2">
-                            Consomations doubles
+                        <label for="double_conso" class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="conso_type" id="double_conso">
+                            {% trans "Double consumptions" %}
                         </label>
                     </div>
                 </div>
@@ -112,40 +135,37 @@
         </div>
     </div>
 
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4" id="history">
         <div class="card-header">
             <p class="card-text font-weight-bold">
-                Historique des transactions récentes
+                {% trans "Recent transactions history" %}
             </p>
         </div>
         {% render_table table %}
     </div>
 {% endblock %}
 
-{% block extracss %}
-    <style>
-        .select2-container{
-            max-width: 100%;
-            min-width: 100%;
-        }
-    </style>
-{% endblock %}
-
 {% block extrajavascript %}
+    <script type="text/javascript" src="/static/js/consos.js"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            // If hash of a category in the URL, then select this category
-            // else select the first one
-            if (location.hash) {
-                $("a[href='" + location.hash + "']").tab("show");
-            } else {
-                $("a[data-toggle='tab']").first().tab("show");
-            }
+        {% for button in most_used %}
+            {% if button.display %}
+                $("#most_used_button{{ button.id }}").click(function() {
+                    addConso({{ button.destination.id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                        {{ button.id }}, "{{ button.name }}");
+                });
+            {% endif %}
+        {% endfor %}
 
-            // When selecting a category, change URL
-            $(document.body).on("click", "a[data-toggle='tab']", function(event) {
-                location.hash = this.getAttribute("href");
-            });
-        });
+        {% for button in transaction_templates %}
+            {% if button.display %}
+                $("#button{{ button.id }}").click(function() {
+                    addConso({{ button.destination.id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                        {{ button.id }}, "{{ button.name }}");
+                });
+            {% endif %}
+        {% endfor %}
     </script>
 {% endblock %}

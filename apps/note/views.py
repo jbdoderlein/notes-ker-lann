@@ -3,52 +3,42 @@
 
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
 
-from .forms import TransactionForm, TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, Alias
+from .forms import TransactionTemplateForm
+from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction, NoteSpecial
+from .models.transactions import SpecialTransaction
 from .tables import HistoryTable
 
 
-class TransactionCreate(LoginRequiredMixin, CreateView):
+class TransactionCreate(LoginRequiredMixin, SingleTableView):
     """
     Show transfer page
 
     TODO: If user have sufficient rights, they can transfer from an other note
     """
-    model = Transaction
-    form_class = TransactionForm
+    queryset = Transaction.objects.order_by("-id").all()[:50]
+    template_name = "note/transaction_form.html"
+
+    # Transaction history table
+    table_class = HistoryTable
+    table_pagination = {"per_page": 50}
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Transfer money from your account '
-                             'to one or others')
-
-        context['no_cache'] = True
+        context['title'] = _('Transfer money')
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
+        context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
+        context['special_types'] = NoteSpecial.objects.order_by("special_type").all()
 
         return context
-
-    def get_form(self, form_class=None):
-        """
-        If the user has no right to transfer funds, then it won't have the choice of the source of the transfer.
-        """
-        form = super().get_form(form_class)
-
-        if False:  # TODO: fix it with "if %user has no right to transfer funds"
-            del form.fields['source']
-            form.user = self.request.user
-
-        return form
-
-    def get_success_url(self):
-        return reverse('note:transfer')
 
 
 class NoteAutocomplete(autocomplete.Select2QuerySetView):
@@ -127,21 +117,25 @@ class ConsoView(LoginRequiredMixin, SingleTableView):
     """
     Consume
     """
-    model = Transaction
+    queryset = Transaction.objects.order_by("-id").all()[:50]
     template_name = "note/conso_form.html"
 
     # Transaction history table
     table_class = HistoryTable
-    table_pagination = {"per_page": 10}
+    table_pagination = {"per_page": 50}
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
-            .order_by('category')
+        from django.db.models import Count
+        buttons = TransactionTemplate.objects.filter(display=True) \
+            .annotate(clicks=Count('templatetransaction')).order_by('category__name', 'name')
+        context['transaction_templates'] = buttons
+        context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
         context['title'] = _("Consumptions")
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(TemplateTransaction).pk
 
         # select2 compatibility
         context['no_cache'] = True
