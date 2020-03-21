@@ -1,20 +1,25 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django_tables2 import tables
+import django_tables2 as tables
+from django_tables2 import A
 
 from .models import Billing
 
 
 class BillingTable(tables.Table):
+    id = tables.LinkColumn("treasury:billing_update", args=[A("pk")])
+
+    render = tables.LinkColumn("treasury:billing_render",
+                               args=[A("pk")],
+                               accessor="pk",
+                               text="",
+                               attrs={'a': {'class': 'fa fa-file-pdf-o'}})
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = Billing
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'name', 'subject', 'acquitted', )
-        row_attrs = {
-            'class': 'table-row',
-            'data-href': lambda record: record.pk
-        }
+        fields = ('id', 'name', 'subject', 'acquitted', 'render', )

@@ -3,19 +3,8 @@
 {% load i18n %}
 {% block content %}
 
-{% render_table  table %}
+{% render_table table %}
 
 <a class="btn btn-primary" href="{% url 'treasury:billing_create' %}">{% trans "New billing" %}</a>
 
-{% endblock %}
-{% block extrajavascript %}
-<script type="text/javascript">
-
-$(document).ready(function($) {
-    $(".table-row").click(function() {
-        window.document.location = $(this).data("href");
-    });
-});
-
-</script>
 {% endblock %}

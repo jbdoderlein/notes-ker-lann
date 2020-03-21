@@ -3,6 +3,7 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
+from django.views.generic.base import View
 from django_tables2 import SingleTableView
 
 from .models import Billing
@@ -32,4 +33,10 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView):
     """
     model = Billing
     fields = '__all__'
-    # form_class = ClubForm
+    # form_class = BillingForm
+
+
+class BillingRenderView(View):
+    """
+    Render Billing
+    """
