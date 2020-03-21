@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-11 11:44+0100\n"
+"POT-Creation-Date: 2020-03-21 17:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgid "activity"
 msgstr "activité"
 
 #: apps/activity/models.py:19 apps/activity/models.py:44
-#: apps/member/models.py:60 apps/member/models.py:111
+#: apps/member/models.py:61 apps/member/models.py:112
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 templates/member/profile_detail.html:15
 msgid "name"
@@ -41,6 +41,7 @@ msgid "activity types"
 msgstr "types d'activité"
 
 #: apps/activity/models.py:48 apps/note/models/transactions.py:69
+#: apps/permission/models.py:91
 msgid "description"
 msgstr "description"
 
@@ -81,7 +82,7 @@ msgstr "invités"
 msgid "API"
 msgstr ""
 
-#: apps/logs/apps.py:10
+#: apps/logs/apps.py:11
 msgid "Logs"
 msgstr ""
 
@@ -161,37 +162,37 @@ msgstr "payé"
 msgid "user profile"
 msgstr "profil utilisateur"
 
-#: apps/member/models.py:65
+#: apps/member/models.py:66
 msgid "email"
 msgstr "courriel"
 
-#: apps/member/models.py:70
+#: apps/member/models.py:71
 msgid "membership fee"
 msgstr "cotisation pour adhérer"
 
-#: apps/member/models.py:74
+#: apps/member/models.py:75
 msgid "membership duration"
 msgstr "durée de l'adhésion"
 
-#: apps/member/models.py:75
+#: apps/member/models.py:76
 msgid "The longest time a membership can last (NULL = infinite)."
 msgstr "La durée maximale d'une adhésion (NULL = infinie)."
 
-#: apps/member/models.py:80
+#: apps/member/models.py:81
 msgid "membership start"
 msgstr "début de l'adhésion"
 
-#: apps/member/models.py:81
+#: apps/member/models.py:82
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 "Combien de temps après le 1er Janvier les adhérents peuvent renouveler leur "
 "adhésion."
 
-#: apps/member/models.py:86
+#: apps/member/models.py:87
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
-#: apps/member/models.py:87
+#: apps/member/models.py:88
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
@@ -199,45 +200,39 @@ msgstr ""
 "Combien de temps l'adhésion peut durer après le 1er Janvier de l'année "
 "suivante avant que les adhérents peuvent renouveler leur adhésion."
 
-#: apps/member/models.py:93 apps/note/models/notes.py:139
+#: apps/member/models.py:94 apps/note/models/notes.py:139
 msgid "club"
 msgstr "club"
 
-msgid "New club"
-msgstr "Nouveau club"
-
-msgid "Clubs list"
-msgstr "Liste des clubs"
-
-#: apps/member/models.py:94
+#: apps/member/models.py:95
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:117
+#: apps/member/models.py:118 apps/permission/models.py:276
 msgid "role"
 msgstr "rôle"
 
-#: apps/member/models.py:118
+#: apps/member/models.py:119
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/models.py:142
+#: apps/member/models.py:143
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:145
+#: apps/member/models.py:146
 msgid "membership ends on"
 msgstr "l'adhésion finie le"
 
-#: apps/member/models.py:149
+#: apps/member/models.py:150
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:153
+#: apps/member/models.py:154
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:154
+#: apps/member/models.py:155
 msgid "memberships"
 msgstr "adhésions"
 
@@ -380,15 +375,15 @@ msgstr "alias"
 msgid "aliases"
 msgstr "alias"
 
-#: apps/note/models/notes.py:229
+#: apps/note/models/notes.py:233
 msgid "Alias is too long."
 msgstr "L'alias est trop long."
 
-#: apps/note/models/notes.py:234
+#: apps/note/models/notes.py:238
 msgid "An alias with a similar name already exists: {} "
 msgstr "Un alias avec un nom similaire existe déjà : {}"
 
-#: apps/note/models/notes.py:243
+#: apps/note/models/notes.py:247
 msgid "You can't delete your main alias."
 msgstr "Vous ne pouvez pas supprimer votre alias principal."
 
@@ -440,44 +435,150 @@ msgstr "transaction"
 msgid "transactions"
 msgstr "transactions"
 
-#: apps/note/models/transactions.py:185
+#: apps/note/models/transactions.py:190
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
-#: apps/note/models/transactions.py:186
+#: apps/note/models/transactions.py:191
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
-#: apps/note/views.py:29
+#: apps/note/views.py:31
 msgid "Transfer money from your account to one or others"
 msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
 
-#: note_kfet/settings/__init__.py:63
+#: apps/note/views.py:144 templates/base.html:70
+msgid "Consumptions"
+msgstr "Consommations"
+
+#: apps/permission/models.py:70 apps/permission/models.py:263
+#, python-brace-format
+msgid "Can {type} {model}.{field} in {query}"
+msgstr ""
+
+#: apps/permission/models.py:72 apps/permission/models.py:265
+#, python-brace-format
+msgid "Can {type} {model} in {query}"
+msgstr ""
+
+#: apps/permission/models.py:85
+msgid "rank"
+msgstr "Rang"
+
+#: apps/permission/models.py:148
+msgid "Specifying field applies only to view and change permission types."
+msgstr ""
+
+#: apps/treasury/apps.py:11 templates/base.html:85
+msgid "Treasury"
+msgstr "Trésorerie"
+
+#: apps/treasury/models.py:11
+msgid "Billing identifier"
+msgstr "Numéro de facture"
+
+#: apps/treasury/models.py:25
+msgid "BDE"
+msgstr "BDE"
+
+#: apps/treasury/models.py:30
+msgid "Subject"
+msgstr "Objet"
+
+#: apps/treasury/models.py:34
+msgid "Description"
+msgstr "Description"
+
+#: apps/treasury/models.py:39
+msgid "Name"
+msgstr "Nom"
+
+#: apps/treasury/models.py:43
+msgid "Address"
+msgstr "Adresse"
+
+#: apps/treasury/models.py:48 apps/treasury/models.py:58
+msgid "Place"
+msgstr "Lieu"
+
+#: apps/treasury/models.py:52
+msgid "Acquitted"
+msgstr "Acquittée"
+
+#: apps/treasury/models.py:64
+msgid "My name"
+msgstr "Mon nom"
+
+#: apps/treasury/models.py:70
+msgid "My street address"
+msgstr "Ma rue"
+
+#: apps/treasury/models.py:76
+msgid "My city"
+msgstr "Ma ville"
+
+#: apps/treasury/models.py:81
+msgid "Bank code"
+msgstr "Code banque"
+
+#: apps/treasury/models.py:86
+msgid "Desk code"
+msgstr "Code guichet"
+
+#: apps/treasury/models.py:91
+msgid "Account number"
+msgstr "Numéro de compte"
+
+#: apps/treasury/models.py:96
+msgid "RIB Key"
+msgstr "Clé RIB"
+
+#: apps/treasury/models.py:102
+msgid "BIC Code"
+msgstr "Code BIC"
+
+#: apps/treasury/models.py:114
+msgid "Designation"
+msgstr "Désignation"
+
+#: apps/treasury/models.py:118
+msgid "Quantity"
+msgstr "Quantité"
+
+#: apps/treasury/models.py:122
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+#: apps/treasury/tables.py:14
+msgid "Billing #{:d}"
+msgstr "Facture n°{:d}"
+
+#: apps/treasury/tables.py:17
+msgid "Billing"
+msgstr "Facture"
+
+#: note_kfet/settings/__init__.py:61
 msgid ""
 "The Central Authentication Service grants you access to most of our websites "
 "by authenticating only once, so you don't need to type your credentials "
 "again unless your session expires or you logout."
 msgstr ""
 
-#: note_kfet/settings/base.py:156
+#: note_kfet/settings/base.py:157
 msgid "German"
 msgstr ""
 
-#: note_kfet/settings/base.py:157
+#: note_kfet/settings/base.py:158
 msgid "English"
 msgstr ""
 
-#: note_kfet/settings/base.py:158
+#: note_kfet/settings/base.py:159
 msgid "French"
 msgstr ""
 
 #: templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
-
-#: templates/base.html:70
-msgid "Consumptions"
-msgstr "Consommations"
 
 #: templates/base.html:73
 msgid "Clubs"
@@ -490,9 +591,6 @@ msgstr "Activités"
 #: templates/base.html:79
 msgid "Buttons"
 msgstr "Boutons"
-
-msgid "Buttons list"
-msgstr "Liste des boutons"
 
 #: templates/base.html:82 templates/note/transaction_form.html:35
 msgid "Transfer"
@@ -556,6 +654,7 @@ msgid "Field filters"
 msgstr ""
 
 #: templates/django_filters/rest_framework/form.html:5
+#: templates/member/club_form.html:10 templates/treasury/billing_form.html:38
 msgid "Submit"
 msgstr ""
 
@@ -578,6 +677,14 @@ msgstr "solde du compte"
 #: templates/member/club_detail.html:51 templates/member/profile_detail.html:75
 msgid "Transaction history"
 msgstr "Historique des transactions"
+
+#: templates/member/club_form.html:6
+msgid "Clubs list"
+msgstr "Liste des clubs"
+
+#: templates/member/club_list.html:8
+msgid "New club"
+msgstr "Nouveau club"
 
 #: templates/member/manage_auth_tokens.html:16
 msgid "Token"
@@ -627,10 +734,14 @@ msgstr "Voir mes adhésions"
 msgid "Save Changes"
 msgstr "Sauvegarder les changements"
 
-#: templates/member/signup.html:8
+#: templates/member/signup.html:5 templates/member/signup.html:8
 #: templates/member/signup.html:14
 msgid "Sign up"
 msgstr "Inscription"
+
+#: templates/note/transactiontemplate_form.html:6
+msgid "Buttons list"
+msgstr "Liste des boutons"
 
 #: templates/registration/logged_out.html:8
 msgid "Thanks for spending some quality time with the Web site today."
@@ -709,3 +820,19 @@ msgstr ""
 #: templates/registration/password_reset_form.html:11
 msgid "Reset my password"
 msgstr ""
+
+#: templates/treasury/billing_form.html:6
+msgid "Billings list"
+msgstr "Liste des factures"
+
+#: templates/treasury/billing_form.html:33
+msgid "Add product"
+msgstr "Ajouter produit"
+
+#: templates/treasury/billing_form.html:34
+msgid "Remove product"
+msgstr "Retirer produit"
+
+#: templates/treasury/billing_list.html:8
+msgid "New billing"
+msgstr "Nouvelle facture"

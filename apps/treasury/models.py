@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
-from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 
