@@ -11,7 +11,7 @@ RUN apt update && \
 
 # Install LaTeX requirements
 RUN apt update && \
-    apt install -y texlive-latex-extra textlive-fonts-extra && \
+    apt install -y texlive-latex-extra texlive-fonts-extra && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . /code/
