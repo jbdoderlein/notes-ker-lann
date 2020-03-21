@@ -134,27 +134,17 @@ class BillingRenderView(LoginRequiredMixin, View):
                 f.write(tex.encode("UTF-8"))
             del tex
 
-            error = subprocess.Popen(
-                ["pdflatex", "billing-{}.tex".format(pk)],
-                cwd=tmp_dir,
-                stdin=open(os.devnull, "r"),
-                stderr=open(os.devnull, "wb"),
-                stdout=open(os.devnull, "wb")
-            ).wait()
+            for _ in range(2):
+                error = subprocess.Popen(
+                    ["pdflatex", "billing-{}.tex".format(pk)],
+                    cwd=tmp_dir,
+                    stdin=open(os.devnull, "r"),
+                    stderr=open(os.devnull, "wb"),
+                    stdout=open(os.devnull, "wb")
+                ).wait()
 
-            if error:
-                raise IOError("An error attempted while generating a billing:", error)
-
-            error = subprocess.Popen(
-                ["pdflatex", "billing-{}.tex".format(pk)],
-                cwd=tmp_dir,
-                stdin=open(os.devnull, "r"),
-                stderr=open(os.devnull, "wb"),
-                stdout=open(os.devnull, "wb")
-            ).wait()
-
-            if error:
-                raise IOError("An error attempted while generating a billing:", error)
+                if error:
+                    raise IOError("An error attempted while generating a billing (code=" + str(error) + ")")
 
             pdf = open("{}/billing-{}.pdf".format(tmp_dir, pk), 'rb').read()
             response = HttpResponse(pdf, content_type="application/pdf")

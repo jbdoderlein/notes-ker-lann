@@ -15,7 +15,7 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
 
     La génération des factures de l'application trésorerie nécessite une installation de LaTeX suffisante :
 
-        $ sudo apt install texlive-latex-extra texlive-fonts-extra
+        $ sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-french
 
 2. Clonage du dépot
 
