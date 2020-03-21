@@ -14,7 +14,10 @@ class BillingTable(tables.Table):
                                args=[A("pk")],
                                accessor="pk",
                                text="",
-                               attrs={'a': {'class': 'fa fa-file-pdf-o'}})
+                               attrs={
+                                   'a': {'class': 'fa fa-file-pdf-o'},
+                                   'td': {'data-turbolinks': 'false'}
+                               })
 
     class Meta:
         attrs = {

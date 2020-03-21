@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 
@@ -123,5 +124,13 @@ class Product(models.Model):
     )
 
     @property
+    def amount_euros(self):
+        return self.amount / 100
+
+    @property
     def total(self):
         return self.quantity * self.amount
+
+    @property
+    def total_euros(self):
+        return self.total / 100

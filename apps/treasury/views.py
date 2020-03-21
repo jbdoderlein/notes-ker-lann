@@ -6,15 +6,20 @@ import shutil
 import subprocess
 from tempfile import mkdtemp
 
+from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View
 from django_tables2 import SingleTableView
+
 from note_kfet.settings.base import BASE_DIR
 
-from .models import Billing
+from .forms import BillingForm, ProductFormSet, ProductFormSetHelper
+from .models import Billing, Product
 from .tables import BillingTable
 
 
@@ -23,8 +28,36 @@ class BillingCreateView(LoginRequiredMixin, CreateView):
     Create Billing
     """
     model = Billing
-    fields = '__all__'
-    # form_class = ClubForm
+    form_class = BillingForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context['form']
+        form.helper = FormHelper()
+        form.helper.form_tag = False
+        form_set = ProductFormSet(instance=form.instance)
+        context['formset'] = form_set
+        context['helper'] = ProductFormSetHelper()
+        context['no_cache'] = True
+
+        return context
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
+        if formset.is_valid():
+            for f in formset:
+                if f.is_valid() and f.instance.designation:
+                    f.save()
+                    f.instance.save()
+                else:
+                    f.instance = None
+
+        return ret
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:billing')
 
 
 class BillingListView(LoginRequiredMixin, SingleTableView):
@@ -40,8 +73,42 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView):
     Create Billing
     """
     model = Billing
-    fields = '__all__'
-    # form_class = BillingForm
+    form_class = BillingForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context['form']
+        form.helper = FormHelper()
+        form.helper.form_tag = False
+        form_set = ProductFormSet(instance=form.instance)
+        context['formset'] = form_set
+        context['helper'] = ProductFormSetHelper()
+        context['no_cache'] = True
+
+        return context
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
+        saved = []
+        if formset.is_valid():
+            for f in formset:
+                if f.is_valid() and f.instance.designation:
+                    if type(f.instance.pk) == 'number' and f.instance.pk <= 0:
+                        f.instance.pk = None
+                    f.save()
+                    f.instance.save()
+                    saved.append(f.instance.pk)
+                else:
+                    f.instance = None
+
+        Product.objects.filter(~Q(pk__in=saved), billing=form.instance).delete()
+
+        return ret
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:billing')
 
 
 class BillingRenderView(LoginRequiredMixin, View):
@@ -52,10 +119,11 @@ class BillingRenderView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
         billing = Billing.objects.get(pk=pk)
+        products = Product.objects.filter(billing=billing).all()
 
         billing.description = billing.description.replace("\n", "\\newline\n")
         billing.address = billing.address.replace("\n", "\\newline\n")
-        tex = render_to_string("treasury/billing_sample.tex", dict(obj=billing))
+        tex = render_to_string("treasury/billing_sample.tex", dict(obj=billing, products=products))
         try:
             os.mkdir(BASE_DIR + "/tmp")
         except FileExistsError:
