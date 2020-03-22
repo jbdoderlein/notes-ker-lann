@@ -8,7 +8,7 @@ from .models import Invoice, Product
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'subject', 'acquitted', )
+    list_display = ('id', 'name', 'object', 'acquitted', )
 
 
 @admin.register(Product)

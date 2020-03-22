@@ -47,9 +47,9 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         kwargs = {}
         for key in self.request.POST:
             value = self.request.POST[key]
-            if key.endswith("amount"):
+            if key.endswith("amount") and value:
                 kwargs[key] = str(int(100 * float(value)))
-            else:
+            elif value:
                 kwargs[key] = value
 
         formset = ProductFormSet(kwargs, instance=form.instance)
@@ -87,6 +87,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
         form = context['form']
         form.helper = FormHelper()
         form.helper.form_tag = False
+        form.fields['date'].initial = form.instance.date
         form_set = ProductFormSet(instance=form.instance)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
@@ -100,26 +101,22 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
         kwargs = {}
         for key in self.request.POST:
             value = self.request.POST[key]
-            if key.endswith("amount"):
+            if key.endswith("amount") and value:
                 kwargs[key] = str(int(100 * float(value)))
-            else:
+            elif value:
                 kwargs[key] = value
 
         formset = ProductFormSet(kwargs, instance=form.instance)
         saved = []
-        print(formset.errors)
         if formset.is_valid():
             for f in formset:
                 if f.is_valid() and f.instance.designation:
-                    if type(f.instance.pk) == 'number' and f.instance.pk <= 0:
-                        f.instance.pk = None
                     f.save()
                     f.instance.save()
                     saved.append(f.instance.pk)
                 else:
                     f.instance = None
-
-        Product.objects.filter(~Q(pk__in=saved), invoice=form.instance).delete()
+            Product.objects.filter(~Q(pk__in=saved), invoice=form.instance).delete()
 
         return ret
 
@@ -137,8 +134,18 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         invoice = Invoice.objects.get(pk=pk)
         products = Product.objects.filter(invoice=invoice).all()
 
-        invoice.description = invoice.description.replace("\n", "\\newline\n")
-        invoice.address = invoice.address.replace("\n", "\\newline\n")
+        invoice.place = "Cachan"
+        invoice.my_name = "BDE ENS Cachan"
+        invoice.my_address_street = "61 avenue du Président Wilson"
+        invoice.my_city = "94230 Cachan"
+        invoice.bank_code = 30003
+        invoice.desk_code = 3894
+        invoice.account_number = 37280662
+        invoice.rib_key = 14
+        invoice.bic = "SOGEFRPP"
+
+        invoice.description = invoice.description.replace("\r", "").replace("\n", "\\\\ ")
+        invoice.address = invoice.address.replace("\r", "").replace("\n", "\\\\ ")
         tex = render_to_string("treasury/invoice_sample.tex", dict(obj=invoice, products=products))
         try:
             os.mkdir(BASE_DIR + "/tmp")
@@ -155,9 +162,6 @@ class InvoiceRenderView(LoginRequiredMixin, View):
                 error = subprocess.Popen(
                     ["pdflatex", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
-                    stdin=open(os.devnull, "r"),
-                    stderr=open(os.devnull, "wb"),
-                    stdout=open(os.devnull, "wb")
                 ).wait()
 
                 if error:

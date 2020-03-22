@@ -25,9 +25,9 @@ class Invoice(models.Model):
         verbose_name=_("BDE"),
     )
 
-    subject = models.CharField(
+    object = models.CharField(
         max_length=255,
-        verbose_name=_("Subject"),
+        verbose_name=_("Object"),
     )
 
     description = models.TextField(
@@ -50,56 +50,6 @@ class Invoice(models.Model):
 
     acquitted = models.BooleanField(
         verbose_name=_("Acquitted"),
-    )
-
-    place = models.CharField(
-        max_length=255,
-        default="Cachan",
-        verbose_name=_("Place"),
-    )
-
-    my_name = models.CharField(
-        max_length=255,
-        default="BDE ENS Cachan",
-        verbose_name=_("My name"),
-    )
-
-    my_address_street = models.CharField(
-        max_length=255,
-        default="61 avenue du Président Wilson",
-        verbose_name=_("My street address"),
-    )
-
-    my_city = models.CharField(
-        max_length=255,
-        default="94230 Cachan",
-        verbose_name=_("My city"),
-    )
-
-    bank_code = models.IntegerField(
-        default=30003,
-        verbose_name=_("Bank code"),
-    )
-
-    desk_code = models.IntegerField(
-        default=3894,
-        verbose_name=_("Desk code"),
-    )
-
-    account_number = models.IntegerField(
-        default=37280662,
-        verbose_name=_("Account number"),
-    )
-
-    rib_key = models.SmallIntegerField(
-        default=14,
-        verbose_name=_("RIB Key")
-    )
-
-    bic = models.CharField(
-        max_length=16,
-        default="SOGEFRPP",
-        verbose_name=_("BIC Code")
     )
 
 

@@ -29,4 +29,4 @@ class InvoiceTable(tables.Table):
         }
         model = Invoice
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'name', 'subject', 'acquitted', 'invoice',)
+        fields = ('id', 'name', 'object', 'acquitted', 'invoice',)

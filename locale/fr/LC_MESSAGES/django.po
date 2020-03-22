@@ -505,7 +505,7 @@ msgid "BDE"
 msgstr "BDE"
 
 #: apps/treasury/models.py:30
-msgid "Subject"
+msgid "Object"
 msgstr "Objet"
 
 #: apps/treasury/models.py:34

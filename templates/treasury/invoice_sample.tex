@@ -85,7 +85,7 @@
 \def\FactureAcquittee    {% if obj.acquitted %} {oui} {% else %} {non} {% endif %}     % Facture acquittée : oui/non
 \def\FactureLieu    {{"{"}}{{ obj.place }}}    % Lieu de l'édition de la facture
 \def\FactureDate    {{"{"}}{{ obj.date }}}    % Date de l'édition de la facture
-\def\FactureObjet   {{"{"}}{{ obj.subject|safe }} }    % Objet du document
+\def\FactureObjet   {{"{"}}{{ obj.object|safe }} }    % Objet du document
 % Description de la facture
 \def\FactureDescr   {{"{"}}{{ obj.description|safe }}}
 
