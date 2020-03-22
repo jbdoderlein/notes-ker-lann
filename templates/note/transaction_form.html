@@ -33,6 +33,16 @@ SPDX-License-Identifier: GPL-2.0-or-later
     </div>
 
     <div class="row">
+       
+        <div class="col-xl-4" id="note_infos_div">
+            <div class="card border-success shadow mb-4">
+                <img src="/media/pic/default.png"
+                    id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
+                <div class="card-body text-center">
+                    <span id="user_note"></span>
+                </div>
+            </div>
+        </div>
         <div class="col-md-4" id="emitters_div" style="display: none;">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
@@ -46,16 +56,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     <input class="form-control mx-auto d-block" type="text" id="source_note" />
                     <ul class="list-group list-group-flush" id="source_alias_matched">
                     </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4" id="note_infos_div">
-            <div class="card border-success shadow mb-4">
-                <img src="/media/pic/default.png"
-                    id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
-                <div class="card-body text-center">
-                    <span id="user_note"></span>
                 </div>
             </div>
         </div>
@@ -170,8 +170,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
         });
 
         $("#type_transfer").click(function() {
-            $("#emitters_div").show();
             $("#external_div").hide();
+            $("#emitters_div").show();
             $("#dests_div").attr('class', 'col-md-4');
             $("#dest_title").text("{% trans "Select receivers" %}");
         });
