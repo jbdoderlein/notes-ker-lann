@@ -20,7 +20,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
-        fields = '__all__'
+        exclude = ('bde', )
 
 
 ProductFormSet = forms.inlineformset_factory(
