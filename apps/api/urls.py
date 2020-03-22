@@ -5,12 +5,15 @@ from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers, serializers
 from rest_framework.filters import SearchFilter
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from activity.api.urls import register_activity_urls
+from api.viewsets import ReadProtectedModelViewSet
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
 from logs.api.urls import register_logs_urls
+from permission.api.urls import register_permission_urls
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,7 +42,7 @@ class ContentTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `User` objects, serialize it to JSON with the given serializer,
@@ -52,7 +55,8 @@ class UserViewSet(viewsets.ModelViewSet):
     search_fields = ['$username', '$first_name', '$last_name', ]
 
 
-class ContentTypeViewSet(viewsets.ReadOnlyModelViewSet):
+# This ViewSet is the only one that is accessible from all authenticated users!
+class ContentTypeViewSet(ReadOnlyModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `User` objects, serialize it to JSON with the given serializer,
@@ -70,6 +74,7 @@ router.register('user', UserViewSet)
 register_members_urls(router, 'members')
 register_activity_urls(router, 'activity')
 register_note_urls(router, 'note')
+register_permission_urls(router, 'permission')
 register_logs_urls(router, 'logs')
 
 app_name = 'api'

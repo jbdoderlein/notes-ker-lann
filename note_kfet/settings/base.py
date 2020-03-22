@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'polymorphic',
     'crispy_forms',
     'django_tables2',
-    'cas_server',
-    'cas',
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -62,6 +60,7 @@ INSTALLED_APPS = [
     'member',
     'note',
     'treasury',
+    'permission',
     'api',
     'logs',
 ]
@@ -127,18 +126,15 @@ PASSWORD_HASHERS = [
     'member.hashers.CustomNK15Hasher',
 ]
 
-# Django Guardian object permissions
-
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # this is default
+    'permission.backends.PermissionBackend',  # Custom role-based permission system
+    'cas.backends.CASBackend',  # For CAS connections
 )
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        # TODO Maybe replace it with our custom permissions system
-        'rest_framework.permissions.DjangoModelPermissions',
+        # Control API access with our role-based permission system
+        'permission.permissions.StrongDjangoObjectPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',

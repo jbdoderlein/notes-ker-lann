@@ -8,7 +8,7 @@ from polymorphic.admin import PolymorphicChildModelAdmin, \
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
 from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, \
-    TemplateTransaction, MembershipTransaction
+    RecurrentTransaction, MembershipTransaction
 
 
 class AliasInlines(admin.TabularInline):
@@ -102,7 +102,7 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
     """
     Admin customisation for Transaction
     """
-    child_models = (TemplateTransaction, MembershipTransaction)
+    child_models = (RecurrentTransaction, MembershipTransaction)
     list_display = ('created_at', 'poly_source', 'poly_destination',
                     'quantity', 'amount', 'valid')
     list_filter = ('valid',)

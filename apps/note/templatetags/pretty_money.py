@@ -11,7 +11,7 @@ def pretty_money(value):
             abs(value) // 100,
         )
     else:
-        return "{:s}{:d} € {:02d}".format(
+        return "{:s}{:d}.{:02d} €".format(
             "- " if value < 0 else "",
             abs(value) // 100,
             abs(value) % 100,
