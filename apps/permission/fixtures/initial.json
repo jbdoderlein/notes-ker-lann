@@ -83,7 +83,10 @@
     "model": "permission.permission",
     "pk": 1,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "view",
       "mask": 1,
@@ -95,7 +98,10 @@
     "model": "permission.permission",
     "pk": 2,
     "fields": {
-      "model": 31,
+      "model": [
+        "member",
+        "profile"
+      ],
       "query": "{\"user\": [\"user\"]}",
       "type": "view",
       "mask": 1,
@@ -107,7 +113,10 @@
     "model": "permission.permission",
     "pk": 3,
     "fields": {
-      "model": 34,
+      "model": [
+        "note",
+        "noteuser"
+      ],
       "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
       "type": "view",
       "mask": 1,
@@ -119,7 +128,10 @@
     "model": "permission.permission",
     "pk": 4,
     "fields": {
-      "model": 25,
+      "model": [
+        "authtoken",
+        "token"
+      ],
       "query": "{\"user\": [\"user\"]}",
       "type": "view",
       "mask": 1,
@@ -131,7 +143,10 @@
     "model": "permission.permission",
     "pk": 5,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "[\"OR\", {\"source\": [\"user\", \"note\"]}, {\"destination\": [\"user\", \"note\"]}]",
       "type": "view",
       "mask": 1,
@@ -143,7 +158,10 @@
     "model": "permission.permission",
     "pk": 6,
     "fields": {
-      "model": 33,
+      "model": [
+        "note",
+        "alias"
+      ],
       "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
       "type": "view",
       "mask": 1,
@@ -155,7 +173,10 @@
     "model": "permission.permission",
     "pk": 7,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -167,7 +188,10 @@
     "model": "permission.permission",
     "pk": 8,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -179,7 +203,10 @@
     "model": "permission.permission",
     "pk": 9,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -191,7 +218,10 @@
     "model": "permission.permission",
     "pk": 10,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -203,7 +233,10 @@
     "model": "permission.permission",
     "pk": 11,
     "fields": {
-      "model": 21,
+      "model": [
+        "auth",
+        "user"
+      ],
       "query": "{\"pk\": [\"user\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -215,7 +248,10 @@
     "model": "permission.permission",
     "pk": 12,
     "fields": {
-      "model": 25,
+      "model": [
+        "authtoken",
+        "token"
+      ],
       "query": "{\"user\": [\"user\"]}",
       "type": "delete",
       "mask": 1,
@@ -227,7 +263,10 @@
     "model": "permission.permission",
     "pk": 13,
     "fields": {
-      "model": 25,
+      "model": [
+        "authtoken",
+        "token"
+      ],
       "query": "{\"user\": [\"user\"]}",
       "type": "add",
       "mask": 1,
@@ -239,7 +278,10 @@
     "model": "permission.permission",
     "pk": 14,
     "fields": {
-      "model": 33,
+      "model": [
+        "note",
+        "alias"
+      ],
       "query": "{\"note\": [\"user\", \"note\"]}",
       "type": "delete",
       "mask": 1,
@@ -251,7 +293,10 @@
     "model": "permission.permission",
     "pk": 15,
     "fields": {
-      "model": 33,
+      "model": [
+        "note",
+        "alias"
+      ],
       "query": "{\"note\": [\"user\", \"note\"]}",
       "type": "add",
       "mask": 1,
@@ -263,7 +308,10 @@
     "model": "permission.permission",
     "pk": 16,
     "fields": {
-      "model": 34,
+      "model": [
+        "note",
+        "noteuser"
+      ],
       "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
       "type": "change",
       "mask": 1,
@@ -275,7 +323,10 @@
     "model": "permission.permission",
     "pk": 17,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, {\"amount__lte\": [\"user\", \"note\", \"balance\"]}]",
       "type": "add",
       "mask": 1,
@@ -287,7 +338,10 @@
     "model": "permission.permission",
     "pk": 18,
     "fields": {
-      "model": 34,
+      "model": [
+        "note",
+        "note"
+      ],
       "query": "{}",
       "type": "change",
       "mask": 1,
@@ -299,7 +353,10 @@
     "model": "permission.permission",
     "pk": 19,
     "fields": {
-      "model": 34,
+      "model": [
+        "note",
+        "note"
+      ],
       "query": "[\"OR\", {\"pk\": [\"club\", \"note\", \"pk\"]}, {\"pk__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club\": [\"club\"]}], [\"all\"]]}]",
       "type": "view",
       "mask": 2,
@@ -311,7 +368,10 @@
     "model": "permission.permission",
     "pk": 20,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
       "type": "add",
       "mask": 2,
@@ -323,7 +383,10 @@
     "model": "permission.permission",
     "pk": 21,
     "fields": {
-      "model": 42,
+      "model": [
+        "note",
+        "recurrenttransaction"
+      ],
       "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
       "type": "add",
       "mask": 2,
@@ -335,7 +398,10 @@
     "model": "permission.permission",
     "pk": 22,
     "fields": {
-      "model": 29,
+      "model": [
+        "member",
+        "club"
+      ],
       "query": "{\"pk\": [\"club\", \"pk\"]}",
       "type": "view",
       "mask": 1,
@@ -347,7 +413,10 @@
     "model": "permission.permission",
     "pk": 23,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "{}",
       "type": "change",
       "mask": 1,
@@ -359,7 +428,10 @@
     "model": "permission.permission",
     "pk": 24,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -371,7 +443,10 @@
     "model": "permission.permission",
     "pk": 25,
     "fields": {
-      "model": 40,
+      "model": [
+        "note",
+        "notespecial"
+      ],
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -383,7 +458,10 @@
     "model": "permission.permission",
     "pk": 26,
     "fields": {
-      "model": 43,
+      "model": [
+        "note",
+        "specialtransaction"
+      ],
       "query": "{}",
       "type": "add",
       "mask": 2,
@@ -395,7 +473,10 @@
     "model": "permission.permission",
     "pk": 27,
     "fields": {
-      "model": 35,
+      "model": [
+        "note",
+        "templatecategory"
+      ],
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -407,7 +488,10 @@
     "model": "permission.permission",
     "pk": 28,
     "fields": {
-      "model": 35,
+      "model": [
+        "note",
+        "templatecategory"
+      ],
       "query": "{}",
       "type": "change",
       "mask": 3,
@@ -419,7 +503,10 @@
     "model": "permission.permission",
     "pk": 29,
     "fields": {
-      "model": 35,
+      "model": [
+        "note",
+        "templatecategory"
+      ],
       "query": "{}",
       "type": "add",
       "mask": 3,
@@ -431,7 +518,10 @@
     "model": "permission.permission",
     "pk": 30,
     "fields": {
-      "model": 37,
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
       "query": "{}",
       "type": "view",
       "mask": 2,
@@ -443,7 +533,10 @@
     "model": "permission.permission",
     "pk": 31,
     "fields": {
-      "model": 37,
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
       "query": "{}",
       "type": "add",
       "mask": 3,
@@ -455,7 +548,10 @@
     "model": "permission.permission",
     "pk": 32,
     "fields": {
-      "model": 37,
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
       "query": "{}",
       "type": "change",
       "mask": 3,
@@ -467,7 +563,10 @@
     "model": "permission.permission",
     "pk": 33,
     "fields": {
-      "model": 36,
+      "model": [
+        "note",
+        "transaction"
+      ],
       "query": "{}",
       "type": "add",
       "mask": 2,
