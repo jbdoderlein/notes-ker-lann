@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
+from treasury.models import Remittance
 
 from .notes import Note, NoteClub, NoteSpecial
 
@@ -207,6 +208,13 @@ class SpecialTransaction(Transaction):
         max_length=255,
         verbose_name=_("bank"),
         blank=True,
+    )
+
+    remittance = models.ForeignKey(
+        Remittance,
+        on_delete=models.PROTECT,
+        null=True,
+        verbose_name=_("Remittance"),
     )
 
     @property

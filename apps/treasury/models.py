@@ -1,8 +1,10 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from note.models import NoteSpecial
 
 
 class Invoice(models.Model):
@@ -83,3 +85,37 @@ class Product(models.Model):
     @property
     def total_euros(self):
         return self.total / 100
+
+
+class Remittance(models.Model):
+    date = models.DateField(
+        auto_now_add=True,
+        verbose_name=_("Date"),
+    )
+
+    type = models.ForeignKey(
+        NoteSpecial,
+        on_delete=models.PROTECT,
+        verbose_name=_("Type"),
+    )
+
+    comment = models.CharField(
+        max_length=255,
+        verbose_name=_("Comment"),
+    )
+
+    @property
+    def size(self):
+        return self.specialtransaction_set.count()
+
+    @property
+    def amount(self):
+        return sum(transaction.total for transaction in self.specialtransaction_set.all())
+
+    def full_clean(self, exclude=None, validate_unique=True):
+        ret = super().full_clean(exclude, validate_unique)
+
+        if self.specialtransaction_set.filter(~Q(source=self.type)).exists():
+            raise ValidationError("All transactions in a remittance must have the same type")
+
+        return ret
