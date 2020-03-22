@@ -16,11 +16,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
             {% endblocktrans %}
         </p>
     {% endif %}
-
-    <div class="alert alert-info">
-        Vous pouvez aussi vous connecter via l'authentification centralisée <a href="{% url 'cas_login' %}">en suivant ce lien.</a>
+        {%url 'cas_login'  as cas_url %}
+        {% if cas_url %}
+        <div class="alert alert-info">
+        Vous pouvez aussi vous connecter via l'authentification centralisée <a href="{{ cas_url }}">en suivant ce lien.</a>
     </div>
-
+    {%endif%}
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
         {{ form | crispy }}
         <input type="submit" value="{% trans 'Log in' %}" class="btn btn-primary">
