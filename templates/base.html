@@ -99,7 +99,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 </li>
                 {% if "treasury.invoice"|not_empty_model_change_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'treasury:invoice' %}"><i class="fa fa-money"></i>{% trans 'Treasury' %} </a>
+                        <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fa fa-money"></i>{% trans 'Treasury' %} </a>
                     </li>
                 {% endif %}
             </ul>

@@ -5,7 +5,7 @@ import django_tables2 as tables
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
-from .models import Invoice
+from .models import Invoice, Remittance
 
 
 class InvoiceTable(tables.Table):
@@ -30,3 +30,13 @@ class InvoiceTable(tables.Table):
         model = Invoice
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('id', 'name', 'object', 'acquitted', 'invoice',)
+
+
+class RemittanceTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = Remittance
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('id', 'date', 'type', 'comment', 'size', 'amount', 'edit',)

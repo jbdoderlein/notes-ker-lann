@@ -17,9 +17,9 @@ from django.views.generic.base import View
 from django_tables2 import SingleTableView
 from note_kfet.settings.base import BASE_DIR
 
-from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper
-from .models import Invoice, Product
-from .tables import InvoiceTable
+from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm
+from .models import Invoice, Product, Remittance
+from .tables import InvoiceTable, RemittanceTable
 
 
 class InvoiceCreateView(LoginRequiredMixin, CreateView):
@@ -64,7 +64,7 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('treasury:invoice')
+        return reverse_lazy('treasury:invoice_list')
 
 
 class InvoiceListView(LoginRequiredMixin, SingleTableView):
@@ -121,7 +121,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('treasury:invoice')
+        return reverse_lazy('treasury:invoice_list')
 
 
 class InvoiceRenderView(LoginRequiredMixin, View):
@@ -176,3 +176,33 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             shutil.rmtree(tmp_dir)
 
         return response
+
+
+class RemittanceCreateView(LoginRequiredMixin, CreateView):
+    """
+    Create Remittance
+    """
+    model = Remittance
+    form_class = RemittanceForm
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:remittance_list')
+
+
+class RemittanceListView(LoginRequiredMixin, SingleTableView):
+    """
+    List existing Remittances
+    """
+    model = Remittance
+    table_class = RemittanceTable
+
+
+class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Update Remittance
+    """
+    model = Remittance
+    form_class = RemittanceForm
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:remittance_list')

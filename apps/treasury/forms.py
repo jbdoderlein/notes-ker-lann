@@ -4,9 +4,11 @@
 import datetime
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
-from .models import Invoice, Product
+from .models import Invoice, Product, Remittance
 
 
 class InvoiceForm(forms.ModelForm):
@@ -38,3 +40,14 @@ class ProductFormSetHelper(FormHelper):
         self.form_method = 'POST'
         self.form_class = 'form-inline'
         self.template = 'bootstrap4/table_inline_formset.html'
+
+
+class RemittanceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
+
+    class Meta:
+        model = Remittance
+        fields = ('type', 'comment', )

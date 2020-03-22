@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load i18n %}
+{% block content %}
+
+{% render_table table %}
+
+<a class="btn btn-primary" href="{% url 'treasury:remittance_create' %}">{% trans "New remittance" %}</a>
+
+{% endblock %}

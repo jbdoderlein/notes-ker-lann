@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load crispy_forms_tags pretty_money %}
 {% block content %}
-    <p><a class="btn btn-default" href="{% url 'treasury:invoice' %}">{% trans "Invoices list" %}</a></p>
+    <p><a class="btn btn-default" href="{% url 'treasury:invoice_list' %}">{% trans "Invoices list" %}</a></p>
     <form method="post" action="">
         {% csrf_token %}
         {% crispy form %}

@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -88,7 +89,7 @@ class Product(models.Model):
 
 
 class Remittance(models.Model):
-    date = models.DateField(
+    date = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Date"),
     )
@@ -102,6 +103,11 @@ class Remittance(models.Model):
     comment = models.CharField(
         max_length=255,
         verbose_name=_("Comment"),
+    )
+
+    closed = models.BooleanField(
+        default=False,
+        verbose_name=_("Closed"),
     )
 
     @property
