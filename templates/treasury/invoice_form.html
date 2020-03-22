@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load crispy_forms_tags pretty_money %}
 {% block content %}
-    <p><a class="btn btn-default" href="{% url 'treasury:billing' %}">{% trans "Billings list" %}</a></p>
+    <p><a class="btn btn-default" href="{% url 'treasury:invoice' %}">{% trans "Invoices list" %}</a></p>
     <form method="post" action="">
         {% csrf_token %}
         {% crispy form %}
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     </td>
-                    {{ form.billing }}
+                    {{ form.invoice }}
                     {{ form.id }}
                  </tr>
         {% endfor %}
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </td>
-                    {{ formset.empty_form.billing }}
+                    {{ formset.empty_form.invoice }}
                     {{ formset.empty_form.id }}
                 </tr>
             </tbody>

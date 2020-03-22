@@ -17,17 +17,17 @@ from django.views.generic.base import View
 from django_tables2 import SingleTableView
 from note_kfet.settings.base import BASE_DIR
 
-from .forms import BillingForm, ProductFormSet, ProductFormSetHelper
-from .models import Billing, Product
-from .tables import BillingTable
+from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper
+from .models import Invoice, Product
+from .tables import InvoiceTable
 
 
-class BillingCreateView(LoginRequiredMixin, CreateView):
+class InvoiceCreateView(LoginRequiredMixin, CreateView):
     """
-    Create Billing
+    Create Invoice
     """
-    model = Billing
-    form_class = BillingForm
+    model = Invoice
+    form_class = InvoiceForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,23 +64,23 @@ class BillingCreateView(LoginRequiredMixin, CreateView):
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('treasury:billing')
+        return reverse_lazy('treasury:invoice')
 
 
-class BillingListView(LoginRequiredMixin, SingleTableView):
+class InvoiceListView(LoginRequiredMixin, SingleTableView):
     """
-    List existing Billings
+    List existing Invoices
     """
-    model = Billing
-    table_class = BillingTable
+    model = Invoice
+    table_class = InvoiceTable
 
 
-class BillingUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
     """
-    Create Billing
+    Create Invoice
     """
-    model = Billing
-    form_class = BillingForm
+    model = Invoice
+    form_class = InvoiceForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,27 +119,27 @@ class BillingUpdateView(LoginRequiredMixin, UpdateView):
                 else:
                     f.instance = None
 
-        Product.objects.filter(~Q(pk__in=saved), billing=form.instance).delete()
+        Product.objects.filter(~Q(pk__in=saved), invoice=form.instance).delete()
 
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('treasury:billing')
+        return reverse_lazy('treasury:invoice')
 
 
-class BillingRenderView(LoginRequiredMixin, View):
+class InvoiceRenderView(LoginRequiredMixin, View):
     """
-    Render Billing as generated PDF
+    Render Invoice as generated PDF
     """
 
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
-        billing = Billing.objects.get(pk=pk)
-        products = Product.objects.filter(billing=billing).all()
+        invoice = Invoice.objects.get(pk=pk)
+        products = Product.objects.filter(invoice=invoice).all()
 
-        billing.description = billing.description.replace("\n", "\\newline\n")
-        billing.address = billing.address.replace("\n", "\\newline\n")
-        tex = render_to_string("treasury/billing_sample.tex", dict(obj=billing, products=products))
+        invoice.description = invoice.description.replace("\n", "\\newline\n")
+        invoice.address = invoice.address.replace("\n", "\\newline\n")
+        tex = render_to_string("treasury/invoice_sample.tex", dict(obj=invoice, products=products))
         try:
             os.mkdir(BASE_DIR + "/tmp")
         except FileExistsError:
@@ -147,13 +147,13 @@ class BillingRenderView(LoginRequiredMixin, View):
         tmp_dir = mkdtemp(prefix=BASE_DIR + "/tmp/")
 
         try:
-            with open("{}/billing-{:d}.tex".format(tmp_dir, pk), "wb") as f:
+            with open("{}/invoice-{:d}.tex".format(tmp_dir, pk), "wb") as f:
                 f.write(tex.encode("UTF-8"))
             del tex
 
             for _ in range(2):
                 error = subprocess.Popen(
-                    ["pdflatex", "billing-{}.tex".format(pk)],
+                    ["pdflatex", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
                     stdin=open(os.devnull, "r"),
                     stderr=open(os.devnull, "wb"),
@@ -161,11 +161,11 @@ class BillingRenderView(LoginRequiredMixin, View):
                 ).wait()
 
                 if error:
-                    raise IOError("An error attempted while generating a billing (code=" + str(error) + ")")
+                    raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")")
 
-            pdf = open("{}/billing-{}.pdf".format(tmp_dir, pk), 'rb').read()
+            pdf = open("{}/invoice-{}.pdf".format(tmp_dir, pk), 'rb').read()
             response = HttpResponse(pdf, content_type="application/pdf")
-            response['Content-Disposition'] = "inline;filename=billing-{:d}.pdf".format(pk)
+            response['Content-Disposition'] = "inline;filename=invoice-{:d}.pdf".format(pk)
         except IOError as e:
             raise e
         finally:

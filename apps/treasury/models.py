@@ -5,10 +5,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Billing(models.Model):
+class Invoice(models.Model):
     id = models.PositiveIntegerField(
         primary_key=True,
-        verbose_name=_("Billing identifier"),
+        verbose_name=_("Invoice identifier"),
     )
 
     bde = models.CharField(
@@ -104,8 +104,8 @@ class Billing(models.Model):
 
 
 class Product(models.Model):
-    billing = models.ForeignKey(
-        Billing,
+    invoice = models.ForeignKey(
+        Invoice,
         on_delete=models.PROTECT,
     )
 

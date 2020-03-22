@@ -3,11 +3,11 @@
 
 from django.contrib import admin
 
-from .models import Billing, Product
+from .models import Invoice, Product
 
 
-@admin.register(Billing)
-class BillingAdmin(admin.ModelAdmin):
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'subject', 'acquitted', )
 
 

@@ -4,17 +4,17 @@
 from crispy_forms.helper import FormHelper
 from django import forms
 
-from .models import Billing, Product
+from .models import Invoice, Product
 
 
-class BillingForm(forms.ModelForm):
+class InvoiceForm(forms.ModelForm):
     class Meta:
-        model = Billing
+        model = Invoice
         fields = '__all__'
 
 
 ProductFormSet = forms.inlineformset_factory(
-    Billing,
+    Invoice,
     Product,
     fields='__all__',
     extra=1,

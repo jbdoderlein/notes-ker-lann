@@ -5,16 +5,16 @@ import django_tables2 as tables
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
-from .models import Billing
+from .models import Invoice
 
 
-class BillingTable(tables.Table):
-    id = tables.LinkColumn("treasury:billing_update",
+class InvoiceTable(tables.Table):
+    id = tables.LinkColumn("treasury:invoice_update",
                            args=[A("pk")],
-                           text=lambda record: _("Billing #{:d}").format(record.id), )
+                           text=lambda record: _("Invoice #{:d}").format(record.id), )
 
-    billing = tables.LinkColumn("treasury:billing_render",
-                                verbose_name=_("Billing"),
+    invoice = tables.LinkColumn("treasury:invoice_render",
+                                verbose_name=_("Invoice"),
                                 args=[A("pk")],
                                 accessor="pk",
                                 text="",
@@ -27,6 +27,6 @@ class BillingTable(tables.Table):
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
-        model = Billing
+        model = Invoice
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'name', 'subject', 'acquitted', 'billing',)
+        fields = ('id', 'name', 'subject', 'acquitted', 'invoice',)

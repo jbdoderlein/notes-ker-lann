@@ -3,12 +3,12 @@
 
 from django.urls import path
 
-from .views import BillingCreateView, BillingListView, BillingUpdateView, BillingRenderView
+from .views import InvoiceCreateView, InvoiceListView, InvoiceUpdateView, InvoiceRenderView
 
 app_name = 'treasury'
 urlpatterns = [
-    path('billing/', BillingListView.as_view(), name='billing'),
-    path('billing/create/', BillingCreateView.as_view(), name='billing_create'),
-    path('billing/<int:pk>/', BillingUpdateView.as_view(), name='billing_update'),
-    path('billing/render/<int:pk>/', BillingRenderView.as_view(), name='billing_render'),
+    path('invoice/', InvoiceListView.as_view(), name='invoice'),
+    path('invoice/create/', InvoiceCreateView.as_view(), name='invoice_create'),
+    path('invoice/<int:pk>/', InvoiceUpdateView.as_view(), name='invoice_update'),
+    path('invoice/render/<int:pk>/', InvoiceRenderView.as_view(), name='invoice_render'),
 ]
