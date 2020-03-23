@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.apps import AppConfig
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_migrate
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,6 +20,9 @@ class TreasuryConfig(AppConfig):
         from treasury.models import SpecialTransactionProxy
         post_save.connect(signals.save_special_transaction, sender=SpecialTransaction)
 
-        # If the treasury app was disabled, we ensure that each special transaction is linked to a proxy
-        for transaction in SpecialTransaction.objects.filter(specialtransactionproxy=None):
-            SpecialTransactionProxy.objects.create(transaction=transaction, remittance=None)
+        def setup_specialtransactions_proxies(**kwargs):
+            # If the treasury app was disabled, we ensure that each special transaction is linked to a proxy
+            for transaction in SpecialTransaction.objects.filter(specialtransactionproxy=None):
+                SpecialTransactionProxy.objects.create(transaction=transaction, remittance=None)
+
+        post_migrate.connect(setup_specialtransactions_proxies, sender=SpecialTransactionProxy)
