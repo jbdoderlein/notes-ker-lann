@@ -9,7 +9,7 @@ from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
 
 from .models.notes import Alias
-from .models.transactions import Transaction
+from .models.transactions import Transaction, TransactionTemplate
 from .templatetags.pretty_money import pretty_money
 
 

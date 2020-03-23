@@ -13,7 +13,7 @@ from permission.backends import PermissionBackend
 from .forms import TransactionTemplateForm
 from .models import Transaction, TransactionTemplate, Alias, RecurrentTransaction, NoteSpecial
 from .models.transactions import SpecialTransaction
-from .tables import HistoryTable
+from .tables import HistoryTable, ButtonTable
 
 
 class TransactionCreateView(LoginRequiredMixin, SingleTableView):
@@ -24,7 +24,6 @@ class TransactionCreateView(LoginRequiredMixin, SingleTableView):
     template_name = "note/transaction_form.html"
 
     model = Transaction
-    form_class = TransactionForm
     # Transaction history table
     table_class = HistoryTable
     table_pagination = {"per_page": 50}
