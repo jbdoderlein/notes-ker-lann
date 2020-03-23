@@ -4,7 +4,7 @@
 from django.urls import path
 
 from .views import InvoiceCreateView, InvoiceListView, InvoiceUpdateView, InvoiceRenderView, RemittanceListView,\
-    RemittanceCreateView, RemittanceUpdateView
+    RemittanceCreateView, RemittanceUpdateView, LinkTransactionToRemittanceView, UnlinkTransactionToRemittanceView
 
 app_name = 'treasury'
 urlpatterns = [
@@ -16,4 +16,7 @@ urlpatterns = [
     path('remittance/', RemittanceListView.as_view(), name='remittance_list'),
     path('remittance/create/', RemittanceCreateView.as_view(), name='remittance_create'),
     path('remittance/<int:pk>/', RemittanceUpdateView.as_view(), name='remittance_update'),
+    path('remittance/link_transaction/<int:pk>/', LinkTransactionToRemittanceView.as_view(), name='link_transaction'),
+    path('remittance/unlink_transaction/<int:pk>/', UnlinkTransactionToRemittanceView.as_view(),
+         name='unlink_transaction'),
 ]

@@ -8,8 +8,10 @@ from tempfile import mkdtemp
 
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
@@ -18,8 +20,8 @@ from django_tables2 import SingleTableView
 from note.models import SpecialTransaction
 from note_kfet.settings.base import BASE_DIR
 
-from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm
-from .models import Invoice, Product, Remittance
+from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
@@ -240,3 +242,38 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
             exclude=('remittance_add', ))
 
         return ctx
+
+
+class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
+    model = SpecialTransactionProxy
+    form_class = LinkTransactionToRemittanceForm
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:remittance_list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        form = ctx["form"]
+        form.fields["last_name"].initial = self.object.transaction.last_name
+        form.fields["first_name"].initial = self.object.transaction.first_name
+        form.fields["bank"].initial = self.object.transaction.bank
+        form.fields["amount"].initial = self.object.transaction.amount
+        form.fields["remittance"].queryset = form.fields["remittance"] \
+            .queryset.filter(type=self.object.transaction.source)
+
+        return ctx
+
+
+class UnlinkTransactionToRemittanceView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        pk = kwargs["pk"]
+        transaction = SpecialTransactionProxy.objects.get(pk=pk)
+
+        if transaction.remittance and transaction.remittance.closed:
+            raise ValidationError("Remittance is already closed.")
+
+        transaction.remittance = None
+        transaction.save()
+
+        return redirect('treasury:remittance_list')

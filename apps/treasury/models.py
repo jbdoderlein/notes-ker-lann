@@ -126,8 +126,7 @@ class Remittance(models.Model):
     def transactions(self):
         return SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self)
 
-    @property
-    def size(self):
+    def count(self):
         return self.transactions.count()
 
     @property
@@ -141,6 +140,9 @@ class Remittance(models.Model):
             raise ValidationError("All transactions in a remittance must have the same type")
 
         return ret
+
+    def __str__(self):
+        return _("Remittance #{:d}: {}").format(self.id, self.comment, )
 
 
 class SpecialTransactionProxy(models.Model):

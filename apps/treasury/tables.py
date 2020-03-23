@@ -43,31 +43,37 @@ class RemittanceTable(tables.Table):
                                  'a': {'class': 'btn btn-primary'}
                              }, )
 
+    def render_amount(self, value):
+        return pretty_money(value)
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = Remittance
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'date', 'type', 'comment', 'size', 'amount', 'edit',)
+        fields = ('id', 'date', 'type', 'comment', 'count', 'amount', 'edit',)
 
 
 class SpecialTransactionTable(tables.Table):
-    remittance_add = tables.LinkColumn("treasury:remittance_update",
+    remittance_add = tables.LinkColumn("treasury:link_transaction",
                                        verbose_name=_("Remittance"),
-                                       args=[A("pk")],
+                                       args=[A("specialtransactionproxy.pk")],
                                        text=_("Add"),
                                        attrs={
                                            'a': {'class': 'btn btn-primary'}
                                        }, )
 
-    remittance_remove = tables.LinkColumn("treasury:remittance_update",
+    remittance_remove = tables.LinkColumn("treasury:unlink_transaction",
                                           verbose_name=_("Remittance"),
-                                          args=[A("pk")],
+                                          args=[A("specialtransactionproxy.pk")],
                                           text=_("Remove"),
                                           attrs={
                                               'a': {'class': 'btn btn-primary btn-danger'}
                                           }, )
+
+    def render_id(self, record):
+        return record.specialtransactionproxy.pk
 
     def render_amount(self, value):
         return pretty_money(value)
@@ -78,4 +84,4 @@ class SpecialTransactionTable(tables.Table):
         }
         model = SpecialTransaction
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'source', 'destination', 'amount', 'last_name', 'first_name', 'bank',)
+        fields = ('id', 'source', 'destination', 'last_name', 'first_name', 'bank', 'amount', 'reason',)
