@@ -9,6 +9,10 @@ from note.models import NoteSpecial, SpecialTransaction
 
 
 class Invoice(models.Model):
+    """
+    An invoice model that can generate a true invoice
+    """
+
     id = models.PositiveIntegerField(
         primary_key=True,
         verbose_name=_("Invoice identifier"),
@@ -57,6 +61,10 @@ class Invoice(models.Model):
 
 
 class Product(models.Model):
+    """
+    Product that appear on an invoice.
+    """
+
     invoice = models.ForeignKey(
         Invoice,
         on_delete=models.PROTECT,
@@ -89,6 +97,10 @@ class Product(models.Model):
 
 
 class Remittance(models.Model):
+    """
+    Treasurers want to regroup checks or bank transfers in bank remittances.
+    """
+
     date = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Date"),
@@ -132,6 +144,12 @@ class Remittance(models.Model):
 
 
 class SpecialTransactionProxy(models.Model):
+    """
+    In order to keep modularity, we don't that the Note app depends on the treasury app.
+    That's why we create a proxy in this app, to link special transactions and remittances.
+    If it isn't very clean, that makes what we want.
+    """
+
     transaction = models.OneToOneField(
         SpecialTransaction,
         on_delete=models.CASCADE,
