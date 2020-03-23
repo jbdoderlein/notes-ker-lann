@@ -62,7 +62,7 @@ function li(id, text) {
  */
 function displayNote(note, alias, user_note_field=null, profile_pic_field=null) {
     if (!note.display_image) {
-        note.display_image = 'https://nk20.ynerant.fr/media/pic/default.png';
+        note.display_image = '/media/pic/default.png';
         $.getJSON("/api/note/note/" + note.id + "/?format=json", function(new_note) {
             note.display_image = new_note.display_image.replace("http:", "https:");
             note.name = new_note.name;
