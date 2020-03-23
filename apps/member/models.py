@@ -67,6 +67,13 @@ class Club(models.Model):
     email = models.EmailField(
         verbose_name=_('email'),
     )
+    parent_club = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('parent club'),
+    )
 
     # Memberships
     membership_fee = models.PositiveIntegerField(
