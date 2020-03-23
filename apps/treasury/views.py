@@ -13,13 +13,14 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django_tables2 import SingleTableView
+from note.models import SpecialTransaction
 from note_kfet.settings.base import BASE_DIR
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm
 from .models import Invoice, Product, Remittance
-from .tables import InvoiceTable, RemittanceTable
+from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
 class InvoiceCreateView(LoginRequiredMixin, CreateView):
@@ -188,13 +189,36 @@ class RemittanceCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
 
-class RemittanceListView(LoginRequiredMixin, SingleTableView):
+        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
+        ctx["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
+
+        return ctx
+
+
+class RemittanceListView(LoginRequiredMixin, TemplateView):
     """
     List existing Remittances
     """
-    model = Remittance
-    table_class = RemittanceTable
+    template_name = "treasury/remittance_list.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["opened_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=False).all())
+        ctx["closed_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=True).reverse().all())
+        ctx["special_transactions_no_remittance"] = SpecialTransactionTable(
+            data=SpecialTransaction.objects.filter(source__polymorphic_ctype__model="notespecial",
+                                                   specialtransactionproxy__remittance=None).all(),
+            exclude=('remittance_remove', ))
+        ctx["special_transactions_with_remittance"] = SpecialTransactionTable(
+            data=SpecialTransaction.objects.filter(source__polymorphic_ctype__model="notespecial",
+                                                   specialtransactionproxy__remittance__closed=False).all(),
+            exclude=('remittance_add', ))
+
+        return ctx
 
 
 class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
@@ -206,3 +230,13 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
+        ctx["special_transactions"] = SpecialTransactionTable(
+            data=SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all(),
+            exclude=('remittance_add', ))
+
+        return ctx

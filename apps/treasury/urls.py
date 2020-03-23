@@ -4,7 +4,7 @@
 from django.urls import path
 
 from .views import InvoiceCreateView, InvoiceListView, InvoiceUpdateView, InvoiceRenderView, RemittanceListView,\
-                    RemittanceCreateView, RemittanceUpdateView
+    RemittanceCreateView, RemittanceUpdateView
 
 app_name = 'treasury'
 urlpatterns = [

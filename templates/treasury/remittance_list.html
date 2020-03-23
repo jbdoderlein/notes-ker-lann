@@ -3,8 +3,23 @@
 {% load i18n %}
 {% block content %}
 
-{% render_table table %}
+    <h2>{% trans "Opened remittances" %}</h2>
+    {% render_table opened_remittances %}
 
-<a class="btn btn-primary" href="{% url 'treasury:remittance_create' %}">{% trans "New remittance" %}</a>
+    <a class="btn btn-primary" href="{% url 'treasury:remittance_create' %}">{% trans "New remittance" %}</a>
 
+    <hr>
+
+    <h2>{% trans "Transfers without remittances" %}</h2>
+    {% render_table special_transactions_no_remittance %}
+
+    <hr>
+
+    <h2>{% trans "Transfers with opened remittances" %}</h2>
+    {% render_table special_transactions_with_remittance %}
+
+    <hr>
+
+    <h2>{% trans "Closed remittances" %}</h2>
+    {% render_table closed_remittances %}
 {% endblock %}
