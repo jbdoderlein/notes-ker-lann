@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
+from note.models import NoteSpecial, SpecialTransaction
 
 
 class Invoice(models.Model):
@@ -111,17 +111,35 @@ class Remittance(models.Model):
     )
 
     @property
+    def transactions(self):
+        return SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self)
+
+    @property
     def size(self):
-        return self.specialtransaction_set.count()
+        return self.transactions.count()
 
     @property
     def amount(self):
-        return sum(transaction.total for transaction in self.specialtransaction_set.all())
+        return sum(transaction.total for transaction in self.transactions.all())
 
     def full_clean(self, exclude=None, validate_unique=True):
         ret = super().full_clean(exclude, validate_unique)
 
-        if self.specialtransaction_set.filter(~Q(source=self.type)).exists():
+        if self.transactions.filter(~Q(source=self.type)).exists():
             raise ValidationError("All transactions in a remittance must have the same type")
 
         return ret
+
+
+class SpecialTransactionProxy(models.Model):
+    transaction = models.OneToOneField(
+        SpecialTransaction,
+        on_delete=models.CASCADE,
+    )
+
+    remittance = models.ForeignKey(
+        Remittance,
+        on_delete=models.PROTECT,
+        null=True,
+        verbose_name=_("Remittance"),
+    )
