@@ -236,10 +236,12 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        form = ctx["form"]
         ctx["table"] = RemittanceTable(data=Remittance.objects.all())
+        data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all()
         ctx["special_transactions"] = SpecialTransactionTable(
-            data=SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all(),
-            exclude=('remittance_add', ))
+            data=data,
+            exclude=('remittance_add', 'remittance_remove', ) if self.object.closed else ('remittance_add', ))
 
         return ctx
 

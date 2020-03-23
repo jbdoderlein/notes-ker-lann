@@ -45,8 +45,35 @@ class ProductFormSetHelper(FormHelper):
 class RemittanceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
+
+        if self.instance.pk:
+            self.fields["type"].disabled = True
+            self.fields["type"].required = False
+
+        if not self.instance.closed:
+            self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
+            if self.instance.transactions:
+                self.helper.add_input(Submit("close", _("Close"), css_class='btn btn-success'))
+        else:
+            self.fields["comment"].disabled = True
+            self.fields["comment"].required = False
+
+    def clean(self):
+        if self.instance.closed:
+            self.add_error("comment", _("Remittance is already closed."))
+
+        cleaned_data = super().clean()
+
+        if "type" in self.changed_data:
+            self.add_error("type", _("You can't change the type of the remittance."))
+
+        if "close" in self.data:
+            self.instance.closed = True
+            self.cleaned_data["closed"] = True
+
+        return cleaned_data
 
     class Meta:
         model = Remittance

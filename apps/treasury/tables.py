@@ -35,10 +35,10 @@ class InvoiceTable(tables.Table):
 
 
 class RemittanceTable(tables.Table):
-    edit = tables.LinkColumn("treasury:remittance_update",
-                             verbose_name=_("Edit"),
+    view = tables.LinkColumn("treasury:remittance_update",
+                             verbose_name=_("View"),
                              args=[A("pk")],
-                             text=_("Edit"),
+                             text=_("View"),
                              attrs={
                                  'a': {'class': 'btn btn-primary'}
                              }, )
@@ -52,7 +52,7 @@ class RemittanceTable(tables.Table):
         }
         model = Remittance
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'date', 'type', 'comment', 'count', 'amount', 'edit',)
+        fields = ('id', 'date', 'type', 'comment', 'count', 'amount', 'view',)
 
 
 class SpecialTransactionTable(tables.Table):
