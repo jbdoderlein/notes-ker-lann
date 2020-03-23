@@ -82,6 +82,11 @@ class ButtonTable(tables.Table):
             'class':
                 'table table condensed table-striped table-hover'
         }
+        row_attrs = {
+            'class': 'table-row',
+            'data-href': lambda record: record.pk
+        }
+
         model = TransactionTemplate
 
     def render_amount(self, value):

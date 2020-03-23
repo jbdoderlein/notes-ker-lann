@@ -89,9 +89,9 @@ class TransactionTemplateViewSet(ReadProtectedModelViewSet):
     """
     queryset = TransactionTemplate.objects.all()
     serializer_class = TransactionTemplateSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'display', 'category', ]
-
+    search_fields = ['$name', ]
 
 class TransactionViewSet(ReadProtectedModelViewSet):
     """

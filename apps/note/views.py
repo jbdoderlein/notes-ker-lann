@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import SingleTableView
+from django.urls import reverse_lazy
 from permission.backends import PermissionBackend
 
 from .forms import TransactionTemplateForm
@@ -108,7 +109,7 @@ class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
-
+    success_url = reverse_lazy('template_list')
 
 class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
@@ -116,6 +117,14 @@ class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
     model = TransactionTemplate
     table_class = ButtonTable
+
+    def get_queryset(self):
+        name = self.request.GET.get('name','')
+        if (name != ''):
+            object_list = self.model.objects.filter(name__icontains = name)
+        else:
+            object_list = self.model.objects.all()
+        return object_list
 
 
 class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
