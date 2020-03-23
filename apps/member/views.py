@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -23,11 +24,21 @@ from note.forms import AliasForm, ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
+from permission.backends import PermissionBackend
 
 from .filters import UserFilter, UserFilterFormHelper
-from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper
+from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
+    CustomAuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable
+
+
+class CustomLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+
+    def form_valid(self, form):
+        self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
+        return super().form_valid(form)
 
 
 class UserCreateView(CreateView):
@@ -120,11 +131,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "user_object"
     template_name = "member/profile_detail.html"
 
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = context['user_object']
         history_list = \
-            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))
+            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")
         context['history_list'] = HistoryTable(history_list)
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
@@ -147,7 +161,7 @@ class UserListView(LoginRequiredMixin, SingleTableView):
     formhelper_class = UserFilterFormHelper
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset()
+        qs = super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))
         self.filter = self.filter_class(self.request.GET, queryset=qs)
         self.filter.form.helper = self.formhelper_class()
         return self.filter.qs
@@ -203,7 +217,6 @@ class DeleteAliasView(LoginRequiredMixin, DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        print(self.request)
         return reverse_lazy('member:user_alias', kwargs={'pk': self.object.note.user.pk})
 
     def get(self, request, *args, **kwargs):
@@ -297,10 +310,10 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return User.objects.none()
 
-        qs = User.objects.all()
+        qs = User.objects.filter(PermissionBackend.filter_queryset(self.request.user, User, "view")).all()
 
         if self.q:
-            qs = qs.filter(username__regex=self.q)
+            qs = qs.filter(username__regex="^" + self.q)
 
         return qs
 
@@ -328,10 +341,16 @@ class ClubListView(LoginRequiredMixin, SingleTableView):
     model = Club
     table_class = ClubTable
 
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))
+
 
 class ClubDetailView(LoginRequiredMixin, DetailView):
     model = Club
     context_object_name = "club"
+
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -350,6 +369,11 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
+
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")
+                                             | PermissionBackend.filter_queryset(self.request.user, Membership,
+                                                                                 "change"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

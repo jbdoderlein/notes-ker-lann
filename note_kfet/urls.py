@@ -7,6 +7,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from member.views import CustomLoginView
+
 urlpatterns = [
     # Dev so redirect to something random
     path('', RedirectView.as_view(pattern_name='note:transfer'), name='index'),
@@ -16,12 +18,12 @@ urlpatterns = [
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),
-    path('accounts/', include('member.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('logs/', include('logs.urls')),
-    path('api/', include('api.urls')),  
+    path('accounts/', include('member.urls')),
+    path('accounts/login/', CustomLoginView.as_view()),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('api/', include('api.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -37,8 +39,8 @@ if "cas" in settings.INSTALLED_APPS:
     from cas import views as cas_views
     urlpatterns += [
         # Include CAS Client routers
-        path('accounts/login/', cas_views.login, name='login'),
-        path('accounts/logout/', cas_views.logout, name='logout'),
+        path('accounts/login/cas/', cas_views.login, name='cas_login'),
+        path('accounts/logout/cas/', cas_views.logout, name='cas_logout'),
        
     ]
 if "debug_toolbar" in settings.INSTALLED_APPS:

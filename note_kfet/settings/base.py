@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'activity',
     'member',
     'note',
+    'permission',
     'api',
     'logs',
 ]
@@ -124,22 +125,21 @@ PASSWORD_HASHERS = [
     'member.hashers.CustomNK15Hasher',
 ]
 
-# Django Guardian object permissions
-
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # this is default
+    'permission.backends.PermissionBackend',  # Custom role-based permission system
 )
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        # TODO Maybe replace it with our custom permissions system
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # Control API access with our role-based permission system
+        'permission.permissions.StrongDjangoObjectPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
 }
 
 # Internationalization

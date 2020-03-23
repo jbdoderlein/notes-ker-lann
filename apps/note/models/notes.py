@@ -209,6 +209,10 @@ class Alias(models.Model):
     class Meta:
         verbose_name = _("alias")
         verbose_name_plural = _("aliases")
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['normalized_name']),
+        ]
 
     def __str__(self):
         return self.name
@@ -231,7 +235,7 @@ class Alias(models.Model):
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
-                raise ValidationError(_('An alias with a similar name already exists: {} '.format(sim_alias)),
+                raise ValidationError(_('An alias with a similar name already exists: {} ').format(sim_alias),
                                       code="same_alias"
                                       )
         except Alias.DoesNotExist:

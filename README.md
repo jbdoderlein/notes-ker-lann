@@ -32,6 +32,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         $ python3 -m venv env
         $ source env/bin/activate
         (env)$ pip3 install -r requirements/base.txt
+        (env)$ pip3 install -r requirements/prod.txt # uniquement en prod, nécessite un base postgres
         (env)$ deactivate
 
 4. uwsgi  et Nginx
@@ -40,14 +41,13 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
 
         $ cp nginx_note.conf_example nginx_note.conf
 
-***Modifier le fichier pour être en accord avec le reste de votre config***
+    ***Modifier le fichier pour être en accord avec le reste de votre config***
 
     On utilise uwsgi et Nginx pour gérer le coté serveur :
 
-        $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
+       $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
 
-
-    Si l'on a un emperor (plusieurs instance uwsgi):
+   Si l'on a un emperor (plusieurs instance uwsgi):
 
         $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
 
@@ -85,7 +85,7 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
         postgres=# CREATE DATABASE note_db OWNER note;
         CREATE DATABASE
 
-    Si tout va bien:
+    Si tout va bien :
         
         postgres=#\list
         List of databases
@@ -96,22 +96,29 @@ On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout n
          template0 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres+postgres=CTc/postgres
          template1 | postgres | UTF8     | fr_FR.UTF-8 | fr_FR.UTF-8 | =c/postgres  +postgres=CTc/postgres
         (4 rows)
-
-    Dans un fichier `.env` à la racine du projet on renseigne des secrets:
     
-        DJANGO_APP_STAGE='prod'
-        DJANGO_DB_PASSWORD='le_mot_de_passe_de_la_bdd'
-        DJANGO_SECRET_KEY='une_secret_key_longue_et_compliquee'
-        ALLOWED_HOSTS='le_ndd_de_votre_instance'
-    
-
 6. Variable d'environnement et Migrations
         
+    On copie le fichier `.env_example` vers le fichier `.env` à la racine du projet 
+    et on renseigne des secrets et des paramètres :
+    
+        DJANGO_APP_STAGE="dev" # ou "prod" 
+        DJANGO_DEV_STORE_METHOD="sqllite" # ou "postgres"
+        DJANGO_DB_HOST="localhost"
+        DJANGO_DB_NAME="note_db"
+        DJANGO_DB_USER="note"
+        DJANGO_DB_PASSWORD="CHANGE_ME" 
+        DJANGO_DB_PORT=""
+        DJANGO_SECRET_KEY="CHANGE_ME"
+        DJANGO_SETTINGS_MODULE="note_kfet.settings"
+        DOMAIN="localhost" # note.example.com
+        CONTACT_EMAIL="tresorerie.bde@localhost"
+        NOTE_URL="localhost" # serveur cas note.example.com si auto-hébergé.
 
-Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
+    Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 
         $ source /env/bin/activate
-        (env)$ ./manage.py check # pas de bétise qui traine
+        (env)$ ./manage.py check # pas de bêtise qui traine
         (env)$ ./manage.py makemigrations
         (env)$ ./manage.py migrate
 
@@ -126,17 +133,21 @@ Il est possible de travailler sur une instance Docker.
     
         $ git clone git@gitlab.crans.org:bde/nk20.git
 
-2. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré,
+2. Copiez le fichier `.env_example` à la racine du projet vers le fichier `.env`,
+et  mettez à jour vos variables d'environnement
+
+3. Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré,
    ajouter les lignes suivantes, en les adaptant à la configuration voulue :
 
         nk20:
           build: /chemin/vers/nk20
           volumes:
             - /chemin/vers/nk20:/code/
+          env_file: /chemin/vers/nk20/.env
           restart: always
           labels:
-            - traefik.domain=ndd.exemple.com
-            - traefik.frontend.rule=Host:ndd.exemple.com
+            - traefik.domain=ndd.example.com
+            - traefik.frontend.rule=Host:ndd.example.com
             - traefik.port=8000
 
 3. Enjoy :
@@ -157,19 +168,22 @@ un serveur de développement par exemple sur son ordinateur.
 
         $ python3 -m venv venv
         $ source venv/bin/activate
-        (env)$ pip install -r requirements.txt
+        (env)$ pip install -r requirements/base.txt
 
-3. Migrations et chargement des données initiales :
+3. Copier le fichier `.env_example` vers `.env` à la racine du projet et mettre à jour
+ce qu'il faut
+
+4. Migrations et chargement des données initiales :
 
         (env)$ ./manage.py makemigrations
         (env)$ ./manage.py migrate
         (env)$ ./manage.py loaddata initial
 
-4. Créer un super-utilisateur :
+5. Créer un super-utilisateur :
 
         (env)$ ./manage.py createsuperuser
 
-5. Enjoy :
+6. Enjoy :
 
         (env)$ ./manage.py runserver 0.0.0.0:8000
 
@@ -184,4 +198,4 @@ Il est disponible [ici](https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC).
 ## Documentation
 
 La documentation est générée par django et son module admindocs.
-**Commenter votre code !**
+**Commentez votre code !**

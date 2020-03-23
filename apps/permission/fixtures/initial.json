@@ -1,0 +1,653 @@
+[
+  {
+    "model": "member.role",
+    "pk": 1,
+    "fields": {
+      "name": "Adh\u00e9rent BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 2,
+    "fields": {
+      "name": "Adh\u00e9rent Kfet"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 3,
+    "fields": {
+      "name": "Pr\u00e9sident\u00b7e BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 4,
+    "fields": {
+      "name": "Tr\u00e9sorier\u00b7\u00e8re BDE"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 5,
+    "fields": {
+      "name": "Respo info"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 6,
+    "fields": {
+      "name": "GC Kfet"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 7,
+    "fields": {
+      "name": "Pr\u00e9sident\u00b7e de club"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 8,
+    "fields": {
+      "name": "Tr\u00e9sorier\u00b7\u00e8re de club"
+    }
+  },
+  {
+    "model": "permission.permissionmask",
+    "pk": 1,
+    "fields": {
+      "rank": 0,
+      "description": "Droits basiques"
+    }
+  },
+  {
+    "model": "permission.permissionmask",
+    "pk": 2,
+    "fields": {
+      "rank": 1,
+      "description": "Droits note seulement"
+    }
+  },
+  {
+    "model": "permission.permissionmask",
+    "pk": 3,
+    "fields": {
+      "rank": 42,
+      "description": "Tous mes droits"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 1,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our User object"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 2,
+    "fields": {
+      "model": [
+        "member",
+        "profile"
+      ],
+      "query": "{\"user\": [\"user\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our profile"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 3,
+    "fields": {
+      "model": [
+        "note",
+        "noteuser"
+      ],
+      "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our own note"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 4,
+    "fields": {
+      "model": [
+        "authtoken",
+        "token"
+      ],
+      "query": "{\"user\": [\"user\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our API token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 5,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "[\"OR\", {\"source\": [\"user\", \"note\"]}, {\"destination\": [\"user\", \"note\"]}]",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our own transactions"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 6,
+    "fields": {
+      "model": [
+        "note",
+        "alias"
+      ],
+      "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View aliases of clubs and members of Kfet club"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 7,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "last_login",
+      "description": "Change myself's last login"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 8,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "username",
+      "description": "Change myself's username"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 9,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "first_name",
+      "description": "Change myself's first name"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 10,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "last_name",
+      "description": "Change myself's last name"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 11,
+    "fields": {
+      "model": [
+        "auth",
+        "user"
+      ],
+      "query": "{\"pk\": [\"user\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "email",
+      "description": "Change myself's email"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 12,
+    "fields": {
+      "model": [
+        "authtoken",
+        "token"
+      ],
+      "query": "{\"user\": [\"user\"]}",
+      "type": "delete",
+      "mask": 1,
+      "field": "",
+      "description": "Delete API Token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 13,
+    "fields": {
+      "model": [
+        "authtoken",
+        "token"
+      ],
+      "query": "{\"user\": [\"user\"]}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Create API Token"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 14,
+    "fields": {
+      "model": [
+        "note",
+        "alias"
+      ],
+      "query": "{\"note\": [\"user\", \"note\"]}",
+      "type": "delete",
+      "mask": 1,
+      "field": "",
+      "description": "Remove alias"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 15,
+    "fields": {
+      "model": [
+        "note",
+        "alias"
+      ],
+      "query": "{\"note\": [\"user\", \"note\"]}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Add alias"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 16,
+    "fields": {
+      "model": [
+        "note",
+        "noteuser"
+      ],
+      "query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "display_image",
+      "description": "Change myself's display image"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 17,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, {\"amount__lte\": [\"user\", \"note\", \"balance\"]}]",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Transfer from myself's note"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 18,
+    "fields": {
+      "model": [
+        "note",
+        "note"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 1,
+      "field": "balance",
+      "description": "Update a note balance with a transaction"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 19,
+    "fields": {
+      "model": [
+        "note",
+        "note"
+      ],
+      "query": "[\"OR\", {\"pk\": [\"club\", \"note\", \"pk\"]}, {\"pk__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club\": [\"club\"]}], [\"all\"]]}]",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View notes of club members"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 20,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Create transactions with a club"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 21,
+    "fields": {
+      "model": [
+        "note",
+        "recurrenttransaction"
+      ],
+      "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Create transactions from buttons with a club"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 22,
+    "fields": {
+      "model": [
+        "member",
+        "club"
+      ],
+      "query": "{\"pk\": [\"club\", \"pk\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View club infos"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 23,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 1,
+      "field": "valid",
+      "description": "Update validation status of a transaction"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 24,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View all transactions"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 25,
+    "fields": {
+      "model": [
+        "note",
+        "notespecial"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "Display credit/debit interface"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 26,
+    "fields": {
+      "model": [
+        "note",
+        "specialtransaction"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Create credit/debit transaction"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 27,
+    "fields": {
+      "model": [
+        "note",
+        "templatecategory"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View button categories"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 28,
+    "fields": {
+      "model": [
+        "note",
+        "templatecategory"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 3,
+      "field": "",
+      "description": "Change button category"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 29,
+    "fields": {
+      "model": [
+        "note",
+        "templatecategory"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 3,
+      "field": "",
+      "description": "Add button category"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 30,
+    "fields": {
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View buttons"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 31,
+    "fields": {
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 3,
+      "field": "",
+      "description": "Add buttons"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 32,
+    "fields": {
+      "model": [
+        "note",
+        "transactiontemplate"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 3,
+      "field": "",
+      "description": "Update buttons"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 33,
+    "fields": {
+      "model": [
+        "note",
+        "transaction"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Create any transaction"
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 1,
+    "fields": {
+      "role": 1,
+      "permissions": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 2,
+    "fields": {
+      "role": 2,
+      "permissions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 3,
+    "fields": {
+      "role": 8,
+      "permissions": [
+        19,
+        20,
+        21,
+        22
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 4,
+    "fields": {
+      "role": 4,
+      "permissions": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ]
+    }
+  }
+]

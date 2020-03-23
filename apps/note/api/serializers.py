@@ -5,7 +5,8 @@ from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
-from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction
+from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
+    RecurrentTransaction, SpecialTransaction
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -17,12 +18,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = '__all__'
-        extra_kwargs = {
-            'url': {
-                'view_name': 'project-detail',
-                'lookup_field': 'pk'
-            },
-        }
+        read_only_fields = [f.name for f in model._meta.get_fields()]  # Notes are read-only protected
 
 
 class NoteClubSerializer(serializers.ModelSerializer):
@@ -30,10 +26,15 @@ class NoteClubSerializer(serializers.ModelSerializer):
     REST API Serializer for Club's notes.
     The djangorestframework plugin will analyse the model `NoteClub` and parse all fields in the API.
     """
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = NoteClub
         fields = '__all__'
+        read_only_fields = ('note', 'club', )
+
+    def get_name(self, obj):
+        return str(obj)
 
 
 class NoteSpecialSerializer(serializers.ModelSerializer):
@@ -41,10 +42,15 @@ class NoteSpecialSerializer(serializers.ModelSerializer):
     REST API Serializer for special notes.
     The djangorestframework plugin will analyse the model `NoteSpecial` and parse all fields in the API.
     """
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = NoteSpecial
         fields = '__all__'
+        read_only_fields = ('note', )
+
+    def get_name(self, obj):
+        return str(obj)
 
 
 class NoteUserSerializer(serializers.ModelSerializer):
@@ -52,10 +58,15 @@ class NoteUserSerializer(serializers.ModelSerializer):
     REST API Serializer for User's notes.
     The djangorestframework plugin will analyse the model `NoteUser` and parse all fields in the API.
     """
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = NoteUser
         fields = '__all__'
+        read_only_fields = ('note', 'user', )
+
+    def get_name(self, obj):
+        return str(obj)
 
 
 class AliasSerializer(serializers.ModelSerializer):
@@ -67,6 +78,7 @@ class AliasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alias
         fields = '__all__'
+        read_only_fields = ('note', )
 
 
 class NotePolymorphicSerializer(PolymorphicSerializer):
@@ -76,6 +88,20 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteClub: NoteClubSerializer,
         NoteSpecial: NoteSpecialSerializer
     }
+
+    class Meta:
+        model = Note
+
+
+class TemplateCategorySerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Transaction templates.
+    The djangorestframework plugin will analyse the model `TemplateCategory` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = TemplateCategory
+        fields = '__all__'
 
 
 class TransactionTemplateSerializer(serializers.ModelSerializer):
@@ -100,6 +126,17 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class RecurrentTransactionSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Transactions.
+    The djangorestframework plugin will analyse the model `RecurrentTransaction` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = RecurrentTransaction
+        fields = '__all__'
+
+
 class MembershipTransactionSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Membership transactions.
@@ -109,3 +146,26 @@ class MembershipTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MembershipTransaction
         fields = '__all__'
+
+
+class SpecialTransactionSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Special transactions.
+    The djangorestframework plugin will analyse the model `SpecialTransaction` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = SpecialTransaction
+        fields = '__all__'
+
+
+class TransactionPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        Transaction: TransactionSerializer,
+        RecurrentTransaction: RecurrentTransactionSerializer,
+        MembershipTransaction: MembershipTransactionSerializer,
+        SpecialTransaction: SpecialTransactionSerializer,
+    }
+
+    class Meta:
+        model = Transaction
