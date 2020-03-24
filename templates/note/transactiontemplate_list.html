@@ -63,15 +63,13 @@ function search_field_moved(secondfield) {
      $.ajax({
          url:"/api/note/transaction/template/"+button_id,
          method:"DELETE",
-         headers: {
-            "X-CSRFTOKEN": CSRF_TOKEN
-         },
-         success: function(){
-             addMsg('{% trans "button successfully deleted "%}','success');
-             $("#buttons_table").load('{% url "note:template_list" %} #buttons_tables');
-         },
-         error: addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
-     });
-}
+         headers: {"X-CSRFTOKEN": CSRF_TOKEN}
+     })
+      .done(function(){
+          addMsg('{% trans "button successfully deleted "%}','success');
+          $("#buttons_table").load("{% url 'note:template_list' %} #buttons_table");
+      })
+      .fail(addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' ));
+ }
 </script>
 {% endblock %}
