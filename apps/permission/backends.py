@@ -89,6 +89,7 @@ class PermissionBackend(ModelBackend):
             query = query | perm.query
         return query
 
+    @staticmethod
     def has_perm(self, user_obj, perm, obj=None):
         if user_obj is None or isinstance(user_obj, AnonymousUser):
             return False
