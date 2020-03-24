@@ -35,6 +35,10 @@ class InvoiceTable(tables.Table):
 
 
 class RemittanceTable(tables.Table):
+    count = tables.Column(verbose_name=_("Transaction count"))
+
+    amount = tables.Column(verbose_name=_("Amount"))
+
     view = tables.LinkColumn("treasury:remittance_update",
                              verbose_name=_("View"),
                              args=[A("pk")],

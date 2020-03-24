@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 01:15+0100\n"
+"POT-Creation-Date: 2020-03-24 01:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgid "activity types"
 msgstr "types d'activité"
 
 #: apps/activity/models.py:48 apps/note/models/transactions.py:69
-#: apps/permission/models.py:91
+#: apps/permission/models.py:90
 msgid "description"
 msgstr "description"
 
@@ -209,7 +209,7 @@ msgstr "club"
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:120 apps/permission/models.py:276
+#: apps/member/models.py:120 apps/permission/models.py:275
 msgid "role"
 msgstr "rôle"
 
@@ -474,111 +474,156 @@ msgstr "Transférer de l'argent"
 msgid "Consumptions"
 msgstr "Consommations"
 
-#: apps/permission/models.py:70 apps/permission/models.py:263
+#: apps/permission/models.py:69 apps/permission/models.py:262
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:72 apps/permission/models.py:265
+#: apps/permission/models.py:71 apps/permission/models.py:264
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:85
+#: apps/permission/models.py:84
 msgid "rank"
 msgstr "Rang"
 
-#: apps/permission/models.py:148
+#: apps/permission/models.py:147
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 
-#: apps/treasury/apps.py:10 templates/base.html:102
+#: apps/treasury/apps.py:11 templates/base.html:102
 msgid "Treasury"
 msgstr "Trésorerie"
 
-#: apps/treasury/models.py:11
+#: apps/treasury/forms.py:56 apps/treasury/forms.py:95
+#: templates/django_filters/rest_framework/form.html:5
+#: templates/member/club_form.html:10 templates/treasury/invoice_form.html:47
+msgid "Submit"
+msgstr "Envoyer"
+
+#: apps/treasury/forms.py:58
+msgid "Close"
+msgstr "Fermer"
+
+#: apps/treasury/forms.py:65
+msgid "Remittance is already closed."
+msgstr "La remise est déjà fermée."
+
+#: apps/treasury/forms.py:70
+msgid "You can't change the type of the remittance."
+msgstr "Vous ne pouvez pas changer le type de la remise."
+
+#: apps/treasury/forms.py:84
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: apps/treasury/forms.py:86 templates/note/transaction_form.html:92
+msgid "First name"
+msgstr "Prénom"
+
+#: apps/treasury/forms.py:88 templates/note/transaction_form.html:98
+msgid "Bank"
+msgstr "Banque"
+
+#: apps/treasury/forms.py:90 apps/treasury/tables.py:40
+#: templates/note/transaction_form.html:128
+#: templates/treasury/remittance_form.html:18
+msgid "Amount"
+msgstr "Montant"
+
+#: apps/treasury/models.py:18
 msgid "Invoice identifier"
 msgstr "Numéro de facture"
 
-#: apps/treasury/models.py:25
+#: apps/treasury/models.py:32
 msgid "BDE"
 msgstr "BDE"
 
-#: apps/treasury/models.py:30
+#: apps/treasury/models.py:37
 msgid "Object"
 msgstr "Objet"
 
-#: apps/treasury/models.py:34
+#: apps/treasury/models.py:41
 msgid "Description"
 msgstr "Description"
 
-#: apps/treasury/models.py:39 templates/note/transaction_form.html:86
+#: apps/treasury/models.py:46 templates/note/transaction_form.html:86
 msgid "Name"
 msgstr "Nom"
 
-#: apps/treasury/models.py:43
+#: apps/treasury/models.py:50
 msgid "Address"
 msgstr "Adresse"
 
-#: apps/treasury/models.py:48 apps/treasury/models.py:58
+#: apps/treasury/models.py:55
 msgid "Place"
 msgstr "Lieu"
 
-#: apps/treasury/models.py:52
+#: apps/treasury/models.py:59
 msgid "Acquitted"
 msgstr "Acquittée"
 
-#: apps/treasury/models.py:64
-msgid "My name"
-msgstr "Mon nom"
-
-#: apps/treasury/models.py:70
-msgid "My street address"
-msgstr "Ma rue"
-
-#: apps/treasury/models.py:76
-msgid "My city"
-msgstr "Ma ville"
-
-#: apps/treasury/models.py:81
-msgid "Bank code"
-msgstr "Code banque"
-
-#: apps/treasury/models.py:86
-msgid "Desk code"
-msgstr "Code guichet"
-
-#: apps/treasury/models.py:91
-msgid "Account number"
-msgstr "Numéro de compte"
-
-#: apps/treasury/models.py:96
-msgid "RIB Key"
-msgstr "Clé RIB"
-
-#: apps/treasury/models.py:102
-msgid "BIC Code"
-msgstr "Code BIC"
-
-#: apps/treasury/models.py:114
+#: apps/treasury/models.py:75
 msgid "Designation"
 msgstr "Désignation"
 
-#: apps/treasury/models.py:118
+#: apps/treasury/models.py:79
 msgid "Quantity"
 msgstr "Quantité"
 
-#: apps/treasury/models.py:122
+#: apps/treasury/models.py:83
 msgid "Unit price"
 msgstr "Prix unitaire"
 
-#: apps/treasury/tables.py:14
+#: apps/treasury/models.py:106
+msgid "Date"
+msgstr "Date"
+
+#: apps/treasury/models.py:112
+msgid "Type"
+msgstr "Type"
+
+#: apps/treasury/models.py:117
+msgid "Comment"
+msgstr "Commentaire"
+
+#: apps/treasury/models.py:122
+msgid "Closed"
+msgstr "Fermée"
+
+#: apps/treasury/models.py:145
+msgid "Remittance #{:d}: {}"
+msgstr "Remise n°{:d} : {}"
+
+#: apps/treasury/models.py:164 apps/treasury/tables.py:64
+#: apps/treasury/tables.py:72
+msgid "Remittance"
+msgstr "Remise"
+
+#: apps/treasury/tables.py:16
 msgid "Invoice #{:d}"
 msgstr "Facture n°{:d}"
 
-#: apps/treasury/tables.py:17
+#: apps/treasury/tables.py:19
 msgid "Invoice"
 msgstr "Facture"
+
+#: apps/treasury/tables.py:38
+msgid "Transaction count"
+msgstr "Nombre de transactions"
+
+#: apps/treasury/tables.py:43 apps/treasury/tables.py:45
+msgid "View"
+msgstr "Voir"
+
+#: apps/treasury/tables.py:66
+msgid "Add"
+msgstr "Ajouter"
+
+#: apps/treasury/tables.py:74
+msgid "Remove"
+msgstr "supprimer"
 
 #: note_kfet/settings/__init__.py:63
 msgid ""
@@ -671,11 +716,6 @@ msgstr ""
 #: templates/django_filters/rest_framework/form.html:2
 msgid "Field filters"
 msgstr ""
-
-#: templates/django_filters/rest_framework/form.html:5
-#: templates/member/club_form.html:10 templates/treasury/invoice_form.html:47
-msgid "Submit"
-msgstr "Envoyer"
 
 #: templates/member/club_detail.html:10
 msgid "Membership starts on"
@@ -802,23 +842,11 @@ msgstr "Paiement externe"
 msgid "Transfer type"
 msgstr "Type de transfert"
 
-#: templates/note/transaction_form.html:92
-msgid "First name"
-msgstr "Prénom"
-
-#: templates/note/transaction_form.html:98
-msgid "Bank"
-msgstr "Banque"
-
 #: templates/note/transaction_form.html:111
 #: templates/note/transaction_form.html:169
 #: templates/note/transaction_form.html:176
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
-
-#: templates/note/transaction_form.html:128
-msgid "Amount"
-msgstr "Montant"
 
 #: templates/note/transaction_form.html:138
 msgid "Reason"
@@ -930,8 +958,55 @@ msgstr "Retirer produit"
 msgid "New invoice"
 msgstr "Nouvelle facture"
 
-#~ msgid "Source and destination must be different."
-#~ msgstr "La source et la destination doivent être différentes."
+#: templates/treasury/remittance_form.html:7
+msgid "Remittance #"
+msgstr "Remise n°"
 
-#~ msgid "Transfer money from your account to one or others"
-#~ msgstr "Transfert d'argent de ton compte vers un ou plusieurs autres"
+#: templates/treasury/remittance_form.html:9
+#: templates/treasury/specialtransactionproxy_form.html:7
+msgid "Remittances list"
+msgstr "Liste des remises"
+
+#: templates/treasury/remittance_form.html:12
+msgid "Count"
+msgstr "Nombre"
+
+#: templates/treasury/remittance_form.html:29
+msgid "Linked transactions"
+msgstr "Transactions liées"
+
+#: templates/treasury/remittance_form.html:34
+msgid "There is no transaction linked with this remittance."
+msgstr "Il n'y a pas de transaction liée à cette remise."
+
+#: templates/treasury/remittance_list.html:6
+msgid "Opened remittances"
+msgstr "Remises ouvertes"
+
+#: templates/treasury/remittance_list.html:11
+msgid "There is no opened remittance."
+msgstr "Il n'y a pas de remise ouverte."
+
+#: templates/treasury/remittance_list.html:15
+msgid "New remittance"
+msgstr "Nouvelle remise"
+
+#: templates/treasury/remittance_list.html:19
+msgid "Transfers without remittances"
+msgstr "Transactions sans remise associée"
+
+#: templates/treasury/remittance_list.html:24
+msgid "There is no transaction without any linked remittance."
+msgstr "Il n'y a pas de transactions sans remise associée."
+
+#: templates/treasury/remittance_list.html:30
+msgid "Transfers with opened remittances"
+msgstr "Transactions avec remise associée ouverte"
+
+#: templates/treasury/remittance_list.html:35
+msgid "There is no transaction without an opened linked remittance."
+msgstr "Il n'y a pas de transaction sans remise ouverte associée."
+
+#: templates/treasury/remittance_list.html:41
+msgid "Closed remittances"
+msgstr "Remises fermées"
