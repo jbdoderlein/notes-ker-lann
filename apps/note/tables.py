@@ -58,7 +58,7 @@ class HistoryTable(tables.Table):
 
 # function delete_button(id) provided in template file
 delete_template = """ 
-    <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> {{ delete_trans }}</a>
+    <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
 """
     
 class AliasTable(tables.Table):
@@ -73,9 +73,16 @@ class AliasTable(tables.Table):
 
     show_header = False
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
-    delete = tables.TemplateColumn(template_code=delete_template,
-                                   extra_context={"delete_trans":_('delete')},
-                                   attrs={'td':{'class': 'col-sm-1'}})
+    # delete = tables.TemplateColumn(template_code=delete_template,
+    #                                attrs={'td':{'class': 'col-sm-1'}})
+    
+    delete = tables.LinkColumn('member:user_alias_delete',
+                               args=[A('pk')],
+                               attrs={
+                                   'td': {'class': 'col-sm-2'},
+                                   'a': {'class': 'btn btn-danger'}},
+                               text='delete', accessor='pk')
+
 class ButtonTable(tables.Table):
     class Meta:
         attrs = {
