@@ -3,6 +3,19 @@
 {% load i18n %}
 {% block content %}
 
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <a href="{% url "treasury:invoice_list" %}" class="btn btn-sm btn-outline-primary">
+                    {% trans "Invoice" %}s
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-primary active">
+                    {% trans "Remittance" %}s
+                </a>
+            </div>
+        </div>
+    </div>
+
     <h2>{% trans "Opened remittances" %}</h2>
     {% if opened_remittances.data %}
         {% render_table opened_remittances %}
