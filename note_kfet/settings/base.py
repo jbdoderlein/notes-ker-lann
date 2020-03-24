@@ -128,7 +128,6 @@ PASSWORD_HASHERS = [
 
 AUTHENTICATION_BACKENDS = (
     'permission.backends.PermissionBackend',  # Custom role-based permission system
-    'cas.backends.CASBackend',  # For CAS connections
 )
 
 REST_FRAMEWORK = {
