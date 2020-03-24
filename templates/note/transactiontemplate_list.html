@@ -61,7 +61,7 @@ function search_field_moved(secondfield) {
 // on click of button "delete" , call the API 
  function delete_button(button_id){
      $.ajax({
-         url:"/api/note/transaction/template/"+button_id,
+         url:"/api/note/transaction/template/"+button_id+"/",
          method:"DELETE",
          headers: {"X-CSRFTOKEN": CSRF_TOKEN}
      })
@@ -69,7 +69,9 @@ function search_field_moved(secondfield) {
           addMsg('{% trans "button successfully deleted "%}','success');
           $("#buttons_table").load("{% url 'note:template_list' %} #buttons_table");
       })
-      .fail(addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' ));
+      .fail(function(){
+          addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
+      });
  }
 </script>
 {% endblock %}
