@@ -14,9 +14,14 @@
     </div>
 </div>
 <div class="row justify-content-center">   
-<div class="col-md-10">
-    {% render_table table %}
-</div>
+    <div class="col-md-10 card shadow">
+        <div class="card-header text-center">
+            <h5> {% trans "buttons listing "%}</h5>
+        </div>
+        <div class="card" id="buttons_table">
+            {% render_table table %}
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -40,7 +45,6 @@ function getInfo() {
         $('table tr').show();
     }       
 }
-
 var timer;
 var timer_on;
 /* Fontion appelée quand le texte change (délenche le timer) */
@@ -53,6 +57,22 @@ function search_field_moved(secondfield) {
         timer = setTimeout("getInfo(" + secondfield + ")", 300);
         timer_on = true;
     }
+}
+// on click of button "delete" , call the API 
+ function delete_button(button_id){
+     console.log(button_id);
+     $.ajax({
+         url:"/api/note/transaction/template/"+button_id,
+         method:"DELETE",
+         headers: {
+            "X-CSRFTOKEN": CSRF_TOKEN
+         },
+         success: function(){
+             addMsg('{% trans "button successfully deleted "%}','success');
+             $("#buttons_table").load('{% url "note:template_list" %} #buttons_tables');
+         },
+         error: addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
+     });
 }
 </script>
 {% endblock %}

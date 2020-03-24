@@ -90,5 +90,10 @@ class ButtonTable(tables.Table):
 
         model = TransactionTemplate
 
+    
+    delete = tables.TemplateColumn(template_code="""
+    <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> delete </a>
+    """)
+    
     def render_amount(self, value):
         return pretty_money(value)
