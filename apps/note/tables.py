@@ -87,10 +87,10 @@ class ButtonTable(tables.Table):
     class Meta:
         attrs = {
             'class':
-                'table table-bordered condensed table-striped table-hover'
+                'table table-bordered condensed table-hover'
         }
         row_attrs = {
-            'class': 'table-row',
+            'class': lambda record: 'table-row ' + 'table-success' if record.display else 'table-danger',
             'id': lambda record: "row-"+str(record.pk),
             'data-href': lambda record: record.pk
         }
