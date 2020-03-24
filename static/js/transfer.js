@@ -39,10 +39,21 @@ $(document).ready(function() {
 
                 last.quantity = 1;
 
-                $.getJSON("/api/user/" + last.note.user + "/", function(user) {
-                    $("#last_name").val(user.last_name);
-                    $("#first_name").val(user.first_name);
-                });
+                if (!last.note.user) {
+                    $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
+                        last.note.user = note.user;
+                        $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                            $("#last_name").val(user.last_name);
+                            $("#first_name").val(user.first_name);
+                        });
+                    });
+                }
+                else {
+                    $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                        $("#last_name").val(user.last_name);
+                        $("#first_name").val(user.first_name);
+                    });
+                }
             }
 
             return true;

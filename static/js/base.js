@@ -67,6 +67,7 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
             note.display_image = new_note.display_image.replace("http:", "https:");
             note.name = new_note.name;
             note.balance = new_note.balance;
+            note.user = new_note.user;
 
             displayNote(note, alias, user_note_field, profile_pic_field);
         });
@@ -151,10 +152,13 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
     let old_pattern = null;
 
-    // When the user type "Enter", the first alias is clicked
+    // When the user type "Enter", the first alias is clicked, and the informations are displayed
     field.keypress(function(event) {
-        if (event.originalEvent.charCode === 13)
-            $("#" + alias_matched_id + " li").first().trigger("click");
+        if (event.originalEvent.charCode === 13) {
+            let li_obj = $("#" + alias_matched_id + " li").first();
+            displayNote(notes[0], li_obj.text(), user_note_field, profile_pic_field);
+            li_obj.trigger("click");
+        }
     });
 
     // When the user type something, the matched aliases are refreshed
