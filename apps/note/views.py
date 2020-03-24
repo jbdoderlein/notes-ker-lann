@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, UpdateView
 from django_tables2 import SingleTableView
 from django.urls import reverse_lazy
 from permission.backends import PermissionBackend

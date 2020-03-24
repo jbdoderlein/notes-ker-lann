@@ -94,6 +94,7 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name', 'amount', 'display', 'category', ]
     search_fields = ['$name', ]
 
+
 class TransactionViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.

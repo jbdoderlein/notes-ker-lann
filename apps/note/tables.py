@@ -62,6 +62,7 @@ DELETE_TEMPLATE = """
     <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
 """
 
+
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
@@ -84,6 +85,7 @@ class AliasTable(tables.Table):
                                    'a': {'class': 'btn btn-danger'}},
                                text='delete', accessor='pk')
 
+
 class ButtonTable(tables.Table):
     class Meta:
         attrs = {
@@ -92,7 +94,7 @@ class ButtonTable(tables.Table):
         }
         row_attrs = {
             'class': lambda record: 'table-row ' + 'table-success' if record.display else 'table-danger',
-            'id': lambda record: "row-"+str(record.pk),
+            'id': lambda record: "row-" + str(record.pk),
             'data-href': lambda record: record.pk
         }
 
