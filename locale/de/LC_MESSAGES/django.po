@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-24 01:00+0100\n"
+"POT-Creation-Date: 2020-03-24 15:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -576,28 +576,29 @@ msgstr ""
 msgid "Unit price"
 msgstr ""
 
-#: apps/treasury/models.py:106
+#: apps/treasury/models.py:120
 msgid "Date"
 msgstr ""
 
-#: apps/treasury/models.py:112
+#: apps/treasury/models.py:126
 msgid "Type"
 msgstr ""
 
-#: apps/treasury/models.py:117
+#: apps/treasury/models.py:131
 msgid "Comment"
 msgstr ""
 
-#: apps/treasury/models.py:122
+#: apps/treasury/models.py:136
 msgid "Closed"
 msgstr ""
 
-#: apps/treasury/models.py:145
+#: apps/treasury/models.py:159
 msgid "Remittance #{:d}: {}"
 msgstr ""
 
-#: apps/treasury/models.py:164 apps/treasury/tables.py:64
-#: apps/treasury/tables.py:72
+#: apps/treasury/models.py:178 apps/treasury/tables.py:64
+#: apps/treasury/tables.py:72 templates/treasury/invoice_list.html:13
+#: templates/treasury/remittance_list.html:13
 msgid "Remittance"
 msgstr ""
 
@@ -605,7 +606,8 @@ msgstr ""
 msgid "Invoice #{:d}"
 msgstr ""
 
-#: apps/treasury/tables.py:19
+#: apps/treasury/tables.py:19 templates/treasury/invoice_list.html:10
+#: templates/treasury/remittance_list.html:10
 msgid "Invoice"
 msgstr ""
 
@@ -952,7 +954,7 @@ msgstr ""
 msgid "Remove product"
 msgstr ""
 
-#: templates/treasury/invoice_list.html:8
+#: templates/treasury/invoice_list.html:21
 msgid "New invoice"
 msgstr ""
 
@@ -977,34 +979,34 @@ msgstr ""
 msgid "There is no transaction linked with this remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:6
+#: templates/treasury/remittance_list.html:19
 msgid "Opened remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:11
+#: templates/treasury/remittance_list.html:24
 msgid "There is no opened remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:15
+#: templates/treasury/remittance_list.html:28
 msgid "New remittance"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:19
+#: templates/treasury/remittance_list.html:32
 msgid "Transfers without remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:24
+#: templates/treasury/remittance_list.html:37
 msgid "There is no transaction without any linked remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:30
+#: templates/treasury/remittance_list.html:43
 msgid "Transfers with opened remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:35
+#: templates/treasury/remittance_list.html:48
 msgid "There is no transaction without an opened linked remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:41
+#: templates/treasury/remittance_list.html:54
 msgid "Closed remittances"
 msgstr ""

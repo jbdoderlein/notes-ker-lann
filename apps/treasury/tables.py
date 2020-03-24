@@ -56,7 +56,7 @@ class RemittanceTable(tables.Table):
         }
         model = Remittance
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'date', 'type', 'comment', 'count', 'amount', 'view',)
+        fields = ('id', 'date', 'remittance_type', 'comment', 'count', 'amount', 'view',)
 
 
 class SpecialTransactionTable(tables.Table):

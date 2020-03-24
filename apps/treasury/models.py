@@ -96,6 +96,20 @@ class Product(models.Model):
         return self.total / 100
 
 
+class RemittanceType(models.Model):
+    """
+    Store what kind of remittances can be stored.
+    """
+
+    note = models.OneToOneField(
+        NoteSpecial,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return str(self.note)
+
+
 class Remittance(models.Model):
     """
     Treasurers want to regroup checks or bank transfers in bank remittances.
@@ -106,8 +120,8 @@ class Remittance(models.Model):
         verbose_name=_("Date"),
     )
 
-    type = models.ForeignKey(
-        NoteSpecial,
+    remittance_type = models.ForeignKey(
+        RemittanceType,
         on_delete=models.PROTECT,
         verbose_name=_("Type"),
     )
@@ -133,13 +147,13 @@ class Remittance(models.Model):
     def amount(self):
         return sum(transaction.total for transaction in self.transactions.all())
 
-    def full_clean(self, exclude=None, validate_unique=True):
-        ret = super().full_clean(exclude, validate_unique)
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
 
-        if self.transactions.filter(~Q(source=self.type)).exists():
+        if self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
             raise ValidationError("All transactions in a remittance must have the same type")
 
-        return ret
+        return super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return _("Remittance #{:d}: {}").format(self.id, self.comment, )

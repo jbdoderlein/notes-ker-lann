@@ -5,8 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from api.viewsets import ReadProtectedModelViewSet
 
-from .serializers import InvoiceSerializer, ProductSerializer
-from ..models import Invoice, Product
+from .serializers import InvoiceSerializer, ProductSerializer, RemittanceTypeSerializer, RemittanceSerializer
+from ..models import Invoice, Product, RemittanceType, Remittance
 
 
 class InvoiceViewSet(ReadProtectedModelViewSet):
@@ -31,3 +31,23 @@ class ProductViewSet(ReadProtectedModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$designation', ]
+
+
+class RemittanceTypeViewSet(ReadProtectedModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `RemittanceType` objects, serialize it to JSON with the given serializer
+    then render it on /api/treasury/remittance_type/
+    """
+    queryset = RemittanceType.objects.all()
+    serializer_class = RemittanceTypeSerializer
+
+
+class RemittanceViewSet(ReadProtectedModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `Remittance` objects, serialize it to JSON with the given serializer,
+    then render it on /api/treasury/remittance/
+    """
+    queryset = Remittance.objects.all()
+    serializer_class = RemittanceSerializer

@@ -17,11 +17,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View, TemplateView
 from django_tables2 import SingleTableView
-from note.models import SpecialTransaction
+from note.models import SpecialTransaction, NoteSpecial
 from note_kfet.settings.base import BASE_DIR
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
-from .models import Invoice, Product, Remittance, SpecialTransactionProxy
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy, RemittanceType
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
@@ -212,11 +212,11 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
         ctx["opened_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=False).all())
         ctx["closed_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=True).reverse().all())
         ctx["special_transactions_no_remittance"] = SpecialTransactionTable(
-            data=SpecialTransaction.objects.filter(source__polymorphic_ctype__model="notespecial",
+            data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).all(),
             exclude=('remittance_remove', ))
         ctx["special_transactions_with_remittance"] = SpecialTransactionTable(
-            data=SpecialTransaction.objects.filter(source__polymorphic_ctype__model="notespecial",
+            data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance__closed=False).all(),
             exclude=('remittance_add', ))
 
@@ -236,7 +236,6 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        form = ctx["form"]
         ctx["table"] = RemittanceTable(data=Remittance.objects.all())
         data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all()
         ctx["special_transactions"] = SpecialTransactionTable(
@@ -262,7 +261,7 @@ class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
         form.fields["bank"].initial = self.object.transaction.bank
         form.fields["amount"].initial = self.object.transaction.amount
         form.fields["remittance"].queryset = form.fields["remittance"] \
-            .queryset.filter(type=self.object.transaction.source)
+            .queryset.filter(remittance_type__note=self.object.transaction.source)
 
         return ctx
 

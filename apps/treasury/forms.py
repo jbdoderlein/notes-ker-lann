@@ -49,8 +49,8 @@ class RemittanceForm(forms.ModelForm):
         self.helper = FormHelper()
 
         if self.instance.pk:
-            self.fields["type"].disabled = True
-            self.fields["type"].required = False
+            self.fields["remittance_type"].disabled = True
+            self.fields["remittance_type"].required = False
 
         if not self.instance.closed:
             self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
@@ -66,8 +66,8 @@ class RemittanceForm(forms.ModelForm):
 
         cleaned_data = super().clean()
 
-        if "type" in self.changed_data:
-            self.add_error("type", _("You can't change the type of the remittance."))
+        if self.instance.pk and cleaned_data.get("remittance_type") != self.instance.remittance_type:
+            self.add_error("remittance_type", _("You can't change the type of the remittance."))
 
         if "close" in self.data:
             self.instance.closed = True
@@ -77,7 +77,7 @@ class RemittanceForm(forms.ModelForm):
 
     class Meta:
         model = Remittance
-        fields = ('type', 'comment', )
+        fields = ('remittance_type', 'comment',)
 
 
 class LinkTransactionToRemittanceForm(forms.ModelForm):
