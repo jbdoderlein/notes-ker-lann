@@ -5,7 +5,6 @@ from django.apps import AppConfig
 from django.db.models import Q
 from django.db.models.signals import post_save, post_migrate
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
 
 
 class TreasuryConfig(AppConfig):
@@ -18,7 +17,7 @@ class TreasuryConfig(AppConfig):
         """
 
         from . import signals
-        from note.models import SpecialTransaction
+        from note.models import SpecialTransaction, NoteSpecial
         from treasury.models import SpecialTransactionProxy
         post_save.connect(signals.save_special_transaction, sender=SpecialTransaction)
 

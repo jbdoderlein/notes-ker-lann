@@ -1003,11 +1003,11 @@ msgstr "Il n'y a pas de transactions sans remise associée."
 
 #: templates/treasury/remittance_list.html:43
 msgid "Transfers with opened remittances"
-msgstr "Transactions avec remise associée ouverte"
+msgstr "Transactions associées à une remise ouverte"
 
 #: templates/treasury/remittance_list.html:48
-msgid "There is no transaction without an opened linked remittance."
-msgstr "Il n'y a pas de transaction sans remise ouverte associée."
+msgid "There is no transaction with an opened linked remittance."
+msgstr "Il n'y a pas de transaction associée à une remise ouverte."
 
 #: templates/treasury/remittance_list.html:54
 msgid "Closed remittances"

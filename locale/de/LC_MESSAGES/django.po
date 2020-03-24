@@ -1004,7 +1004,7 @@ msgid "Transfers with opened remittances"
 msgstr ""
 
 #: templates/treasury/remittance_list.html:48
-msgid "There is no transaction without an opened linked remittance."
+msgid "There is no transaction with an opened linked remittance."
 msgstr ""
 
 #: templates/treasury/remittance_list.html:54

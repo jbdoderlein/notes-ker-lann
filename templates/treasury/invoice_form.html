@@ -6,22 +6,29 @@
     <p><a class="btn btn-default" href="{% url 'treasury:invoice_list' %}">{% trans "Invoices list" %}</a></p>
     <form method="post" action="">
         {% csrf_token %}
+        {# Render the invoice form #}
         {% crispy form %}
+        {# The next part concerns the product formset #}
+        {# Generate some hidden fields that manage the number of products, and make easier the parsing #}
         {{ formset.management_form }}
         <table class="table table-condensed table-striped">
-        {% for form in formset %}
-            {% if forloop.first %}
-                <thead><tr>
-                    <th>{{ form.designation.label }}<span class="asteriskField">*</span></th>
-                    <th>{{ form.quantity.label }}<span class="asteriskField">*</span></th>
-                    <th>{{ form.amount.label }}<span class="asteriskField">*</span></th>
-                </tr></thead>
-                <tbody id="form_body" >
-            {% endif %}
-                  <tr class="row-formset">
+            {# Fill initial data #}
+            {% for form in formset %}
+                {% if forloop.first %}
+                    <thead>
+                    <tr>
+                        <th>{{ form.designation.label }}<span class="asteriskField">*</span></th>
+                        <th>{{ form.quantity.label }}<span class="asteriskField">*</span></th>
+                        <th>{{ form.amount.label }}<span class="asteriskField">*</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="form_body">
+                {% endif %}
+                <tr class="row-formset">
                     <td>{{ form.designation }}</td>
                     <td>{{ form.quantity }} </td>
                     <td>
+                        {# Use custom input for amount, with the € symbol #}
                         <div class="input-group">
                             <input type="number" name="product_set-{{ forloop.counter0 }}-amount" min="0" step="0.01"
                                    id="id_product_set-{{ forloop.counter0 }}-amount"
@@ -31,13 +38,15 @@
                             </div>
                         </div>
                     </td>
+                    {# These fields are hidden but handled by the formset to link the id and the invoice id #}
                     {{ form.invoice }}
                     {{ form.id }}
-                 </tr>
-        {% endfor %}
-        </tbody>
+                </tr>
+            {% endfor %}
+            </tbody>
         </table>
 
+        {# Display buttons to add and remove products #}
         <div class="btn-group btn-block" role="group">
             <button type="button" id="add_more" class="btn btn-primary">{% trans "Add product" %}</button>
             <button type="button" id="remove_one" class="btn btn-danger">{% trans "Remove product" %}</button>
@@ -49,43 +58,44 @@
     </form>
 
     <div id="empty_form" style="display: none;">
+        {# Hidden div that store an empty product form, to be copied into new forms #}
         <table class='no_error'>
             <tbody id="for_real">
-                <tr class="row-formset">
-                    <td>{{ formset.empty_form.designation }}</td>
-                    <td>{{ formset.empty_form.quantity }} </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" name="product_set-__prefix__-amount" min="0" step="0.01"
-                                   id="id_product_set-__prefix__-amount">
-                            <div class="input-group-append">
-                                <span class="input-group-text">€</span>
-                            </div>
+            <tr class="row-formset">
+                <td>{{ formset.empty_form.designation }}</td>
+                <td>{{ formset.empty_form.quantity }} </td>
+                <td>
+                    <div class="input-group">
+                        <input type="number" name="product_set-__prefix__-amount" min="0" step="0.01"
+                               id="id_product_set-__prefix__-amount">
+                        <div class="input-group-append">
+                            <span class="input-group-text">€</span>
                         </div>
-                    </td>
-                    {{ formset.empty_form.invoice }}
-                    {{ formset.empty_form.id }}
-                </tr>
+                    </div>
+                </td>
+                {{ formset.empty_form.invoice }}
+                {{ formset.empty_form.id }}
+            </tr>
             </tbody>
         </table>
     </div>
 {% endblock %}
 
 {% block extrajavascript %}
-    <script src="{% static 'js/dynamic-formset.js' %}"></script>
     <script>
+        {# Script that handles add and remove lines #}
         IDS = {};
 
         $("#id_product_set-TOTAL_FORMS").val($(".row-formset").length - 1);
 
-        $('#add_more').click(function() {
+        $('#add_more').click(function () {
             var form_idx = $('#id_product_set-TOTAL_FORMS').val();
             $('#form_body').append($('#for_real').html().replace(/__prefix__/g, form_idx));
             $('#id_product_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
             $('#id_product_set-' + parseInt(form_idx) + '-id').val(IDS[parseInt(form_idx)]);
         });
 
-        $('#remove_one').click(function() {
+        $('#remove_one').click(function () {
             let form_idx = $('#id_product_set-TOTAL_FORMS').val();
             if (form_idx > 0) {
                 IDS[parseInt(form_idx) - 1] = $('#id_product_set-' + (parseInt(form_idx) - 1) + '-id').val();

@@ -11,6 +11,9 @@ from .models import Invoice, Remittance
 
 
 class InvoiceTable(tables.Table):
+    """
+    List all invoices.
+    """
     id = tables.LinkColumn("treasury:invoice_update",
                            args=[A("pk")],
                            text=lambda record: _("Invoice #{:d}").format(record.id), )
@@ -35,6 +38,10 @@ class InvoiceTable(tables.Table):
 
 
 class RemittanceTable(tables.Table):
+    """
+    List all remittances.
+    """
+
     count = tables.Column(verbose_name=_("Transaction count"))
 
     amount = tables.Column(verbose_name=_("Amount"))
@@ -60,6 +67,11 @@ class RemittanceTable(tables.Table):
 
 
 class SpecialTransactionTable(tables.Table):
+    """
+    List special credit transactions that are (or not, following the queryset) attached to a remittance.
+    """
+
+    # Display add and remove buttons. Use the `exclude` field to select what is needed.
     remittance_add = tables.LinkColumn("treasury:link_transaction",
                                        verbose_name=_("Remittance"),
                                        args=[A("specialtransactionproxy.pk")],

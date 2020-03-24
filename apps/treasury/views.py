@@ -21,7 +21,7 @@ from note.models import SpecialTransaction, NoteSpecial
 from note_kfet.settings.base import BASE_DIR
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
-from .models import Invoice, Product, Remittance, SpecialTransactionProxy, RemittanceType
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
@@ -34,9 +34,12 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         form = context['form']
         form.helper = FormHelper()
+        # Remove form tag on the generation of the form in the template (already present on the template)
         form.helper.form_tag = False
+        # The formset handles the set of the products
         form_set = ProductFormSet(instance=form.instance)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
@@ -48,6 +51,8 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         ret = super().form_valid(form)
 
         kwargs = {}
+
+        # The user type amounts in cents. We convert it in euros.
         for key in self.request.POST:
             value = self.request.POST[key]
             if key.endswith("amount") and value:
@@ -55,9 +60,11 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
             elif value:
                 kwargs[key] = value
 
+        # For each product, we save it
         formset = ProductFormSet(kwargs, instance=form.instance)
         if formset.is_valid():
             for f in formset:
+                # We don't save the product if the designation is not entered, ie. if the line is empty
                 if f.is_valid() and f.instance.designation:
                     f.save()
                     f.instance.save()
@@ -87,10 +94,14 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         form = context['form']
         form.helper = FormHelper()
+        # Remove form tag on the generation of the form in the template (already present on the template)
         form.helper.form_tag = False
+        # Fill the intial value for the date field, with the initial date of the model instance
         form.fields['date'].initial = form.instance.date
+        # The formset handles the set of the products
         form_set = ProductFormSet(instance=form.instance)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
@@ -102,6 +113,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
         ret = super().form_valid(form)
 
         kwargs = {}
+        # The user type amounts in cents. We convert it in euros.
         for key in self.request.POST:
             value = self.request.POST[key]
             if key.endswith("amount") and value:
@@ -111,14 +123,17 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
 
         formset = ProductFormSet(kwargs, instance=form.instance)
         saved = []
+        # For each product, we save it
         if formset.is_valid():
             for f in formset:
+                # We don't save the product if the designation is not entered, ie. if the line is empty
                 if f.is_valid() and f.instance.designation:
                     f.save()
                     f.instance.save()
                     saved.append(f.instance.pk)
                 else:
                     f.instance = None
+            # Remove old products that weren't given in the form
             Product.objects.filter(~Q(pk__in=saved), invoice=form.instance).delete()
 
         return ret
@@ -129,7 +144,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
 
 class InvoiceRenderView(LoginRequiredMixin, View):
     """
-    Render Invoice as generated PDF
+    Render Invoice as a generated PDF with the given information and a LaTeX template
     """
 
     def get(self, request, **kwargs):
@@ -137,6 +152,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         invoice = Invoice.objects.get(pk=pk)
         products = Product.objects.filter(invoice=invoice).all()
 
+        # Informations of the BDE. Should be updated when the school will move.
         invoice.place = "Cachan"
         invoice.my_name = "BDE ENS Cachan"
         invoice.my_address_street = "61 avenue du Président Wilson"
@@ -147,13 +163,17 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         invoice.rib_key = 14
         invoice.bic = "SOGEFRPP"
 
+        # Replace line breaks with the LaTeX equivalent
         invoice.description = invoice.description.replace("\r", "").replace("\n", "\\\\ ")
         invoice.address = invoice.address.replace("\r", "").replace("\n", "\\\\ ")
+        # Fill the template with the information
         tex = render_to_string("treasury/invoice_sample.tex", dict(obj=invoice, products=products))
+
         try:
             os.mkdir(BASE_DIR + "/tmp")
         except FileExistsError:
             pass
+        # We render the file in a temporary directory
         tmp_dir = mkdtemp(prefix=BASE_DIR + "/tmp/")
 
         try:
@@ -161,21 +181,27 @@ class InvoiceRenderView(LoginRequiredMixin, View):
                 f.write(tex.encode("UTF-8"))
             del tex
 
+            # The file has to be rendered twice
             for _ in range(2):
                 error = subprocess.Popen(
                     ["pdflatex", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
+                    stdin=open(os.devnull, "r"),
+                    stderr=open(os.devnull, "wb"),
+                    stdout=open(os.devnull, "wb"),
                 ).wait()
 
                 if error:
                     raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")")
 
+            # Display the generated pdf as a HTTP Response
             pdf = open("{}/invoice-{}.pdf".format(tmp_dir, pk), 'rb').read()
             response = HttpResponse(pdf, content_type="application/pdf")
             response['Content-Disposition'] = "inline;filename=invoice-{:d}.pdf".format(pk)
         except IOError as e:
             raise e
         finally:
+            # Delete all temporary files
             shutil.rmtree(tmp_dir)
 
         return response
@@ -211,6 +237,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
 
         ctx["opened_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=False).all())
         ctx["closed_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=True).reverse().all())
+
         ctx["special_transactions_no_remittance"] = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).all(),
@@ -246,6 +273,10 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
+    """
+    Attach a special transaction to a remittance
+    """
+
     model = SpecialTransactionProxy
     form_class = LinkTransactionToRemittanceForm
 
@@ -267,10 +298,15 @@ class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
 
 
 class UnlinkTransactionToRemittanceView(LoginRequiredMixin, View):
+    """
+    Unlink a special transaction and its remittance
+    """
+
     def get(self, *args, **kwargs):
         pk = kwargs["pk"]
         transaction = SpecialTransactionProxy.objects.get(pk=pk)
 
+        # The remittance must be open (or inexistant)
         if transaction.remittance and transaction.remittance.closed:
             raise ValidationError("Remittance is already closed.")
 

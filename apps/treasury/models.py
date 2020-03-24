@@ -10,7 +10,7 @@ from note.models import NoteSpecial, SpecialTransaction
 
 class Invoice(models.Model):
     """
-    An invoice model that can generate a true invoice
+    An invoice model that can generates a true invoice.
     """
 
     id = models.PositiveIntegerField(
@@ -62,7 +62,7 @@ class Invoice(models.Model):
 
 class Product(models.Model):
     """
-    Product that appear on an invoice.
+    Product that appears on an invoice.
     """
 
     invoice = models.ForeignKey(
@@ -138,18 +138,28 @@ class Remittance(models.Model):
 
     @property
     def transactions(self):
+        """
+        :return: Transactions linked to this remittance.
+        """
+        if not self.pk:
+            return SpecialTransaction.objects.none()
         return SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self)
 
     def count(self):
+        """
+        Linked transactions count.
+        """
         return self.transactions.count()
 
     @property
     def amount(self):
+        """
+        Total amount of the remittance.
+        """
         return sum(transaction.total for transaction in self.transactions.all())
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        # Check if all transactions have the right type.
         if self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
             raise ValidationError("All transactions in a remittance must have the same type")
 
