@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from rest_framework.permissions import DjangoObjectPermissions
+from .backends import PermissionBackend
 
 SAFE_METHODS = ('HEAD', 'OPTIONS', )
 

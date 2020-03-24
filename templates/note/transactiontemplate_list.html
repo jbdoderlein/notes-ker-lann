@@ -60,7 +60,6 @@ function search_field_moved(secondfield) {
 }
 // on click of button "delete" , call the API 
  function delete_button(button_id){
-     console.log(button_id);
      $.ajax({
          url:"/api/note/transaction/template/"+button_id,
          method:"DELETE",

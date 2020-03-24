@@ -109,7 +109,7 @@ class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
-    success_url = reverse_lazy('template_list')
+    success_url = reverse_lazy('note:template_list')
 
 class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
