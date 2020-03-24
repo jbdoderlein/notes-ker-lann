@@ -5,6 +5,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
+from rest_framework import viewsets
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
     TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -81,7 +82,7 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     search_fields = ['$name', ]
 
 
-class TransactionTemplateViewSet(ReadProtectedModelViewSet):
+class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
@@ -89,8 +90,9 @@ class TransactionTemplateViewSet(ReadProtectedModelViewSet):
     """
     queryset = TransactionTemplate.objects.all()
     serializer_class = TransactionTemplateSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'display', 'category', ]
+    search_fields = ['$name', ]
 
 
 class TransactionViewSet(ReadProtectedModelViewSet):

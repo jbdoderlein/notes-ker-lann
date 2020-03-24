@@ -9,7 +9,7 @@ from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
 
 from .models.notes import Alias
-from .models.transactions import Transaction
+from .models.transactions import Transaction, TransactionTemplate
 from .templatetags.pretty_money import pretty_money
 
 
@@ -57,6 +57,12 @@ class HistoryTable(tables.Table):
         return "✔" if value else "✖"
 
 
+# function delete_button(id) provided in template file
+DELETE_TEMPLATE = """
+    <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
+"""
+
+
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
@@ -69,9 +75,41 @@ class AliasTable(tables.Table):
 
     show_header = False
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
+    # delete = tables.TemplateColumn(template_code=delete_template,
+    #                                attrs={'td':{'class': 'col-sm-1'}})
+
     delete = tables.LinkColumn('member:user_alias_delete',
                                args=[A('pk')],
                                attrs={
                                    'td': {'class': 'col-sm-2'},
                                    'a': {'class': 'btn btn-danger'}},
                                text='delete', accessor='pk')
+
+
+class ButtonTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class':
+                'table table-bordered condensed table-hover'
+        }
+        row_attrs = {
+            'class': lambda record: 'table-row ' + 'table-success' if record.display else 'table-danger',
+            'id': lambda record: "row-" + str(record.pk),
+            'data-href': lambda record: record.pk
+        }
+
+        model = TransactionTemplate
+
+    edit = tables.LinkColumn('note:template_update',
+                             args=[A('pk')],
+                             attrs={'td': {'class': 'col-sm-1'},
+                                    'a': {'class': 'btn btn-primary'}},
+                             text=_('edit'),
+                             accessor='pk')
+
+    delete = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+                                   extra_context={"delete_trans": _('delete')},
+                                   attrs={'td': {'class': 'col-sm-1'}})
+
+    def render_amount(self, value):
+        return pretty_money(value)
