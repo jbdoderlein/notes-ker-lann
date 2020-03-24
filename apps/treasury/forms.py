@@ -121,6 +121,8 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
         # Add submit button
         self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
 
+        self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)
+
     def clean_last_name(self):
         """
         Replace the first name in the information of the transaction.
