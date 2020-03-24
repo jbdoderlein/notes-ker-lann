@@ -111,20 +111,13 @@ class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
 
+
 class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
     List TransactionsTemplates
     """
     model = TransactionTemplate
     table_class = ButtonTable
-
-    def get_queryset(self):
-        name = self.request.GET.get('name','')
-        if (name != ''):
-            object_list = self.model.objects.filter(name__icontains = name)
-        else:
-            object_list = self.model.objects.all()
-        return object_list
 
 
 class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
@@ -133,6 +126,7 @@ class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
     model = TransactionTemplate
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
+
 
 class ConsoView(LoginRequiredMixin, SingleTableView):
     """
