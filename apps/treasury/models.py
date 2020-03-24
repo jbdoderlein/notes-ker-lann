@@ -79,7 +79,7 @@ class Product(models.Model):
         verbose_name=_("Quantity")
     )
 
-    amount = models.PositiveIntegerField(
+    amount = models.IntegerField(
         verbose_name=_("Unit price")
     )
 

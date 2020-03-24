@@ -30,7 +30,7 @@
                     <td>
                         {# Use custom input for amount, with the € symbol #}
                         <div class="input-group">
-                            <input type="number" name="product_set-{{ forloop.counter0 }}-amount" min="0" step="0.01"
+                            <input type="number" name="product_set-{{ forloop.counter0 }}-amount" step="0.01"
                                    id="id_product_set-{{ forloop.counter0 }}-amount"
                                    value="{{ form.instance.amount|cents_to_euros }}">
                             <div class="input-group-append">
@@ -66,7 +66,7 @@
                 <td>{{ formset.empty_form.quantity }} </td>
                 <td>
                     <div class="input-group">
-                        <input type="number" name="product_set-__prefix__-amount" min="0" step="0.01"
+                        <input type="number" name="product_set-__prefix__-amount" step="0.01"
                                id="id_product_set-__prefix__-amount">
                         <div class="input-group-append">
                             <span class="input-group-text">€</span>
