@@ -260,18 +260,6 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
     });
 }
 
-function hover_validation_btn(id, show) {
-    let reason_obj = $("#invalidity_reason_" + id);
-    console.log(reason_obj.val());
-
-    if (show) {
-        reason_obj.show();
-        reason_obj.focus();
-    }
-    else
-        reason_obj.hide();
-}
-
 // When a validate button is clicked, we switch the validation status
 function in_validate(id, validated) {
 

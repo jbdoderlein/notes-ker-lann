@@ -35,9 +35,13 @@ class HistoryTable(tables.Table):
             "td": {
                 "id": lambda record: "validate_" + str(record.id),
                 "class": lambda record: str(record.valid).lower() + ' validate',
+                "data-toggle": "tooltip",
+                "title": lambda record: _("Click to invalidate") if record.valid else _("Click to validate"),
                 "onclick": lambda record: 'in_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
-                "onmouseover": lambda record: 'hover_validation_btn(' + str(record.id) + ', true)',
-                "onmouseout": lambda record: 'hover_validation_btn(' + str(record.id) + ', false)',
+                "onmouseover": lambda record: '$("#invalidity_reason_'
+                                              + str(record.id) + '").show();$("#invalidity_reason_'
+                                              + str(record.id) + '").focus();',
+                "onmouseout": lambda record: '$("#invalidity_reason_' + str(record.id) + '").hide()',
             }
         }
     )
@@ -63,10 +67,12 @@ class HistoryTable(tables.Table):
 
     def render_valid(self, value, record):
         val = "✔" if value else "✖"
-        val += "<br><input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
-               + "' value='" + (record.invalidity_reason.replace('\'', '&apos;') if record.invalidity_reason else "") \
+        val += "<input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
+               + "' value='" + (html.escape(record.invalidity_reason)
+                                if record.invalidity_reason else ("" if value else str(_("No reason specified")))) \
                + "'" + ("" if value else " disabled") \
-               + " style='display: none;'>"
+               + " placeholder='" + html.escape(_("invalidity reason").capitalize()) + "'" \
+               + " style='position: absolute; width: 15em; margin-left: -15.5em; margin-top: -2em; display: none;'>"
         return format_html(val)
 
 
