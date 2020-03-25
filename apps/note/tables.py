@@ -66,6 +66,9 @@ class HistoryTable(tables.Table):
         return html.unescape(value)
 
     def render_valid(self, value, record):
+        """
+        When the validation status is hovered, an input field is displayed to let the user specify an invalidity reason
+        """
         val = "✔" if value else "✖"
         val += "<input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
                + "' value='" + (html.escape(record.invalidity_reason)
