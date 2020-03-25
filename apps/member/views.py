@@ -269,10 +269,12 @@ class PictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
         self.object.note.save()
         return super().form_valid(form)
 
+
 class ProfilePictureUpdateView(PictureUpdateView):
     model = User
     template_name = 'member/profile_picture_update.html'
     context_object_name = 'user_object'
+
 
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
@@ -331,7 +333,7 @@ class ClubCreateView(LoginRequiredMixin, CreateView):
     model = Club
     form_class = ClubForm
     success_url = reverse_lazy('member:club_list')
-    
+
     def form_valid(self, form):
         return super().form_valid(form)
     
@@ -366,7 +368,7 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         context['member_list'] = club_member
         return context
 
-    
+
 class ClubUpdateView(LoginRequiredMixin, UpdateView):
     model = Club
     context_object_name = "club"
