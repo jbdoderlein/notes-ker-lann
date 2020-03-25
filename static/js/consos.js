@@ -199,8 +199,26 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "category": category,
             "template": template
         }, reset).fail(function (e) {
-            reset();
-
-            addMsg("Une erreur est survenue lors de la transaction : " + e.responseText, "danger");
+            $.post("/api/note/transaction/transaction/",
+            {
+                "csrfmiddlewaretoken": CSRF_TOKEN,
+                "quantity": quantity,
+                "amount": amount,
+                "reason": reason,
+                "valid": false,
+                "invalidity_reason": "Solde insuffisant",
+                "polymorphic_ctype": type,
+                "resourcetype": "RecurrentTransaction",
+                "source": source,
+                "destination": dest,
+                "category": category,
+                "template": template
+            }).done(function() {
+                reset();
+                addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger");
+            }).fail(function () {
+                reset();
+                addMsg("Une erreur est survenue lors de la transaction : " + e.responseText, "danger");
+            });
     });
 }

@@ -73,18 +73,38 @@ $("#transfer").click(function() {
                     "resourcetype": "Transaction",
                     "source": user_id,
                     "destination": dest.id
-                }, function () {
+                }).done(function () {
                     addMsg("Le transfert de "
                         + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
                         + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                     reset();
-                }).fail(function (err) {
-                    addMsg("Le transfert de "
-                        + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
-                        + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+                }).fail(function () {
+                    $.post("/api/note/transaction/transaction/",
+                    {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "quantity": dest.quantity,
+                        "amount": 100 * $("#amount").val(),
+                        "reason": $("#reason").val(),
+                        "valid": false,
+                        "invalidity_reason": "Solde insuffisant",
+                        "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
+                        "resourcetype": "Transaction",
+                        "source": user_id,
+                        "destination": dest.id
+                    }).done(function () {
+                        addMsg("Le transfert de "
+                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
+                            + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
 
-                reset();
+                        reset();
+                    }).fail(function (err) {
+                        addMsg("Le transfert de "
+                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
+                            + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+
+                    reset();
+                });
             });
         });
     }
@@ -102,18 +122,38 @@ $("#transfer").click(function() {
                         "resourcetype": "Transaction",
                         "source": source.id,
                         "destination": dest.id
-                    }, function () {
+                    }).done(function () {
                         addMsg("Le transfert de "
                             + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
                             + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                         reset();
                     }).fail(function (err) {
-                        addMsg("Le transfert de "
-                            + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                            + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+                        $.post("/api/note/transaction/transaction/",
+                        {
+                            "csrfmiddlewaretoken": CSRF_TOKEN,
+                            "quantity": source.quantity * dest.quantity,
+                            "amount": 100 * $("#amount").val(),
+                            "reason": $("#reason").val(),
+                            "valid": false,
+                            "invalidity_reason": "Solde insuffisant",
+                            "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
+                            "resourcetype": "Transaction",
+                            "source": source.id,
+                            "destination": dest.id
+                        }).done(function () {
+                            addMsg("Le transfert de "
+                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
 
-                        reset();
+                            reset();
+                        }).fail(function (err) {
+                            addMsg("Le transfert de "
+                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+
+                            reset();
+                    });
                 });
             });
         });
@@ -150,11 +190,11 @@ $("#transfer").click(function() {
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
-            }, function () {
+            }).done(function () {
                 addMsg("Le crédit/retrait a bien été effectué !", "success");
                 reset();
             }).fail(function (err) {
-                addMsg("Le crédit/transfert a échoué : " + err.responseText, "danger");
+                addMsg("Le crédit/retrait a échoué : " + err.responseText, "danger");
                 reset();
         });
     }
