@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags pretty_money %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <p><a class="btn btn-default" href="{% url 'treasury:remittance_list' %}">{% trans "Remittances list" %}</a></p>
+    {% crispy form %}
+{% endblock %}
