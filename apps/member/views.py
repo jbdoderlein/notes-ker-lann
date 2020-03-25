@@ -391,12 +391,12 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")
                                              | PermissionBackend.filter_queryset(self.request.user, Membership,
                                                                                  "change"))
-
     def get_context_data(self, **kwargs):
+        club = Club.objects.get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
         context['formset'] = MemberFormSet()
         context['helper'] = FormSetHelper()
-
+        context['club'] = club
         context['no_cache'] = True
 
         return context
