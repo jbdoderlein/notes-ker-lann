@@ -3,7 +3,6 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% block content %}
-<p><a class="btn btn-default" href="{% url 'note:template_list' %}">{% trans "Clubs list" %}</a></p>
 <form method="post">
 {% csrf_token %}
 {{form|crispy}}
