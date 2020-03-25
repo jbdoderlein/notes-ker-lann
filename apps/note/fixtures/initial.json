@@ -70,7 +70,7 @@
       "balance": 0,
       "last_negative": null,
       "is_active": true,
-      "display_image": "",
+      "display_image": "pic/default.png",
       "created_at": "2020-02-20T20:09:38.615Z"
     }
   },
@@ -85,7 +85,7 @@
       "balance": 0,
       "last_negative": null,
       "is_active": true,
-      "display_image": "",
+      "display_image": "pic/default.png",
       "created_at": "2020-02-20T20:16:14.753Z"
     }
   },

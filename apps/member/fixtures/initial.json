@@ -5,7 +5,7 @@
         "fields": {
             "name": "BDE",
             "email": "tresorerie.bde@example.com",
-            "membership_fee": 5,
+            "membership_fee": 500,
             "membership_duration": "396 00:00:00",
             "membership_start": "213 00:00:00",
             "membership_end": "273 00:00:00"
@@ -17,7 +17,7 @@
         "fields": {
             "name": "Kfet",
             "email": "tresorerie.bde@example.com",
-            "membership_fee": 35,
+            "membership_fee": 3500,
             "membership_duration": "396 00:00:00",
             "membership_start": "213 00:00:00",
             "membership_end": "273 00:00:00"
