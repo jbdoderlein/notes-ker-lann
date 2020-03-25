@@ -115,9 +115,17 @@ class Transaction(PolymorphicModel):
         verbose_name=_('reason'),
         max_length=255,
     )
+
     valid = models.BooleanField(
         verbose_name=_('valid'),
         default=True,
+    )
+
+    invalidity_reason = models.CharField(
+        verbose_name=_('invalidity reason'),
+        max_length=255,
+        default=None,
+        null=True,
     )
 
     class Meta:
@@ -151,6 +159,10 @@ class Transaction(PolymorphicModel):
         if self.valid:
             self.source.balance -= to_transfer
             self.destination.balance += to_transfer
+
+            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
+            # previously invalid
+            self.invalidity_reason = None
 
         # We save first the transaction, in case of the user has no right to transfer money
         super().save(*args, **kwargs)
