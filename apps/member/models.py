@@ -169,7 +169,7 @@ class Membership(models.Model):
     def save(self, *args, **kwargs):
         if self.club.parent_club is not None:
             if not Membership.objects.filter(user=self.user, club=self.club.parent_club):
-				raise ValidationError(_('User is not a member of the parent club'))
+                raise ValidationError(_('User is not a member of the parent club'))
         super().save(*args, **kwargs)
 
     class Meta:
