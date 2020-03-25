@@ -143,10 +143,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
         context['club_list'] = ClubTable(club_list)
-        context['title'] = _("Account #%(id)s: %(username)s") % {
-            'id': user.pk,
-            'username': user.username,
-        }
         return context
 
 
