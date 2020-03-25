@@ -168,15 +168,14 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         return context
 
 
+
+    
 class AliasView(LoginRequiredMixin, FormMixin, DetailView):
-    model = User
-    template_name = 'member/profile_alias.html'
-    context_object_name = 'user_object'
     form_class = AliasForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        note = context['user_object'].note
+        note = context['object'].note
         context["aliases"] = AliasTable(note.alias_set.all())
         return context
 
@@ -196,6 +195,11 @@ class AliasView(LoginRequiredMixin, FormMixin, DetailView):
         alias.note = self.object.note
         alias.save()
         return super().form_valid(form)
+
+class ProfileAliasView(AliasView):
+    model = User
+    template_name = 'member/profile_alias.html'
+    context_object_name = 'user_object'
 
 
 class DeleteAliasView(LoginRequiredMixin, DeleteView):
@@ -363,6 +367,11 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         # TODO: consider only valid Membership
         context['member_list'] = club_member
         return context
+
+class ClubAliasView(AliasView):
+    model = Club
+    template_name = 'member/club_alias.html'
+    context_object_name = 'club'
 
 
 class ClubUpdateView(LoginRequiredMixin, UpdateView):
