@@ -59,7 +59,7 @@ class HistoryTable(tables.Table):
 
 # function delete_button(id) provided in template file
 DELETE_TEMPLATE = """
-    <button id="{{ record.pk }}" class="btn btn-danger" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
+    <button id="{{ record.pk }}" class="btn btn-danger btn-sm" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
 """
 
 
@@ -103,7 +103,7 @@ class ButtonTable(tables.Table):
     edit = tables.LinkColumn('note:template_update',
                              args=[A('pk')],
                              attrs={'td': {'class': 'col-sm-1'},
-                                    'a': {'class': 'btn btn-primary'}},
+                                    'a': {'class': 'btn btn-sm btn-primary'}},
                              text=_('edit'),
                              accessor='pk')
 
