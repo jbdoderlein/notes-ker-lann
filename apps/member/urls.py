@@ -20,7 +20,6 @@ urlpatterns = [
     path('user/<int:pk>/update', views.UserUpdateView.as_view(), name="user_update_profile"),
     path('user/<int:pk>/update_pic', views.ProfilePictureUpdateView.as_view(), name="user_update_pic"),
     path('user/<int:pk>/aliases', views.ProfileAliasView.as_view(), name="user_alias"),
-    path('user/aliases/delete/<int:pk>', views.DeleteAliasView.as_view(), name="user_alias_delete"),
     path('manage-auth-token/', views.ManageAuthTokens.as_view(), name='auth_token'),
     # API for the user autocompleter
     path('user/user-autocomplete', views.UserAutocomplete.as_view(), name="user_autocomplete"),
