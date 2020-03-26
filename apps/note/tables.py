@@ -77,7 +77,7 @@ class AliasTable(tables.Table):
     show_header = False
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
 
-    delete = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+    delete_btn = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                    extra_context={"delete_trans": _('delete')},
                                    attrs={'td': {'class': 'col-sm-1'}})
 
