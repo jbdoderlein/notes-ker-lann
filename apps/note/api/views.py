@@ -2,10 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+
+from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
     TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -59,7 +63,16 @@ class AliasViewSet(viewsets.ModelViewSet):
             #alias owner cannot be change once establish
             setattr(serializer_class.Meta, 'read_only_fields', ('note',))
         return serializer_class
-
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        try:
+            self.perform_destroy(instance)
+        except ValidationError as e:
+            print(e)
+            return Response({e.code:e.message},status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
     def get_queryset(self):
         """
         Parse query and apply filters.

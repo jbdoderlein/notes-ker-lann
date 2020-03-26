@@ -249,5 +249,5 @@ class Alias(models.Model):
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
             raise ValidationError(_("You can't delete your main alias."),
-                                  code="cant_delete_main_alias")
+                                  code="main_alias")
         return super().delete(using, keep_parents)
