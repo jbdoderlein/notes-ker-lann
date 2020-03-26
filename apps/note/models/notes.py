@@ -228,7 +228,7 @@ class Alias(models.Model):
                    for cat in {'M', 'P', 'Z', 'C'})).casefold()
 
     def clean(self):
-        normalized_name = Alias.normalize(self.name)
+        normalized_name = self.normalize(self.name)
         if len(normalized_name) >= 255:
             raise ValidationError(_('Alias is too long.'),
                                   code='alias_too_long')
@@ -242,6 +242,10 @@ class Alias(models.Model):
             pass
         self.normalized_name = normalized_name
 
+    def save(self,*args,**kwargs):
+        self.normalized_name = self.normalize(self.name)
+        super().save(*args,**kwargs)
+        
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
             raise ValidationError(_("You can't delete your main alias."),

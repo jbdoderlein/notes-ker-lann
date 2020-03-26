@@ -41,7 +41,7 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
         return queryset.distinct()
 
 
-class AliasViewSet(ReadProtectedModelViewSet):
+class AliasViewSet(viewsets.ModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
@@ -52,6 +52,13 @@ class AliasViewSet(ReadProtectedModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
     ordering_fields = ['name', 'normalized_name']
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method in ['PUT', 'PATCH']:
+            #alias owner cannot be change once establish
+            setattr(serializer_class.Meta, 'read_only_fields', ('note',))
+        return serializer_class
 
     def get_queryset(self):
         """
