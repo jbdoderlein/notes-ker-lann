@@ -67,7 +67,8 @@ class AliasTable(tables.Table):
     class Meta:
         attrs = {
             'class':
-                'table table condensed table-striped table-hover'
+                'table table condensed table-striped table-hover',
+            'id':"alias_table"
         }
         model = Alias
         fields = ('name',)
@@ -75,15 +76,11 @@ class AliasTable(tables.Table):
 
     show_header = False
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
-    # delete = tables.TemplateColumn(template_code=delete_template,
-    #                                attrs={'td':{'class': 'col-sm-1'}})
 
-    delete = tables.LinkColumn('member:user_alias_delete',
-                               args=[A('pk')],
-                               attrs={
-                                   'td': {'class': 'col-sm-2'},
-                                   'a': {'class': 'btn btn-danger'}},
-                               text='delete', accessor='pk')
+    delete = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+                                   extra_context={"delete_trans": _('delete')},
+                                   attrs={'td': {'class': 'col-sm-1'}})
+
 
 
 class ButtonTable(tables.Table):
