@@ -336,7 +336,7 @@ class ClubCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
-    
+
 
 class ClubListView(LoginRequiredMixin, SingleTableView):
     """

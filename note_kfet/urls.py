@@ -23,7 +23,6 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/', include('member.urls')),
     path('accounts/login/', CustomLoginView.as_view()),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
