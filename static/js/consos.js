@@ -200,7 +200,6 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "template": template
         }, reset).fail(function (e) {
             reset();
-
-            addMsg("Une erreur est survenue lors de la transaction : " + e.responseText, "danger");
+            errMsg(e.responseJSON);
     });
 }

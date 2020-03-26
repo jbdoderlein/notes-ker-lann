@@ -28,7 +28,15 @@ function addMsg(msg, alert_type) {
         + msg + "</div>\n";
     msgDiv.html(html);
 }
-
+/**
+ * add Muliple error message from err_obj
+ * @param err_obj {error_code:erro_message}
+ */
+function errMsg(errs_obj){
+    for (const err_msg of Object.values(errs_obj)) {
+              addMsg(err_msg,'danger');
+          }
+}
 /**
  * Reload the balance of the user on the right top corner
  */
