@@ -1,12 +1,9 @@
 {% load django_tables2 crispy_forms_tags i18n %}
 <div class="d-flex justify-content-center">
-    <form class=" text-center form my-2" action="" method="post">
-        {% csrf_token %}
-        {{ form |crispy }}
-        <button class="btn btn-primary mx-2" type="submit">
-            {% trans "Add alias" %}
-        </button>
-    </form>
+    <input id="alias_input" type="text" value=""/>
+    <button id="alias_submit" class="btn btn-primary mx-2" onclick="create_alias( {{ object.note.pk }} )" type="submit">
+        {% trans "Add alias" %}
+    </button>
 </div>
 <div class="card bg-light shadow">
     <div class="card-body">
