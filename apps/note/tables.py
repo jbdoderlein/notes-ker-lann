@@ -77,7 +77,7 @@ class AliasTable(tables.Table):
     show_header = False
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
 
-    delete_btn = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+    delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                    extra_context={"delete_trans": _('delete')},
                                    attrs={'td': {'class': 'col-sm-1'}})
 
@@ -104,7 +104,7 @@ class ButtonTable(tables.Table):
                              text=_('edit'),
                              accessor='pk')
 
-    delete = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+    delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                    extra_context={"delete_trans": _('delete')},
                                    attrs={'td': {'class': 'col-sm-1'}})
 
