@@ -72,7 +72,8 @@ $("#transfer").click(function() {
                     "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                     "resourcetype": "Transaction",
                     "source": user_id,
-                    "destination": dest.id
+                    "destination": dest.id,
+                    "destination_alias": dest.name
                 }).done(function () {
                     addMsg("Le transfert de "
                         + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
@@ -91,7 +92,8 @@ $("#transfer").click(function() {
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
                         "source": user_id,
-                        "destination": dest.id
+                        "destination": dest.id,
+                        "destination_alias": dest.name
                     }).done(function () {
                         addMsg("Le transfert de "
                             + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
@@ -121,7 +123,9 @@ $("#transfer").click(function() {
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
                         "source": source.id,
-                        "destination": dest.id
+                        "source_alias": source.name,
+                        "destination": dest.id,
+                        "destination_alias": dest.name
                     }).done(function () {
                         addMsg("Le transfert de "
                             + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
@@ -140,7 +144,9 @@ $("#transfer").click(function() {
                             "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                             "resourcetype": "Transaction",
                             "source": source.id,
-                            "destination": dest.id
+                            "source_alias": source.name,
+                            "destination": dest.id,
+                            "destination_alias": dest.name
                         }).done(function () {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
@@ -186,7 +192,9 @@ $("#transfer").click(function() {
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,
                 "resourcetype": "SpecialTransaction",
                 "source": source,
+                "source_alias": source.name,
                 "destination": dest,
+                "destination_alias": dest.name,
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()

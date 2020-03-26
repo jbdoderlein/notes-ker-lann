@@ -21,10 +21,28 @@ class HistoryTable(tables.Table):
                 'table table-condensed table-striped table-hover'
         }
         model = Transaction
-        exclude = ("id", "polymorphic_ctype", "invalidity_reason")
+        exclude = ("id", "polymorphic_ctype", "invalidity_reason", "source_alias", "destination_alias",)
         template_name = 'django_tables2/bootstrap4.html'
         sequence = ('...', 'type', 'total', 'valid',)
         orderable = False
+
+    source = tables.Column(
+        attrs={
+            "td": {
+                "data-toggle": "tooltip",
+                "title": lambda record: _("used alias").capitalize() + " : " + record.source_alias,
+            }
+        }
+    )
+
+    destination = tables.Column(
+        attrs={
+            "td": {
+                "data-toggle": "tooltip",
+                "title": lambda record: _("used alias").capitalize() + " : " + record.destination_alias,
+            }
+        }
+    )
 
     type = tables.Column()
 

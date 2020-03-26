@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 14:46+0100\n"
+"POT-Creation-Date: 2020-03-26 14:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,8 @@ msgstr "activité"
 
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:63 apps/member/models.py:114
-#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:210
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:25
+#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:232
 #: templates/member/profile_detail.html:15
 msgid "name"
 msgstr "nom"
@@ -41,13 +41,13 @@ msgstr "type d'activité"
 msgid "activity types"
 msgstr "types d'activité"
 
-#: apps/activity/models.py:48 apps/note/models/transactions.py:69
+#: apps/activity/models.py:48 apps/note/models/transactions.py:70
 #: apps/permission/models.py:91
 msgid "description"
 msgstr "description"
 
 #: apps/activity/models.py:54 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:62
+#: apps/note/models/transactions.py:63
 msgid "type"
 msgstr "type"
 
@@ -115,11 +115,11 @@ msgstr "Nouvelles données"
 msgid "create"
 msgstr "Créer"
 
-#: apps/logs/models.py:61 apps/note/tables.py:126
+#: apps/logs/models.py:61 apps/note/tables.py:147
 msgid "edit"
 msgstr "Modifier"
 
-#: apps/logs/models.py:62 apps/note/tables.py:130
+#: apps/logs/models.py:62 apps/note/tables.py:151
 msgid "delete"
 msgstr "Supprimer"
 
@@ -254,12 +254,12 @@ msgstr "Compte n°%(id)s : %(username)s"
 msgid "Alias successfully deleted"
 msgstr "L'alias a bien été supprimé"
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:94
+#: apps/note/admin.py:120 apps/note/models/transactions.py:95
 msgid "source"
 msgstr "source"
 
 #: apps/note/admin.py:128 apps/note/admin.py:156
-#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:100
+#: apps/note/models/transactions.py:54 apps/note/models/transactions.py:108
 msgid "destination"
 msgstr "destination"
 
@@ -310,7 +310,7 @@ msgstr ""
 msgid "display image"
 msgstr "image affichée"
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:103
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:118
 msgid "created at"
 msgstr "créée le"
 
@@ -384,101 +384,106 @@ msgstr "Un alias avec un nom similaire existe déjà : {}"
 msgid "You can't delete your main alias."
 msgstr "Vous ne pouvez pas supprimer votre alias principal."
 
-#: apps/note/models/transactions.py:30
+#: apps/note/models/transactions.py:31
 msgid "transaction category"
 msgstr "catégorie de transaction"
 
-#: apps/note/models/transactions.py:31
+#: apps/note/models/transactions.py:32
 msgid "transaction categories"
 msgstr "catégories de transaction"
 
-#: apps/note/models/transactions.py:47
+#: apps/note/models/transactions.py:48
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:111
+#: apps/note/models/transactions.py:57 apps/note/models/transactions.py:126
 msgid "amount"
 msgstr "montant"
 
-#: apps/note/models/transactions.py:57
+#: apps/note/models/transactions.py:58
 msgid "in centimes"
 msgstr "en centimes"
 
-#: apps/note/models/transactions.py:75
+#: apps/note/models/transactions.py:76
 msgid "transaction template"
 msgstr "modèle de transaction"
 
-#: apps/note/models/transactions.py:76
+#: apps/note/models/transactions.py:77
 msgid "transaction templates"
 msgstr "modèles de transaction"
 
-#: apps/note/models/transactions.py:107
+#: apps/note/models/transactions.py:101 apps/note/models/transactions.py:114
+#: apps/note/tables.py:33 apps/note/tables.py:42
+msgid "used alias"
+msgstr "alias utilisé"
+
+#: apps/note/models/transactions.py:122
 msgid "quantity"
 msgstr "quantité"
 
-#: apps/note/models/transactions.py:115
+#: apps/note/models/transactions.py:130
 msgid "reason"
 msgstr "raison"
 
-#: apps/note/models/transactions.py:120
+#: apps/note/models/transactions.py:135
 msgid "valid"
 msgstr "valide"
 
-#: apps/note/models/transactions.py:125 apps/note/tables.py:74
+#: apps/note/models/transactions.py:140 apps/note/tables.py:95
 msgid "invalidity reason"
 msgstr "Motif d'invalidité"
 
-#: apps/note/models/transactions.py:132
+#: apps/note/models/transactions.py:147
 msgid "transaction"
 msgstr "transaction"
 
-#: apps/note/models/transactions.py:133
+#: apps/note/models/transactions.py:148
 msgid "transactions"
 msgstr "transactions"
 
-#: apps/note/models/transactions.py:180 templates/base.html:83
+#: apps/note/models/transactions.py:202 templates/base.html:83
 #: templates/note/transaction_form.html:19
 #: templates/note/transaction_form.html:145
 msgid "Transfer"
 msgstr "Virement"
 
-#: apps/note/models/transactions.py:200
+#: apps/note/models/transactions.py:222
 msgid "Template"
 msgstr "Bouton"
 
-#: apps/note/models/transactions.py:215
+#: apps/note/models/transactions.py:237
 msgid "first_name"
 msgstr "Prénom"
 
-#: apps/note/models/transactions.py:220
+#: apps/note/models/transactions.py:242
 msgid "bank"
 msgstr "Banque"
 
-#: apps/note/models/transactions.py:226 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:248 templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr "Crédit"
 
-#: apps/note/models/transactions.py:226 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:248 templates/note/transaction_form.html:28
 msgid "Debit"
 msgstr "Retrait"
 
-#: apps/note/models/transactions.py:242 apps/note/models/transactions.py:247
+#: apps/note/models/transactions.py:264 apps/note/models/transactions.py:269
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
-#: apps/note/models/transactions.py:243
+#: apps/note/models/transactions.py:265
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
-#: apps/note/tables.py:39
+#: apps/note/tables.py:57
 msgid "Click to invalidate"
 msgstr "Cliquez pour dévalider"
 
-#: apps/note/tables.py:39
+#: apps/note/tables.py:57
 msgid "Click to validate"
 msgstr "Cliquez pour valider"
 
-#: apps/note/tables.py:72
+#: apps/note/tables.py:93
 msgid "No reason specified"
 msgstr "Pas de motif spécifié"
 

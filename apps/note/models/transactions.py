@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -93,12 +94,26 @@ class Transaction(PolymorphicModel):
         related_name='+',
         verbose_name=_('source'),
     )
+
+    source_alias = models.CharField(
+        max_length=255,
+        default="",  # Will be remplaced by the name of the note on save
+        verbose_name=_('used alias'),
+    )
+
     destination = models.ForeignKey(
         Note,
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('destination'),
     )
+
+    destination_alias = models.CharField(
+        max_length=255,
+        default="",  # Will be remplaced by the name of the note on save
+        verbose_name=_('used alias'),
+    )
+
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
         default=timezone.now,
@@ -141,6 +156,13 @@ class Transaction(PolymorphicModel):
         """
         When saving, also transfer money between two notes
         """
+
+        # If the aliases are not entered, we assume that the used alias is the name of the note
+        if not self.source_alias:
+            self.source_alias = str(self.source)
+
+        if not self.destination_alias:
+            self.destination_alias = str(self.destination)
 
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transfered
