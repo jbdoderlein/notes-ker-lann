@@ -4,3 +4,37 @@
 {% block profile_content %}
 {% include "member/alias_update.html"%}
 {% endblock %}
+
+{% block extrajavascript %}
+<script>
+ function create_alias(note_id){
+     $.post("/api/note/alias/",
+            {
+                "csrfmiddlewaretoken": CSRF_TOKEN,
+                "name": $("#alias_input").val(),
+                "note": note_id
+            }
+     ).done(function(){
+         $("#alias_table").load("{% url 'member:user_alias' object.pk %} #alias_table");
+     })
+      .fail(function(xhr, textStatus, error){
+          addMsg(xhr.responseJSON.name[0],'danger');
+      });
+}
+ // on click of button "delete" , call the API
+ function delete_button(button_id){
+     $.ajax({
+         url:"/api/note/alias/"+button_id+"/",
+         method:"DELETE",
+         headers: {"X-CSRFTOKEN": CSRF_TOKEN}
+     })
+      .done(function(){
+          addMsg('{% trans "alias successfully deleted "%}','success');
+          $("#alias_table").load("{% url 'member:user_alias' object.pk %} #alias_table");
+      })
+      .fail(function(){
+          addMsg(' {% trans "Unable to delete alias "%} #' + button_id,'danger' )
+      });
+ }
+</script>
+{% endblock%}
