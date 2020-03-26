@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
+
 ########################
 # Production  Settings #
 ########################
@@ -14,11 +16,11 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'note_db',
-        'USER': 'note',
-        'PASSWORD': 'update_in_env_variable',
-        'HOST': '127.0.0.1',
-        'PORT': '',
+        'NAME': os.environ.get('DJANGO_DB_NAME', 'note_db'),
+        'USER': os.environ.get('DJANGO_DB_USER', 'note'),
+        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS'),
+        'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DJANGO_DB_PORT', ''),  # Use default port
     }
 }
 
@@ -26,7 +28,9 @@ DATABASES = {
 DEBUG = True
 
 # Mandatory !
-ALLOWED_HOSTS = ['127.0.0.1','note.comby.xyz']
+ALLOWED_HOSTS = [os.environ.get('NOTE_URL', 'localhost')]
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 
 # Emails
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -37,7 +41,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'change_me'
 # EMAIL_HOST_PASSWORD = 'change_me'
 
-SERVER_EMAIL = 'no-reply@example.org'
+SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN", "example.com")
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False
@@ -47,3 +51,6 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_AGE = 60 * 60 * 3
+
+# CAS Client settings
+CAS_SERVER_URL = "https://" + os.getenv("NOTE_URL", "note.example.com") + "/cas/"

@@ -1,9 +1,65 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.contrib.auth.models import AnonymousUser, User
 
-from urllib.parse import urlencode, parse_qs, urlsplit, urlunsplit
+from threading import local
+
+from django.contrib.sessions.backends.db import SessionStore
+
+USER_ATTR_NAME = getattr(settings, 'LOCAL_USER_ATTR_NAME', '_current_user')
+SESSION_ATTR_NAME = getattr(settings, 'LOCAL_SESSION_ATTR_NAME', '_current_session')
+IP_ATTR_NAME = getattr(settings, 'LOCAL_IP_ATTR_NAME', '_current_ip')
+
+_thread_locals = local()
+
+
+def _set_current_user_and_ip(user=None, session=None, ip=None):
+    setattr(_thread_locals, USER_ATTR_NAME, user)
+    setattr(_thread_locals, SESSION_ATTR_NAME, session)
+    setattr(_thread_locals, IP_ATTR_NAME, ip)
+
+
+def get_current_user() -> User:
+    return getattr(_thread_locals, USER_ATTR_NAME, None)
+
+
+def get_current_session() -> SessionStore:
+    return getattr(_thread_locals, SESSION_ATTR_NAME, None)
+
+
+def get_current_ip() -> str:
+    return getattr(_thread_locals, IP_ATTR_NAME, None)
+
+
+def get_current_authenticated_user():
+    current_user = get_current_user()
+    if isinstance(current_user, AnonymousUser):
+        return None
+    return current_user
+
+
+class SessionMiddleware(object):
+    """
+    This middleware get the current user with his or her IP address on each request.
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user = request.user
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR')
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        _set_current_user_and_ip(user, request.session, ip)
+        response = self.get_response(request)
+        _set_current_user_and_ip(None, None, None)
+
+        return response
 
 
 class TurbolinksMiddleware(object):
@@ -35,4 +91,3 @@ class TurbolinksMiddleware(object):
                     location = request.session.pop('_turbolinks_redirect_to')
                     response['Turbolinks-Location'] = location
         return response
-

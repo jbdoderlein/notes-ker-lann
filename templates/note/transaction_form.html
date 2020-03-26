@@ -3,35 +3,192 @@
 SPDX-License-Identifier: GPL-2.0-or-later
 {% endcomment %}
 
-{% load i18n static %}
+{% load i18n static django_tables2 perms %}
 
 {% block content %}
-    <form method="post" onsubmit="window.onbeforeunload=null">{% csrf_token %}
-        {% if form.non_field_errors %}
-            <p class="errornote">
-                {% for error in form.non_field_errors %}
-                    {{ error }}
-                {% endfor %}
-            </p>
-        {% endif %}
-        <fieldset class="module aligned">
-            {% for field in form %}
-                <div class="form-row{% if field.errors %} errors{% endif %}">
-                    {{ field.errors }}
-                    <div>
-                        {{ field.label_tag }}
-                        {% if field.is_readonly %}
-                            <div class="readonly">{{ field.contents }}</div>
-                        {% else %}
-                            {{ field }}
-                        {% endif %}
-                        {% if field.field.help_text %}
-                            <div class="help">{{ field.field.help_text|safe }}</div>
-                        {% endif %}
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <label for="type_gift" class="btn btn-sm btn-outline-primary active">
+                    <input type="radio" name="transaction_type" id="type_gift" checked>
+                    {% trans "Gift" %}
+                </label>
+                <label for="type_transfer" class="btn btn-sm btn-outline-primary">
+                    <input type="radio" name="transaction_type" id="type_transfer">
+                    {% trans "Transfer" %}
+                </label>
+                {% if "note.notespecial"|not_empty_model_list %}
+                    <label for="type_credit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_credit">
+                        {% trans "Credit" %}
+                    </label>
+                    <label type="type_debit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_debit">
+                        {% trans "Debit" %}
+                    </label>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+       
+        <div class="col-xl-4" id="note_infos_div">
+            <div class="card border-success shadow mb-4">
+                <img src="/media/pic/default.png"
+                    id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
+                <div class="card-body text-center">
+                    <span id="user_note"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" id="emitters_div" style="display: none;">
+            <div class="card border-success shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        {% trans "Select emitters" %}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <input class="form-control mx-auto d-block" type="text" id="source_note" />
+                    <ul class="list-group list-group-flush" id="source_alias_matched">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {% if "note.notespecial"|not_empty_model_list %}
+            <div class="col-md-4" id="external_div" style="display: none;">
+                <div class="card border-success shadow mb-4">
+                    <div class="card-header">
+                        <p class="card-text font-weight-bold">
+                            {% trans "External payment" %}
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush" id="source_note_list">
+                    </ul>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="credit_type">{% trans "Transfer type" %} :</label>
+                                <select id="credit_type" class="custom-select">
+                                    {% for special_type in special_types %}
+                                        <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="last_name">{% trans "Name" %} :</label>
+                                <input type="text" id="last_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="first_name">{% trans "First name" %} :</label>
+                                <input type="text" id="first_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="bank">{% trans "Bank" %} :</label>
+                                <input type="text" id="bank" class="form-control" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
-        </fieldset>
-        <input type="submit" value="{% trans 'Transfer' %}">
-    </form>
+            </div>
+        {% endif %}
+
+        <div class="col-md-8" id="dests_div">
+            <div class="card border-info shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold" id="dest_title">
+                        {% trans "Select receivers" %}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="dest_note_list">
+                </ul>
+                <div class="card-body">
+                    <input class="form-control mx-auto d-block" type="text" id="dest_note" />
+                    <ul class="list-group list-group-flush" id="dest_alias_matched">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="amount">{% trans "Amount" %} :</label>
+            <div class="input-group">
+                <input class="form-control mx-auto d-block" type="number" min="0" step="0.01" id="amount" />
+                <div class="input-group-append">
+                    <span class="input-group-text">€</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="reason">{% trans "Reason" %} :</label>
+            <input class="form-control mx-auto d-block" type="text" id="reason" required />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-12">
+            <button id="transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4" id="history">
+        <div class="card-header">
+            <p class="card-text font-weight-bold">
+                {% trans "Recent transactions history" %}
+            </p>
+        </div>
+        {% render_table table %}
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        TRANSFER_POLYMORPHIC_CTYPE = {{ polymorphic_ctype }};
+        SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
+        user_id = {{ user.note.pk }};
+
+        $("#type_gift").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").hide();
+            $("#dests_div").attr('class', 'col-md-8');
+            $("#dest_title").text("{% trans "Select receivers" %}");
+        });
+
+        $("#type_transfer").click(function() {
+            $("#external_div").hide();
+            $("#emitters_div").show();
+            $("#dests_div").attr('class', 'col-md-4');
+            $("#dest_title").text("{% trans "Select receivers" %}");
+        });
+
+        $("#type_credit").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").show();
+            $("#dests_div").attr('class', 'col-md-4');
+            $("#dest_title").text("{% trans "Credit note" %}");
+        });
+
+        $("#type_debit").click(function() {
+            $("#emitters_div").hide();
+            $("#external_div").show();
+            $("#dests_div").attr('class', 'col-md-4');
+            $("#dest_title").text("{% trans "Debit note" %}");
+        });
+    </script>
+    <script src="/static/js/transfer.js"></script>
 {% endblock %}

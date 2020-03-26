@@ -1,0 +1,32 @@
+{% load i18n static pretty_money %}
+<div class="card bg-light shadow">
+    <div class="card-top text-center">
+        <a  href="{% url 'member:club_update_pic' club.pk  %}">
+            <img src="{{ club.note.display_image.url }}" class="img-thumbnail mt-2" >
+        </a>
+    </div>
+    <div class="card-body" id="profile_infos">
+        <dl class="row">
+            <dt class="col-xl-6">{% trans 'name'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ club.name}}</dd>
+
+            <dt class="col-xl-6">{% trans 'membership start'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ club.membership_start }}</dd>
+
+            <dt class="col-xl-6">{% trans 'membership end'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ club.membership_end }}</dd>
+
+            <dt class="col-xl-6">{% trans 'membership duration'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ club.membership_duration }}</dd>
+
+            <dt class="col-xl-6">{% trans 'membership fee'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ club.membership_fee|pretty_money }}</dd>
+            
+            <dt class="col-xl-6"><a href="{% url 'member:user_alias' club.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
+            <dd class="col-xl-6 text-truncate">{{ object.note.alias_set.all|join:", " }}</dd>
+
+            <dt class="col-xl-3">{% trans 'email'|capfirst %}</dt>
+            <dd class="col-xl-9"><a href="mailto:{{ club.email }}">{{ club.email}}</a></dd>
+        </dl>
+    </div>
+</div>

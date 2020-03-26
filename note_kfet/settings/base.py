@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 
     # External apps
     'polymorphic',
-    'reversion',
     'crispy_forms',
     'django_tables2',
     # Django contrib
@@ -60,7 +59,10 @@ INSTALLED_APPS = [
     'activity',
     'member',
     'note',
+    'treasury',
+    'permission',
     'api',
+    'logs',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 
@@ -92,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                #  'django.template.context_processors.media',
             ],
         },
     },
@@ -123,28 +126,22 @@ PASSWORD_HASHERS = [
     'member.hashers.CustomNK15Hasher',
 ]
 
-# Django Guardian object permissions
-
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # this is default
-    'guardian.backends.ObjectPermissionBackend',
+    'permission.backends.PermissionBackend',  # Custom role-based permission system
 )
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        # TODO Maybe replace it with our custom permissions system
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # Control API access with our role-based permission system
+        'permission.permissions.StrongDjangoObjectPermissions',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
 }
-
-ANONYMOUS_USER_NAME = None  # Disable guardian anonymous user
-
-GUARDIAN_GET_CONTENT_TYPE = 'polymorphic.contrib.guardian.get_polymorphic_base_content_type'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -176,10 +173,10 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.realpath(__file__)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')]
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+# STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = []
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 # URL prefix for static files.
@@ -188,3 +185,9 @@ STATIC_URL = '/static/'
 
 ALIAS_VALIDATOR_REGEX = r''
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+
+# Profile Picture Settings
+PIC_WIDTH = 200
+PIC_RATIO = 1

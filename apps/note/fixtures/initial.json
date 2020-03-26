@@ -1,220 +1,244 @@
 [
-    {
-        "model": "note.note",
-        "pk": 1,
-        "fields": {
-            "polymorphic_ctype": 22,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:02:48.778Z"
-        }
-    },
-    {
-        "model": "note.note",
-        "pk": 2,
-        "fields": {
-            "polymorphic_ctype": 22,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:06:39.546Z"
-        }
-    },
-    {
-        "model": "note.note",
-        "pk": 3,
-        "fields": {
-            "polymorphic_ctype": 22,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:06:43.049Z"
-        }
-    },
-    {
-        "model": "note.note",
-        "pk": 4,
-        "fields": {
-            "polymorphic_ctype": 22,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:06:50.996Z"
-        }
-    },
-    {
-        "model": "note.note",
-        "pk": 5,
-        "fields": {
-            "polymorphic_ctype": 21,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:09:38.615Z"
-        }
-    },
-    {
-        "model": "note.note",
-        "pk": 6,
-        "fields": {
-            "polymorphic_ctype": 21,
-            "balance": 0,
-            "is_active": true,
-            "display_image": "",
-            "created_at": "2020-02-20T20:16:14.753Z"
-        }
-    },
-    {
-        "model": "note.notespecial",
-        "pk": 1,
-        "fields": {
-            "special_type": "Esp\u00e8ces"
-        }
-    },
-    {
-        "model": "note.notespecial",
-        "pk": 2,
-        "fields": {
-            "special_type": "Carte bancaire"
-        }
-    },
-    {
-        "model": "note.notespecial",
-        "pk": 3,
-        "fields": {
-            "special_type": "Ch\u00e8que"
-        }
-    },
-    {
-        "model": "note.notespecial",
-        "pk": 4,
-        "fields": {
-            "special_type": "Virement bancaire"
-        }
-    },
-    {
-        "model": "note.noteclub",
-        "pk": 5,
-        "fields": {
-            "club": 1
-        }
-    },
-    {
-        "model": "note.noteclub",
-        "pk": 6,
-        "fields": {
-            "club": 2
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 1,
-        "fields": {
-            "name": "Esp\u00e8ces",
-            "normalized_name": "especes",
-            "note": 1
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 2,
-        "fields": {
-            "name": "Carte bancaire",
-            "normalized_name": "cartebancaire",
-            "note": 2
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 3,
-        "fields": {
-            "name": "Ch\u00e8que",
-            "normalized_name": "cheque",
-            "note": 3
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 4,
-        "fields": {
-            "name": "Virement bancaire",
-            "normalized_name": "virementbancaire",
-            "note": 4
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 5,
-        "fields": {
-            "name": "BDE",
-            "normalized_name": "bde",
-            "note": 5
-        }
-    },
-    {
-        "model": "note.alias",
-        "pk": 6,
-        "fields": {
-            "name": "Kfet",
-            "normalized_name": "kfet",
-            "note": 6
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 1,
-        "fields": {
-            "name": "Soft"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 2,
-        "fields": {
-            "name": "Pulls"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 3,
-        "fields": {
-            "name": "Gala"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 4,
-        "fields": {
-            "name": "Clubs"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 5,
-        "fields": {
-            "name": "Bouffe"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 6,
-        "fields": {
-            "name": "BDA"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 7,
-        "fields": {
-            "name": "Autre"
-        }
-    },
-    {
-        "model": "note.templatecategory",
-        "pk": 8,
-        "fields": {
-            "name": "Alcool"
-        }
+  {
+    "model": "note.note",
+    "pk": 1,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "notespecial"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "",
+      "created_at": "2020-02-20T20:02:48.778Z"
     }
+  },
+  {
+    "model": "note.note",
+    "pk": 2,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "notespecial"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "",
+      "created_at": "2020-02-20T20:06:39.546Z"
+    }
+  },
+  {
+    "model": "note.note",
+    "pk": 3,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "notespecial"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "",
+      "created_at": "2020-02-20T20:06:43.049Z"
+    }
+  },
+  {
+    "model": "note.note",
+    "pk": 4,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "notespecial"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "",
+      "created_at": "2020-02-20T20:06:50.996Z"
+    }
+  },
+  {
+    "model": "note.note",
+    "pk": 5,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "noteclub"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "pic/default.png",
+      "created_at": "2020-02-20T20:09:38.615Z"
+    }
+  },
+  {
+    "model": "note.note",
+    "pk": 6,
+    "fields": {
+      "polymorphic_ctype": [
+        "note",
+        "noteclub"
+      ],
+      "balance": 0,
+      "last_negative": null,
+      "is_active": true,
+      "display_image": "pic/default.png",
+      "created_at": "2020-02-20T20:16:14.753Z"
+    }
+  },
+  {
+    "model": "note.noteclub",
+    "pk": 5,
+    "fields": {
+      "club": 1
+    }
+  },
+  {
+    "model": "note.noteclub",
+    "pk": 6,
+    "fields": {
+      "club": 2
+    }
+  },
+  {
+    "model": "note.notespecial",
+    "pk": 1,
+    "fields": {
+      "special_type": "Esp\u00e8ces"
+    }
+  },
+  {
+    "model": "note.notespecial",
+    "pk": 2,
+    "fields": {
+      "special_type": "Carte bancaire"
+    }
+  },
+  {
+    "model": "note.notespecial",
+    "pk": 3,
+    "fields": {
+      "special_type": "Ch\u00e8que"
+    }
+  },
+  {
+    "model": "note.notespecial",
+    "pk": 4,
+    "fields": {
+      "special_type": "Virement bancaire"
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 1,
+    "fields": {
+      "name": "Esp\u00e8ces",
+      "normalized_name": "especes",
+      "note": 1
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 2,
+    "fields": {
+      "name": "Carte bancaire",
+      "normalized_name": "cartebancaire",
+      "note": 2
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 3,
+    "fields": {
+      "name": "Ch\u00e8que",
+      "normalized_name": "cheque",
+      "note": 3
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 4,
+    "fields": {
+      "name": "Virement bancaire",
+      "normalized_name": "virementbancaire",
+      "note": 4
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 5,
+    "fields": {
+      "name": "BDE",
+      "normalized_name": "bde",
+      "note": 5
+    }
+  },
+  {
+    "model": "note.alias",
+    "pk": 6,
+    "fields": {
+      "name": "Kfet",
+      "normalized_name": "kfet",
+      "note": 6
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 1,
+    "fields": {
+      "name": "Soft"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 2,
+    "fields": {
+      "name": "Pulls"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 3,
+    "fields": {
+      "name": "Gala"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 4,
+    "fields": {
+      "name": "Clubs"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 5,
+    "fields": {
+      "name": "Bouffe"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 6,
+    "fields": {
+      "name": "BDA"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 7,
+    "fields": {
+      "name": "Autre"
+    }
+  },
+  {
+    "model": "note.templatecategory",
+    "pk": 8,
+    "fields": {
+      "name": "Alcool"
+    }
+  }
 ]

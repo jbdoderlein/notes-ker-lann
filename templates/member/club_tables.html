@@ -1,0 +1,31 @@
+{% load render_table from django_tables2 %}
+{% load i18n %}
+<div class="accordion shadow" id="accordionProfile">
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold"
+               data-toggle="collapse" data-target="#clubListCollapse"
+               aria-expanded="true" aria-controls="clubListCollapse">
+                <i class="fa fa-users"></i> {% trans "Member of the Club" %}
+            </a>
+        </div>
+        <div id="clubListCollapse" class="collapse show" style="overflow:auto hidden" aria-labelledby="clubListHeading" data-parent="#accordionProfile">
+            {% render_table member_list %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header position-relative" id="historyListHeading">
+            <a class="btn btn-link stretched-link collapsed font-weight-bold"
+               data-toggle="collapse" data-target="#historyListCollapse"
+               aria-expanded="false" aria-controls="historyListCollapse">
+                <i class="fa fa-euro"></i> {% trans "Transaction history" %}
+            </a>
+        </div>
+        <div id="historyListCollapse" class="collapse" style="overflow:auto hidden" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
+            <div id="history_list">
+                {% render_table history_list %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,23 +1,79 @@
 {% extends "base.html" %}
 {% load pretty_money %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
 {% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-10 text-center">
+        <h4>
+            {% trans "search button" %}
+        </h4>
+        <input class="form-control mx-auto w-25" type="text" onkeyup="search_field_moved();return(false);" id="search_field"/>
+        <hr>
+        <a class="btn btn-primary text-center my-4" href="{% url 'note:template_create' %}">Créer un bouton</a>
+    </div>
+</div>
+<div class="row justify-content-center">   
+    <div class="col-md-10">
+        <div class="card card-border shadow">
+            <div class="card-header text-center">
+                <h5> {% trans "buttons listing "%}</h5>
+            </div>
+            <div class="card-body px-0 py-0" id="buttons_table">
+                {% render_table table %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-<table class="table">
-<tr>
-<td>ID</td><td>Nom</td>
-    <td>Destinataire</td>
-    <td>Montant</td>
-    <td>Catégorie</td>
-</tr>
-{% for object in object_list %}
-<tr>
-    <td>{{object.pk}}</td>
-    <td><a href="{{object.get_absolute_url}}">{{ object.name }}</a></td>
-    <td>{{ object.destination }}</td>
-    <td>{{ object.amount | pretty_money }}</td>
-    <td>{{ object.template_type }}</td>
-</tr>
-{% endfor %}
-</table>
-<a class="btn btn-primary" href="{% url 'note:template_create' %}">Créer un bouton</a>
+{% block extrajavascript %}
+<script>
+/* fonction appelée à la fin du timer */
+function getInfo() {
+    var asked = $("#search_field").val();
+    /* on ne fait la requête que si on a au moins un caractère pour chercher */
+    var sel = $(".table-row");
+    if (asked.length >= 1) {
+        $.getJSON("/api/note/transaction/template/?format=json&search="+asked, function(buttons){
+            let selected_id = buttons.results.map((a => "#row-"+a.id));
+            console.log(selected_id.join());
+            $(".table-row,"+selected_id.join()).show();
+            $(".table-row").not(selected_id.join()).hide();
+            
+        });
+    }else{
+        // show everything
+        $('table tr').show();
+    }       
+}
+var timer;
+var timer_on;
+/* Fontion appelée quand le texte change (délenche le timer) */
+function search_field_moved(secondfield) {
+    if (timer_on) { // Si le timer a déjà été lancé, on réinitialise le compteur.
+        clearTimeout(timer);
+        timer = setTimeout("getInfo(" + secondfield + ")", 300);
+    }
+    else { // Sinon, on le lance et on enregistre le fait qu'il tourne.
+        timer = setTimeout("getInfo(" + secondfield + ")", 300);
+        timer_on = true;
+    }
+}
+// on click of button "delete" , call the API 
+ function delete_button(button_id){
+     $.ajax({
+         url:"/api/note/transaction/template/"+button_id+"/",
+         method:"DELETE",
+         headers: {"X-CSRFTOKEN": CSRF_TOKEN}
+     })
+      .done(function(){
+          addMsg('{% trans "button successfully deleted "%}','success');
+          $("#buttons_table").load("{% url 'note:template_list' %} #buttons_table");
+      })
+      .fail(function(){
+          addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
+      });
+ }
+</script>
 {% endblock %}

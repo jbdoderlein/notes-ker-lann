@@ -3,60 +3,60 @@
 
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, UpdateView
+from django_tables2 import SingleTableView
+from django.urls import reverse_lazy
+from permission.backends import PermissionBackend
 
-from .models import Transaction, TransactionTemplate, Alias, TemplateTransaction
-from .forms import TransactionForm, TransactionTemplateForm, ConsoForm
+from .forms import TransactionTemplateForm
+from .models import Transaction, TransactionTemplate, Alias, RecurrentTransaction, NoteSpecial
+from .models.transactions import SpecialTransaction
+from .tables import HistoryTable, ButtonTable
 
 
-class TransactionCreate(LoginRequiredMixin, CreateView):
+class TransactionCreateView(LoginRequiredMixin, SingleTableView):
     """
-    Show transfer page
-
-    TODO: If user have sufficient rights, they can transfer from an other note
+    View for the creation of Transaction between two note which are not :models:`transactions.RecurrentTransaction`.
+    e.g. for donation/transfer between people and clubs or for credit/debit with :models:`note.NoteSpecial`
     """
+    template_name = "note/transaction_form.html"
+
     model = Transaction
-    form_class = TransactionForm
+    # Transaction history table
+    table_class = HistoryTable
+    table_pagination = {"per_page": 50}
+
+    def get_queryset(self):
+        return Transaction.objects.filter(PermissionBackend.filter_queryset(
+            self.request.user, Transaction, "view")
+        ).order_by("-id").all()[:50]
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Transfer money from your account '
-                             'to one or others')
-
-        context['no_cache'] = True
+        context['title'] = _('Transfer money')
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
+        context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
+        context['special_types'] = NoteSpecial.objects.order_by("special_type").all()
 
         return context
-
-    def get_form(self, form_class=None):
-        """
-        If the user has no right to transfer funds, then it won't have the choice of the source of the transfer.
-        """
-        form = super().get_form(form_class)
-
-        if False:  # TODO: fix it with "if %user has no right to transfer funds"
-            del form.fields['source']
-            form.user = self.request.user
-
-        return form
-
-    def get_success_url(self):
-        return reverse('note:transfer')
 
 
 class NoteAutocomplete(autocomplete.Select2QuerySetView):
     """
-    Auto complete note by aliases
+    Auto complete note by aliases. Used in every search field for note
+    ex: :view:`ConsoView`, :view:`TransactionCreateView`
     """
+
     def get_queryset(self):
         """
-        Quand une personne cherche un alias, une requête est envoyée sur l'API dédiée à l'auto-complétion.
-        Cette fonction récupère la requête, et renvoie la liste filtrée des aliases.
+        When someone look for an :models:`note.Alias`, a query is sent to the dedicated API.
+        This function handles the result and return a filtered list of aliases.
         """
         #  Un utilisateur non connecté n'a accès à aucune information
         if not self.request.user.is_authenticated:
@@ -66,7 +66,7 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
 
         # self.q est le paramètre de la recherche
         if self.q:
-            qs = qs.filter(Q(name__regex=self.q) | Q(normalized_name__regex=Alias.normalize(self.q)))\
+            qs = qs.filter(Q(name__regex="^" + self.q) | Q(normalized_name__regex="^" + Alias.normalize(self.q))) \
                 .order_by('normalized_name').distinct()
 
         # Filtrage par type de note (user, club, special)
@@ -85,6 +85,10 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
     def get_result_label(self, result):
+        """
+        Show the selected alias and the username associated
+        <Alias> (aka. <Username> )
+        """
         # Gère l'affichage de l'alias dans la recherche
         res = result.name
         note_name = str(result.note)
@@ -93,7 +97,9 @@ class NoteAutocomplete(autocomplete.Select2QuerySetView):
         return res
 
     def get_result_value(self, result):
-        # Le résultat renvoyé doit être l'identifiant de la note, et non de l'alias
+        """
+        The value used for the transactions will be the id of the Note.
+        """
         return str(result.note.pk)
 
 
@@ -103,14 +109,15 @@ class TransactionTemplateCreateView(LoginRequiredMixin, CreateView):
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
+    success_url = reverse_lazy('note:template_list')
 
 
-class TransactionTemplateListView(LoginRequiredMixin, ListView):
+class TransactionTemplateListView(LoginRequiredMixin, SingleTableView):
     """
     List TransactionsTemplates
     """
     model = TransactionTemplate
-    form_class = TransactionTemplateForm
+    table_class = ButtonTable
 
 
 class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
@@ -118,33 +125,40 @@ class TransactionTemplateUpdateView(LoginRequiredMixin, UpdateView):
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
+    success_url = reverse_lazy('note:template_list')
 
 
-class ConsoView(LoginRequiredMixin, CreateView):
+class ConsoView(LoginRequiredMixin, SingleTableView):
     """
-    Consume
+    The Magic View that make people pay their beer and burgers.
+    (Most of the magic happens in the dark world of Javascript see consos.js)
     """
-    model = TemplateTransaction
     template_name = "note/conso_form.html"
-    form_class = ConsoForm
+
+    # Transaction history table
+    table_class = HistoryTable
+    table_pagination = {"per_page": 50}
+
+    def get_queryset(self):
+        return Transaction.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+        ).order_by("-id").all()[:50]
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['transaction_templates'] = TransactionTemplate.objects.filter(display=True) \
-            .order_by('category')
-        context['title'] = _("Consommations")
+        from django.db.models import Count
+        buttons = TransactionTemplate.objects.filter(
+            PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+        ).filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
+        context['transaction_templates'] = buttons
+        context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
+        context['title'] = _("Consumptions")
+        context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
         # select2 compatibility
         context['no_cache'] = True
 
         return context
-
-    def get_success_url(self):
-        """
-        When clicking a button, reload the same page
-        """
-        return reverse('note:consos')
-
