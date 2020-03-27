@@ -29,13 +29,6 @@ class ActivityForm(forms.ModelForm):
 
 
 class GuestForm(forms.ModelForm):
-    def clean(self, **kwargs):
-        cleaned_data = super().clean()
-
-        self.instance.activity = cleaned_data["activity"] = Activity.objects.get(pk=1)
-
-        return cleaned_data
-
     class Meta:
         model = Guest
         fields = ('last_name', 'first_name', 'inviter', )

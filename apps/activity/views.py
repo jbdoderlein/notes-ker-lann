@@ -43,8 +43,14 @@ class ActivityUpdateView(LoginRequiredMixin, UpdateView):
 class ActivityInviteView(LoginRequiredMixin, CreateView):
     model = Guest
     form_class = GuestForm
-    success_url = reverse_lazy('activity:activity_list')
     template_name = "activity/activity_invite.html"
+
+    def form_valid(self, form):
+        form.instance.activity = Activity.objects.get(pk=self.kwargs["pk"])
+        return super().form_valid(form)
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
 
 
 class ActivityEntryView(LoginRequiredMixin, TemplateView):
