@@ -48,6 +48,13 @@ def not_empty_model_change_list(model_name):
     return session.get("not_empty_model_change_list_" + model_name) == 1
 
 
+def has_perm(t, obj, field=None):
+    print(t)
+    perm = "." + t + ("__" + field if field else "_")
+    return PermissionBackend().has_perm(get_current_authenticated_user(), perm, obj)
+
+
 register = template.Library()
 register.filter('not_empty_model_list', not_empty_model_list)
 register.filter('not_empty_model_change_list', not_empty_model_change_list)
+register.filter('has_perm', has_perm)
