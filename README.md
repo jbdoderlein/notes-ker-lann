@@ -6,12 +6,16 @@
 
 ## Installation sur un serveur
 
-On supposera pour la suite que vous utiliser debian/ubuntu sur un serveur tout nu ou bien configuré.
+On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout nu ou bien configuré.
 
 1. Paquets nécessaires
 
         $ sudo apt install nginx python3 python3-pip python3-dev uwsgi
         $ sudo apt install uwsgi-plugin-python3 python3-venv git acl
+
+    La génération des factures de l'application trésorerie nécessite une installation de LaTeX suffisante :
+
+        $ sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-french
 
 2. Clonage du dépot
 

@@ -28,4 +28,3 @@ class RolePermissionsAdmin(admin.ModelAdmin):
     Admin customisation for RolePermissions
     """
     list_display = ('role', )
-

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load i18n %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <a href="{% url "treasury:invoice_list" %}" class="btn btn-sm btn-outline-primary">
+                    {% trans "Invoice" %}s
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-primary active">
+                    {% trans "Remittance" %}s
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <h2>{% trans "Opened remittances" %}</h2>
+    {% if opened_remittances.data %}
+        {% render_table opened_remittances %}
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no opened remittance." %}
+        </div>
+    {% endif %}
+
+    <a class="btn btn-primary" href="{% url 'treasury:remittance_create' %}">{% trans "New remittance" %}</a>
+
+    <hr>
+
+    <h2>{% trans "Transfers without remittances" %}</h2>
+    {% if special_transactions_no_remittance.data %}
+        {% render_table special_transactions_no_remittance %}
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no transaction without any linked remittance." %}
+        </div>
+    {% endif %}
+
+    <hr>
+
+    <h2>{% trans "Transfers with opened remittances" %}</h2>
+    {% if special_transactions_with_remittance.data %}
+        {% render_table special_transactions_with_remittance %}
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no transaction with an opened linked remittance." %}
+        </div>
+    {% endif %}
+
+    <hr>
+
+    <h2>{% trans "Closed remittances" %}</h2>
+    {% render_table closed_remittances %}
+{% endblock %}

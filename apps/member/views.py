@@ -223,10 +223,7 @@ class DeleteAliasView(LoginRequiredMixin, DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
-    model = User
-    template_name = 'member/profile_picture_update.html'
-    context_object_name = 'user_object'
+class PictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
     form_class = ImageForm
 
     def get_context_data(self, *args, **kwargs):
@@ -271,6 +268,12 @@ class ProfilePictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
         self.object.note.display_image = image_field
         self.object.note.save()
         return super().form_valid(form)
+
+
+class ProfilePictureUpdateView(PictureUpdateView):
+    model = User
+    template_name = 'member/profile_picture_update.html'
+    context_object_name = 'user_object'
 
 
 class ManageAuthTokens(LoginRequiredMixin, TemplateView):
@@ -329,10 +332,11 @@ class ClubCreateView(LoginRequiredMixin, CreateView):
     """
     model = Club
     form_class = ClubForm
+    success_url = reverse_lazy('member:club_list')
 
     def form_valid(self, form):
         return super().form_valid(form)
-
+    
 
 class ClubListView(LoginRequiredMixin, SingleTableView):
     """
@@ -363,6 +367,23 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         # TODO: consider only valid Membership
         context['member_list'] = club_member
         return context
+
+
+class ClubUpdateView(LoginRequiredMixin, UpdateView):
+    model = Club
+    context_object_name = "club"
+    form_class = ClubForm
+    template_name = "member/club_form.html"
+    success_url = reverse_lazy("member:club_detail")
+
+
+class ClubPictureUpdateView(PictureUpdateView):
+    model = Club
+    template_name = 'member/club_picture_update.html'
+    context_object_name = 'club'
+
+    def get_success_url(self):
+        return reverse_lazy('member:club_detail', kwargs={'pk': self.object.id})
 
 
 class ClubAddMemberView(LoginRequiredMixin, CreateView):

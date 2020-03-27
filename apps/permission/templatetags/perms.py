@@ -3,10 +3,8 @@
 
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import stringfilter
-
-from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 from django import template
-
+from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 from permission.backends import PermissionBackend
 
 

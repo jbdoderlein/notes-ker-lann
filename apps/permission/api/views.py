@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django_filters.rest_framework import DjangoFilterBackend
-
 from api.viewsets import ReadOnlyProtectedModelViewSet
+
 from .serializers import PermissionSerializer
 from ..models import Permission
 

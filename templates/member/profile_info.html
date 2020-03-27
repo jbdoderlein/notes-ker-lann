@@ -1,0 +1,48 @@
+{% load i18n static pretty_money %}
+
+<div class="card bg-light shadow">
+    <div class="card-top text-center">
+        <a  href="{% url 'member:user_update_pic' object.pk  %}">
+            <img src="{{ object.note.display_image.url }}" class="img-thumbnail mt-2" >
+        </a>
+    </div>
+    <div class="card-body" id="profile_infos">
+        <dl class="row">
+            <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+            <dd class="col-xl-6">{{ object.last_name }} {{ object.first_name }}</dd>
+
+            <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.username }}</dd>
+
+            <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+            <dd class="col-xl-6">
+                <a class="small" href="{% url 'password_change' %}">
+                    {% trans 'Change password' %}
+                </a>
+            </dd>
+
+            <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.profile.section }}</dd>
+
+            <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.profile.address }}</dd>
+
+            <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ object.note.balance | pretty_money }}</dd>
+
+            <dt class="col-xl-6"> <a href="{% url 'member:user_alias' object.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
+            <dd class="col-xl-6 text-truncate">{{ object.note.alias_set.all|join:", " }}</dd>
+        </dl>
+
+        {% if object.pk == user.pk %}
+        <a class="small" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
+        {% endif %}
+    </div>
+    <div class="card-footer text-center">
+        <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+        {% url 'member:user_detail' object.pk as user_profile_url %}
+        {%if request.get_full_path != user_profile_url %}
+        <a class="btn btn-primary btn-sm" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
+        {% endif %}
+    </div>
+</div>

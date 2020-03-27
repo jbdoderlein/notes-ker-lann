@@ -9,6 +9,11 @@ RUN apt update && \
     apt install -y gettext nginx uwsgi uwsgi-plugin-python3 && \
     rm -rf /var/lib/apt/lists/*
 
+# Install LaTeX requirements
+RUN apt update && \
+    apt install -y texlive-latex-extra texlive-fonts-extra texlive-lang-french && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY . /code/
 
 # Comment what is not needed

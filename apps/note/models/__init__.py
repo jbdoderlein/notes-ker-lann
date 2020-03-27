@@ -3,12 +3,12 @@
 
 from .notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
 from .transactions import MembershipTransaction, Transaction, \
-    TemplateCategory, TransactionTemplate, RecurrentTransaction
+    TemplateCategory, TransactionTemplate, RecurrentTransaction, SpecialTransaction
 
 __all__ = [
     # Notes
     'Alias', 'Note', 'NoteClub', 'NoteSpecial', 'NoteUser',
     # Transactions
     'MembershipTransaction', 'Transaction', 'TemplateCategory', 'TransactionTemplate',
-    'RecurrentTransaction',
+    'RecurrentTransaction', 'SpecialTransaction',
 ]

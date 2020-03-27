@@ -1,0 +1,9 @@
+[
+  {
+    "model": "treasury.remittancetype",
+    "pk": 1,
+    "fields": {
+      "note": 3
+    }
+  }
+]

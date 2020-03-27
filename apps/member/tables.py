@@ -17,6 +17,7 @@ class ClubTable(tables.Table):
         fields = ('id', 'name', 'email')
         row_attrs = {
             'class': 'table-row',
+            'id': lambda record: "row-" + str(record.pk),
             'data-href': lambda record: record.pk
         }
 

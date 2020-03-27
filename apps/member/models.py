@@ -4,6 +4,7 @@
 import datetime
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -66,6 +67,13 @@ class Club(models.Model):
     )
     email = models.EmailField(
         verbose_name=_('email'),
+    )
+    parent_club = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('parent club'),
     )
 
     # Memberships
@@ -157,6 +165,12 @@ class Membership(models.Model):
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal() < self.date_end.toordinal()
         else:
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
+
+    def save(self, *args, **kwargs):
+        if self.club.parent_club is not None:
+            if not Membership.objects.filter(user=self.user, club=self.club.parent_club):
+                raise ValidationError(_('User is not a member of the parent club'))
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('membership')
