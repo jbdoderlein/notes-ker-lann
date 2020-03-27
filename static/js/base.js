@@ -28,7 +28,15 @@ function addMsg(msg, alert_type) {
         + msg + "</div>\n";
     msgDiv.html(html);
 }
-
+/**
+ * add Muliple error message from err_obj
+ * @param err_obj {error_code:erro_message}
+ */
+function errMsg(errs_obj){
+    for (const err_msg of Object.values(errs_obj)) {
+              addMsg(err_msg,'danger');
+          }
+}
 /**
  * Reload the balance of the user on the right top corner
  */
@@ -265,7 +273,16 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 }
 
 // When a validate button is clicked, we switch the validation status
-function de_validate(id, validated) {
+function in_validate(id, validated) {
+
+    let invalidity_reason;
+    let reason_obj = $("#invalidity_reason_" + id);
+
+    if (validated)
+        invalidity_reason = reason_obj.val();
+    else
+        invalidity_reason = null;
+
     $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
 
     // Perform a PATCH request to the API in order to update the transaction
@@ -278,12 +295,13 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            "resourcetype": "RecurrentTransaction",
-            valid: !validated
+            resourcetype: "RecurrentTransaction",
+            valid: !validated,
+            invalidity_reason: invalidity_reason,
         },
         success: function () {
             // Refresh jQuery objects
-            $(".validate").click(de_validate);
+            $(".validate").click(in_validate);
 
             refreshBalance();
             // error if this method doesn't exist. Please define it.

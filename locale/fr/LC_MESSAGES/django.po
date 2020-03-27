@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-24 15:49+0100\n"
+"POT-Creation-Date: 2020-03-26 14:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,8 @@ msgstr "activité"
 
 #: apps/activity/models.py:19 apps/activity/models.py:44
 #: apps/member/models.py:63 apps/member/models.py:114
-#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:198
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:25
+#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:232
 #: templates/member/profile_detail.html:15
 msgid "name"
 msgstr "nom"
@@ -41,13 +41,13 @@ msgstr "type d'activité"
 msgid "activity types"
 msgstr "types d'activité"
 
-#: apps/activity/models.py:48 apps/note/models/transactions.py:69
-#: apps/permission/models.py:90
+#: apps/activity/models.py:48 apps/note/models/transactions.py:70
+#: apps/permission/models.py:91
 msgid "description"
 msgstr "description"
 
 #: apps/activity/models.py:54 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:62
+#: apps/note/models/transactions.py:63
 msgid "type"
 msgstr "type"
 
@@ -115,11 +115,11 @@ msgstr "Nouvelles données"
 msgid "create"
 msgstr "Créer"
 
-#: apps/logs/models.py:61
+#: apps/logs/models.py:61 apps/note/tables.py:147
 msgid "edit"
 msgstr "Modifier"
 
-#: apps/logs/models.py:62
+#: apps/logs/models.py:62 apps/note/tables.py:151
 msgid "delete"
 msgstr "Supprimer"
 
@@ -209,7 +209,7 @@ msgstr "club"
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:120 apps/permission/models.py:275
+#: apps/member/models.py:120 apps/permission/models.py:276
 msgid "role"
 msgstr "rôle"
 
@@ -254,12 +254,12 @@ msgstr "Compte n°%(id)s : %(username)s"
 msgid "Alias successfully deleted"
 msgstr "L'alias a bien été supprimé"
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:94
+#: apps/note/admin.py:120 apps/note/models/transactions.py:95
 msgid "source"
 msgstr "source"
 
 #: apps/note/admin.py:128 apps/note/admin.py:156
-#: apps/note/models/transactions.py:53 apps/note/models/transactions.py:100
+#: apps/note/models/transactions.py:54 apps/note/models/transactions.py:108
 msgid "destination"
 msgstr "destination"
 
@@ -310,7 +310,7 @@ msgstr ""
 msgid "display image"
 msgstr "image affichée"
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:103
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:118
 msgid "created at"
 msgstr "créée le"
 
@@ -384,35 +384,40 @@ msgstr "Un alias avec un nom similaire existe déjà : {}"
 msgid "You can't delete your main alias."
 msgstr "Vous ne pouvez pas supprimer votre alias principal."
 
-#: apps/note/models/transactions.py:30
+#: apps/note/models/transactions.py:31
 msgid "transaction category"
 msgstr "catégorie de transaction"
 
-#: apps/note/models/transactions.py:31
+#: apps/note/models/transactions.py:32
 msgid "transaction categories"
 msgstr "catégories de transaction"
 
-#: apps/note/models/transactions.py:47
+#: apps/note/models/transactions.py:48
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:56 apps/note/models/transactions.py:111
+#: apps/note/models/transactions.py:57 apps/note/models/transactions.py:126
 msgid "amount"
 msgstr "montant"
 
-#: apps/note/models/transactions.py:57
+#: apps/note/models/transactions.py:58
 msgid "in centimes"
 msgstr "en centimes"
 
-#: apps/note/models/transactions.py:75
+#: apps/note/models/transactions.py:76
 msgid "transaction template"
 msgstr "modèle de transaction"
 
-#: apps/note/models/transactions.py:76
+#: apps/note/models/transactions.py:77
 msgid "transaction templates"
 msgstr "modèles de transaction"
 
-#: apps/note/models/transactions.py:107
+#: apps/note/models/transactions.py:101 apps/note/models/transactions.py:114
+#: apps/note/tables.py:33 apps/note/tables.py:42
+msgid "used alias"
+msgstr "alias utilisé"
+
+#: apps/note/models/transactions.py:122
 msgid "quantity"
 msgstr "quantité"
 
@@ -634,15 +639,15 @@ msgid ""
 "again unless your session expires or you logout."
 msgstr ""
 
-#: note_kfet/settings/base.py:153
+#: note_kfet/settings/base.py:151
 msgid "German"
 msgstr ""
 
-#: note_kfet/settings/base.py:154
+#: note_kfet/settings/base.py:152
 msgid "English"
 msgstr ""
 
-#: note_kfet/settings/base.py:155
+#: note_kfet/settings/base.py:153
 msgid "French"
 msgstr ""
 
@@ -650,17 +655,13 @@ msgstr ""
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: templates/base.html:84
+#: templates/base.html:87
 msgid "Clubs"
 msgstr "Clubs"
 
-#: templates/base.html:89
+#: templates/base.html:92
 msgid "Activities"
 msgstr "Activités"
-
-#: templates/base.html:94
-msgid "Buttons"
-msgstr "Boutons"
 
 #: templates/cas_server/base.html:7
 msgid "Central Authentication Service"
@@ -800,7 +801,7 @@ msgstr "Sauvegarder les changements"
 msgid "Sign up"
 msgstr "Inscription"
 
-#: templates/note/conso_form.html:28 templates/note/transaction_form.html:40
+#: templates/note/conso_form.html:28 templates/note/transaction_form.html:50
 msgid "Select emitters"
 msgstr "Sélection des émetteurs"
 
@@ -844,11 +845,27 @@ msgstr "Paiement externe"
 msgid "Transfer type"
 msgstr "Type de transfert"
 
+#: templates/note/transaction_form.html:86
+msgid "Name"
+msgstr "Nom"
+
+#: templates/note/transaction_form.html:92
+msgid "First name"
+msgstr "Prénom"
+
+#: templates/note/transaction_form.html:98
+msgid "Bank"
+msgstr "Banque"
+
 #: templates/note/transaction_form.html:111
 #: templates/note/transaction_form.html:169
 #: templates/note/transaction_form.html:176
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
+
+#: templates/note/transaction_form.html:128
+msgid "Amount"
+msgstr "Montant"
 
 #: templates/note/transaction_form.html:138
 msgid "Reason"
@@ -866,6 +883,22 @@ msgstr "Note à débiter"
 msgid "Buttons list"
 msgstr "Liste des boutons"
 
+#: templates/note/transactiontemplate_list.html:9
+msgid "search button"
+msgstr "Chercher un bouton"
+
+#: templates/note/transactiontemplate_list.html:20
+msgid "buttons listing "
+msgstr "Liste des boutons"
+
+#: templates/note/transactiontemplate_list.html:71
+msgid "button successfully deleted "
+msgstr "Le bouton a bien été supprimé"
+
+#: templates/note/transactiontemplate_list.html:75
+msgid "Unable to delete button "
+msgstr "Impossible de supprimer le bouton "
+
 #: templates/registration/logged_out.html:8
 msgid "Thanks for spending some quality time with the Web site today."
 msgstr ""
@@ -875,7 +908,7 @@ msgid "Log in again"
 msgstr ""
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:26
+#: templates/registration/login.html:28
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr ""
@@ -887,7 +920,15 @@ msgid ""
 "page. Would you like to login to a different account?"
 msgstr ""
 
-#: templates/registration/login.html:27
+#: templates/registration/login.html:22
+msgid "You can also register via the central authentification server "
+msgstr ""
+
+#: templates/registration/login.html:23
+msgid "using this link "
+msgstr ""
+
+#: templates/registration/login.html:29
 msgid "Forgotten your password or username?"
 msgstr ""
 

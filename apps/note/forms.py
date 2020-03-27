@@ -9,17 +9,6 @@ from .models import Alias
 from .models import TransactionTemplate
 
 
-class AliasForm(forms.ModelForm):
-    class Meta:
-        model = Alias
-        fields = ("name",)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["name"].label = False
-        self.fields["name"].widget.attrs = {"placeholder": _('New Alias')}
-
-
 class ImageForm(forms.Form):
     image = forms.ImageField(required=False,
                              label=_('select an image'),

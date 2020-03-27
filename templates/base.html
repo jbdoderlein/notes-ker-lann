@@ -79,9 +79,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <a class="nav-link" href="{% url 'note:consos' %}"><i class="fa fa-coffee"></i> {% trans 'Consumptions' %}</a>
                     </li>
                 {% endif %}
+                {% if "note.transaction"|not_empty_model_list %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fa fa-exchange"></i>{% trans 'Transfer' %} </a>
                     </li>
+                {% endif %}
                 {% if "member.club"|not_empty_model_list %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> {% trans 'Clubs' %}</a>
