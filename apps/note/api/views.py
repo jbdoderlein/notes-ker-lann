@@ -45,7 +45,7 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
         return queryset.distinct()
 
 
-class AliasViewSet(viewsets.ModelViewSet):
+class AliasViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
