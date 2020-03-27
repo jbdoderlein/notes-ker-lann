@@ -32,6 +32,7 @@ class ActivityListView(LoginRequiredMixin, SingleTableView):
 
 class ActivityDetailView(LoginRequiredMixin, DetailView):
     model = Activity
+    context_object_name = "activity"
 
 
 class ActivityUpdateView(LoginRequiredMixin, UpdateView):
