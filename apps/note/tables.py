@@ -106,9 +106,8 @@ DELETE_TEMPLATE = """
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
-            'class':
-                'table table condensed table-striped table-hover',
-            'id':"alias_table"
+            'class': 'table table condensed table-striped table-hover',
+            'id': "alias_table"
         }
         model = Alias
         fields = ('name',)
@@ -118,9 +117,8 @@ class AliasTable(tables.Table):
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
-                                   extra_context={"delete_trans": _('delete')},
-                                   attrs={'td': {'class': 'col-sm-1'}})
-
+                                       extra_context={"delete_trans": _('delete')},
+                                       attrs={'td': {'class': 'col-sm-1'}})
 
 
 class ButtonTable(tables.Table):
@@ -145,8 +143,8 @@ class ButtonTable(tables.Table):
                              accessor='pk')
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
-                                   extra_context={"delete_trans": _('delete')},
-                                   attrs={'td': {'class': 'col-sm-1'}})
+                                       extra_context={"delete_trans": _('delete')},
+                                       attrs={'td': {'class': 'col-sm-1'}})
 
     def render_amount(self, value):
         return pretty_money(value)
