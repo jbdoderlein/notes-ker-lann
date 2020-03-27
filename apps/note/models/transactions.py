@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -93,12 +94,26 @@ class Transaction(PolymorphicModel):
         related_name='+',
         verbose_name=_('source'),
     )
+
+    source_alias = models.CharField(
+        max_length=255,
+        default="",  # Will be remplaced by the name of the note on save
+        verbose_name=_('used alias'),
+    )
+
     destination = models.ForeignKey(
         Note,
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('destination'),
     )
+
+    destination_alias = models.CharField(
+        max_length=255,
+        default="",  # Will be remplaced by the name of the note on save
+        verbose_name=_('used alias'),
+    )
+
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
         default=timezone.now,
@@ -115,9 +130,17 @@ class Transaction(PolymorphicModel):
         verbose_name=_('reason'),
         max_length=255,
     )
+
     valid = models.BooleanField(
         verbose_name=_('valid'),
         default=True,
+    )
+
+    invalidity_reason = models.CharField(
+        verbose_name=_('invalidity reason'),
+        max_length=255,
+        default=None,
+        null=True,
     )
 
     class Meta:
@@ -133,6 +156,13 @@ class Transaction(PolymorphicModel):
         """
         When saving, also transfer money between two notes
         """
+
+        # If the aliases are not entered, we assume that the used alias is the name of the note
+        if not self.source_alias:
+            self.source_alias = str(self.source)
+
+        if not self.destination_alias:
+            self.destination_alias = str(self.destination)
 
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transfered
@@ -151,6 +181,10 @@ class Transaction(PolymorphicModel):
         if self.valid:
             self.source.balance -= to_transfer
             self.destination.balance += to_transfer
+
+            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
+            # previously invalid
+            self.invalidity_reason = None
 
         # We save first the transaction, in case of the user has no right to transfer money
         super().save(*args, **kwargs)

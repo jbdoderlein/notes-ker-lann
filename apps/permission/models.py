@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q, Model
 from django.utils.translation import gettext_lazy as _
-
 from member.models import Role
 
 
@@ -281,4 +280,3 @@ class RolePermissions(models.Model):
 
     def __str__(self):
         return str(self.role)
-

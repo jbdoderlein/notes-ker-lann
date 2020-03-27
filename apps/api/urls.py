@@ -12,6 +12,7 @@ from activity.api.urls import register_activity_urls
 from api.viewsets import ReadProtectedModelViewSet
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
+from treasury.api.urls import register_treasury_urls
 from logs.api.urls import register_logs_urls
 from permission.api.urls import register_permission_urls
 
@@ -74,6 +75,7 @@ router.register('user', UserViewSet)
 register_members_urls(router, 'members')
 register_activity_urls(router, 'activity')
 register_note_urls(router, 'note')
+register_treasury_urls(router, 'treasury')
 register_permission_urls(router, 'permission')
 register_logs_urls(router, 'logs')
 

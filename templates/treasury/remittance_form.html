@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags pretty_money %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <h1>{% trans "Remittance #" %}{{ object.pk }}</h1>
+
+    <p><a class="btn btn-default" href="{% url 'treasury:remittance_list' %}">{% trans "Remittances list" %}</a></p>
+
+    {% if object.pk %}
+        <div id="div_id_type" class="form-group"><label for="id_count" class="col-form-label">{% trans "Count" %}</label>
+            <div class="">
+                <input type="text" name="count" value="{{ object.count }}" class="textinput textInput form-control" id="id_count" disabled>
+            </div>
+        </div>
+
+        <div id="div_id_type" class="form-group"><label for="id_amount" class="col-form-label">{% trans "Amount" %}</label>
+            <div class="">
+                <input class="textinput textInput form-control" type="text" value="{{ object.amount|pretty_money }}" id="id_amount" disabled>
+            </div>
+        </div>
+    {% endif %}
+
+    {% crispy form %}
+
+    <hr>
+
+    <h2>{% trans "Linked transactions" %}</h2>
+    {% if special_transactions.data %}
+        {% render_table special_transactions %}
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no transaction linked with this remittance." %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -167,7 +167,7 @@ function reset() {
 function consumeAll() {
     notes_display.forEach(function(note_display) {
         buttons.forEach(function(button) {
-            consume(note_display.id, button.dest, button.quantity * note_display.quantity, button.amount,
+            consume(note_display.id, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
                 button.name + " (" + button.category_name + ")", button.type, button.category_id, button.id);
        });
     });
@@ -176,6 +176,7 @@ function consumeAll() {
 /**
  * Create a new transaction from a button through the API.
  * @param source The note that paid the item (type: int)
+ * @param source_alias The alias used for the source (type: str)
  * @param dest The note that sold the item (type: int)
  * @param quantity The quantity sold (type: int)
  * @param amount The price of one item, in cents (type: int)
@@ -184,7 +185,7 @@ function consumeAll() {
  * @param category The category id of the button (type: int)
  * @param template The button id (type: int)
  */
-function consume(source, dest, quantity, amount, reason, type, category, template) {
+function consume(source, source_alias, dest, quantity, amount, reason, type, category, template) {
     $.post("/api/note/transaction/transaction/",
         {
             "csrfmiddlewaretoken": CSRF_TOKEN,
@@ -195,11 +196,32 @@ function consume(source, dest, quantity, amount, reason, type, category, templat
             "polymorphic_ctype": type,
             "resourcetype": "RecurrentTransaction",
             "source": source,
+            "source_alias": source_alias,
             "destination": dest,
             "category": category,
             "template": template
         }, reset).fail(function (e) {
-            reset();
-            errMsg(e.responseJSON);
+            $.post("/api/note/transaction/transaction/",
+            {
+                "csrfmiddlewaretoken": CSRF_TOKEN,
+                "quantity": quantity,
+                "amount": amount,
+                "reason": reason,
+                "valid": false,
+                "invalidity_reason": "Solde insuffisant",
+                "polymorphic_ctype": type,
+                "resourcetype": "RecurrentTransaction",
+                "source": source,
+                "source_alias": source_alias,
+                "destination": dest,
+                "category": category,
+                "template": template
+            }).done(function() {
+                reset();
+                addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger");
+            }).fail(function () {
+                reset();
+                errMsg(e.responseJSON);
+            });
     });
 }

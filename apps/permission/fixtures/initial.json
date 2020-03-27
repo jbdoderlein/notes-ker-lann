@@ -327,7 +327,7 @@
         "note",
         "transaction"
       ],
-      "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, {\"amount__lte\": [\"user\", \"note\", \"balance\"]}]",
+      "query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, [\"OR\", {\"amount__lte\": [\"user\", \"note\", \"balance\"]}, {\"valid\": false}]]",
       "type": "add",
       "mask": 1,
       "field": "",
@@ -387,7 +387,7 @@
         "note",
         "recurrenttransaction"
       ],
-      "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
+      "query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
       "type": "add",
       "mask": 2,
       "field": "",
