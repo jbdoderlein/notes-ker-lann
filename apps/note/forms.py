@@ -35,7 +35,9 @@ class TransactionTemplateForm(forms.ModelForm):
                     NoteClub,
                     attrs={
                         'api_url': '/api/note/note/',
-                        'api_url_suffix': '&polymorphic_ctype=' + str(ContentType.objects.get_for_model(NoteClub).pk),
+                        # We don't evaluate the content type at launch because the DB might be not initialized
+                        'api_url_suffix':
+                            lambda value: '&polymorphic_ctype=' + str(ContentType.objects.get_for_model(NoteClub).pk),
                         'placeholder': 'Note ...',
                     },
                 ),
