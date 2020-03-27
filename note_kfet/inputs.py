@@ -40,12 +40,6 @@ class AutocompleteModelSelect(Select):
             return str(self.model.objects.get(pk=int(value)))
         return ""
 
-    def value_from_datadict(self, data, files, name):
-        val = super().value_from_datadict(data, files, name)
-        print(data)
-        print(self.attrs)
-        return val
-
 
 """
 The remaining of this file comes from the project `django-bootstrap-datepicker-plus` available on Github:

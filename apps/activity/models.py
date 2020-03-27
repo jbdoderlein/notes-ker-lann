@@ -1,9 +1,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from note.models import NoteUser
 
 
 class ActivityType(models.Model):
@@ -77,6 +77,18 @@ class Activity(models.Model):
         verbose_name_plural = _("activities")
 
 
+class Entry(models.Model):
+    time = models.DateTimeField(
+        verbose_name=_("entry time"),
+    )
+
+    note = models.ForeignKey(
+        NoteUser,
+        on_delete=models.PROTECT,
+        verbose_name=_("note"),
+    )
+
+
 class Guest(models.Model):
     """
     People who are not current members of any clubs, and are invited by someone who is a current member.
@@ -86,17 +98,30 @@ class Guest(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
     )
-    name = models.CharField(
+
+    last_name = models.CharField(
         max_length=255,
+        verbose_name=_("last name"),
     )
+
+    first_name = models.CharField(
+        max_length=255,
+        verbose_name=_("first name"),
+    )
+
     inviter = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        NoteUser,
         on_delete=models.PROTECT,
         related_name='+',
+        verbose_name=_("inviter"),
     )
-    entry = models.DateTimeField(
+
+    entry = models.OneToOneField(
+        Entry,
+        on_delete=models.PROTECT,
         null=True,
     )
+
     entry_transaction = models.ForeignKey(
         'note.Transaction',
         on_delete=models.PROTECT,

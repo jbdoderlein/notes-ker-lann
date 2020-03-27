@@ -7,8 +7,9 @@ from django.views.generic import CreateView, DetailView, UpdateView, TemplateVie
 from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
 
-from .forms import ActivityForm
-from .models import Activity
+from .forms import ActivityForm, GuestForm
+from .models import Activity, Guest
+from .tables import ActivityTable
 
 
 class ActivityCreateView(LoginRequiredMixin, CreateView):
@@ -19,6 +20,7 @@ class ActivityCreateView(LoginRequiredMixin, CreateView):
 
 class ActivityListView(LoginRequiredMixin, SingleTableView):
     model = Activity
+    table_class = ActivityTable
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -36,6 +38,13 @@ class ActivityUpdateView(LoginRequiredMixin, UpdateView):
     model = Activity
     form_class = ActivityForm
     success_url = reverse_lazy('activity:activity_list')
+
+
+class ActivityInviteView(LoginRequiredMixin, CreateView):
+    model = Guest
+    form_class = GuestForm
+    success_url = reverse_lazy('activity:activity_list')
+    template_name = "activity/activity_invite.html"
 
 
 class ActivityEntryView(LoginRequiredMixin, TemplateView):
