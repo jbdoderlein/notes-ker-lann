@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView
 from django_tables2 import SingleTableView
 from django.urls import reverse_lazy
+from note_kfet.inputs import AmountInput
 from permission.backends import PermissionBackend
 
 from .forms import TransactionTemplateForm
@@ -40,6 +41,7 @@ class TransactionCreateView(LoginRequiredMixin, SingleTableView):
         """
         context = super().get_context_data(**kwargs)
         context['title'] = _('Transfer money')
+        context['amount_widget'] = AmountInput(attrs={"id": "amount"})
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
         context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
         context['special_types'] = NoteSpecial.objects.order_by("special_type").all()

@@ -7,6 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from note_kfet.inputs import DatePickerInput, AmountInput
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
@@ -19,7 +20,7 @@ class InvoiceForm(forms.ModelForm):
     # Django forms don't support date fields. We have to add it manually
     date = forms.DateField(
         initial=datetime.date.today,
-        widget=forms.TextInput(attrs={'type': 'date'})
+        widget=DatePickerInput()
     )
 
     def clean_date(self):
@@ -30,12 +31,21 @@ class InvoiceForm(forms.ModelForm):
         exclude = ('bde', )
 
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        widgets = {
+            "amount": AmountInput()
+        }
+
+
 # Add a subform per product in the invoice form, and manage correctly the link between the invoice and
 # its products. The FormSet will search automatically the ForeignKey in the Product model.
 ProductFormSet = forms.inlineformset_factory(
     Invoice,
     Product,
-    fields='__all__',
+    form=ProductForm,
     extra=1,
 )
 

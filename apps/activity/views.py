@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
@@ -9,12 +10,12 @@ from .forms import ActivityForm
 from .models import Activity
 
 
-class ActivityCreateView(CreateView):
+class ActivityCreateView(LoginRequiredMixin, CreateView):
     model = Activity
     form_class = ActivityForm
 
 
-class ActivityListView(SingleTableView):
+class ActivityListView(LoginRequiredMixin, SingleTableView):
     model = Activity
 
     def get_context_data(self, **kwargs):
@@ -25,14 +26,14 @@ class ActivityListView(SingleTableView):
         return ctx
 
 
-class ActivityDetailView(DetailView):
+class ActivityDetailView(LoginRequiredMixin, DetailView):
     model = Activity
 
 
-class ActivityUpdateView(UpdateView):
+class ActivityUpdateView(LoginRequiredMixin, UpdateView):
     model = Activity
     form_class = ActivityForm
 
 
-class ActivityEntryView(TemplateView):
+class ActivityEntryView(LoginRequiredMixin, TemplateView):
     pass
