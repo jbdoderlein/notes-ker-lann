@@ -1,11 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from dal import autocomplete
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
+from note_kfet.inputs import AutocompleteModelSelect
 
-from .models import TransactionTemplate
+from .models import TransactionTemplate, NoteClub
 
 
 class ImageForm(forms.Form):
@@ -30,11 +31,12 @@ class TransactionTemplateForm(forms.ModelForm):
         # forward=(forward.Const('TYPE', 'note_type') où TYPE est dans {user, club, special}
         widgets = {
             'destination':
-                autocomplete.ModelSelect2(
-                    url='note:note_autocomplete',
+                AutocompleteModelSelect(
+                    NoteClub,
                     attrs={
-                        'data-placeholder': 'Note ...',
-                        'data-minimum-input-length': 1,
+                        'api_url': '/api/note/note/',
+                        'api_url_suffix': '&polymorphic_ctype=' + str(ContentType.objects.get_for_model(NoteClub).pk),
+                        'placeholder': 'Note ...',
                     },
                 ),
         }

@@ -13,7 +13,4 @@ urlpatterns = [
     path('buttons/update/<int:pk>/', views.TransactionTemplateUpdateView.as_view(), name='template_update'),
     path('buttons/', views.TransactionTemplateListView.as_view(), name='template_list'),
     path('consos/', views.ConsoView.as_view(), name='consos'),
-
-    # API for the note autocompleter
-    path('note-autocomplete/', views.NoteAutocomplete.as_view(model=Note), name='note_autocomplete'),
 ]

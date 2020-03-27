@@ -4,7 +4,6 @@
 import io
 
 from PIL import Image
-from dal import autocomplete
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -251,28 +250,6 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
         context['token'] = Token.objects.get_or_create(
             user=self.request.user)[0]
         return context
-
-
-class UserAutocomplete(autocomplete.Select2QuerySetView):
-    """
-    Auto complete users by usernames
-    """
-
-    def get_queryset(self):
-        """
-        Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
-        Cette fonction récupère la requête, et renvoie la liste filtrée des utilisateurs par pseudos.
-        """
-        #  Un utilisateur non connecté n'a accès à aucune information
-        if not self.request.user.is_authenticated:
-            return User.objects.none()
-
-        qs = User.objects.filter(PermissionBackend.filter_queryset(self.request.user, User, "view")).all()
-
-        if self.q:
-            qs = qs.filter(username__regex="^" + self.q)
-
-        return qs
 
 
 # ******************************* #

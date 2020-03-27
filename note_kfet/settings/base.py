@@ -52,9 +52,6 @@ INSTALLED_APPS = [
     # API
     'rest_framework',
     'rest_framework.authtoken',
-    # Autocomplete
-    'dal',
-    'dal_select2',
 
     # Note apps
     'activity',

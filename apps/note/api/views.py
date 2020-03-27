@@ -24,7 +24,8 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['polymorphic_ctype', 'is_active', ]
     search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model', ]
     ordering_fields = ['alias__name', 'alias__normalized_name']
 

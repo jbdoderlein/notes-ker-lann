@@ -1,19 +1,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""
-This file comes from the project `django-bootstrap-datepicker-plus` available on Github:
-https://github.com/monim67/django-bootstrap-datepicker-plus
-This is distributed under Apache License 2.0.
-
-This adds datetime pickers with bootstrap.
-"""
-
-"""Contains Base Date-Picker input class for widgets of this package."""
-
 from json import dumps as json_dumps
 
-from django.forms.widgets import DateTimeBaseInput, NumberInput
+from django.forms.widgets import DateTimeBaseInput, NumberInput, Select
 
 
 class AmountInput(NumberInput):
@@ -28,6 +18,44 @@ class AmountInput(NumberInput):
     def value_from_datadict(self, data, files, name):
         val = super().value_from_datadict(data, files, name)
         return str(int(100 * float(val))) if val else val
+
+
+class AutocompleteModelSelect(Select):
+    template_name = "member/autocomplete_model.html"
+
+    def __init__(self, model, attrs=None, choices=()):
+        super().__init__(attrs, choices)
+
+        self.model = model
+        self.model_pk = None
+
+    class Media:
+        """JS/CSS resources needed to render the date-picker calendar."""
+
+        js = ('js/autocomplete_model.js', )
+
+    def format_value(self, value):
+        if value:
+            self.attrs["model_pk"] = int(value)
+            return str(self.model.objects.get(pk=int(value)))
+        return ""
+
+    def value_from_datadict(self, data, files, name):
+        val = super().value_from_datadict(data, files, name)
+        print(data)
+        print(self.attrs)
+        return val
+
+
+"""
+The remaining of this file comes from the project `django-bootstrap-datepicker-plus` available on Github:
+https://github.com/monim67/django-bootstrap-datepicker-plus
+This is distributed under Apache License 2.0.
+
+This adds datetime pickers with bootstrap.
+"""
+
+"""Contains Base Date-Picker input class for widgets of this package."""
 
 
 class DatePickerDictionary:
