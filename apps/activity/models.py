@@ -3,7 +3,7 @@
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteUser
+from note.models import NoteUser, Transaction
 
 
 class ActivityType(models.Model):
@@ -44,32 +44,57 @@ class Activity(models.Model):
         verbose_name=_('name'),
         max_length=255,
     )
+
     description = models.TextField(
         verbose_name=_('description'),
     )
+
     activity_type = models.ForeignKey(
         ActivityType,
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('type'),
     )
+
     organizer = models.ForeignKey(
         'member.Club',
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('organizer'),
     )
+
+    note = models.ForeignKey(
+        'note.Note',
+        on_delete=models.PROTECT,
+        related_name='+',
+        null=True,
+        blank=True,
+        verbose_name=_('note'),
+    )
+
     attendees_club = models.ForeignKey(
         'member.Club',
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('attendees club'),
     )
+
     date_start = models.DateTimeField(
         verbose_name=_('start date'),
     )
+
     date_end = models.DateTimeField(
         verbose_name=_('end date'),
+    )
+
+    valid = models.BooleanField(
+        default=False,
+        verbose_name=_('valid'),
+    )
+
+    open = models.BooleanField(
+        default=False,
+        verbose_name=_('open'),
     )
 
     class Meta:
@@ -122,13 +147,17 @@ class Guest(models.Model):
         null=True,
     )
 
-    entry_transaction = models.ForeignKey(
-        'note.Transaction',
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-
     class Meta:
         verbose_name = _("guest")
         verbose_name_plural = _("guests")
+
+
+class GuestTransaction(Transaction):
+    guest = models.OneToOneField(
+        Guest,
+        on_delete=models.PROTECT,
+    )
+
+    @property
+    def type(self):
+        return _('Invitation')

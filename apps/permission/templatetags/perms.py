@@ -48,9 +48,7 @@ def not_empty_model_change_list(model_name):
     return session.get("not_empty_model_change_list_" + model_name) == 1
 
 
-def has_perm(t, obj, field=None):
-    print(t)
-    perm = "." + t + ("__" + field if field else "_")
+def has_perm(perm, obj):
     return PermissionBackend().has_perm(get_current_authenticated_user(), perm, obj)
 
 

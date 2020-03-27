@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div class="card bg-light shadow">
+    <div id="activity_info" class="card bg-light shadow">
         <div class="card-header text-center">
             <h4>{{ activity.name }}</h4>
         </div>
@@ -38,11 +38,23 @@
                     <dt class="col-xl-6">{% trans 'guest entry fee'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ activity.activity_type.guest_entry_fee|pretty_money }}</dd>
                 {% endif %}
+
+                <dt class="col-xl-6">{% trans 'valid'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ activity.valid|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'opened'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ activity.open|yesno }}</dd>
             </dl>
         </div>
 
         <div class="card-footer text-center">
-            {% if "view"|has_perm:activity %}
+            {% if activity.valid and "change__open"|has_perm:activity %}
+                <a class="btn btn-warning btn-sm my-1" id="open_activity"> {% if activity.open %}{% trans "close"|capfirst %}{% else %}{% trans "open"|capfirst %}{% endif %}</a>
+            {% endif %}
+            {% if not activity.open and "change__valid"|has_perm:activity %}
+                <a class="btn btn-success btn-sm my-1" id="validate_activity"> {% if activity.valid %}{% trans "invalidate"|capfirst %}{% else %}{% trans "validate"|capfirst %}{% endif %}</a>
+            {% endif %}
+            {% if "view_"|has_perm:activity %}
                 <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
             {% endif %}
             {% if activity.activity_type.can_invite %}
@@ -77,5 +89,42 @@
           errMsg(xhr.responseJSON);
       });
     }
+
+    $("#open_activity").click(function() {
+        $.ajax({
+            url: "/api/activity/activity/{{ activity.pk }}/",
+            type: "PATCH",
+            dataType: "json",
+            headers: {
+                "X-CSRFTOKEN": CSRF_TOKEN
+            },
+            data: {
+                open: {{ activity.open|yesno:'false,true' }}
+            }
+        }).done(function () {
+            reloadWithTurbolinks();
+        }).fail(function (xhr) {
+            errMsg(xhr.responseJSON);
+        });
+    });
+
+    $("#validate_activity").click(function () {
+        console.log(42);
+        $.ajax({
+            url: "/api/activity/activity/{{ activity.pk }}/",
+            type: "PATCH",
+            dataType: "json",
+            headers: {
+                "X-CSRFTOKEN": CSRF_TOKEN
+            },
+            data: {
+                valid: {{ activity.valid|yesno:'false,true' }}
+            }
+        }).done(function () {
+            reloadWithTurbolinks();
+        }).fail(function (xhr) {
+            errMsg(xhr.responseJSON);
+        });
+    });
 </script>
 {% endblock %}

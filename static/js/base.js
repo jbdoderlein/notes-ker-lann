@@ -28,15 +28,35 @@ function addMsg(msg, alert_type) {
         + msg + "</div>\n";
     msgDiv.html(html);
 }
+
 /**
  * add Muliple error message from err_obj
- * @param err_obj {error_code:erro_message}
+ * @param errs_obj [{error_code:erro_message}]
  */
 function errMsg(errs_obj){
     for (const err_msg of Object.values(errs_obj)) {
               addMsg(err_msg,'danger');
           }
 }
+
+var reloadWithTurbolinks = (function () {
+  var scrollPosition;
+
+  function reload () {
+    scrollPosition = [window.scrollX, window.scrollY];
+    Turbolinks.visit(window.location.toString(), { action: 'replace' })
+  }
+
+  document.addEventListener('turbolinks:load', function () {
+    if (scrollPosition) {
+      window.scrollTo.apply(window, scrollPosition);
+      scrollPosition = null
+    }
+  });
+
+  return reload;
+})();
+
 /**
  * Reload the balance of the user on the right top corner
  */
