@@ -221,7 +221,7 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
                 addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger");
             }).fail(function () {
                 reset();
-                addMsg("Une erreur est survenue lors de la transaction : " + e.responseText, "danger");
+                errMsg(e.responseJSON);
             });
     });
 }

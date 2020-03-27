@@ -20,7 +20,8 @@ from django.views.generic import CreateView, DetailView, UpdateView, TemplateVie
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
-from note.forms import AliasForm, ImageForm
+from note.forms import ImageForm
+#from note.forms import AliasForm, ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
@@ -143,10 +144,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
         context['club_list'] = ClubTable(club_list)
-        context['title'] = _("Account #%(id)s: %(username)s") % {
-            'id': user.pk,
-            'username': user.username,
-        }
         return context
 
 
@@ -171,56 +168,17 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         context["filter"] = self.filter
         return context
 
-
-class AliasView(LoginRequiredMixin, FormMixin, DetailView):
+    
+class ProfileAliasView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
-    form_class = AliasForm
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        note = context['user_object'].note
+        note = context['object'].note
         context["aliases"] = AliasTable(note.alias_set.all())
         return context
-
-    def get_success_url(self):
-        return reverse_lazy('member:user_alias', kwargs={'pk': self.object.id})
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        alias = form.save(commit=False)
-        alias.note = self.object.note
-        alias.save()
-        return super().form_valid(form)
-
-
-class DeleteAliasView(LoginRequiredMixin, DeleteView):
-    model = Alias
-
-    def delete(self, request, *args, **kwargs):
-        try:
-            self.object = self.get_object()
-            self.object.delete()
-        except ValidationError as e:
-            # TODO: pass message to redirected view.
-            messages.error(self.request, str(e))
-        else:
-            messages.success(self.request, _("Alias successfully deleted"))
-        return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return reverse_lazy('member:user_alias', kwargs={'pk': self.object.note.user.pk})
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
 
 
 class PictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
@@ -368,6 +326,17 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         context['member_list'] = club_member
         return context
 
+class ClubAliasView(LoginRequiredMixin, DetailView):
+    model = Club
+    template_name = 'member/club_alias.html'
+    context_object_name = 'club'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        note = context['object'].note
+        context["aliases"] = AliasTable(note.alias_set.all())
+        return context
+
 
 class ClubUpdateView(LoginRequiredMixin, UpdateView):
     model = Club
@@ -395,12 +364,12 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")
                                              | PermissionBackend.filter_queryset(self.request.user, Membership,
                                                                                  "change"))
-
     def get_context_data(self, **kwargs):
+        club = Club.objects.get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
         context['formset'] = MemberFormSet()
         context['helper'] = FormSetHelper()
-
+        context['club'] = club
         context['no_cache'] = True
 
         return context
