@@ -81,14 +81,13 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
     if (!note.display_image) {
         note.display_image = '/media/pic/default.png';
     }
-
     let img = note.display_image;
     if (alias !== note.name)
         alias += " (aka. " + note.name + ")";
     if (user_note_field !== null)
         
         $("#" + user_note_field).addClass(displayStyle(note.balance));
-        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" : " + pretty_money(note.balance))));
+        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (":\n" + pretty_money(note.balance))));
     if (profile_pic_field != null){
         $("#" + profile_pic_field).attr('src', img);
         $("#" + profile_pic_field).click(function(){
