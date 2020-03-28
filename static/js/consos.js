@@ -167,7 +167,7 @@ function reset() {
 function consumeAll() {
     notes_display.forEach(function(note_display) {
         buttons.forEach(function(button) {
-            consume(note_display.id, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
+            consume(note_display.note.id, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
                 button.name + " (" + button.category_name + ")", button.type, button.category_id, button.id);
        });
     });

@@ -83,7 +83,7 @@ $("#transfer").click(function() {
                     "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                     "resourcetype": "Transaction",
                     "source": user_id,
-                    "destination": dest.id,
+                    "destination": dest.note.id,
                     "destination_alias": dest.name
                 }).done(function () {
                     addMsg("Le transfert de "
@@ -91,7 +91,7 @@ $("#transfer").click(function() {
                         + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                     reset();
-                }).fail(function () {
+                }).fail(function () { // do it again but valid = false
                     $.post("/api/note/transaction/transaction/",
                     {
                         "csrfmiddlewaretoken": CSRF_TOKEN,
@@ -103,7 +103,7 @@ $("#transfer").click(function() {
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
                         "source": user_id,
-                        "destination": dest.id,
+                        "destination": dest.note.id,
                         "destination_alias": dest.name
                     }).done(function () {
                         addMsg("Le transfert de "
@@ -133,9 +133,9 @@ $("#transfer").click(function() {
                         "valid": true,
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
-                        "source": source.id,
+                        "source": source.note.id,
                         "source_alias": source.name,
-                        "destination": dest.id,
+                        "destination": dest.note.id,
                         "destination_alias": dest.name
                     }).done(function () {
                         addMsg("Le transfert de "
@@ -143,7 +143,7 @@ $("#transfer").click(function() {
                             + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                         reset();
-                    }).fail(function (err) {
+                    }).fail(function (err) { // do it again but valid = false
                         $.post("/api/note/transaction/transaction/",
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
@@ -154,9 +154,9 @@ $("#transfer").click(function() {
                             "invalidity_reason": "Solde insuffisant",
                             "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                             "resourcetype": "Transaction",
-                            "source": source.id,
+                            "source": source.note.id,
                             "source_alias": source.name,
-                            "destination": dest.id,
+                            "destination": dest.note.id,
                             "destination_alias": dest.name
                         }).done(function () {
                             addMsg("Le transfert de "
@@ -176,7 +176,7 @@ $("#transfer").click(function() {
         });
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
         let special_note = $("#credit_type").val();
-        let user_note = dests_notes_display[0].id;
+        let user_note = dests_notes_display[0].note.id;
         let given_reason = $("#reason").val();
         let source, dest, reason;
         if ($("#type_credit").is(':checked')) {
