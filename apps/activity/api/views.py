@@ -5,8 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from api.viewsets import ReadProtectedModelViewSet
 
-from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer
-from ..models import ActivityType, Activity, Guest
+from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer, EntrySerializer
+from ..models import ActivityType, Activity, Guest, Entry
 
 
 class ActivityTypeViewSet(ReadProtectedModelViewSet):
@@ -41,5 +41,17 @@ class GuestViewSet(ReadProtectedModelViewSet):
     """
     queryset = Guest.objects.all()
     serializer_class = GuestSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['$last_name', '$first_name', '$inviter__alias__name', '$inviter__alias__normalized_name', ]
+
+
+class EntryViewSet(ReadProtectedModelViewSet):
+    """
+    REST API View set.
+    The djangorestframework plugin will get all `Entry` objects, serialize it to JSON with the given serializer,
+    then render it on /api/activity/entry/
+    """
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
     filter_backends = [SearchFilter]
     search_fields = ['$last_name', '$first_name', '$inviter__alias__name', '$inviter__alias__normalized_name', ]

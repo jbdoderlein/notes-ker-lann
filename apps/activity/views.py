@@ -86,13 +86,17 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
-        print(pattern)
+        if not pattern:
+            pattern = "^$"
+
+        if pattern[0] != "^":
+            pattern = "^" + pattern
 
         guest_qs = Guest.objects\
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
             .filter(Q(first_name__regex=pattern) | Q(last_name__regex=pattern)
                     | Q(inviter__alias__name__regex=pattern)
-                    | Q(inviter__alias__normalized_name__startswith=Alias.normalize(pattern)))\
+                    | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern)))\
             .distinct()[:20]
         for guest in guest_qs:
             guest.type = "Invité"
@@ -106,9 +110,9 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .filter(Q(note__polymorphic_ctype__model="noteuser")
                     & (Q(note__noteuser__user__first_name__regex=pattern)
                     | Q(note__noteuser__user__last_name__regex=pattern)
-                    | Q(name__regex="^" + pattern)
-                    | Q(normalized_name__startswith=Alias.normalize(pattern))))\
-            .distinct()[:20]
+                    | Q(name__regex=pattern)
+                    | Q(normalized_name__regex=Alias.normalize(pattern))))\
+            .distinct("username")[:20]
         for note in note_qs:
             note.type = "Adhérent"
             matched.append(note)

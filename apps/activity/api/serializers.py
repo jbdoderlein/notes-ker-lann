@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from ..models import ActivityType, Activity, Guest
+from ..models import ActivityType, Activity, Guest, Entry
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
@@ -36,4 +36,15 @@ class GuestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Guest
+        fields = '__all__'
+
+
+class EntrySerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Entries.
+    The djangorestframework plugin will analyse the model `Entry` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = Entry
         fields = '__all__'

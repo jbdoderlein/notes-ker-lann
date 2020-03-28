@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
 from note.models import NoteUser, Transaction
 
 
@@ -103,7 +105,14 @@ class Activity(models.Model):
 
 
 class Entry(models.Model):
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.PROTECT,
+        verbose_name=_("activity"),
+    )
+
     time = models.DateTimeField(
+        auto_now_add=True,
         verbose_name=_("entry time"),
     )
 
@@ -112,6 +121,47 @@ class Entry(models.Model):
         on_delete=models.PROTECT,
         verbose_name=_("note"),
     )
+
+    guest = models.OneToOneField(
+        'activity.Guest',
+        on_delete=models.PROTECT,
+        null=True,
+    )
+
+    class Meta:
+        unique_together = (('activity', 'note', 'guest', ), )
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        qs = Entry.objects.filter(~Q(pk=self.pk), activity=self.activity, note=self.note, guest=self.guest)
+        if qs.exists():
+            raise ValidationError(_("Already entered on ") + _("{:%Y-%m-%d %H:%M:%S}").format(qs.get().time, ))
+
+        if self.guest:
+            self.note = self.guest.inviter
+
+        insert = not self.pk
+        if insert:
+            if self.note.balance < 0:
+                raise ValidationError(_("The balance is negative."))
+
+        ret = super().save(force_insert, force_update, using, update_fields)
+
+        if insert and self.guest:
+            GuestTransaction.objects.create(
+                source=self.note,
+                source_alias=self.note.user.username,
+                destination=self.activity.organizer.note,
+                destination_alias=self.activity.organizer.name,
+                quantity=1,
+                amount=self.activity.activity_type.guest_entry_fee,
+                reason="Invitation " + self.activity.name + " " + self.guest.first_name + " " + self.guest.last_name,
+                valid=True,
+                guest=self.guest,
+            ).save()
+
+        return ret
 
 
 class Guest(models.Model):
@@ -141,11 +191,14 @@ class Guest(models.Model):
         verbose_name=_("inviter"),
     )
 
-    entry = models.OneToOneField(
-        Entry,
-        on_delete=models.PROTECT,
-        null=True,
-    )
+    @property
+    def has_entry(self):
+        try:
+            if self.entry:
+                return True
+            return False
+        except AttributeError:
+            return False
 
     class Meta:
         verbose_name = _("guest")

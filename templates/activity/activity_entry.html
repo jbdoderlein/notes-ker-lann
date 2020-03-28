@@ -8,6 +8,8 @@
 {% block content %}
     <input id="alias" type="text" class="form-control" placeholder="Nom/note ...">
 
+    <hr>
+
     <div id="entry_table">
         {% render_table table %}
     </div>
@@ -18,13 +20,55 @@
         old_pattern = null;
         alias_obj = $("#alias");
 
-        alias_obj.keyup(function() {
+        function reloadTable(force=false) {
             let pattern = alias_obj.val();
 
-            if (pattern === old_pattern || pattern === "")
+            if ((pattern === old_pattern || pattern === "") && !force)
                 return;
 
-            $("#entry_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #entry_table");
-        });
+            $("#entry_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #entry_table", init);
+            refreshBalance();
+        }
+
+        alias_obj.keyup(reloadTable);
+
+        $(document).ready(init);
+
+        function init() {
+            $(".table-row").click(function(e) {
+                let target = e.target.parentElement;
+                target = $("#" + target.id);
+
+                let type = target.attr("data-type");
+                let id = target.attr("data-id");
+
+                if (type === "membership") {
+                    $.post("/api/activity/entry/?format=json", {
+                        csrfmiddlewaretoken: CSRF_TOKEN,
+                        activity: {{ activity.id }},
+                        note: id,
+                        guest: null
+                    }).done(function () {
+                        addMsg("Entrée effectuée !", "success");
+                        reloadTable(true);
+                    }).fail(function(xhr) {
+                        errMsg(xhr.responseJSON);
+                    });
+                }
+                else {
+                }
+                $.post("/api/activity/entry/?format=json", {
+                        csrfmiddlewaretoken: CSRF_TOKEN,
+                        activity: {{ activity.id }},
+                        note: target.attr("data-inviter"),
+                        guest: id
+                    }).done(function () {
+                        addMsg("Entrée effectuée !", "success");
+                        reloadTable(true);
+                    }).fail(function(xhr) {
+                        errMsg(xhr.responseJSON);
+                    });
+            });
+        }
     </script>
 {% endblock %}

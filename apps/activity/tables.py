@@ -35,8 +35,8 @@ class GuestTable(tables.Table):
         empty_values=(),
         attrs={
             "td": {
-                "class": lambda record: "" if record.entry else "validate btn btn-danger",
-                "onclick": lambda record: "" if record.entry else "remove_guest(" + str(record.pk) + ")"
+                "class": lambda record: "" if record.has_entry else "validate btn btn-danger",
+                "onclick": lambda record: "" if record.has_entry else "remove_guest(" + str(record.pk) + ")"
             }
         }
     )
@@ -50,8 +50,8 @@ class GuestTable(tables.Table):
         fields = ("last_name", "first_name", "inviter", )
 
     def render_entry(self, record):
-        if record.entry:
-            return str(record.date)
+        if record.has_entry:
+            return str(_("Entered on ") + str(_("{:%Y-%m-%d %H:%M:%S}").format(record.entry.time, )))
         return _("remove").capitalize()
 
 
@@ -83,6 +83,8 @@ class EntryTable(tables.Table):
         template_name = 'django_tables2/bootstrap4.html'
         row_attrs = {
             'class': 'table-row',
-            'id': lambda record: "row-" + str(record.type),
-            'data-href': lambda record: record.type
+            'id': lambda record: "row-" + ("guest-" if isinstance(record, Guest) else "membership-") + str(record.pk),
+            'data-type': lambda record: "guest" if isinstance(record, Guest) else "membership",
+            'data-id': lambda record: record.pk,
+            'data-inviter': lambda record: record.inviter.pk if isinstance(record, Guest) else "",
         }
