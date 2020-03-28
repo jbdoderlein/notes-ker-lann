@@ -55,15 +55,15 @@ class GuestTable(tables.Table):
 
 
 class EntryTable(tables.Table):
-    type = tables.Column()
+    type = tables.Column(verbose_name=_("Type"))
 
-    last_name = tables.Column()
+    last_name = tables.Column(verbose_name=_("Last name"))
 
-    first_name = tables.Column()
+    first_name = tables.Column(verbose_name=_("First name"))
 
-    note_name = tables.Column()
+    note_name = tables.Column(verbose_name=_("Note"))
 
-    balance = tables.Column()
+    balance = tables.Column(verbose_name=_("Balance"))
 
     def render_note_name(self, value, record):
         if hasattr(record, 'username'):
