@@ -92,6 +92,20 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
     class Meta:
         model = Note
 
+class ConsumerSerializer(serializers.ModelSerializer):
+    """
+    REST API Nested Serializer for Consumers.
+    return Alias, and the note Associated to it in 
+    """
+    note = NotePolymorphicSerializer()
+    class Meta:
+        model = Alias
+        fields = '__all__'
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.select_related('note')
+    
 
 class TemplateCategorySerializer(serializers.ModelSerializer):
     """
