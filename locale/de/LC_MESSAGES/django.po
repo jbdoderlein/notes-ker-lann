@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-28 01:54+0100\n"
+"POT-Creation-Date: 2020-03-28 16:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,10 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:101
+#: apps/activity/models.py:109
 msgid "activity"
 msgstr ""
 
-#: apps/activity/models.py:19 apps/activity/models.py:44
+#: apps/activity/models.py:21 apps/activity/models.py:46
 #: apps/member/models.py:64 apps/member/models.py:122
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
@@ -30,38 +31,38 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: apps/activity/models.py:23 templates/activity/activity_detail.html:34
+#: apps/activity/models.py:25 templates/activity/activity_detail.html:34
 msgid "can invite"
 msgstr ""
 
-#: apps/activity/models.py:26 templates/activity/activity_detail.html:38
+#: apps/activity/models.py:28 templates/activity/activity_detail.html:38
 msgid "guest entry fee"
 msgstr ""
 
-#: apps/activity/models.py:30
+#: apps/activity/models.py:32
 msgid "activity type"
 msgstr ""
 
-#: apps/activity/models.py:31
+#: apps/activity/models.py:33
 msgid "activity types"
 msgstr ""
 
-#: apps/activity/models.py:49 apps/note/models/transactions.py:69
+#: apps/activity/models.py:51 apps/note/models/transactions.py:69
 #: apps/permission/models.py:90 templates/activity/activity_detail.html:16
 msgid "description"
 msgstr ""
 
-#: apps/activity/models.py:56 apps/note/models/notes.py:164
+#: apps/activity/models.py:58 apps/note/models/notes.py:164
 #: apps/note/models/transactions.py:62
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
 
-#: apps/activity/models.py:63 templates/activity/activity_detail.html:28
+#: apps/activity/models.py:65 templates/activity/activity_detail.html:28
 msgid "organizer"
 msgstr ""
 
-#: apps/activity/models.py:72 apps/activity/models.py:113 apps/note/apps.py:14
+#: apps/activity/models.py:72 apps/activity/models.py:120 apps/note/apps.py:14
 #: apps/note/models/notes.py:58
 msgid "note"
 msgstr ""
@@ -91,43 +92,80 @@ msgstr ""
 msgid "activities"
 msgstr ""
 
-#: apps/activity/models.py:107
+#: apps/activity/models.py:114
 msgid "entry time"
 msgstr ""
 
-#: apps/activity/models.py:129
+#: apps/activity/models.py:137
+msgid "Already entered on "
+msgstr ""
+
+#: apps/activity/models.py:137 apps/activity/tables.py:54
+msgid "{:%Y-%m-%d %H:%M:%S}"
+msgstr ""
+
+#: apps/activity/models.py:145
+msgid "The balance is negative."
+msgstr ""
+
+#: apps/activity/models.py:177
 msgid "last name"
 msgstr ""
 
-#: apps/activity/models.py:134 templates/member/profile_info.html:14
+#: apps/activity/models.py:182 templates/member/profile_info.html:14
 msgid "first name"
 msgstr ""
 
-#: apps/activity/models.py:141
+#: apps/activity/models.py:189
 msgid "inviter"
 msgstr ""
 
-#: apps/activity/models.py:151
+#: apps/activity/models.py:202
 msgid "guest"
 msgstr ""
 
-#: apps/activity/models.py:152
+#: apps/activity/models.py:203
 msgid "guests"
 msgstr ""
 
-#: apps/activity/models.py:163
+#: apps/activity/models.py:214
 msgid "Invitation"
 msgstr ""
 
 #: apps/activity/tables.py:54
+msgid "Entered on "
+msgstr ""
+
+#: apps/activity/tables.py:55
 msgid "remove"
 msgstr ""
 
-#: apps/activity/views.py:34
-msgid "Upcoming activities"
+#: apps/activity/tables.py:75 apps/treasury/models.py:126
+msgid "Type"
 msgstr ""
 
-#: apps/activity/views.py:119
+#: apps/activity/tables.py:77 apps/treasury/forms.py:120
+msgid "Last name"
+msgstr ""
+
+#: apps/activity/tables.py:79 apps/treasury/forms.py:122
+#: templates/note/transaction_form.html:92
+msgid "First name"
+msgstr ""
+
+#: apps/activity/tables.py:81 apps/note/models/notes.py:67
+msgid "Note"
+msgstr ""
+
+#: apps/activity/tables.py:83
+msgid "Balance"
+msgstr ""
+
+#: apps/activity/views.py:35 templates/base.html:94
+msgid "Activities"
+msgstr ""
+
+#: apps/activity/views.py:130
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -357,10 +395,6 @@ msgstr ""
 msgid "notes"
 msgstr ""
 
-#: apps/note/models/notes.py:67
-msgid "Note"
-msgstr ""
-
 #: apps/note/models/notes.py:77 apps/note/models/notes.py:101
 msgid "This alias is already taken."
 msgstr ""
@@ -573,14 +607,6 @@ msgstr ""
 msgid "You can't change the type of the remittance."
 msgstr ""
 
-#: apps/treasury/forms.py:120
-msgid "Last name"
-msgstr ""
-
-#: apps/treasury/forms.py:122 templates/note/transaction_form.html:92
-msgid "First name"
-msgstr ""
-
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:98
 msgid "Bank"
 msgstr ""
@@ -637,10 +663,6 @@ msgstr ""
 
 #: apps/treasury/models.py:120
 msgid "Date"
-msgstr ""
-
-#: apps/treasury/models.py:126
-msgid "Type"
 msgstr ""
 
 #: apps/treasury/models.py:131
@@ -733,8 +755,32 @@ msgstr ""
 msgid "Guests list"
 msgstr ""
 
-#: templates/activity/activity_list.html:7
+#: templates/activity/activity_entry.html:10
+msgid "Return to activity page"
+msgstr ""
+
+#: templates/activity/activity_entry.html:18
+msgid "entries"
+msgstr ""
+
+#: templates/activity/activity_entry.html:18
+msgid "entry"
+msgstr ""
+
+#: templates/activity/activity_list.html:5
+msgid "Upcoming activities"
+msgstr ""
+
+#: templates/activity/activity_list.html:10
+msgid "There is no planned activity."
+msgstr ""
+
+#: templates/activity/activity_list.html:14
 msgid "New activity"
+msgstr ""
+
+#: templates/activity/activity_list.html:18
+msgid "All activities"
 msgstr ""
 
 #: templates/base.html:13
@@ -743,10 +789,6 @@ msgstr ""
 
 #: templates/base.html:89
 msgid "Clubs"
-msgstr ""
-
-#: templates/base.html:94
-msgid "Activities"
 msgstr ""
 
 #: templates/cas_server/base.html:7

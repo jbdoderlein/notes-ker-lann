@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-28 01:54+0100\n"
+"POT-Creation-Date: 2020-03-28 16:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,10 +14,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:101
+#: apps/activity/models.py:109
 msgid "activity"
 msgstr "activité"
 
-#: apps/activity/models.py:19 apps/activity/models.py:44
+#: apps/activity/models.py:21 apps/activity/models.py:46
 #: apps/member/models.py:64 apps/member/models.py:122
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
@@ -25,45 +26,45 @@ msgstr "activité"
 msgid "name"
 msgstr "nom"
 
-#: apps/activity/models.py:23 templates/activity/activity_detail.html:34
+#: apps/activity/models.py:25 templates/activity/activity_detail.html:34
 msgid "can invite"
 msgstr "peut inviter"
 
-#: apps/activity/models.py:26 templates/activity/activity_detail.html:38
+#: apps/activity/models.py:28 templates/activity/activity_detail.html:38
 msgid "guest entry fee"
 msgstr "cotisation de l'entrée invité"
 
-#: apps/activity/models.py:30
+#: apps/activity/models.py:32
 msgid "activity type"
 msgstr "type d'activité"
 
-#: apps/activity/models.py:31
+#: apps/activity/models.py:33
 msgid "activity types"
 msgstr "types d'activité"
 
-#: apps/activity/models.py:49 apps/note/models/transactions.py:69
+#: apps/activity/models.py:51 apps/note/models/transactions.py:69
 #: apps/permission/models.py:90 templates/activity/activity_detail.html:16
 msgid "description"
 msgstr "description"
 
-#: apps/activity/models.py:56 apps/note/models/notes.py:164
+#: apps/activity/models.py:58 apps/note/models/notes.py:164
 #: apps/note/models/transactions.py:62
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr "type"
 
-#: apps/activity/models.py:63 templates/activity/activity_detail.html:28
+#: apps/activity/models.py:65 templates/activity/activity_detail.html:28
 msgid "organizer"
 msgstr "organisateur"
 
-#: apps/activity/models.py:72 apps/activity/models.py:113 apps/note/apps.py:14
+#: apps/activity/models.py:72 apps/activity/models.py:120 apps/note/apps.py:14
 #: apps/note/models/notes.py:58
 msgid "note"
 msgstr "note"
 
 #: apps/activity/models.py:79 templates/activity/activity_detail.html:31
 msgid "attendees club"
-msgstr ""
+msgstr "club attendu"
 
 #: apps/activity/models.py:83 templates/activity/activity_detail.html:22
 msgid "start date"
@@ -80,59 +81,96 @@ msgstr "valide"
 
 #: apps/activity/models.py:97 templates/activity/activity_detail.html:56
 msgid "open"
-msgstr ""
+msgstr "ouvrir"
 
 #: apps/activity/models.py:102
 msgid "activities"
 msgstr "activités"
 
-#: apps/activity/models.py:107
+#: apps/activity/models.py:114
 msgid "entry time"
-msgstr ""
+msgstr "heure d'entrée"
 
-#: apps/activity/models.py:129
+#: apps/activity/models.py:137
+msgid "Already entered on "
+msgstr "Déjà rentré le "
+
+#: apps/activity/models.py:137 apps/activity/tables.py:54
+msgid "{:%Y-%m-%d %H:%M:%S}"
+msgstr "{:%d/%m/%Y %H:%M:%S}"
+
+#: apps/activity/models.py:145
+msgid "The balance is negative."
+msgstr "La note est en négatif."
+
+#: apps/activity/models.py:177
 msgid "last name"
 msgstr "nom de famille"
 
-#: apps/activity/models.py:134 templates/member/profile_info.html:14
+#: apps/activity/models.py:182 templates/member/profile_info.html:14
 msgid "first name"
 msgstr "prénom"
 
-#: apps/activity/models.py:141
+#: apps/activity/models.py:189
 msgid "inviter"
 msgstr "hôte"
 
-#: apps/activity/models.py:151
+#: apps/activity/models.py:202
 msgid "guest"
 msgstr "invité"
 
-#: apps/activity/models.py:152
+#: apps/activity/models.py:203
 msgid "guests"
 msgstr "invités"
 
-#: apps/activity/models.py:163
+#: apps/activity/models.py:214
 msgid "Invitation"
 msgstr "Invitation"
 
 #: apps/activity/tables.py:54
+msgid "Entered on "
+msgstr "Entré le "
+
+#: apps/activity/tables.py:55
 msgid "remove"
 msgstr "supprimer"
 
-#: apps/activity/views.py:34
-msgid "Upcoming activities"
-msgstr "Activités à venir"
+#: apps/activity/tables.py:75 apps/treasury/models.py:126
+msgid "Type"
+msgstr "Type"
 
-#: apps/activity/views.py:119
+#: apps/activity/tables.py:77 apps/treasury/forms.py:120
+msgid "Last name"
+msgstr "Nom de famille"
+
+#: apps/activity/tables.py:79 apps/treasury/forms.py:122
+#: templates/note/transaction_form.html:92
+msgid "First name"
+msgstr "Prénom"
+
+#: apps/activity/tables.py:81 apps/note/models/notes.py:67
+msgid "Note"
+msgstr "Note"
+
+#: apps/activity/tables.py:83
+msgid "Balance"
+msgstr "Solde du compte"
+
+#: apps/activity/views.py:35 templates/base.html:94
+msgid "Activities"
+msgstr "Activités"
+
+#: apps/activity/views.py:130
 msgid "Entry for activity \"{}\""
 msgstr "Entrées pour l'activité « {} »"
 
 #: apps/api/apps.py:10
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: apps/logs/apps.py:11
 msgid "Logs"
-msgstr ""
+msgstr "Logs"
 
 #: apps/logs/models.py:21 apps/note/models/notes.py:117
 msgid "user"
@@ -283,7 +321,7 @@ msgstr "cotisation"
 
 #: apps/member/models.py:172
 msgid "User is not a member of the parent club"
-msgstr ""
+msgstr "L'utilisateur n'est pas membre du club parent"
 
 #: apps/member/models.py:176
 msgid "membership"
@@ -356,10 +394,6 @@ msgstr "créée le"
 #: apps/note/models/notes.py:59
 msgid "notes"
 msgstr "notes"
-
-#: apps/note/models/notes.py:67
-msgid "Note"
-msgstr "Note"
 
 #: apps/note/models/notes.py:77 apps/note/models/notes.py:101
 msgid "This alias is already taken."
@@ -573,14 +607,6 @@ msgstr "La remise est déjà fermée."
 msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
-#: apps/treasury/forms.py:120
-msgid "Last name"
-msgstr "Nom de famille"
-
-#: apps/treasury/forms.py:122 templates/note/transaction_form.html:92
-msgid "First name"
-msgstr "Prénom"
-
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:98
 msgid "Bank"
 msgstr "Banque"
@@ -638,10 +664,6 @@ msgstr "Prix unitaire"
 #: apps/treasury/models.py:120
 msgid "Date"
 msgstr "Date"
-
-#: apps/treasury/models.py:126
-msgid "Type"
-msgstr "Type"
 
 #: apps/treasury/models.py:131
 msgid "Comment"
@@ -733,9 +755,33 @@ msgstr "Inviter"
 msgid "Guests list"
 msgstr "Liste des invités"
 
-#: templates/activity/activity_list.html:7
+#: templates/activity/activity_entry.html:10
+msgid "Return to activity page"
+msgstr "Retour à la page de l'activité"
+
+#: templates/activity/activity_entry.html:18
+msgid "entries"
+msgstr "entrées"
+
+#: templates/activity/activity_entry.html:18
+msgid "entry"
+msgstr "entrée"
+
+#: templates/activity/activity_list.html:5
+msgid "Upcoming activities"
+msgstr "Activités à venir"
+
+#: templates/activity/activity_list.html:10
+msgid "There is no planned activity."
+msgstr "Il n'y a pas d'activité prévue."
+
+#: templates/activity/activity_list.html:14
 msgid "New activity"
 msgstr "Nouvelle activité"
+
+#: templates/activity/activity_list.html:18
+msgid "All activities"
+msgstr "Toutes les activités"
 
 #: templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
@@ -744,10 +790,6 @@ msgstr "La note du BDE de l'ENS Paris-Saclay."
 #: templates/base.html:89
 msgid "Clubs"
 msgstr "Clubs"
-
-#: templates/base.html:94
-msgid "Activities"
-msgstr "Activités"
 
 #: templates/cas_server/base.html:7
 msgid "Central Authentication Service"
@@ -881,9 +923,6 @@ msgstr "Changer le mot de passe"
 #: templates/member/profile_info.html:33
 msgid "balance"
 msgstr "solde du compte"
-
-msgid "Balance"
-msgstr "Solde du compte"
 
 #: templates/member/profile_info.html:41
 msgid "Manage auth token"
@@ -1138,21 +1177,3 @@ msgstr "Il n'y a pas de transaction associée à une remise ouverte."
 #: templates/treasury/remittance_list.html:54
 msgid "Closed remittances"
 msgstr "Remises fermées"
-
-#~ msgid "Account #%(id)s: %(username)s"
-#~ msgstr "Compte n°%(id)s : %(username)s"
-
-#~ msgid "Alias successfully deleted"
-#~ msgstr "L'alias a bien été supprimé"
-
-#~ msgid "New Alias"
-#~ msgstr "Nouvel alias"
-
-#~ msgid "Membership starts on"
-#~ msgstr "L'adhésion commence le"
-
-#~ msgid "Membership ends on"
-#~ msgstr "L'adhésion finie le"
-
-#~ msgid "Membership duration"
-#~ msgstr "Durée de l'adhésion"

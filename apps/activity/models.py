@@ -69,8 +69,6 @@ class Activity(models.Model):
         'note.Note',
         on_delete=models.PROTECT,
         related_name='+',
-        null=True,
-        blank=True,
         verbose_name=_('note'),
     )
 
@@ -152,7 +150,7 @@ class Entry(models.Model):
             GuestTransaction.objects.create(
                 source=self.note,
                 source_alias=self.note.user.username,
-                destination=self.activity.organizer.note,
+                destination=self.note,
                 destination_alias=self.activity.organizer.name,
                 quantity=1,
                 amount=self.activity.activity_type.guest_entry_fee,

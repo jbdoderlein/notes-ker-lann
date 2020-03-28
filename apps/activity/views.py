@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -8,11 +9,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
-from note.models import NoteUser, Alias
+from note.models import NoteUser, Alias, NoteSpecial
 from permission.backends import PermissionBackend
 
 from .forms import ActivityForm, GuestForm
-from .models import Activity, Guest
+from .models import Activity, Guest, Entry
 from .tables import ActivityTable, GuestTable, EntryTable
 
 
@@ -31,7 +32,10 @@ class ActivityListView(LoginRequiredMixin, SingleTableView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx['title'] = _("Upcoming activities")
+        ctx['title'] = _("Activities")
+
+        upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
+        ctx['upcoming'] = ActivityTable(data=upcoming_activities)
 
         return ctx
 
@@ -115,12 +119,16 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .distinct("username")[:20]
         for note in note_qs:
             note.type = "Adhérent"
+            note.activity = activity
             matched.append(note)
 
         table = EntryTable(data=matched)
         ctx["table"] = table
 
+        ctx["entries"] = Entry.objects.filter(activity=activity)
+
         ctx["title"] = _('Entry for activity "{}"').format(activity.name)
         ctx["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
+        ctx["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
 
         return ctx

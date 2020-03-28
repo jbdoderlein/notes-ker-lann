@@ -163,6 +163,7 @@ class SpecialTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# noinspection PyUnresolvedReferences
 class TransactionPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Transaction: TransactionSerializer,
@@ -170,6 +171,13 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
         MembershipTransaction: MembershipTransactionSerializer,
         SpecialTransaction: SpecialTransactionSerializer,
     }
+
+    try:
+        from activity.models import GuestTransaction
+        from activity.api.serializers import GuestTransactionSerializer
+        model_serializer_mapping[GuestTransaction] = GuestTransactionSerializer
+    except ImportError:  # Activity app is not loaded
+        pass
 
     class Meta:
         model = Transaction

@@ -7,7 +7,7 @@ import django_tables2 as tables
 from django_tables2 import A
 from note.templatetags.pretty_money import pretty_money
 
-from .models import Activity, Guest
+from .models import Activity, Guest, Entry
 
 
 class ActivityTable(tables.Table):
@@ -55,6 +55,22 @@ class GuestTable(tables.Table):
         return _("remove").capitalize()
 
 
+def get_row_class(record):
+    c = "table-row"
+    if isinstance(record, Guest):
+        if record.has_entry:
+            c += " table-success"
+        else:
+            c += " table-warning"
+    else:
+        qs = Entry.objects.filter(note=record.note, activity=record.activity, guest=None)
+        if qs.exists():
+            c += " table-success"
+        elif record.note.balance < 0:
+            c += " table-danger"
+    return c
+
+
 class EntryTable(tables.Table):
     type = tables.Column(verbose_name=_("Type"))
 
@@ -82,9 +98,11 @@ class EntryTable(tables.Table):
         }
         template_name = 'django_tables2/bootstrap4.html'
         row_attrs = {
-            'class': 'table-row',
+            'class': lambda record: get_row_class(record),
             'id': lambda record: "row-" + ("guest-" if isinstance(record, Guest) else "membership-") + str(record.pk),
             'data-type': lambda record: "guest" if isinstance(record, Guest) else "membership",
-            'data-id': lambda record: record.pk,
+            'data-id': lambda record: record.pk if isinstance(record, Guest) else record.note.pk,
             'data-inviter': lambda record: record.inviter.pk if isinstance(record, Guest) else "",
+            'data-last-name': lambda record: record.last_name,
+            'data-first-name': lambda record: record.first_name,
         }
