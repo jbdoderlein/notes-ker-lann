@@ -1,11 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 from django_tables2 import A
-
 from note.templatetags.pretty_money import pretty_money
+
 from .models import Activity, Guest
 
 
