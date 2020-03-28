@@ -39,10 +39,21 @@ $(document).ready(function() {
 
                 last.quantity = 1;
 
-                $.getJSON("/api/user/" + last.note.user + "/", function(user) {
-                    $("#last_name").val(user.last_name);
-                    $("#first_name").val(user.first_name);
-                });
+                if (!last.note.user) {
+                    $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
+                        last.note.user = note.user;
+                        $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                            $("#last_name").val(user.last_name);
+                            $("#first_name").val(user.first_name);
+                        });
+                    });
+                }
+                else {
+                    $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                        $("#last_name").val(user.last_name);
+                        $("#first_name").val(user.first_name);
+                    });
+                }
             }
 
             return true;
@@ -72,19 +83,41 @@ $("#transfer").click(function() {
                     "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                     "resourcetype": "Transaction",
                     "source": user_id,
-                    "destination": dest.id
-                }, function () {
+                    "destination": dest.id,
+                    "destination_alias": dest.name
+                }).done(function () {
                     addMsg("Le transfert de "
                         + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
                         + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                     reset();
-                }).fail(function (err) {
-                    addMsg("Le transfert de "
-                        + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
-                        + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+                }).fail(function () {
+                    $.post("/api/note/transaction/transaction/",
+                    {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "quantity": dest.quantity,
+                        "amount": 100 * $("#amount").val(),
+                        "reason": $("#reason").val(),
+                        "valid": false,
+                        "invalidity_reason": "Solde insuffisant",
+                        "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
+                        "resourcetype": "Transaction",
+                        "source": user_id,
+                        "destination": dest.id,
+                        "destination_alias": dest.name
+                    }).done(function () {
+                        addMsg("Le transfert de "
+                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
+                            + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
 
-                reset();
+                        reset();
+                    }).fail(function (err) {
+                        addMsg("Le transfert de "
+                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
+                            + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+
+                    reset();
+                });
             });
         });
     }
@@ -101,19 +134,43 @@ $("#transfer").click(function() {
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
                         "source": source.id,
-                        "destination": dest.id
-                    }, function () {
+                        "source_alias": source.name,
+                        "destination": dest.id,
+                        "destination_alias": dest.name
+                    }).done(function () {
                         addMsg("Le transfert de "
                             + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
                             + " vers la note " + dest.name + " a été fait avec succès !", "success");
 
                         reset();
                     }).fail(function (err) {
-                        addMsg("Le transfert de "
-                            + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                            + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+                        $.post("/api/note/transaction/transaction/",
+                        {
+                            "csrfmiddlewaretoken": CSRF_TOKEN,
+                            "quantity": source.quantity * dest.quantity,
+                            "amount": 100 * $("#amount").val(),
+                            "reason": $("#reason").val(),
+                            "valid": false,
+                            "invalidity_reason": "Solde insuffisant",
+                            "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
+                            "resourcetype": "Transaction",
+                            "source": source.id,
+                            "source_alias": source.name,
+                            "destination": dest.id,
+                            "destination_alias": dest.name
+                        }).done(function () {
+                            addMsg("Le transfert de "
+                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
 
-                        reset();
+                            reset();
+                        }).fail(function (err) {
+                            addMsg("Le transfert de "
+                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+
+                            reset();
+                    });
                 });
             });
         });
@@ -146,15 +203,17 @@ $("#transfer").click(function() {
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,
                 "resourcetype": "SpecialTransaction",
                 "source": source,
+                "source_alias": source.name,
                 "destination": dest,
+                "destination_alias": dest.name,
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
-            }, function () {
+            }).done(function () {
                 addMsg("Le crédit/retrait a bien été effectué !", "success");
                 reset();
             }).fail(function (err) {
-                addMsg("Le crédit/transfert a échoué : " + err.responseText, "danger");
+                addMsg("Le crédit/retrait a échoué : " + err.responseText, "danger");
                 reset();
         });
     }

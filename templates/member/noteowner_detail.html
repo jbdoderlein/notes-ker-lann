@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load pretty_money %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-3 mb-4">
+        {% block profile_info %}
+        {% endblock %}
+    </div>
+    <div class="col-md-9">
+        {% block profile_content %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+    function refreshhistory() {
+        $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
+    }
+    </script>
+{% endblock %}

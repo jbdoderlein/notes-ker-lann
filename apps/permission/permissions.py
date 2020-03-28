@@ -3,6 +3,8 @@
 
 from rest_framework.permissions import DjangoObjectPermissions
 
+from .backends import PermissionBackend
+
 SAFE_METHODS = ('HEAD', 'OPTIONS', )
 
 
@@ -41,8 +43,8 @@ class StrongDjangoObjectPermissions(DjangoObjectPermissions):
         user = request.user
 
         perms = self.get_required_object_permissions(request.method, model_cls)
-
-        if not user.has_perms(perms, obj):
+        # if not user.has_perms(perms, obj):
+        if not all(PermissionBackend().has_perm(user, perm, obj) for perm in perms):
             # If the user does not have permissions we need to determine if
             # they have read permissions to see 403, or not, and simply see
             # a 404 response.

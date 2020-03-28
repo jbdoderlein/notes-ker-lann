@@ -2,8 +2,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
@@ -52,6 +57,22 @@ class AliasViewSet(ReadProtectedModelViewSet):
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
     ordering_fields = ['name', 'normalized_name']
 
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method in ['PUT', 'PATCH']:
+            #alias owner cannot be change once establish
+            setattr(serializer_class.Meta, 'read_only_fields', ('note',))
+        return serializer_class
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        try:
+            self.perform_destroy(instance)
+        except ValidationError as e:
+            print(e)
+            return Response({e.code:e.message},status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
     def get_queryset(self):
         """
         Parse query and apply filters.
@@ -104,7 +125,7 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     search_fields = ['$name', ]
 
 
-class TransactionTemplateViewSet(ReadProtectedModelViewSet):
+class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
@@ -112,8 +133,9 @@ class TransactionTemplateViewSet(ReadProtectedModelViewSet):
     """
     queryset = TransactionTemplate.objects.all()
     serializer_class = TransactionTemplateSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'display', 'category', ]
+    search_fields = ['$name', ]
 
 
 class TransactionViewSet(ReadProtectedModelViewSet):

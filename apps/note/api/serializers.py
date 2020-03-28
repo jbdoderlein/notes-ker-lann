@@ -78,7 +78,11 @@ class AliasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alias
         fields = '__all__'
-        read_only_fields = ('note', )
+
+    def validate(self, attrs):
+        instance = Alias(**attrs)
+        instance.clean()
+        return attrs
 
 
 class NotePolymorphicSerializer(PolymorphicSerializer):
