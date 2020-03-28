@@ -21,13 +21,22 @@ class ActivityCreateView(LoginRequiredMixin, CreateView):
     model = Activity
     form_class = ActivityForm
 
+    def form_valid(self, form):
+        form.instance.creater = self.request.user
+        return super().form_valid(form)
+
     def get_success_url(self, **kwargs):
-        return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
+        self.object.refresh_from_db()
+        return reverse_lazy('activity:activity_detail', kwargs={"pk": self.object.pk})
 
 
 class ActivityListView(LoginRequiredMixin, SingleTableView):
     model = Activity
     table_class = ActivityTable
+
+    def get_queryset(self):
+        return super().get_queryset()\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")).reverse()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -35,7 +44,8 @@ class ActivityListView(LoginRequiredMixin, SingleTableView):
         ctx['title'] = _("Activities")
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
-        ctx['upcoming'] = ActivityTable(data=upcoming_activities)
+        ctx['upcoming'] = ActivityTable(data=upcoming_activities
+                                        .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
 
         return ctx
 
@@ -100,7 +110,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
             .filter(Q(first_name__regex=pattern) | Q(last_name__regex=pattern)
                     | Q(inviter__alias__name__regex=pattern)
-                    | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern)))\
+                    | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))) \
+            .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view"))\
             .distinct()[:20]
         for guest in guest_qs:
             guest.type = "Invité"
@@ -115,7 +126,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                     & (Q(note__noteuser__user__first_name__regex=pattern)
                     | Q(note__noteuser__user__last_name__regex=pattern)
                     | Q(name__regex=pattern)
-                    | Q(normalized_name__regex=Alias.normalize(pattern))))\
+                    | Q(normalized_name__regex=Alias.normalize(pattern)))) \
+            .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))\
             .distinct("username")[:20]
         for note in note_qs:
             note.type = "Adhérent"

@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -58,6 +59,12 @@ class Activity(models.Model):
         verbose_name=_('type'),
     )
 
+    creater = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name=_("user"),
+    )
+
     organizer = models.ForeignKey(
         'member.Club',
         on_delete=models.PROTECT,
@@ -68,6 +75,8 @@ class Activity(models.Model):
     note = models.ForeignKey(
         'note.Note',
         on_delete=models.PROTECT,
+        blank=True,
+        null=True,
         related_name='+',
         verbose_name=_('note'),
     )

@@ -25,6 +25,11 @@
                 <dt class="col-xl-6">{% trans 'end date'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ activity.date_end }}</dd>
 
+                {% if "view_"|has_perm:activity.creater %}
+                    <dt class="col-xl-6">{% trans 'creater'|capfirst %}</dt>
+                    <dd class="col-xl-6"><a href="{% url "member:user_detail" pk=activity.creater.pk %}">{{ activity.creater }}</a></dd>
+                {% endif %}
+
                 <dt class="col-xl-6">{% trans 'organizer'|capfirst %}</dt>
                 <dd class="col-xl-6"><a href="{% url "member:club_detail" pk=activity.organizer.pk %}">{{ activity.organizer }}</a></dd>
 

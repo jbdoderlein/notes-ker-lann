@@ -13,7 +13,7 @@ from .models import Activity, Guest
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
-        exclude = ('valid', 'open', )
+        exclude = ('creater', 'valid', 'open', )
         widgets = {
             "organizer": AutocompleteModelSelect(
                 model=Club,
