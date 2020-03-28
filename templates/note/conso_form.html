@@ -11,9 +11,10 @@
             <div class="row">
                 {# User details column #}
                 <div class="col-xl-5" id="note_infos_div">
-                    <div class="card border-success shadow mb-4">
+                    <div class="card border-success shadow mb-4 text-center">
                         <img src="/media/pic/default.png"
-                            id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
+                             id="profile_pic" alt=""
+                             class="img-thumbnail">
                         <div class="card-body text-center">
                             <span id="user_note"></span>
                         </div>
@@ -25,14 +26,17 @@
                     <div class="card border-success shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
-                                {% trans "Select emitters" %}
+                                {% trans "Consum" %}
                             </p>
                         </div>
+                        <div class="card-body px-0 py-0" style="min-height:125px;">
                         <ul class="list-group list-group-flush" id="note_list">
                         </ul>
-                        <div class="card-body">
-                            <input class="form-control mx-auto d-block" type="text" id="note" />
-                            <ul class="list-group list-group-flush" id="alias_matched">
+                        </div>
+                        <div class="card-footer bg-white">
+                        <input class="form-control mx-auto d-block" type="text" id="note" />
+                        <ul class="list-group list-group-flush"
+                            id="alias_matched">
                             </ul>
                         </div>
                     </div>
