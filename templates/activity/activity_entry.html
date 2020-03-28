@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load pretty_money %}
+{% load perms %}
+
+{% block content %}
+    <input id="alias" type="text" class="form-control" placeholder="Nom/note ...">
+
+    <div id="entry_table">
+        {% render_table table %}
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        old_pattern = null;
+        alias_obj = $("#alias");
+
+        alias_obj.keyup(function() {
+            let pattern = alias_obj.val();
+
+            if (pattern === old_pattern || pattern === "")
+                return;
+
+            $("#entry_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #entry_table");
+        });
+    </script>
+{% endblock %}

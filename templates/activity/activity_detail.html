@@ -48,6 +48,10 @@
         </div>
 
         <div class="card-footer text-center">
+            {% if activity.open %}
+                <a class="btn btn-warning btn-sm my-1" href="{% url 'activity:activity_entry' pk=activity.pk %}"> {% trans "Entry page" %}</a>
+            {% endif %}
+
             {% if activity.valid and "change__open"|has_perm:activity %}
                 <a class="btn btn-warning btn-sm my-1" id="open_activity"> {% if activity.open %}{% trans "close"|capfirst %}{% else %}{% trans "open"|capfirst %}{% endif %}</a>
             {% endif %}

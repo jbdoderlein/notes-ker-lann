@@ -2,15 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import F, Q
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
-
+from note.models import NoteUser, Alias
 from permission.backends import PermissionBackend
+
 from .forms import ActivityForm, GuestForm
 from .models import Activity, Guest
-from .tables import ActivityTable, GuestTable
+from .tables import ActivityTable, GuestTable, EntryTable
 
 
 class ActivityCreateView(LoginRequiredMixin, CreateView):
@@ -69,4 +72,51 @@ class ActivityInviteView(LoginRequiredMixin, CreateView):
 
 
 class ActivityEntryView(LoginRequiredMixin, TemplateView):
-    pass
+    template_name = "activity/activity_entry.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        activity = Activity.objects.get(pk=self.kwargs["pk"])
+        ctx["activity"] = activity
+
+        matched = []
+
+        pattern = "^$"
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+        print(pattern)
+
+        guest_qs = Guest.objects\
+            .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
+            .filter(Q(first_name__regex=pattern) | Q(last_name__regex=pattern)
+                    | Q(inviter__alias__name__regex=pattern)
+                    | Q(inviter__alias__normalized_name__startswith=Alias.normalize(pattern)))\
+            .distinct()[:20]
+        for guest in guest_qs:
+            guest.type = "Invité"
+            matched.append(guest)
+
+        note_qs = Alias.objects.annotate(last_name=F("note__noteuser__user__last_name"),
+                                         first_name=F("note__noteuser__user__first_name"),
+                                         username=F("note__noteuser__user__username"),
+                                         note_name=F("name"),
+                                         balance=F("note__balance"))\
+            .filter(Q(note__polymorphic_ctype__model="noteuser")
+                    & (Q(note__noteuser__user__first_name__regex=pattern)
+                    | Q(note__noteuser__user__last_name__regex=pattern)
+                    | Q(name__regex="^" + pattern)
+                    | Q(normalized_name__startswith=Alias.normalize(pattern))))\
+            .distinct()[:20]
+        for note in note_qs:
+            note.type = "Adhérent"
+            matched.append(note)
+
+        table = EntryTable(data=matched)
+        ctx["table"] = table
+
+        ctx["title"] = _('Entry for activity "{}"').format(activity.name)
+        ctx["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
+
+        return ctx

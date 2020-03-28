@@ -42,4 +42,4 @@ class GuestViewSet(ReadProtectedModelViewSet):
     queryset = Guest.objects.all()
     serializer_class = GuestSerializer
     filter_backends = [SearchFilter]
-    search_fields = ['$name', ]
+    search_fields = ['$last_name', '$first_name', '$inviter__alias__name', '$inviter__alias__normalized_name', ]

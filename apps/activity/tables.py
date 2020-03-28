@@ -1,10 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 from django_tables2 import A
 
+from note.templatetags.pretty_money import pretty_money
 from .models import Activity, Guest
 
 
@@ -51,3 +52,36 @@ class GuestTable(tables.Table):
         if record.entry:
             return str(record.date)
         return _("remove").capitalize()
+
+
+class EntryTable(tables.Table):
+    type = tables.Column()
+
+    last_name = tables.Column()
+
+    first_name = tables.Column()
+
+    note_name = tables.Column()
+
+    balance = tables.Column()
+
+    def render_note_name(self, value, record):
+        if hasattr(record, 'username'):
+            username = record.username
+            if username != value:
+                return format_html(value + " <em>aka.</em> " + username)
+        return value
+
+    def render_balance(self, value):
+        return pretty_money(value)
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        template_name = 'django_tables2/bootstrap4.html'
+        row_attrs = {
+            'class': 'table-row',
+            'id': lambda record: "row-" + str(record.type),
+            'data-href': lambda record: record.type
+        }
