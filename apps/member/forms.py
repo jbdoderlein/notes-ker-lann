@@ -7,7 +7,7 @@ from crispy_forms.layout import Layout
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from note_kfet.inputs import AutocompleteModelSelect
+from note_kfet.inputs import Autocomplete
 from permission.models import PermissionMask
 
 from .models import Profile, Club, Membership
@@ -63,7 +63,7 @@ class MembershipForm(forms.ModelForm):
         # et récupère les noms d'utilisateur valides
         widgets = {
             'user':
-                AutocompleteModelSelect(
+                Autocomplete(
                     User,
                     attrs={
                         'api_url': '/api/user/',

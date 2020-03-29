@@ -4,7 +4,7 @@
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
-from note_kfet.inputs import AutocompleteModelSelect
+from note_kfet.inputs import Autocomplete
 
 from .models import TransactionTemplate, NoteClub
 
@@ -31,7 +31,7 @@ class TransactionTemplateForm(forms.ModelForm):
         # forward=(forward.Const('TYPE', 'note_type') où TYPE est dans {user, club, special}
         widgets = {
             'destination':
-                AutocompleteModelSelect(
+                Autocomplete(
                     NoteClub,
                     attrs={
                         'api_url': '/api/note/note/',

@@ -1,11 +1,13 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import timedelta
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import gettext as _
 from member.models import Club
 from note.models import NoteUser, Note
-from note_kfet.inputs import DateTimePickerInput, AutocompleteModelSelect
+from note_kfet.inputs import DateTimePickerInput, Autocomplete
 
 from .models import Activity, Guest
 
@@ -15,18 +17,18 @@ class ActivityForm(forms.ModelForm):
         model = Activity
         exclude = ('creater', 'valid', 'open', )
         widgets = {
-            "organizer": AutocompleteModelSelect(
+            "organizer": Autocomplete(
                 model=Club,
                 attrs={"api_url": "/api/members/club/"},
             ),
-            "note": AutocompleteModelSelect(
+            "note": Autocomplete(
                 model=Note,
                 attrs={
                     "api_url": "/api/note/note/",
                     'placeholder': 'Note de l\'événement sur laquelle envoyer les crédits d\'invitation ...'
                 },
             ),
-            "attendees_club": AutocompleteModelSelect(
+            "attendees_club": Autocomplete(
                 model=Club,
                 attrs={"api_url": "/api/members/club/"},
             ),
@@ -36,11 +38,34 @@ class ActivityForm(forms.ModelForm):
 
 
 class GuestForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+
+        one_year = timedelta(days=365)
+
+        qs = Guest.objects.filter(
+            first_name=cleaned_data["first_name"],
+            last_name=cleaned_data["last_name"],
+            activity__date_start__gte=self.activity.date_start - one_year,
+        )
+        if len(qs) >= 5:
+            self.add_error("last_name", _("This person has been already invited 5 times this year."))
+
+        qs = qs.filter(activity=self.activity)
+        if qs.exists():
+            self.add_error("last_name", _("This person is already invited."))
+
+        qs = Guest.objects.filter(inviter=cleaned_data["inviter"], activity=self.activity)
+        if len(qs) >= 3:
+            self.add_error("inviter", _("You can't invite more than 3 people to this activity."))
+
+        return cleaned_data
+
     class Meta:
         model = Guest
         fields = ('last_name', 'first_name', 'inviter', )
         widgets = {
-            "inviter": AutocompleteModelSelect(
+            "inviter": Autocomplete(
                 NoteUser,
                 attrs={
                     'api_url': '/api/note/note/',

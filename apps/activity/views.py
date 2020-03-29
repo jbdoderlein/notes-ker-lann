@@ -77,6 +77,11 @@ class ActivityInviteView(LoginRequiredMixin, CreateView):
     form_class = GuestForm
     template_name = "activity/activity_invite.html"
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.activity = Activity.objects.get(pk=self.kwargs["pk"])
+        return form
+
     def form_valid(self, form):
         form.instance.activity = Activity.objects.get(pk=self.kwargs["pk"])
         return super().form_valid(form)

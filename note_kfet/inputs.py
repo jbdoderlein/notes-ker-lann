@@ -3,7 +3,7 @@
 
 from json import dumps as json_dumps
 
-from django.forms.widgets import DateTimeBaseInput, NumberInput, Select
+from django.forms.widgets import DateTimeBaseInput, NumberInput, TextInput
 
 
 class AmountInput(NumberInput):
@@ -20,11 +20,11 @@ class AmountInput(NumberInput):
         return str(int(100 * float(val))) if val else val
 
 
-class AutocompleteModelSelect(Select):
+class Autocomplete(TextInput):
     template_name = "member/autocomplete_model.html"
 
-    def __init__(self, model, attrs=None, choices=()):
-        super().__init__(attrs, choices)
+    def __init__(self, model, attrs=None):
+        super().__init__(attrs)
 
         self.model = model
         self.model_pk = None

@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -115,6 +116,7 @@ class Entry(models.Model):
     activity = models.ForeignKey(
         Activity,
         on_delete=models.PROTECT,
+        related_name="entries",
         verbose_name=_("activity"),
     )
 
@@ -194,7 +196,7 @@ class Guest(models.Model):
     inviter = models.ForeignKey(
         NoteUser,
         on_delete=models.PROTECT,
-        related_name='+',
+        related_name='guests',
         verbose_name=_("inviter"),
     )
 
@@ -207,9 +209,31 @@ class Guest(models.Model):
         except AttributeError:
             return False
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        one_year = timedelta(days=365)
+
+        qs = Guest.objects.filter(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            activity__date_start__gte=self.activity.date_start - one_year,
+        )
+        if len(qs) >= 5:
+            raise ValidationError(_("This person has been already invited 5 times this year."))
+
+        qs = qs.filter(activity=self.activity)
+        if qs.exists():
+            raise ValidationError(_("This person is already invited."))
+
+        qs = Guest.objects.filter(inviter=self.inviter, activity=self.activity)
+        if len(qs) >= 3:
+            raise ValidationError(_("You can't invite more than 3 people to this activity."))
+
+        return super().save(force_insert, force_update, using, update_fields)
+
     class Meta:
         verbose_name = _("guest")
         verbose_name_plural = _("guests")
+        unique_together = ("activity", "last_name", "first_name", )
 
 
 class GuestTransaction(Transaction):
