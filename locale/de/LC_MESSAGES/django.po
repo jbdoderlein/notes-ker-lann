@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-30 00:38+0200\n"
+"POT-Creation-Date: 2020-03-30 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,21 +23,29 @@ msgstr ""
 msgid "activity"
 msgstr ""
 
-#: apps/activity/forms.py:52 apps/activity/models.py:221
+#: apps/activity/forms.py:45 apps/activity/models.py:217
+msgid "You can't invite someone once the activity is started."
+msgstr ""
+
+#: apps/activity/forms.py:48 apps/activity/models.py:220
+msgid "This activity is not validated yet."
+msgstr ""
+
+#: apps/activity/forms.py:58 apps/activity/models.py:228
 msgid "This person has been already invited 5 times this year."
 msgstr ""
 
-#: apps/activity/forms.py:56 apps/activity/models.py:225
+#: apps/activity/forms.py:62 apps/activity/models.py:232
 msgid "This person is already invited."
 msgstr ""
 
-#: apps/activity/forms.py:60 apps/activity/models.py:229
+#: apps/activity/forms.py:66 apps/activity/models.py:236
 msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
 #: apps/member/models.py:64 apps/member/models.py:122
-#: apps/note/models/notes.py:219 apps/note/models/transactions.py:24
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 msgid "name"
@@ -64,14 +72,14 @@ msgstr ""
 msgid "description"
 msgstr ""
 
-#: apps/activity/models.py:60 apps/note/models/notes.py:166
+#: apps/activity/models.py:60 apps/note/models/notes.py:164
 #: apps/note/models/transactions.py:62
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
 
 #: apps/activity/models.py:66 apps/logs/models.py:21
-#: apps/note/models/notes.py:119
+#: apps/note/models/notes.py:117
 msgid "user"
 msgstr ""
 
@@ -80,7 +88,7 @@ msgid "organizer"
 msgstr ""
 
 #: apps/activity/models.py:82 apps/activity/models.py:131 apps/note/apps.py:14
-#: apps/note/models/notes.py:60
+#: apps/note/models/notes.py:58
 msgid "note"
 msgstr ""
 
@@ -137,15 +145,15 @@ msgstr ""
 msgid "inviter"
 msgstr ""
 
-#: apps/activity/models.py:234
+#: apps/activity/models.py:241
 msgid "guest"
 msgstr ""
 
-#: apps/activity/models.py:235
+#: apps/activity/models.py:242
 msgid "guests"
 msgstr ""
 
-#: apps/activity/models.py:247
+#: apps/activity/models.py:254
 msgid "Invitation"
 msgstr ""
 
@@ -170,7 +178,7 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-#: apps/activity/tables.py:81 apps/note/models/notes.py:69
+#: apps/activity/tables.py:81 apps/note/models/notes.py:67
 msgid "Note"
 msgstr ""
 
@@ -182,7 +190,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:147
+#: apps/activity/views.py:149
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -305,8 +313,7 @@ msgid ""
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:104 apps/note/models/notes.py:141
-#: apps/note/models/notes.py:197
+#: apps/member/models.py:104 apps/note/models/notes.py:139
 msgid "club"
 msgstr ""
 
@@ -371,104 +378,104 @@ msgstr ""
 msgid "Maximal size: 2MB"
 msgstr ""
 
-#: apps/note/models/notes.py:29
+#: apps/note/models/notes.py:27
 msgid "account balance"
 msgstr ""
 
-#: apps/note/models/notes.py:30
+#: apps/note/models/notes.py:28
 msgid "in centimes, money credited for this instance"
 msgstr ""
 
-#: apps/note/models/notes.py:34
+#: apps/note/models/notes.py:32
 msgid "last negative date"
 msgstr ""
 
-#: apps/note/models/notes.py:35
+#: apps/note/models/notes.py:33
 msgid "last time the balance was negative"
 msgstr ""
 
-#: apps/note/models/notes.py:40
+#: apps/note/models/notes.py:38
 msgid "active"
 msgstr ""
 
-#: apps/note/models/notes.py:43
+#: apps/note/models/notes.py:41
 msgid ""
 "Designates whether this note should be treated as active. Unselect this "
 "instead of deleting notes."
 msgstr ""
 
-#: apps/note/models/notes.py:47
+#: apps/note/models/notes.py:45
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:55 apps/note/models/transactions.py:117
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:117
 msgid "created at"
 msgstr ""
 
-#: apps/note/models/notes.py:61
+#: apps/note/models/notes.py:59
 msgid "notes"
 msgstr ""
 
-#: apps/note/models/notes.py:79 apps/note/models/notes.py:103
+#: apps/note/models/notes.py:77 apps/note/models/notes.py:101
 msgid "This alias is already taken."
 msgstr ""
 
-#: apps/note/models/notes.py:123
+#: apps/note/models/notes.py:121
 msgid "one's note"
 msgstr ""
 
-#: apps/note/models/notes.py:124
+#: apps/note/models/notes.py:122
 msgid "users note"
 msgstr ""
 
-#: apps/note/models/notes.py:130
+#: apps/note/models/notes.py:128
 #, python-format
 msgid "%(user)s's note"
 msgstr ""
 
-#: apps/note/models/notes.py:145
+#: apps/note/models/notes.py:143
 msgid "club note"
 msgstr ""
 
-#: apps/note/models/notes.py:146
+#: apps/note/models/notes.py:144
 msgid "clubs notes"
 msgstr ""
 
-#: apps/note/models/notes.py:152
+#: apps/note/models/notes.py:150
 #, python-format
 msgid "Note of %(club)s club"
 msgstr ""
 
-#: apps/note/models/notes.py:172
+#: apps/note/models/notes.py:170
 msgid "special note"
 msgstr ""
 
-#: apps/note/models/notes.py:173
+#: apps/note/models/notes.py:171
 msgid "special notes"
 msgstr ""
 
-#: apps/note/models/notes.py:225
+#: apps/note/models/notes.py:194
 msgid "Invalid alias"
 msgstr ""
 
-#: apps/note/models/notes.py:241
+#: apps/note/models/notes.py:210
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:242 templates/member/club_info.html:33
+#: apps/note/models/notes.py:211 templates/member/club_info.html:33
 #: templates/member/profile_info.html:36
 msgid "aliases"
 msgstr ""
 
-#: apps/note/models/notes.py:264
+#: apps/note/models/notes.py:233
 msgid "Alias is too long."
 msgstr ""
 
-#: apps/note/models/notes.py:269
+#: apps/note/models/notes.py:238
 msgid "An alias with a similar name already exists: {} "
 msgstr ""
 
-#: apps/note/models/notes.py:282
+#: apps/note/models/notes.py:251
 msgid "You can't delete your main alias."
 msgstr ""
 

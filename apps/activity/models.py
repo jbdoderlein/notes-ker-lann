@@ -216,6 +216,9 @@ class Guest(models.Model):
             if self.activity.date_start > datetime.now():
                 raise ValidationError(_("You can't invite someone once the activity is started."))
 
+            if not self.activity.valid:
+                raise ValidationError(_("This activity is not validated yet."))
+
             qs = Guest.objects.filter(
                 first_name=self.first_name,
                 last_name=self.last_name,

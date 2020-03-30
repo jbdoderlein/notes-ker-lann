@@ -44,6 +44,9 @@ class GuestForm(forms.ModelForm):
         if self.activity.date_start > datetime.now():
             self.add_error("inviter", _("You can't invite someone once the activity is started."))
 
+        if not self.activity.valid:
+            self.add_error("inviter", _("This activity is not validated yet."))
+
         one_year = timedelta(days=365)
 
         qs = Guest.objects.filter(
