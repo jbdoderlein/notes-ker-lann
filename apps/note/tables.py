@@ -9,7 +9,7 @@ from django.utils.html import format_html
 from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
 
-from .models.notes import Alias
+from .models.notes import Alias, NoteActivity
 from .models.transactions import Transaction, TransactionTemplate
 from .templatetags.pretty_money import pretty_money
 
@@ -119,6 +119,24 @@ class AliasTable(tables.Table):
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
                                        attrs={'td': {'class': 'col-sm-1'}})
+
+
+class NoteActivityTable(tables.Table):
+    note_name = tables.LinkColumn(
+        "member:club_linked_note_detail",
+        args=[A("club.pk"), A("pk")],
+    )
+
+    def render_balance(self, value):
+        return pretty_money(value)
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = NoteActivity
+        fields = ('note_name', 'balance',)
+        template_name = 'django_tables2/bootstrap4.html'
 
 
 class ButtonTable(tables.Table):

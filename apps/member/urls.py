@@ -8,13 +8,23 @@ from . import views
 app_name = 'member'
 urlpatterns = [
     path('signup/', views.UserCreateView.as_view(), name="signup"),
+
     path('club/', views.ClubListView.as_view(), name="club_list"),
     path('club/<int:pk>/', views.ClubDetailView.as_view(), name="club_detail"),
     path('club/<int:pk>/add_member/', views.ClubAddMemberView.as_view(), name="club_add_member"),
     path('club/create/', views.ClubCreateView.as_view(), name="club_create"),
-    path('club/<int:pk>/update', views.ClubUpdateView.as_view(), name="club_update"),
-    path('club/<int:pk>/update_pic', views.ClubPictureUpdateView.as_view(), name="club_update_pic"),
-    path('club/<int:pk>/aliases', views.ClubAliasView.as_view(), name="club_alias"),
+    path('club/<int:pk>/update/', views.ClubUpdateView.as_view(), name="club_update"),
+    path('club/<int:pk>/update_pic/', views.ClubPictureUpdateView.as_view(), name="club_update_pic"),
+    path('club/<int:pk>/aliases/', views.ClubAliasView.as_view(), name="club_alias"),
+    path('club/<int:pk>/linked_notes/', views.ClubLinkedNotesView.as_view(),
+         name="club_linked_note_list"),
+    path('club/<int:club_pk>/linked_notes/create/', views.ClubLinkedNoteCreateView.as_view(),
+         name="club_linked_note_create"),
+    path('club/<int:club_pk>/linked_notes/<int:pk>/', views.ClubLinkedNoteDetailView.as_view(),
+         name="club_linked_note_detail"),
+    path('club/<int:club_pk>/linked_notes/<int:pk>/update/', views.ClubLinkedNoteUpdateView.as_view(),
+         name="club_linked_note_update"),
+
     path('user/', views.UserListView.as_view(), name="user_list"),
     path('user/<int:pk>', views.UserDetailView.as_view(), name="user_detail"),
     path('user/<int:pk>/update', views.UserUpdateView.as_view(), name="user_update_profile"),

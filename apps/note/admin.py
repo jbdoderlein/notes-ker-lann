@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
-from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
+from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser, NoteActivity
 from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, \
     RecurrentTransaction, MembershipTransaction
 
@@ -24,7 +24,7 @@ class NoteAdmin(PolymorphicParentModelAdmin):
     """
     Parent regrouping all note types as children
     """
-    child_models = (NoteClub, NoteSpecial, NoteUser)
+    child_models = (NoteClub, NoteSpecial, NoteUser, NoteActivity)
     list_filter = (
         PolymorphicChildModelFilter,
         'is_active',
@@ -68,6 +68,14 @@ class NoteClubAdmin(PolymorphicChildModelAdmin):
 
 @admin.register(NoteSpecial)
 class NoteSpecialAdmin(PolymorphicChildModelAdmin):
+    """
+    Child for a special note, see NoteAdmin
+    """
+    readonly_fields = ('balance',)
+
+
+@admin.register(NoteActivity)
+class NoteActivityAdmin(PolymorphicChildModelAdmin):
     """
     Child for a special note, see NoteAdmin
     """

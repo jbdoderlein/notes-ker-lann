@@ -34,7 +34,10 @@
             <dd class="col-xl-6 text-truncate">{{ object.note.alias_set.all|join:", " }}</dd>
 
             <dt class="col-xl-3">{% trans 'email'|capfirst %}</dt>
-            <dd class="col-xl-9"><a href="mailto:{{ club.email }}">{{ club.email}}</a></dd>
+            <dd class="col-xl-9"><a href="mailto:{{ club.email }}">{{ club.email }}</a></dd>
+
+            <dt class="col-xl-6"><a href="{% url 'member:club_linked_note_list' pk=club.pk %}">{% trans 'linked notes'|capfirst %}</a></dt>
+            <dd class="col-xl-6 text-truncate">{{ club.linked_notes.all|join:", " }}</dd>
         </dl>
     </div>
     <div class="card-footer text-center">
@@ -43,6 +46,6 @@
         <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' pk=club.pk %}"> {% trans "Add roles" %}</a>
         {% url 'member:club_detail' club.pk as club_detail_url %}
         {%if request.get_full_path != club_detail_url %}
-        <a class="btn btn-primary btn-sm my-1" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
+        <a class="btn btn-primary btn-sm my-1" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
         {% endif %}    </div>
 </div>

@@ -4,11 +4,13 @@
 import unicodedata
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
+from member.models import Club
 
 """
 Defines each note types
@@ -172,6 +174,40 @@ class NoteSpecial(Note):
 
     def __str__(self):
         return self.special_type
+
+
+class NoteActivity(Note):
+    """
+    A :model:`note.Note` for accounts that are not attached to a user neither to a club,
+    that only need to store and transfer money (notes for activities, departments, ...)
+    """
+
+    note_name = models.CharField(
+        verbose_name=_('name'),
+        max_length=255,
+        unique=True,
+    )
+
+    club = models.ForeignKey(
+        Club,
+        on_delete=models.PROTECT,
+        related_name="linked_notes",
+        verbose_name=_("club"),
+    )
+
+    controller = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="+",
+        verbose_name=_("controller"),
+    )
+
+    class Meta:
+        verbose_name = _("common note")
+        verbose_name_plural = _("common notes")
+
+    def __str__(self):
+        return self.note_name
 
 
 class Alias(models.Model):

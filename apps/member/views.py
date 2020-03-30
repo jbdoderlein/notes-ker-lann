@@ -18,13 +18,14 @@ from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from note.forms import ImageForm
 from note.models import Alias, NoteUser
+from note.models.notes import NoteActivity
 from note.models.transactions import Transaction
-from note.tables import HistoryTable, AliasTable
+from note.tables import HistoryTable, AliasTable, NoteActivityTable
 from permission.backends import PermissionBackend
 
 from .filters import UserFilter, UserFilterFormHelper
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
-    CustomAuthenticationForm
+    CustomAuthenticationForm, NoteActivityForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable
 
@@ -134,7 +135,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         user = context['user_object']
         history_list = \
-            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")
+            Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
         context['history_list'] = HistoryTable(history_list)
         club_list = \
             Membership.objects.all().filter(user=user).only("club")
@@ -179,8 +181,8 @@ class ProfileAliasView(LoginRequiredMixin, DetailView):
 class PictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
     form_class = ImageForm
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.POST, self.request.FILES)
         return context
 
@@ -290,8 +292,8 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         club = context["club"]
-        club_transactions = \
-            Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))
+        club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
         context['history_list'] = HistoryTable(club_transactions)
         club_member = \
             Membership.objects.all().filter(club=club)
@@ -317,7 +319,9 @@ class ClubUpdateView(LoginRequiredMixin, UpdateView):
     context_object_name = "club"
     form_class = ClubForm
     template_name = "member/club_form.html"
-    success_url = reverse_lazy("member:club_detail")
+
+    def get_success_url(self):
+        return reverse_lazy("member:club_detail", kwargs={"pk": self.object.pk})
 
 
 class ClubPictureUpdateView(PictureUpdateView):
@@ -361,3 +365,77 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
     def form_valid(self, formset):
         formset.save()
         return super().form_valid(formset)
+
+
+class ClubLinkedNotesView(LoginRequiredMixin, SingleTableView):
+    model = NoteActivity
+    table_class = NoteActivityTable
+
+    def get_queryset(self):
+        return super().get_queryset().filter(club=self.get_object())\
+            .filter(PermissionBackend.filter_queryset(self.request.user, NoteActivity, "view"))
+
+    def get_object(self):
+        if hasattr(self, 'object'):
+            return self.object
+        self.object = Club.objects.get(pk=int(self.kwargs["pk"]))
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["object"] = ctx["club"] = self.get_object()
+
+        return ctx
+
+
+class ClubLinkedNoteCreateView(LoginRequiredMixin, CreateView):
+    model = NoteActivity
+    form_class = NoteActivityForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        club = Club.objects.get(pk=self.kwargs["club_pk"])
+        ctx["object"] = ctx["club"] = club
+        ctx["form"].fields["club"].initial = club
+
+        return ctx
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy('member:club_linked_note_detail',
+                            kwargs={"club_pk": self.object.club.pk, "pk": self.object.pk})
+
+
+class ClubLinkedNoteUpdateView(LoginRequiredMixin, UpdateView):
+    model = NoteActivity
+    form_class = NoteActivityForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx["club"] = Club.objects.get(pk=self.kwargs["club_pk"])
+
+        return ctx
+
+    def get_success_url(self):
+        return reverse_lazy('member:club_linked_note_detail',
+                            kwargs={"club_pk": self.object.club.pk, "pk": self.object.pk})
+
+
+class ClubLinkedNoteDetailView(LoginRequiredMixin, DetailView):
+    model = NoteActivity
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        note = NoteActivity.objects.get(pk=self.kwargs["pk"])
+
+        transactions = Transaction.objects.all().filter(Q(source=note) | Q(destination=note))\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by("-id")
+        ctx['history_list'] = HistoryTable(transactions)
+        ctx["note"] = note
+        ctx["club"] = note.club
+
+        return ctx

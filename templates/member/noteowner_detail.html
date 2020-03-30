@@ -19,7 +19,7 @@
 
 {% block extrajavascript %}
     <script>
-    function refreshhistory() {
+    function refreshHistory() {
         $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
         $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
     }
