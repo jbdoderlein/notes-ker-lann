@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -60,6 +60,8 @@ class ActivityDetailView(LoginRequiredMixin, DetailView):
         table = GuestTable(data=Guest.objects.filter(activity=self.object)
                            .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view")))
         ctx["guests"] = table
+
+        ctx["activity_started"] = datetime.now(timezone.utc) > self.object.date_start
 
         return ctx
 

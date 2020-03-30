@@ -176,35 +176,6 @@ class NoteSpecial(Note):
         return self.special_type
 
 
-class NoteCommon(Note):
-    """
-    A :model:`note.Note` for special accounts, where real money enter or leave the system
-    - bank check
-    - credit card
-    - bank transfer
-    - cash
-    - refund
-    This Type of Note is not associated to a :model:`auth.User` or :model:`member.Club` .
-    """
-    note_name = models.CharField(
-        max_length=255,
-        unique=True,
-    )
-    
-    club = models.ForeignKey(
-        Club,
-        on_delete=models.PROTECT,
-        verbose_name=_("club"),
-    )
-
-    class Meta:
-        verbose_name = _("common note")
-        verbose_name_plural = _("common notes")
-
-    def __str__(self):
-        return self.note_name
-
-
 class Alias(models.Model):
     """
     points toward  a :model:`note.NoteUser` or :model;`note.NoteClub` instance.

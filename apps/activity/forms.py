@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
@@ -40,6 +40,9 @@ class ActivityForm(forms.ModelForm):
 class GuestForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
+
+        if self.activity.date_start > datetime.now():
+            self.add_error("inviter", _("You can't invite someone once the activity is started."))
 
         one_year = timedelta(days=365)
 

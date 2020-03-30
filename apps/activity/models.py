@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -212,21 +212,25 @@ class Guest(models.Model):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         one_year = timedelta(days=365)
 
-        qs = Guest.objects.filter(
-            first_name=self.first_name,
-            last_name=self.last_name,
-            activity__date_start__gte=self.activity.date_start - one_year,
-        )
-        if len(qs) >= 5:
-            raise ValidationError(_("This person has been already invited 5 times this year."))
+        if not force_insert:
+            if self.activity.date_start > datetime.now():
+                raise ValidationError(_("You can't invite someone once the activity is started."))
 
-        qs = qs.filter(activity=self.activity)
-        if qs.exists():
-            raise ValidationError(_("This person is already invited."))
+            qs = Guest.objects.filter(
+                first_name=self.first_name,
+                last_name=self.last_name,
+                activity__date_start__gte=self.activity.date_start - one_year,
+            )
+            if len(qs) >= 5:
+                raise ValidationError(_("This person has been already invited 5 times this year."))
 
-        qs = Guest.objects.filter(inviter=self.inviter, activity=self.activity)
-        if len(qs) >= 3:
-            raise ValidationError(_("You can't invite more than 3 people to this activity."))
+            qs = qs.filter(activity=self.activity)
+            if qs.exists():
+                raise ValidationError(_("This person is already invited."))
+
+            qs = Guest.objects.filter(inviter=self.inviter, activity=self.activity)
+            if len(qs) >= 3:
+                raise ValidationError(_("You can't invite more than 3 people to this activity."))
 
         return super().save(force_insert, force_update, using, update_fields)
 

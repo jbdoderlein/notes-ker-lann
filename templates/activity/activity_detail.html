@@ -66,7 +66,7 @@
             {% if "view_"|has_perm:activity %}
                 <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
             {% endif %}
-            {% if activity.activity_type.can_invite %}
+            {% if activity.activity_type.can_invite and not activity_started %}
                 <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_invite' pk=activity.pk %}"> {% trans "Invite" %}</a>
             {% endif %}
         </div>
