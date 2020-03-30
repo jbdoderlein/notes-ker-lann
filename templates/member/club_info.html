@@ -13,8 +13,10 @@
             <dt class="col-xl-6">{% trans 'name'|capfirst %}</dt>
             <dd class="col-xl-6">{{ club.name}}</dd>
 
-            <dt class="col-xl-6"><a href="{% url 'member:club_detail' club.parent_club.pk %}">{% trans 'Club Parent'|capfirst %}</a></dt>
-            <dd class="col-xl-6"> {{ club.parent_club.name}}</dd>
+            {% if club.parent_club %}
+                <dt class="col-xl-6"><a href="{% url 'member:club_detail' club.parent_club.pk %}">{% trans 'Club Parent'|capfirst %}</a></dt>
+                <dd class="col-xl-6"> {{ club.parent_club.name}}</dd>
+            {% endif %}
 
             <dt class="col-xl-6">{% trans 'membership start'|capfirst %}</dt>
             <dd class="col-xl-6">{{ club.membership_start }}</dd>

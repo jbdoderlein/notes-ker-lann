@@ -50,18 +50,8 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        kwargs = {}
-
-        # The user type amounts in cents. We convert it in euros.
-        for key in self.request.POST:
-            value = self.request.POST[key]
-            if key.endswith("amount") and value:
-                kwargs[key] = str(int(100 * float(value)))
-            elif value:
-                kwargs[key] = value
-
         # For each product, we save it
-        formset = ProductFormSet(kwargs, instance=form.instance)
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
         if formset.is_valid():
             for f in formset:
                 # We don't save the product if the designation is not entered, ie. if the line is empty
@@ -112,16 +102,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        kwargs = {}
-        # The user type amounts in cents. We convert it in euros.
-        for key in self.request.POST:
-            value = self.request.POST[key]
-            if key.endswith("amount") and value:
-                kwargs[key] = str(int(100 * float(value)))
-            elif value:
-                kwargs[key] = value
-
-        formset = ProductFormSet(kwargs, instance=form.instance)
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
         saved = []
         # For each product, we save it
         if formset.is_valid():

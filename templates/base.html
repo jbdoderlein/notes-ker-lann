@@ -91,7 +91,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% endif %}
                 {% if "activity.activity"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-calendar"></i> {% trans 'Activities' %}</a>
+                        <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fa fa-calendar"></i> {% trans 'Activities' %}</a>
                     </li>
                 {% endif %}
                 {% if "treasury.invoice"|not_empty_model_change_list %}

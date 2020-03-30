@@ -8,7 +8,6 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
@@ -25,7 +24,8 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['polymorphic_ctype', 'is_active', ]
     search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model', ]
     ordering_fields = ['alias__name', 'alias__normalized_name']
 
@@ -60,19 +60,19 @@ class AliasViewSet(ReadProtectedModelViewSet):
     def get_serializer_class(self):
         serializer_class = self.serializer_class
         if self.request.method in ['PUT', 'PATCH']:
-            #alias owner cannot be change once establish
+            # alias owner cannot be change once establish
             setattr(serializer_class.Meta, 'read_only_fields', ('note',))
         return serializer_class
-    
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         try:
             self.perform_destroy(instance)
         except ValidationError as e:
             print(e)
-            return Response({e.code:e.message},status.HTTP_400_BAD_REQUEST)
+            return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     def get_queryset(self):
         """
         Parse query and apply filters.

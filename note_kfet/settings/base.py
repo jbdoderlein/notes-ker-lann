@@ -48,12 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     # API
     'rest_framework',
     'rest_framework.authtoken',
-    # Autocomplete
-    'dal',
-    'dal_select2',
 
     # Note apps
     'activity',
@@ -99,6 +97,8 @@ TEMPLATES = [
         },
     },
 ]
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 WSGI_APPLICATION = 'note_kfet.wsgi.application'
 

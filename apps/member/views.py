@@ -4,24 +4,19 @@
 import io
 
 from PIL import Image
-from dal import autocomplete
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from note.forms import ImageForm
-#from note.forms import AliasForm, ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable
@@ -168,12 +163,12 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         context["filter"] = self.filter
         return context
 
-    
+
 class ProfileAliasView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
@@ -257,28 +252,6 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
         return context
 
 
-class UserAutocomplete(autocomplete.Select2QuerySetView):
-    """
-    Auto complete users by usernames
-    """
-
-    def get_queryset(self):
-        """
-        Quand une personne cherche un utilisateur par pseudo, une requête est envoyée sur l'API dédiée à l'auto-complétion.
-        Cette fonction récupère la requête, et renvoie la liste filtrée des utilisateurs par pseudos.
-        """
-        #  Un utilisateur non connecté n'a accès à aucune information
-        if not self.request.user.is_authenticated:
-            return User.objects.none()
-
-        qs = User.objects.filter(PermissionBackend.filter_queryset(self.request.user, User, "view")).all()
-
-        if self.q:
-            qs = qs.filter(username__regex="^" + self.q)
-
-        return qs
-
-
 # ******************************* #
 #              CLUB               #
 # ******************************* #
@@ -294,7 +267,7 @@ class ClubCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
-    
+
 
 class ClubListView(LoginRequiredMixin, SingleTableView):
     """
@@ -326,11 +299,12 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         context['member_list'] = club_member
         return context
 
+
 class ClubAliasView(LoginRequiredMixin, DetailView):
     model = Club
     template_name = 'member/club_alias.html'
     context_object_name = 'club'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
@@ -364,6 +338,7 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")
                                              | PermissionBackend.filter_queryset(self.request.user, Membership,
                                                                                  "change"))
+
     def get_context_data(self, **kwargs):
         club = Club.objects.get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)

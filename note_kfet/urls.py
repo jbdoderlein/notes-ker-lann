@@ -15,13 +15,14 @@ urlpatterns = [
 
     # Include project routers
     path('note/', include('note.urls')),
+    path('accounts/', include('member.urls')),
+    path('activity/', include('activity.urls')),
     path('treasury/', include('treasury.urls')),
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/', include('member.urls')),
     path('accounts/login/', CustomLoginView.as_view()),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
@@ -42,7 +43,7 @@ if "cas" in settings.INSTALLED_APPS:
         # Include CAS Client routers
         path('accounts/login/cas/', cas_views.login, name='cas_login'),
         path('accounts/logout/cas/', cas_views.logout, name='cas_logout'),
-       
+
     ]
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar

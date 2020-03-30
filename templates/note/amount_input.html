@@ -1,0 +1,11 @@
+<div class="input-group">
+    <input class="form-control mx-auto d-block" type="number" min="0" step="0.01"
+           {% if widget.value != None and widget.value != "" %}value="{{ widget.value }}"{% endif %}
+           name="{{ widget.name }}"
+            {% for name, value in widget.attrs.items %}
+                {% ifnotequal value False %}{{ name }}{% ifnotequal value True %}="{{ value|stringformat:'s' }}"{% endifnotequal %}{% endifnotequal %}
+            {% endfor %}>
+    <div class="input-group-append">
+        <span class="input-group-text">€</span>
+    </div>
+</div>

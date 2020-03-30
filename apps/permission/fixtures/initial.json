@@ -56,6 +56,20 @@
     }
   },
   {
+    "model": "member.role",
+    "pk": 8,
+    "fields": {
+      "name": "Tr\u00e9sorier\u00b7\u00e8re de club"
+    }
+  },
+  {
+    "model": "member.role",
+    "pk": 9,
+    "fields": {
+      "name": "Res[pot]"
+    }
+  },
+  {
     "model": "permission.permissionmask",
     "pk": 1,
     "fields": {
@@ -575,6 +589,201 @@
     }
   },
   {
+    "model": "permission.permission",
+    "pk": 34,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "[\"OR\", {\"valid\": true}, {\"creater\": [\"user\"]}]",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View valid activites"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 35,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+      "type": "change",
+      "mask": 1,
+      "field": "",
+      "description": "Change our activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 36,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "{\"creater\": [\"user\"], \"valid\": false}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Add activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 37,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 2,
+      "field": "valid",
+      "description": "Validate activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 38,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 2,
+      "field": "open",
+      "description": "Open activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 39,
+    "fields": {
+      "model": [
+        "activity",
+        "guest"
+      ],
+      "query": "{\"inviter\": [\"user\", \"note\"], \"activity__activity_type__can_invite\": true}",
+      "type": "add",
+      "mask": 1,
+      "field": "",
+      "description": "Invite people to activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 40,
+    "fields": {
+      "model": [
+        "activity",
+        "guest"
+      ],
+      "query": "{\"inviter\": [\"user\", \"note\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View invited people"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 41,
+    "fields": {
+      "model": [
+        "activity",
+        "activity"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View all activities"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 42,
+    "fields": {
+      "model": [
+        "activity",
+        "guest"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 2,
+      "field": "",
+      "description": "View all invited people"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 43,
+    "fields": {
+      "model": [
+        "activity",
+        "entry"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Manage entries"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 44,
+    "fields": {
+      "model": [
+        "activity",
+        "guesttransaction"
+      ],
+      "query": "{}",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Add invitation transactions"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 45,
+    "fields": {
+      "model": [
+        "activity",
+        "guesttransaction"
+      ],
+      "query": "{}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View invitation transactions"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 46,
+    "fields": {
+      "model": [
+        "activity",
+        "guesttransaction"
+      ],
+      "query": "{}",
+      "type": "change",
+      "mask": 2,
+      "field": "valid",
+      "description": "Validate invitation transactions"
+    }
+  },
+  {
     "model": "permission.rolepermissions",
     "pk": 1,
     "fields": {
@@ -613,7 +822,12 @@
         15,
         16,
         17,
-        18
+        18,
+        34,
+        35,
+        36,
+        39,
+        40
       ]
     }
   },
@@ -647,6 +861,23 @@
         31,
         32,
         33
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 5,
+    "fields": {
+      "role": 9,
+      "permissions": [
+        37,
+        38,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
       ]
     }
   }

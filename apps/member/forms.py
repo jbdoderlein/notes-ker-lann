@@ -4,10 +4,10 @@
 from crispy_forms.bootstrap import Div
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
-from dal import autocomplete
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from note_kfet.inputs import Autocomplete
 from permission.models import PermissionMask
 
 from .models import Profile, Club, Membership
@@ -63,11 +63,12 @@ class MembershipForm(forms.ModelForm):
         # et récupère les noms d'utilisateur valides
         widgets = {
             'user':
-                autocomplete.ModelSelect2(
-                    url='member:user_autocomplete',
+                Autocomplete(
+                    User,
                     attrs={
-                        'data-placeholder': 'Nom ...',
-                        'data-minimum-input-length': 1,
+                        'api_url': '/api/user/',
+                        'name_field': 'username',
+                        'placeholder': 'Nom ...',
                     },
                 ),
         }
