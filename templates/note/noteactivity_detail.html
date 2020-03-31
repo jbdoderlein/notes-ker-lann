@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load render_table from django_tables2 %}
 {% load pretty_money %}
+{% load perms %}
 
 {% block profile_info %}
 {% include "member/club_info.html" %}
@@ -25,9 +26,11 @@
                 <dd class="col-xl-6">{{ note.balance|pretty_money }}</dd>
             </dl>
 
-            <div class="card-footer text-center">
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_linked_note_update' club_pk=club.pk pk=note.pk %}"> {% trans "Edit" %}</a>
-            </div>
+            {% if "change_"|has_perm:note %}
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_linked_note_update' club_pk=club.pk pk=note.pk %}"> {% trans "Edit" %}</a>
+                </div>
+            {% endif %}
         </div>
 
 

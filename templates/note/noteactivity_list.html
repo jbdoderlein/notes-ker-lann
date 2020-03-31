@@ -19,9 +19,11 @@
             </div>
         </div>
 
-        <a href="{% url 'member:club_linked_note_create' club_pk=club.pk %}">
-            <button class="btn btn-primary btn-block">{% trans "Add new note" %}</button>
-        </a>
+        {% if can_create %}
+            <a href="{% url 'member:club_linked_note_create' club_pk=club.pk %}">
+                <button class="btn btn-primary btn-block">{% trans "Add new note" %}</button>
+            </a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

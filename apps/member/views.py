@@ -22,6 +22,7 @@ from note.models.notes import NoteActivity
 from note.models.transactions import Transaction
 from note.tables import HistoryTable, AliasTable, NoteActivityTable
 from permission.backends import PermissionBackend
+from permission.views import ProtectQuerysetMixin
 
 from .filters import UserFilter, UserFilterFormHelper
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
@@ -64,7 +65,7 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = User
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
@@ -98,7 +99,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         if form.is_valid() and profile_form.is_valid():
             new_username = form.data['username']
             alias = Alias.objects.filter(name=new_username)
-            # Si le nouveau pseudo n'est pas un de nos alias, on supprime éventuellement un alias similaire pour le remplacer
+            # Si le nouveau pseudo n'est pas un de nos alias,
+            # on supprime éventuellement un alias similaire pour le remplacer
             if not alias.exists():
                 similar = Alias.objects.filter(
                     normalized_name=Alias.normalize(new_username))
@@ -120,16 +122,13 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             return reverse_lazy('member:user_detail', args=(self.object.id,))
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
     Affiche les informations sur un utilisateur, sa note, ses clubs...
     """
     model = User
     context_object_name = "user_object"
     template_name = "member/profile_detail.html"
-
-    def get_queryset(self, **kwargs):
-        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -138,13 +137,13 @@ class UserDetailView(LoginRequiredMixin, DetailView):
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
         context['history_list'] = HistoryTable(history_list)
-        club_list = \
-            Membership.objects.all().filter(user=user).only("club")
+        club_list = Membership.objects.all().filter(user=user)\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).only("club")
         context['club_list'] = ClubTable(club_list)
         return context
 
 
-class UserListView(LoginRequiredMixin, SingleTableView):
+class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     Affiche la liste des utilisateurs, avec une fonction de recherche statique
     """
@@ -155,7 +154,7 @@ class UserListView(LoginRequiredMixin, SingleTableView):
     formhelper_class = UserFilterFormHelper
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))
+        qs = super().get_queryset()
         self.filter = self.filter_class(self.request.GET, queryset=qs)
         self.filter.form.helper = self.formhelper_class()
         return self.filter.qs
@@ -166,7 +165,7 @@ class UserListView(LoginRequiredMixin, SingleTableView):
         return context
 
 
-class ProfileAliasView(LoginRequiredMixin, DetailView):
+class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
@@ -178,7 +177,7 @@ class ProfileAliasView(LoginRequiredMixin, DetailView):
         return context
 
 
-class PictureUpdateView(LoginRequiredMixin, FormMixin, DetailView):
+class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, DetailView):
     form_class = ImageForm
 
     def get_context_data(self, **kwargs):
@@ -239,8 +238,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     template_name = "member/manage_auth_tokens.html"
 
     def get(self, request, *args, **kwargs):
-        if 'regenerate' in request.GET and Token.objects.filter(
-                user=request.user).exists():
+        if 'regenerate' in request.GET and Token.objects.filter(user=request.user).exists():
             Token.objects.get(user=self.request.user).delete()
             return redirect(reverse_lazy('member:auth_token') + "?show",
                             permanent=True)
@@ -249,8 +247,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['token'] = Token.objects.get_or_create(
-            user=self.request.user)[0]
+        context['token'] = Token.objects.get_or_create(user=self.request.user)[0]
         return context
 
 
@@ -259,7 +256,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
 # ******************************* #
 
 
-class ClubCreateView(LoginRequiredMixin, CreateView):
+class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     Create Club
     """
@@ -271,23 +268,17 @@ class ClubCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClubListView(LoginRequiredMixin, SingleTableView):
+class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     List existing Clubs
     """
     model = Club
     table_class = ClubTable
 
-    def get_queryset(self, **kwargs):
-        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))
 
-
-class ClubDetailView(LoginRequiredMixin, DetailView):
+class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = Club
     context_object_name = "club"
-
-    def get_queryset(self, **kwargs):
-        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -295,14 +286,14 @@ class ClubDetailView(LoginRequiredMixin, DetailView):
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
         context['history_list'] = HistoryTable(club_transactions)
-        club_member = \
-            Membership.objects.all().filter(club=club)
+        club_member = Membership.objects.filter(club=club)\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).all()
         # TODO: consider only valid Membership
         context['member_list'] = club_member
         return context
 
 
-class ClubAliasView(LoginRequiredMixin, DetailView):
+class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = Club
     template_name = 'member/club_alias.html'
     context_object_name = 'club'
@@ -314,7 +305,7 @@ class ClubAliasView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ClubUpdateView(LoginRequiredMixin, UpdateView):
+class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = Club
     context_object_name = "club"
     form_class = ClubForm
@@ -333,7 +324,7 @@ class ClubPictureUpdateView(PictureUpdateView):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.id})
 
 
-class ClubAddMemberView(LoginRequiredMixin, CreateView):
+class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
@@ -344,7 +335,8 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
                                                                                  "change"))
 
     def get_context_data(self, **kwargs):
-        club = Club.objects.get(pk=self.kwargs["pk"])
+        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
         context['formset'] = MemberFormSet()
         context['helper'] = FormSetHelper()
@@ -367,36 +359,40 @@ class ClubAddMemberView(LoginRequiredMixin, CreateView):
         return super().form_valid(formset)
 
 
-class ClubLinkedNotesView(LoginRequiredMixin, SingleTableView):
+class ClubLinkedNotesView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = NoteActivity
     table_class = NoteActivityTable
 
     def get_queryset(self):
-        return super().get_queryset().filter(club=self.get_object())\
-            .filter(PermissionBackend.filter_queryset(self.request.user, NoteActivity, "view"))
+        return super().get_queryset().filter(club=self.get_object())
 
     def get_object(self):
         if hasattr(self, 'object'):
             return self.object
-        self.object = Club.objects.get(pk=int(self.kwargs["pk"]))
+        self.object = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            .get(pk=int(self.kwargs["pk"]))
         return self.object
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx["object"] = ctx["club"] = self.get_object()
+        club = ctx["object"] = ctx["club"] = self.get_object()
+
+        empty_note = NoteActivity(note_name="", club=club, controller=self.request.user)
+        ctx["can_create"] = PermissionBackend().has_perm(self.request.user, "note.add_noteactivity", empty_note)
 
         return ctx
 
 
-class ClubLinkedNoteCreateView(LoginRequiredMixin, CreateView):
+class ClubLinkedNoteCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = NoteActivity
     form_class = NoteActivityForm
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        club = Club.objects.get(pk=self.kwargs["club_pk"])
+        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            .get(pk=self.kwargs["club_pk"])
         ctx["object"] = ctx["club"] = club
         ctx["form"].fields["club"].initial = club
 
@@ -408,14 +404,15 @@ class ClubLinkedNoteCreateView(LoginRequiredMixin, CreateView):
                             kwargs={"club_pk": self.object.club.pk, "pk": self.object.pk})
 
 
-class ClubLinkedNoteUpdateView(LoginRequiredMixin, UpdateView):
+class ClubLinkedNoteUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = NoteActivity
     form_class = NoteActivityForm
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx["club"] = Club.objects.get(pk=self.kwargs["club_pk"])
+        ctx["club"] = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            .get(pk=self.kwargs["club_pk"])
 
         return ctx
 
@@ -424,15 +421,15 @@ class ClubLinkedNoteUpdateView(LoginRequiredMixin, UpdateView):
                             kwargs={"club_pk": self.object.club.pk, "pk": self.object.pk})
 
 
-class ClubLinkedNoteDetailView(LoginRequiredMixin, DetailView):
+class ClubLinkedNoteDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = NoteActivity
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        note = NoteActivity.objects.get(pk=self.kwargs["pk"])
+        note = self.get_queryset().filter(pk=self.kwargs["pk"]).get()
 
-        transactions = Transaction.objects.all().filter(Q(source=note) | Q(destination=note))\
+        transactions = Transaction.objects.filter(Q(source=note) | Q(destination=note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by("-id")
         ctx['history_list'] = HistoryTable(transactions)
         ctx["note"] = note

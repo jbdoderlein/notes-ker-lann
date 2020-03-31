@@ -5,7 +5,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
-from note.models import Note, NoteUser, NoteClub, NoteSpecial
+from note.models import Note, NoteUser, NoteClub, NoteSpecial, NoteActivity
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -35,7 +35,7 @@ class PermissionBackend(ModelBackend):
             model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
             type=type,
         ).all():
-            if not isinstance(model, permission.model.__class__):
+            if not isinstance(model, permission.model.__class__) or not permission.club:
                 continue
 
             club = Club.objects.get(pk=permission.club)
@@ -49,6 +49,7 @@ class PermissionBackend(ModelBackend):
                 NoteUser=NoteUser,
                 NoteClub=NoteClub,
                 NoteSpecial=NoteSpecial,
+                NoteActivity=NoteActivity,
                 F=F,
                 Q=Q
             )

@@ -19,13 +19,15 @@ from django.views.generic.base import View, TemplateView
 from django_tables2 import SingleTableView
 from note.models import SpecialTransaction, NoteSpecial
 from note_kfet.settings.base import BASE_DIR
+from permission.backends import PermissionBackend
+from permission.views import ProtectQuerysetMixin
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
-class InvoiceCreateView(LoginRequiredMixin, CreateView):
+class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     Create Invoice
     """
@@ -67,7 +69,7 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('treasury:invoice_list')
 
 
-class InvoiceListView(LoginRequiredMixin, SingleTableView):
+class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     List existing Invoices
     """
@@ -75,7 +77,7 @@ class InvoiceListView(LoginRequiredMixin, SingleTableView):
     table_class = InvoiceTable
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Create Invoice
     """
@@ -130,7 +132,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
-        invoice = Invoice.objects.get(pk=pk)
+        invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request.user, Invoice, "view")).get(pk=pk)
         products = Product.objects.filter(invoice=invoice).all()
 
         # Informations of the BDE. Should be updated when the school will move.
@@ -188,7 +190,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         return response
 
 
-class RemittanceCreateView(LoginRequiredMixin, CreateView):
+class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     Create Remittance
     """
@@ -201,7 +203,9 @@ class RemittanceCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
+        ctx["table"] = RemittanceTable(data=Remittance.objects
+                                       .filter(PermissionBackend.filter_queryset(self.request.user, Remittance, "view"))
+                                       .all())
         ctx["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
 
         return ctx
@@ -216,22 +220,28 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx["opened_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=False).all())
-        ctx["closed_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=True).reverse().all())
+        ctx["opened_remittances"] = RemittanceTable(
+            data=Remittance.objects.filter(closed=False).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+        ctx["closed_remittances"] = RemittanceTable(
+            data=Remittance.objects.filter(closed=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all())
 
         ctx["special_transactions_no_remittance"] = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
-                                                   specialtransactionproxy__remittance=None).all(),
+                                                   specialtransactionproxy__remittance=None).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             exclude=('remittance_remove', ))
         ctx["special_transactions_with_remittance"] = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
-                                                   specialtransactionproxy__remittance__closed=False).all(),
+                                                   specialtransactionproxy__remittance__closed=False).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             exclude=('remittance_add', ))
 
         return ctx
 
 
-class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
+class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Update Remittance
     """
@@ -244,8 +254,10 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
-        data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all()
+        ctx["table"] = RemittanceTable(data=Remittance.objects.filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+        data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
         ctx["special_transactions"] = SpecialTransactionTable(
             data=data,
             exclude=('remittance_add', 'remittance_remove', ) if self.object.closed else ('remittance_add', ))
@@ -253,7 +265,7 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
         return ctx
 
 
-class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
+class LinkTransactionToRemittanceView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Attach a special transaction to a remittance
     """

@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from datetime import datetime, timezone
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,13 +12,14 @@ from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
 from note.models import NoteUser, Alias, NoteSpecial
 from permission.backends import PermissionBackend
+from permission.views import ProtectQuerysetMixin
 
 from .forms import ActivityForm, GuestForm
 from .models import Activity, Guest, Entry
 from .tables import ActivityTable, GuestTable, EntryTable
 
 
-class ActivityCreateView(LoginRequiredMixin, CreateView):
+class ActivityCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Activity
     form_class = ActivityForm
 
@@ -30,13 +32,12 @@ class ActivityCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('activity:activity_detail', kwargs={"pk": self.object.pk})
 
 
-class ActivityListView(LoginRequiredMixin, SingleTableView):
+class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = Activity
     table_class = ActivityTable
 
     def get_queryset(self):
-        return super().get_queryset()\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")).reverse()
+        return super().get_queryset().reverse()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -50,7 +51,7 @@ class ActivityListView(LoginRequiredMixin, SingleTableView):
         return ctx
 
 
-class ActivityDetailView(LoginRequiredMixin, DetailView):
+class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = Activity
     context_object_name = "activity"
 
@@ -66,7 +67,7 @@ class ActivityDetailView(LoginRequiredMixin, DetailView):
         return ctx
 
 
-class ActivityUpdateView(LoginRequiredMixin, UpdateView):
+class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = Activity
     form_class = ActivityForm
 
@@ -74,18 +75,20 @@ class ActivityUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
 
 
-class ActivityInviteView(LoginRequiredMixin, CreateView):
+class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Guest
     form_class = GuestForm
     template_name = "activity/activity_invite.html"
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.activity = Activity.objects.get(pk=self.kwargs["pk"])
+        form.activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+            .get(pk=self.kwargs["pk"])
         return form
 
     def form_valid(self, form):
-        form.instance.activity = Activity.objects.get(pk=self.kwargs["pk"])
+        form.instance.activity = Activity.objects\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")).get(pk=self.kwargs["pk"])
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -98,7 +101,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        activity = Activity.objects.get(pk=self.kwargs["pk"])
+        activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+            .get(pk=self.kwargs["pk"])
         ctx["activity"] = activity
 
         matched = []

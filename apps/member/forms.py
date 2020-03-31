@@ -49,7 +49,13 @@ class ClubForm(forms.ModelForm):
         model = Club
         fields = '__all__'
         widgets = {
-            "membership_fee": AmountInput()
+            "membership_fee": AmountInput(),
+            "parent_club": Autocomplete(
+                Club,
+                attrs={
+                    'api_url': '/api/members/club/',
+                }
+            ),
         }
 
 
