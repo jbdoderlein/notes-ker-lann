@@ -456,18 +456,6 @@ msgstr ""
 msgid "special notes"
 msgstr ""
 
-#: apps/note/models/notes.py:202 templates/note/noteactivity_detail.html:22
-msgid "controller"
-msgstr ""
-
-#: apps/note/models/notes.py:206
-msgid "activity note"
-msgstr ""
-
-#: apps/note/models/notes.py:207
-msgid "activity notes"
-msgstr ""
-
 #: apps/note/models/notes.py:230
 msgid "Invalid alias"
 msgstr ""
@@ -626,7 +614,7 @@ msgstr ""
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
-#: templates/member/club_form.html:9 templates/note/noteactivity_form.html:14
+#: templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46
 msgid "Submit"
 msgstr ""
@@ -903,7 +891,6 @@ msgid "Add member"
 msgstr ""
 
 #: templates/member/club_info.html:45 templates/note/conso_form.html:121
-#: templates/note/noteactivity_detail.html:31
 msgid "Edit"
 msgstr ""
 
@@ -932,7 +919,6 @@ msgid "Member of the Club"
 msgstr ""
 
 #: templates/member/club_tables.html:22 templates/member/profile_tables.html:22
-#: templates/note/noteactivity_detail.html:42
 msgid "Transaction history"
 msgstr ""
 
@@ -965,7 +951,6 @@ msgid "Change password"
 msgstr ""
 
 #: templates/member/profile_info.html:33
-#: templates/note/noteactivity_detail.html:25
 msgid "balance"
 msgstr ""
 
@@ -1012,22 +997,6 @@ msgstr ""
 
 #: templates/note/conso_form.html:141 templates/note/transaction_form.html:147
 msgid "Recent transactions history"
-msgstr ""
-
-#: templates/note/noteactivity_detail.html:15
-msgid "Linked note:"
-msgstr ""
-
-#: templates/note/noteactivity_detail.html:19
-msgid "attached club"
-msgstr ""
-
-#: templates/note/noteactivity_list.html:15
-msgid "linked notes of club"
-msgstr ""
-
-#: templates/note/noteactivity_list.html:24
-msgid "Add new note"
 msgstr ""
 
 #: templates/note/transaction_form.html:15

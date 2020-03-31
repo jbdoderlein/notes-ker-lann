@@ -7,7 +7,6 @@ from crispy_forms.layout import Layout
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from note.models.notes import NoteActivity
 from note_kfet.inputs import Autocomplete, AmountInput
 from permission.models import PermissionMask
 
@@ -56,28 +55,6 @@ class ClubForm(forms.ModelForm):
                     'api_url': '/api/members/club/',
                 }
             ),
-        }
-
-
-class NoteActivityForm(forms.ModelForm):
-    class Meta:
-        model = NoteActivity
-        fields = ('note_name', 'club', 'controller', )
-        widgets = {
-            "club": Autocomplete(
-                Club,
-                attrs={
-                    'api_url': '/api/members/club/',
-                }
-            ),
-            "controller": Autocomplete(
-                User,
-                attrs={
-                    'api_url': '/api/user/',
-                    'name_field': 'username',
-                    'placeholder': 'Nom ...',
-                }
-            )
         }
 
 

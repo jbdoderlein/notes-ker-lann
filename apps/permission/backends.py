@@ -5,7 +5,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
-from note.models import Note, NoteUser, NoteClub, NoteSpecial, NoteActivity
+from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -49,7 +49,6 @@ class PermissionBackend(ModelBackend):
                 NoteUser=NoteUser,
                 NoteClub=NoteClub,
                 NoteSpecial=NoteSpecial,
-                NoteActivity=NoteActivity,
                 F=F,
                 Q=Q
             )

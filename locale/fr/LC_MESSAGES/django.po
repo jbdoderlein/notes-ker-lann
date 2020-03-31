@@ -457,18 +457,6 @@ msgstr "note spéciale"
 msgid "special notes"
 msgstr "notes spéciales"
 
-#: apps/note/models/notes.py:202 templates/note/noteactivity_detail.html:22
-msgid "controller"
-msgstr "contrôleur"
-
-#: apps/note/models/notes.py:206
-msgid "activity note"
-msgstr "note d'activité"
-
-#: apps/note/models/notes.py:207
-msgid "activity notes"
-msgstr "notes d'activité"
-
 #: apps/note/models/notes.py:230
 msgid "Invalid alias"
 msgstr "Alias invalide"
@@ -627,7 +615,7 @@ msgstr "Trésorerie"
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
-#: templates/member/club_form.html:9 templates/note/noteactivity_form.html:14
+#: templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46
 msgid "Submit"
 msgstr "Envoyer"
@@ -906,7 +894,6 @@ msgid "Add member"
 msgstr "Ajouter un membre"
 
 #: templates/member/club_info.html:45 templates/note/conso_form.html:121
-#: templates/note/noteactivity_detail.html:31
 msgid "Edit"
 msgstr "Éditer"
 
@@ -935,7 +922,6 @@ msgid "Member of the Club"
 msgstr "Membre du club"
 
 #: templates/member/club_tables.html:22 templates/member/profile_tables.html:22
-#: templates/note/noteactivity_detail.html:42
 msgid "Transaction history"
 msgstr "Historique des transactions"
 
@@ -968,7 +954,6 @@ msgid "Change password"
 msgstr "Changer le mot de passe"
 
 #: templates/member/profile_info.html:33
-#: templates/note/noteactivity_detail.html:25
 msgid "balance"
 msgstr "solde du compte"
 
@@ -1016,22 +1001,6 @@ msgstr "Consommations doubles"
 #: templates/note/conso_form.html:141 templates/note/transaction_form.html:147
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
-
-#: templates/note/noteactivity_detail.html:15
-msgid "Linked note:"
-msgstr "note attachée :"
-
-#: templates/note/noteactivity_detail.html:19
-msgid "attached club"
-msgstr "club lié"
-
-#: templates/note/noteactivity_list.html:15
-msgid "linked notes of club"
-msgstr "Notes liées au club"
-
-#: templates/note/noteactivity_list.html:24
-msgid "Add new note"
-msgstr "Ajouter une note"
 
 #: templates/note/transaction_form.html:15
 msgid "Gift"

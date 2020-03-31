@@ -4,7 +4,7 @@
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 
-from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias, NoteActivity
+from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
     RecurrentTransaction, SpecialTransaction
 
@@ -69,22 +69,6 @@ class NoteUserSerializer(serializers.ModelSerializer):
         return str(obj)
 
 
-class NoteActivitySerializer(serializers.ModelSerializer):
-    """
-    REST API Serializer for User's notes.
-    The djangorestframework plugin will analyse the model `NoteActivity` and parse all fields in the API.
-    """
-    name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = NoteActivity
-        fields = '__all__'
-        read_only_fields = ('note', 'user', )
-
-    def get_name(self, obj):
-        return str(obj)
-
-
 class AliasSerializer(serializers.ModelSerializer):
     """
     REST API Serializer for Aliases.
@@ -107,7 +91,6 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         NoteUser: NoteUserSerializer,
         NoteClub: NoteClubSerializer,
         NoteSpecial: NoteSpecialSerializer,
-        NoteActivity: NoteActivitySerializer,
     }
 
     class Meta:

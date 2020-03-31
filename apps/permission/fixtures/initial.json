@@ -176,7 +176,7 @@
         "note",
         "alias"
       ],
-      "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}, {\"note__in\": [\"NoteActivity\", \"objects\", [\"all\"]]}]",
+      "query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__membership__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
       "type": "view",
       "mask": 1,
       "field": "",
@@ -799,96 +799,6 @@
     }
   },
   {
-    "model": "permission.permission",
-    "pk": 48,
-    "fields": {
-      "model": [
-        "note",
-        "noteactivity"
-      ],
-      "query": "{\"club\": [\"club\"]}",
-      "type": "change",
-      "mask": 1,
-      "field": "",
-      "description": "Manage notes that are linked to a club"
-    }
-  },
-  {
-    "model": "permission.permission",
-    "pk": 49,
-    "fields": {
-      "model": [
-        "note",
-        "noteactivity"
-      ],
-      "query": "{\"club\": [\"club\"]}",
-      "type": "view",
-      "mask": 1,
-      "field": "",
-      "description": "View notes that are linked to a club"
-    }
-  },
-  {
-    "model": "permission.permission",
-    "pk": 50,
-    "fields": {
-      "model": [
-        "note",
-        "transaction"
-      ],
-      "query": "[\"AND\", [\"OR\", {\"source__noteactivity__controller\": [\"user\"]}, {\"destination__noteactivity__controller\": [\"user\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
-      "type": "add",
-      "mask": 2,
-      "field": "",
-      "description": "Add transactions linked to a noteactivity"
-    }
-  },
-  {
-    "model": "permission.permission",
-    "pk": 51,
-    "fields": {
-      "model": [
-        "note",
-        "transaction"
-      ],
-      "query": "[\"AND\", [\"OR\", {\"source__noteactivity__controller\": [\"user\"]}, {\"destination__noteactivity__controller\": [\"user\"]}]]",
-      "type": "view",
-      "mask": 1,
-      "field": "",
-      "description": "View transactions linked to a noteactivity"
-    }
-  },
-  {
-    "model": "permission.permission",
-    "pk": 52,
-    "fields": {
-      "model": [
-        "note",
-        "note"
-      ],
-      "query": "{\"noteactivity__controller\": [\"user\"]}",
-      "type": "view",
-      "mask": 1,
-      "field": "",
-      "description": "View note activity"
-    }
-  },
-  {
-    "model": "permission.permission",
-    "pk": 53,
-    "fields": {
-      "model": [
-        "note",
-        "noteactivity"
-      ],
-      "query": "{\"controller\": [\"user\"]}",
-      "type": "view",
-      "mask": 1,
-      "field": "",
-      "description": "View note activity"
-    }
-  },
-  {
     "model": "permission.rolepermissions",
     "pk": 1,
     "fields": {
@@ -915,6 +825,7 @@
         3,
         4,
         5,
+        6,
         7,
         8,
         9,
@@ -932,11 +843,6 @@
         36,
         39,
         40,
-        6,
-        52,
-        53,
-        51,
-        50
       ]
     }
   },
@@ -947,9 +853,9 @@
       "role": 8,
       "permissions": [
         19,
+        20,
         21,
-        22,
-        20
+        22
       ]
     }
   },
@@ -997,9 +903,7 @@
       "role": 7,
       "permissions": [
         22,
-        47,
-        48,
-        49
+        47
       ]
     }
   }
