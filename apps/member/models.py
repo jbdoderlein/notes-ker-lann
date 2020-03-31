@@ -77,28 +77,49 @@ class Club(models.Model):
     )
 
     # Memberships
+
+    # When set to False, the membership system won't be used.
+    # Useful to create notes for activities or departments.
+    require_memberships = models.BooleanField(
+        default=True,
+        verbose_name=_("require memberships"),
+    )
+
     membership_fee = models.PositiveIntegerField(
+        default=0,
         verbose_name=_('membership fee'),
     )
     membership_duration = models.DurationField(
+        blank=True,
         null=True,
         verbose_name=_('membership duration'),
         help_text=_('The longest time a membership can last '
                     '(NULL = infinite).'),
     )
     membership_start = models.DurationField(
+        blank=True,
         null=True,
         verbose_name=_('membership start'),
         help_text=_('How long after January 1st the members can renew '
                     'their membership.'),
     )
     membership_end = models.DurationField(
+        blank=True,
         null=True,
         verbose_name=_('membership end'),
         help_text=_('How long the membership can last after January 1st '
                     'of the next year after members can renew their '
                     'membership.'),
     )
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.require_memberships:
+            self.membership_fee = 0
+            self.membership_duration = None
+            self.membership_start = None
+            self.membership_end = None
+        super().save(force_insert, force_update, update_fields)
 
     class Meta:
         verbose_name = _("club")
