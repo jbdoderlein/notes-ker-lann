@@ -32,6 +32,7 @@ class PermissionBackend(ModelBackend):
         for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
                 .filter(
             rolepermissions__role__membership__user=user,
+            rolepermissions__role__membership__valid=True,
             model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
             type=type,
         ).all():

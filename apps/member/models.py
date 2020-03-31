@@ -83,27 +83,31 @@ class Club(models.Model):
     require_memberships = models.BooleanField(
         default=True,
         verbose_name=_("require memberships"),
+        help_text=_("Uncheck if this club don't require memberships."),
     )
 
     membership_fee = models.PositiveIntegerField(
         default=0,
         verbose_name=_('membership fee'),
     )
-    membership_duration = models.DurationField(
+
+    membership_duration = models.IntegerField(
         blank=True,
         null=True,
         verbose_name=_('membership duration'),
-        help_text=_('The longest time a membership can last '
+        help_text=_('The longest time (in days) a membership can last '
                     '(NULL = infinite).'),
     )
-    membership_start = models.DurationField(
+
+    membership_start = models.DateField(
         blank=True,
         null=True,
         verbose_name=_('membership start'),
         help_text=_('How long after January 1st the members can renew '
                     'their membership.'),
     )
-    membership_end = models.DurationField(
+
+    membership_end = models.DateField(
         blank=True,
         null=True,
         verbose_name=_('membership end'),
@@ -111,6 +115,20 @@ class Club(models.Model):
                     'of the next year after members can renew their '
                     'membership.'),
     )
+
+    def update_membership_dates(self):
+        """
+        This function is called each time the club detail view is displayed.
+        Update the year of the membership dates.
+        """
+        today = datetime.date.today()
+
+        if (today - self.membership_start).days >= 365:
+            self.membership_start = datetime.date(self.membership_start.year + 1,
+                                                  self.membership_start.month, self.membership_start.day)
+            self.membership_end = datetime.date(self.membership_end.year + 1,
+                                                self.membership_end.month, self.membership_end.day)
+            self.save(force_update=True)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -135,9 +153,6 @@ class Club(models.Model):
 class Role(models.Model):
     """
     Role that an :model:`auth.User` can have in a :model:`member.Club`
-
-    TODO: Integrate the right management, and create some standard Roles at the
-    creation of the club.
     """
     name = models.CharField(
         verbose_name=_('name'),
@@ -162,21 +177,25 @@ class Membership(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
     )
+
     club = models.ForeignKey(
         Club,
         on_delete=models.PROTECT,
     )
-    roles = models.ForeignKey(
+
+    roles = models.ManyToManyField(
         Role,
-        on_delete=models.PROTECT,
     )
+
     date_start = models.DateField(
         verbose_name=_('membership starts on'),
     )
+
     date_end = models.DateField(
         verbose_name=_('membership ends on'),
         null=True,
     )
+
     fee = models.PositiveIntegerField(
         verbose_name=_('fee'),
     )
@@ -189,8 +208,16 @@ class Membership(models.Model):
 
     def save(self, *args, **kwargs):
         if self.club.parent_club is not None:
-            if not Membership.objects.filter(user=self.user, club=self.club.parent_club):
+            if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
                 raise ValidationError(_('User is not a member of the parent club'))
+
+        created = not self.pk
+        if created:
+            self.fee = self.club.membership_fee
+            self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
+            if self.date_end > self.club.membership_end:
+                self.date_end = self.club.membership_end
+
         super().save(*args, **kwargs)
 
     class Meta:

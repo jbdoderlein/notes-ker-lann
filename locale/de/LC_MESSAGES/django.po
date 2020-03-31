@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 04:16+0200\n"
+"POT-Creation-Date: 2020-03-31 23:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,10 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
-#: apps/member/models.py:64 apps/member/models.py:122
-#: apps/note/models/notes.py:186 apps/note/models/notes.py:224
-#: apps/note/models/transactions.py:24 apps/note/models/transactions.py:44
-#: apps/note/models/transactions.py:231 templates/member/club_info.html:13
-#: templates/member/profile_info.html:14
+#: apps/member/models.py:64 apps/member/models.py:158
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
+#: templates/member/club_info.html:13 templates/member/profile_info.html:14
 msgid "name"
 msgstr ""
 
@@ -73,14 +72,14 @@ msgstr ""
 msgid "description"
 msgstr ""
 
-#: apps/activity/models.py:60 apps/note/models/notes.py:166
+#: apps/activity/models.py:60 apps/note/models/notes.py:164
 #: apps/note/models/transactions.py:62
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
 
 #: apps/activity/models.py:66 apps/logs/models.py:21
-#: apps/note/models/notes.py:119
+#: apps/note/models/notes.py:117
 msgid "user"
 msgstr ""
 
@@ -89,7 +88,7 @@ msgid "organizer"
 msgstr ""
 
 #: apps/activity/models.py:82 apps/activity/models.py:131 apps/note/apps.py:14
-#: apps/note/models/notes.py:60
+#: apps/note/models/notes.py:58
 msgid "note"
 msgstr ""
 
@@ -179,7 +178,7 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-#: apps/activity/tables.py:81 apps/note/models/notes.py:69
+#: apps/activity/tables.py:81 apps/note/models/notes.py:67
 msgid "Note"
 msgstr ""
 
@@ -227,12 +226,12 @@ msgstr ""
 msgid "create"
 msgstr ""
 
-#: apps/logs/models.py:61 apps/note/tables.py:160
+#: apps/logs/models.py:61 apps/note/tables.py:142
 #: templates/activity/activity_detail.html:67
 msgid "edit"
 msgstr ""
 
-#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:164
+#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:146
 msgid "delete"
 msgstr ""
 
@@ -276,7 +275,7 @@ msgstr ""
 msgid "user profile"
 msgstr ""
 
-#: apps/member/models.py:69 templates/member/club_info.html:36
+#: apps/member/models.py:69 templates/member/club_info.html:38
 msgid "email"
 msgstr ""
 
@@ -284,90 +283,97 @@ msgstr ""
 msgid "parent club"
 msgstr ""
 
-#: apps/member/models.py:81 templates/member/club_info.html:30
-msgid "membership fee"
-msgstr ""
-
-#: apps/member/models.py:85 templates/member/club_info.html:27
-msgid "membership duration"
+#: apps/member/models.py:85
+msgid "require memberships"
 msgstr ""
 
 #: apps/member/models.py:86
-msgid "The longest time a membership can last (NULL = infinite)."
+msgid "Uncheck if this club don't require memberships."
 msgstr ""
 
-#: apps/member/models.py:91 templates/member/club_info.html:21
-msgid "membership start"
+#: apps/member/models.py:91 templates/member/club_info.html:31
+msgid "membership fee"
 msgstr ""
 
-#: apps/member/models.py:92
-msgid "How long after January 1st the members can renew their membership."
-msgstr ""
-
-#: apps/member/models.py:97 templates/member/club_info.html:24
-msgid "membership end"
+#: apps/member/models.py:97 templates/member/club_info.html:28
+msgid "membership duration"
 msgstr ""
 
 #: apps/member/models.py:98
+msgid "The longest time (in days) a membership can last (NULL = infinite)."
+msgstr ""
+
+#: apps/member/models.py:105 templates/member/club_info.html:22
+msgid "membership start"
+msgstr ""
+
+#: apps/member/models.py:106
+msgid "How long after January 1st the members can renew their membership."
+msgstr ""
+
+#: apps/member/models.py:113 templates/member/club_info.html:25
+msgid "membership end"
+msgstr ""
+
+#: apps/member/models.py:114
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:104 apps/note/models/notes.py:141
-#: apps/note/models/notes.py:195
+#: apps/member/models.py:143 apps/note/models/notes.py:139
 msgid "club"
 msgstr ""
 
-#: apps/member/models.py:105
+#: apps/member/models.py:144
 msgid "clubs"
 msgstr ""
 
-#: apps/member/models.py:128 apps/permission/models.py:284
+#: apps/member/models.py:164 apps/permission/models.py:284
 msgid "role"
 msgstr ""
 
-#: apps/member/models.py:129
+#: apps/member/models.py:165
 msgid "roles"
 msgstr ""
 
-#: apps/member/models.py:153
+#: apps/member/models.py:191
 msgid "membership starts on"
 msgstr ""
 
-#: apps/member/models.py:156
+#: apps/member/models.py:195
 msgid "membership ends on"
 msgstr ""
 
-#: apps/member/models.py:160
+#: apps/member/models.py:200
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:172
+#: apps/member/models.py:212
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:176
+#: apps/member/models.py:224
 msgid "membership"
 msgstr ""
 
-#: apps/member/models.py:177
+#: apps/member/models.py:225
 msgid "memberships"
 msgstr ""
 
-#: apps/member/views.py:78 templates/member/profile_info.html:45
+#: apps/member/views.py:77 templates/member/profile_info.html:45
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:91
+#: apps/member/views.py:90
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/note/admin.py:128 apps/note/models/transactions.py:94
+#: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
 msgstr ""
 
-#: apps/note/admin.py:136 apps/note/admin.py:164
+#: apps/note/admin.py:128 apps/note/admin.py:156
 #: apps/note/models/transactions.py:53 apps/note/models/transactions.py:107
 msgid "destination"
 msgstr ""
@@ -380,104 +386,104 @@ msgstr ""
 msgid "Maximal size: 2MB"
 msgstr ""
 
-#: apps/note/models/notes.py:29
+#: apps/note/models/notes.py:27
 msgid "account balance"
 msgstr ""
 
-#: apps/note/models/notes.py:30
+#: apps/note/models/notes.py:28
 msgid "in centimes, money credited for this instance"
 msgstr ""
 
-#: apps/note/models/notes.py:34
+#: apps/note/models/notes.py:32
 msgid "last negative date"
 msgstr ""
 
-#: apps/note/models/notes.py:35
+#: apps/note/models/notes.py:33
 msgid "last time the balance was negative"
 msgstr ""
 
-#: apps/note/models/notes.py:40
+#: apps/note/models/notes.py:38
 msgid "active"
 msgstr ""
 
-#: apps/note/models/notes.py:43
+#: apps/note/models/notes.py:41
 msgid ""
 "Designates whether this note should be treated as active. Unselect this "
 "instead of deleting notes."
 msgstr ""
 
-#: apps/note/models/notes.py:47
+#: apps/note/models/notes.py:45
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:55 apps/note/models/transactions.py:117
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:117
 msgid "created at"
 msgstr ""
 
-#: apps/note/models/notes.py:61
+#: apps/note/models/notes.py:59
 msgid "notes"
 msgstr ""
 
-#: apps/note/models/notes.py:79 apps/note/models/notes.py:103
+#: apps/note/models/notes.py:77 apps/note/models/notes.py:101
 msgid "This alias is already taken."
 msgstr ""
 
-#: apps/note/models/notes.py:123
+#: apps/note/models/notes.py:121
 msgid "one's note"
 msgstr ""
 
-#: apps/note/models/notes.py:124
+#: apps/note/models/notes.py:122
 msgid "users note"
 msgstr ""
 
-#: apps/note/models/notes.py:130
+#: apps/note/models/notes.py:128
 #, python-format
 msgid "%(user)s's note"
 msgstr ""
 
-#: apps/note/models/notes.py:145
+#: apps/note/models/notes.py:143
 msgid "club note"
 msgstr ""
 
-#: apps/note/models/notes.py:146
+#: apps/note/models/notes.py:144
 msgid "clubs notes"
 msgstr ""
 
-#: apps/note/models/notes.py:152
+#: apps/note/models/notes.py:150
 #, python-format
 msgid "Note of %(club)s club"
 msgstr ""
 
-#: apps/note/models/notes.py:172
+#: apps/note/models/notes.py:170
 msgid "special note"
 msgstr ""
 
-#: apps/note/models/notes.py:173
+#: apps/note/models/notes.py:171
 msgid "special notes"
 msgstr ""
 
-#: apps/note/models/notes.py:230
+#: apps/note/models/notes.py:194
 msgid "Invalid alias"
 msgstr ""
 
-#: apps/note/models/notes.py:246
+#: apps/note/models/notes.py:210
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:247 templates/member/club_info.html:33
+#: apps/note/models/notes.py:211 templates/member/club_info.html:35
 #: templates/member/profile_info.html:36
 msgid "aliases"
 msgstr ""
 
-#: apps/note/models/notes.py:269
+#: apps/note/models/notes.py:233
 msgid "Alias is too long."
 msgstr ""
 
-#: apps/note/models/notes.py:274
+#: apps/note/models/notes.py:238
 msgid "An alias with a similar name already exists: {} "
 msgstr ""
 
-#: apps/note/models/notes.py:287
+#: apps/note/models/notes.py:251
 msgid "You can't delete your main alias."
 msgstr ""
 
@@ -614,7 +620,7 @@ msgstr ""
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
-#: templates/member/club_form.html:9
+#: templates/member/add_members.html:14 templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46
 msgid "Submit"
 msgstr ""
@@ -882,23 +888,23 @@ msgstr ""
 msgid "Club Parent"
 msgstr ""
 
-#: templates/member/club_info.html:39
-msgid "linked notes"
+#: templates/member/club_info.html:29
+msgid "days"
 msgstr ""
 
-#: templates/member/club_info.html:44
+#: templates/member/club_info.html:43
 msgid "Add member"
 msgstr ""
 
-#: templates/member/club_info.html:45 templates/note/conso_form.html:121
+#: templates/member/club_info.html:44 templates/note/conso_form.html:121
 msgid "Edit"
 msgstr ""
 
-#: templates/member/club_info.html:46
+#: templates/member/club_info.html:45
 msgid "Add roles"
 msgstr ""
 
-#: templates/member/club_info.html:49 templates/member/profile_info.html:48
+#: templates/member/club_info.html:48 templates/member/profile_info.html:48
 msgid "View Profile"
 msgstr ""
 

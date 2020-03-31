@@ -7,9 +7,9 @@
             "email": "tresorerie.bde@example.com",
             "require_memberships":  true,
             "membership_fee": 500,
-            "membership_duration": "396 00:00:00",
-            "membership_start": "213 00:00:00",
-            "membership_end": "273 00:00:00"
+            "membership_duration": 396,
+            "membership_start": "2019-08-31",
+            "membership_end": "2020-09-30"
         }
     },
     {
@@ -20,9 +20,9 @@
             "email": "tresorerie.bde@example.com",
             "require_memberships":  true,
             "membership_fee": 3500,
-            "membership_duration": "396 00:00:00",
-            "membership_start": "213 00:00:00",
-            "membership_end": "273 00:00:00"
+            "membership_duration": 396,
+            "membership_start": "2019-08-31",
+            "membership_end": "2020-09-30"
         }
     }
 ]

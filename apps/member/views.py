@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import io
+from datetime import datetime
 
 from PIL import Image
 from django.conf import settings
@@ -24,8 +25,7 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .filters import UserFilter, UserFilterFormHelper
-from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, MemberFormSet, FormSetHelper, \
-    CustomAuthenticationForm
+from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable
 
@@ -281,13 +281,19 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         club = context["club"]
+        if PermissionBackend().has_perm(self.request.user, "member.change_club_membership_start", club):
+            club.update_membership_dates()
+
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
         context['history_list'] = HistoryTable(club_transactions)
-        club_member = Membership.objects.filter(club=club)\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).all()
-        # TODO: consider only valid Membership
+        club_member = Membership.objects.filter(
+            club=club,
+            date_start__lte=datetime.now().date(),
+            date_end__gte=datetime.now().date(),
+        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).all()
         context['member_list'] = club_member
         return context
 
@@ -328,31 +334,20 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     form_class = MembershipForm
     template_name = 'member/add_members.html'
 
-    def get_queryset(self, **kwargs):
-        return super().get_queryset().filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")
-                                             | PermissionBackend.filter_queryset(self.request.user, Membership,
-                                                                                 "change"))
-
     def get_context_data(self, **kwargs):
         club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
             .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
-        context['formset'] = MemberFormSet()
-        context['helper'] = FormSetHelper()
         context['club'] = club
         context['no_cache'] = True
 
         return context
 
-    def post(self, request, *args, **kwargs):
-        return
-        # TODO: Implement POST
-        # formset = MembershipFormset(request.POST)
-        # if formset.is_valid():
-        #     return self.form_valid(formset)
-        # else:
-        #     return self.form_invalid(formset)
+    def form_valid(self, form):
+        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            .get(pk=self.kwargs["pk"])
+        form.instance.club = club
+        return super().form_valid(form)
 
-    def form_valid(self, formset):
-        formset.save()
-        return super().form_valid(formset)
+    def get_success_url(self):
+        return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
