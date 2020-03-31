@@ -203,8 +203,8 @@ class NoteActivity(Note):
     )
 
     class Meta:
-        verbose_name = _("common note")
-        verbose_name_plural = _("common notes")
+        verbose_name = _("activity note")
+        verbose_name_plural = _("activity notes")
 
     def __str__(self):
         return self.note_name

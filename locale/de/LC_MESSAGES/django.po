@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-30 17:31+0200\n"
+"POT-Creation-Date: 2020-03-31 04:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,9 +45,10 @@ msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
 #: apps/member/models.py:64 apps/member/models.py:122
-#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
-#: templates/member/club_info.html:13 templates/member/profile_info.html:14
+#: apps/note/models/notes.py:186 apps/note/models/notes.py:224
+#: apps/note/models/transactions.py:24 apps/note/models/transactions.py:44
+#: apps/note/models/transactions.py:231 templates/member/club_info.html:13
+#: templates/member/profile_info.html:14
 msgid "name"
 msgstr ""
 
@@ -68,18 +69,18 @@ msgid "activity types"
 msgstr ""
 
 #: apps/activity/models.py:53 apps/note/models/transactions.py:69
-#: apps/permission/models.py:90 templates/activity/activity_detail.html:16
+#: apps/permission/models.py:99 templates/activity/activity_detail.html:16
 msgid "description"
 msgstr ""
 
-#: apps/activity/models.py:60 apps/note/models/notes.py:164
+#: apps/activity/models.py:60 apps/note/models/notes.py:166
 #: apps/note/models/transactions.py:62
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
 
 #: apps/activity/models.py:66 apps/logs/models.py:21
-#: apps/note/models/notes.py:117
+#: apps/note/models/notes.py:119
 msgid "user"
 msgstr ""
 
@@ -88,7 +89,7 @@ msgid "organizer"
 msgstr ""
 
 #: apps/activity/models.py:82 apps/activity/models.py:131 apps/note/apps.py:14
-#: apps/note/models/notes.py:58
+#: apps/note/models/notes.py:60
 msgid "note"
 msgstr ""
 
@@ -169,16 +170,16 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/treasury/forms.py:120
+#: apps/activity/tables.py:77 apps/treasury/forms.py:121
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/treasury/forms.py:122
+#: apps/activity/tables.py:79 apps/treasury/forms.py:123
 #: templates/note/transaction_form.html:92
 msgid "First name"
 msgstr ""
 
-#: apps/activity/tables.py:81 apps/note/models/notes.py:67
+#: apps/activity/tables.py:81 apps/note/models/notes.py:69
 msgid "Note"
 msgstr ""
 
@@ -186,11 +187,11 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: apps/activity/views.py:44 templates/base.html:94
+#: apps/activity/views.py:45 templates/base.html:94
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:149
+#: apps/activity/views.py:153
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -226,12 +227,12 @@ msgstr ""
 msgid "create"
 msgstr ""
 
-#: apps/logs/models.py:61 apps/note/tables.py:142
+#: apps/logs/models.py:61 apps/note/tables.py:160
 #: templates/activity/activity_detail.html:67
 msgid "edit"
 msgstr ""
 
-#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:146
+#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:164
 msgid "delete"
 msgstr ""
 
@@ -313,7 +314,8 @@ msgid ""
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:104 apps/note/models/notes.py:139
+#: apps/member/models.py:104 apps/note/models/notes.py:141
+#: apps/note/models/notes.py:195
 msgid "club"
 msgstr ""
 
@@ -321,7 +323,7 @@ msgstr ""
 msgid "clubs"
 msgstr ""
 
-#: apps/member/models.py:128 apps/permission/models.py:275
+#: apps/member/models.py:128 apps/permission/models.py:284
 msgid "role"
 msgstr ""
 
@@ -353,19 +355,19 @@ msgstr ""
 msgid "memberships"
 msgstr ""
 
-#: apps/member/views.py:76 templates/member/profile_info.html:45
+#: apps/member/views.py:78 templates/member/profile_info.html:45
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:89
+#: apps/member/views.py:91
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:94
+#: apps/note/admin.py:128 apps/note/models/transactions.py:94
 msgid "source"
 msgstr ""
 
-#: apps/note/admin.py:128 apps/note/admin.py:156
+#: apps/note/admin.py:136 apps/note/admin.py:164
 #: apps/note/models/transactions.py:53 apps/note/models/transactions.py:107
 msgid "destination"
 msgstr ""
@@ -378,104 +380,116 @@ msgstr ""
 msgid "Maximal size: 2MB"
 msgstr ""
 
-#: apps/note/models/notes.py:27
+#: apps/note/models/notes.py:29
 msgid "account balance"
 msgstr ""
 
-#: apps/note/models/notes.py:28
+#: apps/note/models/notes.py:30
 msgid "in centimes, money credited for this instance"
 msgstr ""
 
-#: apps/note/models/notes.py:32
+#: apps/note/models/notes.py:34
 msgid "last negative date"
 msgstr ""
 
-#: apps/note/models/notes.py:33
+#: apps/note/models/notes.py:35
 msgid "last time the balance was negative"
 msgstr ""
 
-#: apps/note/models/notes.py:38
+#: apps/note/models/notes.py:40
 msgid "active"
 msgstr ""
 
-#: apps/note/models/notes.py:41
+#: apps/note/models/notes.py:43
 msgid ""
 "Designates whether this note should be treated as active. Unselect this "
 "instead of deleting notes."
 msgstr ""
 
-#: apps/note/models/notes.py:45
+#: apps/note/models/notes.py:47
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:117
+#: apps/note/models/notes.py:55 apps/note/models/transactions.py:117
 msgid "created at"
 msgstr ""
 
-#: apps/note/models/notes.py:59
+#: apps/note/models/notes.py:61
 msgid "notes"
 msgstr ""
 
-#: apps/note/models/notes.py:77 apps/note/models/notes.py:101
+#: apps/note/models/notes.py:79 apps/note/models/notes.py:103
 msgid "This alias is already taken."
 msgstr ""
 
-#: apps/note/models/notes.py:121
+#: apps/note/models/notes.py:123
 msgid "one's note"
 msgstr ""
 
-#: apps/note/models/notes.py:122
+#: apps/note/models/notes.py:124
 msgid "users note"
 msgstr ""
 
-#: apps/note/models/notes.py:128
+#: apps/note/models/notes.py:130
 #, python-format
 msgid "%(user)s's note"
 msgstr ""
 
-#: apps/note/models/notes.py:143
+#: apps/note/models/notes.py:145
 msgid "club note"
 msgstr ""
 
-#: apps/note/models/notes.py:144
+#: apps/note/models/notes.py:146
 msgid "clubs notes"
 msgstr ""
 
-#: apps/note/models/notes.py:150
+#: apps/note/models/notes.py:152
 #, python-format
 msgid "Note of %(club)s club"
 msgstr ""
 
-#: apps/note/models/notes.py:170
+#: apps/note/models/notes.py:172
 msgid "special note"
 msgstr ""
 
-#: apps/note/models/notes.py:171
+#: apps/note/models/notes.py:173
 msgid "special notes"
 msgstr ""
 
-#: apps/note/models/notes.py:194
+#: apps/note/models/notes.py:202 templates/note/noteactivity_detail.html:22
+msgid "controller"
+msgstr ""
+
+#: apps/note/models/notes.py:206
+msgid "activity note"
+msgstr ""
+
+#: apps/note/models/notes.py:207
+msgid "activity notes"
+msgstr ""
+
+#: apps/note/models/notes.py:230
 msgid "Invalid alias"
 msgstr ""
 
-#: apps/note/models/notes.py:210
+#: apps/note/models/notes.py:246
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:211 templates/member/club_info.html:33
+#: apps/note/models/notes.py:247 templates/member/club_info.html:33
 #: templates/member/profile_info.html:36
 msgid "aliases"
 msgstr ""
 
-#: apps/note/models/notes.py:233
+#: apps/note/models/notes.py:269
 msgid "Alias is too long."
 msgstr ""
 
-#: apps/note/models/notes.py:238
+#: apps/note/models/notes.py:274
 msgid "An alias with a similar name already exists: {} "
 msgstr ""
 
-#: apps/note/models/notes.py:251
+#: apps/note/models/notes.py:287
 msgid "You can't delete your main alias."
 msgstr ""
 
@@ -578,29 +592,29 @@ msgstr ""
 msgid "No reason specified"
 msgstr ""
 
-#: apps/note/views.py:41
+#: apps/note/views.py:39
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:102 templates/base.html:79
+#: apps/note/views.py:100 templates/base.html:79
 msgid "Consumptions"
 msgstr ""
 
-#: apps/permission/models.py:69 apps/permission/models.py:262
+#: apps/permission/models.py:78 apps/permission/models.py:271
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:71 apps/permission/models.py:264
+#: apps/permission/models.py:80 apps/permission/models.py:273
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:84
+#: apps/permission/models.py:93
 msgid "rank"
 msgstr ""
 
-#: apps/permission/models.py:147
+#: apps/permission/models.py:156
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 
@@ -608,31 +622,32 @@ msgstr ""
 msgid "Treasury"
 msgstr ""
 
-#: apps/treasury/forms.py:84 apps/treasury/forms.py:132
+#: apps/treasury/forms.py:85 apps/treasury/forms.py:133
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
-#: templates/member/club_form.html:9 templates/treasury/invoice_form.html:46
+#: templates/member/club_form.html:9 templates/note/noteactivity_form.html:14
+#: templates/treasury/invoice_form.html:46
 msgid "Submit"
 msgstr ""
 
-#: apps/treasury/forms.py:86
+#: apps/treasury/forms.py:87
 msgid "Close"
 msgstr ""
 
-#: apps/treasury/forms.py:95
+#: apps/treasury/forms.py:96
 msgid "Remittance is already closed."
 msgstr ""
 
-#: apps/treasury/forms.py:100
+#: apps/treasury/forms.py:101
 msgid "You can't change the type of the remittance."
 msgstr ""
 
-#: apps/treasury/forms.py:124 templates/note/transaction_form.html:98
+#: apps/treasury/forms.py:125 templates/note/transaction_form.html:98
 msgid "Bank"
 msgstr ""
 
-#: apps/treasury/forms.py:126 apps/treasury/tables.py:47
+#: apps/treasury/forms.py:127 apps/treasury/tables.py:47
 #: templates/note/transaction_form.html:128
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
@@ -879,19 +894,24 @@ msgstr ""
 msgid "Club Parent"
 msgstr ""
 
-#: templates/member/club_info.html:41
+#: templates/member/club_info.html:39
+msgid "linked notes"
+msgstr ""
+
+#: templates/member/club_info.html:44
 msgid "Add member"
 msgstr ""
 
-#: templates/member/club_info.html:42 templates/note/conso_form.html:121
+#: templates/member/club_info.html:45 templates/note/conso_form.html:121
+#: templates/note/noteactivity_detail.html:31
 msgid "Edit"
 msgstr ""
 
-#: templates/member/club_info.html:43
+#: templates/member/club_info.html:46
 msgid "Add roles"
 msgstr ""
 
-#: templates/member/club_info.html:46 templates/member/profile_info.html:48
+#: templates/member/club_info.html:49 templates/member/profile_info.html:48
 msgid "View Profile"
 msgstr ""
 
@@ -912,6 +932,7 @@ msgid "Member of the Club"
 msgstr ""
 
 #: templates/member/club_tables.html:22 templates/member/profile_tables.html:22
+#: templates/note/noteactivity_detail.html:42
 msgid "Transaction history"
 msgstr ""
 
@@ -944,6 +965,7 @@ msgid "Change password"
 msgstr ""
 
 #: templates/member/profile_info.html:33
+#: templates/note/noteactivity_detail.html:25
 msgid "balance"
 msgstr ""
 
@@ -990,6 +1012,22 @@ msgstr ""
 
 #: templates/note/conso_form.html:141 templates/note/transaction_form.html:147
 msgid "Recent transactions history"
+msgstr ""
+
+#: templates/note/noteactivity_detail.html:15
+msgid "Linked note:"
+msgstr ""
+
+#: templates/note/noteactivity_detail.html:19
+msgid "attached club"
+msgstr ""
+
+#: templates/note/noteactivity_list.html:15
+msgid "linked notes of club"
+msgstr ""
+
+#: templates/note/noteactivity_list.html:24
+msgid "Add new note"
 msgstr ""
 
 #: templates/note/transaction_form.html:15

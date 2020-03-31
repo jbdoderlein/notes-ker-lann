@@ -255,9 +255,9 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
         ctx = super().get_context_data(**kwargs)
 
         ctx["table"] = RemittanceTable(data=Remittance.objects.filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
         data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
+            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
         ctx["special_transactions"] = SpecialTransactionTable(
             data=data,
             exclude=('remittance_add', 'remittance_remove', ) if self.object.closed else ('remittance_add', ))
