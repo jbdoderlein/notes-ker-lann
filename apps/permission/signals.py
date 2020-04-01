@@ -27,7 +27,7 @@ def pre_save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_no_log"):
+    if hasattr(instance, "_force_save"):
         return
 
     user = get_current_authenticated_user()
@@ -74,7 +74,7 @@ def pre_delete_object(instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_no_log"):
+    if hasattr(instance, "_force_delete"):
         return
 
     user = get_current_authenticated_user()

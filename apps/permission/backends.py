@@ -10,6 +10,7 @@ from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
+from .decorators import memoize
 
 from .models import Permission
 
@@ -23,6 +24,28 @@ class PermissionBackend(ModelBackend):
     supports_inactive_user = False
 
     @staticmethod
+    @memoize
+    def get_raw_permissions(user, t):
+        """
+        Query permissions of a certain type for a user, then memoize it.
+        :param user: The owner of the permissions
+        :param t: The type of the permissions: view, change, add or delete
+        :return: The queryset of the permissions of the user (memoized) grouped by clubs
+        """
+        if isinstance(user, AnonymousUser):
+            # Unauthenticated users have no permissions
+            return Permission.objects.none()
+
+        return Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
+            .filter(
+                rolepermissions__role__membership__user=user,
+                rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+                rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+                type=t,
+                mask__rank__lte=get_current_session().get("permission_mask", 0),
+            ).distinct('club', 'pk')
+
+    @staticmethod
     def permissions(user, model, type):
         """
         List all permissions of the given user that applies to a given model and a give type
@@ -31,18 +54,16 @@ class PermissionBackend(ModelBackend):
         :param type: The type of the permissions: view, change, add or delete
         :return: A generator of the requested permissions
         """
-        for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
-                .filter(
-            rolepermissions__role__membership__user=user,
-            rolepermissions__role__membership__date_start__lte=datetime.date.today(),
-            rolepermissions__role__membership__date_end__gte=datetime.date.today(),
-            model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
-            type=type,
-        ).all():
-            if not isinstance(model, permission.model.__class__) or not permission.club:
+        clubs = {}
+
+        for permission in PermissionBackend.get_raw_permissions(user, type):
+            if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.club:
                 continue
 
-            club = Club.objects.get(pk=permission.club)
+            if permission.club not in clubs:
+                clubs[permission.club] = club = Club.objects.get(pk=permission.club)
+            else:
+                club = clubs[permission.club]
             permission = permission.about(
                 user=user,
                 club=club,
@@ -56,10 +77,10 @@ class PermissionBackend(ModelBackend):
                 F=F,
                 Q=Q
             )
-            if permission.mask.rank <= get_current_session().get("permission_mask", 0):
-                yield permission
+            yield permission
 
     @staticmethod
+    @memoize
     def filter_queryset(user, model, t, field=None):
         """
         Filter a queryset by considering the permissions of a given user.
@@ -93,9 +114,14 @@ class PermissionBackend(ModelBackend):
             query = query | perm.query
         return query
 
+    @memoize
     def has_perm(self, user_obj, perm, obj=None):
         if user_obj is None or isinstance(user_obj, AnonymousUser):
             return False
+
+        sess = get_current_session()
+        if sess is not None and sess.session_key is None:
+            return Permission.objects.none()
 
         if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             return True

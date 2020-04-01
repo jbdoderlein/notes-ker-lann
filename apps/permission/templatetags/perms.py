@@ -20,11 +20,8 @@ def not_empty_model_list(model_name):
         return False
     elif user.is_superuser and session.get("permission_mask", 0) >= 42:
         return True
-    if session.get("not_empty_model_list_" + model_name, None):
-        return session.get("not_empty_model_list_" + model_name, None) == 1
     qs = model_list(model_name)
-    session["not_empty_model_list_" + model_name] = 1 if qs.exists() else 2
-    return session.get("not_empty_model_list_" + model_name) == 1
+    return qs.exists()
 
 
 @stringfilter
@@ -38,11 +35,8 @@ def not_empty_model_change_list(model_name):
         return False
     elif user.is_superuser and session.get("permission_mask", 0) >= 42:
         return True
-    if session.get("not_empty_model_change_list_" + model_name, None):
-        return session.get("not_empty_model_change_list_" + model_name, None) == 1
     qs = model_list(model_name, "change")
-    session["not_empty_model_change_list_" + model_name] = 1 if qs.exists() else 2
-    return session.get("not_empty_model_change_list_" + model_name) == 1
+    return qs.exists()
 
 
 @stringfilter
