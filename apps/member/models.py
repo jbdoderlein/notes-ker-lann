@@ -128,6 +128,9 @@ class Club(models.Model):
         This function is called each time the club detail view is displayed.
         Update the year of the membership dates.
         """
+        if not self.membership_start:
+            return
+
         today = datetime.date.today()
 
         if (today - self.membership_start).days >= 365:
@@ -237,7 +240,7 @@ class Membership(models.Model):
             if self.club.membership_duration is not None:
                 self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
             else:
-                self.date_end = self.date_start + datetime.timedelta(days=0x7FFFFFFF)
+                self.date_end = self.date_start + datetime.timedelta(days=424242)
             if self.club.membership_end is not None and self.date_end > self.club.membership_end:
                 self.date_end = self.club.membership_end
 

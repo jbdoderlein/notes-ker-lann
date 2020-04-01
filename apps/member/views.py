@@ -374,12 +374,12 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.add_error('user', _('User is already a member of the club'))
             return super().form_invalid(form)
 
-        if form.instance.date_start < form.instance.club.membership_start:
+        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
             form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
-        if form.instance.date_start > form.instance.club.membership_end:
+        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
@@ -406,12 +406,12 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        if form.instance.date_start < form.instance.club.membership_start:
+        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
             form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
-        if form.instance.date_start > form.instance.club.membership_end:
+        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
