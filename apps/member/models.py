@@ -228,8 +228,8 @@ class Membership(models.Model):
             if Membership.objects.filter(
                     user=self.user,
                     club=self.club,
-                    date_start__lte=datetime.datetime.now().date(),
-                    date_end__gte=datetime.datetime.now().date(),
+                    date_start__lte=self.date_start,
+                    date_end__gte=self.date_start,
             ).exists():
                 raise ValidationError(_('User is already a member of the club'))
 

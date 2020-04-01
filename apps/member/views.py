@@ -358,7 +358,24 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
             .get(pk=self.kwargs["pk"])
+        user = self.request.user
         form.instance.club = club
+
+        if user.profile.paid:
+            fee = club.membership_fee_paid
+        else:
+            fee = club.membership_fee_unpaid
+        if user.note.balance < fee and not Membership.objects.filter(
+                club=2,
+                user=user,
+                date_start__lte=datetime.now().date(),
+                date_end__gte=datetime.now().date(),
+        ).exists():
+            # Users without a valid Kfet membership can't have a negative balance.
+            # Club 2 = Kfet (hard-code :'( )
+            # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
+            form.add_error('user',
+                           _("This user don't have enough money to join this club, and can't have a negative balance."))
 
         if club.parent_club is not None:
             if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
@@ -368,8 +385,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         if Membership.objects.filter(
                 user=form.instance.user,
                 club=club,
-                date_start__lte=datetime.now().date(),
-                date_end__gte=datetime.now().date(),
+                date_start__lte=form.instance.date_start,
+                date_end__gte=form.instance.date_start,
         ).exists():
             form.add_error('user', _('User is already a member of the club'))
             return super().form_invalid(form)
