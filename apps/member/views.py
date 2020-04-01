@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
+from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -27,7 +28,7 @@ from permission.views import ProtectQuerysetMixin
 from .filters import UserFilter, UserFilterFormHelper
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
 from .models import Club, Membership
-from .tables import ClubTable, UserTable
+from .tables import ClubTable, UserTable, MembershipTable
 
 
 class CustomLoginView(LoginView):
@@ -138,7 +139,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context['history_list'] = HistoryTable(history_list)
         club_list = Membership.objects.all().filter(user=user)\
             .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).only("club")
-        context['club_list'] = ClubTable(club_list)
+        context['club_list'] = MembershipTable(data=club_list)
         return context
 
 
@@ -294,7 +295,19 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             date_start__lte=datetime.now().date(),
             date_end__gte=datetime.now().date(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).all()
-        context['member_list'] = club_member
+
+        context['member_list'] = MembershipTable(data=club_member)
+
+        empty_membership = Membership(
+            club=club,
+            user=User.objects.first(),
+            date_start=datetime.now().date(),
+            date_end=datetime.now().date(),
+            fee=0,
+        )
+        context["can_add_members"] = PermissionBackend()\
+            .has_perm(self.request.user, "member.add_membership", empty_membership)
+
         return context
 
 
@@ -339,7 +352,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
         context['club'] = club
-        context['no_cache'] = True
 
         return context
 
@@ -347,6 +359,63 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
             .get(pk=self.kwargs["pk"])
         form.instance.club = club
+
+        if club.parent_club is not None:
+            if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
+                form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
+                return super().form_invalid(form)
+
+        if Membership.objects.filter(
+                user=form.instance.user,
+                club=club,
+                date_start__lte=datetime.now().date(),
+                date_end__gte=datetime.now().date(),
+        ).exists():
+            form.add_error('user', _('User is already a member of the club'))
+            return super().form_invalid(form)
+
+        if form.instance.date_start < form.instance.club.membership_start:
+            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_start))
+            return super().form_invalid(form)
+
+        if form.instance.date_start > form.instance.club.membership_end:
+            form.add_error('user', _("The membership must end before {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_start))
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
+
+
+class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    model = Membership
+    form_class = MembershipForm
+    template_name = 'member/add_members.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        club = self.object.club
+        context['club'] = club
+        form = context['form']
+        form.fields['user'].disabled = True
+        form.fields['date_start'].widget = HiddenInput()
+
+        return context
+
+    def form_valid(self, form):
+        if form.instance.date_start < form.instance.club.membership_start:
+            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_start))
+            return super().form_invalid(form)
+
+        if form.instance.date_start > form.instance.club.membership_end:
+            form.add_error('user', _("The membership must end before {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_start))
+            return super().form_invalid(form)
+
         return super().form_valid(form)
 
     def get_success_url(self):

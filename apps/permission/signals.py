@@ -29,6 +29,9 @@ def pre_save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
+    if hasattr(instance, "_force_save"):
+        return
+
     user = get_current_authenticated_user()
     if user is None:
         # Action performed on shell is always granted
@@ -58,37 +61,22 @@ def pre_save_object(sender, instance, **kwargs):
             if not PermissionBackend().has_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
                 raise PermissionDenied
     else:
-        # We check if the user can add the model
-
-        # While checking permissions, the object will be inserted in the DB, then removed.
-        # We disable temporary the connectors
-        pre_save.disconnect(pre_save_object)
-        pre_delete.disconnect(pre_delete_object)
-        # We disable also logs connectors
-        pre_save.disconnect(logs_signals.pre_save_object)
-        post_save.disconnect(logs_signals.save_object)
-        post_delete.disconnect(logs_signals.delete_object)
-
         # We check if the user has right to add the object
         has_perm = PermissionBackend().has_perm(user, app_label + ".add_" + model_name, instance)
-
-        # Then we reconnect all
-        pre_save.connect(pre_save_object)
-        pre_delete.connect(pre_delete_object)
-        pre_save.connect(logs_signals.pre_save_object)
-        post_save.connect(logs_signals.save_object)
-        post_delete.connect(logs_signals.delete_object)
 
         if not has_perm:
             raise PermissionDenied
 
 
-def pre_delete_object(sender, instance, **kwargs):
+def pre_delete_object(instance, **kwargs):
     """
     Before a model get deleted, we check the permissions
     """
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
+        return
+
+    if hasattr(instance, "_force_delete"):
         return
 
     user = get_current_authenticated_user()

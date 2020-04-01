@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import datetime
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -32,7 +34,8 @@ class PermissionBackend(ModelBackend):
         for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
                 .filter(
             rolepermissions__role__membership__user=user,
-            rolepermissions__role__membership__valid=True,
+            rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+            rolepermissions__role__membership__date_end__gte=datetime.date.today(),
             model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
             type=type,
         ).all():

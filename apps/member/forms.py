@@ -4,6 +4,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
@@ -55,11 +56,6 @@ class ClubForm(forms.ModelForm):
             "membership_start": DatePickerInput(),
             "membership_end": DatePickerInput(),
         }
-
-
-class AddMembersForm(forms.Form):
-    class Meta:
-        fields = ('',)
 
 
 class MembershipForm(forms.ModelForm):

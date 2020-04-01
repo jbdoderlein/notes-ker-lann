@@ -18,6 +18,7 @@
         "fields": {
             "name": "Kfet",
             "email": "tresorerie.bde@example.com",
+            "parent_club": 1,
             "require_memberships":  true,
             "membership_fee": 3500,
             "membership_duration": 396,

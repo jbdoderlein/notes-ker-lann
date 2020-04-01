@@ -4,10 +4,13 @@
 import datetime
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
+
+from note.models import MembershipTransaction
 
 
 class Profile(models.Model):
@@ -91,7 +94,7 @@ class Club(models.Model):
         verbose_name=_('membership fee'),
     )
 
-    membership_duration = models.IntegerField(
+    membership_duration = models.PositiveIntegerField(
         blank=True,
         null=True,
         verbose_name=_('membership duration'),
@@ -174,7 +177,7 @@ class Membership(models.Model):
 
     """
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.PROTECT,
     )
 
@@ -185,6 +188,7 @@ class Membership(models.Model):
 
     roles = models.ManyToManyField(
         Role,
+        verbose_name=_("roles"),
     )
 
     date_start = models.DateField(
@@ -209,16 +213,40 @@ class Membership(models.Model):
     def save(self, *args, **kwargs):
         if self.club.parent_club is not None:
             if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
-                raise ValidationError(_('User is not a member of the parent club'))
+                raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
 
         created = not self.pk
         if created:
+            if Membership.objects.filter(
+                    user=self.user,
+                    club=self.club,
+                    date_start__lte=datetime.datetime.now().date(),
+                    date_end__gte=datetime.datetime.now().date(),
+            ).exists():
+                raise ValidationError(_('User is already a member of the club'))
+
             self.fee = self.club.membership_fee
-            self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
-            if self.date_end > self.club.membership_end:
+            if self.club.membership_duration is not None:
+                self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
+            else:
+                self.date_end = self.date_start + datetime.timedelta(days=0x7FFFFFFF)
+            if self.club.membership_end is not None and self.date_end > self.club.membership_end:
                 self.date_end = self.club.membership_end
 
         super().save(*args, **kwargs)
+
+        if created and self.fee:
+            try:
+                MembershipTransaction.objects.create(
+                    membership=self,
+                    source=self.user.note,
+                    destination=self.club.note,
+                    quantity=1,
+                    amount=self.fee,
+                    reason="Adhésion",
+                )
+            except PermissionDenied:
+                self.delete()
 
     class Meta:
         verbose_name = _('membership')

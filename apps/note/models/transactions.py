@@ -140,6 +140,7 @@ class Transaction(PolymorphicModel):
         max_length=255,
         default=None,
         null=True,
+        blank=True,
     )
 
     class Meta:

@@ -1,4 +1,4 @@
-{% load i18n static pretty_money %}
+{% load i18n static pretty_money perms %}
 <div class="card bg-light shadow">
     <div class="card-header text-center">
         <h4> Club {{ club.name }} </h4>
@@ -40,9 +40,12 @@
         </dl>
     </div>
     <div class="card-footer text-center">
-        <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' pk=club.pk %}"> {% trans "Add member" %}</a>
-        <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_update' pk=club.pk %}"> {% trans "Edit" %}</a>
-        <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' pk=club.pk %}"> {% trans "Add roles" %}</a>
+        {% if can_add_members %}
+            <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' pk=club.pk %}"> {% trans "Add member" %}</a>
+        {% endif %}
+        {% if ".change_"|has_perm:club %}
+            <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_update' pk=club.pk %}"> {% trans "Edit" %}</a>
+        {% endif %}
         {% url 'member:club_detail' club.pk as club_detail_url %}
         {%if request.get_full_path != club_detail_url %}
         <a class="btn btn-primary btn-sm my-1" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>

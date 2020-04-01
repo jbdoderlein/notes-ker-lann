@@ -50,6 +50,9 @@ def save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
+    if hasattr(instance, "_force_save"):
+        return
+
     # noinspection PyProtectedMember
     previous = instance._previous
 
@@ -104,6 +107,9 @@ def delete_object(sender, instance, **kwargs):
     """
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
+        return
+
+    if hasattr(instance, "_force_delete"):
         return
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP

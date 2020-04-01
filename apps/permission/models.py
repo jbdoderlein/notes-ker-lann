@@ -45,11 +45,13 @@ class InstancedPermission:
                 else:
                     oldpk = obj.pk
                 # Ensure previous models are deleted
-                self.model.model_class().objects.filter(pk=obj.pk).delete()
+                self.model.model_class().objects.filter(pk=obj.pk).annotate(_force_delete=F("pk") + 1).delete()
                 # Force insertion, no data verification, no trigger
+                obj._force_save = True
                 Model.save(obj, force_insert=True)
                 ret = self.model.model_class().objects.filter(self.query & Q(pk=obj.pk)).exists()
                 # Delete testing object
+                obj._force_delete = True
                 Model.delete(obj)
 
                 # If the primary key was specified, we restore it
