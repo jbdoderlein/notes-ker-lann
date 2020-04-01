@@ -10,8 +10,8 @@ from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
-from .decorators import memoize
 
+from .decorators import memoize
 from .models import Permission
 
 
@@ -43,7 +43,7 @@ class PermissionBackend(ModelBackend):
                 rolepermissions__role__membership__date_end__gte=datetime.date.today(),
                 type=t,
                 mask__rank__lte=get_current_session().get("permission_mask", 0),
-            ).distinct('club', 'pk')
+        ).distinct('club', 'pk',)
 
     @staticmethod
     def permissions(user, model, type):
