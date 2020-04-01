@@ -952,8 +952,8 @@ msgid "search clubs"
 msgstr "Chercher un club"
 
 #: templates/member/club_list.html:12
-msgid "Créer un club"
-msgstr ""
+msgid "Create club"
+msgstr "Créer un club"
 
 #: templates/member/club_list.html:19
 msgid "club listing "

@@ -27,7 +27,6 @@ from note.tables import HistoryTable, AliasTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .filters import UserFilter, UserFilterFormHelper
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable
@@ -152,18 +151,29 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = User
     table_class = UserTable
     template_name = 'member/user_list.html'
-    filter_class = UserFilter
-    formhelper_class = UserFilterFormHelper
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset()
-        self.filter = self.filter_class(self.request.GET, queryset=qs)
-        self.filter.form.helper = self.formhelper_class()
-        return self.filter.qs
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+            if not pattern:
+                return qs.none()
+
+            qs = qs.filter(
+                Q(first_name__iregex=pattern)
+                | Q(last_name__iregex=pattern)
+                | Q(profile__section__iregex=pattern)
+                | Q(note__alias__name__iregex="^" + pattern)
+                | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
+            )
+        else:
+            qs = qs.none()
+
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["filter"] = self.filter
         return context
 
 

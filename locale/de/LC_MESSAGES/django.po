@@ -949,7 +949,7 @@ msgid "search clubs"
 msgstr ""
 
 #: templates/member/club_list.html:12
-msgid "Créer un club"
+msgid "Create club"
 msgstr ""
 
 #: templates/member/club_list.html:19
