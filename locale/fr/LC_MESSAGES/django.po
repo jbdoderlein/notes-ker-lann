@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-01 04:00+0200\n"
+"POT-Creation-Date: 2020-04-01 04:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -362,10 +362,15 @@ msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
 #: apps/member/models.py:265
+#, python-brace-format
+msgid "Membership of {user} for the club {club}"
+msgstr "Adhésion de {user} pour le club {club}"
+
+#: apps/member/models.py:268
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:266
+#: apps/member/models.py:269
 msgid "memberships"
 msgstr "adhésions"
 
@@ -1228,9 +1233,3 @@ msgstr "Il n'y a pas de transaction associée à une remise ouverte."
 #: templates/treasury/remittance_list.html:54
 msgid "Closed remittances"
 msgstr "Remises fermées"
-
-#~ msgid "Add roles"
-#~ msgstr "Ajouter des rôles"
-
-#~ msgid "linked notes"
-#~ msgstr "notes liées"

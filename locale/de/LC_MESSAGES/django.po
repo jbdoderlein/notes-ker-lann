@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-01 04:00+0200\n"
+"POT-Creation-Date: 2020-04-01 04:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -362,10 +362,15 @@ msgid "User is already a member of the club"
 msgstr ""
 
 #: apps/member/models.py:265
+#, python-brace-format
+msgid "Membership of {user} for the club {club}"
+msgstr ""
+
+#: apps/member/models.py:268
 msgid "membership"
 msgstr ""
 
-#: apps/member/models.py:266
+#: apps/member/models.py:269
 msgid "memberships"
 msgstr ""
 
@@ -382,7 +387,7 @@ msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
 #: apps/member/views.py:383 apps/member/views.py:415
-msgid "The membership must start before {:%m-%d-%Y}."
+msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
 #: apps/note/admin.py:120 apps/note/models/transactions.py:94

@@ -5,7 +5,7 @@ import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -246,7 +246,7 @@ class Membership(models.Model):
         self.make_transaction()
 
     def make_transaction(self):
-        if self.transaction is not None or not self.fee:
+        if not self.fee or MembershipTransaction.objects.filter(membership=self).exists():
             return
 
         if self.fee:
@@ -256,10 +256,13 @@ class Membership(models.Model):
                 destination=self.club.note,
                 quantity=1,
                 amount=self.fee,
-                reason="Adhésion",
+                reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
             transaction.save(force_insert=True)
+
+    def __str__(self):
+        return _("Membership of {user} for the club {club}").format(user=self.user.username, club=self.club.name, )
 
     class Meta:
         verbose_name = _('membership')
