@@ -2,19 +2,21 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import io
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from PIL import Image
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
+from django.views.generic.base import View
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
@@ -137,8 +139,8 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
         context['history_list'] = HistoryTable(history_list)
-        club_list = Membership.objects.all().filter(user=user)\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).only("club")
+        club_list = Membership.objects.filter(user=user, date_end__gte=datetime.today())\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
         context['club_list'] = MembershipTable(data=club_list)
         return context
 
@@ -292,9 +294,8 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context['history_list'] = HistoryTable(club_transactions)
         club_member = Membership.objects.filter(
             club=club,
-            date_start__lte=datetime.now().date(),
-            date_end__gte=datetime.now().date(),
-        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view")).all()
+            date_end__gte=datetime.today(),
+        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
         context['member_list'] = MembershipTable(data=club_member)
 
@@ -366,7 +367,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         else:
             fee = club.membership_fee_unpaid
         if user.note.balance < fee and not Membership.objects.filter(
-                club=2,
+                club__name="Kfet",
                 user=user,
                 date_start__lte=datetime.now().date(),
                 date_end__gte=datetime.now().date(),
@@ -437,3 +438,28 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
+
+
+class ClubRenewMembershipView(ProtectQuerysetMixin, LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        membership = Membership.objects.filter(PermissionBackend.filter_queryset(user, Membership, "change"))\
+            .filter(pk=self.kwargs["pk"]).get()
+
+        if Membership.objects.filter(
+            club=membership.club,
+            user=membership.user,
+            date_start__gte=membership.club.membership_start,
+            date_end__lte=membership.club.membership_end,
+        ).exists():
+            raise ValidationError(_("This membership is already renewed"))
+
+        new_membership = Membership.objects.create(
+            user=user,
+            club=membership.club,
+            date_start=membership.date_end + timedelta(days=1),
+        )
+        new_membership.roles.set(membership.roles.all())
+        new_membership.save()
+
+        return redirect(reverse_lazy('member:club_detail', kwargs={'pk': membership.club.pk}))

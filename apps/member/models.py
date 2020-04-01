@@ -187,11 +187,13 @@ class Membership(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
+        verbose_name=_("user"),
     )
 
     club = models.ForeignKey(
         Club,
         on_delete=models.PROTECT,
+        verbose_name=_("club"),
     )
 
     roles = models.ManyToManyField(
@@ -237,6 +239,7 @@ class Membership(models.Model):
                 self.fee = self.club.membership_fee_paid
             else:
                 self.fee = self.club.membership_fee_unpaid
+
             if self.club.membership_duration is not None:
                 self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
             else:

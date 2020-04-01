@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-01 04:12+0200\n"
+"POT-Creation-Date: 2020-04-01 18:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
-#: apps/member/models.py:66 apps/member/models.py:166
+#: apps/member/models.py:66 apps/member/models.py:169
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:232
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
@@ -74,7 +74,7 @@ msgstr "description"
 msgid "type"
 msgstr "type"
 
-#: apps/activity/models.py:66 apps/logs/models.py:21
+#: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:190
 #: apps/note/models/notes.py:117
 msgid "user"
 msgstr "utilisateur"
@@ -271,7 +271,7 @@ msgstr "payé"
 msgid "user profile"
 msgstr "profil utilisateur"
 
-#: apps/member/models.py:71 templates/member/club_info.html:41
+#: apps/member/models.py:71 templates/member/club_info.html:46
 msgid "email"
 msgstr "courriel"
 
@@ -287,11 +287,11 @@ msgstr "nécessite des adhésions"
 msgid "Uncheck if this club don't require memberships."
 msgstr "Décochez si ce club n'utilise pas d'adhésions."
 
-#: apps/member/models.py:93 templates/member/club_info.html:31
+#: apps/member/models.py:93 templates/member/club_info.html:35
 msgid "membership fee (paid students)"
 msgstr "cotisation pour adhérer (normalien élève)"
 
-#: apps/member/models.py:98 templates/member/club_info.html:34
+#: apps/member/models.py:98 templates/member/club_info.html:38
 msgid "membership fee (unpaid students)"
 msgstr "cotisation pour adhérer (normalien étudiant)"
 
@@ -325,70 +325,85 @@ msgstr ""
 "Combien de temps l'adhésion peut durer après le 1er Janvier de l'année "
 "suivante avant que les adhérents peuvent renouveler leur adhésion."
 
-#: apps/member/models.py:151 apps/note/models/notes.py:139
+#: apps/member/models.py:154 apps/member/models.py:196
+#: apps/note/models/notes.py:139
 msgid "club"
 msgstr "club"
 
-#: apps/member/models.py:152
+#: apps/member/models.py:155
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:172 apps/permission/models.py:288
+#: apps/member/models.py:175 apps/permission/models.py:288
 msgid "role"
 msgstr "rôle"
 
-#: apps/member/models.py:173 apps/member/models.py:196
+#: apps/member/models.py:176 apps/member/models.py:201
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/models.py:200
+#: apps/member/models.py:205
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:204
+#: apps/member/models.py:209
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:209
+#: apps/member/models.py:214
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:221 apps/member/views.py:365
+#: apps/member/models.py:226 apps/member/views.py:383
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:231 apps/member/views.py:374
+#: apps/member/models.py:236 apps/member/views.py:392
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:265
+#: apps/member/models.py:271
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:268
+#: apps/member/models.py:274
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:269
+#: apps/member/models.py:275
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/views.py:78 templates/member/profile_info.html:45
+#: apps/member/tables.py:73
+msgid "Renew"
+msgstr ""
+
+#: apps/member/views.py:80 templates/member/profile_info.html:45
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
-#: apps/member/views.py:91
+#: apps/member/views.py:93
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
-#: apps/member/views.py:378 apps/member/views.py:410
+#: apps/member/views.py:379
+msgid ""
+"This user don't have enough money to join this club, and can't have a "
+"negative balance."
+msgstr ""
+
+#: apps/member/views.py:396 apps/member/views.py:428
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:383 apps/member/views.py:415
+#: apps/member/views.py:401 apps/member/views.py:433
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
+
+#: apps/member/views.py:455
+msgid "This membership is already renewed"
+msgstr "Cette adhésion est déjà renouvelée"
 
 #: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
@@ -492,7 +507,7 @@ msgstr "Alias invalide"
 msgid "alias"
 msgstr "alias"
 
-#: apps/note/models/notes.py:211 templates/member/club_info.html:38
+#: apps/note/models/notes.py:211 templates/member/club_info.html:43
 #: templates/member/profile_info.html:36
 msgid "aliases"
 msgstr "alias"
@@ -916,15 +931,19 @@ msgstr "Club parent"
 msgid "days"
 msgstr "jours"
 
-#: templates/member/club_info.html:47
+#: templates/member/club_info.html:32
+msgid "membership fee"
+msgstr "cotisation pour adhérer"
+
+#: templates/member/club_info.html:52
 msgid "Add member"
 msgstr "Ajouter un membre"
 
-#: templates/member/club_info.html:50 templates/note/conso_form.html:121
+#: templates/member/club_info.html:55 templates/note/conso_form.html:121
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/member/club_info.html:54 templates/member/profile_info.html:48
+#: templates/member/club_info.html:59 templates/member/profile_info.html:48
 msgid "View Profile"
 msgstr "Voir le profil"
 
