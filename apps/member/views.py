@@ -170,10 +170,13 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         else:
             qs = qs.none()
 
-        return qs
+        return qs[:20]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context["title"] = _("Search user")
+
         return context
 
 
