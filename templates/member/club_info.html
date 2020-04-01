@@ -28,8 +28,11 @@
                 <dt class="col-xl-6">{% trans 'membership duration'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ club.membership_duration }} {% trans "days" %}</dd>
 
-                <dt class="col-xl-6">{% trans 'membership fee'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_fee|pretty_money }}</dd>
+                <dt class="col-xl-6">{% trans 'membership fee (paid students)'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.membership_fee_paid|pretty_money }}</dd>
+
+                <dt class="col-xl-6">{% trans 'membership fee (unpaid students)'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.membership_fee_unpaid|pretty_money }}</dd>
             {% endif %}
             
             <dt class="col-xl-6"><a href="{% url 'member:club_alias' club.pk %}">{% trans 'aliases'|capfirst %}</a></dt>

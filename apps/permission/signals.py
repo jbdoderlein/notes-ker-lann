@@ -2,8 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.core.exceptions import PermissionDenied
-from django.db.models.signals import pre_save, pre_delete, post_save, post_delete
-from logs import signals as logs_signals
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
 
@@ -29,7 +27,7 @@ def pre_save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_force_save"):
+    if hasattr(instance, "_no_log"):
         return
 
     user = get_current_authenticated_user()
@@ -76,7 +74,7 @@ def pre_delete_object(instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_force_delete"):
+    if hasattr(instance, "_no_log"):
         return
 
     user = get_current_authenticated_user()

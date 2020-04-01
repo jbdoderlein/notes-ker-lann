@@ -5,11 +5,10 @@ import django_tables2 as tables
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-from django_tables2 import A
-
 from note.templatetags.pretty_money import pretty_money
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
+
 from .models import Club, Membership
 
 

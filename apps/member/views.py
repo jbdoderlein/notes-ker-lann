@@ -380,7 +380,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
         if form.instance.date_start > form.instance.club.membership_end:
-            form.add_error('user', _("The membership must end before {:%m-%d-%Y}.")
+            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
@@ -412,7 +412,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             return super().form_invalid(form)
 
         if form.instance.date_start > form.instance.club.membership_end:
-            form.add_error('user', _("The membership must end before {:%m-%d-%Y}.")
+            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 

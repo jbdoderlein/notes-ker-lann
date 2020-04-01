@@ -4,7 +4,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
@@ -46,7 +45,8 @@ class ClubForm(forms.ModelForm):
         model = Club
         fields = '__all__'
         widgets = {
-            "membership_fee": AmountInput(),
+            "membership_fee_paid": AmountInput(),
+            "membership_fee_unpaid": AmountInput(),
             "parent_club": Autocomplete(
                 Club,
                 attrs={

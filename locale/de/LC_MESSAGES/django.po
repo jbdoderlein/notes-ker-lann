@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 23:49+0200\n"
+"POT-Creation-Date: 2020-04-01 04:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,9 +44,9 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
-#: apps/member/models.py:64 apps/member/models.py:158
+#: apps/member/models.py:66 apps/member/models.py:166
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:231
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:232
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 msgid "name"
 msgstr ""
@@ -68,7 +68,7 @@ msgid "activity types"
 msgstr ""
 
 #: apps/activity/models.py:53 apps/note/models/transactions.py:69
-#: apps/permission/models.py:99 templates/activity/activity_detail.html:16
+#: apps/permission/models.py:103 templates/activity/activity_detail.html:16
 msgid "description"
 msgstr ""
 
@@ -251,129 +251,145 @@ msgstr ""
 msgid "member"
 msgstr ""
 
-#: apps/member/models.py:26
+#: apps/member/models.py:28
 msgid "phone number"
 msgstr ""
 
-#: apps/member/models.py:32 templates/member/profile_info.html:27
+#: apps/member/models.py:34 templates/member/profile_info.html:27
 msgid "section"
 msgstr ""
 
-#: apps/member/models.py:33
+#: apps/member/models.py:35
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr ""
 
-#: apps/member/models.py:39 templates/member/profile_info.html:30
+#: apps/member/models.py:41 templates/member/profile_info.html:30
 msgid "address"
 msgstr ""
 
-#: apps/member/models.py:45
+#: apps/member/models.py:47
 msgid "paid"
 msgstr ""
 
-#: apps/member/models.py:50 apps/member/models.py:51
+#: apps/member/models.py:52 apps/member/models.py:53
 msgid "user profile"
 msgstr ""
 
-#: apps/member/models.py:69 templates/member/club_info.html:38
+#: apps/member/models.py:71 templates/member/club_info.html:41
 msgid "email"
 msgstr ""
 
-#: apps/member/models.py:76
+#: apps/member/models.py:78
 msgid "parent club"
 msgstr ""
 
-#: apps/member/models.py:85
+#: apps/member/models.py:87
 msgid "require memberships"
 msgstr ""
 
-#: apps/member/models.py:86
+#: apps/member/models.py:88
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
 
-#: apps/member/models.py:91 templates/member/club_info.html:31
-msgid "membership fee"
+#: apps/member/models.py:93 templates/member/club_info.html:31
+msgid "membership fee (paid students)"
 msgstr ""
 
-#: apps/member/models.py:97 templates/member/club_info.html:28
+#: apps/member/models.py:98 templates/member/club_info.html:34
+msgid "membership fee (unpaid students)"
+msgstr ""
+
+#: apps/member/models.py:104 templates/member/club_info.html:28
 msgid "membership duration"
 msgstr ""
 
-#: apps/member/models.py:98
+#: apps/member/models.py:105
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr ""
 
-#: apps/member/models.py:105 templates/member/club_info.html:22
+#: apps/member/models.py:112 templates/member/club_info.html:22
 msgid "membership start"
 msgstr ""
 
-#: apps/member/models.py:106
+#: apps/member/models.py:113
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:113 templates/member/club_info.html:25
+#: apps/member/models.py:120 templates/member/club_info.html:25
 msgid "membership end"
 msgstr ""
 
-#: apps/member/models.py:114
+#: apps/member/models.py:121
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:143 apps/note/models/notes.py:139
+#: apps/member/models.py:151 apps/note/models/notes.py:139
 msgid "club"
 msgstr ""
 
-#: apps/member/models.py:144
+#: apps/member/models.py:152
 msgid "clubs"
 msgstr ""
 
-#: apps/member/models.py:164 apps/permission/models.py:284
+#: apps/member/models.py:172 apps/permission/models.py:288
 msgid "role"
 msgstr ""
 
-#: apps/member/models.py:165
+#: apps/member/models.py:173 apps/member/models.py:196
 msgid "roles"
 msgstr ""
 
-#: apps/member/models.py:191
+#: apps/member/models.py:200
 msgid "membership starts on"
 msgstr ""
 
-#: apps/member/models.py:195
+#: apps/member/models.py:204
 msgid "membership ends on"
 msgstr ""
 
-#: apps/member/models.py:200
+#: apps/member/models.py:209
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:212
+#: apps/member/models.py:221 apps/member/views.py:365
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:224
+#: apps/member/models.py:231 apps/member/views.py:374
+msgid "User is already a member of the club"
+msgstr ""
+
+#: apps/member/models.py:265
 msgid "membership"
 msgstr ""
 
-#: apps/member/models.py:225
+#: apps/member/models.py:266
 msgid "memberships"
 msgstr ""
 
-#: apps/member/views.py:77 templates/member/profile_info.html:45
+#: apps/member/views.py:78 templates/member/profile_info.html:45
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:90
+#: apps/member/views.py:91
 msgid "An alias with a similar name already exists."
+msgstr ""
+
+#: apps/member/views.py:378 apps/member/views.py:410
+msgid "The membership must start after {:%m-%d-%Y}."
+msgstr ""
+
+#: apps/member/views.py:383 apps/member/views.py:415
+msgid "The membership must start before {:%m-%d-%Y}."
 msgstr ""
 
 #: apps/note/admin.py:120 apps/note/models/transactions.py:94
 msgid "source"
 msgstr ""
 
-#: apps/note/admin.py:128 apps/note/admin.py:156
+#: apps/note/admin.py:128 apps/note/admin.py:163
 #: apps/note/models/transactions.py:53 apps/note/models/transactions.py:107
 msgid "destination"
 msgstr ""
@@ -470,7 +486,7 @@ msgstr ""
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:211 templates/member/club_info.html:35
+#: apps/note/models/notes.py:211 templates/member/club_info.html:38
 #: templates/member/profile_info.html:36
 msgid "aliases"
 msgstr ""
@@ -532,45 +548,45 @@ msgstr ""
 msgid "invalidity reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:146
+#: apps/note/models/transactions.py:147
 msgid "transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:147
+#: apps/note/models/transactions.py:148
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:201 templates/base.html:84
+#: apps/note/models/transactions.py:202 templates/base.html:84
 #: templates/note/transaction_form.html:19
 #: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:221
+#: apps/note/models/transactions.py:222
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:236
+#: apps/note/models/transactions.py:237
 msgid "first_name"
 msgstr ""
 
-#: apps/note/models/transactions.py:241
+#: apps/note/models/transactions.py:242
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:247 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:248 templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:247 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:248 templates/note/transaction_form.html:28
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:263 apps/note/models/transactions.py:268
+#: apps/note/models/transactions.py:264 apps/note/models/transactions.py:269
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:264
+#: apps/note/models/transactions.py:265
 msgid "membership transactions"
 msgstr ""
 
@@ -594,21 +610,21 @@ msgstr ""
 msgid "Consumptions"
 msgstr ""
 
-#: apps/permission/models.py:78 apps/permission/models.py:271
+#: apps/permission/models.py:82 apps/permission/models.py:275
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:80 apps/permission/models.py:273
+#: apps/permission/models.py:84 apps/permission/models.py:277
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:93
+#: apps/permission/models.py:97
 msgid "rank"
 msgstr ""
 
-#: apps/permission/models.py:156
+#: apps/permission/models.py:160
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 
@@ -892,19 +908,15 @@ msgstr ""
 msgid "days"
 msgstr ""
 
-#: templates/member/club_info.html:43
+#: templates/member/club_info.html:47
 msgid "Add member"
 msgstr ""
 
-#: templates/member/club_info.html:44 templates/note/conso_form.html:121
+#: templates/member/club_info.html:50 templates/note/conso_form.html:121
 msgid "Edit"
 msgstr ""
 
-#: templates/member/club_info.html:45
-msgid "Add roles"
-msgstr ""
-
-#: templates/member/club_info.html:48 templates/member/profile_info.html:48
+#: templates/member/club_info.html:54 templates/member/profile_info.html:48
 msgid "View Profile"
 msgstr ""
 

@@ -15,14 +15,16 @@
         require_memberships_obj = $("#id_require_memberships");
 
         if (!require_memberships_obj.is(":checked")) {
-            $("#div_id_membership_fee").toggle();
+            $("#div_id_membership_fee_paid").toggle();
+            $("#div_id_membership_fee_unpaid").toggle();
             $("#div_id_membership_duration").toggle();
             $("#div_id_membership_start").toggle();
             $("#div_id_membership_end").toggle();
         }
 
         require_memberships_obj.change(function () {
-            $("#div_id_membership_fee").toggle();
+            $("#div_id_membership_fee_paid").toggle();
+            $("#div_id_membership_fee_unpaid").toggle();
             $("#div_id_membership_duration").toggle();
             $("#div_id_membership_start").toggle();
             $("#div_id_membership_end").toggle();

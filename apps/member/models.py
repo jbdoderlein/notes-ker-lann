@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError, PermissionDenied
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
-
 from note.models import MembershipTransaction
 
 
@@ -89,9 +88,14 @@ class Club(models.Model):
         help_text=_("Uncheck if this club don't require memberships."),
     )
 
-    membership_fee = models.PositiveIntegerField(
+    membership_fee_paid = models.PositiveIntegerField(
         default=0,
-        verbose_name=_('membership fee'),
+        verbose_name=_('membership fee (paid students)'),
+    )
+
+    membership_fee_unpaid = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('membership fee (unpaid students)'),
     )
 
     membership_duration = models.PositiveIntegerField(
@@ -136,7 +140,8 @@ class Club(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.require_memberships:
-            self.membership_fee = 0
+            self.membership_fee_paid = 0
+            self.membership_fee_unpaid = 0
             self.membership_duration = None
             self.membership_start = None
             self.membership_end = None
@@ -225,7 +230,10 @@ class Membership(models.Model):
             ).exists():
                 raise ValidationError(_('User is already a member of the club'))
 
-            self.fee = self.club.membership_fee
+            if self.user.profile.paid:
+                self.fee = self.club.membership_fee_paid
+            else:
+                self.fee = self.club.membership_fee_unpaid
             if self.club.membership_duration is not None:
                 self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
             else:
@@ -235,18 +243,23 @@ class Membership(models.Model):
 
         super().save(*args, **kwargs)
 
-        if created and self.fee:
-            try:
-                MembershipTransaction.objects.create(
-                    membership=self,
-                    source=self.user.note,
-                    destination=self.club.note,
-                    quantity=1,
-                    amount=self.fee,
-                    reason="Adhésion",
-                )
-            except PermissionDenied:
-                self.delete()
+        self.make_transaction()
+
+    def make_transaction(self):
+        if self.transaction is not None or not self.fee:
+            return
+
+        if self.fee:
+            transaction = MembershipTransaction(
+                membership=self,
+                source=self.user.note,
+                destination=self.club.note,
+                quantity=1,
+                amount=self.fee,
+                reason="Adhésion",
+            )
+            transaction._force_save = True
+            transaction.save(force_insert=True)
 
     class Meta:
         verbose_name = _('membership')
