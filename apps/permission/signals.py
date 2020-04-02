@@ -44,7 +44,7 @@ def pre_save_object(sender, instance, **kwargs):
         # We check if the user can change the model
 
         # If the user has all right on a model, then OK
-        if PermissionBackend().has_perm(user, app_label + ".change_" + model_name, instance):
+        if PermissionBackend.check_perm(user, app_label + ".change_" + model_name, instance):
             return
 
         # In the other case, we check if he/she has the right to change one field
@@ -56,11 +56,11 @@ def pre_save_object(sender, instance, **kwargs):
             # If the field wasn't modified, no need to check the permissions
             if old_value == new_value:
                 continue
-            if not PermissionBackend().has_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
+            if not PermissionBackend.check_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
                 raise PermissionDenied
     else:
         # We check if the user has right to add the object
-        has_perm = PermissionBackend().has_perm(user, app_label + ".add_" + model_name, instance)
+        has_perm = PermissionBackend.check_perm(user, app_label + ".add_" + model_name, instance)
 
         if not has_perm:
             raise PermissionDenied
@@ -87,5 +87,5 @@ def pre_delete_object(instance, **kwargs):
     model_name = model_name_full[1]
 
     # We check if the user has rights to delete the object
-    if not PermissionBackend().has_perm(user, app_label + ".delete_" + model_name, instance):
+    if not PermissionBackend.check_perm(user, app_label + ".delete_" + model_name, instance):
         raise PermissionDenied

@@ -49,7 +49,10 @@ def memoize(f):
             # lru_cache makes the job of memoization
             # We store only the 512 latest data per session. It has to be enough.
             sess_funs[sess_key] = lru_cache(512)(f)
-        return sess_funs[sess_key](*args, **kwargs)
+        try:
+            return sess_funs[sess_key](*args, **kwargs)
+        except TypeError:  # For add permissions, objects are not hashable (not yet created). Don't memoize this case.
+            return f(*args, **kwargs)
 
     func.func_name = f.__name__
 

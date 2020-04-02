@@ -54,7 +54,7 @@ def model_list(model_name, t="view"):
 
 
 def has_perm(perm, obj):
-    return PermissionBackend().has_perm(get_current_authenticated_user(), perm, obj)
+    return PermissionBackend.check_perm(get_current_authenticated_user(), perm, obj)
 
 
 def can_create_transaction():
@@ -77,7 +77,7 @@ def can_create_transaction():
         amount=0,
         reason="Check permissions",
     )
-    session["can_create_transaction"] = PermissionBackend().has_perm(user, "note.add_transaction", empty_transaction)
+    session["can_create_transaction"] = PermissionBackend.check_perm(user, "note.add_transaction", empty_transaction)
     return session.get("can_create_transaction") == 1
 
 

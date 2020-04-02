@@ -299,7 +299,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         club = context["club"]
-        if PermissionBackend().has_perm(self.request.user, "member.change_club_membership_start", club):
+        if PermissionBackend.check_perm(self.request.user, "member.change_club_membership_start", club):
             club.update_membership_dates()
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\

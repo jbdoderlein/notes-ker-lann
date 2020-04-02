@@ -61,7 +61,7 @@ class MembershipTable(tables.Table):
 
     def render_club(self, value):
         s = value.name
-        if PermissionBackend().has_perm(get_current_authenticated_user(), "member.view_club", value):
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_club", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:club_detail', kwargs={"pk": value.pk}), name=s)
 
@@ -86,7 +86,7 @@ class MembershipTable(tables.Table):
                         date_end=datetime.now().date(),
                         fee=0,
                     )
-                    if PermissionBackend().has_perm(get_current_authenticated_user(),
+                    if PermissionBackend.check_perm(get_current_authenticated_user(),
                                                     "member:add_membership", empty_membership):  # If the user has right
                         t = format_html(t + ' <a class="btn btn-warning" href="{url}">{text}</a>',
                                         url=reverse_lazy('member:club_renew_membership',
@@ -96,7 +96,7 @@ class MembershipTable(tables.Table):
     def render_roles(self, record):
         roles = record.roles.all()
         s = ", ".join(str(role) for role in roles)
-        if PermissionBackend().has_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
             s = format_html("<a href='" + str(reverse_lazy("member:club_manage_roles", kwargs={"pk": record.pk}))
                             + "'>" + s + "</a>")
         return s

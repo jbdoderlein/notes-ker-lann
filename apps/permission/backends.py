@@ -114,8 +114,16 @@ class PermissionBackend(ModelBackend):
             query = query | perm.query
         return query
 
+    @staticmethod
     @memoize
-    def has_perm(self, user_obj, perm, obj=None):
+    def check_perm(user_obj, perm, obj=None):
+        """
+        Check is the given user has the permission over a given object.
+        The result is then memoized.
+        Exception: for add permissions, since the object is not hashable since it doesn't have any
+        primary key, the result is not memoized. Moreover, the right could change
+        (e.g. for a transaction, the balance of the user could change)
+        """
         if user_obj is None or isinstance(user_obj, AnonymousUser):
             return False
 
@@ -134,9 +142,12 @@ class PermissionBackend(ModelBackend):
         perm_field = perm[2] if len(perm) == 3 else None
         ct = ContentType.objects.get_for_model(obj)
         if any(permission.applies(obj, perm_type, perm_field)
-               for permission in self.permissions(user_obj, ct, perm_type)):
+               for permission in PermissionBackend.permissions(user_obj, ct, perm_type)):
             return True
         return False
+
+    def has_perm(self, user_obj, perm, obj=None):
+        return PermissionBackend.check_perm(user_obj, perm, obj)
 
     def has_module_perms(self, user_obj, app_label):
         return False
