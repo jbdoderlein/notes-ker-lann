@@ -9,16 +9,13 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import HiddenInput
 from django.shortcuts import redirect, resolve_url
-from django.template import loader
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
@@ -49,11 +46,11 @@ class CustomLoginView(LoginView):
 
 class UserCreateView(CreateView):
     """
-    Une vue pour inscrire un utilisateur et lui créer un profile
+    Une vue pour inscrire un utilisateur et lui créer un profil
     """
 
     form_class = SignUpForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('member:login')
     template_name = 'member/signup.html'
     second_form = ProfileForm
 
@@ -77,18 +74,9 @@ class UserCreateView(CreateView):
         user.profile = profile_form.save(commit=False)
         user.save()
         user.profile.save()
-        site = get_current_site(self.request)
-        subject = "Activate your {} account".format(site.name)
-        message = loader.render_to_string('registration/account_activation_email.html',
-                                          {
-                                              'user': user,
-                                              'domain': site.domain,
-                                              'site_name': "La Note Kfet",
-                                              'protocol': 'https',
-                                              'token': account_activation_token.make_token(user),
-                                              'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('UTF-8'),
-                                          })
-        user.email_user(subject, message)
+
+        user.profile.send_email_validation_link()
+
         return super().form_valid(form)
 
 
@@ -195,11 +183,18 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
                 if similar.exists():
                     similar.delete()
 
+            olduser = User.objects.get(pk=form.instance.pk)
+
             user = form.save(commit=False)
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             user.save()
+
+            if olduser.email != user.email:
+                user.profile.email_confirmed = False
+                user.profile.send_email_validation_link()
+
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):

@@ -7,8 +7,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.template import loader
 from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+
+from member.tokens import account_activation_token
 from note.models import MembershipTransaction
 
 
@@ -61,6 +66,19 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('user_detail', args=(self.pk,))
+
+    def send_email_validation_link(self):
+        subject = "Activate your Note Kfet account"
+        message = loader.render_to_string('registration/account_activation_email.html',
+                                          {
+                                              'user': self.user,
+                                              'domain': "nk20.ynerant.fr",
+                                              'site_name': "La Note Kfet",
+                                              'protocol': 'https',
+                                              'token': account_activation_token.make_token(self.user),
+                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)).decode('UTF-8'),
+                                          })
+        self.user.email_user(subject, message)
 
 
 class Club(models.Model):
