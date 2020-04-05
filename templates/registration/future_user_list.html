@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+    <div id="user_table">
+        {% render_table table %}
+    </div>
+
+    <hr>
+
+    <a href="{% url 'registration:signup' %}"><button class="btn btn-primary btn-block">{% trans "New user" %}</button></a>
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+    $(".table-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
+</script>
+{% endblock %}

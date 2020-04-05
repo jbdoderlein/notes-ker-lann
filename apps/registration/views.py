@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.shortcuts import resolve_url
@@ -11,10 +12,13 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView
+from django_tables2 import SingleTableView
 from member.forms import ProfileForm
-from member.tokens import account_activation_token
+from permission.views import ProtectQuerysetMixin
 
 from .forms import SignUpForm
+from .tables import FutureUserTable
+from .tokens import account_activation_token
 
 
 class UserCreateView(CreateView):
@@ -23,8 +27,8 @@ class UserCreateView(CreateView):
     """
 
     form_class = SignUpForm
-    success_url = reverse_lazy('member:login')
-    template_name = 'member/signup.html'
+    success_url = reverse_lazy('registration:account_activation_sent')
+    template_name = 'registration/signup.html'
     second_form = ProfileForm
 
     def get_context_data(self, **kwargs):
@@ -107,4 +111,23 @@ class UserActivateView(TemplateView):
 class UserActivationEmailSentView(TemplateView):
     template_name = 'registration/account_activation_email_sent.html'
     title = _('Account activation email sent')
+
+
+class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+    """
+    Affiche la liste des utilisateurs, avec une fonction de recherche statique
+    """
+    model = User
+    table_class = FutureUserTable
+    template_name = 'registration/future_user_list.html'
+
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(profile__registration_valid=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["title"] = _("Unregistered users")
+
+        return context
 

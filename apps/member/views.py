@@ -139,7 +139,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     template_name = 'member/user_list.html'
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset()
+        qs = super().get_queryset().filter(profile__registration_valid=True)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 

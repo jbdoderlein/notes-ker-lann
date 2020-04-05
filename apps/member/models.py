@@ -12,7 +12,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
-from member.tokens import account_activation_token
+from registration.tokens import account_activation_token
 from note.models import MembershipTransaction
 
 
@@ -50,6 +50,11 @@ class Profile(models.Model):
     paid = models.BooleanField(
         verbose_name=_("paid"),
         help_text=_("Tells if the user receive a salary."),
+        default=False,
+    )
+
+    registration_valid = models.BooleanField(
+        verbose_name=_("registration valid"),
         default=False,
     )
 
