@@ -102,11 +102,8 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
-        if kwargs:
-            return reverse_lazy('member:user_detail',
-                                kwargs={'pk': kwargs['id']})
-        else:
-            return reverse_lazy('member:user_detail', args=(self.object.id,))
+        url = 'member:user_detail' if self.object.profile.registration_valid else 'registration:future_user_detail'
+        return reverse_lazy(url, args=(self.object.id,))
 
 
 class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
@@ -116,6 +113,12 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = User
     context_object_name = "user_object"
     template_name = "member/profile_detail.html"
+
+    def get_queryset(self, **kwargs):
+        """
+        We can't display information of a not registered user.
+        """
+        return super().get_queryset().filter(profile__registration_valid=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -4,13 +4,19 @@
 {% load i18n %}
 
 {% block content %}
-    <div id="user_table">
-        {% render_table table %}
-    </div>
+    <a href="{% url 'registration:signup' %}"><button class="btn btn-primary btn-block">{% trans "New user" %}</button></a>
 
     <hr>
 
-    <a href="{% url 'registration:signup' %}"><button class="btn btn-primary btn-block">{% trans "New user" %}</button></a>
+    {% if table.data %}
+        <div id="user_table">
+            {% render_table table %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no pending user." %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block extrajavascript %}

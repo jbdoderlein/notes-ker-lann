@@ -5,15 +5,18 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
+from member.models import Profile
+from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import SignUpForm
@@ -42,15 +45,19 @@ class UserCreateView(CreateView):
         If the form is valid, then the user is created with is_active set to False
         so that the user cannot log in until the email has been validated.
         """
-        profile_form = ProfileForm(self.request.POST)
+        profile_form = ProfileForm(data=self.request.POST)
         if not profile_form.is_valid():
             return self.form_invalid(form)
 
         user = form.save(commit=False)
         user.is_active = False
-        user.profile = profile_form.save(commit=False)
+        profile_form.instance.user = user
+        profile = profile_form.save(commit=False)
+        user.profile = profile
         user.save()
-        user.profile.save()
+        user.refresh_from_db()
+        profile.user = user
+        profile.save()
 
         user.profile.send_email_validation_link()
 
@@ -86,7 +93,6 @@ class UserActivateView(TemplateView):
             return self.render_to_response(self.get_context_data())
 
     def get_user(self, uidb64):
-        print(uidb64)
         try:
             # urlsafe_base64_decode() decodes to bytestring
             uid = urlsafe_base64_decode(uidb64).decode()
@@ -131,3 +137,32 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
 
         return context
 
+
+class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Affiche les informations sur un utilisateur, sa note, ses clubs...
+    """
+    model = User
+    context_object_name = "user_object"
+    template_name = "registration/future_profile_detail.html"
+
+    def get_queryset(self, **kwargs):
+        """
+        We only display information of a not registered user.
+        """
+        return super().get_queryset().filter(profile__registration_valid=False)
+
+
+class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
+    """
+    Affiche les informations sur un utilisateur, sa note, ses clubs...
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        user = User.objects.filter(profile__registration_valid=False)\
+            .filter(PermissionBackend.filter_queryset(request.user, User, "change", "is_valid"))\
+            .get(pk=self.kwargs["pk"])
+
+        user.delete()
+
+        return redirect('registration:future_user_list')
