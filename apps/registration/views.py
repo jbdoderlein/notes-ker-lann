@@ -232,12 +232,12 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             return self.form_invalid(form)
 
         if credit_type is not None and credit_amount > 0:
-            if not last_name or not first_name or not bank:
+            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
                 if not last_name:
                     form.add_error('last_name', _("This field is required."))
                 if not first_name:
                     form.add_error('first_name', _("This field is required."))
-                if not bank:
+                if not bank and credit_type.special_type == "Chèque":
                     form.add_error('bank', _("This field is required."))
                 return self.form_invalid(form)
 

@@ -5,7 +5,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-
 from note.models import NoteSpecial
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask

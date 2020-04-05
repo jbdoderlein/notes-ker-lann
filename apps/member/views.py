@@ -9,14 +9,11 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
-from django.views.generic.base import View
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
@@ -351,18 +348,40 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     template_name = 'member/add_members.html'
 
     def get_context_data(self, **kwargs):
-        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
-            .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
+        form = context['form']
+
+        if "club_pk" in self.kwargs:
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+                .get(pk=self.kwargs["club_pk"])
+            form.fields['credit_amount'].initial = club.membership_fee_paid
+        else:
+            old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
+            club = old_membership.club
+            user = old_membership.user
+            form.fields['user'].initial = user
+            form.fields['user'].disabled = True
+            form.fields['roles'].initial = old_membership.roles.all()
+            form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
+            form.fields['credit_amount'].initial = club.membership_fee_paid if user.profile.paid \
+                else club.membership_fee_unpaid
+            form.fields['last_name'].initial = user.last_name
+            form.fields['first_name'].initial = user.first_name
+
         context['club'] = club
-        context['form'].fields['credit_amount'].initial = club.membership_fee_paid
 
         return context
 
     def form_valid(self, form):
-        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
-            .get(pk=self.kwargs["pk"])
-        user = form.instance.user
+        if "club_pk" in self.kwargs:
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
+                .get(pk=self.kwargs["club_pk"])
+            user = form.instance.user
+        else:
+            old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
+            club = old_membership.club
+            user = old_membership.user
+
         form.instance.club = club
 
         credit_type = form.cleaned_data["credit_type"]
@@ -405,23 +424,23 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.add_error('user', _('User is already a member of the club'))
             return super().form_invalid(form)
 
-        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
+        if club.membership_start and form.instance.date_start < club.membership_start:
             form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
-        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
+        if club.membership_end and form.instance.date_start > club.membership_end:
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
         if credit_amount > 0:
-            if not last_name or not first_name or not bank:
+            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
                 if not last_name:
                     form.add_error('last_name', _("This field is required."))
                 if not first_name:
                     form.add_error('first_name', _("This field is required."))
-                if not bank:
+                if not bank and credit_type.special_type == "Chèque":
                     form.add_error('bank', _("This field is required."))
                 return self.form_invalid(form)
 
@@ -452,49 +471,18 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         club = self.object.club
         context['club'] = club
-        form = context['form']
-        form.fields['user'].disabled = True
-        form.fields['date_start'].widget = HiddenInput()
-
         return context
 
-    def form_valid(self, form):
-        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
-            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
-            return super().form_invalid(form)
-
-        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
-            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
-            return super().form_invalid(form)
-
-        return super().form_valid(form)
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['user'].disabled = True
+        del form.fields['date_start']
+        del form.fields['credit_type']
+        del form.fields['credit_amount']
+        del form.fields['last_name']
+        del form.fields['first_name']
+        del form.fields['bank']
+        return form
 
     def get_success_url(self):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
-
-
-class ClubRenewMembershipView(ProtectQuerysetMixin, LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        user = self.request.user
-        membership = Membership.objects.filter(PermissionBackend.filter_queryset(user, Membership, "change"))\
-            .filter(pk=self.kwargs["pk"]).get()
-
-        if Membership.objects.filter(
-            club=membership.club,
-            user=membership.user,
-            date_start__gte=membership.club.membership_start,
-            date_end__lte=membership.club.membership_end,
-        ).exists():
-            raise ValidationError(_("This membership is already renewed"))
-
-        new_membership = Membership.objects.create(
-            user=user,
-            club=membership.club,
-            date_start=membership.date_end + timedelta(days=1),
-        )
-        new_membership.roles.set(membership.roles.all())
-        new_membership.save()
-
-        return redirect(reverse_lazy('member:club_detail', kwargs={'pk': membership.club.pk}))

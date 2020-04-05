@@ -84,7 +84,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-id").all()[:50]
+        return super().get_queryset(**kwargs).order_by("-id").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
