@@ -4,6 +4,9 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
+from note.models import NoteSpecial
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
@@ -48,6 +51,36 @@ class ClubForm(forms.ModelForm):
 
 
 class MembershipForm(forms.ModelForm):
+    credit_type = forms.ModelChoiceField(
+        queryset=NoteSpecial.objects,
+        label=_("Credit type"),
+        empty_label=_("No credit"),
+        required=False,
+        help_text=_("You can credit the note of the user."),
+    )
+
+    credit_amount = forms.IntegerField(
+        label=_("Credit amount"),
+        required=False,
+        initial=0,
+        widget=AmountInput(),
+    )
+
+    last_name = forms.CharField(
+        label=_("Last name"),
+        required=False,
+    )
+
+    first_name = forms.CharField(
+        label=_("First name"),
+        required=False,
+    )
+
+    bank = forms.CharField(
+        label=_("Bank"),
+        required=False,
+    )
+
     class Meta:
         model = Membership
         fields = ('user', 'roles', 'date_start')

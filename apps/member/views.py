@@ -22,7 +22,7 @@ from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from note.forms import ImageForm
 from note.models import Alias, NoteUser
-from note.models.transactions import Transaction
+from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -355,6 +355,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
         context['club'] = club
+        context['form'].fields['credit_amount'].initial = club.membership_fee_paid
 
         return context
 
@@ -364,11 +365,20 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         user = form.instance.user
         form.instance.club = club
 
+        credit_type = form.cleaned_data["credit_type"]
+        credit_amount = form.cleaned_data["credit_amount"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+
+        if credit_type is None:
+            credit_amount = 0
+
         if user.profile.paid:
             fee = club.membership_fee_paid
         else:
             fee = club.membership_fee_unpaid
-        if user.note.balance < fee and not Membership.objects.filter(
+        if user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
                 date_start__lte=datetime.now().date(),
@@ -404,6 +414,28 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
+
+        if credit_amount > 0:
+            if not last_name or not first_name or not bank:
+                if not last_name:
+                    form.add_error('last_name', _("This field is required."))
+                if not first_name:
+                    form.add_error('first_name', _("This field is required."))
+                if not bank:
+                    form.add_error('bank', _("This field is required."))
+                return self.form_invalid(form)
+
+            SpecialTransaction.objects.create(
+                source=credit_type,
+                destination=user.note,
+                quantity=1,
+                amount=credit_amount,
+                reason="Crédit " + credit_type.special_type + " (Adhésion " + club.name + ")",
+                last_name=last_name,
+                first_name=first_name,
+                bank=bank,
+                valid=True,
+            )
 
         return super().form_valid(form)
 

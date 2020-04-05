@@ -17,5 +17,13 @@
 
 {% block extrajavascript %}
 <script>
+    function autocompleted(user) {
+        $("#id_last_name").val(user.last_name);
+        $("#id_first_name").val(user.first_name);
+        $.getJSON("/api/members/profile/" + user.id + "/", function(profile) {
+            let fee = profile.paid ? {{ club.membership_fee_paid }} : {{ club.membership_fee_unpaid }};
+            $("#id_credit_amount").val((fee / 100).toFixed(2));
+        });
+    }
 </script>
 {% endblock %}
