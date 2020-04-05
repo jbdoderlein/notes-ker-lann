@@ -4,6 +4,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
@@ -23,10 +24,14 @@ class SignUpForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.pop("autofocus", None)
         self.fields['first_name'].widget.attrs.update({"autofocus": "autofocus"})
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+        self.fields['email'].help_text = _("This address must be valid.")
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ('first_name', 'last_name', 'username', 'email', )
 
 
 class ProfileForm(forms.ModelForm):
@@ -37,7 +42,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = '__all__'
-        exclude = ['user']
+        exclude = ('user', 'email_confirmed', )
 
 
 class ClubForm(forms.ModelForm):

@@ -9,12 +9,18 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import HiddenInput
-from django.shortcuts import redirect
+from django.shortcuts import redirect, resolve_url
+from django.template import loader
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.views.generic.base import View
 from django.views.generic.edit import FormMixin
@@ -30,6 +36,7 @@ from permission.views import ProtectQuerysetMixin
 from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable
+from .tokens import account_activation_token
 
 
 class CustomLoginView(LoginView):
@@ -57,13 +64,88 @@ class UserCreateView(CreateView):
         return context
 
     def form_valid(self, form):
+        """
+        If the form is valid, then the user is created with is_active set to False
+        so that the user cannot log in until the email has been validated.
+        """
         profile_form = ProfileForm(self.request.POST)
-        if form.is_valid() and profile_form.is_valid():
-            user = form.save(commit=False)
-            user.profile = profile_form.save(commit=False)
-            user.save()
-            user.profile.save()
+        if not profile_form.is_valid():
+            return self.form_invalid(form)
+
+        user = form.save(commit=False)
+        user.is_active = False
+        user.profile = profile_form.save(commit=False)
+        user.save()
+        user.profile.save()
+        site = get_current_site(self.request)
+        subject = "Activate your {} account".format(site.name)
+        message = loader.render_to_string('registration/account_activation_email.html',
+                                          {
+                                              'user': user,
+                                              'domain': site.domain,
+                                              'site_name': "La Note Kfet",
+                                              'protocol': 'https',
+                                              'token': account_activation_token.make_token(user),
+                                              'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('UTF-8'),
+                                          })
+        user.email_user(subject, message)
         return super().form_valid(form)
+
+
+class UserActivateView(TemplateView):
+    title = _("Account Activation")
+    template_name = 'registration/account_activation_complete.html'
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        """
+        The dispatch method looks at the request to determine whether it is a GET, POST, etc,
+        and relays the request to a matching method if one is defined, or raises HttpResponseNotAllowed
+        if not. We chose to check the token in the dispatch method to mimic PasswordReset from
+        django.contrib.auth
+        """
+        assert 'uidb64' in kwargs and 'token' in kwargs
+
+        self.validlink = False
+        user = self.get_user(kwargs['uidb64'])
+        token = kwargs['token']
+
+        if user is not None and account_activation_token.check_token(user, token):
+            self.validlink = True
+            user.is_active = True
+            user.profile.email_confirmed = True
+            user.save()
+            return super().dispatch(*args, **kwargs)
+        else:
+            # Display the "Account Activation unsuccessful" page.
+            return self.render_to_response(self.get_context_data())
+
+    def get_user(self, uidb64):
+        print(uidb64)
+        try:
+            # urlsafe_base64_decode() decodes to bytestring
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist, ValidationError):
+            user = None
+        return user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['login_url'] = resolve_url(settings.LOGIN_URL)
+        if self.validlink:
+            context['validlink'] = True
+        else:
+            context.update({
+                'title': _('Account Activation unsuccessful'),
+                'validlink': False,
+            })
+        return context
+
+
+class UserActivationEmailSentView(TemplateView):
+    template_name = 'registration/account_activation_email_sent.html'
+    title = _('Account activation email sent')
 
 
 class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -75,14 +157,20 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        form = context['form']
+        form.fields['username'].widget.attrs.pop("autofocus", None)
+        form.fields['first_name'].widget.attrs.update({"autofocus": "autofocus"})
+        form.fields['first_name'].required = True
+        form.fields['last_name'].required = True
+        form.fields['email'].required = True
+        form.fields['email'].help_text = _("This address must be valid.")
+
         context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
         context['title'] = _("Update Profile")
         return context
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if 'username' not in form.data:
-            return form
+    def form_valid(self, form):
         new_username = form.data['username']
         # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(
@@ -90,9 +178,8 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         if note.exists() and note.get().user != self.object:
             form.add_error('username',
                            _("An alias with a similar name already exists."))
-        return form
+            return super().form_invalid(form)
 
-    def form_valid(self, form):
         profile_form = ProfileForm(
             data=self.request.POST,
             instance=self.object.profile,

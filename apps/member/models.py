@@ -45,6 +45,12 @@ class Profile(models.Model):
     )
     paid = models.BooleanField(
         verbose_name=_("paid"),
+        help_text=_("Tells if the user receive a salary."),
+        default=False,
+    )
+
+    email_confirmed = models.BooleanField(
+        verbose_name=_("email confirmed"),
         default=False,
     )
 

@@ -8,6 +8,9 @@ from . import views
 app_name = 'member'
 urlpatterns = [
     path('signup/', views.UserCreateView.as_view(), name="signup"),
+    path('accounts/activate/sent', views.UserActivationEmailSentView.as_view(), name='account_activation_sent'),
+    path('accounts/activate/<uidb64>/<token>', views.UserActivateView.as_view(), name='account_activation'),
+
 
     path('club/', views.ClubListView.as_view(), name="club_list"),
     path('club/create/', views.ClubCreateView.as_view(), name="club_create"),

@@ -1,0 +1,11 @@
+Hi {{ user.username }},
+
+Welcome to {{ site_name }}. Please click on the link below to confirm your registration.
+
+{{ protocol }}://{{ domain }}{% url 'member:account_activation' uidb64=uid token=token %}
+
+This link is only valid for a couple of days, after that you will need to contact us to validate your email.
+
+Thanks,
+
+{{ site_name }} team.
