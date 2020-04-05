@@ -124,7 +124,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     </li>
                 {% else %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:signup' %}">
+                        <a class="nav-link" href="{% url 'registration:signup' %}">
                             <i class="fa fa-user-plus"></i> S'inscrire
                         </a>
                     </li>
@@ -138,7 +138,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
         </div>
     </nav>
     <div class="container-fluid my-3" style="max-width: 1600px;">
-        {% if not user.profile.email_confirmed %}
+        {% if user.is_authenticated and not user.profile.email_confirmed %}
             <div class="alert alert-warning">
                 {% trans "Your e-mail address is not validated. Please check your mail inbox and click on the validation link." %}
             </div>

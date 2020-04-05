@@ -12,7 +12,6 @@ from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
-
 from member.tokens import account_activation_token
 from note.models import MembershipTransaction
 

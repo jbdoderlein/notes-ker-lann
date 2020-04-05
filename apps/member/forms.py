@@ -2,9 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
@@ -17,21 +16,6 @@ class CustomAuthenticationForm(AuthenticationForm):
         queryset=PermissionMask.objects.order_by("rank"),
         empty_label=None,
     )
-
-
-class SignUpForm(UserCreationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.pop("autofocus", None)
-        self.fields['first_name'].widget.attrs.update({"autofocus": "autofocus"})
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
-        self.fields['email'].required = True
-        self.fields['email'].help_text = _("This address must be valid.")
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username', 'email', )
 
 
 class ProfileForm(forms.ModelForm):
