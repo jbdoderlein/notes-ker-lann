@@ -67,7 +67,7 @@ class UserCreateView(CreateView):
 
 
 class UserValidateView(TemplateView):
-    title = _("Account Activation")
+    title = _("Email validation")
     template_name = 'registration/email_validation_complete.html'
 
     @method_decorator(csrf_protect)
@@ -111,7 +111,7 @@ class UserValidateView(TemplateView):
             context['validlink'] = True
         else:
             context.update({
-                'title': _('Account Activation unsuccessful'),
+                'title': _('Email validation unsuccessful'),
                 'validlink': False,
             })
         return context
@@ -119,7 +119,7 @@ class UserValidateView(TemplateView):
 
 class UserValidationEmailSentView(TemplateView):
     template_name = 'registration/email_validation_email_sent.html'
-    title = _('Account activation email sent')
+    title = _('Email validation email sent')
 
 
 class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, DetailView):
