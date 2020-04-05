@@ -386,7 +386,7 @@
         "note",
         "transaction"
       ],
-      "query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}]",
+      "query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
       "type": "add",
       "mask": 2,
       "field": "",
@@ -784,6 +784,66 @@
     }
   },
   {
+    "model": "permission.permission",
+    "pk": 47,
+    "fields": {
+      "model": [
+        "member",
+        "club"
+      ],
+      "query": "{\"pk\": [\"club\", \"pk\"]}",
+      "type": "change",
+      "mask": 1,
+      "field": "",
+      "description": "Update club"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 48,
+    "fields": {
+      "model": [
+        "member",
+        "membership"
+      ],
+      "query": "{\"user\": [\"user\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View our memberships"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 49,
+    "fields": {
+      "model": [
+        "member",
+        "membership"
+      ],
+      "query": "{\"club\": [\"club\"]}",
+      "type": "view",
+      "mask": 1,
+      "field": "",
+      "description": "View club's memberships"
+    }
+  },
+  {
+    "model": "permission.permission",
+    "pk": 50,
+    "fields": {
+      "model": [
+        "member",
+        "membership"
+      ],
+      "query": "{\"club\": [\"club\"]}",
+      "type": "add",
+      "mask": 2,
+      "field": "",
+      "description": "Add a membership to a club"
+    }
+  },
+  {
     "model": "permission.rolepermissions",
     "pk": 1,
     "fields": {
@@ -795,7 +855,8 @@
         8,
         9,
         10,
-        11
+        11,
+        48
       ]
     }
   },
@@ -878,6 +939,76 @@
         44,
         45,
         46
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 6,
+    "fields": {
+      "role": 7,
+      "permissions": [
+        22,
+        47
+      ]
+    }
+  },
+  {
+    "model": "permission.rolepermissions",
+    "pk": 7,
+    "fields": {
+      "role": 5,
+      "permissions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
       ]
     }
   }

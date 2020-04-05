@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import datetime
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -9,6 +11,7 @@ from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
+from .decorators import memoize
 from .models import Permission
 
 
@@ -21,6 +24,28 @@ class PermissionBackend(ModelBackend):
     supports_inactive_user = False
 
     @staticmethod
+    @memoize
+    def get_raw_permissions(user, t):
+        """
+        Query permissions of a certain type for a user, then memoize it.
+        :param user: The owner of the permissions
+        :param t: The type of the permissions: view, change, add or delete
+        :return: The queryset of the permissions of the user (memoized) grouped by clubs
+        """
+        if isinstance(user, AnonymousUser):
+            # Unauthenticated users have no permissions
+            return Permission.objects.none()
+
+        return Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
+            .filter(
+                rolepermissions__role__membership__user=user,
+                rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+                rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+                type=t,
+                mask__rank__lte=get_current_session().get("permission_mask", 0),
+        ).distinct('club', 'pk',)
+
+    @staticmethod
     def permissions(user, model, type):
         """
         List all permissions of the given user that applies to a given model and a give type
@@ -29,16 +54,16 @@ class PermissionBackend(ModelBackend):
         :param type: The type of the permissions: view, change, add or delete
         :return: A generator of the requested permissions
         """
-        for permission in Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
-                .filter(
-            rolepermissions__role__membership__user=user,
-            model__app_label=model.app_label,  # For polymorphic models, we don't filter on model type
-            type=type,
-        ).all():
-            if not isinstance(model, permission.model.__class__):
+        clubs = {}
+
+        for permission in PermissionBackend.get_raw_permissions(user, type):
+            if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.club:
                 continue
 
-            club = Club.objects.get(pk=permission.club)
+            if permission.club not in clubs:
+                clubs[permission.club] = club = Club.objects.get(pk=permission.club)
+            else:
+                club = clubs[permission.club]
             permission = permission.about(
                 user=user,
                 club=club,
@@ -52,10 +77,10 @@ class PermissionBackend(ModelBackend):
                 F=F,
                 Q=Q
             )
-            if permission.mask.rank <= get_current_session().get("permission_mask", 0):
-                yield permission
+            yield permission
 
     @staticmethod
+    @memoize
     def filter_queryset(user, model, t, field=None):
         """
         Filter a queryset by considering the permissions of a given user.
@@ -89,9 +114,22 @@ class PermissionBackend(ModelBackend):
             query = query | perm.query
         return query
 
-    def has_perm(self, user_obj, perm, obj=None):
+    @staticmethod
+    @memoize
+    def check_perm(user_obj, perm, obj=None):
+        """
+        Check is the given user has the permission over a given object.
+        The result is then memoized.
+        Exception: for add permissions, since the object is not hashable since it doesn't have any
+        primary key, the result is not memoized. Moreover, the right could change
+        (e.g. for a transaction, the balance of the user could change)
+        """
         if user_obj is None or isinstance(user_obj, AnonymousUser):
             return False
+
+        sess = get_current_session()
+        if sess is not None and sess.session_key is None:
+            return Permission.objects.none()
 
         if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
             return True
@@ -104,9 +142,12 @@ class PermissionBackend(ModelBackend):
         perm_field = perm[2] if len(perm) == 3 else None
         ct = ContentType.objects.get_for_model(obj)
         if any(permission.applies(obj, perm_type, perm_field)
-               for permission in self.permissions(user_obj, ct, perm_type)):
+               for permission in PermissionBackend.permissions(user_obj, ct, perm_type)):
             return True
         return False
+
+    def has_perm(self, user_obj, perm, obj=None):
+        return PermissionBackend.check_perm(user_obj, perm, obj)
 
     def has_module_perms(self, user_obj, app_label):
         return False

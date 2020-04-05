@@ -70,7 +70,7 @@ function refreshBalance() {
  * @param fun For each found note with the matched alias `alias`, fun(note, alias) is called.
  */
 function getMatchedNotes(pattern, fun) {
-    $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", fun);
+    $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club|activity&ordering=normalized_name", fun);
 }
 
 /**

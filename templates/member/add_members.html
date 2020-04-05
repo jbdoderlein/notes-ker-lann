@@ -1,29 +1,21 @@
 {% extends "member/noteowner_detail.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load i18n %}
 
 {% block profile_info %}
 {% include "member/club_info.html" %}
 {% endblock %}
-{% block profile_content %}
 
+{% block profile_content %}
 <form method="post" action="">
     {% csrf_token %}
-    {% crispy formset helper %}
-    <div class="form-actions">
-        <input type="submit" name="submit" value="Add Members" class="btn btn-primary" id="submit-save">
-    </div>
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">{% trans "Submit" %}</button>
 </form>
 {% endblock %}
 
 {% block extrajavascript %}
-<script src="{% static 'js/dynamic-formset.js' %}"></script>
 <script>
-    $('.formset-row').formset({
-        addText: 'add another',          // Text for the add link
-        deleteText: 'remove',            // Text for the delete link
-        addCssClass: 'btn btn-primary',          // CSS class applied to the add link
-        deleteCssClass: 'btn btn-danger h-50 my-auto',
-    });
 </script>
 {% endblock %}

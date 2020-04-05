@@ -2,8 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.core.exceptions import PermissionDenied
-from django.db.models.signals import pre_save, pre_delete, post_save, post_delete
-from logs import signals as logs_signals
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
 
@@ -29,6 +27,9 @@ def pre_save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
+    if hasattr(instance, "_force_save"):
+        return
+
     user = get_current_authenticated_user()
     if user is None:
         # Action performed on shell is always granted
@@ -43,7 +44,7 @@ def pre_save_object(sender, instance, **kwargs):
         # We check if the user can change the model
 
         # If the user has all right on a model, then OK
-        if PermissionBackend().has_perm(user, app_label + ".change_" + model_name, instance):
+        if PermissionBackend.check_perm(user, app_label + ".change_" + model_name, instance):
             return
 
         # In the other case, we check if he/she has the right to change one field
@@ -55,40 +56,25 @@ def pre_save_object(sender, instance, **kwargs):
             # If the field wasn't modified, no need to check the permissions
             if old_value == new_value:
                 continue
-            if not PermissionBackend().has_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
+            if not PermissionBackend.check_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
                 raise PermissionDenied
     else:
-        # We check if the user can add the model
-
-        # While checking permissions, the object will be inserted in the DB, then removed.
-        # We disable temporary the connectors
-        pre_save.disconnect(pre_save_object)
-        pre_delete.disconnect(pre_delete_object)
-        # We disable also logs connectors
-        pre_save.disconnect(logs_signals.pre_save_object)
-        post_save.disconnect(logs_signals.save_object)
-        post_delete.disconnect(logs_signals.delete_object)
-
         # We check if the user has right to add the object
-        has_perm = PermissionBackend().has_perm(user, app_label + ".add_" + model_name, instance)
-
-        # Then we reconnect all
-        pre_save.connect(pre_save_object)
-        pre_delete.connect(pre_delete_object)
-        pre_save.connect(logs_signals.pre_save_object)
-        post_save.connect(logs_signals.save_object)
-        post_delete.connect(logs_signals.delete_object)
+        has_perm = PermissionBackend.check_perm(user, app_label + ".add_" + model_name, instance)
 
         if not has_perm:
             raise PermissionDenied
 
 
-def pre_delete_object(sender, instance, **kwargs):
+def pre_delete_object(instance, **kwargs):
     """
     Before a model get deleted, we check the permissions
     """
     # noinspection PyProtectedMember
     if instance._meta.label_lower in EXCLUDED:
+        return
+
+    if hasattr(instance, "_force_delete"):
         return
 
     user = get_current_authenticated_user()
@@ -101,5 +87,5 @@ def pre_delete_object(sender, instance, **kwargs):
     model_name = model_name_full[1]
 
     # We check if the user has rights to delete the object
-    if not PermissionBackend().has_perm(user, app_label + ".delete_" + model_name, instance):
+    if not PermissionBackend.check_perm(user, app_label + ".delete_" + model_name, instance):
         raise PermissionDenied

@@ -8,6 +8,7 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import DatePickerInput, AmountInput
+from permission.backends import PermissionBackend
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
@@ -131,7 +132,8 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
         # Add submit button
         self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
 
-        self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)
+        self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Remittance, "view"))
 
     def clean_last_name(self):
         """

@@ -25,7 +25,7 @@
                 <dt class="col-xl-6">{% trans 'end date'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ activity.date_end }}</dd>
 
-                {% if "view_"|has_perm:activity.creater %}
+                {% if ".view_"|has_perm:activity.creater %}
                     <dt class="col-xl-6">{% trans 'creater'|capfirst %}</dt>
                     <dd class="col-xl-6"><a href="{% url "member:user_detail" pk=activity.creater.pk %}">{{ activity.creater }}</a></dd>
                 {% endif %}
@@ -53,17 +53,17 @@
         </div>
 
         <div class="card-footer text-center">
-            {% if activity.open and "change__open"|has_perm:activity %}
+            {% if activity.open and ".change__open"|has_perm:activity %}
                 <a class="btn btn-warning btn-sm my-1" href="{% url 'activity:activity_entry' pk=activity.pk %}"> {% trans "Entry page" %}</a>
             {% endif %}
 
-            {% if activity.valid and "change__open"|has_perm:activity %}
+            {% if activity.valid and ".change__open"|has_perm:activity %}
                 <a class="btn btn-warning btn-sm my-1" id="open_activity"> {% if activity.open %}{% trans "close"|capfirst %}{% else %}{% trans "open"|capfirst %}{% endif %}</a>
             {% endif %}
-            {% if not activity.open and "change__valid"|has_perm:activity %}
+            {% if not activity.open and ".change__valid"|has_perm:activity %}
                 <a class="btn btn-success btn-sm my-1" id="validate_activity"> {% if activity.valid %}{% trans "invalidate"|capfirst %}{% else %}{% trans "validate"|capfirst %}{% endif %}</a>
             {% endif %}
-            {% if "view_"|has_perm:activity %}
+            {% if ".view_"|has_perm:activity %}
                 <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
             {% endif %}
             {% if activity.activity_type.can_invite and not activity_started %}

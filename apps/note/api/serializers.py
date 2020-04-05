@@ -90,7 +90,7 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
         Note: NoteSerializer,
         NoteUser: NoteUserSerializer,
         NoteClub: NoteClubSerializer,
-        NoteSpecial: NoteSpecialSerializer
+        NoteSpecial: NoteSpecialSerializer,
     }
 
     class Meta:

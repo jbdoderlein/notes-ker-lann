@@ -138,6 +138,13 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
         return []
 
 
+@admin.register(MembershipTransaction)
+class MembershipTransactionAdmin(PolymorphicChildModelAdmin):
+    """
+    Admin customisation for Transaction
+    """
+
+
 @admin.register(TransactionTemplate)
 class TransactionTemplateAdmin(admin.ModelAdmin):
     """

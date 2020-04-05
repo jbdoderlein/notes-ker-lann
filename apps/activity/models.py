@@ -73,15 +73,6 @@ class Activity(models.Model):
         verbose_name=_('organizer'),
     )
 
-    note = models.ForeignKey(
-        'note.Note',
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-        related_name='+',
-        verbose_name=_('note'),
-    )
-
     attendees_club = models.ForeignKey(
         'member.Club',
         on_delete=models.PROTECT,
@@ -160,9 +151,7 @@ class Entry(models.Model):
         if insert and self.guest:
             GuestTransaction.objects.create(
                 source=self.note,
-                source_alias=self.note.user.username,
-                destination=self.note,
-                destination_alias=self.activity.organizer.name,
+                destination=self.activity.organizer.note,
                 quantity=1,
                 amount=self.activity.activity_type.guest_entry_fee,
                 reason="Invitation " + self.activity.name + " " + self.guest.first_name + " " + self.guest.last_name,
