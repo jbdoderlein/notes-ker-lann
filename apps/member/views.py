@@ -361,7 +361,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
             .get(pk=self.kwargs["pk"])
-        user = self.request.user
+        user = form.instance.user
         form.instance.club = club
 
         if user.profile.paid:
@@ -379,6 +379,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
             form.add_error('user',
                            _("This user don't have enough money to join this club, and can't have a negative balance."))
+            return super().form_invalid(form)
 
         if club.parent_club is not None:
             if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
