@@ -12,14 +12,16 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
-from member.models import Profile
+from member.models import Membership, Club
+from note.models import SpecialTransaction
+from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .forms import SignUpForm
+from .forms import SignUpForm, ValidationForm
 from .tables import FutureUserTable
 from .tokens import account_activation_token
 
@@ -138,11 +140,12 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         return context
 
 
-class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView, FormView):
     """
     Affiche les informations sur un utilisateur, sa note, ses clubs...
     """
     model = User
+    form_class = ValidationForm
     context_object_name = "user_object"
     template_name = "registration/future_profile_detail.html"
 
@@ -151,6 +154,92 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView)
         We only display information of a not registered user.
         """
         return super().get_queryset().filter(profile__registration_valid=False)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        user = self.get_object()
+        form.fields["last_name"].initial = user.last_name
+        form.fields["first_name"].initial = user.first_name
+        return form
+
+    def form_valid(self, form):
+        user = self.object = self.get_object()
+
+        print(form.cleaned_data)
+        credit_type = form.cleaned_data["credit_type"]
+        credit_amount = form.cleaned_data["credit_amount"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+        join_BDE = form.cleaned_data["join_BDE"]
+        join_Kfet = form.cleaned_data["join_Kfet"]
+
+        fee = 0
+        bde = Club.objects.get(name="BDE")
+        bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
+        if join_BDE:
+            fee += bde_fee
+        kfet = Club.objects.get(name="Kfet")
+        kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+        if join_Kfet:
+            fee += kfet_fee
+
+        if join_Kfet and not join_BDE:
+            form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
+
+        if fee > credit_amount:
+            form.add_error('credit_type',
+                           _("The entered amount is not enough for the memberships, should be at least {}")
+                           .format(pretty_money(fee)))
+            return self.form_invalid(form)
+
+        if credit_type is not None and credit_amount > 0:
+            if not last_name or not first_name or not bank:
+                if not last_name:
+                    form.add_error('last_name', _("This field is required."))
+                if not first_name:
+                    form.add_error('first_name', _("This field is required."))
+                if not bank:
+                    form.add_error('bank', _("This field is required."))
+                return self.form_invalid(form)
+
+        ret = super().form_valid(form)
+        user.is_active = True
+        user.profile.registration_valid = True
+        user.save()
+        user.profile.save()
+
+        if credit_type is not None and credit_amount > 0:
+            SpecialTransaction.objects.create(
+                source=credit_type,
+                destination=user.note,
+                quantity=1,
+                amount=credit_amount,
+                reason="Crédit " + credit_type.special_type + " (Inscription)",
+                last_name=last_name,
+                first_name=first_name,
+                bank=bank,
+                valid=True,
+            )
+
+        if join_BDE:
+            Membership.objects.create(
+                club=bde,
+                user=user,
+                fee=bde_fee,
+            )
+
+        if join_Kfet:
+            Membership.objects.create(
+                club=kfet,
+                user=user,
+                fee=kfet_fee,
+            )
+
+        return ret
+
+    def get_success_url(self):
+        return reverse_lazy('member:user_detail', args=(self.get_object().pk, ))
 
 
 class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):

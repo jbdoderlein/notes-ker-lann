@@ -1,54 +1,65 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
 {% load pretty_money %}
 
 {% block content %}
+    <div class="card bg-light shadow">
+        <div class="card-header text-center" >
+            <h4> {% trans "Account #" %}  {{ object.pk }}</h4>
+        </div>
+        <div class="card-body" id="profile_infos">
+            <dl class="row">
+                <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+                <dd class="col-xl-6">{{ object.last_name }} {{ object.first_name }}</dd>
 
-<div class="card bg-light shadow">
-    <div class="card-header text-center" >
-        <h4> {% trans "Account #" %}  {{ object.pk }}</h4>
+                <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.username }}</dd>
+
+                <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
+                <dd class="col-xl-6"><a href="mailto:{{ object.email }}">{{ object.email }}</a></dd>
+
+                <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+                <dd class="col-xl-6">
+                    <a class="small" href="{% url 'password_change' %}">
+                        {% trans 'Change password' %}
+                    </a>
+                </dd>
+
+                <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.profile.section }}</dd>
+
+                <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.profile.address }}</dd>
+
+                <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.profile.phone_number }}</dd>
+
+                <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.profile.paid|yesno }}</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'registration:future_user_invalidate' object.pk %}">{% trans 'Delete registration' %}</a>
+        </div>
     </div>
-    <div class="card-body" id="profile_infos">
-        <dl class="row">
-            <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
-            <dd class="col-xl-6">{{ object.last_name }} {{ object.first_name }}</dd>
 
-            <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.username }}</dd>
+    <hr>
 
-            <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
-            <dd class="col-xl-6"><a href="mailto:{{ object.email }}">{{ object.email }}</a></dd>
-
-            <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
-            <dd class="col-xl-6">
-                <a class="small" href="{% url 'password_change' %}">
-                    {% trans 'Change password' %}
-                </a>
-            </dd>
-
-            <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.profile.section }}</dd>
-
-            <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.profile.address }}</dd>
-
-            <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.profile.phone_number }}</dd>
-
-            <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ object.profile.paid|yesno }}</dd>
-        </dl>
-
-        {% if object.pk == user.pk %}
-        <a class="small" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
-        {% endif %}
+    <div class="card bg-light shadow">
+        <form method="post">
+            <div class="card-header text-center" >
+                <h4> {% trans "Validate account" %}</h4>
+            </div>
+            <div class="card-body" id="profile_infos">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </div>
+            <div class="card-footer text-center">
+                <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
+            </div>
+        </form>
     </div>
-    <div class="card-footer text-center">
-        <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
-        <a class="btn btn-danger btn-sm" href="{% url 'registration:future_user_invalidate' object.pk %}">{% trans 'Delete registration' %}</a>
-    </div>
-</div>
-
 {% endblock %}

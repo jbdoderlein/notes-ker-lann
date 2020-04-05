@@ -230,6 +230,7 @@ class Membership(models.Model):
     )
 
     date_start = models.DateField(
+        default=datetime.date.today,
         verbose_name=_('membership starts on'),
     )
 

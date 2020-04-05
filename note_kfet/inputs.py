@@ -13,7 +13,7 @@ class AmountInput(NumberInput):
     template_name = "note/amount_input.html"
 
     def format_value(self, value):
-        return None if value is None or value == "" else "{:.02f}".format(value / 100, )
+        return None if value is None or value == "" else "{:.02f}".format(int(value) / 100, )
 
     def value_from_datadict(self, data, files, name):
         val = super().value_from_datadict(data, files, name)
