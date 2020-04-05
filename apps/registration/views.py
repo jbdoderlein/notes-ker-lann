@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
-from member.models import Membership, Club
+from member.models import Membership, Club, Role
 from note.models import SpecialTransaction, NoteSpecial
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
@@ -262,18 +262,22 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             )
 
         if join_BDE:
-            Membership.objects.create(
+            membership = Membership.objects.create(
                 club=bde,
                 user=user,
                 fee=bde_fee,
             )
+            membership.roles.add(Role.objects.get(name="Adhérent BDE"))
+            membership.save()
 
         if join_Kfet:
-            Membership.objects.create(
+            membership = Membership.objects.create(
                 club=kfet,
                 user=user,
                 fee=kfet_fee,
             )
+            membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
+            membership.save()
 
         return ret
 

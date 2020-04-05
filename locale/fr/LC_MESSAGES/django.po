@@ -1135,12 +1135,12 @@ msgstr "Gérer les jetons d'authentification"
 #: templates/member/profile_tables.html:7
 #: templates/registration/future_profile_detail.html:28
 msgid "This user doesn't have confirmed his/her e-mail address."
-msgstr ""
+msgstr "Cet utilisateur n'a pas encore confirmé son adresse e-mail."
 
 #: templates/member/profile_tables.html:8
 #: templates/registration/future_profile_detail.html:29
 msgid "Click here to resend a validation link."
-msgstr ""
+msgstr "Cliquez ici pour renvoyer un lien de validation."
 
 #: templates/member/profile_tables.html:18
 msgid "View my memberships"
@@ -1247,15 +1247,15 @@ msgstr ""
 
 #: templates/registration/future_profile_detail.html:56
 msgid "Delete registration"
-msgstr ""
+msgstr "Supprimer l'inscription"
 
 #: templates/registration/future_profile_detail.html:64
 msgid "Validate account"
-msgstr ""
+msgstr "Valider le compte"
 
 #: templates/registration/future_profile_detail.html:71
 msgid "Validate registration"
-msgstr ""
+msgstr "Valider l'inscription"
 
 #: templates/registration/future_user_list.html:7
 msgid "New user"
