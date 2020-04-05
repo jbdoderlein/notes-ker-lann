@@ -18,14 +18,14 @@ from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from note.forms import ImageForm
-from note.models import Alias, NoteUser
+from note.models import Alias, NoteUser, NoteSpecial
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
-from .models import Club, Membership
+from .models import Club, Membership, Role
 from .tables import ClubTable, UserTable, MembershipTable
 
 
@@ -355,6 +355,16 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"])
             form.fields['credit_amount'].initial = club.membership_fee_paid
+
+            if club.name != "BDE":
+                del form.fields['soge']
+            else:
+                fee = 0
+                bde = Club.objects.get(name="BDE")
+                fee += bde.membership_fee_paid
+                kfet = Club.objects.get(name="Kfet")
+                fee += kfet.membership_fee_paid
+                context["total_fee"] = "{:.02f}".format(fee / 100, )
         else:
             old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
             club = old_membership.club
@@ -367,6 +377,16 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 else club.membership_fee_unpaid
             form.fields['last_name'].initial = user.last_name
             form.fields['first_name'].initial = user.first_name
+
+            if club.name != "BDE" or user.profile.soge:
+                del form.fields['soge']
+            else:
+                fee = 0
+                bde = Club.objects.get(name="BDE")
+                fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
+                kfet = Club.objects.get(name="Kfet")
+                fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+                context["total_fee"] = "{:.02f}".format(fee / 100, )
 
         context['club'] = club
 
@@ -389,6 +409,18 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
         bank = form.cleaned_data["bank"]
+        soge = form.cleaned_data["soge"] and not user.profile.soge and club.name == "BDE"
+
+        if soge:
+            credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
+            bde = club
+            kfet = Club.objects.get(name="Kfet")
+            if user.profile.paid:
+                fee = bde.membership_fee_paid + kfet.membership_fee_paid
+            else:
+                fee = bde.membership_fee_unpaid + kfet.membership_fee_unpaid
+            credit_amount = fee
+            bank = "Société générale"
 
         if credit_type is None:
             credit_amount = 0
@@ -455,6 +487,33 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 bank=bank,
                 valid=True,
             )
+
+        if soge:
+            user.profile.soge = True
+            user.profile.save()
+
+            kfet = Club.objects.get(name="Kfet")
+            kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+
+            old_membership = Membership.objects.filter(
+                club__name="Kfet",
+                user=user,
+                date_start__lte=datetime.today(),
+                date_end__gte=datetime.today(),
+            )
+
+            membership = Membership.objects.create(
+                club=kfet,
+                user=user,
+                fee=kfet_fee,
+                date_start=old_membership.get().date_end + timedelta(days=1)
+                if old_membership.exists() else form.instance.date_start,
+            )
+            if old_membership.exists():
+                membership.roles.set(old_membership.get().roles.all())
+            else:
+                membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
+            membership.save()
 
         return super().form_valid(form)
 
