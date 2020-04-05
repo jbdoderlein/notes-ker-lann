@@ -16,7 +16,7 @@ from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club
-from note.models import SpecialTransaction, Transaction
+from note.models import SpecialTransaction, NoteSpecial
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -66,7 +66,7 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-class UserValidateView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
+class UserValidateView(TemplateView):
     title = _("Account Activation")
     template_name = 'registration/email_validation_complete.html'
 
@@ -89,6 +89,7 @@ class UserValidateView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
             user.is_active = True
             user.profile.email_confirmed = True
             user.save()
+            user.profile.save()
             return super().dispatch(*args, **kwargs)
         else:
             # Display the "Account Activation unsuccessful" page.
@@ -116,7 +117,7 @@ class UserValidateView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
         return context
 
 
-class UserValidationEmailSentView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
+class UserValidationEmailSentView(TemplateView):
     template_name = 'registration/email_validation_email_sent.html'
     title = _('Account activation email sent')
 
@@ -170,6 +171,19 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         """
         return super().get_queryset().filter(profile__registration_valid=False)
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        user = self.get_object()
+        fee = 0
+        bde = Club.objects.get(name="BDE")
+        fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
+        kfet = Club.objects.get(name="Kfet")
+        fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+        ctx["total_fee"] = "{:.02f}".format(fee / 100, )
+
+        return ctx
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         user = self.get_object()
@@ -180,7 +194,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
     def form_valid(self, form):
         user = self.object = self.get_object()
 
-        print(form.cleaned_data)
+        soge = form.cleaned_data["soge"]
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
@@ -188,6 +202,10 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         bank = form.cleaned_data["bank"]
         join_BDE = form.cleaned_data["join_BDE"]
         join_Kfet = form.cleaned_data["join_Kfet"]
+
+        if soge:
+            join_BDE = True
+            join_Kfet = True
 
         fee = 0
         bde = Club.objects.get(name="BDE")
@@ -198,6 +216,11 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
         if join_Kfet:
             fee += kfet_fee
+
+        if soge:
+            credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
+            credit_amount = fee
+            bank = "Société générale"
 
         if join_Kfet and not join_BDE:
             form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
@@ -221,6 +244,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         ret = super().form_valid(form)
         user.is_active = True
         user.profile.registration_valid = True
+        user.profile.soge = soge
         user.save()
         user.profile.save()
 
@@ -230,7 +254,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
                 destination=user.note,
                 quantity=1,
                 amount=credit_amount,
-                reason="Crédit " + credit_type.special_type + " (Inscription)",
+                reason="Crédit " + ("Société générale" if soge else credit_type.special_type) + " (Inscription)",
                 last_name=last_name,
                 first_name=first_name,
                 bank=bank,

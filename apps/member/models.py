@@ -53,13 +53,19 @@ class Profile(models.Model):
         default=False,
     )
 
+    email_confirmed = models.BooleanField(
+        verbose_name=_("email confirmed"),
+        default=False,
+    )
+
     registration_valid = models.BooleanField(
         verbose_name=_("registration valid"),
         default=False,
     )
 
-    email_confirmed = models.BooleanField(
-        verbose_name=_("email confirmed"),
+    soge = models.BooleanField(
+        verbose_name=_("Société générale"),
+        help_text=_("Has the user ever be paid by the Société générale?"),
         default=False,
     )
 

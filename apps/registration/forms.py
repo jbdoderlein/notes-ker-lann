@@ -25,6 +25,12 @@ class SignUpForm(UserCreationForm):
 
 
 class ValidationForm(forms.Form):
+    soge = forms.BooleanField(
+        label=_("Inscription paid by Société Générale"),
+        required=False,
+        help_text=_("Check this case is the Société Générale paid the inscription."),
+    )
+
     credit_type = forms.ModelChoiceField(
         queryset=NoteSpecial.objects,
         label=_("Credit type"),
@@ -55,13 +61,13 @@ class ValidationForm(forms.Form):
     )
 
     join_BDE = forms.BooleanField(
-        label=_("Join BDE"),
+        label=_("Join BDE Club"),
         required=False,
         initial=True,
     )
 
     join_Kfet = forms.BooleanField(
-        label=_("Join Kfet"),
+        label=_("Join Kfet Club"),
         required=False,
         initial=True,
     )
