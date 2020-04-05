@@ -62,7 +62,7 @@ class ValidationForm(forms.Form):
 
     join_BDE = forms.BooleanField(
         label=_("Join BDE Club"),
-        required=False,
+        required=True,
         initial=True,
     )
 
