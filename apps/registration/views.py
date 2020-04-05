@@ -16,14 +16,14 @@ from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club
-from note.models import SpecialTransaction
+from note.models import SpecialTransaction, Transaction
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import SignUpForm, ValidationForm
 from .tables import FutureUserTable
-from .tokens import account_activation_token
+from .tokens import email_validation_token
 
 
 class UserCreateView(CreateView):
@@ -32,7 +32,7 @@ class UserCreateView(CreateView):
     """
 
     form_class = SignUpForm
-    success_url = reverse_lazy('registration:account_activation_sent')
+    success_url = reverse_lazy('registration:email_validation_sent')
     template_name = 'registration/signup.html'
     second_form = ProfileForm
 
@@ -66,9 +66,9 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-class UserActivateView(TemplateView):
+class UserValidateView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
     title = _("Account Activation")
-    template_name = 'registration/account_activation_complete.html'
+    template_name = 'registration/email_validation_complete.html'
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
@@ -84,7 +84,7 @@ class UserActivateView(TemplateView):
         user = self.get_user(kwargs['uidb64'])
         token = kwargs['token']
 
-        if user is not None and account_activation_token.check_token(user, token):
+        if user is not None and email_validation_token.check_token(user, token):
             self.validlink = True
             user.is_active = True
             user.profile.email_confirmed = True
@@ -116,9 +116,24 @@ class UserActivateView(TemplateView):
         return context
 
 
-class UserActivationEmailSentView(TemplateView):
-    template_name = 'registration/account_activation_email_sent.html'
+class UserValidationEmailSentView(LoginRequiredMixin, ProtectQuerysetMixin, TemplateView):
+    template_name = 'registration/email_validation_email_sent.html'
     title = _('Account activation email sent')
+
+
+class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, DetailView):
+    model = User
+
+    def get_queryset(self, **kwargs):
+        return super().get_queryset(**kwargs).filter(profile__email_confirmed=False)
+
+    def get(self, request, *args, **kwargs):
+        user = self.get_object()
+
+        user.profile.send_email_validation_link()
+
+        url = 'member:user_detail' if user.profile.registration_valid else 'registration:future_user_detail'
+        return redirect(url, user.id)
 
 
 class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):

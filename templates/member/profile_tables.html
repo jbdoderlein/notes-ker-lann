@@ -1,5 +1,14 @@
 {% load render_table from django_tables2 %}
 {% load i18n %}
+{% load perms %}
+
+{% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:object.profile %}
+    <div class="alert alert-warning">
+        {% trans "This user doesn't have confirmed his/her e-mail address." %}
+        <a href="{% url "registration:email_validation_resend" pk=object.pk %}">{% trans "Click here to resend a validation link." %}</a>
+    </div>
+{% endif %}
+
 <div class="accordion shadow" id="accordionProfile">
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">

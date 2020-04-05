@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% load pretty_money %}
+{% load perms %}
 
 {% block content %}
     <div class="card bg-light shadow">
@@ -19,6 +19,15 @@
 
                 <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
                 <dd class="col-xl-6"><a href="mailto:{{ object.email }}">{{ object.email }}</a></dd>
+
+                {% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:object.profile %}
+                    <dd class="col-xl-12">
+                        <div class="alert alert-warning">
+                            {% trans "This user doesn't have confirmed his/her e-mail address." %}
+                            <a href="{% url "registration:email_validation_resend" pk=object.pk %}">{% trans "Click here to resend a validation link." %}</a>
+                        </div>
+                    </dd>
+                {% endif %}
 
                 <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
                 <dd class="col-xl-6">

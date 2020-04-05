@@ -27,4 +27,4 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         return str(user.pk) + str(user.profile.email_confirmed) + str(login_timestamp) + str(timestamp)
 
 
-account_activation_token = AccountActivationTokenGenerator()
+email_validation_token = AccountActivationTokenGenerator()
