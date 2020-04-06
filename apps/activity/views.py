@@ -40,15 +40,15 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
         return super().get_queryset().reverse()
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        ctx['title'] = _("Activities")
+        context['title'] = _("Activities")
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
-        ctx['upcoming'] = ActivityTable(data=upcoming_activities
+        context['upcoming'] = ActivityTable(data=upcoming_activities
                                         .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
 
-        return ctx
+        return context
 
 
 class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
@@ -56,15 +56,15 @@ class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     context_object_name = "activity"
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        context = super().get_context_data()
 
         table = GuestTable(data=Guest.objects.filter(activity=self.object)
                            .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view")))
-        ctx["guests"] = table
+        context["guests"] = table
 
-        ctx["activity_started"] = datetime.now(timezone.utc) > self.object.date_start
+        context["activity_started"] = datetime.now(timezone.utc) > self.object.date_start
 
-        return ctx
+        return context
 
 
 class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -99,11 +99,11 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
     template_name = "activity/activity_entry.html"
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
             .get(pk=self.kwargs["pk"])
-        ctx["activity"] = activity
+        context["activity"] = activity
 
         matched = []
 
@@ -146,12 +146,12 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             matched.append(note)
 
         table = EntryTable(data=matched)
-        ctx["table"] = table
+        context["table"] = table
 
-        ctx["entries"] = Entry.objects.filter(activity=activity)
+        context["entries"] = Entry.objects.filter(activity=activity)
 
-        ctx["title"] = _('Entry for activity "{}"').format(activity.name)
-        ctx["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
-        ctx["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
+        context["title"] = _('Entry for activity "{}"').format(activity.name)
+        context["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
+        context["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
 
-        return ctx
+        return context
