@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 15:31+0200\n"
+"POT-Creation-Date: 2020-04-06 06:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,13 +167,14 @@ msgstr "supprimer"
 msgid "Type"
 msgstr "Type"
 
-#: apps/activity/tables.py:77 apps/registration/forms.py:49
-#: apps/treasury/forms.py:121
+#: apps/activity/tables.py:77 apps/member/forms.py:75
+#: apps/registration/forms.py:49 apps/treasury/forms.py:121
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: apps/activity/tables.py:79 apps/registration/forms.py:54
-#: apps/treasury/forms.py:123 templates/note/transaction_form.html:92
+#: apps/activity/tables.py:79 apps/member/forms.py:80
+#: apps/registration/forms.py:54 apps/treasury/forms.py:123
+#: templates/note/transaction_form.html:97
 msgid "First name"
 msgstr "Prénom"
 
@@ -189,7 +190,7 @@ msgstr "Solde du compte"
 msgid "Activities"
 msgstr "Activités"
 
-#: apps/activity/views.py:153
+#: apps/activity/views.py:154
 msgid "Entry for activity \"{}\""
 msgstr "Entrées pour l'activité « {} »"
 
@@ -249,6 +250,35 @@ msgstr "Les logs ne peuvent pas être détruits."
 #: apps/member/apps.py:14
 msgid "member"
 msgstr "adhérent"
+
+#: apps/member/forms.py:54 apps/registration/forms.py:29
+msgid "Inscription paid by Société Générale"
+msgstr "Inscription payée par la Société générale"
+
+#: apps/member/forms.py:56 apps/registration/forms.py:31
+msgid "Check this case is the Société Générale paid the inscription."
+msgstr "Cochez cette case si la Société Générale a payé l'inscription."
+
+#: apps/member/forms.py:61 apps/registration/forms.py:36
+msgid "Credit type"
+msgstr "Type de rechargement"
+
+#: apps/member/forms.py:62 apps/registration/forms.py:37
+msgid "No credit"
+msgstr "Pas de rechargement"
+
+#: apps/member/forms.py:64
+msgid "You can credit the note of the user."
+msgstr "Vous pouvez créditer la note de l'utisateur avant l'adhésion."
+
+#: apps/member/forms.py:68 apps/registration/forms.py:42
+msgid "Credit amount"
+msgstr "Montant à créditer"
+
+#: apps/member/forms.py:85 apps/registration/forms.py:59
+#: apps/treasury/forms.py:125 templates/note/transaction_form.html:103
+msgid "Bank"
+msgstr "Banque"
 
 #: apps/member/models.py:32
 #: templates/registration/future_profile_detail.html:47
@@ -382,11 +412,11 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:261 apps/member/views.py:385
+#: apps/member/models.py:261 apps/member/views.py:447
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:271 apps/member/views.py:394
+#: apps/member/models.py:271 apps/member/views.py:456
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
@@ -407,42 +437,44 @@ msgstr "adhésions"
 msgid "Renew"
 msgstr "Renouveler"
 
-#: apps/member/views.py:59 apps/registration/forms.py:20
+#: apps/member/views.py:56 apps/registration/forms.py:20
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:62 templates/member/profile_info.html:45
+#: apps/member/views.py:59 templates/member/profile_info.html:45
 #: templates/registration/future_profile_detail.html:55
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
-#: apps/member/views.py:72
+#: apps/member/views.py:69
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
-#: apps/member/views.py:167
+#: apps/member/views.py:164
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:381
+#: apps/member/views.py:442
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
-"Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne "
-"peut pas avoir un solde négatif."
+"Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
+"avoir un solde négatif."
 
-#: apps/member/views.py:398 apps/member/views.py:430
+#: apps/member/views.py:460
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:403 apps/member/views.py:435
+#: apps/member/views.py:465
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:457
-msgid "This membership is already renewed"
-msgstr "Cette adhésion est déjà renouvelée"
+#: apps/member/views.py:472 apps/member/views.py:474 apps/member/views.py:476
+#: apps/registration/views.py:237 apps/registration/views.py:239
+#: apps/registration/views.py:241
+msgid "This field is required."
+msgstr "Ce champ est requis."
 
 #: apps/note/admin.py:120 apps/note/models/transactions.py:99
 msgid "source"
@@ -620,9 +652,10 @@ msgstr "transaction"
 msgid "transactions"
 msgstr "transactions"
 
-#: apps/note/models/transactions.py:207 templates/base.html:84
+#: apps/note/models/transactions.py:207
+#: templates/activity/activity_entry.html:13 templates/base.html:84
 #: templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:140
+#: templates/note/transaction_form.html:145
 msgid "Transfer"
 msgstr "Virement"
 
@@ -638,7 +671,9 @@ msgstr "prénom"
 msgid "bank"
 msgstr "banque"
 
-#: apps/note/models/transactions.py:253 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:253
+#: templates/activity/activity_entry.html:17
+#: templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr "Crédit"
 
@@ -675,11 +710,11 @@ msgstr "Supprimer"
 msgid "Edit"
 msgstr "Éditer"
 
-#: apps/note/views.py:39
+#: apps/note/views.py:40
 msgid "Transfer money"
 msgstr "Transférer de l'argent"
 
-#: apps/note/views.py:100 templates/base.html:79
+#: apps/note/views.py:107 templates/base.html:79
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -704,31 +739,6 @@ msgstr ""
 #: apps/registration/apps.py:10
 msgid "registration"
 msgstr "inscription"
-
-#: apps/registration/forms.py:29
-msgid "Inscription paid by Société Générale"
-msgstr "Inscription payée par la Société générale"
-
-#: apps/registration/forms.py:31
-msgid "Check this case is the Société Générale paid the inscription."
-msgstr "Cochez cette case si la Société Générale a payé l'inscription."
-
-#: apps/registration/forms.py:36
-msgid "Credit type"
-msgstr "Type de rechargement"
-
-#: apps/registration/forms.py:37
-msgid "No credit"
-msgstr "Pas de rechargement"
-
-#: apps/registration/forms.py:42
-msgid "Credit amount"
-msgstr "Montant à créditer"
-
-#: apps/registration/forms.py:59 apps/treasury/forms.py:125
-#: templates/note/transaction_form.html:98
-msgid "Bank"
-msgstr "Banque"
 
 #: apps/registration/forms.py:64
 msgid "Join BDE Club"
@@ -761,12 +771,9 @@ msgstr "Vous devez adhérer au club BDE avant d'adhérer au club Kfet."
 #: apps/registration/views.py:230
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
-msgstr "Le montant crédité est trop faible pour adhérer, il doit être au minimum de {}"
-
-#: apps/registration/views.py:237 apps/registration/views.py:239
-#: apps/registration/views.py:241
-msgid "This field is required."
-msgstr "Ce champ est requis."
+msgstr ""
+"Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
+"{}"
 
 #: apps/treasury/apps.py:12 templates/base.html:111
 msgid "Treasury"
@@ -794,7 +801,7 @@ msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
 #: apps/treasury/forms.py:127 apps/treasury/tables.py:47
-#: templates/note/transaction_form.html:128
+#: templates/note/transaction_form.html:133
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr "Montant"
@@ -815,7 +822,7 @@ msgstr "Objet"
 msgid "Description"
 msgstr "Description"
 
-#: apps/treasury/models.py:46 templates/note/transaction_form.html:86
+#: apps/treasury/models.py:46 templates/note/transaction_form.html:91
 msgid "Name"
 msgstr "Nom"
 
@@ -941,15 +948,20 @@ msgstr "Inviter"
 msgid "Guests list"
 msgstr "Liste des invités"
 
-#: templates/activity/activity_entry.html:10
+#: templates/activity/activity_entry.html:22
+#: templates/note/transaction_form.html:33
+msgid "Entries"
+msgstr "Entrées"
+
+#: templates/activity/activity_entry.html:30
 msgid "Return to activity page"
 msgstr "Retour à la page de l'activité"
 
-#: templates/activity/activity_entry.html:18
+#: templates/activity/activity_entry.html:38
 msgid "entries"
 msgstr "entrées"
 
-#: templates/activity/activity_entry.html:18
+#: templates/activity/activity_entry.html:38
 msgid "entry"
 msgstr "entrée"
 
@@ -975,7 +987,7 @@ msgstr "La note du BDE de l'ENS Paris-Saclay."
 
 #: templates/base.html:89
 msgid "Users"
-msgstr ""
+msgstr "Utilisateurs"
 
 #: templates/base.html:94
 msgid "Clubs"
@@ -1150,7 +1162,7 @@ msgstr "Voir mes adhésions"
 msgid "Save Changes"
 msgstr "Sauvegarder les changements"
 
-#: templates/note/conso_form.html:28 templates/note/transaction_form.html:50
+#: templates/note/conso_form.html:28 templates/note/transaction_form.html:55
 msgid "Select emitters"
 msgstr "Sélection des émetteurs"
 
@@ -1174,7 +1186,7 @@ msgstr "Consommations simples"
 msgid "Double consumptions"
 msgstr "Consommations doubles"
 
-#: templates/note/conso_form.html:141 templates/note/transaction_form.html:147
+#: templates/note/conso_form.html:141 templates/note/transaction_form.html:152
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
 
@@ -1182,29 +1194,29 @@ msgstr "Historique des transactions récentes"
 msgid "Gift"
 msgstr "Don"
 
-#: templates/note/transaction_form.html:68
+#: templates/note/transaction_form.html:73
 msgid "External payment"
 msgstr "Paiement externe"
 
-#: templates/note/transaction_form.html:76
+#: templates/note/transaction_form.html:81
 msgid "Transfer type"
 msgstr "Type de transfert"
 
-#: templates/note/transaction_form.html:111
-#: templates/note/transaction_form.html:164
-#: templates/note/transaction_form.html:171
+#: templates/note/transaction_form.html:116
+#: templates/note/transaction_form.html:169
+#: templates/note/transaction_form.html:176
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
 
-#: templates/note/transaction_form.html:133
+#: templates/note/transaction_form.html:138
 msgid "Reason"
 msgstr "Raison"
 
-#: templates/note/transaction_form.html:178
+#: templates/note/transaction_form.html:183
 msgid "Credit note"
 msgstr "Note à recharger"
 
-#: templates/note/transaction_form.html:185
+#: templates/note/transaction_form.html:190
 msgid "Debit note"
 msgstr "Note à débiter"
 
@@ -1424,3 +1436,6 @@ msgstr "Il n'y a pas de transaction associée à une remise ouverte."
 #: templates/treasury/remittance_list.html:54
 msgid "Closed remittances"
 msgstr "Remises fermées"
+
+#~ msgid "This membership is already renewed"
+#~ msgstr "Cette adhésion est déjà renouvelée"

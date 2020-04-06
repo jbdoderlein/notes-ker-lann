@@ -155,4 +155,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         ctx["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
         ctx["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
 
+        ctx["activities_open"] = Activity.objects.filter(open=True).filter(
+            PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
+            PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()
+
         return ctx

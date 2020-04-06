@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 15:39+0200\n"
+"POT-Creation-Date: 2020-04-06 06:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,13 +171,14 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/registration/forms.py:49
-#: apps/treasury/forms.py:121
+#: apps/activity/tables.py:77 apps/member/forms.py:75
+#: apps/registration/forms.py:49 apps/treasury/forms.py:121
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/registration/forms.py:54
-#: apps/treasury/forms.py:123 templates/note/transaction_form.html:92
+#: apps/activity/tables.py:79 apps/member/forms.py:80
+#: apps/registration/forms.py:54 apps/treasury/forms.py:123
+#: templates/note/transaction_form.html:97
 msgid "First name"
 msgstr ""
 
@@ -193,7 +194,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:153
+#: apps/activity/views.py:154
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -252,6 +253,35 @@ msgstr ""
 
 #: apps/member/apps.py:14
 msgid "member"
+msgstr ""
+
+#: apps/member/forms.py:54 apps/registration/forms.py:29
+msgid "Inscription paid by Société Générale"
+msgstr ""
+
+#: apps/member/forms.py:56 apps/registration/forms.py:31
+msgid "Check this case is the Société Générale paid the inscription."
+msgstr ""
+
+#: apps/member/forms.py:61 apps/registration/forms.py:36
+msgid "Credit type"
+msgstr ""
+
+#: apps/member/forms.py:62 apps/registration/forms.py:37
+msgid "No credit"
+msgstr ""
+
+#: apps/member/forms.py:64
+msgid "You can credit the note of the user."
+msgstr ""
+
+#: apps/member/forms.py:68 apps/registration/forms.py:42
+msgid "Credit amount"
+msgstr ""
+
+#: apps/member/forms.py:85 apps/registration/forms.py:59
+#: apps/treasury/forms.py:125 templates/note/transaction_form.html:103
+msgid "Bank"
 msgstr ""
 
 #: apps/member/models.py:32
@@ -382,11 +412,11 @@ msgstr ""
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:261 apps/member/views.py:385
+#: apps/member/models.py:261 apps/member/views.py:447
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:271 apps/member/views.py:394
+#: apps/member/models.py:271 apps/member/views.py:456
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -407,39 +437,41 @@ msgstr ""
 msgid "Renew"
 msgstr ""
 
-#: apps/member/views.py:59 apps/registration/forms.py:20
+#: apps/member/views.py:56 apps/registration/forms.py:20
 msgid "This address must be valid."
 msgstr ""
 
-#: apps/member/views.py:62 templates/member/profile_info.html:45
+#: apps/member/views.py:59 templates/member/profile_info.html:45
 #: templates/registration/future_profile_detail.html:55
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:72
+#: apps/member/views.py:69
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/views.py:167
+#: apps/member/views.py:164
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:381
+#: apps/member/views.py:442
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:398 apps/member/views.py:430
+#: apps/member/views.py:460
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:403 apps/member/views.py:435
+#: apps/member/views.py:465
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:457
-msgid "This membership is already renewed"
+#: apps/member/views.py:472 apps/member/views.py:474 apps/member/views.py:476
+#: apps/registration/views.py:237 apps/registration/views.py:239
+#: apps/registration/views.py:241
+msgid "This field is required."
 msgstr ""
 
 #: apps/note/admin.py:120 apps/note/models/transactions.py:99
@@ -617,9 +649,10 @@ msgstr ""
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:207 templates/base.html:84
+#: apps/note/models/transactions.py:207
+#: templates/activity/activity_entry.html:13 templates/base.html:84
 #: templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:140
+#: templates/note/transaction_form.html:145
 msgid "Transfer"
 msgstr ""
 
@@ -635,7 +668,9 @@ msgstr ""
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:253 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:253
+#: templates/activity/activity_entry.html:17
+#: templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr ""
 
@@ -672,11 +707,11 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: apps/note/views.py:39
+#: apps/note/views.py:40
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:100 templates/base.html:79
+#: apps/note/views.py:107 templates/base.html:79
 msgid "Consumptions"
 msgstr ""
 
@@ -700,31 +735,6 @@ msgstr ""
 
 #: apps/registration/apps.py:10
 msgid "registration"
-msgstr ""
-
-#: apps/registration/forms.py:29
-msgid "Inscription paid by Société Générale"
-msgstr ""
-
-#: apps/registration/forms.py:31
-msgid "Check this case is the Société Générale paid the inscription."
-msgstr ""
-
-#: apps/registration/forms.py:36
-msgid "Credit type"
-msgstr ""
-
-#: apps/registration/forms.py:37
-msgid "No credit"
-msgstr ""
-
-#: apps/registration/forms.py:42
-msgid "Credit amount"
-msgstr ""
-
-#: apps/registration/forms.py:59 apps/treasury/forms.py:125
-#: templates/note/transaction_form.html:98
-msgid "Bank"
 msgstr ""
 
 #: apps/registration/forms.py:64
@@ -760,11 +770,6 @@ msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 
-#: apps/registration/views.py:237 apps/registration/views.py:239
-#: apps/registration/views.py:241
-msgid "This field is required."
-msgstr ""
-
 #: apps/treasury/apps.py:12 templates/base.html:111
 msgid "Treasury"
 msgstr ""
@@ -791,7 +796,7 @@ msgid "You can't change the type of the remittance."
 msgstr ""
 
 #: apps/treasury/forms.py:127 apps/treasury/tables.py:47
-#: templates/note/transaction_form.html:128
+#: templates/note/transaction_form.html:133
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr ""
@@ -812,7 +817,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: apps/treasury/models.py:46 templates/note/transaction_form.html:86
+#: apps/treasury/models.py:46 templates/note/transaction_form.html:91
 msgid "Name"
 msgstr ""
 
@@ -938,15 +943,20 @@ msgstr ""
 msgid "Guests list"
 msgstr ""
 
-#: templates/activity/activity_entry.html:10
+#: templates/activity/activity_entry.html:22
+#: templates/note/transaction_form.html:33
+msgid "Entries"
+msgstr ""
+
+#: templates/activity/activity_entry.html:30
 msgid "Return to activity page"
 msgstr ""
 
-#: templates/activity/activity_entry.html:18
+#: templates/activity/activity_entry.html:38
 msgid "entries"
 msgstr ""
 
-#: templates/activity/activity_entry.html:18
+#: templates/activity/activity_entry.html:38
 msgid "entry"
 msgstr ""
 
@@ -1145,7 +1155,7 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: templates/note/conso_form.html:28 templates/note/transaction_form.html:50
+#: templates/note/conso_form.html:28 templates/note/transaction_form.html:55
 msgid "Select emitters"
 msgstr ""
 
@@ -1169,7 +1179,7 @@ msgstr ""
 msgid "Double consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:141 templates/note/transaction_form.html:147
+#: templates/note/conso_form.html:141 templates/note/transaction_form.html:152
 msgid "Recent transactions history"
 msgstr ""
 
@@ -1177,29 +1187,29 @@ msgstr ""
 msgid "Gift"
 msgstr ""
 
-#: templates/note/transaction_form.html:68
+#: templates/note/transaction_form.html:73
 msgid "External payment"
 msgstr ""
 
-#: templates/note/transaction_form.html:76
+#: templates/note/transaction_form.html:81
 msgid "Transfer type"
 msgstr ""
 
-#: templates/note/transaction_form.html:111
-#: templates/note/transaction_form.html:164
-#: templates/note/transaction_form.html:171
+#: templates/note/transaction_form.html:116
+#: templates/note/transaction_form.html:169
+#: templates/note/transaction_form.html:176
 msgid "Select receivers"
 msgstr ""
 
-#: templates/note/transaction_form.html:133
+#: templates/note/transaction_form.html:138
 msgid "Reason"
 msgstr ""
 
-#: templates/note/transaction_form.html:178
+#: templates/note/transaction_form.html:183
 msgid "Credit note"
 msgstr ""
 
-#: templates/note/transaction_form.html:185
+#: templates/note/transaction_form.html:190
 msgid "Debit note"
 msgstr ""
 
