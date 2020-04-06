@@ -389,6 +389,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"])
             form.fields['credit_amount'].initial = club.membership_fee_paid
+            form.fields['roles'].initial = Role.objects.filter(name="Membre de club").all()
 
             # If the concerned club is the BDE, then we add the option that Société générale pays the membership.
             if club.name != "BDE":

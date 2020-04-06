@@ -12,6 +12,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, FormView
+from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club, Role
@@ -88,7 +89,7 @@ class UserValidateView(TemplateView):
         if user is not None and email_validation_token.check_token(user, token):
             self.validlink = True
             # The user must wait that someone validates the account before the user can be active and login.
-            user.is_active = user.profile.registration_valid
+            user.is_active = user.profile.registration_valid or user.is_superuser
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
@@ -185,7 +186,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         return context
 
 
-class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView, FormView):
+class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, DetailView):
     """
     Display information about a pre-registered user, in order to complete the registration.
     """
@@ -193,6 +194,14 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
     form_class = ValidationForm
     context_object_name = "user_object"
     template_name = "registration/future_profile_detail.html"
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        self.object = self.get_object()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_queryset(self, **kwargs):
         """
@@ -221,7 +230,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         return form
 
     def form_valid(self, form):
-        user = self.object = self.get_object()
+        user = self.get_object()
 
         # Get form data
         soge = form.cleaned_data["soge"]
@@ -238,6 +247,10 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             join_BDE = True
             join_Kfet = True
 
+        if not join_BDE:
+            form.add_error('join_BDE', _("You must join the BDE."))
+            return super().form_invalid(form)
+
         fee = 0
         bde = Club.objects.get(name="BDE")
         bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
@@ -253,6 +266,8 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
             credit_amount = fee
             bank = "Société générale"
+
+        print("OK")
 
         if join_Kfet and not join_BDE:
             form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
@@ -277,7 +292,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         # Save the user and finally validate the registration
         # Saving the user creates the associated note
         ret = super().form_valid(form)
-        user.is_active = user.profile.email_confirmed
+        user.is_active = user.profile.email_confirmed or user.is_superuser
         user.profile.registration_valid = True
         # Store if Société générale paid for next years
         user.profile.soge = soge
