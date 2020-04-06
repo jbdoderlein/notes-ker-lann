@@ -86,7 +86,7 @@ class UserValidateView(TemplateView):
 
         if user is not None and email_validation_token.check_token(user, token):
             self.validlink = True
-            user.is_active = True
+            user.is_active = user.profile.registration_valid
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
@@ -242,7 +242,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
                 return self.form_invalid(form)
 
         ret = super().form_valid(form)
-        user.is_active = True
+        user.is_active = user.profile.email_confirmed
         user.profile.registration_valid = True
         user.profile.soge = soge
         user.save()
