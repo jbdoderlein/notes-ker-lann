@@ -59,6 +59,10 @@ class Invoice(models.Model):
         verbose_name=_("Acquitted"),
     )
 
+    class Meta:
+        verbose_name = _("invoice")
+        verbose_name_plural = _("invoices")
+
 
 class Product(models.Model):
     """
@@ -95,6 +99,10 @@ class Product(models.Model):
     def total_euros(self):
         return self.total / 100
 
+    class Meta:
+        verbose_name = _("product")
+        verbose_name_plural = _("products")
+
 
 class RemittanceType(models.Model):
     """
@@ -108,6 +116,10 @@ class RemittanceType(models.Model):
 
     def __str__(self):
         return str(self.note)
+
+    class Meta:
+        verbose_name = _("remittance type")
+        verbose_name_plural = _("remittance types")
 
 
 class Remittance(models.Model):
@@ -135,6 +147,10 @@ class Remittance(models.Model):
         default=False,
         verbose_name=_("Closed"),
     )
+
+    class Meta:
+        verbose_name = _("remittance")
+        verbose_name_plural = _("remittances")
 
     @property
     def transactions(self):
@@ -187,3 +203,7 @@ class SpecialTransactionProxy(models.Model):
         null=True,
         verbose_name=_("Remittance"),
     )
+
+    class Meta:
+        verbose_name = _("special transaction proxy")
+        verbose_name_plural = _("special transaction proxies")
