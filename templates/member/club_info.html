@@ -55,7 +55,7 @@
             <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_update' pk=club.pk %}"> {% trans "Edit" %}</a>
         {% endif %}
         {% url 'member:club_detail' club.pk as club_detail_url %}
-        {%if request.get_full_path != club_detail_url %}
+        {%if request.path_info != club_detail_url %}
         <a class="btn btn-primary btn-sm my-1" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
         {% endif %}    </div>
 </div>

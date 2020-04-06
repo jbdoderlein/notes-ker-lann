@@ -130,10 +130,15 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
-        context['history_list'] = HistoryTable(history_list)
+        history_table = HistoryTable(history_list, prefix='transaction-')
+        history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
+        context['history_list'] = history_table
+
         club_list = Membership.objects.filter(user=user, date_end__gte=datetime.today())\
             .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
-        context['club_list'] = MembershipTable(data=club_list)
+        membership_table = MembershipTable(data=club_list, prefix='membership-')
+        membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
+        context['club_list'] = membership_table
         return context
 
 
@@ -310,13 +315,17 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
-        context['history_list'] = HistoryTable(club_transactions)
+        history_table = HistoryTable(club_transactions, prefix="history-")
+        history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
+        context['history_list'] = history_table
         club_member = Membership.objects.filter(
             club=club,
             date_end__gte=datetime.today(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
-        context['member_list'] = MembershipTable(data=club_member)
+        membership_table = MembershipTable(data=club_member, prefix="membership-")
+        membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        context['member_list'] = membership_table
 
         # Check if the user has the right to create a membership, to display the button.
         empty_membership = Membership(
