@@ -7,7 +7,13 @@
     <hr>
 
     <div id="user_table">
-        {% render_table table %}
+        {% if table.data %}
+            {% render_table table %}
+        {% else %}
+            <div class="alert alert-warning">
+                {% trans "There is no pending user with this pattern." %}
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

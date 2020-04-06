@@ -30,6 +30,9 @@ from .tables import ClubTable, UserTable, MembershipTable
 
 
 class CustomLoginView(LoginView):
+    """
+    Login view, where the user can select its permission mask.
+    """
     form_class = CustomAuthenticationForm
 
     def form_valid(self, form):
@@ -38,6 +41,9 @@ class CustomLoginView(LoginView):
 
 
 class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update the user information.
+    """
     model = User
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
@@ -93,6 +99,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             user.save()
 
             if olduser.email != user.email:
+                # If the user changed her/his email, then it is unvalidated and a confirmation link is sent.
                 user.profile.email_confirmed = False
                 user.profile.send_email_validation_link()
 
@@ -132,13 +139,16 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
-    Affiche la liste des utilisateurs, avec une fonction de recherche statique
+    Display user list, with a search bar
     """
     model = User
     table_class = UserTable
     template_name = 'member/user_list.html'
 
     def get_queryset(self, **kwargs):
+        """
+        Filter the user list with the given pattern.
+        """
         qs = super().get_queryset().filter(profile__registration_valid=True)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
@@ -150,6 +160,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
                 Q(first_name__iregex=pattern)
                 | Q(last_name__iregex=pattern)
                 | Q(profile__section__iregex=pattern)
+                | Q(profile__username__iregex="^" + pattern)
                 | Q(note__alias__name__iregex="^" + pattern)
                 | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
             )
@@ -167,6 +178,9 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    View and manage user aliases.
+    """
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
@@ -179,6 +193,9 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, DetailView):
+    """
+    Update profile picture of the user note.
+    """
     form_class = ImageForm
 
     def get_context_data(self, **kwargs):
@@ -278,6 +295,9 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
 
 class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Display details of a club
+    """
     model = Club
     context_object_name = "club"
 
@@ -298,6 +318,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         context['member_list'] = MembershipTable(data=club_member)
 
+        # Check if the user has the right to create a membership, to display the button.
         empty_membership = Membership(
             club=club,
             user=User.objects.first(),
@@ -312,6 +333,9 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Manage aliases of a club.
+    """
     model = Club
     template_name = 'member/club_alias.html'
     context_object_name = 'club'
@@ -324,6 +348,9 @@ class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update the information of a club.
+    """
     model = Club
     context_object_name = "club"
     form_class = ClubForm
@@ -334,6 +361,9 @@ class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
 
 class ClubPictureUpdateView(PictureUpdateView):
+    """
+    Update the profile picture of a club.
+    """
     model = Club
     template_name = 'member/club_picture_update.html'
     context_object_name = 'club'
@@ -343,6 +373,9 @@ class ClubPictureUpdateView(PictureUpdateView):
 
 
 class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Add a membership to a club.
+    """
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
@@ -352,10 +385,12 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         form = context['form']
 
         if "club_pk" in self.kwargs:
+            # We create a new membership.
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"])
             form.fields['credit_amount'].initial = club.membership_fee_paid
 
+            # If the concerned club is the BDE, then we add the option that Société générale pays the membership.
             if club.name != "BDE":
                 del form.fields['soge']
             else:
@@ -366,6 +401,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 fee += kfet.membership_fee_paid
                 context["total_fee"] = "{:.02f}".format(fee / 100, )
         else:
+            # This is a renewal. Fields can be pre-completed.
             old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
             club = old_membership.club
             user = old_membership.user
@@ -378,6 +414,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.fields['last_name'].initial = user.last_name
             form.fields['first_name'].initial = user.first_name
 
+            # If this is a renewal of a BDE membership, Société générale can pays, if it is not yet done
             if club.name != "BDE" or user.profile.soge:
                 del form.fields['soge']
             else:
@@ -393,6 +430,10 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        """
+        Create membership, check that all is good, make transactions
+        """
+        # Get the club that is concerned by the membership
         if "club_pk" in self.kwargs:
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
                 .get(pk=self.kwargs["club_pk"])
@@ -404,6 +445,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         form.instance.club = club
 
+        # Get form data
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
@@ -411,6 +453,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         bank = form.cleaned_data["bank"]
         soge = form.cleaned_data["soge"] and not user.profile.soge and club.name == "BDE"
 
+        # If Société générale pays, then we auto-fill some data
         if soge:
             credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
             bde = club
@@ -466,6 +509,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
+        # Now, all is fine, the membership can be created.
+
+        # Credit note before the membership is created.
         if credit_amount > 0:
             if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
                 if not last_name:
@@ -488,6 +534,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 valid=True,
             )
 
+        # If Société générale pays, then we store the information: the bank can't pay twice to a same person.
         if soge:
             user.profile.soge = True
             user.profile.save()
@@ -495,6 +542,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             kfet = Club.objects.get(name="Kfet")
             kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
 
+            # Get current membership, to get the end date
             old_membership = Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
@@ -522,6 +570,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
 
 class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Manage the roles of a user in a club
+    """
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
@@ -534,6 +585,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
+        # We don't create a full membership, we only update one field
         form.fields['user'].disabled = True
         del form.fields['date_start']
         del form.fields['credit_type']

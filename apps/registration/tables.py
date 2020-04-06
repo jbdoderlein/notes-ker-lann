@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 
 class FutureUserTable(tables.Table):
+    """
+    Display the list of pre-registered users
+    """
     phone_number = tables.Column(accessor='profile.phone_number')
 
     section = tables.Column(accessor='profile.section')

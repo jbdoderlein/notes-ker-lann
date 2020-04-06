@@ -5,13 +5,12 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
@@ -46,11 +45,13 @@ class UserCreateView(CreateView):
         """
         If the form is valid, then the user is created with is_active set to False
         so that the user cannot log in until the email has been validated.
+        The user must also wait that someone validate her/his account.
         """
         profile_form = ProfileForm(data=self.request.POST)
         if not profile_form.is_valid():
             return self.form_invalid(form)
 
+        # Save the user and the profile
         user = form.save(commit=False)
         user.is_active = False
         profile_form.instance.user = user
@@ -67,16 +68,15 @@ class UserCreateView(CreateView):
 
 
 class UserValidateView(TemplateView):
+    """
+    A view to validate the email address.
+    """
     title = _("Email validation")
     template_name = 'registration/email_validation_complete.html'
 
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
+    def get(self, *args, **kwargs):
         """
-        The dispatch method looks at the request to determine whether it is a GET, POST, etc,
-        and relays the request to a matching method if one is defined, or raises HttpResponseNotAllowed
-        if not. We chose to check the token in the dispatch method to mimic PasswordReset from
-        django.contrib.auth
+        With a given token and user id (in params), validate the email address.
         """
         assert 'uidb64' in kwargs and 'token' in kwargs
 
@@ -84,18 +84,23 @@ class UserValidateView(TemplateView):
         user = self.get_user(kwargs['uidb64'])
         token = kwargs['token']
 
+        # Validate the token
         if user is not None and email_validation_token.check_token(user, token):
             self.validlink = True
+            # The user must wait that someone validates the account before the user can be active and login.
             user.is_active = user.profile.registration_valid
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
             return super().dispatch(*args, **kwargs)
         else:
-            # Display the "Account Activation unsuccessful" page.
+            # Display the "Email validation unsuccessful" page.
             return self.render_to_response(self.get_context_data())
 
     def get_user(self, uidb64):
+        """
+        Get user from the base64-encoded string.
+        """
         try:
             # urlsafe_base64_decode() decodes to bytestring
             uid = urlsafe_base64_decode(uidb64).decode()
@@ -118,15 +123,18 @@ class UserValidateView(TemplateView):
 
 
 class UserValidationEmailSentView(TemplateView):
+    """
+    Display the information that the validation link has been sent.
+    """
     template_name = 'registration/email_validation_email_sent.html'
     title = _('Email validation email sent')
 
 
 class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, DetailView):
+    """
+    Rensend the email validation link.
+    """
     model = User
-
-    def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).filter(profile__email_confirmed=False)
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
@@ -139,14 +147,35 @@ class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, De
 
 class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
-    Affiche la liste des utilisateurs, avec une fonction de recherche statique
+    Display pre-registered users, with a search bar
     """
     model = User
     table_class = FutureUserTable
     template_name = 'registration/future_user_list.html'
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset().filter(profile__registration_valid=False)
+        """
+        Filter the table with the given parameter.
+        :param kwargs:
+        :return:
+        """
+        qs = super().get_queryset().filter(profile__registration_valid=False)
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+            if not pattern:
+                return qs.none()
+
+            qs = qs.filter(
+                Q(first_name__iregex=pattern)
+                | Q(last_name__iregex=pattern)
+                | Q(profile__section__iregex=pattern)
+                | Q(username__iregex="^" + pattern)
+            )
+        else:
+            qs = qs.none()
+
+        return qs[:20]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -158,7 +187,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
 
 class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView, FormView):
     """
-    Affiche les informations sur un utilisateur, sa note, ses clubs...
+    Display information about a pre-registered user, in order to complete the registration.
     """
     model = User
     form_class = ValidationForm
@@ -194,6 +223,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
     def form_valid(self, form):
         user = self.object = self.get_object()
 
+        # Get form data
         soge = form.cleaned_data["soge"]
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
@@ -204,6 +234,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
         join_Kfet = form.cleaned_data["join_Kfet"]
 
         if soge:
+            # If Société Générale pays the inscription, the user joins the two clubs
             join_BDE = True
             join_Kfet = True
 
@@ -218,6 +249,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             fee += kfet_fee
 
         if soge:
+            # Fill payment information if Société Générale pays the inscription
             credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
             credit_amount = fee
             bank = "Société générale"
@@ -226,6 +258,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
 
         if fee > credit_amount:
+            # Check if the user credits enough money
             form.add_error('credit_type',
                            _("The entered amount is not enough for the memberships, should be at least {}")
                            .format(pretty_money(fee)))
@@ -241,14 +274,18 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
                     form.add_error('bank', _("This field is required."))
                 return self.form_invalid(form)
 
+        # Save the user and finally validate the registration
+        # Saving the user creates the associated note
         ret = super().form_valid(form)
         user.is_active = user.profile.email_confirmed
         user.profile.registration_valid = True
+        # Store if Société générale paid for next years
         user.profile.soge = soge
         user.save()
         user.profile.save()
 
         if credit_type is not None and credit_amount > 0:
+            # Credit the note
             SpecialTransaction.objects.create(
                 source=credit_type,
                 destination=user.note,
@@ -262,6 +299,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             )
 
         if join_BDE:
+            # Create membership for the user to the BDE starting today
             membership = Membership.objects.create(
                 club=bde,
                 user=user,
@@ -271,6 +309,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
             membership.save()
 
         if join_Kfet:
+            # Create membership for the user to the Kfet starting today
             membership = Membership.objects.create(
                 club=kfet,
                 user=user,
@@ -287,10 +326,13 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView,
 
 class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
     """
-    Affiche les informations sur un utilisateur, sa note, ses clubs...
+    Delete a pre-registered user.
     """
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        """
+        Delete the pre-registered user which id is given in the URL.
+        """
         user = User.objects.filter(profile__registration_valid=False)\
             .filter(PermissionBackend.filter_queryset(request.user, User, "change", "is_valid"))\
             .get(pk=self.kwargs["pk"])

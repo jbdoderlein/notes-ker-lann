@@ -10,6 +10,9 @@ from note_kfet.inputs import AmountInput
 
 
 class SignUpForm(UserCreationForm):
+    """
+    Pre-register users with all information
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.pop("autofocus", None)
@@ -25,6 +28,9 @@ class SignUpForm(UserCreationForm):
 
 
 class ValidationForm(forms.Form):
+    """
+    Validate the inscription of the new users and pay memberships.
+    """
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,
@@ -66,6 +72,7 @@ class ValidationForm(forms.Form):
         initial=True,
     )
 
+    # The user can join the Kfet club at the inscription
     join_Kfet = forms.BooleanField(
         label=_("Join Kfet Club"),
         required=False,

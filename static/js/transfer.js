@@ -28,7 +28,6 @@ function reset() {
 }
 
 $(document).ready(function() {
-    console.log(42);
     autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
         "source_alias", "source_note", "user_note", "profile_pic");
     autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
@@ -72,7 +71,6 @@ $(document).ready(function() {
     $("label[for='type_credit']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_debit']").attr('class', 'btn btn-sm btn-outline-primary');
 
-    console.log("#type_" + location.hash.substr(1));
     if (location.hash)
         $("#type_" + location.hash.substr(1)).click();
     else

@@ -5,24 +5,49 @@
 
 {% block content %}
     <a href="{% url 'registration:signup' %}"><button class="btn btn-primary btn-block">{% trans "New user" %}</button></a>
-
+    <hr>
+    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
     <hr>
 
-    {% if table.data %}
-        <div id="user_table">
+    <div id="user_table">
+        {% if table.data %}
             {% render_table table %}
-        </div>
-    {% else %}
-        <div class="alert alert-warning">
-            {% trans "There is no pending user." %}
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="alert alert-warning">
+                {% trans "There is no pending user with this pattern." %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block extrajavascript %}
 <script type="text/javascript">
-    $(".table-row").click(function() {
-        window.document.location = $(this).data("href");
+    $(document).ready(function() {
+        let old_pattern = null;
+        let searchbar_obj = $("#searchbar");
+
+        function reloadTable() {
+            let pattern = searchbar_obj.val();
+
+            if (pattern === old_pattern || pattern === "")
+                return;
+
+            $("#user_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
+
+            $(".table-row").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        }
+
+        searchbar_obj.keyup(reloadTable);
+
+        function init() {
+            $(".table-row").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        }
+
+        init();
     });
 </script>
 {% endblock %}

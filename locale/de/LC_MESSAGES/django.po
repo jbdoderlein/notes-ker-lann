@@ -1267,7 +1267,7 @@ msgid "New user"
 msgstr ""
 
 #: templates/registration/future_user_list.html:17
-msgid "There is no pending user."
+msgid "There is no pending user with this pattern."
 msgstr ""
 
 #: templates/registration/logged_out.html:8

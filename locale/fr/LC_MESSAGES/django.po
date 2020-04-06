@@ -1274,8 +1274,8 @@ msgid "New user"
 msgstr "Nouvel utilisateur"
 
 #: templates/registration/future_user_list.html:17
-msgid "There is no pending user."
-msgstr "Il n'y a pas d'inscription en attente."
+msgid "There is no pending user with this pattern."
+msgstr "Il n'y a pas d'inscription en attente avec cette entrée."
 
 #: templates/registration/logged_out.html:8
 msgid "Thanks for spending some quality time with the Web site today."

@@ -15,6 +15,9 @@ from .models import Club, Membership
 
 
 class ClubTable(tables.Table):
+    """
+    List all clubs.
+    """
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
@@ -30,6 +33,9 @@ class ClubTable(tables.Table):
 
 
 class UserTable(tables.Table):
+    """
+    List all users.
+    """
     section = tables.Column(accessor='profile.section')
 
     balance = tables.Column(accessor='note.balance', verbose_name=_("Balance"))
@@ -51,6 +57,9 @@ class UserTable(tables.Table):
 
 
 class MembershipTable(tables.Table):
+    """
+    List all memberships.
+    """
     roles = tables.Column(
         attrs={
             "td": {
@@ -59,7 +68,17 @@ class MembershipTable(tables.Table):
         }
     )
 
+    def render_user(self, value):
+        # If the user has the right, link the displayed user with the page of its detail.
+        s = value.username
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "auth.view_user", value):
+            s = format_html("<a href={url}>{name}</a>",
+                            url=reverse_lazy('member:user_detail', kwargs={"pk": value.pk}), name=s)
+
+        return s
+
     def render_club(self, value):
+        # If the user has the right, link the displayed club with the page of its detail.
         s = value.name
         if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_club", value):
             s = format_html("<a href={url}>{name}</a>",
@@ -94,6 +113,7 @@ class MembershipTable(tables.Table):
         return t
 
     def render_roles(self, record):
+        # If the user has the right to manage the roles, display the link to manage them
         roles = record.roles.all()
         s = ", ".join(str(role) for role in roles)
         if PermissionBackend.check_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
