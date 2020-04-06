@@ -139,7 +139,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                     | Q(name__regex=pattern)
                     | Q(normalized_name__regex=Alias.normalize(pattern)))) \
             .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))\
-            .distinct("username")[:20]
+            .distinct()[:20]
         for note in note_qs:
             note.type = "Adhérent"
             note.activity = activity
