@@ -118,7 +118,6 @@
     });
 
     $("#validate_activity").click(function () {
-        console.log(42);
         $.ajax({
             url: "/api/activity/activity/{{ activity.pk }}/",
             type: "PATCH",

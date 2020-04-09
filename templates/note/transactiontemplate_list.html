@@ -37,7 +37,6 @@ function getInfo() {
     if (asked.length >= 1) {
         $.getJSON("/api/note/transaction/template/?format=json&search="+asked, function(buttons){
             let selected_id = buttons.results.map((a => "#row-"+a.id));
-            console.log(selected_id.join());
             $(".table-row,"+selected_id.join()).show();
             $(".table-row").not(selected_id.join()).hide();
             

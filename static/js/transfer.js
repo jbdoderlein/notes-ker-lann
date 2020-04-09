@@ -61,16 +61,24 @@ $(document).ready(function() {
 
 
     // Ensure we begin in gift mode. Removing these lines may cause problems when reloading.
-    $("#type_gift").prop('checked', 'true');
+    let type_gift = $("#type_gift"); // Default mode
+    type_gift.removeAttr('checked');
     $("#type_transfer").removeAttr('checked');
     $("#type_credit").removeAttr('checked');
     $("#type_debit").removeAttr('checked');
+    $("label[for='type_gift']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_transfer']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_credit']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_debit']").attr('class', 'btn btn-sm btn-outline-primary');
+
+    if (location.hash)
+        $("#type_" + location.hash.substr(1)).click();
+    else
+        type_gift.click();
+    location.hash = "";
 });
 
-$("#transfer").click(function() {
+$("#btn_transfer").click(function() {
     if ($("#type_gift").is(':checked')) {
         dests_notes_display.forEach(function (dest) {
             $.post("/api/note/transaction/transaction/",

@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
-{% load crispy_forms_tags%}
-{% block content %}
-    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
+{% load crispy_forms_tags %}
+{% load i18n %}
 
+{% block content %}
+    <a href="{% url 'registration:signup' %}"><button class="btn btn-primary btn-block">{% trans "New user" %}</button></a>
+    <hr>
+    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
     <hr>
 
     <div id="user_table">
@@ -15,7 +18,6 @@
             </div>
         {% endif %}
     </div>
-
 {% endblock %}
 
 {% block extrajavascript %}

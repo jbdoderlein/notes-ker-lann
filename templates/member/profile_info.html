@@ -44,7 +44,7 @@
     <div class="card-footer text-center">
         <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
         {% url 'member:user_detail' object.pk as user_profile_url %}
-        {%if request.get_full_path != user_profile_url %}
+        {%if request.path_info != user_profile_url %}
         <a class="btn btn-primary btn-sm" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
         {% endif %}
     </div>

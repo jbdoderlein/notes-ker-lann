@@ -2,13 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
+import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.template import loader
 from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from registration.tokens import email_validation_token
 from note.models import MembershipTransaction
 
 
@@ -45,6 +50,23 @@ class Profile(models.Model):
     )
     paid = models.BooleanField(
         verbose_name=_("paid"),
+        help_text=_("Tells if the user receive a salary."),
+        default=False,
+    )
+
+    email_confirmed = models.BooleanField(
+        verbose_name=_("email confirmed"),
+        default=False,
+    )
+
+    registration_valid = models.BooleanField(
+        verbose_name=_("registration valid"),
+        default=False,
+    )
+
+    soge = models.BooleanField(
+        verbose_name=_("Société générale"),
+        help_text=_("Has the user ever be paid by the Société générale?"),
         default=False,
     )
 
@@ -55,6 +77,17 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('user_detail', args=(self.pk,))
+
+    def send_email_validation_link(self):
+        subject = "Activate your Note Kfet account"
+        message = loader.render_to_string('registration/mails/email_validation_email.html',
+                                          {
+                                              'user': self.user,
+                                              'domain': os.getenv("NOTE_URL", "note.example.com"),
+                                              'token': email_validation_token.make_token(self.user),
+                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)).decode('UTF-8'),
+                                          })
+        self.user.email_user(subject, message)
 
 
 class Club(models.Model):
@@ -202,6 +235,7 @@ class Membership(models.Model):
     )
 
     date_start = models.DateField(
+        default=datetime.date.today,
         verbose_name=_('membership starts on'),
     )
 
@@ -215,12 +249,18 @@ class Membership(models.Model):
     )
 
     def valid(self):
+        """
+        A membership is valid if today is between the start and the end date.
+        """
         if self.date_end is not None:
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal() < self.date_end.toordinal()
         else:
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
 
     def save(self, *args, **kwargs):
+        """
+        Calculate fee and end date before saving the membership and creating the transaction if needed.
+        """
         if self.club.parent_club is not None:
             if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
                 raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
@@ -252,6 +292,9 @@ class Membership(models.Model):
         self.make_transaction()
 
     def make_transaction(self):
+        """
+        Create Membership transaction associated to this membership.
+        """
         if not self.fee or MembershipTransaction.objects.filter(membership=self).exists():
             return
 

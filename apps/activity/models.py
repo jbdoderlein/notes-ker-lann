@@ -130,6 +130,8 @@ class Entry(models.Model):
 
     class Meta:
         unique_together = (('activity', 'note', 'guest', ), )
+        verbose_name = _("entry")
+        verbose_name_plural = _("entries")
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):

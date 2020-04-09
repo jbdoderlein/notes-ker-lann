@@ -53,7 +53,7 @@ ProductFormSet = forms.inlineformset_factory(
 
 class ProductFormSetHelper(FormHelper):
     """
-    Specify some template informations for the product form.
+    Specify some template information for the product form.
     """
 
     def __init__(self, form=None):
