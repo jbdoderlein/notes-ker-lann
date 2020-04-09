@@ -55,7 +55,7 @@ class HistoryTable(tables.Table):
                 "class": lambda record: str(record.valid).lower() + ' validate',
                 "data-toggle": "tooltip",
                 "title": lambda record: _("Click to invalidate") if record.valid else _("Click to validate"),
-                "onclick": lambda record: 'in_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
+                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
                 "onmouseover": lambda record: '$("#invalidity_reason_'
                                               + str(record.id) + '").show();$("#invalidity_reason_'
                                               + str(record.id) + '").focus();',

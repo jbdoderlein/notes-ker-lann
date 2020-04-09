@@ -111,6 +111,10 @@ class ConsumerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_note(self, obj):
+        """
+        Display information about the associated note
+        """
+        # If the user has no right to see the note, then we only display the note identifier
         if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note):
             print(obj.pk)
             return NotePolymorphicSerializer().to_representation(obj.note)
