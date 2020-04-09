@@ -89,6 +89,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
 
         return queryset
 
+
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
     queryset = Alias.objects.all()
     serializer_class = ConsumerSerializer
@@ -111,7 +112,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
             | Q(normalized_name__regex="^" + alias.lower()))
 
         return queryset
-   
+
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     """

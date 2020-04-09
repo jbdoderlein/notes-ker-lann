@@ -3,6 +3,8 @@
 
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
@@ -96,20 +98,24 @@ class NotePolymorphicSerializer(PolymorphicSerializer):
     class Meta:
         model = Note
 
+
 class ConsumerSerializer(serializers.ModelSerializer):
     """
     REST API Nested Serializer for Consumers.
-    return Alias, and the note Associated to it in 
+    return Alias, and the note Associated to it in
     """
-    note = NotePolymorphicSerializer()
+    note = serializers.SerializerMethodField()
+
     class Meta:
         model = Alias
         fields = '__all__'
 
-    @staticmethod
-    def setup_eager_loading(queryset):
-        queryset = queryset.select_related('note')
-    
+    def get_note(self, obj):
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note):
+            print(obj.pk)
+            return NotePolymorphicSerializer().to_representation(obj.note)
+        return dict(id=obj.id)
+
 
 class TemplateCategorySerializer(serializers.ModelSerializer):
     """

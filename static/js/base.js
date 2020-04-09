@@ -119,7 +119,7 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
         note.display_image = '/media/pic/default.png';
     }
     let img = note.display_image;
-    if (alias !== note.name)
+    if (alias !== note.name && note.name)
         alias += " (aka. " + note.name + ")";
     if (user_note_field !== null)
 

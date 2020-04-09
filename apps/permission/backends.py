@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
+from note_kfet import settings
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -36,14 +37,21 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        return Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
+        perms = Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
             .filter(
                 rolepermissions__role__membership__user=user,
                 rolepermissions__role__membership__date_start__lte=datetime.date.today(),
                 rolepermissions__role__membership__date_end__gte=datetime.date.today(),
                 type=t,
-                mask__rank__lte=get_current_session().get("permission_mask", 0),
-        ).distinct()
+                mask__rank__lte=get_current_session().get("permission_mask", 42),
+        )
+        if settings.DATABASES[perms.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
+            # We want one permission per club, and per permission type.
+            # SQLite does not support this kind of filter, that's why we don't filter the permissions with this
+            # kind of DB. This only increases performances (we can check multiple times the same permission)
+            # but don't have any semantic influence.
+            perms = perms.distinct('club', 'pk')
+        return perms
 
     @staticmethod
     def permissions(user, model, type):
@@ -95,7 +103,7 @@ class PermissionBackend(ModelBackend):
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -129,9 +137,9 @@ class PermissionBackend(ModelBackend):
 
         sess = get_current_session()
         if sess is not None and sess.session_key is None:
-            return Permission.objects.none()
+            return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user_obj.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             return True
 
         if obj is None:
