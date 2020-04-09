@@ -242,10 +242,10 @@ class Alias(models.Model):
             pass
         self.normalized_name = normalized_name
 
-    def save(self,*args,**kwargs):
+    def save(self, *args, **kwargs):
         self.normalized_name = self.normalize(self.name)
-        super().save(*args,**kwargs)
-        
+        super().save(*args, **kwargs)
+
     def delete(self, using=None, keep_parents=False):
         if self.name == str(self.note):
             raise ValidationError(_("You can't delete your main alias."),

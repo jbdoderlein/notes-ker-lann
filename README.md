@@ -106,18 +106,18 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
     On copie le fichier `.env_example` vers le fichier `.env` à la racine du projet 
     et on renseigne des secrets et des paramètres :
     
-        DJANGO_APP_STAGE="dev" # ou "prod" 
-        DJANGO_DEV_STORE_METHOD="sqllite" # ou "postgres"
-        DJANGO_DB_HOST="localhost"
-        DJANGO_DB_NAME="note_db"
-        DJANGO_DB_USER="note"
-        DJANGO_DB_PASSWORD="CHANGE_ME" 
-        DJANGO_DB_PORT=""
-        DJANGO_SECRET_KEY="CHANGE_ME"
-        DJANGO_SETTINGS_MODULE="note_kfet.settings"
-        DOMAIN="localhost" # note.example.com
-        CONTACT_EMAIL="tresorerie.bde@localhost"
-        NOTE_URL="localhost" # serveur cas note.example.com si auto-hébergé.
+        DJANGO_APP_STAGE=dev # ou "prod" 
+        DJANGO_DEV_STORE_METHOD=sqllite # ou "postgres"
+        DJANGO_DB_HOST=localhost
+        DJANGO_DB_NAME=note_db
+        DJANGO_DB_USER=note
+        DJANGO_DB_PASSWORD=CHANGE_ME
+        DJANGO_DB_PORT=
+        DJANGO_SECRET_KEY=CHANGE_ME
+        DJANGO_SETTINGS_MODULE="note_kfet.settings
+        DOMAIN=localhost # note.example.com
+        CONTACT_EMAIL=tresorerie.bde@localhost
+        NOTE_URL=localhost # serveur cas note.example.com si auto-hébergé.
 
     Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 

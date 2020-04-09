@@ -18,10 +18,5 @@ def pretty_money(value):
         )
 
 
-def cents_to_euros(value):
-    return "{:.02f}".format(value / 100) if value else ""
-
-
 register = template.Library()
 register.filter('pretty_money', pretty_money)
-register.filter('cents_to_euros', cents_to_euros)

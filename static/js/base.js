@@ -19,15 +19,52 @@ function pretty_money(value) {
  * Add a message on the top of the page.
  * @param msg The message to display
  * @param alert_type The type of the alert. Choices: info, success, warning, danger
+ * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function addMsg(msg, alert_type) {
+function addMsg(msg, alert_type, timeout=-1) {
     let msgDiv = $("#messages");
     let html = msgDiv.html();
+    let id = Math.floor(10000 * Math.random() + 1);
     html += "<div class=\"alert alert-" + alert_type + " alert-dismissible\">" +
-        "<button class=\"close\" data-dismiss=\"alert\" href=\"#\"><span aria-hidden=\"true\">×</span></button>"
+        "<button id=\"close-message-" + id + "\" class=\"close\" data-dismiss=\"alert\" href=\"#\"><span aria-hidden=\"true\">×</span></button>"
         + msg + "</div>\n";
     msgDiv.html(html);
+
+    if (timeout > 0) {
+        setTimeout(function () {
+            $("#close-message-" + id).click();
+        }, timeout);
+    }
 }
+
+/**
+ * add Muliple error message from err_obj
+ * @param errs_obj [{error_code:erro_message}]
+ * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
+ */
+function errMsg(errs_obj, timeout=-1) {
+    for (const err_msg of Object.values(errs_obj)) {
+              addMsg(err_msg,'danger', timeout);
+          }
+}
+
+var reloadWithTurbolinks = (function () {
+  var scrollPosition;
+
+  function reload () {
+    scrollPosition = [window.scrollX, window.scrollY];
+    Turbolinks.visit(window.location.toString(), { action: 'replace' })
+  }
+
+  document.addEventListener('turbolinks:load', function () {
+    if (scrollPosition) {
+      window.scrollTo.apply(window, scrollPosition);
+      scrollPosition = null
+    }
+  });
+
+  return reload;
+})();
 
 /**
  * Reload the balance of the user on the right top corner
@@ -85,7 +122,7 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
     if (alias !== note.name)
         alias += " (aka. " + note.name + ")";
     if (user_note_field !== null)
-        
+
         $("#" + user_note_field).addClass(displayStyle(note.balance));
         $("#" + user_note_field).text(alias + (note.balance == null ? "" : (":\n" + pretty_money(note.balance))));
     if (profile_pic_field != null){
@@ -202,7 +239,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
             notes.length = 0;
             return;
         }
-        
+
         $.getJSON("/api/note/consumer/?format=json&alias="
                   + pattern
                   + "&search=user|club&ordering=normalized_name",
@@ -277,9 +314,9 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                     });
                 })
             });
-            
+
         });// end getJSON alias
-    }); 
+    });
 }// end function autocomplete
 
 // When a validate button is clicked, we switch the validation status
@@ -296,8 +333,9 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            "resourcetype": "RecurrentTransaction",
-            valid: !validated
+            resourcetype: "RecurrentTransaction",
+            valid: !validated,
+            invalidity_reason: invalidity_reason,
         },
         success: function () {
             // Refresh jQuery objects

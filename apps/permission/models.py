@@ -38,20 +38,33 @@ class InstancedPermission:
             if permission_type == self.type:
                 self.update_query()
 
-                # Don't increase indexes
-                obj.pk = 0
+                # Don't increase indexes, if the primary key is an AutoField
+                if not hasattr(obj, "pk") or not obj.pk:
+                    obj.pk = 0
+                    oldpk = None
+                else:
+                    oldpk = obj.pk
+                # Ensure previous models are deleted
+                self.model.model_class().objects.filter(pk=obj.pk).annotate(_force_delete=F("pk")).delete()
                 # Force insertion, no data verification, no trigger
+                obj._force_save = True
                 Model.save(obj, force_insert=True)
-                ret = obj in self.model.model_class().objects.filter(self.query).all()
+                # We don't want log anything
+                obj._no_log = True
+                ret = self.model.model_class().objects.filter(self.query & Q(pk=obj.pk)).exists()
                 # Delete testing object
+                obj._force_delete = True
                 Model.delete(obj)
+
+                # If the primary key was specified, we restore it
+                obj.pk = oldpk
                 return ret
 
         if permission_type == self.type:
             if self.field and field_name != self.field:
                 return False
             self.update_query()
-            return obj in self.model.model_class().objects.filter(self.query).all()
+            return self.model.model_class().objects.filter(self.query & Q(pk=obj.pk)).exists()
         else:
             return False
 
@@ -92,6 +105,10 @@ class PermissionMask(models.Model):
 
     def __str__(self):
         return self.description
+
+    class Meta:
+        verbose_name = _("permission mask")
+        verbose_name_plural = _("permission masks")
 
 
 class Permission(models.Model):
@@ -140,6 +157,8 @@ class Permission(models.Model):
 
     class Meta:
         unique_together = ('model', 'query', 'type', 'field')
+        verbose_name = _("permission")
+        verbose_name_plural = _("permissions")
 
     def clean(self):
         self.query = json.dumps(json.loads(self.query))
@@ -280,3 +299,7 @@ class RolePermissions(models.Model):
 
     def __str__(self):
         return str(self.role)
+
+    class Meta:
+        verbose_name = _("role permissions")
+        verbose_name_plural = _("role permissions")

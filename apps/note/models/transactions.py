@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.db import models
-from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -47,12 +46,14 @@ class TransactionTemplate(models.Model):
         unique=True,
         error_messages={'unique': _("A template with this name already exist")},
     )
+
     destination = models.ForeignKey(
         NoteClub,
         on_delete=models.PROTECT,
         related_name='+',  # no reverse
         verbose_name=_('destination'),
     )
+
     amount = models.PositiveIntegerField(
         verbose_name=_('amount'),
         help_text=_('in centimes'),
@@ -63,9 +64,12 @@ class TransactionTemplate(models.Model):
         verbose_name=_('type'),
         max_length=31,
     )
+
     display = models.BooleanField(
         default=True,
+        verbose_name=_("display"),
     )
+
     description = models.CharField(
         verbose_name=_('description'),
         max_length=255,
@@ -141,6 +145,7 @@ class Transaction(PolymorphicModel):
         max_length=255,
         default=None,
         null=True,
+        blank=True,
     )
 
     class Meta:

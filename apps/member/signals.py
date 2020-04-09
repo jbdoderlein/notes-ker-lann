@@ -10,7 +10,7 @@ def save_user_profile(instance, created, raw, **_kwargs):
         # When provisionning data, do not try to autocreate
         return
 
-    if created:
+    if created and instance.is_active:
         from .models import Profile
         Profile.objects.get_or_create(user=instance)
-    instance.profile.save()
+        instance.profile.save()

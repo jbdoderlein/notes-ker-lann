@@ -19,13 +19,15 @@ from django.views.generic.base import View, TemplateView
 from django_tables2 import SingleTableView
 from note.models import SpecialTransaction, NoteSpecial
 from note_kfet.settings.base import BASE_DIR
+from permission.backends import PermissionBackend
+from permission.views import ProtectQuerysetMixin
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
-class InvoiceCreateView(LoginRequiredMixin, CreateView):
+class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     Create Invoice
     """
@@ -50,18 +52,8 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        kwargs = {}
-
-        # The user type amounts in cents. We convert it in euros.
-        for key in self.request.POST:
-            value = self.request.POST[key]
-            if key.endswith("amount") and value:
-                kwargs[key] = str(int(100 * float(value)))
-            elif value:
-                kwargs[key] = value
-
         # For each product, we save it
-        formset = ProductFormSet(kwargs, instance=form.instance)
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
         if formset.is_valid():
             for f in formset:
                 # We don't save the product if the designation is not entered, ie. if the line is empty
@@ -77,7 +69,7 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('treasury:invoice_list')
 
 
-class InvoiceListView(LoginRequiredMixin, SingleTableView):
+class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     List existing Invoices
     """
@@ -85,7 +77,7 @@ class InvoiceListView(LoginRequiredMixin, SingleTableView):
     table_class = InvoiceTable
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Create Invoice
     """
@@ -112,16 +104,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
 
-        kwargs = {}
-        # The user type amounts in cents. We convert it in euros.
-        for key in self.request.POST:
-            value = self.request.POST[key]
-            if key.endswith("amount") and value:
-                kwargs[key] = str(int(100 * float(value)))
-            elif value:
-                kwargs[key] = value
-
-        formset = ProductFormSet(kwargs, instance=form.instance)
+        formset = ProductFormSet(self.request.POST, instance=form.instance)
         saved = []
         # For each product, we save it
         if formset.is_valid():
@@ -149,7 +132,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
-        invoice = Invoice.objects.get(pk=pk)
+        invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request.user, Invoice, "view")).get(pk=pk)
         products = Product.objects.filter(invoice=invoice).all()
 
         # Informations of the BDE. Should be updated when the school will move.
@@ -207,7 +190,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         return response
 
 
-class RemittanceCreateView(LoginRequiredMixin, CreateView):
+class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     Create Remittance
     """
@@ -218,12 +201,14 @@ class RemittanceCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('treasury:remittance_list')
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
-        ctx["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
+        context["table"] = RemittanceTable(data=Remittance.objects
+                                       .filter(PermissionBackend.filter_queryset(self.request.user, Remittance, "view"))
+                                       .all())
+        context["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
 
-        return ctx
+        return context
 
 
 class RemittanceListView(LoginRequiredMixin, TemplateView):
@@ -233,24 +218,30 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     template_name = "treasury/remittance_list.html"
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        ctx["opened_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=False).all())
-        ctx["closed_remittances"] = RemittanceTable(data=Remittance.objects.filter(closed=True).reverse().all())
+        context["opened_remittances"] = RemittanceTable(
+            data=Remittance.objects.filter(closed=False).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+        context["closed_remittances"] = RemittanceTable(
+            data=Remittance.objects.filter(closed=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all())
 
-        ctx["special_transactions_no_remittance"] = SpecialTransactionTable(
+        context["special_transactions_no_remittance"] = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
-                                                   specialtransactionproxy__remittance=None).all(),
+                                                   specialtransactionproxy__remittance=None).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             exclude=('remittance_remove', ))
-        ctx["special_transactions_with_remittance"] = SpecialTransactionTable(
+        context["special_transactions_with_remittance"] = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
-                                                   specialtransactionproxy__remittance__closed=False).all(),
+                                                   specialtransactionproxy__remittance__closed=False).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             exclude=('remittance_add', ))
 
-        return ctx
+        return context
 
 
-class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
+class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Update Remittance
     """
@@ -261,18 +252,20 @@ class RemittanceUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('treasury:remittance_list')
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        ctx["table"] = RemittanceTable(data=Remittance.objects.all())
-        data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).all()
-        ctx["special_transactions"] = SpecialTransactionTable(
+        context["table"] = RemittanceTable(data=Remittance.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+        data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
+            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
+        context["special_transactions"] = SpecialTransactionTable(
             data=data,
             exclude=('remittance_add', 'remittance_remove', ) if self.object.closed else ('remittance_add', ))
 
-        return ctx
+        return context
 
 
-class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
+class LinkTransactionToRemittanceView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     Attach a special transaction to a remittance
     """
@@ -284,9 +277,9 @@ class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('treasury:remittance_list')
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
-        form = ctx["form"]
+        form = context["form"]
         form.fields["last_name"].initial = self.object.transaction.last_name
         form.fields["first_name"].initial = self.object.transaction.first_name
         form.fields["bank"].initial = self.object.transaction.bank
@@ -294,7 +287,7 @@ class LinkTransactionToRemittanceView(LoginRequiredMixin, UpdateView):
         form.fields["remittance"].queryset = form.fields["remittance"] \
             .queryset.filter(remittance_type__note=self.object.transaction.source)
 
-        return ctx
+        return context
 
 
 class UnlinkTransactionToRemittanceView(LoginRequiredMixin, View):

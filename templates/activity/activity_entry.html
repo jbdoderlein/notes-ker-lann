@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load pretty_money %}
+{% load perms %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <a href="{% url "note:transfer" %}#transfer" class="btn btn-sm btn-outline-primary">
+                    {% trans "Transfer" %}
+                </a>
+                {% if "note.notespecial"|not_empty_model_list %}
+                    <a href="{% url "note:transfer" %}#credit" class="btn btn-sm btn-outline-primary">
+                        {% trans "Credit" %}
+                    </a>
+                {% endif %}
+                {% for a in activities_open %}
+                    <a href="{% url "activity:activity_entry" pk=a.pk %}" class="btn btn-sm btn-outline-primary{% if a.pk == activity.pk %} active{% endif %}">
+                        {% trans "Entries" %} {{ a.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url "activity:activity_detail" pk=activity.pk %}">
+        <button class="btn btn-light">{% trans "Return to activity page" %}</button>
+    </a>
+
+    <input id="alias" type="text" class="form-control" placeholder="Nom/note ...">
+
+    <hr>
+
+    <div id="entry_table">
+        <h2 class="text-center">{{ entries.count }} {% if entries.count >= 2 %}{% trans "entries" %}{% else %}{% trans "entry" %}{% endif %}</h2>
+        {% render_table table %}
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        old_pattern = null;
+        alias_obj = $("#alias");
+
+        function reloadTable(force=false) {
+            let pattern = alias_obj.val();
+
+            if ((pattern === old_pattern || pattern === "") && !force)
+                return;
+
+            $("#entry_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #entry_table", init);
+            refreshBalance();
+        }
+
+        alias_obj.keyup(reloadTable);
+
+        $(document).ready(init);
+
+        function init() {
+            $(".table-row").click(function(e) {
+                let target = e.target.parentElement;
+                target = $("#" + target.id);
+
+                let type = target.attr("data-type");
+                let id = target.attr("data-id");
+                let last_name = target.attr("data-last-name");
+                let first_name = target.attr("data-first-name");
+
+                if (type === "membership") {
+                    $.post("/api/activity/entry/?format=json", {
+                        csrfmiddlewaretoken: CSRF_TOKEN,
+                        activity: {{ activity.id }},
+                        note: id,
+                        guest: null
+                    }).done(function () {
+                        addMsg("Entrée effectuée !", "success", 4000);
+                        reloadTable(true);
+                    }).fail(function(xhr) {
+                        errMsg(xhr.responseJSON, 4000);
+                    });
+                }
+                else {
+                    let line_obj = $("#buttons_guest_" + id);
+                    if (line_obj.length || target.attr('class').includes("table-success")) {
+                        line_obj.remove();
+                        return;
+                    }
+
+                    let tr = "<tr class='text-center'>" +
+                        "<td id='buttons_guest_" + id + "' style='table-danger center' colspan='5'>" +
+                        "<button id='transaction_guest_" + id + "' class='btn btn-secondary'>Payer avec la note de l'hôte</button> " +
+                        "<button id='transaction_guest_" + id + "_especes' class='btn btn-secondary'>Payer en espèces</button> " +
+                        "<button id='transaction_guest_" + id + "_cb' class='btn btn-secondary'>Payer en CB</button></td>" +
+                        "<tr>";
+                    $(tr).insertAfter(target);
+
+                    let makeTransaction = function() {
+                        $.post("/api/activity/entry/?format=json", {
+                            csrfmiddlewaretoken: CSRF_TOKEN,
+                            activity: {{ activity.id }},
+                            note: target.attr("data-inviter"),
+                            guest: id
+                        }).done(function () {
+                            addMsg("Entrée effectuée !", "success", 4000);
+                            reloadTable(true);
+                        }).fail(function (xhr) {
+                            errMsg(xhr.responseJSON, 4000);
+                        });
+                    };
+
+                    let credit = function(credit_id, credit_name) {
+                        return function() {
+                            $.post("/api/note/transaction/transaction/",
+                                {
+                                    "csrfmiddlewaretoken": CSRF_TOKEN,
+                                    "quantity": 1,
+                                    "amount": {{ activity.activity_type.guest_entry_fee }},
+                                    "reason": "Crédit " + credit_name + " (invitation {{ activity.name }})",
+                                    "valid": true,
+                                    "polymorphic_ctype": {{ notespecial_ctype }},
+                                    "resourcetype": "SpecialTransaction",
+                                    "source": credit_id,
+                                    "destination": target.attr('data-inviter'),
+                                    "last_name": last_name,
+                                    "first_name": first_name,
+                                    "bank": ""
+                                }).done(function () {
+                                makeTransaction();
+                                reset();
+                            }).fail(function (xhr) {
+                                errMsg(xhr.responseJSON, 4000);
+                            });
+                        };
+                    };
+
+                    $("#transaction_guest_" + id).click(makeTransaction);
+                    $("#transaction_guest_" + id + "_especes").click(credit(1, "espèces"));
+                    $("#transaction_guest_" + id + "_cb").click(credit(2, "carte bancaire"));
+                }
+            });
+        }
+    </script>
+{% endblock %}

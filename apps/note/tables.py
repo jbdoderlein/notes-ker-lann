@@ -106,9 +106,8 @@ DELETE_TEMPLATE = """
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
-            'class':
-                'table table condensed table-striped table-hover',
-            'id':"alias_table"
+            'class': 'table table condensed table-striped table-hover',
+            'id': "alias_table"
         }
         model = Alias
         fields = ('name',)
@@ -118,9 +117,9 @@ class AliasTable(tables.Table):
     name = tables.Column(attrs={'td': {'class': 'text-center'}})
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
-                                   extra_context={"delete_trans": _('delete')},
-                                   attrs={'td': {'class': 'col-sm-1'}})
-
+                                       extra_context={"delete_trans": _('delete')},
+                                       attrs={'td': {'class': 'col-sm-1'}},
+                                       verbose_name=_("Delete"),)
 
 
 class ButtonTable(tables.Table):
@@ -136,17 +135,20 @@ class ButtonTable(tables.Table):
         }
 
         model = TransactionTemplate
+        exclude = ('id',)
 
     edit = tables.LinkColumn('note:template_update',
                              args=[A('pk')],
                              attrs={'td': {'class': 'col-sm-1'},
                                     'a': {'class': 'btn btn-sm btn-primary'}},
                              text=_('edit'),
-                             accessor='pk')
+                             accessor='pk',
+                             verbose_name=_("Edit"),)
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
-                                   extra_context={"delete_trans": _('delete')},
-                                   attrs={'td': {'class': 'col-sm-1'}})
+                                       extra_context={"delete_trans": _('delete')},
+                                       attrs={'td': {'class': 'col-sm-1'}},
+                                       verbose_name=_("Delete"),)
 
     def render_amount(self, value):
         return pretty_money(value)

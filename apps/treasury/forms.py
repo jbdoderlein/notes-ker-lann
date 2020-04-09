@@ -7,6 +7,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from note_kfet.inputs import DatePickerInput, AmountInput
+from permission.backends import PermissionBackend
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
@@ -19,7 +21,7 @@ class InvoiceForm(forms.ModelForm):
     # Django forms don't support date fields. We have to add it manually
     date = forms.DateField(
         initial=datetime.date.today,
-        widget=forms.TextInput(attrs={'type': 'date'})
+        widget=DatePickerInput()
     )
 
     def clean_date(self):
@@ -30,19 +32,28 @@ class InvoiceForm(forms.ModelForm):
         exclude = ('bde', )
 
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        widgets = {
+            "amount": AmountInput()
+        }
+
+
 # Add a subform per product in the invoice form, and manage correctly the link between the invoice and
 # its products. The FormSet will search automatically the ForeignKey in the Product model.
 ProductFormSet = forms.inlineformset_factory(
     Invoice,
     Product,
-    fields='__all__',
+    form=ProductForm,
     extra=1,
 )
 
 
 class ProductFormSetHelper(FormHelper):
     """
-    Specify some template informations for the product form.
+    Specify some template information for the product form.
     """
 
     def __init__(self, form=None):
@@ -121,7 +132,8 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
         # Add submit button
         self.helper.add_input(Submit('submit', _("Submit"), attr={'class': 'btn btn-block btn-primary'}))
 
-        self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)
+        self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Remittance, "view"))
 
     def clean_last_name(self):
         """
