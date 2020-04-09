@@ -28,6 +28,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
                         {% trans "Debit" %}
                     </label>
                 {% endif %}
+                {% for activity in activities_open %}
+                    <a href="{% url "activity:activity_entry" pk=activity.pk %}" class="btn btn-sm btn-outline-primary">
+                        {% trans "Entries" %} {{ activity.name }}
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -137,7 +142,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
     <div class="form-row">
         <div class="col-md-12">
-            <button id="transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
+            <button id="btn_transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
         </div>
     </div>
 

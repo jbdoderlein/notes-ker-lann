@@ -16,6 +16,7 @@ urlpatterns = [
     # Include project routers
     path('note/', include('note.urls')),
     path('accounts/', include('member.urls')),
+    path('registration/', include('registration.urls')),
     path('activity/', include('activity.urls')),
     path('treasury/', include('treasury.urls')),
 
@@ -37,14 +38,7 @@ if "cas_server" in settings.INSTALLED_APPS:
         # Include CAS Server routers
         path('cas/', include('cas_server.urls', namespace="cas_server")),
     ]
-if "cas" in settings.INSTALLED_APPS:
-    from cas import views as cas_views
-    urlpatterns += [
-        # Include CAS Client routers
-        path('accounts/login/cas/', cas_views.login, name='cas_login'),
-        path('accounts/logout/cas/', cas_views.logout, name='cas_logout'),
 
-    ]
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns = [

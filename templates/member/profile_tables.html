@@ -1,31 +1,34 @@
 {% load render_table from django_tables2 %}
 {% load i18n %}
-<div class="accordion shadow" id="accordionProfile">
-    <div class="card">
-        <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold"
-               data-toggle="collapse" data-target="#clubListCollapse"
-               aria-expanded="true" aria-controls="clubListCollapse">
-                <i class="fa fa-users"></i> {% trans "View my memberships" %}
-            </a>
-        </div>
-        <div id="clubListCollapse" class="collapse show" style="overflow:auto hidden" aria-labelledby="clubListHeading" data-parent="#accordionProfile">
-            {% render_table club_list %}
-        </div>
-    </div>
+{% load perms %}
 
-    <div class="card">
-        <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link collapsed font-weight-bold"
-               data-toggle="collapse" data-target="#historyListCollapse"
-               aria-expanded="false" aria-controls="historyListCollapse">
-                <i class="fa fa-euro"></i> {% trans "Transaction history" %}
-            </a>
-        </div>
-        <div id="historyListCollapse" class="collapse" style="overflow:auto hidden" aria-labelledby="historyListHeading" data-parent="#accordionProfile">
-            <div id="history_list">
-                {% render_table history_list %}
-            </div>
-        </div>
+{% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:object.profile %}
+    <div class="alert alert-warning">
+        {% trans "This user doesn't have confirmed his/her e-mail address." %}
+        <a href="{% url "registration:email_validation_resend" pk=object.pk %}">{% trans "Click here to resend a validation link." %}</a>
+    </div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header position-relative" id="clubListHeading">
+        <a class="btn btn-link stretched-link font-weight-bold">
+            <i class="fa fa-users"></i> {% trans "View my memberships" %}
+        </a>
+    </div>
+    {% render_table club_list %}
+</div>
+
+<hr>
+
+<div class="card">
+    <div class="card-header position-relative" id="historyListHeading">
+        <a class="btn btn-link stretched-link collapsed font-weight-bold"
+           data-toggle="collapse" data-target="#historyListCollapse"
+           aria-expanded="true" aria-controls="historyListCollapse">
+            <i class="fa fa-euro"></i> {% trans "Transaction history" %}
+        </a>
+    </div>
+    <div id="history_list">
+        {% render_table history_list %}
     </div>
 </div>

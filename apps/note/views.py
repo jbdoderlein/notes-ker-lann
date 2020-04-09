@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
@@ -29,7 +30,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-id").all()[:50]
+        return super().get_queryset(**kwargs).order_by("-id").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
@@ -44,12 +45,19 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
             .filter(PermissionBackend.filter_queryset(self.request.user, NoteSpecial, "view"))\
             .order_by("special_type").all()
 
+        # Add a shortcut for entry page for open activities
+        if "activity" in settings.INSTALLED_APPS:
+            from activity.models import Activity
+            context["activities_open"] = Activity.objects.filter(open=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
+                PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()
+
         return context
 
 
 class TransactionTemplateCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
-    Create TransactionTemplate
+    Create Transaction template
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
@@ -58,7 +66,7 @@ class TransactionTemplateCreateView(ProtectQuerysetMixin, LoginRequiredMixin, Cr
 
 class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
-    List TransactionsTemplates
+    List Transaction templates
     """
     model = TransactionTemplate
     table_class = ButtonTable
@@ -66,6 +74,7 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
 
 class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
+    Update Transaction template
     """
     model = TransactionTemplate
     form_class = TransactionTemplateForm
@@ -84,7 +93,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-id").all()[:50]
+        return super().get_queryset(**kwargs).order_by("-id").all()[:20]
 
     def get_context_data(self, **kwargs):
         """

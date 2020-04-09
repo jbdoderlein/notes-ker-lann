@@ -6,6 +6,26 @@
 {% load perms %}
 
 {% block content %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <a href="{% url "note:transfer" %}#transfer" class="btn btn-sm btn-outline-primary">
+                    {% trans "Transfer" %}
+                </a>
+                {% if "note.notespecial"|not_empty_model_list %}
+                    <a href="{% url "note:transfer" %}#credit" class="btn btn-sm btn-outline-primary">
+                        {% trans "Credit" %}
+                    </a>
+                {% endif %}
+                {% for a in activities_open %}
+                    <a href="{% url "activity:activity_entry" pk=a.pk %}" class="btn btn-sm btn-outline-primary{% if a.pk == activity.pk %} active{% endif %}">
+                        {% trans "Entries" %} {{ a.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     <a href="{% url "activity:activity_detail" pk=activity.pk %}">
         <button class="btn btn-light">{% trans "Return to activity page" %}</button>
     </a>
@@ -56,10 +76,10 @@
                         note: id,
                         guest: null
                     }).done(function () {
-                        addMsg("Entrée effectuée !", "success");
+                        addMsg("Entrée effectuée !", "success", 4000);
                         reloadTable(true);
                     }).fail(function(xhr) {
-                        errMsg(xhr.responseJSON);
+                        errMsg(xhr.responseJSON, 4000);
                     });
                 }
                 else {
@@ -84,10 +104,10 @@
                             note: target.attr("data-inviter"),
                             guest: id
                         }).done(function () {
-                            addMsg("Entrée effectuée !", "success");
+                            addMsg("Entrée effectuée !", "success", 4000);
                             reloadTable(true);
                         }).fail(function (xhr) {
-                            errMsg(xhr.responseJSON);
+                            errMsg(xhr.responseJSON, 4000);
                         });
                     };
 
@@ -111,7 +131,7 @@
                                 makeTransaction();
                                 reset();
                             }).fail(function (xhr) {
-                                errMsg(xhr.responseJSON);
+                                errMsg(xhr.responseJSON, 4000);
                             });
                         };
                     };

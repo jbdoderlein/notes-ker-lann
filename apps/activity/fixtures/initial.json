@@ -1,0 +1,20 @@
+[
+  {
+    "model": "activity.activitytype",
+    "pk": 1,
+    "fields": {
+      "name": "Pot",
+      "can_invite": true,
+      "guest_entry_fee": 500
+    }
+  },
+  {
+    "model": "activity.activitytype",
+    "pk": 2,
+    "fields": {
+      "name": "Soir\u00e9e de club",
+      "can_invite": false,
+      "guest_entry_fee": 0
+    }
+  }
+]

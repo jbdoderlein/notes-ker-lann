@@ -24,6 +24,9 @@ $(document).ready(function () {
                 $("#" + prefix + "_" + obj.id).click(function() {
                     target.val(obj[name_field]);
                     $("#" + prefix + "_pk").val(obj.id);
+
+                    if (typeof autocompleted != 'undefined')
+                        autocompleted(obj, prefix)
                 });
 
                 if (input === obj[name_field])

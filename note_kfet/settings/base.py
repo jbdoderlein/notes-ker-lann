@@ -54,13 +54,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     # Note apps
+    'api',
     'activity',
+    'logs',
     'member',
     'note',
-    'treasury',
     'permission',
-    'api',
-    'logs',
+    'registration',
+    'treasury',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 

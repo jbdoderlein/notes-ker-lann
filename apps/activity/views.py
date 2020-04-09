@@ -139,6 +139,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                     | Q(name__regex=pattern)
                     | Q(normalized_name__regex=Alias.normalize(pattern)))) \
             .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))\
+            .filter(note__noteuser__user__profile__registration_valid=True)\
             .distinct("username")[:20]
         for note in note_qs:
             note.type = "Adhérent"
@@ -153,5 +154,9 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         ctx["title"] = _('Entry for activity "{}"').format(activity.name)
         ctx["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
         ctx["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
+
+        ctx["activities_open"] = Activity.objects.filter(open=True).filter(
+            PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
+            PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()
 
         return ctx
