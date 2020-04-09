@@ -43,7 +43,7 @@ class PermissionBackend(ModelBackend):
                 rolepermissions__role__membership__date_end__gte=datetime.date.today(),
                 type=t,
                 mask__rank__lte=get_current_session().get("permission_mask", 0),
-        ).distinct('club', 'pk',)
+        ).distinct()
 
     @staticmethod
     def permissions(user, model, type):
