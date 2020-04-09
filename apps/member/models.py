@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import datetime
+import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -79,12 +80,10 @@ class Profile(models.Model):
 
     def send_email_validation_link(self):
         subject = "Activate your Note Kfet account"
-        message = loader.render_to_string('registration/email_validation_email.html',
+        message = loader.render_to_string('registration/mails/email_validation_email.html',
                                           {
                                               'user': self.user,
-                                              'domain': "nk20.ynerant.fr",
-                                              'site_name': "La Note Kfet",
-                                              'protocol': 'https',
+                                              'domain': os.getenv("NOTE_URL", "note.example.com"),
                                               'token': email_validation_token.make_token(self.user),
                                               'uid': urlsafe_base64_encode(force_bytes(self.user.pk)).decode('UTF-8'),
                                           })

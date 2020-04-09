@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-06 10:51+0200\n"
+"POT-Creation-Date: 2020-04-09 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
-#: apps/member/models.py:100 apps/member/models.py:203
+#: apps/member/models.py:99 apps/member/models.py:202
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:237
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
@@ -79,7 +79,7 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-#: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:224
+#: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:223
 #: apps/note/models/notes.py:117
 msgid "user"
 msgstr ""
@@ -300,152 +300,152 @@ msgstr ""
 msgid "Bank"
 msgstr ""
 
-#: apps/member/models.py:32
+#: apps/member/models.py:33
 #: templates/registration/future_profile_detail.html:47
 msgid "phone number"
 msgstr ""
 
-#: apps/member/models.py:38 templates/member/profile_info.html:27
+#: apps/member/models.py:39 templates/member/profile_info.html:27
 #: templates/registration/future_profile_detail.html:41
 msgid "section"
 msgstr ""
 
-#: apps/member/models.py:39
+#: apps/member/models.py:40
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr ""
 
-#: apps/member/models.py:45 templates/member/profile_info.html:30
+#: apps/member/models.py:46 templates/member/profile_info.html:30
 #: templates/registration/future_profile_detail.html:44
 msgid "address"
 msgstr ""
 
-#: apps/member/models.py:51
+#: apps/member/models.py:52
 #: templates/registration/future_profile_detail.html:50
 msgid "paid"
 msgstr ""
 
-#: apps/member/models.py:52
+#: apps/member/models.py:53
 msgid "Tells if the user receive a salary."
 msgstr ""
 
-#: apps/member/models.py:57
+#: apps/member/models.py:58
 msgid "email confirmed"
 msgstr ""
 
-#: apps/member/models.py:62
+#: apps/member/models.py:63
 msgid "registration valid"
 msgstr ""
 
-#: apps/member/models.py:67
+#: apps/member/models.py:68
 msgid "Société générale"
 msgstr ""
 
-#: apps/member/models.py:68
+#: apps/member/models.py:69
 msgid "Has the user ever be paid by the Société générale?"
 msgstr ""
 
-#: apps/member/models.py:73 apps/member/models.py:74
+#: apps/member/models.py:74 apps/member/models.py:75
 msgid "user profile"
 msgstr ""
 
-#: apps/member/models.py:105 templates/member/club_info.html:46
+#: apps/member/models.py:104 templates/member/club_info.html:46
 #: templates/registration/future_profile_detail.html:22
 msgid "email"
 msgstr ""
 
-#: apps/member/models.py:112
+#: apps/member/models.py:111
 msgid "parent club"
 msgstr ""
 
-#: apps/member/models.py:121
+#: apps/member/models.py:120
 msgid "require memberships"
 msgstr ""
 
-#: apps/member/models.py:122
+#: apps/member/models.py:121
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
 
-#: apps/member/models.py:127 templates/member/club_info.html:35
+#: apps/member/models.py:126 templates/member/club_info.html:35
 msgid "membership fee (paid students)"
 msgstr ""
 
-#: apps/member/models.py:132 templates/member/club_info.html:38
+#: apps/member/models.py:131 templates/member/club_info.html:38
 msgid "membership fee (unpaid students)"
 msgstr ""
 
-#: apps/member/models.py:138 templates/member/club_info.html:28
+#: apps/member/models.py:137 templates/member/club_info.html:28
 msgid "membership duration"
 msgstr ""
 
-#: apps/member/models.py:139
+#: apps/member/models.py:138
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr ""
 
-#: apps/member/models.py:146 templates/member/club_info.html:22
+#: apps/member/models.py:145 templates/member/club_info.html:22
 msgid "membership start"
 msgstr ""
 
-#: apps/member/models.py:147
+#: apps/member/models.py:146
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:154 templates/member/club_info.html:25
+#: apps/member/models.py:153 templates/member/club_info.html:25
 msgid "membership end"
 msgstr ""
 
-#: apps/member/models.py:155
+#: apps/member/models.py:154
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:188 apps/member/models.py:230
+#: apps/member/models.py:187 apps/member/models.py:229
 #: apps/note/models/notes.py:139
 msgid "club"
 msgstr ""
 
-#: apps/member/models.py:189
+#: apps/member/models.py:188
 msgid "clubs"
 msgstr ""
 
-#: apps/member/models.py:209 apps/permission/models.py:294
+#: apps/member/models.py:208 apps/permission/models.py:294
 msgid "role"
 msgstr ""
 
-#: apps/member/models.py:210 apps/member/models.py:235
+#: apps/member/models.py:209 apps/member/models.py:234
 msgid "roles"
 msgstr ""
 
-#: apps/member/models.py:240
+#: apps/member/models.py:239
 msgid "membership starts on"
 msgstr ""
 
-#: apps/member/models.py:244
+#: apps/member/models.py:243
 msgid "membership ends on"
 msgstr ""
 
-#: apps/member/models.py:249
+#: apps/member/models.py:248
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:267 apps/member/views.py:491
+#: apps/member/models.py:266 apps/member/views.py:500
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:277 apps/member/views.py:500
+#: apps/member/models.py:276 apps/member/views.py:509
 msgid "User is already a member of the club"
 msgstr ""
 
-#: apps/member/models.py:315
+#: apps/member/models.py:314
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr ""
 
-#: apps/member/models.py:318
+#: apps/member/models.py:317
 msgid "membership"
 msgstr ""
 
-#: apps/member/models.py:319
+#: apps/member/models.py:318
 msgid "memberships"
 msgstr ""
 
@@ -466,27 +466,27 @@ msgstr ""
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/views.py:175
+#: apps/member/views.py:180
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:486
+#: apps/member/views.py:495
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:504
+#: apps/member/views.py:513
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:509
+#: apps/member/views.py:518
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:519 apps/member/views.py:521 apps/member/views.py:523
-#: apps/registration/views.py:285 apps/registration/views.py:287
-#: apps/registration/views.py:289
+#: apps/member/views.py:528 apps/member/views.py:530 apps/member/views.py:532
+#: apps/registration/views.py:286 apps/registration/views.py:288
+#: apps/registration/views.py:290
 msgid "This field is required."
 msgstr ""
 
@@ -785,27 +785,27 @@ msgstr ""
 msgid "Email validation"
 msgstr ""
 
-#: apps/registration/views.py:120
+#: apps/registration/views.py:121
 msgid "Email validation unsuccessful"
 msgstr ""
 
-#: apps/registration/views.py:131
+#: apps/registration/views.py:132
 msgid "Email validation email sent"
 msgstr ""
 
-#: apps/registration/views.py:184
+#: apps/registration/views.py:185
 msgid "Unregistered users"
 msgstr ""
 
-#: apps/registration/views.py:251
+#: apps/registration/views.py:252
 msgid "You must join the BDE."
 msgstr ""
 
-#: apps/registration/views.py:273
+#: apps/registration/views.py:274
 msgid "You must join BDE club before joining Kfet club."
 msgstr ""
 
-#: apps/registration/views.py:278
+#: apps/registration/views.py:279
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
@@ -1161,11 +1161,11 @@ msgstr ""
 msgid "club listing "
 msgstr ""
 
-#: templates/member/club_tables.html:9
+#: templates/member/club_tables.html:6
 msgid "Member of the Club"
 msgstr ""
 
-#: templates/member/club_tables.html:22 templates/member/profile_tables.html:31
+#: templates/member/club_tables.html:17 templates/member/profile_tables.html:28
 msgid "Transaction history"
 msgstr ""
 
@@ -1219,7 +1219,7 @@ msgstr ""
 msgid "Click here to resend a validation link."
 msgstr ""
 
-#: templates/member/profile_tables.html:18
+#: templates/member/profile_tables.html:15
 msgid "View my memberships"
 msgstr ""
 
@@ -1314,14 +1314,21 @@ msgstr ""
 msgid "Unable to delete button "
 msgstr ""
 
-#: templates/registration/email_validation_complete.html:8
-#, python-format
-msgid ""
-"Your account have successfully been activated. You can now <a href="
-"\"%(login_url)s\">log in</a>."
+#: templates/registration/email_validation_complete.html:6
+msgid "Your email have successfully been validated."
 msgstr ""
 
-#: templates/registration/email_validation_complete.html:12
+#: templates/registration/email_validation_complete.html:8
+#, python-format
+msgid "You can now <a href=\"%(login_url)s\">log in</a>."
+msgstr ""
+
+#: templates/registration/email_validation_complete.html:10
+msgid ""
+"You must pay now your membership in the Kfet to complete your registration."
+msgstr ""
+
+#: templates/registration/email_validation_complete.html:13
 msgid ""
 "The link was invalid. The token may have expired. Please send us an email to "
 "activate your account."
@@ -1374,6 +1381,36 @@ msgstr ""
 
 #: templates/registration/login.html:29
 msgid "Forgotten your password or username?"
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:3
+msgid "Hi"
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:5
+msgid ""
+"You recently registered on the Note Kfet. Please click on the link below to "
+"confirm your registration."
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:9
+msgid ""
+"This link is only valid for a couple of days, after that you will need to "
+"contact us to validate your email."
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:11
+msgid ""
+"After that, you'll have to wait that someone validates your account before "
+"you can log in. You will need to pay your membership in the Kfet."
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:13
+msgid "Thanks"
+msgstr ""
+
+#: templates/registration/mails/email_validation_email.html:15
+msgid "The Note Kfet team."
 msgstr ""
 
 #: templates/registration/password_change_done.html:8
