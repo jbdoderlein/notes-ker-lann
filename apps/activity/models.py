@@ -104,6 +104,12 @@ class Activity(models.Model):
 
 
 class Entry(models.Model):
+    """
+    Register the entry of someone:
+    - a member with a :model:`note.NoteUser`
+    - or a :model:`activity.Guest`
+    In the case of a Guest Entry, the inviter note is also save.
+    """
     activity = models.ForeignKey(
         Activity,
         on_delete=models.PROTECT,
@@ -133,8 +139,7 @@ class Entry(models.Model):
         verbose_name = _("entry")
         verbose_name_plural = _("entries")
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, *args,**kwargs):
 
         qs = Entry.objects.filter(~Q(pk=self.pk), activity=self.activity, note=self.note, guest=self.guest)
         if qs.exists():
@@ -148,7 +153,7 @@ class Entry(models.Model):
             if self.note.balance < 0:
                 raise ValidationError(_("The balance is negative."))
 
-        ret = super().save(force_insert, force_update, using, update_fields)
+        ret = super().save(*args,**kwargs)
 
         if insert and self.guest:
             GuestTransaction.objects.create(
