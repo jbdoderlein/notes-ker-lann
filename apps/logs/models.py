@@ -75,3 +75,7 @@ class Changelog(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         raise ValidationError(_("Logs cannot be destroyed."))
+
+    class Meta:
+        verbose_name = _("changelog")
+        verbose_name_plural = _("changelogs")

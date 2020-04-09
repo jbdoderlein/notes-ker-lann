@@ -9,30 +9,30 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
-from django.views.generic.base import View
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
 from note.forms import ImageForm
-from note.models import Alias, NoteUser
-from note.models.transactions import Transaction
+from note.models import Alias, NoteUser, NoteSpecial
+from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .forms import SignUpForm, ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
-from .models import Club, Membership
+from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
+from .models import Club, Membership, Role
 from .tables import ClubTable, UserTable, MembershipTable
 
 
 class CustomLoginView(LoginView):
+    """
+    Login view, where the user can select its permission mask.
+    """
     form_class = CustomAuthenticationForm
 
     def form_valid(self, form):
@@ -40,33 +40,10 @@ class CustomLoginView(LoginView):
         return super().form_valid(form)
 
 
-class UserCreateView(CreateView):
-    """
-    Une vue pour inscrire un utilisateur et lui créer un profile
-    """
-
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-    template_name = 'member/signup.html'
-    second_form = ProfileForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form()
-
-        return context
-
-    def form_valid(self, form):
-        profile_form = ProfileForm(self.request.POST)
-        if form.is_valid() and profile_form.is_valid():
-            user = form.save(commit=False)
-            user.profile = profile_form.save(commit=False)
-            user.save()
-            user.profile.save()
-        return super().form_valid(form)
-
-
 class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update the user information.
+    """
     model = User
     fields = ['first_name', 'last_name', 'username', 'email']
     template_name = 'member/profile_update.html'
@@ -75,14 +52,20 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        form = context['form']
+        form.fields['username'].widget.attrs.pop("autofocus", None)
+        form.fields['first_name'].widget.attrs.update({"autofocus": "autofocus"})
+        form.fields['first_name'].required = True
+        form.fields['last_name'].required = True
+        form.fields['email'].required = True
+        form.fields['email'].help_text = _("This address must be valid.")
+
         context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
         context['title'] = _("Update Profile")
         return context
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if 'username' not in form.data:
-            return form
+    def form_valid(self, form):
         new_username = form.data['username']
         # Si l'utilisateur cherche à modifier son pseudo, le nouveau pseudo ne doit pas être proche d'un alias existant
         note = NoteUser.objects.filter(
@@ -90,9 +73,8 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         if note.exists() and note.get().user != self.object:
             form.add_error('username',
                            _("An alias with a similar name already exists."))
-        return form
+            return super().form_invalid(form)
 
-    def form_valid(self, form):
         profile_form = ProfileForm(
             data=self.request.POST,
             instance=self.object.profile,
@@ -108,19 +90,24 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
                 if similar.exists():
                     similar.delete()
 
+            olduser = User.objects.get(pk=form.instance.pk)
+
             user = form.save(commit=False)
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
             user.save()
+
+            if olduser.email != user.email:
+                # If the user changed her/his email, then it is unvalidated and a confirmation link is sent.
+                user.profile.email_confirmed = False
+                user.profile.send_email_validation_link()
+
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
-        if kwargs:
-            return reverse_lazy('member:user_detail',
-                                kwargs={'pk': kwargs['id']})
-        else:
-            return reverse_lazy('member:user_detail', args=(self.object.id,))
+        url = 'member:user_detail' if self.object.profile.registration_valid else 'registration:future_user_detail'
+        return reverse_lazy(url, args=(self.object.id,))
 
 
 class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
@@ -131,29 +118,43 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     context_object_name = "user_object"
     template_name = "member/profile_detail.html"
 
+    def get_queryset(self, **kwargs):
+        """
+        We can't display information of a not registered user.
+        """
+        return super().get_queryset().filter(profile__registration_valid=True)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = context['user_object']
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note)).order_by("-id")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
-        context['history_list'] = HistoryTable(history_list)
+        history_table = HistoryTable(history_list, prefix='transaction-')
+        history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
+        context['history_list'] = history_table
+
         club_list = Membership.objects.filter(user=user, date_end__gte=datetime.today())\
             .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
-        context['club_list'] = MembershipTable(data=club_list)
+        membership_table = MembershipTable(data=club_list, prefix='membership-')
+        membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
+        context['club_list'] = membership_table
         return context
 
 
 class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
-    Affiche la liste des utilisateurs, avec une fonction de recherche statique
+    Display user list, with a search bar
     """
     model = User
     table_class = UserTable
     template_name = 'member/user_list.html'
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset()
+        """
+        Filter the user list with the given pattern.
+        """
+        qs = super().get_queryset().filter(profile__registration_valid=True)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
@@ -164,6 +165,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
                 Q(first_name__iregex=pattern)
                 | Q(last_name__iregex=pattern)
                 | Q(profile__section__iregex=pattern)
+                | Q(profile__username__iregex="^" + pattern)
                 | Q(note__alias__name__iregex="^" + pattern)
                 | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
             )
@@ -181,6 +183,9 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    View and manage user aliases.
+    """
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
@@ -193,6 +198,9 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, DetailView):
+    """
+    Update profile picture of the user note.
+    """
     form_class = ImageForm
 
     def get_context_data(self, **kwargs):
@@ -292,6 +300,9 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
 
 class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Display details of a club
+    """
     model = Club
     context_object_name = "club"
 
@@ -304,14 +315,19 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
-        context['history_list'] = HistoryTable(club_transactions)
+        history_table = HistoryTable(club_transactions, prefix="history-")
+        history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
+        context['history_list'] = history_table
         club_member = Membership.objects.filter(
             club=club,
             date_end__gte=datetime.today(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
-        context['member_list'] = MembershipTable(data=club_member)
+        membership_table = MembershipTable(data=club_member, prefix="membership-")
+        membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        context['member_list'] = membership_table
 
+        # Check if the user has the right to create a membership, to display the button.
         empty_membership = Membership(
             club=club,
             user=User.objects.first(),
@@ -326,6 +342,9 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Manage aliases of a club.
+    """
     model = Club
     template_name = 'member/club_alias.html'
     context_object_name = 'club'
@@ -338,6 +357,9 @@ class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update the information of a club.
+    """
     model = Club
     context_object_name = "club"
     form_class = ClubForm
@@ -348,6 +370,9 @@ class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
 
 class ClubPictureUpdateView(PictureUpdateView):
+    """
+    Update the profile picture of a club.
+    """
     model = Club
     template_name = 'member/club_picture_update.html'
     context_object_name = 'club'
@@ -357,29 +382,107 @@ class ClubPictureUpdateView(PictureUpdateView):
 
 
 class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Add a membership to a club.
+    """
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
 
     def get_context_data(self, **kwargs):
-        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
-            .get(pk=self.kwargs["pk"])
         context = super().get_context_data(**kwargs)
+        form = context['form']
+
+        if "club_pk" in self.kwargs:
+            # We create a new membership.
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+                .get(pk=self.kwargs["club_pk"])
+            form.fields['credit_amount'].initial = club.membership_fee_paid
+            form.fields['roles'].initial = Role.objects.filter(name="Membre de club").all()
+
+            # If the concerned club is the BDE, then we add the option that Société générale pays the membership.
+            if club.name != "BDE":
+                del form.fields['soge']
+            else:
+                fee = 0
+                bde = Club.objects.get(name="BDE")
+                fee += bde.membership_fee_paid
+                kfet = Club.objects.get(name="Kfet")
+                fee += kfet.membership_fee_paid
+                context["total_fee"] = "{:.02f}".format(fee / 100, )
+        else:
+            # This is a renewal. Fields can be pre-completed.
+            old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
+            club = old_membership.club
+            user = old_membership.user
+            form.fields['user'].initial = user
+            form.fields['user'].disabled = True
+            form.fields['roles'].initial = old_membership.roles.all()
+            form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
+            form.fields['credit_amount'].initial = club.membership_fee_paid if user.profile.paid \
+                else club.membership_fee_unpaid
+            form.fields['last_name'].initial = user.last_name
+            form.fields['first_name'].initial = user.first_name
+
+            # If this is a renewal of a BDE membership, Société générale can pays, if it is not yet done
+            if club.name != "BDE" or user.profile.soge:
+                del form.fields['soge']
+            else:
+                fee = 0
+                bde = Club.objects.get(name="BDE")
+                fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
+                kfet = Club.objects.get(name="Kfet")
+                fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+                context["total_fee"] = "{:.02f}".format(fee / 100, )
+
         context['club'] = club
 
         return context
 
     def form_valid(self, form):
-        club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
-            .get(pk=self.kwargs["pk"])
-        user = self.request.user
+        """
+        Create membership, check that all is good, make transactions
+        """
+        # Get the club that is concerned by the membership
+        if "club_pk" in self.kwargs:
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
+                .get(pk=self.kwargs["club_pk"])
+            user = form.instance.user
+        else:
+            old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
+            club = old_membership.club
+            user = old_membership.user
+
         form.instance.club = club
+
+        # Get form data
+        credit_type = form.cleaned_data["credit_type"]
+        credit_amount = form.cleaned_data["credit_amount"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+        soge = form.cleaned_data["soge"] and not user.profile.soge and club.name == "BDE"
+
+        # If Société générale pays, then we auto-fill some data
+        if soge:
+            credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
+            bde = club
+            kfet = Club.objects.get(name="Kfet")
+            if user.profile.paid:
+                fee = bde.membership_fee_paid + kfet.membership_fee_paid
+            else:
+                fee = bde.membership_fee_unpaid + kfet.membership_fee_unpaid
+            credit_amount = fee
+            bank = "Société générale"
+
+        if credit_type is None:
+            credit_amount = 0
 
         if user.profile.paid:
             fee = club.membership_fee_paid
         else:
             fee = club.membership_fee_unpaid
-        if user.note.balance < fee and not Membership.objects.filter(
+        if user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
                 date_start__lte=datetime.now().date(),
@@ -390,6 +493,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
             form.add_error('user',
                            _("This user don't have enough money to join this club, and can't have a negative balance."))
+            return super().form_invalid(form)
 
         if club.parent_club is not None:
             if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
@@ -405,15 +509,69 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.add_error('user', _('User is already a member of the club'))
             return super().form_invalid(form)
 
-        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
+        if club.membership_start and form.instance.date_start < club.membership_start:
             form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
 
-        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
+        if club.membership_end and form.instance.date_start > club.membership_end:
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
                            .format(form.instance.club.membership_start))
             return super().form_invalid(form)
+
+        # Now, all is fine, the membership can be created.
+
+        # Credit note before the membership is created.
+        if credit_amount > 0:
+            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
+                if not last_name:
+                    form.add_error('last_name', _("This field is required."))
+                if not first_name:
+                    form.add_error('first_name', _("This field is required."))
+                if not bank and credit_type.special_type == "Chèque":
+                    form.add_error('bank', _("This field is required."))
+                return self.form_invalid(form)
+
+            SpecialTransaction.objects.create(
+                source=credit_type,
+                destination=user.note,
+                quantity=1,
+                amount=credit_amount,
+                reason="Crédit " + credit_type.special_type + " (Adhésion " + club.name + ")",
+                last_name=last_name,
+                first_name=first_name,
+                bank=bank,
+                valid=True,
+            )
+
+        # If Société générale pays, then we store the information: the bank can't pay twice to a same person.
+        if soge:
+            user.profile.soge = True
+            user.profile.save()
+
+            kfet = Club.objects.get(name="Kfet")
+            kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+
+            # Get current membership, to get the end date
+            old_membership = Membership.objects.filter(
+                club__name="Kfet",
+                user=user,
+                date_start__lte=datetime.today(),
+                date_end__gte=datetime.today(),
+            )
+
+            membership = Membership.objects.create(
+                club=kfet,
+                user=user,
+                fee=kfet_fee,
+                date_start=old_membership.get().date_end + timedelta(days=1)
+                if old_membership.exists() else form.instance.date_start,
+            )
+            if old_membership.exists():
+                membership.roles.set(old_membership.get().roles.all())
+            else:
+                membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
+            membership.save()
 
         return super().form_valid(form)
 
@@ -422,6 +580,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
 
 class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Manage the roles of a user in a club
+    """
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
@@ -430,49 +591,19 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         club = self.object.club
         context['club'] = club
-        form = context['form']
-        form.fields['user'].disabled = True
-        form.fields['date_start'].widget = HiddenInput()
-
         return context
 
-    def form_valid(self, form):
-        if form.instance.club.membership_start and form.instance.date_start < form.instance.club.membership_start:
-            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
-            return super().form_invalid(form)
-
-        if form.instance.club.membership_end and form.instance.date_start > form.instance.club.membership_end:
-            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
-            return super().form_invalid(form)
-
-        return super().form_valid(form)
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # We don't create a full membership, we only update one field
+        form.fields['user'].disabled = True
+        del form.fields['date_start']
+        del form.fields['credit_type']
+        del form.fields['credit_amount']
+        del form.fields['last_name']
+        del form.fields['first_name']
+        del form.fields['bank']
+        return form
 
     def get_success_url(self):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
-
-
-class ClubRenewMembershipView(ProtectQuerysetMixin, LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        user = self.request.user
-        membership = Membership.objects.filter(PermissionBackend.filter_queryset(user, Membership, "change"))\
-            .filter(pk=self.kwargs["pk"]).get()
-
-        if Membership.objects.filter(
-            club=membership.club,
-            user=membership.user,
-            date_start__gte=membership.club.membership_start,
-            date_end__lte=membership.club.membership_end,
-        ).exists():
-            raise ValidationError(_("This membership is already renewed"))
-
-        new_membership = Membership.objects.create(
-            user=user,
-            club=membership.club,
-            date_start=membership.date_end + timedelta(days=1),
-        )
-        new_membership.roles.set(membership.roles.all())
-        new_membership.save()
-
-        return redirect(reverse_lazy('member:club_detail', kwargs={'pk': membership.club.pk}))

@@ -19,23 +19,32 @@ function pretty_money(value) {
  * Add a message on the top of the page.
  * @param msg The message to display
  * @param alert_type The type of the alert. Choices: info, success, warning, danger
+ * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function addMsg(msg, alert_type) {
+function addMsg(msg, alert_type, timeout=-1) {
     let msgDiv = $("#messages");
     let html = msgDiv.html();
+    let id = Math.floor(10000 * Math.random() + 1);
     html += "<div class=\"alert alert-" + alert_type + " alert-dismissible\">" +
-        "<button class=\"close\" data-dismiss=\"alert\" href=\"#\"><span aria-hidden=\"true\">×</span></button>"
+        "<button id=\"close-message-" + id + "\" class=\"close\" data-dismiss=\"alert\" href=\"#\"><span aria-hidden=\"true\">×</span></button>"
         + msg + "</div>\n";
     msgDiv.html(html);
+
+    if (timeout > 0) {
+        setTimeout(function () {
+            $("#close-message-" + id).click();
+        }, timeout);
+    }
 }
 
 /**
  * add Muliple error message from err_obj
  * @param errs_obj [{error_code:erro_message}]
+ * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function errMsg(errs_obj){
+function errMsg(errs_obj, timeout=-1) {
     for (const err_msg of Object.values(errs_obj)) {
-              addMsg(err_msg,'danger');
+              addMsg(err_msg,'danger', timeout);
           }
 }
 

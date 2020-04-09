@@ -10,9 +10,11 @@
 
 {% block extrajavascript %}
     <script>
-    function refreshHistory() {
-        $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
-        $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
-    }
+        function refreshHistory() {
+            $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
+            $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
+        }
+
+        window.history.replaceState({}, document.title, location.pathname);
     </script>
 {% endblock %}

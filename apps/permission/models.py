@@ -106,6 +106,10 @@ class PermissionMask(models.Model):
     def __str__(self):
         return self.description
 
+    class Meta:
+        verbose_name = _("permission mask")
+        verbose_name_plural = _("permission masks")
+
 
 class Permission(models.Model):
 
@@ -153,6 +157,8 @@ class Permission(models.Model):
 
     class Meta:
         unique_together = ('model', 'query', 'type', 'field')
+        verbose_name = _("permission")
+        verbose_name_plural = _("permissions")
 
     def clean(self):
         self.query = json.dumps(json.loads(self.query))
@@ -293,3 +299,7 @@ class RolePermissions(models.Model):
 
     def __str__(self):
         return str(self.role)
+
+    class Meta:
+        verbose_name = _("role permissions")
+        verbose_name_plural = _("role permissions")
