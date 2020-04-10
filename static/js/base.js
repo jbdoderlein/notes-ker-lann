@@ -21,7 +21,7 @@ function pretty_money(value) {
  * @param alert_type The type of the alert. Choices: info, success, warning, danger
  * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function addMsg(msg, alert_type, timeout=-1) {
+function addMsg(msg, alert_type, timeout = -1) {
     let msgDiv = $("#messages");
     let html = msgDiv.html();
     let id = Math.floor(10000 * Math.random() + 1);
@@ -42,28 +42,28 @@ function addMsg(msg, alert_type, timeout=-1) {
  * @param errs_obj [{error_code:erro_message}]
  * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function errMsg(errs_obj, timeout=-1) {
+function errMsg(errs_obj, timeout = -1) {
     for (const err_msg of Object.values(errs_obj)) {
-              addMsg(err_msg,'danger', timeout);
-          }
+        addMsg(err_msg, 'danger', timeout);
+    }
 }
 
 var reloadWithTurbolinks = (function () {
-  var scrollPosition;
+    var scrollPosition;
 
-  function reload () {
-    scrollPosition = [window.scrollX, window.scrollY];
-    Turbolinks.visit(window.location.toString(), { action: 'replace' })
-  }
-
-  document.addEventListener('turbolinks:load', function () {
-    if (scrollPosition) {
-      window.scrollTo.apply(window, scrollPosition);
-      scrollPosition = null
+    function reload() {
+        scrollPosition = [window.scrollX, window.scrollY];
+        Turbolinks.visit(window.location.toString(), {action: 'replace'})
     }
-  });
 
-  return reload;
+    document.addEventListener('turbolinks:load', function () {
+        if (scrollPosition) {
+            window.scrollTo.apply(window, scrollPosition);
+            scrollPosition = null
+        }
+    });
+
+    return reload;
 })();
 
 /**
@@ -85,25 +85,27 @@ function getMatchedNotes(pattern, fun) {
 /**
  * Generate a <li> entry with a given id and text
  */
-function li(id, text,extra_css) {
+function li(id, text, extra_css) {
     return "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center " + extra_css + "\"" +
-                " id=\"" + id + "\">" + text + "</li>\n";
+        " id=\"" + id + "\">" + text + "</li>\n";
 }
+
 /**
- * Return style to apply according to the balance of the note
- * @param balance The balance of the note.
+ * Return style to apply according to the balance of the note and the validation status of the email address
+ * @param note The concerned note.
  */
-function displayStyle(balance){
-    if (balance < -5000){
-        return " text-danger bg-dark"
-    }
-    else if(balance <-1000){
-        return " text-danger"
-    }
-    else if(balance < 0){
-        return "text-warning"
-    }
-    return ""
+function displayStyle(note) {
+    let balance = note.balance;
+    var css = "";
+    if (balance < -5000)
+        css += " text-danger bg-dark";
+    else if (balance < -1000)
+        css += " text-danger";
+    else if (balance < 0)
+        css += " text-warning";
+    if (!note.email_confirmed)
+        css += " text-white bg-primary";
+    return css;
 }
 
 
@@ -114,29 +116,28 @@ function displayStyle(balance){
  * @param user_note_field
  * @param profile_pic_field
  */
-function displayNote(note, alias, user_note_field=null, profile_pic_field=null) {
+function displayNote(note, alias, user_note_field = null, profile_pic_field = null) {
     if (!note.display_image) {
         note.display_image = '/media/pic/default.png';
     }
     let img = note.display_image;
     if (alias !== note.name && note.name)
         alias += " (aka. " + note.name + ")";
-    if (user_note_field !== null)
-
+    if (user_note_field !== null) {
         $("#" + user_note_field).removeAttr('class');
-        $("#" + user_note_field).addClass(displayStyle(note.balance));
+        $("#" + user_note_field).addClass(displayStyle(note));
         $("#" + user_note_field).text(alias + (note.balance == null ? "" : (":\n" + pretty_money(note.balance))));
-    if (profile_pic_field != null){
-        $("#" + profile_pic_field).attr('src', img);
-        $("#" + profile_pic_field).click(function(){
-            console.log(note);
-            if(note.resourcetype == "NoteUser"){
-                document.location.href = "/accounts/user/" + note.user;
-            }
-            else if(note.resourcetype == "NoteClub"){
-                document.location.href = "/accounts/club/" + note.club;
-            }
-        });
+        if (profile_pic_field != null) {
+            $("#" + profile_pic_field).attr('src', img);
+            $("#" + profile_pic_field).click(function () {
+                console.log(note);
+                if (note.resourcetype === "NoteUser") {
+                    document.location.href = "/accounts/user/" + note.user;
+                } else if (note.resourcetype === "NoteClub") {
+                    document.location.href = "/accounts/club/" + note.club;
+                }
+            });
+        }
     }
 }
 
@@ -152,8 +153,8 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
  *                          (useful in consumptions, put null if not used)
  * @returns an anonymous function to be compatible with jQuery events
  */
-function removeNote(d, note_prefix="note", notes_display, note_list_id, user_note_field=null, profile_pic_field=null) {
-    return (function() {
+function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_note_field = null, profile_pic_field = null) {
+    return (function () {
         let new_notes_display = [];
         let html = "";
         notes_display.forEach(function (disp) {
@@ -166,7 +167,7 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
         });
 
         notes_display.length = 0;
-        new_notes_display.forEach(function(disp) {
+        new_notes_display.forEach(function (disp) {
             notes_display.push(disp);
         });
 
@@ -174,7 +175,7 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
         notes_display.forEach(function (disp) {
             let obj = $("#" + note_prefix + "_" + disp.id);
             obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field, profile_pic_field));
-            obj.hover(function() {
+            obj.hover(function () {
                 if (disp.note)
                     displayNote(disp.note, disp.name, user_note_field, profile_pic_field);
             });
@@ -199,18 +200,18 @@ function removeNote(d, note_prefix="note", notes_display, note_list_id, user_not
  *                    the associated note is not displayed.
  *                    Useful for a consumption if the item is selected before.
  */
-function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes_display, alias_prefix="alias",
-                          note_prefix="note", user_note_field=null, profile_pic_field=null, alias_click=null) {
+function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes_display, alias_prefix = "alias",
+                          note_prefix = "note", user_note_field = null, profile_pic_field = null, alias_click = null) {
     let field = $("#" + field_id);
     // When the user clicks on the search field, it is immediately cleared
-    field.click(function() {
+    field.click(function () {
         field.val("");
     });
 
     let old_pattern = null;
 
     // When the user type "Enter", the first alias is clicked
-    field.keypress(function(event) {
+    field.keypress(function (event) {
         if (event.originalEvent.charCode === 13 && notes.length > 0) {
             let li_obj = $("#" + alias_matched_id + " li").first();
             displayNote(notes[0], li_obj.text(), user_note_field, profile_pic_field);
@@ -219,7 +220,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
     });
 
     // When the user type something, the matched aliases are refreshed
-    field.keyup(function(e) {
+    field.keyup(function (e) {
         if (e.originalEvent.charCode === 13)
             return;
 
@@ -233,7 +234,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
         let aliases_matched_obj = $("#" + alias_matched_id);
         let aliases_matched_html = "";
         // get matched Alias with note associated
-        if(pattern == ""){
+        if (pattern === "") {
             aliases_matched_obj = $("#" + alias_matched_id);
             aliases_matched_html = "";
             aliases_matched_obj.html("")
@@ -242,81 +243,83 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
         }
 
         $.getJSON("/api/note/consumer/?format=json&alias="
-                  + pattern
-                  + "&search=user|club&ordering=normalized_name",
-        function(consumers){
-            // The response arrived too late, we stop the request
-            if (pattern !== $("#" + field_id).val())
-                return;
-            consumers.results.forEach(function (consumer){
-                let note = consumer.note;
-                extra_css = displayStyle(note.balance);
-                aliases_matched_html += li(alias_prefix + '_' + consumer.id,
-                                         consumer.name,
-                                         extra_css);
-                notes.push(note);
-            });
-            aliases_matched_obj.html(aliases_matched_html);
-            consumers.results.forEach(function(consumer){
-                let note = consumer.note;
-                let consumer_obj = $("#" + alias_prefix+ "_" + consumer.id);
-                consumer_obj.hover(function(){
-                    displayNote(consumer.note, consumer.name, user_note_field,profile_pic_field)
+            + pattern
+            + "&search=user|club&ordering=normalized_name",
+            function (consumers) {
+                // The response arrived too late, we stop the request
+                if (pattern !== $("#" + field_id).val())
+                    return;
+                consumers.results.forEach(function (consumer) {
+                    let note = consumer.note;
+                    note.email_confirmed = consumer.email_confirmed;
+                    let extra_css = displayStyle(note);
+                    aliases_matched_html += li(alias_prefix + '_' + consumer.id,
+                        consumer.name,
+                        extra_css);
+                    notes.push(note);
                 });
-                consumer_obj.click(function(){
-                    field.val(""); old_pattern = ""; // reset input field
-                    var disp = null;
-                    notes_display.forEach(function (d) {
-                        // We compare the note ids
-                        if (d.id === note.id) {
-                            d.quantity += 1;
-                            disp = d;
+                aliases_matched_obj.html(aliases_matched_html);
+                consumers.results.forEach(function (consumer) {
+                    let note = consumer.note;
+                    let consumer_obj = $("#" + alias_prefix + "_" + consumer.id);
+                    consumer_obj.hover(function () {
+                        displayNote(consumer.note, consumer.name, user_note_field, profile_pic_field)
+                    });
+                    consumer_obj.click(function () {
+                        field.val("");
+                        old_pattern = ""; // reset input field
+                        var disp = null;
+                        notes_display.forEach(function (d) {
+                            // We compare the note ids
+                            if (d.id === note.id) {
+                                d.quantity += 1;
+                                disp = d;
+                            }
+                        });
+                        // In the other case, we add a new emitter
+                        if (disp == null) {
+                            disp = {
+                                name: consumer.name,
+                                id: consumer.id,
+                                note: note,
+                                quantity: 1
+                            };
+                            notes_display.push(disp);
                         }
-                    });
-                    // In the other case, we add a new emitter
-                    if (disp == null) {
-                        disp = {
-                            name: consumer.name,
-                            id: consumer.id,
-                            note: note,
-                            quantity: 1
-                        };
-                        notes_display.push(disp);
-                    }
 
-                    // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
-                    // note displayed. Useful for a consumption when a button is already clicked
-                    if (alias_click && !alias_click())
-                        return;
+                        // If the function alias_click exists, it is called. If it doesn't return true, then the notes are
+                        // note displayed. Useful for a consumption when a button is already clicked
+                        if (alias_click && !alias_click())
+                            return;
 
-                    let note_list = $("#" + note_list_id);
-                    let html = "";
-                    notes_display.forEach(function (disp) {
-                        html += li(note_prefix + "_" + disp.id,
-                                   disp.name
-                                   + "<span class=\"badge badge-dark badge-pill\">"
-                                   + disp.quantity + "</span>",
-                                   displayStyle(disp.note.balance));
-                    });
-
-                    // Emitters are displayed
-                    note_list.html(html);
-
-                    notes_display.forEach(function (disp) {
-                        let line_obj = $("#" + note_prefix + "_" + disp.id);
-                        // Hover an emitter display also the profile picture
-                        line_obj.hover(function () {
-                            displayNote(disp.note, disp.name, user_note_field, profile_pic_field);
+                        let note_list = $("#" + note_list_id);
+                        let html = "";
+                        notes_display.forEach(function (disp) {
+                            html += li(note_prefix + "_" + disp.id,
+                                disp.name
+                                + "<span class=\"badge badge-dark badge-pill\">"
+                                + disp.quantity + "</span>",
+                                displayStyle(disp.note.balance));
                         });
 
-                        // When an emitter is clicked, it is removed
-                        line_obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field,
-                            profile_pic_field));
-                    });
-                })
-            });
+                        // Emitters are displayed
+                        note_list.html(html);
 
-        });// end getJSON alias
+                        notes_display.forEach(function (disp) {
+                            let line_obj = $("#" + note_prefix + "_" + disp.id);
+                            // Hover an emitter display also the profile picture
+                            line_obj.hover(function () {
+                                displayNote(disp.note, disp.name, user_note_field, profile_pic_field);
+                            });
+
+                            // When an emitter is clicked, it is removed
+                            line_obj.click(removeNote(disp, note_prefix, notes_display, note_list_id, user_note_field,
+                                profile_pic_field));
+                        });
+                    })
+                });
+
+            });// end getJSON alias
     });
 }// end function autocomplete
 
@@ -347,7 +350,7 @@ function de_validate(id, validated) {
             // error if this method doesn't exist. Please define it.
             refreshHistory();
         },
-        error: function(err) {
+        error: function (err) {
             addMsg("Une erreur est survenue lors de la validation/dévalidation " +
                 "de cette transaction : " + err.responseText, "danger");
 

@@ -106,6 +106,8 @@ class ConsumerSerializer(serializers.ModelSerializer):
     """
     note = serializers.SerializerMethodField()
 
+    email_confirmed = serializers.SerializerMethodField()
+
     class Meta:
         model = Alias
         fields = '__all__'
@@ -119,6 +121,11 @@ class ConsumerSerializer(serializers.ModelSerializer):
             print(obj.pk)
             return NotePolymorphicSerializer().to_representation(obj.note)
         return dict(id=obj.id)
+
+    def get_email_confirmed(self, obj):
+        if isinstance(obj.note, NoteUser):
+            return obj.note.user.profile.email_confirmed
+        return True
 
 
 class TemplateCategorySerializer(serializers.ModelSerializer):
