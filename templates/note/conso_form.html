@@ -30,13 +30,15 @@
                             </p>
                         </div>
                         <div class="card-body px-0 py-0" style="min-height:125px;">
-                        <ul class="list-group list-group-flush" id="note_list">
-                        </ul>
+                            <ul class="list-group list-group-flush" id="note_list">
+                            </ul>
                         </div>
+
+                        {# User search with autocompletion #}
                         <div class="card-footer bg-white">
-                        <input class="form-control mx-auto d-block" type="text" id="note" />
-                        <ul class="list-group list-group-flush"
-                            id="alias_matched">
+                            <input class="form-control mx-auto d-block"
+                                placeholder="{% trans "Name or alias" %}" type="text" id="note" />
+                            <ul class="list-group list-group-flush" id="alias_matched">
                             </ul>
                         </div>
                     </div>
