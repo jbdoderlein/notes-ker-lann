@@ -13,8 +13,7 @@
                 <div class="col-xl-5" id="note_infos_div">
                     <div class="card border-success shadow mb-4 text-center">
                         <img src="/media/pic/default.png"
-                             id="profile_pic" alt=""
-                             class="img-thumbnail">
+                             id="profile_pic" alt="" class="card-img-top">
                         <div class="card-body text-center">
                             <span id="user_note"></span>
                         </div>
@@ -35,9 +34,9 @@
                         </div>
 
                         {# User search with autocompletion #}
-                        <div class="card-footer bg-white">
+                        <div class="card-body p-0">
                             <input class="form-control mx-auto d-block"
-                                placeholder="{% trans "Name or alias" %}" type="text" id="note" />
+                                placeholder="{% trans "Name or alias" %}" type="text" id="note" autofocus />
                         </div>
                     </div>
                 </div>
