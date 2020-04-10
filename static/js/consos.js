@@ -24,13 +24,10 @@ $(document).ready(function() {
     });
 
     // Switching in double consumptions mode should update the layout
-    let double_conso_obj = $("#double_conso");
-    double_conso_obj.click(function() {
-        $("#consos_list_div").show();
-        $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
-        $("#note_infos_div").attr('class', 'col-xl-3');
+    $("#double_conso").click(function() {
+        $("#consos_list_div").removeClass('d-none');
         $("#user_select_div").attr('class', 'col-xl-4');
-        $("#buttons_div").attr('class', 'col-sm-7 col-xl-6');
+        $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
 
         let note_list_obj = $("#note_list");
         if (buttons.length > 0 && note_list_obj.text().length > 0) {
@@ -44,13 +41,10 @@ $(document).ready(function() {
         }
     });
 
-    let single_conso_obj = $("#single_conso");
-    single_conso_obj.click(function() {
-        $("#consos_list_div").hide();
-        $("#infos_div").attr('class', 'col-sm-5 col-md-4');
-        $("#note_infos_div").attr('class', 'col-xl-5');
+    $("#single_conso").click(function() {
+        $("#consos_list_div").addClass('d-none');
         $("#user_select_div").attr('class', 'col-xl-7');
-        $("#buttons_div").attr('class', 'col-sm-7 col-md-8');
+        $("#infos_div").attr('class', 'col-sm-5 col-md-4');
 
         let consos_list_obj = $("#consos_list");
         if (buttons.length > 0) {
@@ -69,12 +63,8 @@ $(document).ready(function() {
         }
     });
 
-    // Ensure we begin in single consumption. Removing these lines may cause problems when reloading.
-    single_conso_obj.prop('checked', 'true');
-    double_conso_obj.removeAttr('checked');
-    $("label[for='double_conso']").attr('class', 'btn btn-sm btn-outline-primary');
-
-    $("#consos_list_div").hide();
+    // Ensure we begin in single consumption. Fix issue with TurboLinks and BootstrapJS
+    $("label[for='double_conso']").removeClass('active');
 
     $("#consume_all").click(consumeAll);
 });
@@ -84,7 +74,7 @@ notes_display = [];
 buttons = [];
 
 // When the user searches an alias, we update the auto-completion
-autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
+autoCompleteNote("note", "note_list", notes, notes_display,
     "alias", "note", "user_note", "profile_pic", function() {
         if (buttons.length > 0 && $("#single_conso").is(":checked")) {
             consumeAll();
@@ -152,7 +142,6 @@ function reset() {
     notes.length = 0;
     buttons.length = 0;
     $("#note_list").html("");
-    $("#alias_matched").html("");
     $("#consos_list").html("");
     $("#user_note").text("");
     $("#profile_pic").attr("src", "/media/pic/default.png");

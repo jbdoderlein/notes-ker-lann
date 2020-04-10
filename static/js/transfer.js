@@ -14,8 +14,6 @@ function reset() {
     dests.length = 0;
     $("#source_note_list").html("");
     $("#dest_note_list").html("");
-    $("#source_alias_matched").html("");
-    $("#dest_alias_matched").html("");
     $("#amount").val("");
     $("#reason").val("");
     $("#last_name").val("");
@@ -28,37 +26,110 @@ function reset() {
 }
 
 $(document).ready(function() {
-    autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
-        "source_alias", "source_note", "user_note", "profile_pic");
-    autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
-        "dest_alias", "dest_note", "user_note", "profile_pic", function() {
-            if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
-                let last = dests_notes_display[dests_notes_display.length - 1];
-                dests_notes_display.length = 0;
-                dests_notes_display.push(last);
+    /**
+     * If we are in credit/debit mode, check that only one note is entered.
+     * More over, get first name and last name to autocomplete fields.
+     */
+    function checkUniqueNote() {
+        if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
+            let arr = $("#type_credit").is(":checked") ? dests_notes_display : sources_notes_display;
 
-                last.quantity = 1;
+            if (arr.length === 0)
+                return;
 
-                if (!last.note.user) {
-                    $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
-                        last.note.user = note.user;
-                        $.getJSON("/api/user/" + last.note.user + "/", function(user) {
-                            $("#last_name").val(user.last_name);
-                            $("#first_name").val(user.first_name);
-                        });
-                    });
-                }
-                else {
+            let last = arr[arr.length - 1];
+            arr.length = 0;
+            arr.push(last);
+
+            last.quantity = 1;
+
+            if (!last.note.user) {
+                $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
+                    last.note.user = note.user;
                     $.getJSON("/api/user/" + last.note.user + "/", function(user) {
                         $("#last_name").val(user.last_name);
                         $("#first_name").val(user.first_name);
                     });
-                }
+                });
             }
+            else {
+                $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                    $("#last_name").val(user.last_name);
+                    $("#first_name").val(user.first_name);
+                });
+            }
+        }
 
-            return true;
-       });
+        return true;
+   }
 
+    autoCompleteNote("source_note", "source_note_list", sources, sources_notes_display,
+        "source_alias", "source_note", "user_note", "profile_pic", checkUniqueNote);
+    autoCompleteNote("dest_note", "dest_note_list", dests, dests_notes_display,
+        "dest_alias", "dest_note", "user_note", "profile_pic", checkUniqueNote);
+
+    let source = $("#source_note");
+    let dest = $("#dest_note");
+
+    $("#type_gift").click(function() {
+        $("#special_transaction_div").addClass('d-none');
+        source.attr('disabled', true);
+        source.val(username);
+        source.tooltip('hide');
+        $("#source_note_list").addClass('d-none');
+        dest.attr('disabled', false);
+        $("#dest_note_list").removeClass('d-none');
+    });
+
+    $("#type_transfer").click(function() {
+        $("#special_transaction_div").addClass('d-none');
+        source.attr('disabled', false);
+        $("#source_note_list").removeClass('d-none');
+        dest.attr('disabled', false);
+        $("#dest_note_list").removeClass('d-none');
+    });
+
+    $("#type_credit").click(function() {
+        $("#special_transaction_div").removeClass('d-none');
+        $("#source_note_list").addClass('d-none');
+        $("#dest_note_list").removeClass('d-none');
+        source.attr('disabled', true);
+        source.val($("#credit_type option:selected").text());
+        source.tooltip('hide');
+        dest.attr('disabled', false);
+        dest.val('');
+        dest.tooltip('hide');
+
+        if (dests_notes_display.length > 1) {
+            $("#dest_note_list").html('');
+            dests_notes_display.length = 0;
+        }
+    });
+
+    $("#type_debit").click(function() {
+        $("#special_transaction_div").removeClass('d-none');
+        $("#source_note_list").removeClass('d-none');
+        $("#dest_note_list").addClass('d-none');
+        source.attr('disabled', false);
+        source.val('');
+        source.tooltip('hide');
+        dest.attr('disabled', true);
+        dest.val($("#credit_type option:selected").text());
+        dest.tooltip('hide');
+
+        if (sources_notes_display.length > 1) {
+            $("#source_note_list").html('');
+            sources_notes_display.length = 0;
+        }
+    });
+
+        $("#credit_type").change(function() {
+            let type = $("#credit_type option:selected").text();
+            if ($("#type_credit").is(":checked"))
+                source.val(type);
+            else
+                dest.val(type);
+        });
 
     // Ensure we begin in gift mode. Removing these lines may cause problems when reloading.
     let type_gift = $("#type_gift"); // Default mode
@@ -184,10 +255,11 @@ $("#btn_transfer").click(function() {
         });
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
         let special_note = $("#credit_type").val();
-        let user_note = dests_notes_display[0].note.id;
+        let user_note;
         let given_reason = $("#reason").val();
         let source, dest, reason;
         if ($("#type_credit").is(':checked')) {
+            user_note = dests_notes_display[0].note.id;
             source = special_note;
             dest = user_note;
             reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
@@ -195,6 +267,7 @@ $("#btn_transfer").click(function() {
                 reason += " (" + given_reason + ")";
         }
         else {
+            user_note = sources_notes_display[0].note.id;
             source = user_note;
             dest = special_note;
             reason = "Retrait " + $("#credit_type option:selected").text().toLowerCase();

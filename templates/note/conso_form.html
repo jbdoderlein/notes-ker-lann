@@ -10,11 +10,10 @@
         <div class="col-sm-5 col-md-4" id="infos_div">
             <div class="row">
                 {# User details column #}
-                <div class="col-xl-5" id="note_infos_div">
+                <div class="col">
                     <div class="card border-success shadow mb-4 text-center">
                         <img src="/media/pic/default.png"
-                             id="profile_pic" alt=""
-                             class="img-thumbnail">
+                             id="profile_pic" alt="" class="card-img-top">
                         <div class="card-body text-center">
                             <span id="user_note"></span>
                         </div>
@@ -29,38 +28,42 @@
                                 {% trans "Consum" %}
                             </p>
                         </div>
-                        <div class="card-body px-0 py-0" style="min-height:125px;">
-                        <ul class="list-group list-group-flush" id="note_list">
-                        </ul>
-                        </div>
-                        <div class="card-footer bg-white">
-                        <input class="form-control mx-auto d-block" type="text" id="note" />
-                        <ul class="list-group list-group-flush"
-                            id="alias_matched">
+                        <div class="card-body p-0" style="min-height:125px;">
+                            <ul class="list-group list-group-flush" id="note_list">
                             </ul>
+                        </div>
+
+                        {# User search with autocompletion #}
+                        <div class="card-footer">
+                            <input class="form-control mx-auto d-block"
+                                placeholder="{% trans "Name or alias..." %}" type="text" id="note" autofocus />
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-5" id="consos_list_div">
+                <div class="col-xl-5 d-none" id="consos_list_div">
                     <div class="card border-info shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
                                 {% trans "Select consumptions" %}
                             </p>
                         </div>
-                        <ul class="list-group list-group-flush" id="consos_list">
-                        </ul>
-                        <button id="consume_all" class="form-control btn btn-primary">
-                            {% trans "Consume!" %}
-                        </button>
+                        <div class="card-body p-0" style="min-height:125px;">
+                            <ul class="list-group list-group-flush" id="consos_list">
+                            </ul>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a id="consume_all" href="#" class="btn btn-primary">
+                                {% trans "Consume!" %}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         {# Buttons column #}
-        <div class="col-sm-7 col-md-8" id="buttons_div">
+        <div class="col">
             {# Show last used buttons #}
             <div class="card shadow mb-4">
                 <div class="card-header">
@@ -127,10 +130,12 @@
                     <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
                         <label for="single_conso" class="btn btn-sm btn-outline-primary active">
                             <input type="radio" name="conso_type" id="single_conso" checked>
+                            <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
                             {% trans "Single consumptions" %}
                         </label>
                         <label for="double_conso" class="btn btn-sm btn-outline-primary">
                             <input type="radio" name="conso_type" id="double_conso">
+                            <i class="fa fa-arrows-h" aria-hidden="true"></i>
                             {% trans "Double consumptions" %}
                         </label>
                     </div>
@@ -150,7 +155,7 @@
 {% endblock %}
 
 {% block extrajavascript %}
-    <script type="text/javascript" src="/static/js/consos.js"></script>
+    <script type="text/javascript" src="{% static "js/consos.js" %}"></script>
     <script type="text/javascript">
         {% for button in most_used %}
             {% if button.display %}
