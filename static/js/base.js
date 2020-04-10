@@ -186,7 +186,6 @@ function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_n
 /**
  * Generate an auto-complete field to query a note with its alias
  * @param field_id The identifier of the text field where the alias is typed
- * @param alias_matched_id The div block identifier where the matched aliases are displayed
  * @param note_list_id The div block identifier where the notes of the buyers are displayed
  * @param notes An array containing the note objects of the buyers
  * @param notes_display An array containing the infos of the buyers: [alias, note id, note object, quantity]
@@ -200,11 +199,21 @@ function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_n
  *                    the associated note is not displayed.
  *                    Useful for a consumption if the item is selected before.
  */
-function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes_display, alias_prefix = "alias",
+function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_prefix = "alias",
                           note_prefix = "note", user_note_field = null, profile_pic_field = null, alias_click = null) {
     let field = $("#" + field_id);
-    // When the user clicks on the search field, it is immediately cleared
+
+    // Configure tooltip
+    field.tooltip({
+        html: true,
+        placement: 'bottom',
+        title: 'Loading...',
+        trigger: 'manual'
+    });
+
+    // Clear search on click
     field.click(function () {
+        field.tooltip('hide');
         field.val("");
     });
 
@@ -213,7 +222,7 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
     // When the user type "Enter", the first alias is clicked
     field.keypress(function (event) {
         if (event.originalEvent.charCode === 13 && notes.length > 0) {
-            let li_obj = $("#" + alias_matched_id + " li").first();
+            let li_obj = $(".tooltip-inner ul li").first();
             displayNote(notes[0], li_obj.text(), user_note_field, profile_pic_field);
             li_obj.trigger("click");
         }
@@ -225,19 +234,16 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
             return;
 
         let pattern = field.val();
+
         // If the pattern is not modified, we don't query the API
         if (pattern === old_pattern)
             return;
         old_pattern = pattern;
         notes.length = 0;
 
-        let aliases_matched_obj = $("#" + alias_matched_id);
-        let aliases_matched_html = "";
         // get matched Alias with note associated
         if (pattern === "") {
-            aliases_matched_obj = $("#" + alias_matched_id);
-            aliases_matched_html = "";
-            aliases_matched_obj.html("")
+            field.tooltip('hide');
             notes.length = 0;
             return;
         }
@@ -249,6 +255,9 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                 // The response arrived too late, we stop the request
                 if (pattern !== $("#" + field_id).val())
                     return;
+
+                // Build tooltip content
+                let aliases_matched_html = '<ul class="list-group list-group-flush">';
                 consumers.results.forEach(function (consumer) {
                     let note = consumer.note;
                     note.email_confirmed = consumer.email_confirmed;
@@ -258,7 +267,11 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                         extra_css);
                     notes.push(note);
                 });
-                aliases_matched_obj.html(aliases_matched_html);
+                aliases_matched_html += '</ul>';
+
+                // Show tooltip
+                field.attr('data-original-title', aliases_matched_html).tooltip('show');
+
                 consumers.results.forEach(function (consumer) {
                     let note = consumer.note;
                     let consumer_obj = $("#" + alias_prefix + "_" + consumer.id);
@@ -266,8 +279,6 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
                         displayNote(consumer.note, consumer.name, user_note_field, profile_pic_field)
                     });
                     consumer_obj.click(function () {
-                        field.val("");
-                        old_pattern = ""; // reset input field
                         var disp = null;
                         notes_display.forEach(function (d) {
                             // We compare the note ids

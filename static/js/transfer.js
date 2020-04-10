@@ -28,9 +28,9 @@ function reset() {
 }
 
 $(document).ready(function() {
-    autoCompleteNote("source_note", "source_alias_matched", "source_note_list", sources, sources_notes_display,
+    autoCompleteNote("source_note", "source_note_list", sources, sources_notes_display,
         "source_alias", "source_note", "user_note", "profile_pic");
-    autoCompleteNote("dest_note", "dest_alias_matched", "dest_note_list", dests, dests_notes_display,
+    autoCompleteNote("dest_note", "dest_note_list", dests, dests_notes_display,
         "dest_alias", "dest_note", "user_note", "profile_pic", function() {
             if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
                 let last = dests_notes_display[dests_notes_display.length - 1];

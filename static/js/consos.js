@@ -78,7 +78,7 @@ notes_display = [];
 buttons = [];
 
 // When the user searches an alias, we update the auto-completion
-autoCompleteNote("note", "alias_matched", "note_list", notes, notes_display,
+autoCompleteNote("note", "note_list", notes, notes_display,
     "alias", "note", "user_note", "profile_pic", function() {
         if (buttons.length > 0 && $("#single_conso").is(":checked")) {
             consumeAll();
