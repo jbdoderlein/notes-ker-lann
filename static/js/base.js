@@ -208,7 +208,8 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
         html: true,
         placement: 'bottom',
         title: 'Loading...',
-        trigger: 'manual'
+        trigger: 'manual',
+        container: field.parent()
     });
 
     // Clear search on click
