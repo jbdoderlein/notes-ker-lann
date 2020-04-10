@@ -32,7 +32,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+          crossorigin="anonymous">
 
     {# JQuery, Bootstrap and Turbolinks JavaScript #}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -61,8 +62,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
         .tooltip-inner {
             background-color: #fff;
             box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-            border: 1px solid #000;
+            border: 1px solid rgba(0,0,0,.250);
             color: #000;
+            margin: 0 .5rem .25rem .5rem;
+            padding: 0;
+        }
+        .bs-tooltip-bottom .arrow::before {
+            border-bottom-color: rgba(0,0,0,.250);
         }
     </style>
 

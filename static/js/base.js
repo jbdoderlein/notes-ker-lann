@@ -86,7 +86,7 @@ function getMatchedNotes(pattern, fun) {
  * Generate a <li> entry with a given id and text
  */
 function li(id, text, extra_css) {
-    return "<li class=\"list-group-item py-1 d-flex justify-content-between align-items-center " + extra_css + "\"" +
+    return "<li class=\"list-group-item p-1 text-truncate " + extra_css + "\"" +
         " id=\"" + id + "\">" + text + "</li>\n";
 }
 
