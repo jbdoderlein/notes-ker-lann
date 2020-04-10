@@ -162,7 +162,8 @@ function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_n
                 disp.quantity -= disp.id === d.id ? 1 : 0;
                 new_notes_display.push(disp);
                 html += li(note_prefix + "_" + disp.id, disp.name
-                    + "<span class=\"badge badge-dark badge-pill\">" + disp.quantity + "</span>");
+                    + "<span class=\"badge badge-dark badge-pill\">" + disp.quantity + "</span>",
+                    displayStyle(disp.note));
             }
         });
 
