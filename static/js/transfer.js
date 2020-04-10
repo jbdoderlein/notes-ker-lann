@@ -34,6 +34,9 @@ $(document).ready(function() {
         if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
             let arr = $("#type_credit").is(":checked") ? dests_notes_display : sources_notes_display;
 
+            if (arr.length === 0)
+                return;
+
             let last = arr[arr.length - 1];
             arr.length = 0;
             arr.push(last);
@@ -65,6 +68,68 @@ $(document).ready(function() {
     autoCompleteNote("dest_note", "dest_note_list", dests, dests_notes_display,
         "dest_alias", "dest_note", "user_note", "profile_pic", checkUniqueNote);
 
+    let source = $("#source_note");
+    let dest = $("#dest_note");
+
+    $("#type_gift").click(function() {
+        $("#special_transaction_div").addClass('d-none');
+        source.attr('disabled', true);
+        source.val(username);
+        source.tooltip('hide');
+        $("#source_note_list").addClass('d-none');
+        dest.attr('disabled', false);
+        $("#dest_note_list").removeClass('d-none');
+    });
+
+    $("#type_transfer").click(function() {
+        $("#special_transaction_div").addClass('d-none');
+        source.attr('disabled', false);
+        $("#source_note_list").removeClass('d-none');
+        dest.attr('disabled', false);
+        $("#dest_note_list").removeClass('d-none');
+    });
+
+    $("#type_credit").click(function() {
+        $("#special_transaction_div").removeClass('d-none');
+        $("#source_note_list").addClass('d-none');
+        $("#dest_note_list").removeClass('d-none');
+        source.attr('disabled', true);
+        source.val($("#credit_type option:selected").text());
+        source.tooltip('hide');
+        dest.attr('disabled', false);
+        dest.val('');
+        dest.tooltip('hide');
+
+        if (dests_notes_display.length > 1) {
+            $("#dest_note_list").html('');
+            dests_notes_display.length = 0;
+        }
+    });
+
+    $("#type_debit").click(function() {
+        $("#special_transaction_div").removeClass('d-none');
+        $("#source_note_list").removeClass('d-none');
+        $("#dest_note_list").addClass('d-none');
+        source.attr('disabled', false);
+        source.val('');
+        source.tooltip('hide');
+        dest.attr('disabled', true);
+        dest.val($("#credit_type option:selected").text());
+        dest.tooltip('hide');
+
+        if (sources_notes_display.length > 1) {
+            $("#source_note_list").html('');
+            sources_notes_display.length = 0;
+        }
+    });
+
+        $("#credit_type").change(function() {
+            let type = $("#credit_type option:selected").text();
+            if ($("#type_credit").is(":checked"))
+                source.val(type);
+            else
+                dest.val(type);
+        });
 
     // Ensure we begin in gift mode. Removing these lines may cause problems when reloading.
     let type_gift = $("#type_gift"); // Default mode

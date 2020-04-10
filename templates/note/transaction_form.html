@@ -160,57 +160,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         TRANSFER_POLYMORPHIC_CTYPE = {{ polymorphic_ctype }};
         SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
         user_id = {{ user.note.pk }};
-
-        source = $("#source_note");
-        dest = $("#dest_note");
-
-        $("#type_gift").click(function() {
-            $("#special_transaction_div").addClass('d-none');
-            source.attr('disabled', true);
-            source.val("{{ user.username }}");
-            source.tooltip('hide');
-            $("#source_note_list").addClass('d-none');
-            dest.attr('disabled', false);
-            $("#dest_note_list").removeClass('d-none');
-        });
-
-        $("#type_transfer").click(function() {
-            $("#special_transaction_div").addClass('d-none');
-            source.attr('disabled', false);
-            $("#source_note_list").removeClass('d-none');
-            dest.attr('disabled', false);
-            $("#dest_note_list").removeClass('d-none');
-        });
-
-        $("#type_credit").click(function() {
-            $("#special_transaction_div").removeClass('d-none');
-            $("#source_note_list").addClass('d-none');
-            $("#dest_note_list").removeClass('d-none');
-            source.attr('disabled', true);
-            source.val($("#credit_type option:selected").text());
-            source.tooltip('hide');
-            dest.attr('disabled', false);
-            dest.val('');
-        });
-
-        $("#type_debit").click(function() {
-            $("#special_transaction_div").removeClass('d-none');
-            $("#source_note_list").removeClass('d-none');
-            $("#dest_note_list").addClass('d-none');
-            source.attr('disabled', false);
-            source.val('');
-            dest.attr('disabled', true);
-            dest.val($("#credit_type option:selected").text());
-            dest.tooltip('hide');
-        });
-
-        $("#credit_type").change(function() {
-            let type = $("#credit_type option:selected").text();
-            if ($("#type_credit").is(":checked"))
-                source.val(type);
-            else
-                dest.val(type);
-        });
+        username = "{{ user.username }}";
     </script>
     <script src="/static/js/transfer.js"></script>
 {% endblock %}
