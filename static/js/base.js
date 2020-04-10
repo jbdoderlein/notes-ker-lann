@@ -126,7 +126,7 @@ function displayNote(note, alias, user_note_field = null, profile_pic_field = nu
     if (user_note_field !== null) {
         $("#" + user_note_field).removeAttr('class');
         $("#" + user_note_field).addClass(displayStyle(note));
-        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (":\n" + pretty_money(note.balance))));
+        $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" :\n" + pretty_money(note.balance))));
         if (profile_pic_field != null) {
             $("#" + profile_pic_field).attr('src', img);
             $("#" + profile_pic_field).click(function () {
@@ -311,7 +311,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                                 disp.name
                                 + "<span class=\"badge badge-dark badge-pill\">"
                                 + disp.quantity + "</span>",
-                                displayStyle(disp.note.balance));
+                                displayStyle(disp.note));
                         });
 
                         // Emitters are displayed

@@ -26,36 +26,44 @@ function reset() {
 }
 
 $(document).ready(function() {
-    autoCompleteNote("source_note", "source_note_list", sources, sources_notes_display,
-        "source_alias", "source_note", "user_note", "profile_pic");
-    autoCompleteNote("dest_note", "dest_note_list", dests, dests_notes_display,
-        "dest_alias", "dest_note", "user_note", "profile_pic", function() {
-            if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
-                let last = dests_notes_display[dests_notes_display.length - 1];
-                dests_notes_display.length = 0;
-                dests_notes_display.push(last);
+    /**
+     * If we are in credit/debit mode, check that only one note is entered.
+     * More over, get first name and last name to autocomplete fields.
+     */
+    function checkUniqueNote() {
+        if ($("#type_credit").is(":checked") || $("#type_debit").is(":checked")) {
+            let arr = $("#type_credit").is(":checked") ? dests_notes_display : sources_notes_display;
 
-                last.quantity = 1;
+            let last = arr[arr.length - 1];
+            arr.length = 0;
+            arr.push(last);
 
-                if (!last.note.user) {
-                    $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
-                        last.note.user = note.user;
-                        $.getJSON("/api/user/" + last.note.user + "/", function(user) {
-                            $("#last_name").val(user.last_name);
-                            $("#first_name").val(user.first_name);
-                        });
-                    });
-                }
-                else {
+            last.quantity = 1;
+
+            if (!last.note.user) {
+                $.getJSON("/api/note/note/" + last.note.id + "/?format=json", function(note) {
+                    last.note.user = note.user;
                     $.getJSON("/api/user/" + last.note.user + "/", function(user) {
                         $("#last_name").val(user.last_name);
                         $("#first_name").val(user.first_name);
                     });
-                }
+                });
             }
+            else {
+                $.getJSON("/api/user/" + last.note.user + "/", function(user) {
+                    $("#last_name").val(user.last_name);
+                    $("#first_name").val(user.first_name);
+                });
+            }
+        }
 
-            return true;
-       });
+        return true;
+   }
+
+    autoCompleteNote("source_note", "source_note_list", sources, sources_notes_display,
+        "source_alias", "source_note", "user_note", "profile_pic", checkUniqueNote);
+    autoCompleteNote("dest_note", "dest_note_list", dests, dests_notes_display,
+        "dest_alias", "dest_note", "user_note", "profile_pic", checkUniqueNote);
 
 
     // Ensure we begin in gift mode. Removing these lines may cause problems when reloading.
@@ -182,10 +190,11 @@ $("#btn_transfer").click(function() {
         });
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
         let special_note = $("#credit_type").val();
-        let user_note = dests_notes_display[0].note.id;
+        let user_note;
         let given_reason = $("#reason").val();
         let source, dest, reason;
         if ($("#type_credit").is(':checked')) {
+            user_note = dests_notes_display[0].note.id;
             source = special_note;
             dest = user_note;
             reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
@@ -193,6 +202,7 @@ $("#btn_transfer").click(function() {
                 reason += " (" + given_reason + ")";
         }
         else {
+            user_note = sources_notes_display[0].note.id;
             source = user_note;
             dest = special_note;
             reason = "Retrait " + $("#credit_type option:selected").text().toLowerCase();

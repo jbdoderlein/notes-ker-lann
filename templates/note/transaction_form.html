@@ -38,8 +38,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
     </div>
 
     <div class="row">
-       
-        <div class="col-xl-4" id="note_infos_div">
+        <div class="col-md-3" id="note_infos_div">
             <div class="card border-success shadow mb-4">
                 <img src="/media/pic/default.png"
                     id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block">
@@ -48,7 +47,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-        <div class="col-md-4" id="emitters_div" style="display: none;">
+
+        <div class="col-md-3" id="emitters_div">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
@@ -58,22 +58,53 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 <ul class="list-group list-group-flush" id="source_note_list">
                 </ul>
                 <div class="card-body">
-                    <input class="form-control mx-auto d-block" type="text" id="source_note" />
+                    <input class="form-control mx-auto d-block" type="text" id="source_note" placeholder="{% trans "Name or alias..." %}" />
                 </div>
             </div>
         </div>
 
-        {% if "note.notespecial"|not_empty_model_list %}
-            <div class="col-md-4" id="external_div" style="display: none;">
-                <div class="card border-success shadow mb-4">
-                    <div class="card-header">
-                        <p class="card-text font-weight-bold">
-                            {% trans "External payment" %}
-                        </p>
-                    </div>
-                    <ul class="list-group list-group-flush" id="source_note_list">
+        <div class="col-md-3" id="dests_div">
+            <div class="card border-info shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold" id="dest_title">
+                        {% trans "Select receivers" %}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="dest_note_list">
+                </ul>
+                <div class="card-body">
+                    <input class="form-control mx-auto d-block" type="text" id="dest_note" placeholder="{% trans "Name or alias..." %}" />
+                    <ul class="list-group list-group-flush" id="dest_alias_matched">
                     </ul>
-                    <div class="card-body">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" id="external_div">
+            <div class="card border-warning shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        {% trans "Action" %}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="amount">{% trans "Amount" %} :</label>
+                            {% include "note/amount_input.html" with widget=amount_widget %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="reason">{% trans "Reason" %} :</label>
+                            <input class="form-control mx-auto d-block" type="text" id="reason" required />
+                        </div>
+                    </div>
+
+                    <div class="d-none" id="special_transaction_div">
                         <div class="form-row">
                             <div class="col-md-12">
                                 <label for="credit_type">{% trans "Transfer type" %} :</label>
@@ -103,42 +134,14 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <button id="btn_transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        {% endif %}
-
-        <div class="col-md-8" id="dests_div">
-            <div class="card border-info shadow mb-4">
-                <div class="card-header">
-                    <p class="card-text font-weight-bold" id="dest_title">
-                        {% trans "Select receivers" %}
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush" id="dest_note_list">
-                </ul>
-                <div class="card-body">
-                    <input class="form-control mx-auto d-block" type="text" id="dest_note" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="amount">{% trans "Amount" %} :</label>
-            {% include "note/amount_input.html" with widget=amount_widget %}
-        </div>
-
-        <div class="form-group col-md-6">
-            <label for="reason">{% trans "Reason" %} :</label>
-            <input class="form-control mx-auto d-block" type="text" id="reason" required />
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="col-md-12">
-            <button id="btn_transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
         </div>
     </div>
 
@@ -158,32 +161,55 @@ SPDX-License-Identifier: GPL-2.0-or-later
         SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
         user_id = {{ user.note.pk }};
 
+        source = $("#source_note");
+        dest = $("#dest_note");
+
         $("#type_gift").click(function() {
-            $("#emitters_div").hide();
-            $("#external_div").hide();
-            $("#dests_div").attr('class', 'col-md-8');
-            $("#dest_title").text("{% trans "Select receivers" %}");
+            $("#special_transaction_div").addClass('d-none');
+            source.attr('disabled', true);
+            source.val("{{ user.username }}");
+            source.tooltip('hide');
+            $("#source_note_list").addClass('d-none');
+            dest.attr('disabled', false);
+            $("#dest_note_list").removeClass('d-none');
         });
 
         $("#type_transfer").click(function() {
-            $("#external_div").hide();
-            $("#emitters_div").show();
-            $("#dests_div").attr('class', 'col-md-4');
-            $("#dest_title").text("{% trans "Select receivers" %}");
+            $("#special_transaction_div").addClass('d-none');
+            source.attr('disabled', false);
+            $("#source_note_list").removeClass('d-none');
+            dest.attr('disabled', false);
+            $("#dest_note_list").removeClass('d-none');
         });
 
         $("#type_credit").click(function() {
-            $("#emitters_div").hide();
-            $("#external_div").show();
-            $("#dests_div").attr('class', 'col-md-4');
-            $("#dest_title").text("{% trans "Credit note" %}");
+            $("#special_transaction_div").removeClass('d-none');
+            $("#source_note_list").addClass('d-none');
+            $("#dest_note_list").removeClass('d-none');
+            source.attr('disabled', true);
+            source.val($("#credit_type option:selected").text());
+            source.tooltip('hide');
+            dest.attr('disabled', false);
+            dest.val('');
         });
 
         $("#type_debit").click(function() {
-            $("#emitters_div").hide();
-            $("#external_div").show();
-            $("#dests_div").attr('class', 'col-md-4');
-            $("#dest_title").text("{% trans "Debit note" %}");
+            $("#special_transaction_div").removeClass('d-none');
+            $("#source_note_list").removeClass('d-none');
+            $("#dest_note_list").addClass('d-none');
+            source.attr('disabled', false);
+            source.val('');
+            dest.attr('disabled', true);
+            dest.val($("#credit_type option:selected").text());
+            dest.tooltip('hide');
+        });
+
+        $("#credit_type").change(function() {
+            let type = $("#credit_type option:selected").text();
+            if ($("#type_credit").is(":checked"))
+                source.val(type);
+            else
+                dest.val(type);
         });
     </script>
     <script src="/static/js/transfer.js"></script>
