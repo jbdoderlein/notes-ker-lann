@@ -223,7 +223,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
     // When the user type "Enter", the first alias is clicked
     field.keypress(function (event) {
         if (event.originalEvent.charCode === 13 && notes.length > 0) {
-            let li_obj = $(".tooltip-inner ul li").first();
+            let li_obj = field.parent().find("ul li").first();
             displayNote(notes[0], li_obj.text(), user_note_field, profile_pic_field);
             li_obj.trigger("click");
         }
