@@ -123,6 +123,7 @@ function displayNote(note, alias, user_note_field=null, profile_pic_field=null) 
         alias += " (aka. " + note.name + ")";
     if (user_note_field !== null)
 
+        $("#" + user_note_field).removeAttr('class');
         $("#" + user_note_field).addClass(displayStyle(note.balance));
         $("#" + user_note_field).text(alias + (note.balance == null ? "" : (":\n" + pretty_money(note.balance))));
     if (profile_pic_field != null){
@@ -321,10 +322,11 @@ function autoCompleteNote(field_id, alias_matched_id, note_list_id, notes, notes
 
 // When a validate button is clicked, we switch the validation status
 function de_validate(id, validated) {
+    let invalidity_reason = $("#invalidity_reason_" + id).val();
     $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
 
     // Perform a PATCH request to the API in order to update the transaction
-    // If the user has insuffisent rights, an error message will appear
+    // If the user has insufficient rights, an error message will appear
     $.ajax({
         "url": "/api/note/transaction/transaction/" + id + "/",
         type: "PATCH",
@@ -333,9 +335,9 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            resourcetype: "RecurrentTransaction",
-            valid: !validated,
-            invalidity_reason: invalidity_reason,
+            "resourcetype": "RecurrentTransaction",
+            "valid": !validated,
+            "invalidity_reason": invalidity_reason,
         },
         success: function () {
             // Refresh jQuery objects
