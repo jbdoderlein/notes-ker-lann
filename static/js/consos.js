@@ -26,7 +26,7 @@ $(document).ready(function() {
     // Switching in double consumptions mode should update the layout
     let double_conso_obj = $("#double_conso");
     double_conso_obj.click(function() {
-        $("#consos_list_div").show();
+        $("#consos_list_div").attr('class', 'col-xl-5');
         $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
         $("#note_infos_div").attr('class', 'col-xl-3');
         $("#user_select_div").attr('class', 'col-xl-4');
@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     let single_conso_obj = $("#single_conso");
     single_conso_obj.click(function() {
-        $("#consos_list_div").hide();
+        $("#consos_list_div").attr('class', 'col-xl-5 d-none');
         $("#infos_div").attr('class', 'col-sm-5 col-md-4');
         $("#note_infos_div").attr('class', 'col-xl-5');
         $("#user_select_div").attr('class', 'col-xl-7');
@@ -73,8 +73,6 @@ $(document).ready(function() {
     single_conso_obj.prop('checked', 'true');
     double_conso_obj.removeAttr('checked');
     $("label[for='double_conso']").attr('class', 'btn btn-sm btn-outline-primary');
-
-    $("#consos_list_div").hide();
 
     $("#consume_all").click(consumeAll);
 });

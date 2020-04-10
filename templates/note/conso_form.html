@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="col-xl-5" id="consos_list_div">
+                <div class="col-xl-5 d-none" id="consos_list_div">
                     <div class="card border-info shadow mb-4">
                         <div class="card-header">
                             <p class="card-text font-weight-bold">
@@ -150,7 +150,7 @@
 {% endblock %}
 
 {% block extrajavascript %}
-    <script type="text/javascript" src="/static/js/consos.js"></script>
+    <script type="text/javascript" src="{% static "js/consos.js" %}"></script>
     <script type="text/javascript">
         {% for button in most_used %}
             {% if button.display %}
