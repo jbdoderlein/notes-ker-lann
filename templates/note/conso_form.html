@@ -28,7 +28,7 @@
                                 {% trans "Consum" %}
                             </p>
                         </div>
-                        <div class="card-body px-0 py-0" style="min-height:125px;">
+                        <div class="card-body p-0" style="min-height:125px;">
                             <ul class="list-group list-group-flush" id="note_list">
                             </ul>
                         </div>
@@ -48,11 +48,15 @@
                                 {% trans "Select consumptions" %}
                             </p>
                         </div>
-                        <ul class="list-group list-group-flush" id="consos_list">
-                        </ul>
-                        <button id="consume_all" class="form-control btn btn-primary">
-                            {% trans "Consume!" %}
-                        </button>
+                        <div class="card-body p-0" style="min-height:125px;">
+                            <ul class="list-group list-group-flush" id="consos_list">
+                            </ul>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a id="consume_all" href="#" class="btn btn-primary">
+                                {% trans "Consume!" %}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
