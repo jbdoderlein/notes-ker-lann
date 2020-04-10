@@ -146,7 +146,6 @@ function reset() {
     notes.length = 0;
     buttons.length = 0;
     $("#note_list").html("");
-    $("#alias_matched").html("");
     $("#consos_list").html("");
     $("#user_note").text("");
     $("#profile_pic").attr("src", "/media/pic/default.png");

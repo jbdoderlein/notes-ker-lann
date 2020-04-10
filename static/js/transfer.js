@@ -14,8 +14,6 @@ function reset() {
     dests.length = 0;
     $("#source_note_list").html("");
     $("#dest_note_list").html("");
-    $("#source_alias_matched").html("");
-    $("#dest_alias_matched").html("");
     $("#amount").val("");
     $("#reason").val("");
     $("#last_name").val("");
