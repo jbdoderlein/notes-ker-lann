@@ -317,6 +317,9 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                         // Emitters are displayed
                         note_list.html(html);
 
+                        // Update tooltip position
+                        field.tooltip('update');
+
                         notes_display.forEach(function (disp) {
                             let line_obj = $("#" + note_prefix + "_" + disp.id);
                             // Hover an emitter display also the profile picture
