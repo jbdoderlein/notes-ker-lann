@@ -11,31 +11,26 @@
     <div class="card-body" id="profile_infos">
         <dl class="row">
             <dt class="col-xl-6">{% trans 'name'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ club.name}}</dd>
-
-            {% if club.parent_club %}
-                <dt class="col-xl-6"><a href="{% url 'member:club_detail' club.parent_club.pk %}">{% trans 'Club Parent'|capfirst %}</a></dt>
-                <dd class="col-xl-6"> {{ club.parent_club.name }}</dd>
-            {% endif %}
+            <dd class="col-xl-6">{{ club.name }}</dd>
 
             {% if club.require_memberships %}
-                <dt class="col-xl-6">{% trans 'membership start'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_start }}</dd>
+                <dt class="col-xl-6">{% trans 'date start'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.date_start }}</dd>
 
-                <dt class="col-xl-6">{% trans 'membership end'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_end }}</dd>
+                <dt class="col-xl-6">{% trans 'date end'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.date_end }}</dd>
 
-                <dt class="col-xl-6">{% trans 'membership duration'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_duration }} {% trans "days" %}</dd>
+                <dt class="col-xl-6">{% trans 'year'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.year }}</dd>
 
                 {% if club.membership_fee_paid == club.membership_fee_unpaid %}
                     <dt class="col-xl-6">{% trans 'membership fee'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ club.membership_fee_paid|pretty_money }}</dd>
                 {% else %}
-                    <dt class="col-xl-6">{% trans 'membership fee (paid students)'|capfirst %}</dt>
+                    <dt class="col-xl-6">{% trans 'fee (paid students)'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ club.membership_fee_paid|pretty_money }}</dd>
 
-                    <dt class="col-xl-6">{% trans 'membership fee (unpaid students)'|capfirst %}</dt>
+                    <dt class="col-xl-6">{% trans 'fee (unpaid students)'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ club.membership_fee_unpaid|pretty_money }}</dd>
                 {% endif %}
             {% endif %}

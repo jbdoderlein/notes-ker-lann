@@ -21,5 +21,5 @@ class WEITable(tables.Table):
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
-            'data-href': lambda record: reverse_lazy('member:club_detail', args=(record.pk,))
+            'data-href': lambda record: reverse_lazy('wei:wei_detail', args=(record.pk,))
         }

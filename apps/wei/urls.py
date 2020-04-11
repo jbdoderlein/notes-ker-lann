@@ -3,10 +3,11 @@
 
 from django.urls import path
 
-from .views import WEIListView
+from .views import WEIListView, WEIDetailView
 
 
 app_name = 'wei'
 urlpatterns = [
     path('list/', WEIListView.as_view(), name="wei_list"),
+    path('detail/<int:pk>/', WEIDetailView.as_view(), name="wei_detail"),
 ]

@@ -8,4 +8,4 @@ def register_wei_urls(router, path):
     """
     Configure router for Member REST API.
     """
-    router.register(path + '/club', WEIClubViewSet)
+    router.register(path + '/club/', WEIClubViewSet)
