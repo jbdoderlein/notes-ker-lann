@@ -1,21 +1,30 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 import json
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from member.models import Role, Club, Membership
 from note.models import NoteSpecial
 
 
 class WEIClub(Club):
     """
+    The WEI is a club. Register to the WEI is equivalent than be member of the club.
     """
     year = models.PositiveIntegerField(
         unique=True,
         verbose_name=_("year"),
+    )
+
+    date_start = models.DateField(
+        verbose_name=_("date start"),
+    )
+
+    date_end = models.DateField(
+        verbose_name=_("date end"),
     )
 
     def update_membership_dates(self):
@@ -84,6 +93,8 @@ class WEIRole(Role):
     bus = models.ForeignKey(
         Bus,
         on_delete=models.CASCADE,
+        null=True,
+        default=None,
         related_name="roles",
         verbose_name=_("bus"),
     )

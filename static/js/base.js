@@ -312,7 +312,7 @@ function in_validate(id, validated) {
     else
         invalidity_reason = null;
 
-    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
+    $("#validate_" + id).html("<i class='fa fa-spinner'></i>");
 
     // Perform a PATCH request to the API in order to update the transaction
     // If the user has insuffisent rights, an error message will appear
