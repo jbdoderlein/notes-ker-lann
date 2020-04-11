@@ -171,6 +171,7 @@ class Club(models.Model):
                                                   self.membership_start.month, self.membership_start.day)
             self.membership_end = datetime.date(self.membership_end.year + 1,
                                                 self.membership_end.month, self.membership_end.day)
+            self._force_save = True
             self.save(force_update=True)
 
     def save(self, force_insert=False, force_update=False, using=None,

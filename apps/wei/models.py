@@ -1,58 +1,28 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+import json
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from member.models import Role, Club, Membership
 from note.models import NoteSpecial
 
 
-class WEI(models.Model):
+class WEIClub(Club):
     """
-    Store WEI information
     """
-    name = models.CharField(
-        max_length=255,
-        unique=True,
-        verbose_name=_("name"),
-    )
-
     year = models.PositiveIntegerField(
         unique=True,
         verbose_name=_("year"),
     )
 
-    start = models.DateField(
-        verbose_name=_("start date"),
-    )
-
-    end = models.DateField(
-        verbose_name=_("end date"),
-    )
-
-    price_paid = models.PositiveIntegerField(
-        verbose_name=_("Price for paid students"),
-    )
-
-    price_unpaid = models.PositiveIntegerField(
-        verbose_name=_("Price for unpaid students"),
-    )
-
-    email = models.EmailField(
-        verbose_name=_("contact email"),
-    )
-
-    registrations_open = models.BooleanField(
-        verbose_name=_("registrations open"),
-    )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("WEI")
-        verbose_name_plural = _("WEI")
+    def update_membership_dates(self):
+        """
+        We can't join the WEI next years.
+        """
+        return
 
 
 class Bus(models.Model):
@@ -60,7 +30,7 @@ class Bus(models.Model):
     The best bus for the best WEI
     """
     wei = models.ForeignKey(
-        WEI,
+        WEIClub,
         on_delete=models.PROTECT,
         related_name="buses",
         verbose_name=_("WEI"),
@@ -107,17 +77,19 @@ class BusTeam(models.Model):
         verbose_name_plural = _("Bus teams")
 
 
-class WEIRole(models.Model):
+class WEIRole(Role):
     """
     A Role for the WEI can be bus chief, team chief, free electron, ...
     """
-    name = models.CharField(
-        max_length=255,
-        unique=True,
+    bus = models.ForeignKey(
+        Bus,
+        on_delete=models.CASCADE,
+        related_name="roles",
+        verbose_name=_("bus"),
     )
 
 
-class WEIUser(models.Model):
+class WEIRegistration(models.Model):
     """
     Store personal data that can be useful for the WEI.
     """
@@ -130,16 +102,22 @@ class WEIUser(models.Model):
     )
 
     wei = models.ForeignKey(
-        WEI,
+        WEIClub,
         on_delete=models.PROTECT,
         related_name="users",
         verbose_name=_("WEI"),
     )
 
-    role = models.ForeignKey(
-        WEIRole,
+    payment_method = models.ForeignKey(
+        NoteSpecial,
         on_delete=models.PROTECT,
-        verbose_name=_("role"),
+        null=True,  # null = no credit, paid with note
+        related_name="+",
+        verbose_name=_("payment method"),
+    )
+
+    soge_credit = models.BooleanField(
+        verbose_name=_("Credit from Société générale"),
     )
 
     birth_date = models.DateField(
@@ -170,69 +148,45 @@ class WEIUser(models.Model):
         verbose_name=_("emergency contact phone"),
     )
 
-    payment_method = models.ForeignKey(
-        NoteSpecial,
-        on_delete=models.PROTECT,
-        null=True,  # null = no credit, paid with note
-        related_name="+",
-        verbose_name=_("payment method"),
-    )
-
-    soge_credit = models.BooleanField(
-        verbose_name=_("Credit from Société générale"),
-    )
-
-    ml_events_registation = models.BooleanField(
+    ml_events_registration = models.BooleanField(
         verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
     )
 
-    ml_sport_registation = models.BooleanField(
+    ml_sport_registration = models.BooleanField(
         verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
     )
 
-    ml_art_registation = models.BooleanField(
+    ml_art_registration = models.BooleanField(
         verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
     )
 
-    team = models.ForeignKey(
-        BusTeam,
-        on_delete=models.PROTECT,
-        related_name="users",
-        null=True,
-        blank=True,
-        verbose_name=_("team"),
+    information_json = models.TextField(
+        verbose_name=_("registration information"),
+        help_text=_("Information about the registration (buses for old members, survey fot the new members), "
+                    "encoded in JSON"),
     )
 
-    bus_choice1 = models.ForeignKey(
-        Bus,
-        on_delete=models.PROTECT,
-        related_name="+",
-        verbose_name=_("bus choice 1"),
-    )
+    @property
+    def information(self):
+        """
+        The information about the registration (the survey for the new members, the bus for the older members, ...)
+        are stored in a dictionary that can evolve following the years. The dictionary is stored as a JSON string.
+        """
+        return json.loads(self.information_json)
 
-    bus_choice2 = models.ForeignKey(
-        Bus,
-        on_delete=models.PROTECT,
-        related_name="+",
-        null=True,
-        blank=True,
-        verbose_name=_("bus choice 2"),
-    )
+    @information.setter
+    def information(self, information):
+        """
+        Store information as a JSON string
+        """
+        self.information_json = json.dumps(information)
 
-    bus_choice3 = models.ForeignKey(
-        Bus,
-        on_delete=models.PROTECT,
-        related_name="+",
-        null=True,
-        blank=True,
-        verbose_name=_("bus choice 3"),
-    )
-
-    asked_roles = models.ManyToManyField(
-        WEIRole,
-        related_name="+",
-        verbose_name=_("asked roles"),
-    )
+    @property
+    def is_1A(self):
+        """
+        We assume that a user is a new member if it not fully registered yet.
+        """
+        return not self.user.profile.registration_valid
 
     def __str__(self):
         return str(self.user)
@@ -241,3 +195,34 @@ class WEIUser(models.Model):
         unique_together = ('user', 'wei',)
         verbose_name = _("WEI User")
         verbose_name_plural = _("WEI Users")
+
+
+class WEIMembership(Membership):
+    bus = models.ForeignKey(
+        Bus,
+        on_delete=models.PROTECT,
+        null=True,
+        default=None,
+        verbose_name=_("bus"),
+    )
+
+    team = models.ForeignKey(
+        BusTeam,
+        on_delete=models.PROTECT,
+        related_name="memberships",
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name=_("team"),
+    )
+
+    registration = models.OneToOneField(
+        WEIRegistration,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        default=None,
+        related_name="membership",
+        verbose_name=_("WEI registration"),
+    )
+
