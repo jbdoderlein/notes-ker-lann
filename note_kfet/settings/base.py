@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'permission',
     'registration',
     'treasury',
+    'wei',
 ]
 LOGIN_REDIRECT_URL = '/note/transfer/'
 

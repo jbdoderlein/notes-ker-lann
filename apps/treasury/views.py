@@ -203,9 +203,9 @@ class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["table"] = RemittanceTable(data=Remittance.objects
-                                       .filter(PermissionBackend.filter_queryset(self.request.user, Remittance, "view"))
-                                       .all())
+        context["table"] = RemittanceTable(
+            data=Remittance.objects.filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
         context["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
 
         return context
