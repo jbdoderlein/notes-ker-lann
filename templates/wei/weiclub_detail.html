@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block profile_content %}
-{% include "member/club_tables.html" %}
+{% include "wei/weiclub_tables.html" %}
 {% endblock %}
 
 {% block extrajavascript %}
     <script>
         function refreshHistory() {
-            $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
-            $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
+            $("#history_list").load("{% url 'wei:wei_detail' pk=object.pk %} #history_list");
+            $("#profile_infos").load("{% url 'wei:wei_detail' pk=object.pk %} #profile_infos");
         }
 
         window.history.replaceState({}, document.title, location.pathname);
