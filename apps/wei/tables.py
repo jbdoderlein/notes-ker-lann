@@ -37,7 +37,7 @@ class WEIRegistrationTable(tables.Table):
     )
 
     edit = tables.LinkColumn(
-        'wei:wei_detail',
+        'wei:wei_update_registration',
         args=[A('pk')],
         verbose_name=_("Edit"),
         text=_("Edit"),

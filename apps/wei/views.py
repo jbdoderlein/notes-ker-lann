@@ -136,3 +136,21 @@ class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_success_url(self):
         self.object.refresh_from_db()
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+
+
+class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update a registration for the WEI
+    """
+    model = WEIRegistration
+    form_class = WEIRegistrationForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        del form.fields["user"]
+        return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+
