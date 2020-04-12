@@ -123,12 +123,20 @@ class WEIRegistration(models.Model):
         NoteSpecial,
         on_delete=models.PROTECT,
         null=True,  # null = no credit, paid with note
+        blank=True,
+        default=None,
         related_name="+",
         verbose_name=_("payment method"),
     )
 
     soge_credit = models.BooleanField(
+        default=False,
         verbose_name=_("Credit from Société générale"),
+    )
+
+    caution_check = models.BooleanField(
+        default=False,
+        verbose_name=_("Caution check given")
     )
 
     birth_date = models.DateField(
@@ -160,18 +168,22 @@ class WEIRegistration(models.Model):
     )
 
     ml_events_registration = models.BooleanField(
+        default=False,
         verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
     )
 
     ml_sport_registration = models.BooleanField(
+        default=False,
         verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
     )
 
     ml_art_registration = models.BooleanField(
+        default=False,
         verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
     )
 
     information_json = models.TextField(
+        default="{}",
         verbose_name=_("registration information"),
         help_text=_("Information about the registration (buses for old members, survey fot the new members), "
                     "encoded in JSON"),

@@ -51,7 +51,7 @@
     </div>
     <div class="card-footer text-center">
         {% if can_add_members %}
-            <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' club_pk=club.pk %}"> {% trans "Register 2A+" %}</a>
+            <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_register' wei_pk=club.pk %}"> {% trans "Register 2A+" %}</a>
         {% endif %}
         {% if ".change_"|has_perm:club %}
             <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_update' pk=club.pk %}"> {% trans "Edit" %}</a>

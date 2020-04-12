@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django import forms
-from note_kfet.inputs import AmountInput, DatePickerInput
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete
 
-from .models import WEIClub
+from .models import WEIClub, WEIRegistration
 
 
 class WEIForm(forms.ModelForm):
@@ -18,4 +20,26 @@ class WEIForm(forms.ModelForm):
             "membership_end": DatePickerInput(),
             "date_start": DatePickerInput(),
             "date_end": DatePickerInput(),
+        }
+
+
+class WEIRegistrationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["payment_method"].empty_label = _("No credit, directly pay with note balance")
+
+    class Meta:
+        model = WEIRegistration
+        exclude = ('wei', 'information_json', )
+        widgets = {
+            "user": Autocomplete(
+                User,
+                attrs={
+                    'api_url': '/api/user/',
+                    'name_field': 'username',
+                    'placeholder': 'Nom ...',
+                },
+            ),
+            "birth_date": DatePickerInput(),
         }

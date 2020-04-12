@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from .views import WEIListView, WEICreateView, WEIDetailView, WEIUpdateView
+from .views import WEIListView, WEICreateView, WEIDetailView, WEIUpdateView, WEIRegisterView
 
 
 app_name = 'wei'
@@ -12,4 +12,5 @@ urlpatterns = [
     path('create/', WEICreateView.as_view(), name="wei_create"),
     path('detail/<int:pk>/', WEIDetailView.as_view(), name="wei_detail"),
     path('update/<int:pk>/', WEIUpdateView.as_view(), name="wei_update"),
+    path('register/<int:wei_pk>/', WEIRegisterView.as_view(), name="wei_register"),
 ]

@@ -16,8 +16,8 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .models import WEIClub
-from .forms import WEIForm
+from .models import WEIClub, WEIRegistration
+from .forms import WEIForm, WEIRegistrationForm
 from .tables import WEITable
 
 
@@ -46,7 +46,6 @@ class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_success_url(self):
         self.object.refresh_from_db()
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
-
 
 
 class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
@@ -100,4 +99,25 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     form_class = WEIForm
 
     def get_success_url(self):
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
+
+
+class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Register to the WEI
+    """
+    model = WEIRegistration
+    form_class = WEIRegistrationForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["user"].initial = self.request.user
+        return form
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        return ret
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
