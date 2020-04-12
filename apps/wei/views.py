@@ -16,9 +16,9 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .models import WEIClub, WEIRegistration
+from .models import WEIClub, WEIRegistration, WEIMembership
 from .forms import WEIForm, WEIRegistrationForm
-from .tables import WEITable
+from .tables import WEITable, WEIRegistrationTable
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -67,14 +67,29 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
         context['history_list'] = history_table
-        club_member = Membership.objects.filter(
+
+        club_member = WEIMembership.objects.filter(
             club=club,
             date_end__gte=datetime.today(),
-        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
-
+        ).filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
         membership_table = MembershipTable(data=club_member, prefix="membership-")
         membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['member_list'] = membership_table
+
+        WEIRegistrationTable.base_columns["delete"].visible = False
+        WEIRegistrationTable.base_columns["validate"].visible = False
+        all_registrations = WEIRegistration.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view"))
+        all_registrations_table = WEIRegistrationTable(data=all_registrations, prefix="all-registration-")
+        all_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        context['all_registrations'] = all_registrations_table
+
+        WEIRegistrationTable.base_columns["delete"].visible = True
+        WEIRegistrationTable.base_columns["validate"].visible = True
+        pre_registrations = all_registrations.filter(membership=None)
+        pre_registrations_table = WEIRegistrationTable(data=pre_registrations, prefix="pre-registration-")
+        pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        context['pre_registrations'] = pre_registrations_table
 
         # Check if the user has the right to create a membership, to display the button.
         empty_membership = Membership(
@@ -115,9 +130,9 @@ class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         return form
 
     def form_valid(self, form):
-        ret = super().form_valid(form)
-        return ret
+        form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        return super().form_valid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()
-        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})

@@ -154,6 +154,8 @@ class WEIRegistration(models.Model):
     )
 
     health_issues = models.TextField(
+        blank=True,
+        default="",
         verbose_name=_("health issues"),
     )
 

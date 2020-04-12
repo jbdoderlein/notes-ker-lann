@@ -57,6 +57,8 @@
     </div>
 </div>
 
+<hr>
+
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
@@ -79,6 +81,36 @@
         </div>
         <div id="history_list">
             {% render_table history_list %}
+        </div>
+    </div>
+
+    <hr>
+{% endif %}
+
+{% if pre_registrations.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="historyListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-user-plus"></i> {% trans "Unvalidated registrations" %}
+            </a>
+        </div>
+        <div id="history_list">
+            {% render_table pre_registrations %}
+        </div>
+    </div>
+
+    <hr>
+{% endif %}
+
+{% if all_registrations.data or True %}
+    <div class="card">
+        <div class="card-header position-relative" id="historyListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-user-plus"></i> {% trans "All registrations" %}
+            </a>
+        </div>
+        <div id="history_list">
+            {% render_table all_registrations %}
         </div>
     </div>
 {% endif %}
