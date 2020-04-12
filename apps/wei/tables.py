@@ -4,7 +4,7 @@
 import django_tables2 as tables
 from django.urls import reverse_lazy
 
-from wei.models import WEIClub
+from .models import WEIClub
 
 
 class WEITable(tables.Table):

@@ -8,4 +8,3 @@ from django.utils.translation import gettext_lazy as _
 class WeiConfig(AppConfig):
     name = 'wei'
     verbose_name = _('WEI')
-

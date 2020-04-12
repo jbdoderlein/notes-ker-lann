@@ -6,17 +6,18 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.views.generic import DetailView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView
 from django_tables2 import SingleTableView
-
 from member.models import Membership
 from member.tables import MembershipTable
 from note.models import Transaction
 from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
-from wei.models import WEIClub
 
+from .models import WEIClub
+from .forms import WEIForm
 from .tables import WEITable
 
 
@@ -68,3 +69,15 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             .has_perm(self.request.user, "member.add_membership", empty_membership)
 
         return context
+
+
+class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update the information of the WEI.
+    """
+    model = WEIClub
+    context_object_name = "club"
+    form_class = WEIForm
+
+    def get_success_url(self):
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})

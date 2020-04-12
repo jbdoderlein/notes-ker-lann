@@ -193,7 +193,7 @@ class WEIRegistration(models.Model):
         self.information_json = json.dumps(information)
 
     @property
-    def is_1A(self):
+    def is_first_year(self):
         """
         We assume that a user is a new member if it not fully registered yet.
         """
@@ -236,4 +236,3 @@ class WEIMembership(Membership):
         related_name="membership",
         verbose_name=_("WEI registration"),
     )
-
