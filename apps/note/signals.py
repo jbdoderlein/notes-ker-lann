@@ -17,7 +17,7 @@ def save_user_note(instance, raw, **_kwargs):
         instance.note.save()
 
 
-def save_club_note(instance, created, raw, **_kwargs):
+def save_club_note(instance, raw, **_kwargs):
     """
     Hook to create and save a note when a club is updated
     """
@@ -25,7 +25,6 @@ def save_club_note(instance, created, raw, **_kwargs):
         # When provisionning data, do not try to autocreate
         return
 
-    if created:
-        from .models import NoteClub
-        NoteClub.objects.create(club=instance)
+    from .models import NoteClub
+    NoteClub.objects.get_or_create(club=instance)
     instance.note.save()

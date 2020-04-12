@@ -7,11 +7,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, CreateView
 from django_tables2 import SingleTableView
-from member.models import Membership
+from member.models import Membership, Club
 from member.tables import MembershipTable
-from note.models import Transaction
+from note.models import Transaction, NoteClub
 from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -27,6 +27,26 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     model = WEIClub
     table_class = WEITable
+
+
+class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Create WEI
+    """
+    model = WEIClub
+    form_class = WEIForm
+
+    def form_valid(self, form):
+        form.instance.requires_membership = True
+        form.instance.parent_club = Club.objects.get(name="Kfet")
+        ret = super().form_valid(form)
+        NoteClub.objects.create(club=form.instance)
+        return ret
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
+
 
 
 class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
