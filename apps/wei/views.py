@@ -16,9 +16,9 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .models import WEIClub, WEIRegistration, WEIMembership
-from .forms import WEIForm, WEIRegistrationForm
-from .tables import WEITable, WEIRegistrationTable
+from .models import WEIClub, WEIRegistration, WEIMembership, Bus
+from .forms import WEIForm, WEIRegistrationForm, BusForm
+from .tables import WEITable, WEIRegistrationTable, BusTable
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -91,6 +91,11 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['pre_registrations'] = pre_registrations_table
 
+        buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view"))\
+            .filter(wei=self.object)
+        bus_table = BusTable(data=buses, prefix="bus-")
+        context['buses'] = bus_table
+
         # Check if the user has the right to create a membership, to display the button.
         empty_membership = Membership(
             club=club,
@@ -115,6 +120,28 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
+
+
+class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Create Bus
+    """
+    model = Bus
+    form_class = BusForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["wei"].initial = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
 
 
 class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):

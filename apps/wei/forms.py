@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete
 
-from .models import WEIClub, WEIRegistration
+from .models import WEIClub, WEIRegistration, Bus
 
 
 class WEIForm(forms.ModelForm):
@@ -42,4 +42,34 @@ class WEIRegistrationForm(forms.ModelForm):
                 },
             ),
             "birth_date": DatePickerInput(),
+        }
+
+
+class BusForm(forms.ModelForm):
+    class Meta:
+        model = Bus
+        fields = '__all__'
+        widgets = {
+            "wei": Autocomplete(
+                WEIClub,
+                attrs={
+                    'api_url': '/api/wei/club/',
+                    'placeholder': 'WEI ...',
+                },
+            ),
+        }
+
+
+class BusTeamForm(forms.ModelForm):
+    class Meta:
+        model = Bus
+        fields = '__all__'
+        widgets = {
+            "bus": Autocomplete(
+                Bus,
+                attrs={
+                    'api_url': '/api/wei/bus/',
+                    'placeholder': 'Bus ...',
+                },
+            ),
         }

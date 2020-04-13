@@ -59,6 +59,19 @@
 
 <hr>
 
+{% if buses.data or True %}
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-bus"></i> {% trans "Buses" %}
+            </a>
+        </div>
+        {% render_table buses %}
+    </div>
+
+    <hr>
+{% endif %}
+
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">

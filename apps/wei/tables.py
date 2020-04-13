@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
-from .models import WEIClub, WEIRegistration
+from .models import WEIClub, WEIRegistration, Bus, BusTeam
 
 
 class WEITable(tables.Table):
@@ -71,13 +71,54 @@ class WEIRegistrationTable(tables.Table):
         },
     )
 
+    def render_is_first_year(self, value):
+        return _("yes") if value else _("no")
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user',)
+        fields = ('user', 'is_first_year',)
+        row_attrs = {
+            'class': 'table-row',
+            'id': lambda record: "row-" + str(record.pk),
+            'data-href': lambda record: record.pk
+        }
+
+
+class BusTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = Bus
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('name', 'teams',)
+        row_attrs = {
+            'class': 'table-row',
+            'id': lambda record: "row-" + str(record.pk),
+            'data-href': lambda record: record.pk
+        }
+
+
+class BusTeamTable(tables.Table):
+    color = tables.Column(
+        attrs={
+            "td": {
+                "style": lambda record: "background-color: #" + "".format(record.color) + ";"
+            }
+        }
+    )
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = BusTeam
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('name', 'color', 'team',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
