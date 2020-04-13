@@ -107,10 +107,14 @@ class BusTeamTable(tables.Table):
     color = tables.Column(
         attrs={
             "td": {
-                "style": lambda record: "background-color: #" + "".format(record.color) + ";"
+                "style": lambda record: "background-color: #{:06X}; color: #{:06X};"
+                                        .format(record.color, 0xFFFFFF - record.color, )
             }
         }
     )
+
+    def render_color(self, value):
+        return "#{:06X}".format(value)
 
     class Meta:
         attrs = {
@@ -118,7 +122,7 @@ class BusTeamTable(tables.Table):
         }
         model = BusTeam
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('name', 'color', 'team',)
+        fields = ('name', 'color',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),

@@ -16,9 +16,9 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .models import WEIClub, WEIRegistration, WEIMembership, Bus
-from .forms import WEIForm, WEIRegistrationForm, BusForm
-from .tables import WEITable, WEIRegistrationTable, BusTable
+from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam
+from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm
+from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -141,7 +141,71 @@ class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         self.object.refresh_from_db()
-        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+        return reverse_lazy("wei:manage_bus", kwargs={"pk": self.object.pk})
+
+
+class BusUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update Bus
+    """
+    model = Bus
+    form_class = BusForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.wei
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["wei"].disabled = True
+        return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:manage_bus", kwargs={"pk": self.object.pk})
+
+
+class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Manage Bus
+    """
+    model = Bus
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.wei
+
+        bus = self.object
+        teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view"))\
+            .filter(bus=bus)
+        teams_table = BusTeamTable(data=teams, prefix="teams-")
+        context["teams"] = teams_table
+
+        return context
+
+
+class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Create BusTeam
+    """
+    model = BusTeam
+    form_class = BusTeamForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        bus = Bus.objects.get(pk=self.kwargs["pk"])
+        context["club"] = bus.wei
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["bus"].initial = Bus.objects.get(pk=self.kwargs["pk"])
+        return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:manage_bus", kwargs={"pk": self.object.bus.pk})
 
 
 class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
@@ -180,4 +244,3 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_success_url(self):
         self.object.refresh_from_db()
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
-

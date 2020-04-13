@@ -50,6 +50,12 @@ class Bus(models.Model):
         verbose_name=_("name"),
     )
 
+    description = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("description"),
+    )
+
     def __str__(self):
         return self.name
 
@@ -75,6 +81,12 @@ class BusTeam(models.Model):
     color = models.PositiveIntegerField(  # Use a color picker to get the hexa code
         verbose_name=_("color"),
         help_text=_("The color of the T-Shirt, stored with its number equivalent"),
+    )
+
+    description = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("description"),
     )
 
     def __str__(self):
