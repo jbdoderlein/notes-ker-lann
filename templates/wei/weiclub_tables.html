@@ -114,16 +114,3 @@
 
     <hr>
 {% endif %}
-
-{% if all_registrations.data %}
-    <div class="card">
-        <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
-                <i class="fa fa-user-plus"></i> {% trans "All registrations" %}
-            </a>
-        </div>
-        <div id="history_list">
-            {% render_table all_registrations %}
-        </div>
-    </div>
-{% endif %}

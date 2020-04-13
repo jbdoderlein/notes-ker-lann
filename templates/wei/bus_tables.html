@@ -19,7 +19,7 @@
 
 <hr>
 
-{% if teams.data or True %}
+{% if teams.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
             <a class="btn btn-link stretched-link font-weight-bold">
@@ -30,4 +30,15 @@
     </div>
 
     <hr>
+{% endif %}
+
+{% if memberships.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-bus"></i> {% trans "Members" %}
+            </a>
+        </div>
+        {% render_table memberships %}
+    </div>
 {% endif %}

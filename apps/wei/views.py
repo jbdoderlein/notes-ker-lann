@@ -10,7 +10,6 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
-from member.tables import MembershipTable
 from note.models import Transaction, NoteClub
 from note.tables import HistoryTable
 from permission.backends import PermissionBackend
@@ -18,7 +17,7 @@ from permission.views import ProtectQuerysetMixin
 
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam
 from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm
-from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable
+from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -72,21 +71,12 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             club=club,
             date_end__gte=datetime.today(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
-        membership_table = MembershipTable(data=club_member, prefix="membership-")
+        membership_table = WEIMembershipTable(data=club_member, prefix="membership-")
         membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['member_list'] = membership_table
 
-        WEIRegistrationTable.base_columns["delete"].visible = False
-        WEIRegistrationTable.base_columns["validate"].visible = False
-        all_registrations = WEIRegistration.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view"))
-        all_registrations_table = WEIRegistrationTable(data=all_registrations, prefix="all-registration-")
-        all_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
-        context['all_registrations'] = all_registrations_table
-
-        WEIRegistrationTable.base_columns["delete"].visible = True
-        WEIRegistrationTable.base_columns["validate"].visible = True
-        pre_registrations = all_registrations.filter(membership=None)
+        pre_registrations = WEIRegistration.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view")).filter(membership=None)
         pre_registrations_table = WEIRegistrationTable(data=pre_registrations, prefix="pre-registration-")
         pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['pre_registrations'] = pre_registrations_table
@@ -179,8 +169,14 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         bus = self.object
         teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view"))\
             .filter(bus=bus)
-        teams_table = BusTeamTable(data=teams, prefix="teams-")
+        teams_table = BusTeamTable(data=teams, prefix="team-")
         context["teams"] = teams_table
+
+        memberships = WEIMembership.objects.filter(PermissionBackend.filter_queryset(
+            self.request.user, WEIMembership, "view")).filter(bus=bus)
+        memberships_table = WEIMembershipTable(data=memberships, prefix="membership-")
+        memberships_table.paginate(per_page=20, page=self.request.GET.get("membership-page", 1))
+        context["memberships"] = memberships_table
 
         return context
 
@@ -206,6 +202,49 @@ class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_success_url(self):
         self.object.refresh_from_db()
         return reverse_lazy("wei:manage_bus", kwargs={"pk": self.object.bus.pk})
+
+
+class BusTeamUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Update Bus team
+    """
+    model = BusTeam
+    form_class = BusTeamForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.bus.wei
+        context["bus"] = self.object.bus
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["bus"].disabled = True
+        return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:manage_bus_team", kwargs={"pk": self.object.pk})
+
+
+class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Manage Bus team
+    """
+    model = BusTeam
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["bus"] = self.object.bus
+        context["club"] = self.object.bus.wei
+
+        memberships = WEIMembership.objects.filter(PermissionBackend.filter_queryset(
+            self.request.user, WEIMembership, "view")).filter(team=self.object)
+        memberships_table = WEIMembershipTable(data=memberships, prefix="membership-")
+        memberships_table.paginate(per_page=20, page=self.request.GET.get("membership-page", 1))
+        context["memberships"] = memberships_table
+
+        return context
 
 
 class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):

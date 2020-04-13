@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
-from .models import WEIClub, WEIRegistration, Bus, BusTeam
+from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership
 
 
 class WEITable(tables.Table):
@@ -88,22 +88,58 @@ class WEIRegistrationTable(tables.Table):
         }
 
 
+class WEIMembershipTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = WEIMembership
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('user', )
+        row_attrs = {
+            'class': 'table-row',
+            'id': lambda record: "row-" + str(record.pk),
+        }
+
+
 class BusTable(tables.Table):
+    name = tables.LinkColumn(
+        'wei:manage_bus',
+        args=[A('pk')],
+    )
+
+    teams = tables.Column(
+        accessor=A("teams"),
+        verbose_name=_("Teams"),
+        attrs={
+            "td": {
+                "class": "text-truncate",
+            }
+        }
+    )
+
+    def render_teams(self, value):
+        return ", ".join(team.name for team in value.all())
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = Bus
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('name', 'teams',)
+        fields = ('name', 'teams', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
-            'data-href': lambda record: record.pk
         }
 
 
 class BusTeamTable(tables.Table):
+    name = tables.LinkColumn(
+        'wei:manage_bus_team',
+        args=[A('pk')],
+    )
+
     color = tables.Column(
         attrs={
             "td": {
@@ -126,5 +162,5 @@ class BusTeamTable(tables.Table):
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
-            'data-href': lambda record: record.pk
+            'data-href': lambda record: reverse_lazy('wei:manage_bus_team', args=(record.pk, ))
         }
