@@ -33,6 +33,10 @@ class WEIClub(Club):
         """
         return
 
+    class Meta:
+        verbose_name = _("WEI")
+        verbose_name_plural = _("WEI")
+
 
 class Bus(models.Model):
     """
@@ -60,6 +64,8 @@ class Bus(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = _("Bus")
+        verbose_name_plural = _("Buses")
         unique_together = ('wei', 'name',)
 
 
@@ -102,14 +108,10 @@ class WEIRole(Role):
     """
     A Role for the WEI can be bus chief, team chief, free electron, ...
     """
-    bus = models.ForeignKey(
-        Bus,
-        on_delete=models.CASCADE,
-        null=True,
-        default=None,
-        related_name="roles",
-        verbose_name=_("bus"),
-    )
+
+    class Meta:
+        verbose_name = _("WEI Role")
+        verbose_name_plural = _("WEI Roles")
 
 
 class WEIRegistration(models.Model):
@@ -262,3 +264,7 @@ class WEIMembership(Membership):
         related_name="membership",
         verbose_name=_("WEI registration"),
     )
+
+    class Meta:
+        verbose_name = _("WEI membership")
+        verbose_name_plural = _("WEI memberships")

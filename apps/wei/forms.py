@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
-from .models import WEIClub, WEIRegistration, Bus, BusTeam
+from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
 
 
 class WEIForm(forms.ModelForm):
@@ -42,6 +42,30 @@ class WEIRegistrationForm(forms.ModelForm):
                 },
             ),
             "birth_date": DatePickerInput(),
+        }
+
+
+class WEIMembershipForm(forms.ModelForm):
+    roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects)
+
+    class Meta:
+        model = WEIMembership
+        fields = ('roles', 'bus', 'team',)
+        widgets = {
+            "bus": Autocomplete(
+                Bus,
+                attrs={
+                    'api_url': '/api/wei/bus/',
+                    'placeholder': 'Bus ...',
+                }
+            ),
+            "team": Autocomplete(
+                BusTeam,
+                attrs={
+                    'api_url': '/api/wei/team/',
+                    'placeholder': 'Équipe ...',
+                }
+            ),
         }
 
 

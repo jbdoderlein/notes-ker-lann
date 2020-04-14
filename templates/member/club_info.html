@@ -42,11 +42,11 @@
 
             {% if "note.view_note"|has_perm:club.note %}
                 <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ object.note.balance | pretty_money }}</dd>
+                <dd class="col-xl-6">{{ club.note.balance | pretty_money }}</dd>
             {% endif %}
             
             <dt class="col-xl-6"><a href="{% url 'member:club_alias' club.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
-            <dd class="col-xl-6 text-truncate">{{ object.note.alias_set.all|join:", " }}</dd>
+            <dd class="col-xl-6 text-truncate">{{ club.note.alias_set.all|join:", " }}</dd>
 
             <dt class="col-xl-4">{% trans 'email'|capfirst %}</dt>
             <dd class="col-xl-8"><a href="mailto:{{ club.email }}">{{ club.email }}</a></dd>

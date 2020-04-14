@@ -1,0 +1,133 @@
+{% extends "member/noteowner_detail.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load pretty_money %}
+{% load perms %}
+
+{% block profile_info %}
+    {% include "wei/weiclub_info.html" %}
+{% endblock %}
+
+{% block profile_content %}
+    <div class="card bg-light shadow">
+        <div class="card-header text-center" >
+            <h4>{% trans "Review registration" %}</h4>
+        </div>
+        <div class="card-body" id="profile_infos">
+            <dl class="row">
+                <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+                <dd class="col-xl-6">{{ registration.user.last_name }} {{ registration.user.first_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.username }}</dd>
+
+                <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
+                <dd class="col-xl-6"><a href="mailto:{{ registration.user.email }}">{{ registration.user.email }}</a></dd>
+
+                {% if not registration.user.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:registration.user.profile %}
+                    <dd class="col-xl-12">
+                        <div class="alert alert-warning">
+                            {% trans "This user doesn't have confirmed his/her e-mail address." %}
+                            <a href="{% url "registration:email_validation_resend" pk=registration.user.pk %}">{% trans "Click here to resend a validation link." %}</a>
+                        </div>
+                    </dd>
+                {% endif %}
+
+                <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.section }}</dd>
+
+                <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.address }}</dd>
+
+                <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.phone_number }}</dd>
+
+                <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.paid|yesno }}</dd>
+
+                <hr>
+
+                <dt class="col-xl-6">{% trans 'gender'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.gender }}</dd>
+
+                <dt class="col-xl-6">{% trans 'birth date'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.birth_date }}</dd>
+
+                <dt class="col-xl-6">{% trans 'health issues'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.health_issues }}</dd>
+
+                <dt class="col-xl-6">{% trans 'emergency contact name'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.emergency_contact_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'emergency contact phone'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.emergency_contact_phone }}</dd>
+
+                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the events of the campus (1 mail/week)' %}</dt>
+                <dd class="col-xl-6">{{ registration.ml_events_registration|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)' %}</dt>
+                <dd class="col-xl-6">{{ registration.ml_sport_registration|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the art events of the campus (1 mail/week)' %}</dt>
+                <dd class="col-xl-6">{{ registration.ml_art_registration|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'Payment from Société générale' %}</dt>
+                <dd class="col-xl-6">{{ registration.soge_credit|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' registration.user.pk %}">{% trans 'Update Profile' %}</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.user.pk %}">{% trans 'Update registration' %}</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="card bg-light shadow">
+        <form method="post">
+            <div class="card-header text-center" >
+                <h4> {% trans "Validate registration" %}</h4>
+            </div>
+            {% if registration.soge_credit %}
+                <div class="alert alert-warning">
+                    {% blocktrans %}
+                        The WEI will be paid by Société générale. The membership will be created even if the bank didn't pay the BDE yet.
+                        The membership transaction will be created but will be invalid. You will have to validate it once the bank
+                        validated the creation of the account, or to change the payment method.
+                    {% endblocktrans %}
+                </div>
+            {% else %}
+                {% if registration.user.note.balance < fee %}
+                    <div class="alert alert-danger">
+                        {% with pretty_fee=fee|pretty_money %}
+                        {% blocktrans with balance=registration.user.note.balance|pretty_money %}
+                            The note don't have enough money ({{ balance }}, {{ pretty_fee }} required). The registration may fail.
+                        {% endblocktrans %}
+                        {% endwith %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-success">
+                        {% trans "The note has enough money." %}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if not registration.caution_check %}
+                <div class="alert alert-danger">
+                    {% trans "The user didn't give her/his caution check." %}
+                </div>
+            {% endif %}
+
+            <div class="card-body" id="profile_infos">
+                {% csrf_token %}
+                {{ form|crispy }}
+            </div>
+            <div class="card-footer text-center">
+                <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

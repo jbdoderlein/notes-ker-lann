@@ -9,7 +9,7 @@ from note.models import NoteSpecial
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
-from .models import Profile, Club, Membership
+from .models import Profile, Club, Membership, Role
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -50,6 +50,8 @@ class ClubForm(forms.ModelForm):
 
 
 class MembershipForm(forms.ModelForm):
+    roles = forms.ModelMultipleChoiceField(queryset=Role.objects.filter(weirole=None).all())
+
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,

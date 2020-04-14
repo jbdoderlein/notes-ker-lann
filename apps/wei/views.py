@@ -16,7 +16,7 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam
-from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm
+from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
@@ -257,6 +257,7 @@ class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
+        del form.fields["payment_method"]
         return form
 
     def form_valid(self, form):
@@ -278,7 +279,31 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         del form.fields["user"]
+        del form.fields["payment_method"]
         return form
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+
+
+class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Validate WEI Registration
+    """
+    model = WEIMembership
+    form_class = WEIMembershipForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        context["registration"] = registration
+        context["club"] = registration.wei
+        context["fee"] = registration.wei.membership_fee_paid if registration.user.profile.paid \
+            else registration.wei.membership_fee_unpaid
+
+        return context
 
     def get_success_url(self):
         self.object.refresh_from_db()

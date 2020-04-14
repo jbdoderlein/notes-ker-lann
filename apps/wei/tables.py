@@ -48,7 +48,7 @@ class WEIRegistrationTable(tables.Table):
         }
     )
     validate = tables.LinkColumn(
-        'wei:wei_detail',
+        'wei:validate_registration',
         args=[A('pk')],
         verbose_name=_("Validate"),
         text=_("Validate"),

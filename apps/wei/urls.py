@@ -5,7 +5,7 @@ from django.urls import path
 
 from .views import WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
-    WEIRegisterView, WEIUpdateRegistrationView
+    WEIRegisterView, WEIUpdateRegistrationView, WEIValidateRegistrationView
 
 
 app_name = 'wei'
@@ -22,4 +22,5 @@ urlpatterns = [
     path('update-bus-team/<int:pk>/', BusTeamUpdateView.as_view(), name="update_bus_team"),
     path('register/<int:wei_pk>/', WEIRegisterView.as_view(), name="wei_register"),
     path('edit-registration/<int:pk>/', WEIUpdateRegistrationView.as_view(), name="wei_update_registration"),
+    path('validate/<int:pk>/', WEIValidateRegistrationView.as_view(), name="validate_registration"),
 ]
