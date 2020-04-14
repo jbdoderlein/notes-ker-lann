@@ -1,13 +1,14 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
 from note.models import Transaction, NoteClub
@@ -302,9 +303,54 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         context["club"] = registration.wei
         context["fee"] = registration.wei.membership_fee_paid if registration.user.profile.paid \
             else registration.wei.membership_fee_unpaid
+        context["kfet_member"] = Membership.objects.filter(
+            club__name="Kfet",
+            user=registration.user,
+            date_start__lte=datetime.now().date(),
+            date_end__gte=datetime.now().date(),
+        ).exists()
 
         return context
 
+    def form_valid(self, form):
+        """
+        Create membership, check that all is good, make transactions
+        """
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        club = registration.wei
+        user = registration.user
+
+        membership = form.instance
+        membership.user = user
+        membership.club = club
+        membership.date_start = min(date.today(), club.date_start)
+        membership.registration = registration
+
+        if user.profile.paid:
+            fee = club.membership_fee_paid
+        else:
+            fee = club.membership_fee_unpaid
+
+        if not registration.soge_credit and user.note.balance < fee:
+            # Users must have money before registering to the WEI.
+            # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
+            form.add_error('bus',
+                           _("This user don't have enough money to join this club, and can't have a negative balance."))
+            return super().form_invalid(form)
+
+        if not registration.caution_check and True:  # TODO: Replace it with "is 2A+"
+            form.add_error('bus', _("This user didn't give her/his caution check."))
+            return super().form_invalid(form)
+
+        if club.parent_club is not None:
+            if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
+                form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
+                return super().form_invalid(form)
+
+        # Now, all is fine, the membership can be created.
+
+        return super().form_valid(form)
+
     def get_success_url(self):
         self.object.refresh_from_db()
-        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.club.pk})

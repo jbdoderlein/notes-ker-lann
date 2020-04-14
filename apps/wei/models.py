@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from member.models import Role, Club, Membership
-from note.models import NoteSpecial
+from note.models import NoteSpecial, MembershipTransaction
 
 
 class WEIClub(Club):
@@ -268,3 +268,23 @@ class WEIMembership(Membership):
     class Meta:
         verbose_name = _("WEI membership")
         verbose_name_plural = _("WEI memberships")
+
+    def make_transaction(self):
+        """
+        Create Membership transaction associated to this membership.
+        """
+        if not self.fee or MembershipTransaction.objects.filter(membership=self).exists():
+            return
+
+        if self.fee:
+            transaction = MembershipTransaction(
+                membership=self,
+                source=self.user.note,
+                destination=self.club.note,
+                quantity=1,
+                amount=self.fee,
+                reason="Adhésion WEI " + self.club.name,
+                valid=not self.registration.soge_credit  # Soge transactions are by default invalidated
+            )
+            transaction._force_save = True
+            transaction.save(force_insert=True)

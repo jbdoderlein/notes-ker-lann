@@ -544,6 +544,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 valid=True,
             )
 
+        ret = super().form_valid(form)
+
         # If Société générale pays, then we store the information: the bank can't pay twice to a same person.
         if soge:
             user.profile.soge = True
@@ -573,7 +575,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
             membership.save()
 
-        return super().form_valid(form)
+        return ret
 
     def get_success_url(self):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})

@@ -121,6 +121,19 @@
                 </div>
             {% endif %}
 
+            {% if not kfet_member %}
+                <div class="alert alert-danger">
+                    {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
+                {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
+                    {% blocktrans %}
+                        This user is not a member of the Kfet club. Please adhere
+                        <a href="{{ future_user_detail }}">here if he/she is in her/his first year</a>
+                        or <a href="{{ club_detail }}">here if he/she was an old member</a> before you validate
+                        the registration of the WEI.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
+
             <div class="card-body" id="profile_infos">
                 {% csrf_token %}
                 {{ form|crispy }}
