@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from member.models import Role, Club, Membership
-from note.models import NoteSpecial, MembershipTransaction
+from note.models import MembershipTransaction
 
 
 class WEIClub(Club):
@@ -188,6 +188,12 @@ class WEIRegistration(models.Model):
         verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
     )
 
+    first_year = models.BooleanField(
+        default=False,
+        verbose_name=_("first year"),
+        help_text=_("Tells if the user is new in the school.")
+    )
+
     information_json = models.TextField(
         default="{}",
         verbose_name=_("registration information"),
@@ -209,13 +215,6 @@ class WEIRegistration(models.Model):
         Store information as a JSON string
         """
         self.information_json = json.dumps(information)
-
-    @property
-    def is_first_year(self):
-        """
-        We assume that a user is a new member if it not fully registered yet.
-        """
-        return not self.user.profile.registration_valid
 
     def __str__(self):
         return str(self.user)

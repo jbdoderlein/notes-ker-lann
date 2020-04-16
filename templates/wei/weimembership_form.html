@@ -47,6 +47,9 @@
 
                 <hr>
 
+                <dt class="col-xl-6">{% trans 'first year'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.first_year|yesno }}</dd>
+
                 <dt class="col-xl-6">{% trans 'gender'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ registration.gender }}</dd>
 
@@ -74,8 +77,10 @@
                 <dt class="col-xl-6">{% trans 'Payment from Société générale' %}</dt>
                 <dd class="col-xl-6">{{ registration.soge_credit|yesno }}</dd>
 
-                <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
+                {% if not registration.first_year %}
+                    <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
+                {% endif %}
             </dl>
         </div>
         <div class="card-footer text-center">
@@ -115,7 +120,7 @@
                 {% endif %}
             {% endif %}
 
-            {% if not registration.caution_check %}
+            {% if not registration.caution_check and not registration.first_year %}
                 <div class="alert alert-danger">
                     {% trans "The user didn't give her/his caution check." %}
                 </div>

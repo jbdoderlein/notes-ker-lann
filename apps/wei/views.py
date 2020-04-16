@@ -16,7 +16,7 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam
+from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
 from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
@@ -77,7 +77,10 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context['member_list'] = membership_table
 
         pre_registrations = WEIRegistration.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view")).filter(membership=None)
+            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view")).filter(
+            membership=None,
+            wei=club
+        )
         pre_registrations_table = WEIRegistrationTable(data=pre_registrations, prefix="pre-registration-")
         pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['pre_registrations'] = pre_registrations_table
@@ -258,10 +261,12 @@ class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
+        del form.fields["first_year"]
         return form
 
     def form_valid(self, form):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        form.instance.first_year = False
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -310,6 +315,12 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
 
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if WEIRegistration.objects.get(pk=self.kwargs["pk"]).first_year:
+            del form.fields["roles"]
+        return form
+
     def form_valid(self, form):
         """
         Create membership, check that all is good, make transactions
@@ -336,7 +347,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
                            _("This user don't have enough money to join this club, and can't have a negative balance."))
             return super().form_invalid(form)
 
-        if not registration.caution_check and True:  # TODO: Replace it with "is 2A+"
+        if not registration.caution_check and not registration.first_year:
             form.add_error('bus', _("This user didn't give her/his caution check."))
             return super().form_invalid(form)
 
@@ -346,6 +357,13 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
                 return super().form_invalid(form)
 
         # Now, all is fine, the membership can be created.
+
+        if registration.first_year:
+            membership = form.instance
+            membership.save()
+            membership.refresh_from_db()
+            membership.roles.set(WEIRole.objects.filter(name="1A").all())
+            membership.save()
 
         return super().form_valid(form)
 

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db.models import Q, BooleanField
+from django.db.models import Q
 from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
@@ -33,7 +33,6 @@ class UserCreateView(CreateView):
     """
 
     form_class = SignUpForm
-    success_url = reverse_lazy('registration:email_validation_sent')
     template_name = 'registration/signup.html'
     second_form = ProfileForm
 
@@ -46,6 +45,7 @@ class UserCreateView(CreateView):
             wei_form = WEIRegistrationForm()
             del wei_form.fields["user"]
             del wei_form.fields["caution_check"]
+            del wei_form.fields["first_year"]
             context["wei_form"] = wei_form
             context["wei_registration_form"] = WEISignupForm()
 
@@ -62,6 +62,7 @@ class UserCreateView(CreateView):
             return self.form_invalid(form)
 
         wei_form = None
+        self.wei = False
 
         if "wei" in settings.INSTALLED_APPS:
             wei_signup_form = WEISignupForm(self.request.POST)
@@ -70,9 +71,12 @@ class UserCreateView(CreateView):
                 wei_form = WEIRegistrationForm(self.request.POST)
                 del wei_form.fields["user"]
                 del wei_form.fields["caution_check"]
+                del wei_form.fields["first_year"]
 
                 if not wei_form.is_valid():
                     return self.form_invalid(wei_form)
+
+                self.wei = True
 
         # Save the user and the profile
         user = form.save(commit=False)
@@ -87,14 +91,21 @@ class UserCreateView(CreateView):
 
         user.profile.send_email_validation_link()
 
-        if wei_form is not None:
+        if self.wei:
             wei_registration = wei_form.instance
             wei_registration.user = user
             wei_registration.wei = WEIClub.objects.order_by('date_start').last()
             wei_registration.caution_check = False
+            wei_registration.first_year = True
             wei_registration.save()
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        if self.wei:
+            return reverse_lazy('registration:email_validation_sent')  # TODO Load WEI survey
+        else:
+            return reverse_lazy('registration:email_validation_sent')
 
 
 class UserValidateView(TemplateView):

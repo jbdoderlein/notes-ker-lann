@@ -3,7 +3,6 @@
 
 from django import forms
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
 from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole

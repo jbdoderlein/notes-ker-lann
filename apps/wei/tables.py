@@ -71,16 +71,13 @@ class WEIRegistrationTable(tables.Table):
         },
     )
 
-    def render_is_first_year(self, value):
-        return _("yes") if value else _("no")
-
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'is_first_year',)
+        fields = ('user', 'first_year',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
