@@ -24,11 +24,6 @@ class WEIForm(forms.ModelForm):
 
 
 class WEIRegistrationForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields["payment_method"].empty_label = _("No credit, directly pay with note balance")
-
     class Meta:
         model = WEIRegistration
         exclude = ('wei', 'information_json', )

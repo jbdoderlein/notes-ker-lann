@@ -165,7 +165,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
                 Q(first_name__iregex=pattern)
                 | Q(last_name__iregex=pattern)
                 | Q(profile__section__iregex=pattern)
-                | Q(profile__username__iregex="^" + pattern)
+                | Q(username__iregex="^" + pattern)
                 | Q(note__alias__name__iregex="^" + pattern)
                 | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
             )

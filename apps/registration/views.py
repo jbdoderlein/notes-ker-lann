@@ -5,13 +5,13 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+from django.db.models import Q, BooleanField
 from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import CreateView, TemplateView, DetailView, FormView
+from django.views.generic import CreateView, TemplateView, DetailView
 from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
@@ -20,8 +20,9 @@ from note.models import SpecialTransaction, NoteSpecial
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
+from wei.models import WEIClub
 
-from .forms import SignUpForm, ValidationForm
+from .forms import SignUpForm, ValidationForm, WEISignupForm
 from .tables import FutureUserTable
 from .tokens import email_validation_token
 
@@ -40,6 +41,14 @@ class UserCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form()
 
+        if "wei" in settings.INSTALLED_APPS:
+            from wei.forms import WEIRegistrationForm
+            wei_form = WEIRegistrationForm()
+            del wei_form.fields["user"]
+            del wei_form.fields["caution_check"]
+            context["wei_form"] = wei_form
+            context["wei_registration_form"] = WEISignupForm()
+
         return context
 
     def form_valid(self, form):
@@ -51,6 +60,19 @@ class UserCreateView(CreateView):
         profile_form = ProfileForm(data=self.request.POST)
         if not profile_form.is_valid():
             return self.form_invalid(form)
+
+        wei_form = None
+
+        if "wei" in settings.INSTALLED_APPS:
+            wei_signup_form = WEISignupForm(self.request.POST)
+            if wei_signup_form.is_valid() and wei_signup_form.cleaned_data["wei_registration"]:
+                from wei.forms import WEIRegistrationForm
+                wei_form = WEIRegistrationForm(self.request.POST)
+                del wei_form.fields["user"]
+                del wei_form.fields["caution_check"]
+
+                if not wei_form.is_valid():
+                    return self.form_invalid(wei_form)
 
         # Save the user and the profile
         user = form.save(commit=False)
@@ -64,6 +86,13 @@ class UserCreateView(CreateView):
         profile.save()
 
         user.profile.send_email_validation_link()
+
+        if wei_form is not None:
+            wei_registration = wei_form.instance
+            wei_registration.user = user
+            wei_registration.wei = WEIClub.objects.order_by('date_start').last()
+            wei_registration.caution_check = False
+            wei_registration.save()
 
         return super().form_valid(form)
 
@@ -112,7 +141,7 @@ class UserValidateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.get_user(self.kwargs["uidb64"])
+        context['user_object'] = self.get_user(self.kwargs["uidb64"])
         context['login_url'] = resolve_url(settings.LOGIN_URL)
         if self.validlink:
             context['validlink'] = True

@@ -133,16 +133,6 @@ class WEIRegistration(models.Model):
         verbose_name=_("WEI"),
     )
 
-    payment_method = models.ForeignKey(
-        NoteSpecial,
-        on_delete=models.PROTECT,
-        null=True,  # null = no credit, paid with note
-        blank=True,
-        default=None,
-        related_name="+",
-        verbose_name=_("payment method"),
-    )
-
     soge_credit = models.BooleanField(
         default=False,
         verbose_name=_("Credit from Société générale"),

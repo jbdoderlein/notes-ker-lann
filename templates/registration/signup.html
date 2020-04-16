@@ -5,13 +5,47 @@
 {% block title %}{% trans "Sign up" %}{% endblock %}
 
 {% block content %}
-  <h2>{% trans "Sign up" %}</h2>
-  <form method="post">
-      {% csrf_token %}
-      {{ form|crispy }}
-      {{ profile_form|crispy }}
-      <button class="btn btn-success" type="submit">
-          {% trans "Sign up" %}
-      </button>
-  </form>
+    <h2>{% trans "Sign up" %}</h2>
+
+    <div class="alert alert-warning">
+        {% blocktrans %}
+            If you already signed up, your registration is taken into account. The BDE must validate your account before
+            your can log in. You have to go to the Kfet and pay the registration fee. You must also validate your email
+            address by following the link you received. If you forgot to register to the WEI, then you can pre-register
+            to the WEI after your account get validated, so please go to the Kfet.
+        {% endblocktrans %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {{ profile_form|crispy }}
+        {{ wei_registration_form|crispy }}
+        <div id="wei_form_div" class="d-none">
+            {{ wei_form|crispy }}
+        </div>
+        <button class="btn btn-success" type="submit">
+            {% trans "Sign up" %}
+        </button>
+    </form>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        $("#id_wei_registration").change(function () {
+            if ($(this).is(":checked")) {
+                $("#wei_form_div").removeClass('d-none');
+                $("#wei_form_div .form-control").removeAttr('disabled');
+            }
+            else {
+                $("#wei_form_div").addClass('d-none');
+                $("#wei_form_div .form-control").attr('disabled', true);
+            }
+        });
+
+        if ($("#id_wei_registration").is(":checked")) {
+            $("#wei_form_div").removeClass('d-none');
+            $("#wei_form_div .form-control").removeAttr('disabled');
+        }
+    </script>
 {% endblock %}

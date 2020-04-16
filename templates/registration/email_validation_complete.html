@@ -4,7 +4,7 @@
 {% block content %}
     {% if validlink %}
         {% trans "Your email have successfully been validated." %}
-        {% if user.profile.registration_valid %}
+        {% if user_object.profile.registration_valid %}
             {% blocktrans %}You can now <a href="{{ login_url }}">log in</a>.{% endblocktrans %}
         {% else %}
             {% trans "You must pay now your membership in the Kfet to complete your registration." %}

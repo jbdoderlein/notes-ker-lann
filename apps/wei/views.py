@@ -258,7 +258,6 @@ class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
-        del form.fields["payment_method"]
         return form
 
     def form_valid(self, form):
@@ -280,7 +279,6 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         del form.fields["user"]
-        del form.fields["payment_method"]
         return form
 
     def get_success_url(self):
