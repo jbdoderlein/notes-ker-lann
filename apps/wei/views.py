@@ -251,17 +251,55 @@ class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class WEIRegisterView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
-    Register to the WEI
+    Register a new user to the WEI
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _("Register 1A")
+        return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
         del form.fields["first_year"]
+        del form.fields["caution_check"]
+        return form
+
+    def form_valid(self, form):
+        form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        form.instance.first_year = True
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        # TODO Replace it with the link of the survey
+        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+
+
+class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+    """
+    Register an old user to the WEI
+    """
+    model = WEIRegistration
+    form_class = WEIRegistrationForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _("Register 2A+")
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["user"].initial = self.request.user
+        del form.fields["first_year"]
+        del form.fields["ml_events_registration"]
+        del form.fields["ml_art_registration"]
+        del form.fields["ml_sport_registration"]
         return form
 
     def form_valid(self, form):
