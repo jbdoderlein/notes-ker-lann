@@ -189,7 +189,7 @@ class SpecialTransactionProxy(models.Model):
     """
     In order to keep modularity, we don't that the Note app depends on the treasury app.
     That's why we create a proxy in this app, to link special transactions and remittances.
-    If it isn't very clean, that makes what we want.
+    If it isn't very clean, it does what we want.
     """
 
     transaction = models.OneToOneField(
