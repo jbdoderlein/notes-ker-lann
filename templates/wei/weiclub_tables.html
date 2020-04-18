@@ -59,7 +59,10 @@
     {% if club.is_current_wei %}
         <div class="card-footer text-center">
             {% if not my_registration %}
-                <a href="{% url "wei:wei_register_1A" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI!" %}</button></a>
+                {% if not not_first_year %}
+                    <a href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 1A" %}</button></a>
+                {% endif %}
+                <a href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 2A+" %}</button></a>
             {% elif my_registration.is_validated %}
                 <a href="{% url "wei:wei_update_registration" pk=user.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
             {% endif %}

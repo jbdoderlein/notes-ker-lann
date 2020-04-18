@@ -23,6 +23,8 @@ urlpatterns = [
     path('update-bus-team/<int:pk>/', BusTeamUpdateView.as_view(), name="update_bus_team"),
     path('register/<int:wei_pk>/1A/', WEIRegister1AView.as_view(), name="wei_register_1A"),
     path('register/<int:wei_pk>/2A+/', WEIRegister2AView.as_view(), name="wei_register_2A"),
+    path('register/<int:wei_pk>/1A/myself/', WEIRegister1AView.as_view(), name="wei_register_1A_myself"),
+    path('register/<int:wei_pk>/2A+/myself/', WEIRegister2AView.as_view(), name="wei_register_2A_myself"),
     path('edit-registration/<int:pk>/', WEIUpdateRegistrationView.as_view(), name="wei_update_registration"),
     path('validate/<int:pk>/', WEIValidateRegistrationView.as_view(), name="validate_registration"),
 ]

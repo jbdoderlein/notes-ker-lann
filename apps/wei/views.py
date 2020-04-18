@@ -6,9 +6,8 @@ from datetime import datetime, date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, CreateView, View
+from django.views.generic import DetailView, UpdateView, CreateView, RedirectView
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
@@ -22,10 +21,10 @@ from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMember
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
-class CurrentWEIDetailView(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
+class CurrentWEIDetailView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
         wei = WEIClub.objects.order_by('date_start').last()
-        return redirect(reverse_lazy('wei:wei_detail', args=(wei.pk,)))
+        return reverse_lazy('wei:wei_detail', args=(wei.pk,))
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -121,6 +120,8 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             name="",
         )
         context["can_add_bus"] = PermissionBackend.check_perm(self.request.user, "wei.add_bus", empty_bus)
+
+        context["not_first_year"] = WEIMembership.objects.filter(user=self.request.user).exists()
 
         return context
 
@@ -288,6 +289,8 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
+        if "myself" in self.request.path:
+            form.fields["user"].disabled = True
         del form.fields["first_year"]
         del form.fields["caution_check"]
         return form
@@ -319,10 +322,17 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
+        if "myself" in self.request.path:
+            form.fields["user"].disabled = True
+            if self.request.user.profile.soge:
+                form.fields["soge_credit"].disabled = True
+                form.fields["soge_credit"].help_text = _("You already opened an account in the Société générale.")
+
         del form.fields["first_year"]
         del form.fields["ml_events_registration"]
         del form.fields["ml_art_registration"]
         del form.fields["ml_sport_registration"]
+
         return form
 
     def form_valid(self, form):
