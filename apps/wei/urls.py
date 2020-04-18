@@ -3,13 +3,14 @@
 
 from django.urls import path
 
-from .views import WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
+from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
     WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIValidateRegistrationView
 
 
 app_name = 'wei'
 urlpatterns = [
+    path('detail/', CurrentWEIDetailView.as_view(), name="current_wei_detail"),
     path('list/', WEIListView.as_view(), name="wei_list"),
     path('create/', WEICreateView.as_view(), name="wei_create"),
     path('detail/<int:pk>/', WEIDetailView.as_view(), name="wei_detail"),

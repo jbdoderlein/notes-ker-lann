@@ -1,8 +1,12 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "member/noteowner_detail.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-{% block content %}
+
+{% block profile_info %}
+{% include "wei/weiclub_info.html" %}
+{% endblock %}
+
+{% block profile_content %}
 <form method="post">
 {% csrf_token %}
 {{ form|crispy }}

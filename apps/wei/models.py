@@ -27,6 +27,10 @@ class WEIClub(Club):
         verbose_name=_("date end"),
     )
 
+    @property
+    def is_current_wei(self):
+        return not WEIClub.objects.filter(date_start__gt=self.date_start).exists()
+
     def update_membership_dates(self):
         """
         We can't join the WEI next years.
@@ -215,6 +219,13 @@ class WEIRegistration(models.Model):
         Store information as a JSON string
         """
         self.information_json = json.dumps(information)
+
+    @property
+    def is_validated(self):
+        try:
+            return self.membership is not None
+        except KeyError:
+            return False
 
     def __str__(self):
         return str(self.user)

@@ -6,8 +6,9 @@ from datetime import datetime, date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, CreateView
+from django.views.generic import DetailView, UpdateView, CreateView, View
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
@@ -21,12 +22,19 @@ from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMember
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
+class CurrentWEIDetailView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        wei = WEIClub.objects.order_by('date_start').last()
+        return redirect(reverse_lazy('wei:wei_detail', args=(wei.pk,)))
+
+
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     List existing WEI
     """
     model = WEIClub
     table_class = WEITable
+    ordering = '-year'
 
 
 class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
@@ -85,6 +93,13 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['pre_registrations'] = pre_registrations_table
 
+        my_registration = WEIRegistration.objects.filter(wei=club, user=self.request.user)
+        if my_registration.exists():
+            my_registration = my_registration.get()
+        else:
+            my_registration = None
+        context["my_registration"] = my_registration
+
         buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view"))\
             .filter(wei=self.object)
         bus_table = BusTable(data=buses, prefix="bus-")
@@ -98,8 +113,14 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             date_end=datetime.now().date(),
             fee=0,
         )
-        context["can_add_members"] = PermissionBackend() \
-            .has_perm(self.request.user, "member.add_membership", empty_membership)
+        context["can_add_members"] = PermissionBackend \
+            .check_perm(self.request.user, "member.add_membership", empty_membership)
+
+        empty_bus = Bus(
+            wei=club,
+            name="",
+        )
+        context["can_add_bus"] = PermissionBackend.check_perm(self.request.user, "wei.add_bus", empty_bus)
 
         return context
 
@@ -261,6 +282,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = _("Register 1A")
+        context['club'] = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         return context
 
     def get_form(self, form_class=None):
@@ -291,6 +313,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = _("Register 2A+")
+        context['club'] = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         return context
 
     def get_form(self, form_class=None):
@@ -319,9 +342,15 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     model = WEIRegistration
     form_class = WEIRegistrationForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.wei
+        return context
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        del form.fields["user"]
+        if "user" in form.fields:
+            del form.fields["user"]
         return form
 
     def get_success_url(self):

@@ -55,6 +55,16 @@
             in iaculis. Neque gravida in fermentum et sollicitudin ac orci.
         </p>
     </div>
+
+    {% if club.is_current_wei %}
+        <div class="card-footer text-center">
+            {% if not my_registration %}
+                <a href="{% url "wei:wei_register_1A" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI!" %}</button></a>
+            {% elif my_registration.is_validated %}
+                <a href="{% url "wei:wei_update_registration" pk=user.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
 
 <hr>
