@@ -1,7 +1,7 @@
-# Server config forms
+# Server config files
 nginx_note.conf
 
-# Byte-compiled / optimized / DLL forms
+# Byte-compiled / optimized / DLL files
 dist
 build
 __pycache__
