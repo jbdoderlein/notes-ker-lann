@@ -3,11 +3,11 @@
 
 from django.contrib import admin
 
-from .models import WEIClub, WEIRegistration, WEIRole, Bus, BusTeam
-
+from .models import WEIClub, WEIRegistration, WEIMembership, WEIRole, Bus, BusTeam
 
 admin.site.register(WEIClub)
 admin.site.register(WEIRegistration)
+admin.site.register(WEIMembership)
 admin.site.register(WEIRole)
 admin.site.register(Bus)
 admin.site.register(BusTeam)

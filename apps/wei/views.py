@@ -6,8 +6,9 @@ from datetime import datetime, date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, CreateView, RedirectView
+from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import BaseFormView
 from django_tables2 import SingleTableView
@@ -294,6 +295,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.fields["user"].disabled = True
         del form.fields["first_year"]
         del form.fields["caution_check"]
+        del form.fields["information_json"]
         return form
 
     def form_valid(self, form):
@@ -332,6 +334,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         del form.fields["ml_events_registration"]
         del form.fields["ml_art_registration"]
         del form.fields["ml_sport_registration"]
+        del form.fields["information_json"]
 
         return form
 
@@ -398,6 +401,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
         if registration.first_year:
             del form.fields["roles"]
             survey = CurrentSurvey(registration)
@@ -457,20 +461,35 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
 
 
 class WEISurveyView(BaseFormView, DetailView):
+    """
+    Display the survey for the WEI for first
+    """
     model = WEIRegistration
     template_name = "wei/survey.html"
     survey = None
 
-    def setup(self, request, *args, **kwargs):
-        ret = super().setup(request, *args, **kwargs)
-        return ret
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if not self.survey:
+            self.survey = CurrentSurvey(obj)
+        # If the survey is complete, then display the end page.
+        if self.survey.is_complete():
+            return redirect(reverse_lazy('wei:wei_survey_end', args=(self.survey.registration.pk,)))
+        # Non first year members don't have a survey
+        if not obj.first_year:
+            return redirect(reverse_lazy('wei:wei_survey_end', args=(self.survey.registration.pk,)))
+        return super().get(request, *args, **kwargs)
 
     def get_form_class(self):
-        if not self.survey:
-            self.survey = CurrentSurvey(self.get_object())
+        """
+        Get the survey form. It may depend on the current state of the survey.
+        """
         return self.survey.get_form_class()
 
     def get_form(self, form_class=None):
+        """
+        Update the form with the data of the survey.
+        """
         form = super().get_form(form_class)
         self.survey.update_form(form)
         return form
@@ -482,8 +501,21 @@ class WEISurveyView(BaseFormView, DetailView):
         return context
 
     def form_valid(self, form):
+        """
+        Update the survey with the data of the form.
+        """
         self.survey.form_valid(form)
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('wei:wei_survey', args=(self.get_object().pk,))
+
+
+class WEISurveyEndView(TemplateView):
+    template_name = "wei/survey_end.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei
+        context["title"] = _("Survey WEI")
+        return context

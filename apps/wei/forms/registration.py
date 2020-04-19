@@ -3,9 +3,10 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
-from wei.models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
+from ..models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
 
 
 class WEIForm(forms.ModelForm):
@@ -25,7 +26,7 @@ class WEIForm(forms.ModelForm):
 class WEIRegistrationForm(forms.ModelForm):
     class Meta:
         model = WEIRegistration
-        exclude = ('wei', 'information_json', )
+        exclude = ('wei', )
         widgets = {
             "user": Autocomplete(
                 User,
@@ -41,6 +42,12 @@ class WEIRegistrationForm(forms.ModelForm):
 
 class WEIMembershipForm(forms.ModelForm):
     roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data["team"] is not None and cleaned_data["team"].bus != cleaned_data["bus"]:
+            self.add_error('bus', _("This team doesn't belong to the given team."))
+        return cleaned_data
 
     class Meta:
         model = WEIMembership

@@ -167,3 +167,15 @@
         </form>
     </div>
 {% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        function autocompleted(obj, prefix) {
+            console.log(prefix);
+            if (prefix === "id_bus") {
+                console.log(obj);
+                $("#id_team").attr('api_url', '/api/wei/team/?bus=' + obj.id);
+            }
+        }
+    </script>
+{% endblock %}

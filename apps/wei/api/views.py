@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from api.viewsets import ReadProtectedModelViewSet
 
@@ -16,8 +16,9 @@ class WEIClubViewSet(ReadProtectedModelViewSet):
     """
     queryset = WEIClub.objects.all()
     serializer_class = WEIClubSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['$name', ]
+    filterset_fields = ['name', 'year', ]
 
 
 class BusViewSet(ReadProtectedModelViewSet):
@@ -28,8 +29,9 @@ class BusViewSet(ReadProtectedModelViewSet):
     """
     queryset = Bus.objects.all()
     serializer_class = BusSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['$name', ]
+    filterset_fields = ['name', 'wei', ]
 
 
 class BusTeamViewSet(ReadProtectedModelViewSet):
@@ -40,5 +42,6 @@ class BusTeamViewSet(ReadProtectedModelViewSet):
     """
     queryset = BusTeam.objects.all()
     serializer_class = BusTeamSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['$name', ]
+    filterset_fields = ['name', 'bus', 'wei', ]

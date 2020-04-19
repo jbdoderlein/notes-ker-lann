@@ -46,6 +46,7 @@ class UserCreateView(CreateView):
             del wei_form.fields["user"]
             del wei_form.fields["caution_check"]
             del wei_form.fields["first_year"]
+            del wei_form.fields["information_json"]
             context["wei_form"] = wei_form
             context["wei_registration_form"] = WEISignupForm()
 

@@ -4,7 +4,7 @@
 from django.core.management import BaseCommand
 from django.utils.translation import gettext_lazy as _
 
-from wei.forms import CurrentSurvey
+from ...forms import CurrentSurvey
 
 
 class Command(BaseCommand):
