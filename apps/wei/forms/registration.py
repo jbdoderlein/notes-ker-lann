@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
-from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
+from wei.models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
 
 
 class WEIForm(forms.ModelForm):

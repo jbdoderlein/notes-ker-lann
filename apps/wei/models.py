@@ -64,6 +64,27 @@ class Bus(models.Model):
         verbose_name=_("description"),
     )
 
+    information_json = models.TextField(
+        default="{}",
+        verbose_name=_("survey information"),
+        help_text=_("Information about the survey for new members, encoded in JSON"),
+    )
+
+    @property
+    def information(self):
+        """
+        The information about the survey for new members are stored in a dictionary that can evolve following the years.
+         The dictionary is stored as a JSON string.
+        """
+        return json.loads(self.information_json)
+
+    @information.setter
+    def information(self, information):
+        """
+        Store information as a JSON string
+        """
+        self.information_json = json.dumps(information)
+
     def __str__(self):
         return self.name
 

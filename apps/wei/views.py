@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.edit import BaseFormView
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
 from note.models import Transaction, NoteClub
@@ -17,7 +18,7 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
-from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm
+from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm, CurrentSurvey
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
@@ -302,8 +303,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         self.object.refresh_from_db()
-        # TODO Replace it with the link of the survey
-        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+        return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
 
 
 class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
@@ -342,7 +342,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         self.object.refresh_from_db()
-        return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+        return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
 
 
 class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -447,3 +447,36 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
     def get_success_url(self):
         self.object.refresh_from_db()
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.club.pk})
+
+
+class WEISurveyView(BaseFormView, DetailView):
+    model = WEIRegistration
+    template_name = "wei/survey.html"
+    survey = None
+
+    def setup(self, request, *args, **kwargs):
+        ret = super().setup(request, *args, **kwargs)
+        return ret
+
+    def get_form_class(self):
+        if not self.survey:
+            self.survey = CurrentSurvey(self.get_object())
+        return self.survey.get_form_class()
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        self.survey.update_form(form)
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.wei
+        context["title"] = _("Survey WEI")
+        return context
+
+    def form_valid(self, form):
+        self.survey.form_valid(form)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('wei:wei_survey', args=(self.get_object().pk,))

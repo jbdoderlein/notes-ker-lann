@@ -184,7 +184,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         except IOError as e:
             raise e
         finally:
-            # Delete all temporary files
+            # Delete all temporary forms
             shutil.rmtree(tmp_dir)
 
         return response

@@ -168,11 +168,11 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
 
-# Static files (CSS, JavaScript, Images)
+# Static forms (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
+# Absolute path to the directory static forms should be collected to.
+# Don't put anything in this directory yourself; store your static forms
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
@@ -181,7 +181,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATICFILES_DIRS = []
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
-# URL prefix for static files.
+# URL prefix for static forms.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 

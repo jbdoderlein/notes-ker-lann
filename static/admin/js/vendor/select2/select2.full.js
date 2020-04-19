@@ -23,7 +23,7 @@
   var S2 =
 (function () {
   // Restore the Select2 AMD loader so it can be used
-  // Needed mostly in the language files, where the loader is not inserted
+  // Needed mostly in the language forms, where the loader is not inserted
   if (jQuery && jQuery.fn && jQuery.fn.select2 && jQuery.fn.select2.amd) {
     var S2 = jQuery.fn.select2.amd;
   }
@@ -4774,7 +4774,7 @@ S2.define('select2/defaults',[
           } catch (ex) {
             // The translation could not be loaded at all. Sometimes this is
             // because of a configuration problem, other times this can be
-            // because of how Select2 helps load all possible translation files.
+            // because of how Select2 helps load all possible translation forms.
             if (options.debug && window.console && console.warn) {
               console.warn(
                 'Select2: The language file for "' + name + '" could not be ' +
@@ -6428,7 +6428,7 @@ S2.define('jquery.select2',[
 
   // Hold the AMD module references on the jQuery function that was just loaded
   // This allows Select2 to use the internal loader outside of this file, such
-  // as in the language files.
+  // as in the language forms.
   jQuery.fn.select2.amd = S2;
 
   // Return the Select2 instance for anyone who is importing it.
