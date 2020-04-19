@@ -380,6 +380,9 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
 
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
         context["registration"] = registration
+        survey = CurrentSurvey(registration)
+        if survey.information.valid:
+            context["suggested_bus"] = survey.information.get_selected_bus()
         context["club"] = registration.wei
         context["fee"] = registration.wei.membership_fee_paid if registration.user.profile.paid \
             else registration.wei.membership_fee_unpaid
@@ -394,8 +397,12 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        if WEIRegistration.objects.get(pk=self.kwargs["pk"]).first_year:
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        if registration.first_year:
             del form.fields["roles"]
+            survey = CurrentSurvey(registration)
+            if survey.information.valid:
+                form.fields["bus"].initial = survey.information.get_selected_bus()
         return form
 
     def form_valid(self, form):

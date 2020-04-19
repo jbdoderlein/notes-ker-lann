@@ -10,7 +10,7 @@
 
 {% block profile_content %}
     <div class="card bg-light shadow">
-        <div class="card-header text-center" >
+        <div class="card-header text-center">
             <h4>{% trans "Review registration" %}</h4>
         </div>
         <div class="card-body" id="profile_infos">
@@ -77,7 +77,25 @@
                 <dt class="col-xl-6">{% trans 'Payment from Société générale' %}</dt>
                 <dd class="col-xl-6">{{ registration.soge_credit|yesno }}</dd>
 
-                {% if not registration.first_year %}
+                {% if registration.first_year %}
+                    <dt class="col-xl-6">{% trans 'Suggested bus from the survey:' %}</dt>
+                    {% if registration.information.valid or True %}
+                        <dd class="col-xl-6">{{ suggested_bus }}</dd>
+
+                        <div class="card-header text-center col-xl-12">
+                            <h5>{% trans 'Raw survey information' %}</h5>
+                        </div>
+
+                        {% with information=registration.information %}
+                        {% for key, value in information.items %}
+                            <dt class="col-xl-6">{{ key }}</dt>
+                            <dd class="col-xl-6">{{ value }}</dd>
+                        {% endfor %}
+                        {% endwith %}
+                    {% else %}
+                        <dd class="col-xl-6"><em>{% trans "The algorithm didn't run." %}</em></dd>
+                    {% endif %}
+                {% else %}
                     <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
                 {% endif %}

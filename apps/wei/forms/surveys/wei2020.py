@@ -18,6 +18,7 @@ class WEISurveyForm2020(forms.Form):
 
 class WEISurveyInformation2020(WEISurveyInformation):
     chosen_bus_pk = None
+    chosen_bus_name = None
 
 
 class WEISurvey2020(WEISurvey):
@@ -33,7 +34,9 @@ class WEISurvey2020(WEISurvey):
         form.set_registration(self.registration)
 
     def form_valid(self, form):
-        self.information.chosen_bus_pk = form.cleaned_data["bus"].pk
+        bus = form.cleaned_data["bus"]
+        self.information.chosen_bus_pk = bus.pk
+        self.information.chosen_bus_name = bus.name
         self.save()
 
     @staticmethod
@@ -48,5 +51,5 @@ class WEISurveyAlgorithm2020(WEISurveyAlgorithm):
     def run_algorithm(self):
         for registration in self.get_registrations():
             survey = self.get_survey_class()(registration)
-            survey.select_bus(survey.information.chosen_bus_pk)
+            survey.select_bus(Bus.objects.get(pk=survey.information.chosen_bus_pk))
             survey.save()

@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from wei.models import WEIClub, WEIRegistration
+from ...models import WEIClub, WEIRegistration, Bus
 
 
 class WEISurvey:
@@ -34,16 +34,24 @@ class WEISurvey:
     def save(self):
         self.information.save(self.registration)
 
-    def select_bus(self, bus_pk):
-        self.information.selected_bus_pk = bus_pk
+    def select_bus(self, bus):
+        self.information.selected_bus_pk = bus.pk
+        self.information.selected_bus_name = bus.name
+        self.information.valid = True
 
 
 class WEISurveyInformation:
     valid = False
     selected_bus_pk = None
+    selected_bus_name = None
 
     def __init__(self, registration):
         self.__dict__.update(registration.information)
+
+    def get_selected_bus(self):
+        if not self.valid:
+            return None
+        return Bus.objects.get(pk=self.selected_bus_pk)
 
     def save(self, registration):
         registration.information = self.__dict__
