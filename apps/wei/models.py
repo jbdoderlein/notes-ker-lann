@@ -29,6 +29,9 @@ class WEIClub(Club):
 
     @property
     def is_current_wei(self):
+        """
+        We consider that this is the current WEI iff there is no future WEI planned.
+        """
         return not WEIClub.objects.filter(date_start__gt=self.date_start).exists()
 
     def update_membership_dates(self):

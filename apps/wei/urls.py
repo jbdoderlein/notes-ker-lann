@@ -6,7 +6,7 @@ from django.urls import path
 from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
     WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIValidateRegistrationView,\
-    WEISurveyView, WEISurveyEndView
+    WEISurveyView, WEISurveyEndView, WEIClosedView
 
 
 app_name = 'wei'
@@ -30,4 +30,5 @@ urlpatterns = [
     path('validate/<int:pk>/', WEIValidateRegistrationView.as_view(), name="validate_registration"),
     path('survey/<int:pk>/', WEISurveyView.as_view(), name="wei_survey"),
     path('survey/<int:pk>/end/', WEISurveyEndView.as_view(), name="wei_survey_end"),
+    path('detail/<int:pk>/closed/', WEIClosedView.as_view(), name="wei_closed"),
 ]

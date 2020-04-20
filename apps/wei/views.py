@@ -25,7 +25,7 @@ from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIM
 
 class CurrentWEIDetailView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        wei = WEIClub.objects.order_by('date_start').last()
+        wei = WEIClub.objects.filter(membership_start__lte=date.today()).order_by('date_start').last()
         return reverse_lazy('wei:wei_detail', args=(wei.pk,))
 
 
@@ -68,8 +68,6 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         club = context["club"]
-        if PermissionBackend.check_perm(self.request.user, "member.change_club_membership_start", club):
-            club.update_membership_dates()
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note)) \
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
@@ -106,7 +104,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
 
-        # Check if the user has the right to create a membership, to display the button.
+        # Check if the user has the right to create a membership with a random user, to display the button.
         empty_membership = Membership(
             club=club,
             user=User.objects.first(),
@@ -136,6 +134,15 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     context_object_name = "club"
     form_class = WEIForm
 
+    def dispatch(self, request, *args, **kwargs):
+        wei = self.get_object()
+        today = date.today()
+        # We can't update a past WEI
+        # But we can update it while it is not officially opened
+        if today > wei.membership_end:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
 
@@ -146,6 +153,14 @@ class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = Bus
     form_class = BusForm
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = WEIClub.objects.get(pk=self.kwargs["pk"])
+        today = date.today()
+        # We can't add a bus once the WEI is started
+        if today >= wei.date_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -168,6 +183,14 @@ class BusUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = Bus
     form_class = BusForm
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = self.get_object().wei
+        today = date.today()
+        # We can't update a bus once the WEI is started
+        if today >= wei.date_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -216,6 +239,14 @@ class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = BusTeam
     form_class = BusTeamForm
 
+    def dispatch(self, request, *args, **kwargs):
+        wei = WEIClub.objects.get(buses__pk=self.kwargs["pk"])
+        today = date.today()
+        # We can't add a team once the WEI is started
+        if today >= wei.date_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         bus = Bus.objects.get(pk=self.kwargs["pk"])
@@ -238,6 +269,14 @@ class BusTeamUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = BusTeam
     form_class = BusTeamForm
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = self.get_object().bus.wei
+        today = date.today()
+        # We can't update a bus once the WEI is started
+        if today >= wei.date_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -282,6 +321,14 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = WEIRegistration
     form_class = WEIRegistrationForm
 
+    def dispatch(self, request, *args, **kwargs):
+        wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        today = date.today()
+        # We can't register someone once the WEI is started and before the membership start date
+        if today >= wei.date_start or today < wei.membership_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = _("Register 1A")
@@ -314,6 +361,14 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        today = date.today()
+        # We can't register someone once the WEI is started and before the membership start date
+        if today >= wei.date_start or today < wei.membership_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -355,6 +410,14 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     model = WEIRegistration
     form_class = WEIRegistrationForm
 
+    def dispatch(self, request, *args, **kwargs):
+        wei = self.get_object().wei
+        today = date.today()
+        # We can't update a registration once the WEI is started and before the membership start date
+        if today >= wei.date_start or today < wei.membership_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = self.object.wei
@@ -377,6 +440,14 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
     """
     model = WEIMembership
     form_class = WEIMembershipForm
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei
+        today = date.today()
+        # We can't validate anyone once the WEI is started and before the membership start date
+        if today >= wei.date_start or today < wei.membership_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -468,8 +539,15 @@ class WEISurveyView(BaseFormView, DetailView):
     template_name = "wei/survey.html"
     survey = None
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
+
+        wei = obj.wei
+        today = date.today()
+        # We can't access to the WEI survey once the WEI is started and before the membership start date
+        if today >= wei.date_start or today < wei.membership_start:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+
         if not self.survey:
             self.survey = CurrentSurvey(obj)
         # If the survey is complete, then display the end page.
@@ -478,7 +556,7 @@ class WEISurveyView(BaseFormView, DetailView):
         # Non first year members don't have a survey
         if not obj.first_year:
             return redirect(reverse_lazy('wei:wei_survey_end', args=(self.survey.registration.pk,)))
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_class(self):
         """
@@ -517,5 +595,15 @@ class WEISurveyEndView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei
+        context["title"] = _("Survey WEI")
+        return context
+
+
+class WEIClosedView(TemplateView):
+    template_name = "wei/survey_closed.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = WEIClub.objects.get(pk=self.kwargs["pk"])
         context["title"] = _("Survey WEI")
         return context
