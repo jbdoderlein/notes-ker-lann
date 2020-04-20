@@ -3,6 +3,7 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
@@ -40,13 +41,35 @@ class WEIRegistrationForm(forms.ModelForm):
         }
 
 
+class WEIChooseBusForm(forms.Form):
+    bus = forms.ModelMultipleChoiceField(
+        queryset=Bus.objects,
+        label=_("bus"),
+        help_text=_("This choice is not definitive. The WEI organizers are free to attribute for you a bus and a team,"
+                    + " in particular if you are a free eletron."),
+    )
+
+    team = forms.ModelMultipleChoiceField(
+        queryset=BusTeam.objects,
+        label=_("Team"),
+        required=False,
+        help_text=_("Leave this field empty if you won't be in a team (staff, bus chief, free electron)"),
+    )
+
+    roles = forms.ModelMultipleChoiceField(
+        queryset=WEIRole.objects.filter(~Q(name="1A")),
+        label=_("WEI Roles"),
+        help_text=_("Select the roles that you are interested in."),
+    )
+
+
 class WEIMembershipForm(forms.ModelForm):
-    roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects)
+    roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects, label=_("WEI Roles"))
 
     def clean(self):
         cleaned_data = super().clean()
         if cleaned_data["team"] is not None and cleaned_data["team"].bus != cleaned_data["bus"]:
-            self.add_error('bus', _("This team doesn't belong to the given team."))
+            self.add_error('bus', _("This team doesn't belong to the given bus."))
         return cleaned_data
 
     class Meta:

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 17:51+0200\n"
+"POT-Creation-Date: 2020-04-20 22:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/member/models.py:99 apps/member/models.py:203
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
 #: apps/note/models/transactions.py:44 apps/note/models/transactions.py:237
-#: apps/wei/models.py:54 templates/member/club_info.html:13
+#: apps/wei/models.py:61 templates/member/club_info.html:13
 #: templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
 #: templates/wei/weiclub_info.html:13 templates/wei/weimembership_form.html:18
@@ -67,7 +67,7 @@ msgid "activity types"
 msgstr "types d'activité"
 
 #: apps/activity/models.py:53 apps/note/models/transactions.py:74
-#: apps/permission/models.py:103 apps/wei/models.py:60 apps/wei/models.py:95
+#: apps/permission/models.py:103 apps/wei/models.py:67 apps/wei/models.py:123
 #: templates/activity/activity_detail.html:16
 msgid "description"
 msgstr "description"
@@ -79,7 +79,8 @@ msgid "type"
 msgstr "type"
 
 #: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:224
-#: apps/note/models/notes.py:117 apps/wei/models.py:126
+#: apps/note/models/notes.py:117 apps/wei/models.py:154
+#: templates/wei/survey.html:16
 msgid "user"
 msgstr "utilisateur"
 
@@ -438,7 +439,7 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:267 apps/member/views.py:500 apps/wei/views.py:356
+#: apps/member/models.py:267 apps/member/views.py:500 apps/wei/views.py:592
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -469,7 +470,7 @@ msgstr "Cette adresse doit être valide."
 
 #: apps/member/views.py:65 templates/member/profile_info.html:45
 #: templates/registration/future_profile_detail.html:55
-#: templates/wei/weimembership_form.html:87
+#: templates/wei/weimembership_form.html:105
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
@@ -481,7 +482,7 @@ msgstr "Un alias avec un nom similaire existe déjà."
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:495 apps/wei/views.py:347
+#: apps/member/views.py:495 apps/wei/views.py:583
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -498,8 +499,8 @@ msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
 #: apps/member/views.py:528 apps/member/views.py:530 apps/member/views.py:532
-#: apps/registration/views.py:326 apps/registration/views.py:328
-#: apps/registration/views.py:330
+#: apps/registration/views.py:327 apps/registration/views.py:329
+#: apps/registration/views.py:331
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
@@ -735,7 +736,7 @@ msgstr "Supprimer"
 #: apps/note/tables.py:146 apps/wei/tables.py:42 apps/wei/tables.py:43
 #: templates/member/club_info.html:60 templates/note/conso_form.html:121
 #: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
-#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:61
+#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:66
 msgid "Edit"
 msgstr "Éditer"
 
@@ -799,7 +800,8 @@ msgid ""
 "will be able to register later, after validating your account in the Kfet."
 msgstr ""
 "Cochez cette case si vous voulez vous inscrire au WEI. Si vous hésitez, vous "
-"pourrez toujours vous inscrire plus tard, après avoir validé votre compte à la Kfet."
+"pourrez toujours vous inscrire plus tard, après avoir validé votre compte à "
+"la Kfet."
 
 #: apps/registration/forms.py:79
 msgid "Join BDE Club"
@@ -809,31 +811,31 @@ msgstr "Adhérer au club BDE"
 msgid "Join Kfet Club"
 msgstr "Adhérer au club Kfet"
 
-#: apps/registration/views.py:115
+#: apps/registration/views.py:116
 msgid "Email validation"
 msgstr "Validation de l'adresse mail"
 
-#: apps/registration/views.py:161
+#: apps/registration/views.py:162
 msgid "Email validation unsuccessful"
 msgstr " La validation de l'adresse mail a échoué"
 
-#: apps/registration/views.py:172
+#: apps/registration/views.py:173
 msgid "Email validation email sent"
 msgstr "L'email de vérification de l'adresse email a bien été envoyé."
 
-#: apps/registration/views.py:225
+#: apps/registration/views.py:226
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:292
+#: apps/registration/views.py:293
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
-#: apps/registration/views.py:314
+#: apps/registration/views.py:315
 msgid "You must join BDE club before joining Kfet club."
 msgstr "Vous devez adhérer au club BDE avant d'adhérer au club Kfet."
 
-#: apps/registration/views.py:319
+#: apps/registration/views.py:320
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
@@ -851,7 +853,7 @@ msgstr "Trésorerie"
 #: templates/member/add_members.html:14 templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46 templates/wei/bus_form.html:13
 #: templates/wei/busteam_form.html:13 templates/wei/weiclub_form.html:15
-#: templates/wei/weiregistration_form.html:9
+#: templates/wei/weiregistration_form.html:14
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -1004,10 +1006,38 @@ msgstr "Ajouter"
 msgid "Remove"
 msgstr "supprimer"
 
-#: apps/wei/apps.py:10 apps/wei/models.py:37 apps/wei/models.py:38
-#: apps/wei/models.py:49 apps/wei/models.py:133 templates/base.html:115
+#: apps/wei/apps.py:10 apps/wei/models.py:44 apps/wei/models.py:45
+#: apps/wei/models.py:56 apps/wei/models.py:161 templates/base.html:115
 msgid "WEI"
 msgstr "WEI"
+
+#: apps/wei/forms/registration.py:47
+msgid ""
+"This choice is not definitive. The WEI organizers are free to attribute for "
+"you a bus and a team, in particular if you are a free eletron."
+msgstr ""
+"Ce choix n'est pas définitif. Les organisateurs du WEI sont libres de vous "
+"attribuer un bus et une équipe, en particulier si vous êtes un électron libre."
+
+#: apps/wei/forms/registration.py:54
+msgid ""
+"Leave this field empty if you won't be in a team (staff, bus chief, free "
+"electron)"
+msgstr ""
+"Laissez ce champ vide si vous ne serez pas dans une équipe (staff, chef "
+"de bus ou électron libre)"
+
+#: apps/wei/forms/registration.py:59
+msgid "Select the roles that you are interested in."
+msgstr "Sélectionnez les rôles qui vous intéressent."
+
+#: apps/wei/forms/registration.py:65 apps/wei/forms/registration.py:75
+msgid "This team doesn't belong to the given bus."
+msgstr "Cette équipe n'appartient pas à ce bus."
+
+#: apps/wei/management/commands/wei_algorithm.py:11
+msgid "Attribute to each first year member a bus for the WEI"
+msgstr "Attribuer à chaque première année un bus pour le WEI"
 
 #: apps/wei/models.py:19 templates/wei/weiclub_info.html:23
 msgid "year"
@@ -1021,83 +1051,92 @@ msgstr "début"
 msgid "date end"
 msgstr "fin"
 
-#: apps/wei/models.py:67
+#: apps/wei/models.py:72
+msgid "survey information"
+msgstr "informations sur le questionnaire"
+
+#: apps/wei/models.py:73
+msgid "Information about the survey for new members, encoded in JSON"
+msgstr "Informations sur le sondage pour les nouveaux membres, encodées en JSON"
+
+#: apps/wei/models.py:95
 msgid "Bus"
 msgstr "Bus"
 
-#: apps/wei/models.py:68 templates/wei/weiclub_tables.html:66
+#: apps/wei/models.py:96 templates/wei/weiclub_tables.html:79
 msgid "Buses"
 msgstr "Bus"
 
-#: apps/wei/models.py:80 apps/wei/models.py:234
+#: apps/wei/models.py:108 apps/wei/models.py:269
 msgid "bus"
 msgstr "Bus"
 
-#: apps/wei/models.py:88
+#: apps/wei/models.py:116
 msgid "color"
 msgstr "couleur"
 
-#: apps/wei/models.py:89
+#: apps/wei/models.py:117
 msgid "The color of the T-Shirt, stored with its number equivalent"
-msgstr "La couleur du T-Shirt, stocké sous la forme de son équivalent numérique"
+msgstr ""
+"La couleur du T-Shirt, stocké sous la forme de son équivalent numérique"
 
-#: apps/wei/models.py:103
+#: apps/wei/models.py:131
 msgid "Bus team"
 msgstr "Équipe de bus"
 
-#: apps/wei/models.py:104
+#: apps/wei/models.py:132
 msgid "Bus teams"
-msgstr ""
+msgstr "Équipes de bus"
 
-#: apps/wei/models.py:113
+#: apps/wei/models.py:141
 msgid "WEI Role"
 msgstr "Rôle au WEI"
 
-#: apps/wei/models.py:114
+#: apps/wei/models.py:142
 msgid "WEI Roles"
 msgstr "Rôles au WEI"
 
-#: apps/wei/models.py:138
+#: apps/wei/models.py:166
 msgid "Credit from Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/wei/models.py:143
+#: apps/wei/models.py:171
 msgid "Caution check given"
 msgstr "Chèque de caution donné"
 
-#: apps/wei/models.py:147 templates/wei/weimembership_form.html:56
+#: apps/wei/models.py:175 templates/wei/weimembership_form.html:56
 msgid "birth date"
 msgstr "date de naissance"
 
-#: apps/wei/models.py:153
+#: apps/wei/models.py:181
 msgid "Male"
 msgstr "Homme"
 
-#: apps/wei/models.py:154
+#: apps/wei/models.py:182
 msgid "Female"
 msgstr "Femme"
 
-#: apps/wei/models.py:155
+#: apps/wei/models.py:183
 msgid "Non binary"
 msgstr "Non-binaire"
 
-#: apps/wei/models.py:157 templates/wei/weimembership_form.html:53
+#: apps/wei/models.py:185 templates/wei/weimembership_form.html:53
 msgid "gender"
 msgstr "genre"
 
-#: apps/wei/models.py:163 templates/wei/weimembership_form.html:59
+#: apps/wei/models.py:191 templates/wei/weimembership_form.html:59
 msgid "health issues"
 msgstr "problèmes de santé"
 
-#: apps/wei/models.py:168 templates/wei/weimembership_form.html:62
+#: apps/wei/models.py:196 templates/wei/weimembership_form.html:62
 msgid "emergency contact name"
 msgstr "Nom du contact en cas d'urgence"
 
-#: apps/wei/models.py:173 templates/wei/weimembership_form.html:65
+#: apps/wei/models.py:201 templates/wei/weimembership_form.html:65
 msgid "emergency contact phone"
 msgstr "Téléphone du contact en cas d'urgence"
 
-#: apps/wei/models.py:178 templates/wei/weimembership_form.html:68
+#: apps/wei/models.py:206 templates/wei/weimembership_form.html:68
 msgid ""
 "Register on the mailing list to stay informed of the events of the campus (1 "
 "mail/week)"
@@ -1105,7 +1144,7 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des événements sur "
 "le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:183 templates/wei/weimembership_form.html:71
+#: apps/wei/models.py:211 templates/wei/weimembership_form.html:71
 msgid ""
 "Register on the mailing list to stay informed of the sport events of the "
 "campus (1 mail/week)"
@@ -1113,7 +1152,7 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des actualités "
 "sportives sur le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:188 templates/wei/weimembership_form.html:74
+#: apps/wei/models.py:216 templates/wei/weimembership_form.html:74
 msgid ""
 "Register on the mailing list to stay informed of the art events of the "
 "campus (1 mail/week)"
@@ -1121,47 +1160,51 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des actualités "
 "artistiques sur le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:193 templates/wei/weimembership_form.html:50
+#: apps/wei/models.py:221 templates/wei/weimembership_form.html:50
 msgid "first year"
 msgstr "première année"
 
-#: apps/wei/models.py:194
+#: apps/wei/models.py:222
 msgid "Tells if the user is new in the school."
 msgstr "Indique si l'utilisateur est nouveau dans l'école."
 
-#: apps/wei/models.py:199
+#: apps/wei/models.py:227
 msgid "registration information"
 msgstr "informations sur l'inscription"
 
-#: apps/wei/models.py:200
+#: apps/wei/models.py:228
 msgid ""
 "Information about the registration (buses for old members, survey fot the "
 "new members), encoded in JSON"
 msgstr ""
-"Informations sur l'inscription (bus pour les 2A+, questionnaire pour les 1A),"
-" encodées en JSON"
+"Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
+"1A), encodées en JSON"
 
-#: apps/wei/models.py:224
+#: apps/wei/models.py:259
 msgid "WEI User"
 msgstr "Participant au WEI"
 
-#: apps/wei/models.py:225
+#: apps/wei/models.py:260
 msgid "WEI Users"
 msgstr "Participants au WEI"
 
-#: apps/wei/models.py:244
+#: apps/wei/models.py:279
 msgid "team"
 msgstr "équipe"
 
-#: apps/wei/models.py:254
+#: apps/wei/models.py:279
+msgid "Team"
+msgstr "Équipe"
+
+#: apps/wei/models.py:289
 msgid "WEI registration"
 msgstr "inscription au WEI"
 
-#: apps/wei/models.py:258
+#: apps/wei/models.py:293
 msgid "WEI membership"
 msgstr "adhésion au WEI"
 
-#: apps/wei/models.py:259
+#: apps/wei/models.py:294
 msgid "WEI memberships"
 msgstr "adhésions au WEI"
 
@@ -1174,9 +1217,27 @@ msgstr "Valider"
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/views.py:351
+#: apps/wei/views.py:336 templates/wei/weiclub_info.html:62
+msgid "Register 1A"
+msgstr "Inscrire un 1A"
+
+#: apps/wei/views.py:377 templates/wei/weiclub_info.html:63
+msgid "Register 2A+"
+msgstr "Inscrire un 2A+"
+
+#: apps/wei/views.py:394
+msgid "You already opened an account in the Société générale."
+msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
+
+#: apps/wei/views.py:587
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
+
+#: apps/wei/views.py:655 apps/wei/views.py:675 apps/wei/views.py:685
+#: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
+#: templates/wei/survey_end.html:12
+msgid "Survey WEI"
+msgstr "Questionnaire WEI"
 
 #: note_kfet/settings/__init__.py:63
 msgid ""
@@ -1376,12 +1437,12 @@ msgstr "Créer un club"
 msgid "Club listing"
 msgstr "Liste des clubs"
 
-#: templates/member/club_tables.html:7 templates/wei/weiclub_tables.html:79
+#: templates/member/club_tables.html:7 templates/wei/weiclub_tables.html:92
 msgid "Member of the Club"
 msgstr "Membre du club"
 
 #: templates/member/club_tables.html:20 templates/member/profile_tables.html:28
-#: templates/wei/weiclub_tables.html:92
+#: templates/wei/weiclub_tables.html:105
 msgid "Transaction history"
 msgstr "Historique des transactions"
 
@@ -1561,8 +1622,8 @@ msgid "Validate account"
 msgstr "Valider le compte"
 
 #: templates/registration/future_profile_detail.html:71
-#: templates/wei/weimembership_form.html:97
-#: templates/wei/weimembership_form.html:147
+#: templates/wei/weimembership_form.html:115
+#: templates/wei/weimembership_form.html:173
 msgid "Validate registration"
 msgstr "Valider l'inscription"
 
@@ -1715,13 +1776,15 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Si vous vous êtes déjà inscrits, votre inscription a bien été prise en "
-"compte. Le BDE doit d'abord valider votre compte avant\n"
-"            que vous puissiez vous connecter. Vous devez vous rendre à la Kfet et payer "
-"les frais d'adhésion. Vous devez également valider votre adresse\n"
-"            email en suivant le lien que vous avez reçu. Si vous aviez oublié de vous "
-"inscrire au WEI, vous pourrez vous pré-inscrire à nouveau\n"
-"            après avoir validé votre compte, merci alors de vous rendre à la Kfet.\n"
+"            Si vous vous êtes déjà inscrits, votre inscription a bien été "
+"prise en compte. Le BDE doit d'abord valider votre compte avant\n"
+"            que vous puissiez vous connecter. Vous devez vous rendre à la "
+"Kfet et payer les frais d'adhésion. Vous devez également valider votre "
+"adresse\n"
+"            email en suivant le lien que vous avez reçu. Si vous aviez "
+"oublié de vous inscrire au WEI, vous pourrez vous pré-inscrire à nouveau\n"
+"            après avoir validé votre compte, merci alors de vous rendre à la "
+"Kfet.\n"
 "        "
 
 #: templates/treasury/invoice_form.html:6
@@ -1801,6 +1864,22 @@ msgstr "Ajouter une équipe"
 msgid "Members"
 msgstr "Membres"
 
+#: templates/wei/survey.html:24
+msgid "Next"
+msgstr "Suivant"
+
+#: templates/wei/survey_closed.html:16
+msgid "The inscription for this WEI are now closed."
+msgstr "Les inscriptions pour le WEI sont fermées."
+
+#: templates/wei/survey_closed.html:22
+msgid "Return to WEI detail"
+msgstr "Retour aux détails du WEI"
+
+#: templates/wei/survey_end.html:16
+msgid "The survey is now ended. Your answers have been saved."
+msgstr "Le sondage est désormais terminé, vos réponses ont bien été enregistrées."
+
 #: templates/wei/weiclub_info.html:31
 msgid "WEI fee / including BDE and Kfet fee (paid students)"
 msgstr "Prix du WEI / incluant l'adhésion BDE/Kfet (élèves)"
@@ -1810,14 +1889,14 @@ msgid "WEI fee / including BDE and Kfet fee (unpaid students)"
 msgstr "Prix du WEI / incluant l'adhésion BDE/Kfet (étudiants)"
 
 #: templates/wei/weiclub_info.html:58
-msgid "Register 2A+"
-msgstr "Inscrire un 2A+"
+msgid "WEI list"
+msgstr "Liste des WEI"
 
-#: templates/wei/weiclub_info.html:64
+#: templates/wei/weiclub_info.html:69
 msgid "Add bus"
 msgstr "Ajouter un bus"
 
-#: templates/wei/weiclub_info.html:68
+#: templates/wei/weiclub_info.html:73
 msgid "View WEI"
 msgstr "Voir le WEI"
 
@@ -1833,7 +1912,19 @@ msgstr "Créer un WEI"
 msgid "WEI listing"
 msgstr "Liste des WEI"
 
-#: templates/wei/weiclub_tables.html:107
+#: templates/wei/weiclub_tables.html:63
+msgid "Register to the WEI! – 1A"
+msgstr "M'inscrire au WEI ! – 1A"
+
+#: templates/wei/weiclub_tables.html:65
+msgid "Register to the WEI! – 2A+"
+msgstr "M'inscrire au WEI ! – 2A+"
+
+#: templates/wei/weiclub_tables.html:67
+msgid "Update my registration"
+msgstr "Mettre à jour mon inscription"
+
+#: templates/wei/weiclub_tables.html:120
 msgid "Unvalidated registrations"
 msgstr "Inscriptions non validées"
 
@@ -1846,73 +1937,101 @@ msgid "Payment from Société générale"
 msgstr "Paiement de la Société générale"
 
 #: templates/wei/weimembership_form.html:81
+msgid "Suggested bus from the survey:"
+msgstr "Bus suggéré par le sondage :"
+
+#: templates/wei/weimembership_form.html:86
+msgid "Raw survey information"
+msgstr "Informations brutes du sondage"
+
+#: templates/wei/weimembership_form.html:96
+msgid "The algorithm didn't run."
+msgstr "L'algorithme n'a pas été exécuté."
+
+#: templates/wei/weimembership_form.html:99
 msgid "caution check given"
 msgstr "chèque de caution donné"
 
-#: templates/wei/weimembership_form.html:88
+#: templates/wei/weimembership_form.html:106
 msgid "Update registration"
 msgstr "Mettre à jour l'inscription"
 
-#: templates/wei/weimembership_form.html:101
+#: templates/wei/weimembership_form.html:119
+msgid "The registration is already validated and can't be unvalidated."
+msgstr "L'inscription a déjà été validée et ne peut pas être dévalidée."
+
+#: templates/wei/weimembership_form.html:120
+msgid "The user joined the bus"
+msgstr "L'utilisateur a rejoint le bus"
+
+#: templates/wei/weimembership_form.html:121
+msgid "in the team"
+msgstr "dans l'équipe"
+
+#: templates/wei/weimembership_form.html:122
+msgid "in no team (staff)"
+msgstr "dans aucune équipe (staff)"
+
+#: templates/wei/weimembership_form.html:122
+msgid "with the following roles:"
+msgstr "avec les rôles suivants :"
+
+#: templates/wei/weimembership_form.html:127
 msgid ""
 "\n"
-"                        The WEI will be paid by Société générale. The "
+"                            The WEI will be paid by Société générale. The "
 "membership will be created even if the bank didn't pay the BDE yet.\n"
-"                        The membership transaction will be created but will "
-"be invalid. You will have to validate it once the bank\n"
-"                        validated the creation of the account, or to change "
-"the payment method.\n"
-"                    "
+"                            The membership transaction will be created but "
+"will be invalid. You will have to validate it once the bank\n"
+"                            validated the creation of the account, or to "
+"change the payment method.\n"
+"                        "
 msgstr ""
 "\n"
-"                        Le WEI va être payé par la Société générale. "
+"Le WEI va être payé par la Société générale. "
 "L'adhésion sera créée même si la banque n'a pas encore payé le BDE.\n"
-"                        La transaction d'adhésion sera créée mais invalide. "
+"La transaction d'adhésion sera créée mais invalide. "
 "Vous devrez la valider une fois que la banque\n"
-"                        aura validé la création du compte, ou bien changer "
+"aura validé la création du compte, ou bien changer "
 "de moyen de paiement.\n"
 "                    "
 
-#: templates/wei/weimembership_form.html:111
-#, python-format
+#: templates/wei/weimembership_form.html:137
 msgid ""
 "\n"
-"                            The note don't have enough money (%(balance)s, "
-"%(pretty_fee)s required). The registration may fail.\n"
-"                        "
+"The note don't have enough money "
+"(%(balance)s, %(pretty_fee)s required). The registration may fail.\n"
+"                            "
 msgstr ""
 "\n"
-"                            La note n'a pas assez d'argent (%(balance)s, "
+"La note n'a pas assez d'argent (%(balance)s, "
 "%(pretty_fee)s requis). L'inscription va échouer.\n"
-"                        "
+"                            "
 
-#: templates/wei/weimembership_form.html:118
-msgid "The note has enough money."
-msgstr "La note n'a pas assez d'argent."
+#: templates/wei/weimembership_form.html:144
+msgid "The note has enough money, the registration is possible."
+msgstr "La note a assez d'argent, l'inscription est possible."
 
-#: templates/wei/weimembership_form.html:125
+#: templates/wei/weimembership_form.html:151
 msgid "The user didn't give her/his caution check."
 msgstr "L'utilisateur n'a pas donné son chèque de caution."
 
-#: templates/wei/weimembership_form.html:133
-#, python-format
+#: templates/wei/weimembership_form.html:159
 msgid ""
 "\n"
-"                        This user is not a member of the Kfet club. Please "
-"adhere\n"
-"                        <a href=\"%(future_user_detail)s\">here if he/she is "
-"in her/his first year</a>\n"
-"                        or <a href=\"%(club_detail)s\">here if he/she was an "
-"old member</a> before you validate\n"
-"                        the registration of the WEI.\n"
-"                    "
+"                            This user is not a member of the Kfet club. "
+"Please adhere\n"
+"                            <a href=\"%(future_user_detail)s\">here if he/"
+"she is in her/his first year</a>\n"
+"                            or <a href=\"%(club_detail)s\">here if he/she "
+"was an old member</a> before you validate\n"
+"                            the registration of the WEI.\n"
+"                        "
 msgstr ""
 "\n"
-"                        Cet utilisateur n'est pas membre du club Kfet. Merci "
+"Cet utilisateur n'est pas membre du club Kfet. Merci "
 "de le faire adhérer\n"
-"                        <a href=\"%(future_user_detail)s\">ici s'il est en "
-"première année</a>\n"
-"                        ou <a href=\"%(club_detail)s\">ici s'il est un ancien "
-"membre</a> avant de valider\n"
-"                        l'inscription au WEI.\n"
-"                    "
+"<a href=\"%(future_user_detail)s\">ici s'il est en première année</a>\n"
+"ou <a href=\"%(club_detail)s\">ici s'il est un ancien membre</a> avant de valider\n"
+"l'inscription au WEI.\n"
+"                        "

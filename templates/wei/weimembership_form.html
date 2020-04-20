@@ -98,12 +98,23 @@
                 {% else %}
                     <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
                     <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
+
+                    {% with information=registration.information %}
+                        <dt class="col-xl-6">{% trans 'preferred bus'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_bus_name|join:', ' }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'preferred team'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_team_name|join:', ' }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'preferred roles'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_roles_name|join:', ' }}</dd>
+                    {% endwith %}
                 {% endif %}
             </dl>
         </div>
         <div class="card-footer text-center">
             <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' registration.user.pk %}">{% trans 'Update Profile' %}</a>
-            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.user.pk %}">{% trans 'Update registration' %}</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.pk %}">{% trans 'Update registration' %}</a>
         </div>
     </div>
 
@@ -114,56 +125,65 @@
             <div class="card-header text-center" >
                 <h4> {% trans "Validate registration" %}</h4>
             </div>
-            {% if registration.soge_credit %}
+            {% if registration.is_validated %}
                 <div class="alert alert-warning">
-                    {% blocktrans %}
-                        The WEI will be paid by Société générale. The membership will be created even if the bank didn't pay the BDE yet.
-                        The membership transaction will be created but will be invalid. You will have to validate it once the bank
-                        validated the creation of the account, or to change the payment method.
-                    {% endblocktrans %}
+                    {% trans "The registration is already validated and can't be unvalidated." %}
+                    {% trans "The user joined the bus" %} {{ registration.membership.bus }}
+                    {% if registration.membership.team %}{% trans "in the team" %} {{ registration.membership.team }},
+                    {% else %}{% trans "in no team (staff)" %},{% endif %} {% trans "with the following roles:" %} {{ registration.membership.roles.all|join:", " }}
                 </div>
             {% else %}
-                {% if registration.user.note.balance < fee %}
-                    <div class="alert alert-danger">
-                        {% with pretty_fee=fee|pretty_money %}
-                        {% blocktrans with balance=registration.user.note.balance|pretty_money %}
-                            The note don't have enough money ({{ balance }}, {{ pretty_fee }} required). The registration may fail.
+                {% if registration.soge_credit %}
+                    <div class="alert alert-warning">
+                        {% blocktrans %}
+                            The WEI will be paid by Société générale. The membership will be created even if the bank didn't pay the BDE yet.
+                            The membership transaction will be created but will be invalid. You will have to validate it once the bank
+                            validated the creation of the account, or to change the payment method.
                         {% endblocktrans %}
-                        {% endwith %}
                     </div>
                 {% else %}
-                    <div class="alert alert-success">
-                        {% trans "The note has enough money." %}
+                    {% if registration.user.note.balance < fee %}
+                        <div class="alert alert-danger">
+                            {% with pretty_fee=fee|pretty_money %}
+                            {% blocktrans with balance=registration.user.note.balance|pretty_money %}
+                                The note don't have enough money ({{ balance }}, {{ pretty_fee }} required). The registration may fail.
+                            {% endblocktrans %}
+                            {% endwith %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            {% trans "The note has enough money, the registration is possible." %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if not registration.caution_check and not registration.first_year %}
+                    <div class="alert alert-danger">
+                        {% trans "The user didn't give her/his caution check." %}
                     </div>
                 {% endif %}
-            {% endif %}
 
-            {% if not registration.caution_check and not registration.first_year %}
-                <div class="alert alert-danger">
-                    {% trans "The user didn't give her/his caution check." %}
+                {% if not kfet_member %}
+                    <div class="alert alert-danger">
+                        {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
+                    {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
+                        {% blocktrans %}
+                            This user is not a member of the Kfet club. Please adhere
+                            <a href="{{ future_user_detail }}">here if he/she is in her/his first year</a>
+                            or <a href="{{ club_detail }}">here if he/she was an old member</a> before you validate
+                            the registration of the WEI.
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
+
+                <div class="card-body" id="profile_infos">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
                 </div>
             {% endif %}
-
-            {% if not kfet_member %}
-                <div class="alert alert-danger">
-                    {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
-                {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
-                    {% blocktrans %}
-                        This user is not a member of the Kfet club. Please adhere
-                        <a href="{{ future_user_detail }}">here if he/she is in her/his first year</a>
-                        or <a href="{{ club_detail }}">here if he/she was an old member</a> before you validate
-                        the registration of the WEI.
-                    {% endblocktrans %}
-                </div>
-            {% endif %}
-
-            <div class="card-body" id="profile_infos">
-                {% csrf_token %}
-                {{ form|crispy }}
-            </div>
-            <div class="card-footer text-center">
-                <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
-            </div>
         </form>
     </div>
 {% endblock %}

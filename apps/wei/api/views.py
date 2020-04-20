@@ -44,4 +44,4 @@ class BusTeamViewSet(ReadProtectedModelViewSet):
     serializer_class = BusTeamSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['$name', ]
-    filterset_fields = ['name', 'bus', 'wei', ]
+    filterset_fields = ['name', 'bus', 'bus__wei', ]

@@ -63,8 +63,8 @@
                     <a href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 1A" %}</button></a>
                 {% endif %}
                 <a href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 2A+" %}</button></a>
-            {% elif my_registration.is_validated %}
-                <a href="{% url "wei:wei_update_registration" pk=user.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
+            {% else %}
+                <a href="{% url "wei:wei_update_registration" pk=my_registration.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
             {% endif %}
         </div>
     {% endif %}

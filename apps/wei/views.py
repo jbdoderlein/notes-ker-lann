@@ -6,6 +6,7 @@ from datetime import datetime, date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
@@ -18,6 +19,7 @@ from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
+from .forms.registration import WEIChooseBusForm
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
 from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm, CurrentSurvey
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
@@ -333,13 +335,13 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = _("Register 1A")
         context['club'] = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        if "myself" in self.request.path:
+            context["form"].fields["user"].disabled = True
         return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
-        if "myself" in self.request.path:
-            form.fields["user"].disabled = True
         del form.fields["first_year"]
         del form.fields["caution_check"]
         del form.fields["information_json"]
@@ -374,16 +376,23 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = _("Register 2A+")
         context['club'] = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+
+        if "myself" in self.request.path:
+            context["form"].fields["user"].disabled = True
+
+        choose_bus_form = WEIChooseBusForm()
+        choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"])
+        choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])
+        context['membership_form'] = choose_bus_form
+
         return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].initial = self.request.user
-        if "myself" in self.request.path:
-            form.fields["user"].disabled = True
-            if self.request.user.profile.soge:
-                form.fields["soge_credit"].disabled = True
-                form.fields["soge_credit"].help_text = _("You already opened an account in the Société générale.")
+        if "myself" in self.request.path and self.request.user.profile.soge:
+            form.fields["soge_credit"].disabled = True
+            form.fields["soge_credit"].help_text = _("You already opened an account in the Société générale.")
 
         del form.fields["first_year"]
         del form.fields["ml_events_registration"]
@@ -396,7 +405,27 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         form.instance.first_year = False
+
+        choose_bus_form = WEIChooseBusForm(self.request.POST)
+        if not choose_bus_form.is_valid():
+            return self.form_invalid(choose_bus_form)
+
+        information = form.instance.information
+        information["preferred_bus_pk"] = [bus.pk for bus in choose_bus_form.cleaned_data["bus"]]
+        information["preferred_bus_name"] = [bus.name for bus in choose_bus_form.cleaned_data["bus"]]
+        information["preferred_team_pk"] = [team.pk for team in choose_bus_form.cleaned_data["team"]]
+        information["preferred_team_name"] = [team.name for team in choose_bus_form.cleaned_data["team"]]
+        information["preferred_roles_pk"] = [role.pk for role in choose_bus_form.cleaned_data["roles"]]
+        information["preferred_roles_name"] = [role.name for role in choose_bus_form.cleaned_data["roles"]]
+        form.instance.information = information
+        form.instance.save()
+
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.data)
+        print(form.cleaned_data)
+        return super().form_invalid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()
@@ -421,16 +450,72 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = self.object.wei
+
+        if self.object.is_validated:
+            membership_form = WEIMembershipForm(instance=self.object.membership)
+            for field_name, field in membership_form.fields.items():
+                if not PermissionBackend.check_perm(
+                        self.request.user, "wei.change_membership_" + field_name, self.object.membership):
+                    field.widget = HiddenInput()
+            context["membership_form"] = membership_form
+        elif not self.object.first_year and PermissionBackend.check_perm(
+                self.request.user, "wei.change_weiregistration_information_json", self.object):
+            choose_bus_form = WEIChooseBusForm(
+                dict(
+                    bus=Bus.objects.filter(pk__in=self.object.information["preferred_bus_pk"]).all(),
+                    team=BusTeam.objects.filter(pk__in=self.object.information["preferred_team_pk"]).all(),
+                    roles=WEIRole.objects.filter(pk__in=self.object.information["preferred_roles_pk"]).all(),
+                )
+            )
+            choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"])
+            choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])
+            context["membership_form"] = choose_bus_form
+
+        if not self.object.soge_credit and self.object.user.profile.soge:
+            form = context["form"]
+            form.fields["soge_credit"].disabled = True
+            form.fields["soge_credit"].help_text = _("You already opened an account in the Société générale.")
+
         return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        if "user" in form.fields:
-            del form.fields["user"]
+        del form.fields["user"]
+        if not self.object.first_year:
+            del form.fields["information_json"]
         return form
+
+    def form_valid(self, form):
+        # If the membership is already validated, then we update the bus and the team (and the roles)
+        if form.instance.is_validated:
+            membership_form = WEIMembershipForm(self.request.POST)
+            if not membership_form.is_valid():
+                return self.form_invalid(membership_form)
+            membership_form.save()
+        # If it is not validated and if this is an old member, then we update the choices
+        elif not form.instance.first_year and PermissionBackend.check_perm(
+                self.request.user, "wei.change_weiregistration_information_json", self.object):
+            choose_bus_form = WEIChooseBusForm(self.request.POST)
+            if not choose_bus_form.is_valid():
+                return self.form_invalid(choose_bus_form)
+            information = form.instance.information
+            information["preferred_bus_pk"] = [bus.pk for bus in choose_bus_form.cleaned_data["bus"]]
+            information["preferred_bus_name"] = [bus.name for bus in choose_bus_form.cleaned_data["bus"]]
+            information["preferred_team_pk"] = [team.pk for team in choose_bus_form.cleaned_data["team"]]
+            information["preferred_team_name"] = [team.name for team in choose_bus_form.cleaned_data["team"]]
+            information["preferred_roles_pk"] = [role.pk for role in choose_bus_form.cleaned_data["roles"]]
+            information["preferred_roles_name"] = [role.name for role in choose_bus_form.cleaned_data["roles"]]
+            form.instance.information = information
+            form.instance.save()
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()
+        if self.object.first_year:
+            survey = CurrentSurvey(self.object)
+            if not survey.is_complete():
+                return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
 
 
@@ -474,10 +559,21 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
         form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
         if registration.first_year:
+            # Use the results of the survey to fill initial data
+            # A first year has no other role than "1A"
             del form.fields["roles"]
             survey = CurrentSurvey(registration)
             if survey.information.valid:
                 form.fields["bus"].initial = survey.information.get_selected_bus()
+        else:
+            # Use the choice of the member to fill initial data
+            information = registration.information
+            if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
+                form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
+            if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
+                form["team"].initial = Bus.objects.get(pk=information["preferred_team_pk"][0])
+            if "preferred_roles_pk" in information:
+                form["roles"].initial = WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all()
         return form
 
     def form_valid(self, form):

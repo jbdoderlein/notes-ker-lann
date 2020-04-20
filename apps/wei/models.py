@@ -248,7 +248,7 @@ class WEIRegistration(models.Model):
     def is_validated(self):
         try:
             return self.membership is not None
-        except KeyError:
+        except AttributeError:
             return False
 
     def __str__(self):
