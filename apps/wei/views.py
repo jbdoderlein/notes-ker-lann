@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
 from note.models import Transaction, NoteClub
@@ -350,6 +350,19 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         form.instance.first_year = True
+
+        if not form.instance.pk:
+            # Check if the user is not already registered to the WEI
+            if WEIRegistration.objects.filter(wei=form.instance.wei, user=form.instance.user).exists():
+                form.add_error('user', _("This user is already registered to this WEI."))
+                return self.form_invalid(form)
+
+            # Check if the user can be in her/his first year (yeah, no cheat)
+            if WEIRegistration.objects.filter(user=form.instance.user).exists():
+                form.add_error('user', _("This user can't be in her/his first year since he/she has already"
+                                         " participed to a WEI."))
+                return self.form_invalid(form)
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -406,9 +419,15 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         form.instance.first_year = False
 
+        if not form.instance.pk:
+            # Check if the user is not already registered to the WEI
+            if WEIRegistration.objects.filter(wei=form.instance.wei, user=form.instance.user).exists():
+                form.add_error('user', _("This user is already registered to this WEI."))
+                return self.form_invalid(form)
+
         choose_bus_form = WEIChooseBusForm(self.request.POST)
         if not choose_bus_form.is_valid():
-            return self.form_invalid(choose_bus_form)
+            return self.form_invalid(form)
 
         information = form.instance.information
         information["preferred_bus_pk"] = [bus.pk for bus in choose_bus_form.cleaned_data["bus"]]
@@ -421,11 +440,6 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         form.instance.save()
 
         return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print(form.data)
-        print(form.cleaned_data)
-        return super().form_invalid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()
@@ -490,14 +504,14 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         if form.instance.is_validated:
             membership_form = WEIMembershipForm(self.request.POST)
             if not membership_form.is_valid():
-                return self.form_invalid(membership_form)
+                return self.form_invalid(form)
             membership_form.save()
         # If it is not validated and if this is an old member, then we update the choices
         elif not form.instance.first_year and PermissionBackend.check_perm(
                 self.request.user, "wei.change_weiregistration_information_json", self.object):
             choose_bus_form = WEIChooseBusForm(self.request.POST)
             if not choose_bus_form.is_valid():
-                return self.form_invalid(choose_bus_form)
+                return self.form_invalid(form)
             information = form.instance.information
             information["preferred_bus_pk"] = [bus.pk for bus in choose_bus_form.cleaned_data["bus"]]
             information["preferred_bus_name"] = [bus.name for bus in choose_bus_form.cleaned_data["bus"]]
@@ -517,6 +531,26 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             if not survey.is_complete():
                 return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
+
+
+class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
+    model = WEIRegistration
+
+    def dispatch(self, request, *args, **kwargs):
+        wei = self.get_object().wei
+        today = date.today()
+        # We can't delete a registration of a past WEI
+        if today > wei.membership_end:
+            return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.object.wei
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('wei:wei_detail', args=(self.object.wei.pk,))
 
 
 class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):

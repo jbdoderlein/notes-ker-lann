@@ -5,8 +5,8 @@ from django.urls import path
 
 from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
-    WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIValidateRegistrationView,\
-    WEISurveyView, WEISurveyEndView, WEIClosedView
+    WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIDeleteRegistrationView,\
+    WEIValidateRegistrationView, WEISurveyView, WEISurveyEndView, WEIClosedView
 
 
 app_name = 'wei'
@@ -27,6 +27,7 @@ urlpatterns = [
     path('register/<int:wei_pk>/1A/myself/', WEIRegister1AView.as_view(), name="wei_register_1A_myself"),
     path('register/<int:wei_pk>/2A+/myself/', WEIRegister2AView.as_view(), name="wei_register_2A_myself"),
     path('edit-registration/<int:pk>/', WEIUpdateRegistrationView.as_view(), name="wei_update_registration"),
+    path('delete-registration/<int:pk>/', WEIDeleteRegistrationView.as_view(), name="wei_delete_registration"),
     path('validate/<int:pk>/', WEIValidateRegistrationView.as_view(), name="validate_registration"),
     path('survey/<int:pk>/', WEISurveyView.as_view(), name="wei_survey"),
     path('survey/<int:pk>/end/', WEISurveyEndView.as_view(), name="wei_survey_end"),

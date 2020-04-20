@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-20 22:34+0200\n"
+"POT-Creation-Date: 2020-04-21 01:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -439,7 +439,7 @@ msgstr ""
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:267 apps/member/views.py:500 apps/wei/views.py:592
+#: apps/member/models.py:267 apps/member/views.py:500 apps/wei/views.py:645
 msgid "User is not a member of the parent club"
 msgstr ""
 
@@ -470,7 +470,7 @@ msgstr ""
 
 #: apps/member/views.py:65 templates/member/profile_info.html:45
 #: templates/registration/future_profile_detail.html:55
-#: templates/wei/weimembership_form.html:105
+#: templates/wei/weimembership_form.html:116
 msgid "Update Profile"
 msgstr ""
 
@@ -482,7 +482,7 @@ msgstr ""
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:495 apps/wei/views.py:583
+#: apps/member/views.py:495 apps/wei/views.py:636
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -727,6 +727,7 @@ msgid "No reason specified"
 msgstr ""
 
 #: apps/note/tables.py:122 apps/note/tables.py:151 apps/wei/tables.py:66
+#: templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
 msgstr ""
 
@@ -1003,23 +1004,37 @@ msgstr ""
 msgid "WEI"
 msgstr ""
 
-#: apps/wei/forms/registration.py:47
+#: apps/wei/forms/registration.py:47 apps/wei/models.py:108
+#: apps/wei/models.py:269
+msgid "bus"
+msgstr ""
+
+#: apps/wei/forms/registration.py:48
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
 msgstr ""
 
 #: apps/wei/forms/registration.py:54
+msgid "Team"
+msgstr ""
+
+#: apps/wei/forms/registration.py:56
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
 msgstr ""
 
-#: apps/wei/forms/registration.py:59
+#: apps/wei/forms/registration.py:61 apps/wei/forms/registration.py:67
+#: apps/wei/models.py:142
+msgid "WEI Roles"
+msgstr ""
+
+#: apps/wei/forms/registration.py:62
 msgid "Select the roles that you are interested in."
 msgstr ""
 
-#: apps/wei/forms/registration.py:65 apps/wei/forms/registration.py:75
+#: apps/wei/forms/registration.py:72
 msgid "This team doesn't belong to the given bus."
 msgstr ""
 
@@ -1055,10 +1070,6 @@ msgstr ""
 msgid "Buses"
 msgstr ""
 
-#: apps/wei/models.py:108 apps/wei/models.py:269
-msgid "bus"
-msgstr ""
-
 #: apps/wei/models.py:116
 msgid "color"
 msgstr ""
@@ -1077,10 +1088,6 @@ msgstr ""
 
 #: apps/wei/models.py:141
 msgid "WEI Role"
-msgstr ""
-
-#: apps/wei/models.py:142
-msgid "WEI Roles"
 msgstr ""
 
 #: apps/wei/models.py:166
@@ -1196,19 +1203,29 @@ msgstr ""
 msgid "Register 1A"
 msgstr ""
 
-#: apps/wei/views.py:377 templates/wei/weiclub_info.html:63
+#: apps/wei/views.py:357 apps/wei/views.py:425
+msgid "This user is already registered to this WEI."
+msgstr ""
+
+#: apps/wei/views.py:362
+msgid ""
+"This user can't be in her/his first year since he/she has already participed "
+"to a WEI."
+msgstr ""
+
+#: apps/wei/views.py:390 templates/wei/weiclub_info.html:63
 msgid "Register 2A+"
 msgstr ""
 
-#: apps/wei/views.py:394
+#: apps/wei/views.py:408 apps/wei/views.py:491
 msgid "You already opened an account in the Société générale."
 msgstr ""
 
-#: apps/wei/views.py:587
+#: apps/wei/views.py:640
 msgid "This user didn't give her/his caution check."
 msgstr ""
 
-#: apps/wei/views.py:655 apps/wei/views.py:675 apps/wei/views.py:685
+#: apps/wei/views.py:708 apps/wei/views.py:728 apps/wei/views.py:738
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
@@ -1581,6 +1598,7 @@ msgid ""
 msgstr ""
 
 #: templates/registration/future_profile_detail.html:56
+#: templates/wei/weiregistration_confirm_delete.html:12
 msgid "Delete registration"
 msgstr ""
 
@@ -1589,8 +1607,8 @@ msgid "Validate account"
 msgstr ""
 
 #: templates/registration/future_profile_detail.html:71
-#: templates/wei/weimembership_form.html:115
-#: templates/wei/weimembership_form.html:173
+#: templates/wei/weimembership_form.html:126
+#: templates/wei/weimembership_form.html:184
 msgid "Validate registration"
 msgstr ""
 
@@ -1822,7 +1840,7 @@ msgstr ""
 msgid "The inscription for this WEI are now closed."
 msgstr ""
 
-#: templates/wei/survey_closed.html:22
+#: templates/wei/survey_closed.html:20
 msgid "Return to WEI detail"
 msgstr ""
 
@@ -1902,31 +1920,44 @@ msgstr ""
 msgid "caution check given"
 msgstr ""
 
+#: templates/wei/weimembership_form.html:103
+msgid "preferred bus"
+msgstr ""
+
 #: templates/wei/weimembership_form.html:106
+msgid "preferred team"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:109
+msgid "preferred roles"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:117
+#: templates/wei/weiregistration_confirm_delete.html:31
 msgid "Update registration"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:119
+#: templates/wei/weimembership_form.html:130
 msgid "The registration is already validated and can't be unvalidated."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:120
+#: templates/wei/weimembership_form.html:131
 msgid "The user joined the bus"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:121
+#: templates/wei/weimembership_form.html:132
 msgid "in the team"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:122
+#: templates/wei/weimembership_form.html:133
 msgid "in no team (staff)"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:122
+#: templates/wei/weimembership_form.html:133
 msgid "with the following roles:"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:127
+#: templates/wei/weimembership_form.html:138
 msgid ""
 "\n"
 "                            The WEI will be paid by Société générale. The "
@@ -1938,7 +1969,7 @@ msgid ""
 "                        "
 msgstr ""
 
-#: templates/wei/weimembership_form.html:137
+#: templates/wei/weimembership_form.html:148
 #, python-format
 msgid ""
 "\n"
@@ -1947,15 +1978,15 @@ msgid ""
 "                            "
 msgstr ""
 
-#: templates/wei/weimembership_form.html:144
+#: templates/wei/weimembership_form.html:155
 msgid "The note has enough money, the registration is possible."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:151
+#: templates/wei/weimembership_form.html:162
 msgid "The user didn't give her/his caution check."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:159
+#: templates/wei/weimembership_form.html:170
 #, python-format
 msgid ""
 "\n"
@@ -1967,4 +1998,15 @@ msgid ""
 "was an old member</a> before you validate\n"
 "                            the registration of the WEI.\n"
 "                        "
+msgstr ""
+
+#: templates/wei/weiregistration_confirm_delete.html:17
+msgid "This registration is already validated and can't be deleted."
+msgstr ""
+
+#: templates/wei/weiregistration_confirm_delete.html:24
+#, python-format
+msgid ""
+"Are you sure you want to delete the registration of %(user)s for the WEI "
+"%(wei_name)s? This action can't be undoed."
 msgstr ""

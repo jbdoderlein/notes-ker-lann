@@ -60,7 +60,7 @@ class WEIRegistrationTable(tables.Table):
     )
 
     delete = tables.LinkColumn(
-        'wei:wei_detail',
+        'wei:wei_delete_registration',
         args=[A('pk')],
         verbose_name=_("delete"),
         text=_("Delete"),
