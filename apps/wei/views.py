@@ -5,6 +5,7 @@ from datetime import datetime, date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
 from django.shortcuts import redirect
@@ -14,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
-from note.models import Transaction, NoteClub
+from note.models import Transaction, NoteClub, Alias
 from note.tables import HistoryTable
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -125,6 +126,78 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         context["not_first_year"] = WEIMembership.objects.filter(user=self.request.user).exists()
 
+        return context
+
+
+class WEIMembershipsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+    """
+    List all WEI memberships
+    """
+    model = WEIMembership
+    table_class = WEIMembershipTable
+
+    def dispatch(self, request, *args, **kwargs):
+        self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs).filter(club=self.club)
+
+        pattern = self.request.GET.get("search", "")
+
+        if not pattern:
+            return qs.none()
+
+        qs = qs.filter(
+            Q(user__first_name__iregex=pattern)
+            | Q(user__last_name__iregex=pattern)
+            | Q(user__note__alias__name__iregex="^" + pattern)
+            | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+            | Q(bus__name__iregex=pattern)
+            | Q(team__name__iregex=pattern)
+        )
+
+        return qs[:20]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.club
+        context["title"] = _("Find WEI Membership")
+        return context
+
+
+class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+    """
+    List all non-validated WEI registrations.
+    """
+    model = WEIRegistration
+    table_class = WEIRegistrationTable
+
+    def dispatch(self, request, *args, **kwargs):
+        self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs).filter(wei=self.club, membership=None)
+
+        pattern = self.request.GET.get("search", "")
+
+        if not pattern:
+            return qs.none()
+
+        qs = qs.filter(
+            Q(user__first_name__iregex=pattern)
+            | Q(user__last_name__iregex=pattern)
+            | Q(user__note__alias__name__iregex="^" + pattern)
+            | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+        )
+
+        return qs[:20]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = self.club
+        context["title"] = _("Find WEI Registration")
         return context
 
 
@@ -494,7 +567,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        del form.fields["user"]
+        form.fields["user"].disabled = True
         if not self.object.first_year:
             del form.fields["information_json"]
         return form
@@ -502,7 +575,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def form_valid(self, form):
         # If the membership is already validated, then we update the bus and the team (and the roles)
         if form.instance.is_validated:
-            membership_form = WEIMembershipForm(self.request.POST)
+            membership_form = WEIMembershipForm(self.request.POST, instance=form.instance.membership)
             if not membership_form.is_valid():
                 return self.form_invalid(form)
             membership_form.save()
@@ -534,14 +607,22 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
 
 
 class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
+    """
+    Delete a non-validated WEI registration
+    """
     model = WEIRegistration
 
     def dispatch(self, request, *args, **kwargs):
-        wei = self.get_object().wei
+        object = self.get_object()
+        wei = object.wei
         today = date.today()
         # We can't delete a registration of a past WEI
         if today > wei.membership_end:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+
+        if not PermissionBackend.check_perm(self.request.user, "wei.delete_weiregistration", object):
+            raise PermissionDenied
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

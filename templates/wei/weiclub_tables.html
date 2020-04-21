@@ -88,8 +88,8 @@
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
-                <i class="fa fa-users"></i> {% trans "Member of the Club" %}
+            <a class="btn btn-link stretched-link font-weight-bold" href="{% url "wei:wei_memberships" pk=club.pk %}">
+                <i class="fa fa-users"></i> {% trans "Members of the WEI" %}
             </a>
         </div>
         {% render_table member_list %}
@@ -116,7 +116,7 @@
 {% if pre_registrations.data %}
     <div class="card">
         <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
+            <a class="btn btn-link stretched-link font-weight-bold" href="{% url 'wei:wei_registrations' pk=club.pk %}">
                 <i class="fa fa-user-plus"></i> {% trans "Unvalidated registrations" %}
             </a>
         </div>

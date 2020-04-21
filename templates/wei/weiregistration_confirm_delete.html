@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="alert alert-warning">
                     {% with user=object.user wei_name=object.wei.name %}
-                    {% blocktrans %}Are you sure you want to delete the registration of {{ user }} for the WEI {{ wei_name }}? This action can't be undoed.{% endblocktrans %}
+                    {% blocktrans %}Are you sure you want to delete the registration of {{ user }} for the WEI {{ wei_name }}? This action can't be undone.{% endblocktrans %}
                     {% endwith %}
                 </div>
             </div>

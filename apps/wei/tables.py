@@ -77,7 +77,7 @@ class WEIRegistrationTable(tables.Table):
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'first_year',)
+        fields = ('user', 'user.first_name', 'user.last_name', 'first_year',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -86,13 +86,28 @@ class WEIRegistrationTable(tables.Table):
 
 
 class WEIMembershipTable(tables.Table):
+    user = tables.LinkColumn(
+        'wei:wei_update_registration',
+        args=[A('registration.pk')],
+    )
+
+    bus = tables.LinkColumn(
+        'wei:manage_bus',
+        args=[A('bus.pk')],
+    )
+
+    team = tables.LinkColumn(
+        'wei:manage_bus_team',
+        args=[A('bus.pk')],
+    )
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', )
+        fields = ('user', 'user.first_name', 'user.last_name', 'bus', 'team', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),

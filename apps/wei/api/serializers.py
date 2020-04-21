@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from ..models import WEIClub, Bus, BusTeam
+from ..models import WEIClub, Bus, BusTeam, WEIRole, WEIRegistration, WEIMembership
 
 
 class WEIClubSerializer(serializers.ModelSerializer):
@@ -36,4 +36,37 @@ class BusTeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BusTeam
+        fields = '__all__'
+
+
+class WEIRoleSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for WEI roles.
+    The djangorestframework plugin will analyse the model `WEIRole` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = WEIRole
+        fields = '__all__'
+
+
+class WEIRegistrationSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for WEI registrations.
+    The djangorestframework plugin will analyse the model `WEIRegistration` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = WEIRegistration
+        fields = '__all__'
+
+
+class WEIMembershipSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for WEI memberships.
+    The djangorestframework plugin will analyse the model `WEIMembership` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = WEIMembership
         fields = '__all__'

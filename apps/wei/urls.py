@@ -4,6 +4,7 @@
 from django.urls import path
 
 from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
+    WEIRegistrationsView, WEIMembershipsView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
     WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIDeleteRegistrationView,\
     WEIValidateRegistrationView, WEISurveyView, WEISurveyEndView, WEIClosedView
@@ -16,6 +17,8 @@ urlpatterns = [
     path('create/', WEICreateView.as_view(), name="wei_create"),
     path('detail/<int:pk>/', WEIDetailView.as_view(), name="wei_detail"),
     path('update/<int:pk>/', WEIUpdateView.as_view(), name="wei_update"),
+    path('detail/<int:pk>/registrations/', WEIRegistrationsView.as_view(), name="wei_registrations"),
+    path('detail/<int:pk>/memberships/', WEIMembershipsView.as_view(), name="wei_memberships"),
     path('add-bus/<int:pk>/', BusCreateView.as_view(), name="add_bus"),
     path('manage-bus/<int:pk>/', BusManageView.as_view(), name="manage_bus"),
     path('update-bus/<int:pk>/', BusUpdateView.as_view(), name="update_bus"),
