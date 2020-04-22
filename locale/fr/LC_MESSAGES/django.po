@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-22 03:51+0200\n"
+"POT-Creation-Date: 2020-04-22 13:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,13 +67,14 @@ msgid "activity types"
 msgstr "types d'activité"
 
 #: apps/activity/models.py:53 apps/note/models/transactions.py:75
-#: apps/permission/models.py:103 apps/wei/models.py:68 apps/wei/models.py:124
+#: apps/permission/models.py:103 apps/permission/models.py:176
+#: apps/wei/models.py:68 apps/wei/models.py:124
 #: templates/activity/activity_detail.html:16
 msgid "description"
 msgstr "description"
 
 #: apps/activity/models.py:60 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:65
+#: apps/note/models/transactions.py:65 apps/permission/models.py:157
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr "type"
@@ -220,7 +221,7 @@ msgstr "Logs"
 msgid "IP Address"
 msgstr "Adresse IP"
 
-#: apps/logs/models.py:35
+#: apps/logs/models.py:35 apps/permission/models.py:127
 msgid "model"
 msgstr "Modèle"
 
@@ -412,7 +413,7 @@ msgstr "club"
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:210 apps/permission/models.py:294
+#: apps/member/models.py:210 apps/permission/models.py:312
 msgid "role"
 msgstr "rôle"
 
@@ -432,7 +433,7 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:268 apps/member/views.py:505 apps/wei/views.py:727
+#: apps/member/models.py:268 apps/member/views.py:505 apps/wei/views.py:731
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -475,7 +476,7 @@ msgstr "Un alias avec un nom similaire existe déjà."
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:500 apps/wei/views.py:718
+#: apps/member/views.py:500 apps/wei/views.py:722
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -744,12 +745,12 @@ msgstr "Transférer de l'argent"
 msgid "Consumptions"
 msgstr "Consommations"
 
-#: apps/permission/models.py:82 apps/permission/models.py:281
+#: apps/permission/models.py:82
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:84 apps/permission/models.py:283
+#: apps/permission/models.py:84
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr ""
@@ -766,19 +767,31 @@ msgstr "masque de permissions"
 msgid "permission masks"
 msgstr "masques de permissions"
 
-#: apps/permission/models.py:160
+#: apps/permission/models.py:151
+msgid "query"
+msgstr "requête"
+
+#: apps/permission/models.py:164
+msgid "mask"
+msgstr "masque"
+
+#: apps/permission/models.py:170
+msgid "field"
+msgstr "champ"
+
+#: apps/permission/models.py:181
 msgid "permission"
 msgstr "permission"
 
-#: apps/permission/models.py:161
+#: apps/permission/models.py:182
 msgid "permissions"
 msgstr "permissions"
 
-#: apps/permission/models.py:166
+#: apps/permission/models.py:187
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 
-#: apps/permission/models.py:304 apps/permission/models.py:305
+#: apps/permission/models.py:322 apps/permission/models.py:323
 msgid "role permissions"
 msgstr "Permissions par rôles"
 
@@ -982,7 +995,7 @@ msgstr "Proxys de transactions spéciales"
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:292
+#: apps/treasury/models.py:296
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -990,11 +1003,11 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:303 templates/treasury/sogecredit_detail.html:10
+#: apps/treasury/models.py:308 templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:304
+#: apps/treasury/models.py:309
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
@@ -1252,23 +1265,23 @@ msgstr "Valider"
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/views.py:166
+#: apps/wei/views.py:170
 msgid "Find WEI Membership"
 msgstr "Trouver une adhésion au WEI"
 
-#: apps/wei/views.py:201
+#: apps/wei/views.py:205
 msgid "Find WEI Registration"
 msgstr "Trouver une inscription au WEI"
 
-#: apps/wei/views.py:410 templates/wei/weiclub_info.html:62
+#: apps/wei/views.py:414 templates/wei/weiclub_info.html:62
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/views.py:431 apps/wei/views.py:499
+#: apps/wei/views.py:435 apps/wei/views.py:503
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:436
+#: apps/wei/views.py:440
 msgid ""
 "This user can't be in her/his first year since he/she has already participed "
 "to a WEI."
@@ -1276,19 +1289,19 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:464 templates/wei/weiclub_info.html:63
+#: apps/wei/views.py:468 templates/wei/weiclub_info.html:63
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
-#: apps/wei/views.py:482 apps/wei/views.py:565
+#: apps/wei/views.py:486 apps/wei/views.py:569
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:722
+#: apps/wei/views.py:726
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
 
-#: apps/wei/views.py:791 apps/wei/views.py:811 apps/wei/views.py:821
+#: apps/wei/views.py:795 apps/wei/views.py:815 apps/wei/views.py:825
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
@@ -1955,8 +1968,8 @@ msgstr ""
 #: templates/treasury/sogecredit_detail.html:50
 msgid "Please ask the user to credit its note before deleting this credit."
 msgstr ""
-"Merci de demander à l'utilisateur de recharger sa note avant de "
-"supprimer la demande de crédit."
+"Merci de demander à l'utilisateur de recharger sa note avant de supprimer la "
+"demande de crédit."
 
 #: templates/treasury/sogecredit_detail.html:64
 msgid "Return to credit list"

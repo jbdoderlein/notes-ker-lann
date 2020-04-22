@@ -34,7 +34,6 @@ class WEISurveyInformation:
         Store the data of the survey into the database, with the information of the registration.
         """
         registration.information = self.__dict__
-        registration.save()
 
 
 class WEISurveyAlgorithm:
@@ -140,6 +139,10 @@ class WEISurvey:
         Store the information of the survey into the database.
         """
         self.information.save(self.registration)
+        # The information is forced-saved.
+        # We don't want that anyone can update manually the information, so since most users don't have the
+        # right to save the information of a registration, we force save.
+        self.registration._force_save = True
         self.registration.save()
 
     @classmethod

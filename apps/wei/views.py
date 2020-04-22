@@ -28,8 +28,12 @@ from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIM
 
 class CurrentWEIDetailView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        wei = WEIClub.objects.filter(membership_start__lte=date.today()).order_by('date_start').last()
-        return reverse_lazy('wei:wei_detail', args=(wei.pk,))
+        wei = WEIClub.objects.filter(membership_start__lte=date.today()).order_by('date_start')
+        if wei.exists():
+            wei = wei.last()
+            return reverse_lazy('wei:wei_detail', args=(wei.pk,))
+        else:
+            return reverse_lazy('wei:wei_list')
 
 
 class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):

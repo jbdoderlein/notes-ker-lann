@@ -75,7 +75,9 @@ class PermissionBackend(ModelBackend):
                 NoteClub=NoteClub,
                 NoteSpecial=NoteSpecial,
                 F=F,
-                Q=Q
+                Q=Q,
+                now=datetime.datetime.now(),
+                today=datetime.date.today(),
             )
             yield permission
 
