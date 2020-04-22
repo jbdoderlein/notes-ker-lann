@@ -240,7 +240,7 @@ class SogeCredit(models.Model):
 
     @property
     def amount(self):
-        return sum(transaction.quantity * transaction.amount for transaction in self.transactions.all())
+        return sum(transaction.total for transaction in self.transactions.all())
 
     def invalidate(self):
         """
@@ -249,11 +249,14 @@ class SogeCredit(models.Model):
         """
         if self.valid:
             self.credit_transaction.valid = False
+            self.credit_transaction._force_save = True
             self.credit_transaction.save()
+            self.credit_transaction._force_delete = True
             self.credit_transaction.delete()
         self.credit_transaction = None
         for transaction in self.transactions.all():
             transaction.valid = False
+            transaction._force_save = True
             transaction.save()
 
     def validate(self, force=False):
@@ -277,6 +280,7 @@ class SogeCredit(models.Model):
 
         for transaction in self.transactions.all():
             transaction.valid = True
+            transaction._force_save = True
             transaction.created_at = datetime.now()
             transaction.save()
 
@@ -286,8 +290,15 @@ class SogeCredit(models.Model):
         Treasurers must know what they do, this is difficult to undo this operation.
         With Great Power Comes Great Responsibility...
         """
+
+        total_fee = sum(transaction.total for transaction in self.transactions.all() if not transaction.valid)
+        if self.user.note.balance < total_fee:
+            raise ValidationError(_("This user doesn't have enough money to pay the memberships with its note. "
+                                    "Please ask her/him to credit the note before invalidating this credit."))
+
         self.invalidate()
         for transaction in self.transactions.all():
+            transaction._force_save = True
             transaction.valid = True
             transaction.created_at = datetime.now()
             transaction.save()

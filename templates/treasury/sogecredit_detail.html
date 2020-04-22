@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load pretty_money %}
+{% load perms %}
 
 {% block content %}
     <div class="card bg-light shadow">
@@ -12,6 +13,11 @@
             <dl class="row">
                 <dt class="col-xl-6 text-right">{% trans 'user'|capfirst %}</dt>
                 <dd class="col-xl-6"><a href="{% url 'member:user_detail' pk=object.user.pk %}">{{ object.user }}</a></dd>
+
+                {% if "note.view_note_balance"|has_perm:object.user.note %}
+                    <dt class="col-xl-6 text-right">{% trans 'balance'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.user.note.balance|pretty_money }}</dd>
+                {% endif %}
 
                 <dt class="col-xl-6 text-right">{% trans 'transactions'|capfirst %}</dt>
                 <dd class="col-xl-6">
@@ -38,11 +44,20 @@
                     {% trans "This credit is already validated." %}
                 </div>
             {% else %}
+                {% if object.user.note.balance < object.amount %}
+                    <div class="alert alert-warning">
+                        {% trans "Warning: if you don't validate this credit, the note of the user doesn't have enough money to pay its memberships." %}
+                        {% trans "Please ask the user to credit its note before deleting this credit." %}
+                    </div>
+                {% endif %}
+
                 <form method="post">
                     {% csrf_token %}
                     <div class="btn-group btn-block">
                         <button name="validate" class="btn btn-success">{% trans "Validate" %}</button>
-                        <button name="delete" class="btn btn-danger">{% trans "Delete" %}</button>
+                        {% if object.user.note.balance >= object.amount %}
+                            <button name="delete" class="btn btn-danger">{% trans "Delete" %}</button>
+                        {% endif %}
                     </div>
                 </form>
             {% endif %}
