@@ -25,6 +25,12 @@ class ProfileForm(forms.ModelForm):
     A form for the extras field provided by the :model:`member.Profile` model.
     """
 
+    def save(self, commit=True):
+        if not self.instance.section or (("department" in self.changed_data
+                                         or "promotion" in self.changed_data) and "section" not in self.changed_data):
+            self.instance.section = self.instance.section_generated
+        return super().save(commit)
+
     class Meta:
         model = Profile
         fields = '__all__'

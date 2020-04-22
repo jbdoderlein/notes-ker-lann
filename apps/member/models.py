@@ -3,6 +3,7 @@
 
 import datetime
 import os
+from math import ceil
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -23,18 +24,20 @@ class Profile(models.Model):
 
     We do not want to patch the Django Contrib :model:`auth.User`model;
     so this model add an user profile with additional information.
-
     """
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
     phone_number = models.CharField(
         verbose_name=_('phone number'),
         max_length=50,
         blank=True,
         null=True,
     )
+
     section = models.CharField(
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
@@ -42,12 +45,44 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+
+    department = models.CharField(
+        max_length=8,
+        verbose_name=_("department"),
+        choices=[
+            ('A0', _("Informatics (A0)")),
+            ('A1', _("Mathematics (A1)")),
+            ('A2', _("Physics (A2)")),
+            ("A'2", _("Applied physics (A'2)")),
+            ('A''2', _("Chemistry (A''2)")),
+            ('A3', _("Biology (A3)")),
+            ('B1234', _("SAPHIRE (B1234)")),
+            ('B1', _("Mechanics (B1)")),
+            ('B2', _("Civil engineering (B2)")),
+            ('B3', _("Mechanical engineering (B3)")),
+            ('B4', _("EEA (B4)")),
+            ('C', _("Design (C)")),
+            ('D2', _("Economy-management (D2)")),
+            ('D3', _("Social sciences (D3)")),
+            ('E', _("English (E)")),
+            ('EXT', _("External (EXT)")),
+        ]
+    )
+
+    promotion = models.PositiveIntegerField(
+        null=True,
+        default=datetime.date.today().year,
+        verbose_name=_("promotion"),
+        help_text=_("Year of entry to the school (None if not ENS student)"),
+    )
+
     address = models.CharField(
         verbose_name=_('address'),
         max_length=255,
         blank=True,
         null=True,
     )
+
     paid = models.BooleanField(
         verbose_name=_("paid"),
         help_text=_("Tells if the user receive a salary."),
@@ -63,6 +98,23 @@ class Profile(models.Model):
         verbose_name=_("registration valid"),
         default=False,
     )
+
+    @property
+    def ens_year(self):
+        """
+        Number of years since the 1st august of the entry year, rounded up.
+        """
+        if self.promotion is None:
+            return 0
+        today = datetime.date.today()
+        years = today.year - self.promotion
+        if today.month >= 8:
+            years += 1
+        return years
+
+    @property
+    def section_generated(self):
+        return str(self.ens_year) + self.department
 
     @property
     def soge(self):

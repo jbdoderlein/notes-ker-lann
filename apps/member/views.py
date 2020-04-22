@@ -526,6 +526,13 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         # Now, all is fine, the membership can be created.
 
+        if club.name == "BDE":
+            # When we renew the BDE membership, we update the profile section.
+            # We could automate that and remove the section field from the Profile model,
+            # but with this way users can customize their section as they want.
+            user.profile.section = user.profile.section_generated
+            user.profile.save()
+
         # Credit note before the membership is created.
         if credit_amount > 0:
             if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):

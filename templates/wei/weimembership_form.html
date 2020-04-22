@@ -33,6 +33,12 @@
                     </dd>
                 {% endif %}
 
+                <dt class="col-xl-6">{% trans 'department'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.department }}</dd>
+
+                <dt class="col-xl-6">{% trans 'ENS year'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.ens_year }}</dd>
+
                 <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ registration.user.profile.section }}</dd>
 
