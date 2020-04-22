@@ -1,9 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from datetime import date
+
 from django.core.management import BaseCommand
 from django.db.models import Q
 
+from member.models import Membership
 from ...models import WEIClub
 
 
@@ -13,12 +16,21 @@ class Command(BaseCommand):
            "You can write this into a file with a pipe, then paste the document into your mail manager."
 
     def add_arguments(self, parser):
-        parser.add_argument('--type', '-t', choices=["events", "art", "sport"], default="events",
-                            help='Select the type of the mailing list (default events)')
+        parser.add_argument('--type', '-t', choices=["members", "events", "art", "sport"], default="members",
+                            help='Select the type of the mailing list (default members)')
         parser.add_argument('--year', '-y', type=int, default=None,
                             help='Select the year of the concerned WEI. Default: last year')
 
     def handle(self, *args, **options):
+        if options["type"] == "members":
+            for membership in Membership.objects.filter(
+                club__name="BDE",
+                date_start__lte=date.today(),
+                date_end__gte=date.today(),
+            ).all():
+                self.stdout.write(membership.user.email)
+            return
+
         if options["year"] is None:
             wei = WEIClub.objects.order_by('-year').first()
         else:
