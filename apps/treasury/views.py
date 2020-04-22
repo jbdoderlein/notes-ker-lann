@@ -10,21 +10,23 @@ from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.forms import Form
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
+from django.views.generic.edit import BaseFormView
 from django_tables2 import SingleTableView
-from note.models import SpecialTransaction, NoteSpecial
+from note.models import SpecialTransaction, NoteSpecial, Alias
 from note_kfet.settings.base import BASE_DIR
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
-from .models import Invoice, Product, Remittance, SpecialTransactionProxy
-from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
+from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
 
 
 class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
@@ -307,3 +309,61 @@ class UnlinkTransactionToRemittanceView(LoginRequiredMixin, View):
         transaction.save()
 
         return redirect('treasury:remittance_list')
+
+
+class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
+    """
+    List all Société Générale credits
+    """
+    model = SogeCredit
+    table_class = SogeCreditTable
+
+    def get_queryset(self, **kwargs):
+        """
+        Filter the table with the given parameter.
+        :param kwargs:
+        :return:
+        """
+        qs = super().get_queryset()
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+            if not pattern:
+                return qs.none()
+
+            qs = qs.filter(
+                Q(user__first_name__iregex=pattern)
+                | Q(user__last_name__iregex=pattern)
+                | Q(user__note__alias__name__iregex="^" + pattern)
+                | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+            )
+        else:
+            qs = qs.none()
+
+        if "valid" in self.request.GET:
+            q = Q(credit_transaction=None)
+            if not self.request.GET["valid"]:
+                q = ~q
+            qs = qs.filter(q)
+
+        return qs[:20]
+
+
+class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormView, DetailView):
+    """
+    Manage credits from the Société générale.
+    """
+    model = SogeCredit
+    form_class = Form
+
+    def form_valid(self, form):
+        if "validate" in form.data:
+            self.get_object().validate(True)
+        elif "delete" in form.data:
+            self.get_object().delete()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        if "validate" in self.request.POST:
+            return reverse_lazy('treasury:manage_soge_credit', args=(self.get_object().pk,))
+        return reverse_lazy('treasury:soge_credits')

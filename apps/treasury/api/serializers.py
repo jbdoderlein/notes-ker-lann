@@ -4,7 +4,7 @@
 from rest_framework import serializers
 from note.api.serializers import SpecialTransactionSerializer
 
-from ..models import Invoice, Product, RemittanceType, Remittance
+from ..models import Invoice, Product, RemittanceType, Remittance, SogeCredit
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -60,3 +60,14 @@ class RemittanceSerializer(serializers.ModelSerializer):
 
     def get_transactions(self, obj):
         return serializers.ListSerializer(child=SpecialTransactionSerializer()).to_representation(obj.transactions)
+
+
+class SogeCreditSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for SogeCredit types.
+    The djangorestframework plugin will analyse the model `SogeCredit` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = SogeCredit
+        fields = '__all__'

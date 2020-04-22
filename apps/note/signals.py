@@ -10,7 +10,7 @@ def save_user_note(instance, raw, **_kwargs):
         # When provisionning data, do not try to autocreate
         return
 
-    if (instance.is_superuser or instance.profile.registration_valid) and instance.is_active:
+    if instance.is_superuser or instance.profile.registration_valid:
         # Create note only when the registration is validated
         from note.models import NoteUser
         NoteUser.objects.get_or_create(user=instance)

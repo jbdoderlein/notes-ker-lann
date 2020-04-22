@@ -64,11 +64,12 @@ class Profile(models.Model):
         default=False,
     )
 
-    soge = models.BooleanField(
-        verbose_name=_("Société générale"),
-        help_text=_("Has the user ever be paid by the Société générale?"),
-        default=False,
-    )
+    @property
+    def soge(self):
+        if "treasury" in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            return SogeCredit.objects.filter(user=self.user, credit_transaction=None).exists()
+        return False
 
     class Meta:
         verbose_name = _('user profile')
@@ -309,7 +310,20 @@ class Membership(models.Model):
                 reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
-            transaction.save(force_insert=True)
+            print(hasattr(self, '_soge'))
+            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS:
+                # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
+                # to treasurers.
+                transaction.valid = False
+                from treasury.models import SogeCredit
+                soge_credit = SogeCredit.objects.get_or_create(user=self.user)[0]
+                soge_credit.refresh_from_db()
+                transaction.save(force_insert=True)
+                transaction.refresh_from_db()
+                soge_credit.transactions.add(transaction)
+                soge_credit.save()
+            else:
+                transaction.save(force_insert=True)
 
     def __str__(self):
         return _("Membership of {user} for the club {club}").format(user=self.user.username, club=self.club.name, )

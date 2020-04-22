@@ -3,6 +3,7 @@
 
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -312,3 +313,14 @@ class WEIMembership(Membership):
             )
             transaction._force_save = True
             transaction.save(force_insert=True)
+
+            if self.registration.soge_credit and "treasury" in settings.INSTALLED_APPS:
+                # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
+                # to treasurers.
+                transaction.refresh_from_db()
+                from treasury.models import SogeCredit
+                soge_credit = SogeCredit.objects.get_or_create(user=self.user)[0]
+                soge_credit.refresh_from_db()
+                transaction.save()
+                soge_credit.transactions.add(transaction)
+                soge_credit.save()

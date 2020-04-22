@@ -73,7 +73,8 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club = context["club"]
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note)) \
-            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")).order_by('-id')
+            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
+            .order_by('-created_at', '-id')
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
         context['history_list'] = history_table
@@ -742,9 +743,10 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.club.pk})
 
 
-class WEISurveyView(BaseFormView, DetailView):
+class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
     """
-    Display the survey for the WEI for first
+    Display the survey for the WEI for first year members.
+    Warning: this page is accessible for anyone that is connected, the view doesn't extend ProtectQuerySetMixin.
     """
     model = WEIRegistration
     template_name = "wei/survey.html"
@@ -800,7 +802,7 @@ class WEISurveyView(BaseFormView, DetailView):
         return reverse_lazy('wei:wei_survey', args=(self.get_object().pk,))
 
 
-class WEISurveyEndView(TemplateView):
+class WEISurveyEndView(LoginRequiredMixin, TemplateView):
     template_name = "wei/survey_end.html"
 
     def get_context_data(self, **kwargs):
@@ -810,7 +812,7 @@ class WEISurveyEndView(TemplateView):
         return context
 
 
-class WEIClosedView(TemplateView):
+class WEIClosedView(LoginRequiredMixin, TemplateView):
     template_name = "wei/survey_closed.html"
 
     def get_context_data(self, **kwargs):
