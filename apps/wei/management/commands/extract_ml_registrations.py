@@ -6,7 +6,7 @@ from datetime import date
 from django.core.management import BaseCommand
 from django.db.models import Q
 
-from member.models import Membership
+from member.models import Membership, Club
 from ...models import WEIClub
 
 
@@ -16,7 +16,7 @@ class Command(BaseCommand):
            "You can write this into a file with a pipe, then paste the document into your mail manager."
 
     def add_arguments(self, parser):
-        parser.add_argument('--type', '-t', choices=["members", "events", "art", "sport"], default="members",
+        parser.add_argument('--type', '-t', choices=["members", "clubs", "events", "art", "sport"], default="members",
                             help='Select the type of the mailing list (default members)')
         parser.add_argument('--year', '-y', type=int, default=None,
                             help='Select the year of the concerned WEI. Default: last year')
@@ -29,6 +29,11 @@ class Command(BaseCommand):
                 date_end__gte=date.today(),
             ).all():
                 self.stdout.write(membership.user.email)
+            return
+
+        if options["type"] == "clubs":
+            for club in Club.objects.all():
+                self.stdout.write(club.email)
             return
 
         if options["year"] is None:
