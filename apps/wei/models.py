@@ -265,6 +265,7 @@ class WEIMembership(Membership):
     bus = models.ForeignKey(
         Bus,
         on_delete=models.PROTECT,
+        related_name="memberships",
         null=True,
         default=None,
         verbose_name=_("bus"),

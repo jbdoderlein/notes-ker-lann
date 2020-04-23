@@ -273,6 +273,7 @@ class Membership(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
+        related_name="memberships",
         verbose_name=_("user"),
     )
 

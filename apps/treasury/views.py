@@ -182,7 +182,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             # Display the generated pdf as a HTTP Response
             pdf = open("{}/invoice-{}.pdf".format(tmp_dir, pk), 'rb').read()
             response = HttpResponse(pdf, content_type="application/pdf")
-            response['Content-Disposition'] = "inline;filename=invoice-{:d}.pdf".format(pk)
+            response['Content-Disposition'] = "inline;filename=Facture%20n°{:d}.pdf".format(pk)
         except IOError as e:
             raise e
         finally:

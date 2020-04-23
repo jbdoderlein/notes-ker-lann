@@ -1,15 +1,23 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
+import shutil
+import subprocess
 from datetime import datetime, date
+from tempfile import mkdtemp
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
+from django.db.models import Q, Count
+from django.db.models.functions import Lower
 from django.forms import HiddenInput
+from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import BaseFormView, DeleteView
@@ -17,6 +25,7 @@ from django_tables2 import SingleTableView
 from member.models import Membership, Club
 from note.models import Transaction, NoteClub, Alias
 from note.tables import HistoryTable
+from note_kfet.settings import BASE_DIR
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
@@ -108,7 +117,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["my_registration"] = my_registration
 
         buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view"))\
-            .filter(wei=self.object)
+            .filter(wei=self.object).annotate(count=Count("memberships"))
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
 
@@ -299,7 +308,7 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         bus = self.object
         teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view"))\
-            .filter(bus=bus)
+            .filter(bus=bus).annotate(count=Count("memberships"))
         teams_table = BusTeamTable(data=teams, prefix="team-")
         context["teams"] = teams_table
 
@@ -824,3 +833,80 @@ class WEIClosedView(LoginRequiredMixin, TemplateView):
         context["club"] = WEIClub.objects.get(pk=self.kwargs["pk"])
         context["title"] = _("Survey WEI")
         return context
+
+
+class MemberListRenderView(LoginRequiredMixin, View):
+    """
+    Render Invoice as a generated PDF with the given information and a LaTeX template
+    """
+
+    def get_queryset(self, **kwargs):
+        qs = WEIMembership.objects.filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
+        qs = qs.filter(club__pk=self.kwargs["wei_pk"]).order_by(
+            Lower('bus__name'),
+            Lower('team__name'),
+            'roles',
+            Lower('user__last_name'),
+            Lower('user__first_name'),
+        ).distinct()
+
+        if "bus_pk" in self.kwargs:
+            qs = qs.filter(bus__pk=self.kwargs["bus_pk"])
+
+        if "team_pk" in self.kwargs:
+            qs = qs.filter(team__pk=self.kwargs["team_pk"] if self.kwargs["team_pk"] else None)
+
+        return qs
+
+    def get(self, request, **kwargs):
+        qs = self.get_queryset()
+
+        wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        bus = team = None
+        if "bus_pk" in self.kwargs:
+            bus = Bus.objects.get(pk=self.kwargs["bus_pk"])
+        if "team_pk" in self.kwargs:
+            team = BusTeam.objects.filter(pk=self.kwargs["team_pk"] if self.kwargs["team_pk"] else None)
+            if team.exists():
+                team = team.get()
+                bus = team.bus
+            else:
+                team = dict(name="Staff")
+
+        # Fill the template with the information
+        tex = render_to_string("wei/weilist_sample.tex", dict(memberships=qs.all(), wei=wei, bus=bus, team=team))
+
+        try:
+            os.mkdir(BASE_DIR + "/tmp")
+        except FileExistsError:
+            pass
+        # We render the file in a temporary directory
+        tmp_dir = mkdtemp(prefix=BASE_DIR + "/tmp/")
+
+        try:
+            with open("{}/wei-list.tex".format(tmp_dir), "wb") as f:
+                f.write(tex.encode("UTF-8"))
+            del tex
+
+            error = subprocess.Popen(
+                ["pdflatex", "{}/wei-list.tex".format(tmp_dir)],
+                cwd=tmp_dir,
+                stdin=open(os.devnull, "r"),
+                stderr=open(os.devnull, "wb"),
+                stdout=open(os.devnull, "wb"),
+            ).wait()
+
+            if error:
+                raise IOError("An error attempted while generating a WEI list (code=" + str(error) + ")")
+
+            # Display the generated pdf as a HTTP Response
+            pdf = open("{}/wei-list.pdf".format(tmp_dir), 'rb').read()
+            response = HttpResponse(pdf, content_type="application/pdf")
+            response['Content-Disposition'] = "inline;filename=Liste%20des%20participants%20au%20WEI.pdf"
+        except IOError as e:
+            raise e
+        finally:
+            # Delete all temporary files
+            shutil.rmtree(tmp_dir)
+
+        return response

@@ -91,6 +91,11 @@ class WEIMembershipTable(tables.Table):
         args=[A('registration.pk')],
     )
 
+    year = tables.Column(
+        accessor=A("pk"),
+        verbose_name=_("Year"),
+    )
+
     bus = tables.LinkColumn(
         'wei:manage_bus',
         args=[A('bus.pk')],
@@ -101,13 +106,17 @@ class WEIMembershipTable(tables.Table):
         args=[A('bus.pk')],
     )
 
+    def render_year(self, record):
+        return str(record.user.profile.ens_year) + "A"
+
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.first_name', 'user.last_name', 'bus', 'team', )
+        fields = ('user', 'user.last_name', 'user.first_name', 'registration.gender', 'user.profile.department',
+                  'year', 'bus', 'team', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -130,8 +139,15 @@ class BusTable(tables.Table):
         }
     )
 
+    count = tables.Column(
+        verbose_name=_("Members count"),
+    )
+
     def render_teams(self, value):
         return ", ".join(team.name for team in value.all())
+
+    def render_count(self, value):
+        return str(value) + " " + (str(_("members")) if value > 0 else str(_("member")))
 
     class Meta:
         attrs = {
@@ -159,6 +175,13 @@ class BusTeamTable(tables.Table):
                                         .format(record.color, 0xFFFFFF - record.color, )
             }
         }
+    )
+
+    def render_count(self, value):
+        return str(value) + " " + (str(_("members")) if value > 0 else str(_("member")))
+
+    count = tables.Column(
+        verbose_name=_("Members count"),
     )
 
     def render_color(self, value):

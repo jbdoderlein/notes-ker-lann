@@ -1470,7 +1470,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__year\": [\"today\", \"year\"]}",
+			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1883,6 +1883,36 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 115,
+		"fields": {
+			"model": [
+				"wei",
+				"weimembership"
+			],
+			"query": "{\"wei\": [\"club\"], \"bus\": [\"membership\", \"weimembership\", \"bus\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"description": "View the members of the bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 116,
+		"fields": {
+			"model": [
+				"wei",
+				"weimembership"
+			],
+			"query": "{\"wei\": [\"club\"], \"team\": [\"membership\", \"weimembership\", \"team\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"description": "View the members of the team"
+		}
+	},
+	{
 		"model": "permission.rolepermissions",
 		"pk": 1,
 		"fields": {
@@ -2228,6 +2258,26 @@
 				111,
 				112,
 				113
+			]
+		}
+	},
+	{
+		"model": "permission.rolepermissions",
+		"pk": 13,
+		"fields": {
+			"role": 13,
+			"permissions": [
+				115
+			]
+		}
+	},
+	{
+		"model": "permission.rolepermissions",
+		"pk": 14,
+		"fields": {
+			"role": 14,
+			"permissions": [
+				116
 			]
 		}
 	}

@@ -41,4 +41,10 @@
         </div>
         {% render_table memberships %}
     </div>
+
+    <hr>
+
+    <a href="{% url 'wei:wei_memberships_bus_pdf' wei_pk=club.pk bus_pk=object.pk %}" data-turbolinks="false">
+        <button class="btn btn-block btn-danger"><i class="fa fa-file-pdf-o"></i> {% trans "View as PDF" %}</button>
+    </a>
 {% endif %}
