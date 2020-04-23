@@ -86,7 +86,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club = context["club"]
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note)) \
-            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")) \
             .order_by('-created_at', '-id')
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
@@ -116,7 +116,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             my_registration = None
         context["my_registration"] = my_registration
 
-        buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view"))\
+        buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view")) \
             .filter(wei=self.object).annotate(count=Count("memberships"))
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
@@ -307,7 +307,7 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["club"] = self.object.wei
 
         bus = self.object
-        teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view"))\
+        teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view")) \
             .filter(bus=bus).annotate(count=Count("memberships"))
         teams_table = BusTeamTable(data=teams, prefix="team-")
         context["teams"] = teams_table
