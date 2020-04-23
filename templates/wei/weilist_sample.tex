@@ -1,10 +1,11 @@
-\documentclass{article}
+\documentclass[landscape,10pt]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 
-\usepackage[margin=2cm]{geometry}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{ltablex}
 \usepackage{tabularx}
 
 \begin{document}
@@ -22,16 +23,29 @@
 \end{center}
 
 \begin{center}
-\begin{tabularx}{\textwidth}{|c|c|c|c|c|c|c|X|}
-\hline
-\textbf{Nom} & \textbf{Prénom} & \textbf{Genre} & \textbf{Département} & \textbf{Année} & \textbf{Bus} & \textbf{Équipe} & \textbf{Rôles} \\
-\hline
+\footnotesize
+\begin{tabularx}{\textwidth}{ccccccccc}
+\textbf{Nom} & \textbf{Prénom} & \textbf{Date de naissance} & \textbf{Genre} & \textbf{Section}
+ & \textbf{Bus} & \textbf{Équipe} & \textbf{Rôles} \\
 {% for membership in memberships %}
-{{ membership.user.last_name|safe }} & {{ membership.user.first_name|safe }} & {{ membership.registration.get_gender_display|safe }}
-& {{ membership.user.profile.get_department_display|safe }} & {{ membership.user.profile.ens_year|safe }}A & {{ membership.bus.name|safe }}
+{{ membership.user.last_name|safe }} & {{ membership.user.first_name|safe }} & {{ membership.registration.birth_date|safe }}
+& {{ membership.registration.get_gender_display|safe }} & {{ membership.user.profile.section_generated|safe }} & {{ membership.bus.name|safe }}
 & {% if membership.team %}{{ membership.team.name|safe }}{% else %}--{% endif %} & {{ membership.roles.all|join:", "|safe }} \\
-\hline
 {% endfor %}
 \end{tabularx}
 \end{center}
+
+\footnotesize
+Section = Année à l'ENS + code du département
+
+\begin{center}
+\begin{tabular}{ccccccccc}
+\textbf{Code} & A0 & A1 & A2 & A'2 & A''2 & A3 & B1234 & B1 \\
+\textbf{Département} & Informatique & Maths & Physique & Physique appliquée & Chimie & Biologie & SAPHIRE & Mécanique \\
+\hline
+\textbf{Code} & B2 & B3 & B4 & C & D2 & D3 & E & EXT \\
+\textbf{Département} & Génie civil & Génie mécanique & EEA & Design & Éco-gestion & Sciences sociales & Anglais & Extérieur
+\end{tabular}
+\end{center}
+
 \end{document}
