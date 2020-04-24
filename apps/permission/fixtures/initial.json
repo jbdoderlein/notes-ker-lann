@@ -119,6 +119,13 @@
 		}
 	},
 	{
+		"model": "member.role",
+		"pk": 18,
+		"fields": {
+			"name": "Adhérent WEI"
+		}
+	},
+	{
 		"model": "wei.weirole",
 		"pk": 12,
 		"fields": {}
@@ -146,6 +153,11 @@
 	{
 		"model": "wei.weirole",
 		"pk": 17,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 18,
 		"fields": {}
 	},
 	{
@@ -1320,11 +1332,11 @@
 				"wei",
 				"weiclub"
 			],
-			"query": "{}",
+			"query": "{\"pk\": [\"club\", \"pk\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
-			"description": "View all WEI"
+			"description": "View my WEI"
 		}
 	},
 	{
@@ -1410,7 +1422,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"], \"membership\": null}",
+			"query": "{\"user\": [\"user\"], \"wei__year\": [\"today\", \"year\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"], \"membership\": null}",
 			"type": "add",
 			"mask": 1,
 			"field": "",
@@ -1650,7 +1662,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"club\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_name",
@@ -1680,7 +1692,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"club\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_phone",
@@ -1725,7 +1737,7 @@
 				"wei",
 				"bus"
 			],
-			"query": "{\"wei\": [\"club\"]}",
+			"query": "{\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}",
 			"type": "change",
 			"mask": 3,
 			"field": "name",
@@ -1785,7 +1797,7 @@
 				"wei",
 				"bus"
 			],
-			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", {\"first_year\": false, \"club__weiclub__end_date__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"registration\", \"first_year\"]], {\"wei__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1800,7 +1812,7 @@
 				"wei",
 				"busteam"
 			],
-			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", {\"first_year\": false, \"club__weiclub__end_date__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"registration\", \"first_year\"]], {\"wei__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1815,7 +1827,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "[\"AND\", {\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"registration__soge_credit\": true}, {\"user__note__balance__gte\": [\"F\", \"fee\"]}]]",
+			"query": "[\"AND\", {\"club\": [\"club\"], \"club__weiclub__membership_end__gte\": [\"today\"]}, [\"OR\", {\"registration__soge_credit\": true}, {\"user__note__balance__gte\": [\"F\", \"fee\"]}]]",
 			"type": "add",
 			"mask": 3,
 			"field": "",
@@ -1830,7 +1842,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "{\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "{\"club\": [\"club\"], \"club__weiclub__membership_end__gte\": [\"today\"]}",
 			"type": "change",
 			"mask": 1,
 			"field": "bus",
@@ -1845,7 +1857,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "{\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "{\"club\": [\"club\"], \"club__weiclub__membership_end__gte\": [\"today\"]}",
 			"type": "change",
 			"mask": 1,
 			"field": "team",
@@ -1860,7 +1872,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "{\"wei\": [\"club\"]}",
+			"query": "{\"club\": [\"club\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1875,7 +1887,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"], \"wei\": [\"club\"]}, [\"OR\", {\"first_year\": false, \"club__weiclub__end_date__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"club\": [\"club\"]}, [\"OR\", {\"registration__first_year\": false, \"club__weiclub__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1890,7 +1902,7 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "{\"wei\": [\"club\"], \"bus\": [\"membership\", \"weimembership\", \"bus\"]}",
+			"query": "{\"club\": [\"club\"], \"bus\": [\"membership\", \"weimembership\", \"bus\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1905,11 +1917,146 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "{\"wei\": [\"club\"], \"team\": [\"membership\", \"weimembership\", \"team\"]}",
+			"query": "{\"club\": [\"club\"], \"team\": [\"membership\", \"weimembership\", \"team\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
 			"description": "View the members of the team"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 117,
+		"fields": {
+			"model": [
+				"wei",
+				"bus"
+			],
+			"query": "{\"pk\": [\"membership\", \"bus\", \"pk\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "name",
+			"description": "Update the name of my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 118,
+		"fields": {
+			"model": [
+				"wei",
+				"bus"
+			],
+			"query": "{\"pk\": [\"membership\", \"bus\", \"pk\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "description",
+			"description": "Update the description of my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 119,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"bus\": [\"membership\", \"bus\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"description": "Add a team to my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 120,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"bus\": [\"membership\", \"bus\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "name",
+			"description": "Update the name of a team of my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 121,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"bus\": [\"membership\", \"bus\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "color",
+			"description": "Update the color of a team of my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 122,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"bus\": [\"membership\", \"bus\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "description",
+			"description": "Update the description of a team of my bus"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 123,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"pk\": [\"membership\", \"team\", \"pk\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "name",
+			"description": "Update the name of my team"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 124,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"pk\": [\"membership\", \"team\", \"pk\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "color",
+			"description": "Update the color of my team"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 125,
+		"fields": {
+			"model": [
+				"wei",
+				"busteam"
+			],
+			"query": "{\"pk\": [\"membership\", \"team\", \"pk\"], \"wei__date_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "description",
+			"description": "Update the description of my team"
 		}
 	},
 	{
@@ -1952,21 +2099,12 @@
 				16,
 				17,
 				18,
-				97,
-				99,
-				101,
 				70,
 				108,
 				109,
 				78,
 				79,
-				114,
-				83,
-				84,
-				87,
-				90,
-				93,
-				95
+				83
 			]
 		}
 	},
@@ -2180,7 +2318,18 @@
 				111,
 				112,
 				113,
-				114
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125
 			]
 		}
 	},
@@ -2190,15 +2339,6 @@
 		"fields": {
 			"role": 10,
 			"permissions": [
-				32,
-				33,
-				56,
-				58,
-				55,
-				57,
-				52,
-				53,
-				54,
 				23,
 				24,
 				25,
@@ -2207,7 +2347,16 @@
 				28,
 				29,
 				30,
-				31
+				31,
+				32,
+				33,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58
 			]
 		}
 	},
@@ -2267,7 +2416,12 @@
 		"fields": {
 			"role": 13,
 			"permissions": [
-				115
+				115,
+				117,
+				118,
+				120,
+				121,
+				122
 			]
 		}
 	},
@@ -2278,6 +2432,27 @@
 			"role": 14,
 			"permissions": [
 				116
+			]
+		}
+	},
+	{
+		"model": "permission.rolepermissions",
+		"pk": 16,
+		"fields": {
+			"role": 18,
+			"permissions": [
+				77,
+				84,
+				87,
+				90,
+				93,
+				95,
+				97,
+				99,
+				101,
+				108,
+				109,
+				114
 			]
 		}
 	}

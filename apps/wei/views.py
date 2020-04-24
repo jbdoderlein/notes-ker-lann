@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, Count
-from django.db.models.functions import Lower
+from django.db.models.functions.text import Lower
 from django.forms import HiddenInput
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -540,6 +540,9 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     model = WEIRegistration
     form_class = WEIRegistrationForm
 
+    def get_queryset(self, **kwargs):
+        return WEIRegistration.objects
+
     def dispatch(self, request, *args, **kwargs):
         wei = self.get_object().wei
         today = date.today()
@@ -702,7 +705,9 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
             if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
                 form["team"].initial = Bus.objects.get(pk=information["preferred_team_pk"][0])
             if "preferred_roles_pk" in information:
-                form["roles"].initial = WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all()
+                form["roles"].initial = WEIRole.objects.filter(
+                    Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
+                ).all()
         return form
 
     def form_valid(self, form):
@@ -749,7 +754,12 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
             membership.roles.set(WEIRole.objects.filter(name="1A").all())
             membership.save()
 
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+
+        membership.refresh_from_db()
+        membership.roles.add(WEIRole.objects.get("Adhérent WEI"))
+
+        return ret
 
     def get_success_url(self):
         self.object.refresh_from_db()
@@ -845,10 +855,11 @@ class MemberListRenderView(LoginRequiredMixin, View):
         qs = qs.filter(club__pk=self.kwargs["wei_pk"]).order_by(
             Lower('bus__name'),
             Lower('team__name'),
-            'roles',
+            'user__profile__promotion',
             Lower('user__last_name'),
             Lower('user__first_name'),
-        ).distinct()
+            'id',
+        )
 
         if "bus_pk" in self.kwargs:
             qs = qs.filter(bus__pk=self.kwargs["bus_pk"])
@@ -856,7 +867,7 @@ class MemberListRenderView(LoginRequiredMixin, View):
         if "team_pk" in self.kwargs:
             qs = qs.filter(team__pk=self.kwargs["team_pk"] if self.kwargs["team_pk"] else None)
 
-        return qs
+        return qs.distinct()
 
     def get(self, request, **kwargs):
         qs = self.get_queryset()

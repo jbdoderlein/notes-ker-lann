@@ -30,7 +30,7 @@
 {% for membership in memberships %}
 {{ membership.user.last_name|safe }} & {{ membership.user.first_name|safe }} & {{ membership.registration.birth_date|safe }}
 & {{ membership.registration.get_gender_display|safe }} & {{ membership.user.profile.section_generated|safe }} & {{ membership.bus.name|safe }}
-& {% if membership.team %}{{ membership.team.name|safe }}{% else %}--{% endif %} & {{ membership.roles.all|join:", "|safe }} \\
+& {% if membership.team %}{{ membership.team.name|safe }}{% else %}--{% endif %} & {{ membership.roles.first|safe }} \\
 {% endfor %}
 \end{tabularx}
 \end{center}
