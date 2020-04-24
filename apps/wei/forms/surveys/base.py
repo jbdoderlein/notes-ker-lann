@@ -36,6 +36,16 @@ class WEISurveyInformation:
         registration.information = self.__dict__
 
 
+class WEIBusInformation:
+    """
+    Abstract data of the bus.
+    """
+
+    def __init__(self, bus: Bus):
+        self.__dict__.update(bus.information)
+        self.bus = bus
+
+
 class WEISurveyAlgorithm:
     """
     Abstract algorithm that attributes a bus to each new member.
@@ -47,6 +57,14 @@ class WEISurveyAlgorithm:
         The class of the survey associated with this algorithm.
         """
         raise NotImplementedError
+
+    @classmethod
+    def get_bus_information_class(cls):
+        """
+        The class of the information associated to a bus extending WEIBusInformation.
+        Default: WEIBusInformation (contains nothing)
+        """
+        return WEIBusInformation
 
     @classmethod
     def get_registrations(cls) -> QuerySet:
@@ -61,6 +79,13 @@ class WEISurveyAlgorithm:
         Queryset of all buses of the associated wei.
         """
         return Bus.objects.filter(wei__year=cls.get_survey_class().get_year())
+
+    @classmethod
+    def get_bus_information(cls, bus):
+        """
+        Return the WEIBusInformation object containing the data stored in a given bus.
+        """
+        return cls.get_bus_information_class()(bus)
 
     def run_algorithm(self) -> None:
         """

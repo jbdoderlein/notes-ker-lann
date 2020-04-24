@@ -516,6 +516,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.fields["soge_credit"].disabled = True
             form.fields["soge_credit"].help_text = _("You already opened an account in the Société générale.")
 
+        del form.fields["caution_check"]
         del form.fields["first_year"]
         del form.fields["ml_events_registration"]
         del form.fields["ml_art_registration"]
