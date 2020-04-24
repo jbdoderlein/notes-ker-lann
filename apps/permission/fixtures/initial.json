@@ -1482,7 +1482,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1527,7 +1527,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "soge_credit",
@@ -1572,7 +1572,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "birth_date",
@@ -1602,7 +1602,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "gender",
@@ -1632,7 +1632,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "health_issues",
@@ -1662,7 +1662,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_name",
@@ -1692,7 +1692,7 @@
 				"wei",
 				"weiregistration"
 			],
-			"query": "{\"user\": [\"user\"], \"wei\": [\"club\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_phone",

@@ -121,16 +121,38 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
 
-        # Check if the user has the right to create a membership with a random user, to display the button.
-        empty_membership = Membership(
-            club=club,
-            user=User.objects.first(),
-            date_start=datetime.now().date(),
-            date_end=datetime.now().date(),
-            fee=0,
-        )
-        context["can_add_members"] = PermissionBackend \
-            .check_perm(self.request.user, "member.add_membership", empty_membership)
+        random_user = User.objects.filter(~Q(wei__wei__in=[club])).first()
+
+        if random_user is None:
+            # This case occurs when all users are registered to the WEI.
+            # Don't worry, Pikachu never went to the WEI.
+            # This bug can arrive only in dev mode.
+            context["can_add_first_year_member"] = True
+            context["can_add_any_member"] = True
+        else:
+            # Check if the user has the right to create a registration of a random first year member.
+            empty_fy_registration = WEIRegistration(
+                user=random_user,
+                first_year=True,
+                birth_date="1970-01-01",
+                gender="No",
+                emergency_contact_name="No",
+                emergency_contact_phone="No",
+            )
+            context["can_add_first_year_member"] = PermissionBackend \
+                .check_perm(self.request.user, "wei.add_weiregistration", empty_fy_registration)
+
+            # Check if the user has the right to create a registration of a random old member.
+            empty_old_registration = WEIRegistration(
+                user=User.objects.filter(~Q(wei__wei__in=[club])).first(),
+                first_year=False,
+                birth_date="1970-01-01",
+                gender="No",
+                emergency_contact_name="No",
+                emergency_contact_phone="No",
+            )
+            context["can_add_any_member"] = PermissionBackend \
+                .check_perm(self.request.user, "wei.add_weiregistration", empty_old_registration)
 
         empty_bus = Bus(
             wei=club,
