@@ -1,14 +1,18 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import date
 
 from django.forms import HiddenInput
-from django.views.generic import UpdateView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import UpdateView, TemplateView
+from member.models import Role, Membership
 
 from .backends import PermissionBackend
 
 
 class ProtectQuerysetMixin:
     """
+    This is a View class decorator and not a proper View class.
     Ensure that the user has the right to see or update objects.
     Display 404 error if the user can't see an object, remove the fields the user can't
     update on an update form (useful if the user can't change only specified fields).
@@ -32,3 +36,25 @@ class ProtectQuerysetMixin:
                 form.fields[key].widget = HiddenInput()
 
         return form
+
+
+class RightsView(TemplateView):
+    template_name = "permission/all_rights.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["title"] = _("All rights")
+        roles = Role.objects.all()
+        context["roles"] = roles
+        if self.request.user.is_authenticated:
+            active_memberships = Membership.objects.filter(user=self.request.user,
+                                                           date_start__lte=date.today(),
+                                                           date_end__gte=date.today()).all()
+        else:
+            active_memberships = Membership.objects.none()
+
+        for role in roles:
+            role.clubs = [membership.club for membership in active_memberships if role in membership.roles.all()]
+
+        return context

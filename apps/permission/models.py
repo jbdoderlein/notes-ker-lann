@@ -305,14 +305,15 @@ class RolePermissions(models.Model):
     """
     Permissions associated with a Role
     """
-    role = models.ForeignKey(
+    role = models.OneToOneField(
         Role,
         on_delete=models.PROTECT,
-        related_name='+',
+        related_name='permissions',
         verbose_name=_('role'),
     )
     permissions = models.ManyToManyField(
         Permission,
+        verbose_name=_("permissions"),
     )
 
     def __str__(self):

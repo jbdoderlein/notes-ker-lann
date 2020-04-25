@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 19:12+0200\n"
+"POT-Creation-Date: 2020-04-26 00:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -864,7 +864,7 @@ msgstr "champ"
 msgid "permission"
 msgstr "permission"
 
-#: apps/permission/models.py:182
+#: apps/permission/models.py:182 apps/permission/models.py:316
 msgid "permissions"
 msgstr "permissions"
 
@@ -874,7 +874,7 @@ msgstr ""
 "Spécifie le champ concerné, ne fonctionne que pour les permissions view et "
 "change."
 
-#: apps/permission/models.py:322 apps/permission/models.py:323
+#: apps/permission/models.py:323 apps/permission/models.py:324
 msgid "role permissions"
 msgstr "Permissions par rôles"
 
@@ -896,7 +896,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter cette instance du modèle {app_label}."
 "{model_name}."
 
-#: apps/permission/signals.py:100
+#: apps/permission/signals.py:99
 #, python-brace-format
 msgid ""
 "You don't have the permission to delete this instance of model {app_label}."
@@ -904,6 +904,10 @@ msgid ""
 msgstr ""
 "Vous n'avez pas la permission de supprimer cette instance du modèle "
 "{app_label}.{model_name}."
+
+#: apps/permission/views.py:47
+msgid "All rights"
+msgstr "Tous les droits"
 
 #: apps/registration/apps.py:10
 msgid "registration"
@@ -1566,7 +1570,11 @@ msgstr "Clubs"
 msgid "Registrations"
 msgstr "Inscriptions"
 
-#: templates/base.html:155
+#: templates/base.html:120
+msgid "Rights"
+msgstr "Droits"
+
+#: templates/base.html:158
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -1782,6 +1790,22 @@ msgstr "Le bouton a bien été supprimé"
 #: templates/note/transactiontemplate_list.html:74
 msgid "Unable to delete button "
 msgstr "Impossible de supprimer le bouton "
+
+#: templates/permission/all_rights.html:10
+msgid "Filter with roles that I have in at least one club"
+msgstr "Filtrer les rôles que je possède dans au moins un club"
+
+#: templates/permission/all_rights.html:21
+msgid "Own this role in the clubs"
+msgstr "Possède ce rôle dans les clubs"
+
+#: templates/permission/all_rights.html:26
+msgid "Query:"
+msgstr "Requête :"
+
+#: templates/permission/all_rights.html:28
+msgid "No associated permission"
+msgstr "Pas de permission associée"
 
 #: templates/registration/email_validation_complete.html:6
 msgid "Your email have successfully been validated."
