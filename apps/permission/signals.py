@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext_lazy as _
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
 
@@ -57,13 +58,19 @@ def pre_save_object(sender, instance, **kwargs):
             if old_value == new_value:
                 continue
             if not PermissionBackend.check_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
-                raise PermissionDenied
+                raise PermissionDenied(
+                    _("You don't have the permission to change the field {field} on this instance of model"
+                      " {app_label}.{model_name}.")
+                    .format(field=field_name, app_label=app_label, model_name=model_name, )
+                )
     else:
         # We check if the user has right to add the object
         has_perm = PermissionBackend.check_perm(user, app_label + ".add_" + model_name, instance)
 
         if not has_perm:
-            raise PermissionDenied
+            raise PermissionDenied(
+                _("You don't have the permission to add this instance of model {app_label}.{model_name}.")
+                .format(app_label=app_label, model_name=model_name, ))
 
 
 def pre_delete_object(instance, **kwargs):
@@ -88,4 +95,6 @@ def pre_delete_object(instance, **kwargs):
 
     # We check if the user has rights to delete the object
     if not PermissionBackend.check_perm(user, app_label + ".delete_" + model_name, instance):
-        raise PermissionDenied
+        raise PermissionDenied(
+            _("You don't have the permission to delete this instance of model {app_label}.{model_name}.")
+            .format(app_label=app_label, model_name=model_name))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 15:52+0200\n"
+"POT-Creation-Date: 2020-04-25 19:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -868,6 +868,27 @@ msgstr ""
 msgid "role permissions"
 msgstr ""
 
+#: apps/permission/signals.py:62
+#, python-brace-format
+msgid ""
+"You don't have the permission to change the field {field} on this instance "
+"of model {app_label}.{model_name}."
+msgstr ""
+
+#: apps/permission/signals.py:72
+#, python-brace-format
+msgid ""
+"You don't have the permission to add this instance of model {app_label}."
+"{model_name}."
+msgstr ""
+
+#: apps/permission/signals.py:100
+#, python-brace-format
+msgid ""
+"You don't have the permission to delete this instance of model {app_label}."
+"{model_name}."
+msgstr ""
+
 #: apps/registration/apps.py:10
 msgid "registration"
 msgstr ""
@@ -1353,6 +1374,10 @@ msgstr ""
 msgid "You already opened an account in the Société générale."
 msgstr ""
 
+#: apps/wei/views.py:664
+msgid "You don't have the right to delete this WEI registration."
+msgstr ""
+
 #: apps/wei/views.py:763
 msgid "This user didn't give her/his caution check."
 msgstr ""
@@ -1373,6 +1398,50 @@ msgstr ""
 
 #: note_kfet/settings/base.py:156
 msgid "French"
+msgstr ""
+
+#: templates/400.html:6
+msgid "Bad request"
+msgstr ""
+
+#: templates/400.html:7
+msgid ""
+"Sorry, your request was bad. Don't know what could be wrong. An email has "
+"been sent to webmasters with the details of the error. You can now drink a "
+"coke."
+msgstr ""
+
+#: templates/403.html:6
+msgid "Permission denied"
+msgstr ""
+
+#: templates/403.html:7
+msgid "You don't have the right to perform this request."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:10
+msgid "Exception message:"
+msgstr ""
+
+#: templates/404.html:6
+msgid "Page not found"
+msgstr ""
+
+#: templates/404.html:7
+#, python-format
+msgid ""
+"The requested path <code>%(request_path)s</code> was not found on the server."
+msgstr ""
+
+#: templates/500.html:6
+msgid "Server error"
+msgstr ""
+
+#: templates/500.html:7
+msgid ""
+"Sorry, an error occurred when processing your request. An email has been "
+"sent to webmasters with the detail of the error, and this will be fixed "
+"soon. You can now drink a beer."
 msgstr ""
 
 #: templates/activity/activity_detail.html:29

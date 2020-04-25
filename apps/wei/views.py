@@ -661,7 +661,7 @@ class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Delete
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
 
         if not PermissionBackend.check_perm(self.request.user, "wei.delete_weiregistration", object):
-            raise PermissionDenied
+            raise PermissionDenied(_("You don't have the right to delete this WEI registration."))
 
         return super().dispatch(request, *args, **kwargs)
 

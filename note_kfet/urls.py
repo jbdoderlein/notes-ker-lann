@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
 from django.views.generic import RedirectView
 
 from member.views import CustomLoginView
@@ -45,3 +46,11 @@ if "debug_toolbar" in settings.INSTALLED_APPS:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+
+handler400 = bad_request
+handler403 = permission_denied
+
+# Only displayed in production, when debug mode is set to False
+handler404 = page_not_found
+handler500 = server_error
