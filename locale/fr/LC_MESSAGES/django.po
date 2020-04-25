@@ -1,9 +1,14 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-23 18:21+0200\n"
+"POT-Creation-Date: 2020-04-25 15:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,13 +270,13 @@ msgstr "Les logs ne peuvent pas être détruits."
 
 #: apps/logs/models.py:80
 msgid "changelog"
-msgstr ""
+msgstr "journal de modification"
 
 #: apps/logs/models.py:81
 msgid "changelogs"
-msgstr ""
+msgstr "journaux de modifications"
 
-#: apps/member/apps.py:14
+#: apps/member/apps.py:14 apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "member"
 msgstr "adhérent"
 
@@ -509,7 +514,7 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:738
+#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:768
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -552,7 +557,7 @@ msgstr "Un alias avec un nom similaire existe déjà."
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:500 apps/wei/views.py:729
+#: apps/member/views.py:500 apps/wei/views.py:759
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -809,7 +814,7 @@ msgstr "Supprimer"
 #: apps/note/tables.py:146 apps/wei/tables.py:42 apps/wei/tables.py:43
 #: templates/member/club_info.html:67 templates/note/conso_form.html:121
 #: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
-#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:66
+#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:68
 msgid "Edit"
 msgstr "Éditer"
 
@@ -824,12 +829,12 @@ msgstr "Consommations"
 #: apps/permission/models.py:82
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
-msgstr ""
+msgstr "Can {type} {model}.{field} in {query}"
 
 #: apps/permission/models.py:84
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
-msgstr ""
+msgstr "Can {type} {model} in {query}"
 
 #: apps/permission/models.py:97
 msgid "rank"
@@ -866,6 +871,8 @@ msgstr "permissions"
 #: apps/permission/models.py:187
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
+"Spécifie le champ concerné, ne fonctionne que pour les permissions view et "
+"change."
 
 #: apps/permission/models.py:322 apps/permission/models.py:323
 msgid "role permissions"
@@ -934,7 +941,6 @@ msgstr "Trésorerie"
 #: apps/treasury/forms.py:85 apps/treasury/forms.py:133
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
-#: templates/django_filters/rest_framework/form.html:5
 #: templates/member/add_members.html:14 templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46 templates/wei/bus_form.html:13
 #: templates/wei/busteam_form.html:13 templates/wei/weiclub_form.html:15
@@ -1334,38 +1340,38 @@ msgstr "Valider"
 
 #: apps/wei/tables.py:96
 msgid "Year"
-msgstr ""
+msgstr "Année"
 
 #: apps/wei/tables.py:134 templates/wei/bus_tables.html:26
 #: templates/wei/busteam_tables.html:43
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/tables.py:143 apps/wei/tables.py:185
+#: apps/wei/tables.py:143 apps/wei/tables.py:184
 msgid "Members count"
 msgstr "Nombre de membres"
 
-#: apps/wei/tables.py:150 apps/wei/tables.py:151 apps/wei/tables.py:182
+#: apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "members"
 msgstr "adhérents"
 
-#: apps/wei/views.py:177
+#: apps/wei/views.py:201
 msgid "Find WEI Membership"
 msgstr "Trouver une adhésion au WEI"
 
-#: apps/wei/views.py:212
+#: apps/wei/views.py:236
 msgid "Find WEI Registration"
 msgstr "Trouver une inscription au WEI"
 
-#: apps/wei/views.py:421 templates/wei/weiclub_info.html:62
+#: apps/wei/views.py:445 templates/wei/weiclub_info.html:62
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/views.py:442 apps/wei/views.py:510
+#: apps/wei/views.py:466 apps/wei/views.py:535
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:447
+#: apps/wei/views.py:471
 msgid ""
 "This user can't be in her/his first year since he/she has already participed "
 "to a WEI."
@@ -1373,30 +1379,23 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:475 templates/wei/weiclub_info.html:63
+#: apps/wei/views.py:499 templates/wei/weiclub_info.html:65
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
-#: apps/wei/views.py:493 apps/wei/views.py:576
+#: apps/wei/views.py:517 apps/wei/views.py:604
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:733
+#: apps/wei/views.py:763
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
 
-#: apps/wei/views.py:802 apps/wei/views.py:822 apps/wei/views.py:832
+#: apps/wei/views.py:837 apps/wei/views.py:857 apps/wei/views.py:867
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
 msgstr "Questionnaire WEI"
-
-#: note_kfet/settings/__init__.py:63
-msgid ""
-"The Central Authentication Service grants you access to most of our websites "
-"by authenticating only once, so you don't need to type your credentials "
-"again unless your session expires or you logout."
-msgstr ""
 
 #: note_kfet/settings/base.py:154
 msgid "German"
@@ -1493,7 +1492,7 @@ msgstr ""
 
 #: templates/cas_server/base.html:7
 msgid "Central Authentication Service"
-msgstr ""
+msgstr "Service Central d'Authentification"
 
 #: templates/cas_server/base.html:43
 #, python-format
@@ -1502,51 +1501,9 @@ msgid ""
 "%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
 "upgrading."
 msgstr ""
-
-#: templates/cas_server/logged.html:4
-msgid ""
-"<h3>Log In Successful</h3>You have successfully logged into the Central "
-"Authentication Service.<br/>For security reasons, please Log Out and Exit "
-"your web browser when you are done accessing services that require "
-"authentication!"
-msgstr ""
-
-#: templates/cas_server/logged.html:8
-msgid "Log me out from all my sessions"
-msgstr ""
-
-#: templates/cas_server/logged.html:14
-msgid "Forget the identity provider"
-msgstr ""
-
-#: templates/cas_server/logged.html:18
-msgid "Logout"
-msgstr ""
-
-#: templates/cas_server/login.html:6
-msgid "Please log in"
-msgstr ""
-
-#: templates/cas_server/login.html:11
-msgid ""
-"If you don't have any Note Kfet account, please follow <a href='/accounts/"
-"signup'>this link to sign up</a>."
-msgstr ""
-"Si vous n'avez pas de compte Note Kfet, veuillez suivre <a href='/accounts/"
-"signup'>ce lien pour vous inscrire</a>."
-
-#: templates/cas_server/login.html:17
-msgid "Login"
-msgstr ""
-
-#: templates/cas_server/warn.html:9
-msgid "Connect to the service"
-msgstr ""
-
-#: templates/django_filters/rest_framework/crispy_form.html:4
-#: templates/django_filters/rest_framework/form.html:2
-msgid "Field filters"
-msgstr ""
+"Une nouvelle version de l'application est disponible. Cette instance utilise "
+"la version %(VERSION)s et la dernière version est %(LAST_VERSION)s. Merci de "
+"vous mettre à jour."
 
 #: templates/member/alias_update.html:5
 msgid "Add alias"
@@ -1791,17 +1748,17 @@ msgstr "Il n'y a pas d'inscription en attente avec cette entrée."
 
 #: templates/registration/logged_out.html:8
 msgid "Thanks for spending some quality time with the Web site today."
-msgstr ""
+msgstr "Merci d'avoir utilisé la Note Kfet."
 
 #: templates/registration/logged_out.html:9
 msgid "Log in again"
-msgstr ""
+msgstr "Se connecter à nouveau"
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:28
+#: templates/registration/login.html:21
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
-msgstr ""
+msgstr "Se connecter"
 
 #: templates/registration/login.html:13
 #, python-format
@@ -1809,18 +1766,12 @@ msgid ""
 "You are authenticated as %(username)s, but are not authorized to access this "
 "page. Would you like to login to a different account?"
 msgstr ""
+"Vous êtes connecté en tant que %(username)s, mais vous n'avez le droit "
+"d'accéder à cette page. Voulez vous essayer avec un autre compte ?"
 
 #: templates/registration/login.html:22
-msgid "You can also register via the central authentification server "
-msgstr ""
-
-#: templates/registration/login.html:23
-msgid "using this link "
-msgstr ""
-
-#: templates/registration/login.html:29
 msgid "Forgotten your password or username?"
-msgstr ""
+msgstr "Mot de passe ou pseudo oublié ?"
 
 #: templates/registration/mails/email_validation_email.html:3
 msgid "Hi"
@@ -1871,45 +1822,57 @@ msgstr ""
 #: templates/registration/password_change_form.html:11
 #: templates/registration/password_reset_confirm.html:12
 msgid "Change my password"
-msgstr ""
+msgstr "Changer mon mot de passe"
 
 #: templates/registration/password_reset_complete.html:8
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr ""
+"Votre mot de passe a été enregistré. Vous pouvez vous connecter dès à "
+"présent."
 
 #: templates/registration/password_reset_confirm.html:9
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
+"Entrer votre nouveau mot de passe, et le confirmer en le renseignant une "
+"seconde fois."
 
 #: templates/registration/password_reset_confirm.html:15
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
+"Le lien de reinitialisation du mot de passe est invalide, il a peut-être été "
+"déjà utilisé. Faites une nouvelle demande."
 
 #: templates/registration/password_reset_done.html:8
 msgid ""
 "We've emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
+"Nous vous avons envoyé par mail les instructions pour changer votre mot de "
+"passe."
 
 #: templates/registration/password_reset_done.html:9
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Si vous ne recevez pas d'email, vérifiez que vous avez bien utilisé "
+"l'adresse associé à votre compte, et regarder également le dossier spam."
 
 #: templates/registration/password_reset_form.html:8
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
 msgstr ""
+"Mot de passe oublié ? Entrez votre adresse mail ci-dessous, et vous recevrez "
+"les instructions pour choisir un nouveau mot de passe."
 
 #: templates/registration/password_reset_form.html:11
 msgid "Reset my password"
-msgstr ""
+msgstr "Réinitialiser mon mot de passe"
 
 #: templates/registration/signup.html:5 templates/registration/signup.html:8
 #: templates/registration/signup.html:19
@@ -2111,11 +2074,11 @@ msgstr "Prix du WEI / incluant l'adhésion BDE/Kfet (étudiants)"
 msgid "WEI list"
 msgstr "Liste des WEI"
 
-#: templates/wei/weiclub_info.html:69
+#: templates/wei/weiclub_info.html:71
 msgid "Add bus"
 msgstr "Ajouter un bus"
 
-#: templates/wei/weiclub_info.html:73
+#: templates/wei/weiclub_info.html:75
 msgid "View WEI"
 msgstr "Voir le WEI"
 
@@ -2305,6 +2268,3 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 #: templates/wei/weiregistration_list.html:24
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
-
-#~ msgid "Attribute to each first year member a bus for the WEI"
-#~ msgstr "Attribuer à chaque première année un bus pour le WEI"

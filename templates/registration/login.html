@@ -16,13 +16,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
             {% endblocktrans %}
         </p>
     {% endif %}
-    {%url 'cas_login'  as cas_url %}
-    {% if cas_url %}
-    <div class="alert alert-info">
-        {% trans "You can also register via the central authentification server " %}
-         <a href="{{ cas_url }}"> {% trans "using this link "%}</a>
-    </div>
-    {%endif%}
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
         {{ form | crispy }}
         <input type="submit" value="{% trans 'Log in' %}" class="btn btn-primary">

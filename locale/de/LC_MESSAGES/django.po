@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-23 18:21+0200\n"
+"POT-Creation-Date: 2020-04-25 15:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,7 +275,7 @@ msgstr ""
 msgid "changelogs"
 msgstr ""
 
-#: apps/member/apps.py:14
+#: apps/member/apps.py:14 apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "member"
 msgstr ""
 
@@ -509,7 +509,7 @@ msgstr ""
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:738
+#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:768
 msgid "User is not a member of the parent club"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:500 apps/wei/views.py:729
+#: apps/member/views.py:500 apps/wei/views.py:759
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -806,7 +806,7 @@ msgstr ""
 #: apps/note/tables.py:146 apps/wei/tables.py:42 apps/wei/tables.py:43
 #: templates/member/club_info.html:67 templates/note/conso_form.html:121
 #: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
-#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:66
+#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:68
 msgid "Edit"
 msgstr ""
 
@@ -926,7 +926,6 @@ msgstr ""
 #: apps/treasury/forms.py:85 apps/treasury/forms.py:133
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
-#: templates/django_filters/rest_framework/form.html:5
 #: templates/member/add_members.html:14 templates/member/club_form.html:9
 #: templates/treasury/invoice_form.html:46 templates/wei/bus_form.html:13
 #: templates/wei/busteam_form.html:13 templates/wei/weiclub_form.html:15
@@ -1316,59 +1315,52 @@ msgstr ""
 msgid "Teams"
 msgstr ""
 
-#: apps/wei/tables.py:143 apps/wei/tables.py:185
+#: apps/wei/tables.py:143 apps/wei/tables.py:184
 msgid "Members count"
 msgstr ""
 
-#: apps/wei/tables.py:150 apps/wei/tables.py:151 apps/wei/tables.py:182
+#: apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "members"
 msgstr ""
 
-#: apps/wei/views.py:177
+#: apps/wei/views.py:201
 msgid "Find WEI Membership"
 msgstr ""
 
-#: apps/wei/views.py:212
+#: apps/wei/views.py:236
 msgid "Find WEI Registration"
 msgstr ""
 
-#: apps/wei/views.py:421 templates/wei/weiclub_info.html:62
+#: apps/wei/views.py:445 templates/wei/weiclub_info.html:62
 msgid "Register 1A"
 msgstr ""
 
-#: apps/wei/views.py:442 apps/wei/views.py:510
+#: apps/wei/views.py:466 apps/wei/views.py:535
 msgid "This user is already registered to this WEI."
 msgstr ""
 
-#: apps/wei/views.py:447
+#: apps/wei/views.py:471
 msgid ""
 "This user can't be in her/his first year since he/she has already participed "
 "to a WEI."
 msgstr ""
 
-#: apps/wei/views.py:475 templates/wei/weiclub_info.html:63
+#: apps/wei/views.py:499 templates/wei/weiclub_info.html:65
 msgid "Register 2A+"
 msgstr ""
 
-#: apps/wei/views.py:493 apps/wei/views.py:576
+#: apps/wei/views.py:517 apps/wei/views.py:604
 msgid "You already opened an account in the Société générale."
 msgstr ""
 
-#: apps/wei/views.py:733
+#: apps/wei/views.py:763
 msgid "This user didn't give her/his caution check."
 msgstr ""
 
-#: apps/wei/views.py:802 apps/wei/views.py:822 apps/wei/views.py:832
+#: apps/wei/views.py:837 apps/wei/views.py:857 apps/wei/views.py:867
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
-msgstr ""
-
-#: note_kfet/settings/__init__.py:63
-msgid ""
-"The Central Authentication Service grants you access to most of our websites "
-"by authenticating only once, so you don't need to type your credentials "
-"again unless your session expires or you logout."
 msgstr ""
 
 #: note_kfet/settings/base.py:154
@@ -1472,49 +1464,6 @@ msgid ""
 "A new version of the application is available. This instance runs "
 "%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
 "upgrading."
-msgstr ""
-
-#: templates/cas_server/logged.html:4
-msgid ""
-"<h3>Log In Successful</h3>You have successfully logged into the Central "
-"Authentication Service.<br/>For security reasons, please Log Out and Exit "
-"your web browser when you are done accessing services that require "
-"authentication!"
-msgstr ""
-
-#: templates/cas_server/logged.html:8
-msgid "Log me out from all my sessions"
-msgstr ""
-
-#: templates/cas_server/logged.html:14
-msgid "Forget the identity provider"
-msgstr ""
-
-#: templates/cas_server/logged.html:18
-msgid "Logout"
-msgstr ""
-
-#: templates/cas_server/login.html:6
-msgid "Please log in"
-msgstr ""
-
-#: templates/cas_server/login.html:11
-msgid ""
-"If you don't have any Note Kfet account, please follow <a href='/accounts/"
-"signup'>this link to sign up</a>."
-msgstr ""
-
-#: templates/cas_server/login.html:17
-msgid "Login"
-msgstr ""
-
-#: templates/cas_server/warn.html:9
-msgid "Connect to the service"
-msgstr ""
-
-#: templates/django_filters/rest_framework/crispy_form.html:4
-#: templates/django_filters/rest_framework/form.html:2
-msgid "Field filters"
 msgstr ""
 
 #: templates/member/alias_update.html:5
@@ -1763,7 +1712,7 @@ msgid "Log in again"
 msgstr ""
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:28
+#: templates/registration/login.html:21
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr ""
@@ -1776,14 +1725,6 @@ msgid ""
 msgstr ""
 
 #: templates/registration/login.html:22
-msgid "You can also register via the central authentification server "
-msgstr ""
-
-#: templates/registration/login.html:23
-msgid "using this link "
-msgstr ""
-
-#: templates/registration/login.html:29
 msgid "Forgotten your password or username?"
 msgstr ""
 
@@ -2051,11 +1992,11 @@ msgstr ""
 msgid "WEI list"
 msgstr ""
 
-#: templates/wei/weiclub_info.html:69
+#: templates/wei/weiclub_info.html:71
 msgid "Add bus"
 msgstr ""
 
-#: templates/wei/weiclub_info.html:73
+#: templates/wei/weiclub_info.html:75
 msgid "View WEI"
 msgstr ""
 
