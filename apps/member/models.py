@@ -137,7 +137,7 @@ class Profile(models.Model):
                                               'user': self.user,
                                               'domain': os.getenv("NOTE_URL", "note.example.com"),
                                               'token': email_validation_token.make_token(self.user),
-                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)).decode('UTF-8'),
+                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
         self.user.email_user(subject, message)
 
