@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-09 21:59+0200\n"
+"POT-Creation-Date: 2020-04-27 03:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,27 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:102
-#: apps/activity/models.py:111
+#: apps/activity/models.py:117
 msgid "activity"
 msgstr ""
 
-#: apps/activity/forms.py:45 apps/activity/models.py:208
+#: apps/activity/forms.py:45 apps/activity/models.py:213
 msgid "You can't invite someone once the activity is started."
 msgstr ""
 
-#: apps/activity/forms.py:48 apps/activity/models.py:211
+#: apps/activity/forms.py:48 apps/activity/models.py:216
 msgid "This activity is not validated yet."
 msgstr ""
 
-#: apps/activity/forms.py:58 apps/activity/models.py:219
+#: apps/activity/forms.py:58 apps/activity/models.py:224
 msgid "This person has been already invited 5 times this year."
 msgstr ""
 
-#: apps/activity/forms.py:62 apps/activity/models.py:223
+#: apps/activity/forms.py:62 apps/activity/models.py:228
 msgid "This person is already invited."
 msgstr ""
 
-#: apps/activity/forms.py:66 apps/activity/models.py:227
+#: apps/activity/forms.py:66 apps/activity/models.py:232
 msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
@@ -113,57 +113,57 @@ msgstr ""
 msgid "activities"
 msgstr ""
 
-#: apps/activity/models.py:116
+#: apps/activity/models.py:122
 msgid "entry time"
 msgstr ""
 
-#: apps/activity/models.py:122 apps/note/apps.py:14
+#: apps/activity/models.py:128 apps/note/apps.py:14
 #: apps/note/models/notes.py:58
 msgid "note"
 msgstr ""
 
-#: apps/activity/models.py:133 templates/activity/activity_entry.html:38
+#: apps/activity/models.py:139 templates/activity/activity_entry.html:38
 msgid "entry"
 msgstr ""
 
-#: apps/activity/models.py:134 templates/activity/activity_entry.html:38
+#: apps/activity/models.py:140 templates/activity/activity_entry.html:38
 msgid "entries"
 msgstr ""
 
-#: apps/activity/models.py:141
+#: apps/activity/models.py:146
 msgid "Already entered on "
 msgstr ""
 
-#: apps/activity/models.py:141 apps/activity/tables.py:54
+#: apps/activity/models.py:146 apps/activity/tables.py:54
 msgid "{:%Y-%m-%d %H:%M:%S}"
 msgstr ""
 
-#: apps/activity/models.py:149
+#: apps/activity/models.py:154
 msgid "The balance is negative."
 msgstr ""
 
-#: apps/activity/models.py:179
+#: apps/activity/models.py:184
 msgid "last name"
 msgstr ""
 
-#: apps/activity/models.py:184 templates/member/profile_info.html:14
+#: apps/activity/models.py:189 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
 msgid "first name"
 msgstr ""
 
-#: apps/activity/models.py:191
+#: apps/activity/models.py:196
 msgid "inviter"
 msgstr ""
 
-#: apps/activity/models.py:232
+#: apps/activity/models.py:237
 msgid "guest"
 msgstr ""
 
-#: apps/activity/models.py:233
+#: apps/activity/models.py:238
 msgid "guests"
 msgstr ""
 
-#: apps/activity/models.py:245
+#: apps/activity/models.py:250
 msgid "Invitation"
 msgstr ""
 
@@ -186,7 +186,7 @@ msgstr ""
 
 #: apps/activity/tables.py:79 apps/member/forms.py:80
 #: apps/registration/forms.py:60 apps/treasury/forms.py:123
-#: templates/note/transaction_form.html:97
+#: templates/note/transaction_form.html:126
 msgid "First name"
 msgstr ""
 
@@ -198,11 +198,11 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: apps/activity/views.py:45 templates/base.html:106
+#: apps/activity/views.py:46 templates/base.html:121
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:154
+#: apps/activity/views.py:160
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -296,7 +296,7 @@ msgid "Credit amount"
 msgstr ""
 
 #: apps/member/forms.py:85 apps/registration/forms.py:65
-#: apps/treasury/forms.py:125 templates/note/transaction_form.html:103
+#: apps/treasury/forms.py:125 templates/note/transaction_form.html:132
 msgid "Bank"
 msgstr ""
 
@@ -666,9 +666,9 @@ msgid "transactions"
 msgstr ""
 
 #: apps/note/models/transactions.py:207
-#: templates/activity/activity_entry.html:13 templates/base.html:84
+#: templates/activity/activity_entry.html:13 templates/base.html:99
 #: templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:145
+#: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr ""
 
@@ -719,15 +719,15 @@ msgid "Delete"
 msgstr ""
 
 #: apps/note/tables.py:146 templates/member/club_info.html:55
-#: templates/note/conso_form.html:121
+#: templates/note/conso_form.html:128
 msgid "Edit"
 msgstr ""
 
-#: apps/note/views.py:40
+#: apps/note/views.py:41
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:109 templates/base.html:79
+#: apps/note/views.py:137 templates/base.html:94
 msgid "Consumptions"
 msgstr ""
 
@@ -810,7 +810,7 @@ msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 
-#: apps/treasury/apps.py:12 templates/base.html:111
+#: apps/treasury/apps.py:12 templates/base.html:126
 msgid "Treasury"
 msgstr ""
 
@@ -836,7 +836,7 @@ msgid "You can't change the type of the remittance."
 msgstr ""
 
 #: apps/treasury/forms.py:127 apps/treasury/tables.py:47
-#: templates/note/transaction_form.html:133
+#: templates/note/transaction_form.html:95
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr ""
@@ -857,7 +857,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: apps/treasury/models.py:46 templates/note/transaction_form.html:91
+#: apps/treasury/models.py:46 templates/note/transaction_form.html:120
 msgid "Name"
 msgstr ""
 
@@ -1052,19 +1052,19 @@ msgstr ""
 msgid "The ENS Paris-Saclay BDE note."
 msgstr ""
 
-#: templates/base.html:89
+#: templates/base.html:104
 msgid "Users"
 msgstr ""
 
-#: templates/base.html:94
+#: templates/base.html:109
 msgid "Clubs"
 msgstr ""
 
-#: templates/base.html:100
+#: templates/base.html:115
 msgid "Registrations"
 msgstr ""
 
-#: templates/base.html:150
+#: templates/base.html:165
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -1227,36 +1227,41 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: templates/member/user_list.html:14
+#: templates/member/user_list.html:15
 #: templates/registration/future_user_list.html:17
 msgid "There is no pending user with this pattern."
 msgstr ""
 
-#: templates/note/conso_form.html:28 templates/note/transaction_form.html:55
-msgid "Select emitters"
+#: templates/note/conso_form.html:28
+msgid "Consum"
 msgstr ""
 
-#: templates/note/conso_form.html:45
+#: templates/note/conso_form.html:39 templates/note/transaction_form.html:61
+#: templates/note/transaction_form.html:76
+msgid "Name or alias..."
+msgstr ""
+
+#: templates/note/conso_form.html:48
 msgid "Select consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:51
+#: templates/note/conso_form.html:57
 msgid "Consume!"
 msgstr ""
 
-#: templates/note/conso_form.html:64
+#: templates/note/conso_form.html:71
 msgid "Most used buttons"
 msgstr ""
 
-#: templates/note/conso_form.html:126
+#: templates/note/conso_form.html:134
 msgid "Single consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:130
+#: templates/note/conso_form.html:139
 msgid "Double consumptions"
 msgstr ""
 
-#: templates/note/conso_form.html:141 templates/note/transaction_form.html:152
+#: templates/note/conso_form.html:150 templates/note/transaction_form.html:151
 msgid "Recent transactions history"
 msgstr ""
 
@@ -1264,34 +1269,40 @@ msgstr ""
 msgid "Gift"
 msgstr ""
 
-#: templates/note/transaction_form.html:73
-msgid "External payment"
+#: templates/note/transaction_form.html:55
+msgid "Select emitters"
 msgstr ""
 
-#: templates/note/transaction_form.html:81
-msgid "Transfer type"
-msgstr ""
-
-#: templates/note/transaction_form.html:116
-#: templates/note/transaction_form.html:169
-#: templates/note/transaction_form.html:176
+#: templates/note/transaction_form.html:70
 msgid "Select receivers"
 msgstr ""
 
-#: templates/note/transaction_form.html:138
+#: templates/note/transaction_form.html:87
+msgid "Action"
+msgstr ""
+
+#: templates/note/transaction_form.html:102
 msgid "Reason"
 msgstr ""
 
-#: templates/note/transaction_form.html:183
-msgid "Credit note"
+#: templates/note/transaction_form.html:110
+msgid "Transfer type"
 msgstr ""
 
-#: templates/note/transaction_form.html:190
-msgid "Debit note"
-msgstr ""
-
-#: templates/note/transactiontemplate_form.html:6
+#: templates/note/transactiontemplate_form.html:10
 msgid "Buttons list"
+msgstr ""
+
+#: templates/note/transactiontemplate_form.html:21
+msgid "Price history"
+msgstr ""
+
+#: templates/note/transactiontemplate_form.html:24
+msgid "Obsolete since"
+msgstr ""
+
+#: templates/note/transactiontemplate_form.html:24
+msgid "Current price"
 msgstr ""
 
 #: templates/note/transactiontemplate_list.html:9

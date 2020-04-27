@@ -1,12 +1,28 @@
 {% extends "base.html" %}
+
 {% load static %}
 {% load i18n %}
 {% load crispy_forms_tags %}
+{% load pretty_money %}
+
 {% block content %}
-<p><a class="btn btn-default" href="{% url 'note:template_list' %}">{% trans "Buttons list" %}</a></p>
-<form method="post">
-{% csrf_token %}
-{{form|crispy}}
-<button class="btn btn-primary" type="submit">Submit</button>
-</form>
+    <p>
+        <a class="btn btn-default" href="{% url 'note:template_list' %}">{% trans "Buttons list" %}</a>
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+
+    {% if price_history %}
+        <hr>
+
+        <h4>{% trans "Price history" %}</h4>
+        <ul>
+        {% for price in price_history %}
+            <li>{{ price.price|pretty_money }} {% if price.time %}({% trans "Obsolete since" %} {{ price.time }}){% else %}({% trans "Current price" %}){% endif %}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
