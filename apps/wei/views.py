@@ -780,7 +780,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         ret = super().form_valid(form)
 
         membership.refresh_from_db()
-        membership.roles.add(WEIRole.objects.get("Adhérent WEI"))
+        membership.roles.add(WEIRole.objects.get(name="Adhérent WEI"))
 
         return ret
 

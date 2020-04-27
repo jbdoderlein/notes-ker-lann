@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
+from datetime import date
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -17,6 +18,7 @@ class WEIClub(Club):
     """
     year = models.PositiveIntegerField(
         unique=True,
+        default=date.today().year,
         verbose_name=_("year"),
     )
 

@@ -119,7 +119,7 @@ class Profile(models.Model):
     def soge(self):
         if "treasury" in settings.INSTALLED_APPS:
             from treasury.models import SogeCredit
-            return SogeCredit.objects.filter(user=self.user, credit_transaction=None).exists()
+            return SogeCredit.objects.filter(user=self.user, credit_transaction__isnull=False).exists()
         return False
 
     class Meta:

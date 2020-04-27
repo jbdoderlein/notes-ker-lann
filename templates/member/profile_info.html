@@ -17,12 +17,14 @@
             <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
             <dd class="col-xl-6">{{ object.username }}</dd>
 
-            <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
-            <dd class="col-xl-6">
-                <a class="small" href="{% url 'password_change' %}">
-                    {% trans 'Change password' %}
-                </a>
-            </dd>
+            {% if object.pk == user.pk %}
+                <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+                <dd class="col-xl-6">
+                    <a class="small" href="{% url 'password_change' %}">
+                        {% trans 'Change password' %}
+                    </a>
+                </dd>
+            {% endif %}
 
             <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
             <dd class="col-xl-6">{{ object.profile.section }}</dd>
