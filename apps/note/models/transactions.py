@@ -214,8 +214,7 @@ class RecurrentTransaction(Transaction):
 
     template = models.ForeignKey(
         TransactionTemplate,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
     )
     category = models.ForeignKey(
         TemplateCategory,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-27 03:19+0200\n"
+"POT-Creation-Date: 2020-04-27 03:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: apps/activity/models.py:23 apps/activity/models.py:48
 #: apps/member/models.py:99 apps/member/models.py:202
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:237
+#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:236
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
 msgid "name"
@@ -238,12 +238,12 @@ msgstr ""
 msgid "create"
 msgstr ""
 
-#: apps/logs/models.py:61 apps/note/tables.py:144
+#: apps/logs/models.py:61 apps/note/tables.py:145
 #: templates/activity/activity_detail.html:67
 msgid "edit"
 msgstr ""
 
-#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:149
+#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:150
 msgid "delete"
 msgstr ""
 
@@ -672,33 +672,33 @@ msgstr ""
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:227
+#: apps/note/models/transactions.py:226
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:242
+#: apps/note/models/transactions.py:241
 msgid "first_name"
 msgstr ""
 
-#: apps/note/models/transactions.py:247
+#: apps/note/models/transactions.py:246
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:253
+#: apps/note/models/transactions.py:252
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:253 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:252 templates/note/transaction_form.html:28
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:269 apps/note/models/transactions.py:274
+#: apps/note/models/transactions.py:268 apps/note/models/transactions.py:273
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:270
+#: apps/note/models/transactions.py:269
 msgid "membership transactions"
 msgstr ""
 
@@ -714,11 +714,11 @@ msgstr ""
 msgid "No reason specified"
 msgstr ""
 
-#: apps/note/tables.py:122 apps/note/tables.py:151
+#: apps/note/tables.py:122 apps/note/tables.py:152
 msgid "Delete"
 msgstr ""
 
-#: apps/note/tables.py:146 templates/member/club_info.html:55
+#: apps/note/tables.py:147 templates/member/club_info.html:55
 #: templates/note/conso_form.html:128
 msgid "Edit"
 msgstr ""
@@ -819,6 +819,7 @@ msgstr ""
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
 #: templates/member/add_members.html:14 templates/member/club_form.html:9
+#: templates/note/transactiontemplate_form.html:15
 #: templates/treasury/invoice_form.html:46
 msgid "Submit"
 msgstr ""
@@ -1306,22 +1307,30 @@ msgid "Current price"
 msgstr ""
 
 #: templates/note/transactiontemplate_list.html:9
-msgid "search button"
+msgid "Search button"
 msgstr ""
 
-#: templates/note/transactiontemplate_list.html:13
+#: templates/note/transactiontemplate_list.html:11
+msgid "Name of the button..."
+msgstr ""
+
+#: templates/note/transactiontemplate_list.html:16
+msgid "Display visible buttons only"
+msgstr ""
+
+#: templates/note/transactiontemplate_list.html:21
 msgid "New button"
 msgstr ""
 
-#: templates/note/transactiontemplate_list.html:20
+#: templates/note/transactiontemplate_list.html:28
 msgid "buttons listing "
 msgstr ""
 
-#: templates/note/transactiontemplate_list.html:70
+#: templates/note/transactiontemplate_list.html:86
 msgid "button successfully deleted "
 msgstr ""
 
-#: templates/note/transactiontemplate_list.html:74
+#: templates/note/transactiontemplate_list.html:90
 msgid "Unable to delete button "
 msgstr ""
 

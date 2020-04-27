@@ -129,13 +129,14 @@ class ButtonTable(tables.Table):
                 'table table-bordered condensed table-hover'
         }
         row_attrs = {
-            'class': lambda record: 'table-row ' + 'table-success' if record.display else 'table-danger',
+            'class': lambda record: 'table-row ' + ('table-success' if record.display else 'table-danger'),
             'id': lambda record: "row-" + str(record.pk),
             'data-href': lambda record: record.pk
         }
 
         model = TransactionTemplate
         exclude = ('id',)
+        order_by = ('type', '-display', 'destination__name', 'name',)
 
     edit = tables.LinkColumn('note:template_update',
                              args=[A('pk')],
