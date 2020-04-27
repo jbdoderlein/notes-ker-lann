@@ -1241,10 +1241,8 @@ msgid "There is no pending user with this pattern."
 msgstr "Il n'y a pas d'inscription en attente avec cette entrée."
 
 #: templates/note/conso_form.html:28
-#, fuzzy
-#| msgid "Consume!"
 msgid "Consum"
-msgstr "Consommer !"
+msgstr "Consommer"
 
 #: templates/note/conso_form.html:39 templates/note/transaction_form.html:61
 #: templates/note/transaction_form.html:76
@@ -1288,8 +1286,6 @@ msgid "Select receivers"
 msgstr "Sélection des destinataires"
 
 #: templates/note/transaction_form.html:87
-#, fuzzy
-#| msgid "action"
 msgid "Action"
 msgstr "Action"
 
