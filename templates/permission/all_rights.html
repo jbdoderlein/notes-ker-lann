@@ -23,7 +23,7 @@
             {% endif %}
             <ul>
             {% for permission in role.permissions.permissions.all %}
-                <li data-toggle="tooltip" title="{% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.type }} {{ permission.model }})</li>
+                <li data-toggle="tooltip" title="{% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.type }} {{ permission.model }}{% if permission.permanent %}, {% trans "permanent" %}{% endif %})</li>
             {% empty %}
                 <em>{% trans "No associated permission" %}</em>
             {% endfor %}
