@@ -15,6 +15,7 @@ from note.api.urls import register_note_urls
 from treasury.api.urls import register_treasury_urls
 from logs.api.urls import register_logs_urls
 from permission.api.urls import register_permission_urls
+from wei.api.urls import register_wei_urls
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -78,6 +79,7 @@ register_note_urls(router, 'note')
 register_treasury_urls(router, 'treasury')
 register_permission_urls(router, 'permission')
 register_logs_urls(router, 'logs')
+register_wei_urls(router, 'wei')
 
 app_name = 'api'
 

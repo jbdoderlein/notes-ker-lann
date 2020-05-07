@@ -2,6 +2,7 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+
 {% block content %}
     <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
 
@@ -12,7 +13,7 @@
             {% render_table table %}
         {% else %}
             <div class="alert alert-warning">
-                {% trans "There is no pending user with this pattern." %}
+                {% trans "There is no user with this pattern." %}
             </div>
         {% endif %}
     </div>

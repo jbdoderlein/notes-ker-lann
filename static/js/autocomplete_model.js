@@ -11,7 +11,7 @@ $(document).ready(function () {
             name_field = "name";
         let input = target.val();
 
-        $.getJSON(api_url + "?format=json&search=^" + input + api_url_suffix, function(objects) {
+        $.getJSON(api_url + (api_url.includes("?") ? "&" : "?") + "format=json&search=^" + input + api_url_suffix, function(objects) {
             let html = "";
 
             objects.results.forEach(function (obj) {

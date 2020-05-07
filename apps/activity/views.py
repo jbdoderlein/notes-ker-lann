@@ -46,8 +46,8 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
         context['title'] = _("Activities")
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
-        context['upcoming'] = ActivityTable(data=upcoming_activities.filter(
-            PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
+        context['upcoming'] = ActivityTable(
+            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
 
         return context
 

@@ -37,21 +37,16 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        perms = Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
-            .filter(
-                rolepermissions__role__membership__user=user,
-                rolepermissions__role__membership__date_start__lte=datetime.date.today(),
-                rolepermissions__role__membership__date_end__gte=datetime.date.today(),
-                type=t,
-                mask__rank__lte=get_current_session().get("permission_mask", 42),
-        )
-        if settings.DATABASES[perms.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
-            # We want one permission per club, and per permission type.
-            # SQLite does not support this kind of filter, that's why we don't filter the permissions with this
-            # kind of DB. This only increases performances (we can check multiple times the same permission)
-            # but don't have any semantic influence.
-            perms = perms.distinct('club', 'pk')
-        return perms
+        return Permission.objects.annotate(
+            club=F("rolepermissions__role__membership__club"),
+            membership=F("rolepermissions__role__membership"),
+        ).filter(
+            rolepermissions__role__membership__user=user,
+            rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+            rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+            type=t,
+            mask__rank__lte=get_current_session().get("permission_mask", 0),
+        ).distinct()
 
     @staticmethod
     def permissions(user, model, type):
@@ -63,6 +58,7 @@ class PermissionBackend(ModelBackend):
         :return: A generator of the requested permissions
         """
         clubs = {}
+        memberships = {}
 
         for permission in PermissionBackend.get_raw_permissions(user, type):
             if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.club:
@@ -72,9 +68,16 @@ class PermissionBackend(ModelBackend):
                 clubs[permission.club] = club = Club.objects.get(pk=permission.club)
             else:
                 club = clubs[permission.club]
+
+            if permission.membership not in memberships:
+                memberships[permission.membership] = membership = Membership.objects.get(pk=permission.membership)
+            else:
+                membership = memberships[permission.membership]
+
             permission = permission.about(
                 user=user,
                 club=club,
+                membership=membership,
                 User=User,
                 Club=Club,
                 Membership=Membership,
@@ -83,7 +86,9 @@ class PermissionBackend(ModelBackend):
                 NoteClub=NoteClub,
                 NoteSpecial=NoteSpecial,
                 F=F,
-                Q=Q
+                Q=Q,
+                now=datetime.datetime.now(),
+                today=datetime.date.today(),
             )
             yield permission
 

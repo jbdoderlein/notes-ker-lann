@@ -9,7 +9,7 @@ from note.models import NoteSpecial
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask
 
-from .models import Profile, Club, Membership
+from .models import Profile, Club, Membership, Role
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -25,10 +25,16 @@ class ProfileForm(forms.ModelForm):
     A form for the extras field provided by the :model:`member.Profile` model.
     """
 
+    def save(self, commit=True):
+        if not self.instance.section or (("department" in self.changed_data
+                                         or "promotion" in self.changed_data) and "section" not in self.changed_data):
+            self.instance.section = self.instance.section_generated
+        return super().save(commit)
+
     class Meta:
         model = Profile
         fields = '__all__'
-        exclude = ('user', 'email_confirmed', 'registration_valid', 'soge', )
+        exclude = ('user', 'email_confirmed', 'registration_valid', )
 
 
 class ClubForm(forms.ModelForm):
@@ -50,6 +56,8 @@ class ClubForm(forms.ModelForm):
 
 
 class MembershipForm(forms.ModelForm):
+    roles = forms.ModelMultipleChoiceField(queryset=Role.objects.filter(weirole=None).all())
+
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,

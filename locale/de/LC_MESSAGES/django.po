@@ -44,11 +44,13 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:23 apps/activity/models.py:48
-#: apps/member/models.py:99 apps/member/models.py:202
-#: apps/note/models/notes.py:188 apps/note/models/transactions.py:24
-#: apps/note/models/transactions.py:44 apps/note/models/transactions.py:236
-#: templates/member/club_info.html:13 templates/member/profile_info.html:14
+#: apps/member/models.py:151 apps/member/models.py:255
+#: apps/note/models/notes.py:188 apps/note/models/transactions.py:25
+#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:250
+#: apps/wei/models.py:62 templates/member/club_info.html:13
+#: templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
+#: templates/wei/weiclub_info.html:13 templates/wei/weimembership_form.html:18
 msgid "name"
 msgstr ""
 
@@ -68,19 +70,23 @@ msgstr ""
 msgid "activity types"
 msgstr ""
 
-#: apps/activity/models.py:53 apps/note/models/transactions.py:74
-#: apps/permission/models.py:103 templates/activity/activity_detail.html:16
+#: apps/activity/models.py:53 apps/note/models/transactions.py:75
+#: apps/permission/models.py:103 apps/permission/models.py:176
+#: apps/wei/models.py:68 apps/wei/models.py:124
+#: templates/activity/activity_detail.html:16
 msgid "description"
 msgstr ""
 
 #: apps/activity/models.py:60 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:64
+#: apps/note/models/transactions.py:65 apps/permission/models.py:157
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
 
-#: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:223
-#: apps/note/models/notes.py:117
+#: apps/activity/models.py:66 apps/logs/models.py:21 apps/member/models.py:277
+#: apps/note/models/notes.py:117 apps/treasury/models.py:221
+#: apps/wei/models.py:155 templates/treasury/sogecredit_detail.html:14
+#: templates/wei/survey.html:16
 msgid "user"
 msgstr ""
 
@@ -100,7 +106,7 @@ msgstr ""
 msgid "end date"
 msgstr ""
 
-#: apps/activity/models.py:93 apps/note/models/transactions.py:139
+#: apps/activity/models.py:93 apps/note/models/transactions.py:140
 #: templates/activity/activity_detail.html:47
 msgid "valid"
 msgstr ""
@@ -148,6 +154,7 @@ msgstr ""
 
 #: apps/activity/models.py:189 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
+#: templates/wei/weimembership_form.html:18
 msgid "first name"
 msgstr ""
 
@@ -175,18 +182,18 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
-#: apps/activity/tables.py:75 apps/treasury/models.py:138
+#: apps/activity/tables.py:75 apps/treasury/models.py:140
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/member/forms.py:75
-#: apps/registration/forms.py:55 apps/treasury/forms.py:121
+#: apps/activity/tables.py:77 apps/member/forms.py:83
+#: apps/registration/forms.py:64 apps/treasury/forms.py:121
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/member/forms.py:80
-#: apps/registration/forms.py:60 apps/treasury/forms.py:123
-#: templates/note/transaction_form.html:126
+#: apps/activity/tables.py:79 apps/member/forms.py:88
+#: apps/registration/forms.py:69 apps/treasury/forms.py:123
+#: templates/note/transaction_form.html:97
 msgid "First name"
 msgstr ""
 
@@ -202,7 +209,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:160
+#: apps/activity/views.py:153
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -218,7 +225,7 @@ msgstr ""
 msgid "IP Address"
 msgstr ""
 
-#: apps/logs/models.py:35
+#: apps/logs/models.py:35 apps/permission/models.py:127
 msgid "model"
 msgstr ""
 
@@ -243,7 +250,8 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:150
+#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:149
+#: apps/wei/tables.py:65
 msgid "delete"
 msgstr ""
 
@@ -267,185 +275,258 @@ msgstr ""
 msgid "changelogs"
 msgstr ""
 
-#: apps/member/apps.py:14
+#: apps/member/apps.py:14 apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "member"
 msgstr ""
 
-#: apps/member/forms.py:54 apps/registration/forms.py:35
+#: apps/member/forms.py:62 apps/registration/forms.py:44
 msgid "Inscription paid by Société Générale"
 msgstr ""
 
-#: apps/member/forms.py:56 apps/registration/forms.py:37
+#: apps/member/forms.py:64 apps/registration/forms.py:46
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr ""
 
-#: apps/member/forms.py:61 apps/registration/forms.py:42
+#: apps/member/forms.py:69 apps/registration/forms.py:51
 msgid "Credit type"
 msgstr ""
 
-#: apps/member/forms.py:62 apps/registration/forms.py:43
+#: apps/member/forms.py:70 apps/registration/forms.py:52
 msgid "No credit"
 msgstr ""
 
-#: apps/member/forms.py:64
+#: apps/member/forms.py:72
 msgid "You can credit the note of the user."
 msgstr ""
 
-#: apps/member/forms.py:68 apps/registration/forms.py:48
+#: apps/member/forms.py:76 apps/registration/forms.py:57
 msgid "Credit amount"
 msgstr ""
 
-#: apps/member/forms.py:85 apps/registration/forms.py:65
-#: apps/treasury/forms.py:125 templates/note/transaction_form.html:132
+#: apps/member/forms.py:93 apps/registration/forms.py:74
+#: apps/treasury/forms.py:125 templates/note/transaction_form.html:103
 msgid "Bank"
 msgstr ""
 
-#: apps/member/models.py:33
+#: apps/member/models.py:34
 #: templates/registration/future_profile_detail.html:47
+#: templates/wei/weimembership_form.html:48
 msgid "phone number"
 msgstr ""
 
-#: apps/member/models.py:39 templates/member/profile_info.html:27
+#: apps/member/models.py:41 templates/member/profile_info.html:27
 #: templates/registration/future_profile_detail.html:41
+#: templates/wei/weimembership_form.html:42
 msgid "section"
 msgstr ""
 
-#: apps/member/models.py:40
+#: apps/member/models.py:42
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr ""
 
-#: apps/member/models.py:46 templates/member/profile_info.html:30
-#: templates/registration/future_profile_detail.html:44
-msgid "address"
+#: apps/member/models.py:50 templates/wei/weimembership_form.html:36
+msgid "department"
 msgstr ""
 
 #: apps/member/models.py:52
-#: templates/registration/future_profile_detail.html:50
-msgid "paid"
+msgid "Informatics (A0)"
 msgstr ""
 
 #: apps/member/models.py:53
-msgid "Tells if the user receive a salary."
+msgid "Mathematics (A1)"
+msgstr ""
+
+#: apps/member/models.py:54
+msgid "Physics (A2)"
+msgstr ""
+
+#: apps/member/models.py:55
+msgid "Applied physics (A'2)"
+msgstr ""
+
+#: apps/member/models.py:56
+msgid "Chemistry (A''2)"
+msgstr ""
+
+#: apps/member/models.py:57
+msgid "Biology (A3)"
 msgstr ""
 
 #: apps/member/models.py:58
-msgid "email confirmed"
+msgid "SAPHIRE (B1234)"
+msgstr ""
+
+#: apps/member/models.py:59
+msgid "Mechanics (B1)"
+msgstr ""
+
+#: apps/member/models.py:60
+msgid "Civil engineering (B2)"
+msgstr ""
+
+#: apps/member/models.py:61
+msgid "Mechanical engineering (B3)"
+msgstr ""
+
+#: apps/member/models.py:62
+msgid "EEA (B4)"
 msgstr ""
 
 #: apps/member/models.py:63
+msgid "Design (C)"
+msgstr ""
+
+#: apps/member/models.py:64
+msgid "Economy-management (D2)"
+msgstr ""
+
+#: apps/member/models.py:65
+msgid "Social sciences (D3)"
+msgstr ""
+
+#: apps/member/models.py:66
+msgid "English (E)"
+msgstr ""
+
+#: apps/member/models.py:67
+msgid "External (EXT)"
+msgstr ""
+
+#: apps/member/models.py:74
+msgid "promotion"
+msgstr ""
+
+#: apps/member/models.py:75
+msgid "Year of entry to the school (None if not ENS student)"
+msgstr ""
+
+#: apps/member/models.py:79 templates/member/profile_info.html:30
+#: templates/registration/future_profile_detail.html:44
+#: templates/wei/weimembership_form.html:45
+msgid "address"
+msgstr ""
+
+#: apps/member/models.py:86
+#: templates/registration/future_profile_detail.html:50
+#: templates/wei/weimembership_form.html:51
+msgid "paid"
+msgstr ""
+
+#: apps/member/models.py:87
+msgid "Tells if the user receive a salary."
+msgstr ""
+
+#: apps/member/models.py:92
+msgid "email confirmed"
+msgstr ""
+
+#: apps/member/models.py:97
 msgid "registration valid"
 msgstr ""
 
-#: apps/member/models.py:68
-msgid "Société générale"
-msgstr ""
-
-#: apps/member/models.py:69
-msgid "Has the user ever be paid by the Société générale?"
-msgstr ""
-
-#: apps/member/models.py:74 apps/member/models.py:75
+#: apps/member/models.py:126 apps/member/models.py:127
 msgid "user profile"
 msgstr ""
 
-#: apps/member/models.py:104 templates/member/club_info.html:46
+#: apps/member/models.py:156 templates/member/club_info.html:57
 #: templates/registration/future_profile_detail.html:22
+#: templates/wei/weiclub_info.html:52 templates/wei/weimembership_form.html:24
 msgid "email"
 msgstr ""
 
-#: apps/member/models.py:111
+#: apps/member/models.py:163
 msgid "parent club"
 msgstr ""
 
-#: apps/member/models.py:120
+#: apps/member/models.py:172
 msgid "require memberships"
 msgstr ""
 
-#: apps/member/models.py:121
+#: apps/member/models.py:173
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
 
-#: apps/member/models.py:126 templates/member/club_info.html:35
+#: apps/member/models.py:178 templates/member/club_info.html:41
 msgid "membership fee (paid students)"
 msgstr ""
 
-#: apps/member/models.py:131 templates/member/club_info.html:38
+#: apps/member/models.py:183 templates/member/club_info.html:44
 msgid "membership fee (unpaid students)"
 msgstr ""
 
-#: apps/member/models.py:137 templates/member/club_info.html:28
+#: apps/member/models.py:189 templates/member/club_info.html:33
 msgid "membership duration"
 msgstr ""
 
-#: apps/member/models.py:138
+#: apps/member/models.py:190
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr ""
 
-#: apps/member/models.py:145 templates/member/club_info.html:22
+#: apps/member/models.py:197 templates/member/club_info.html:23
 msgid "membership start"
 msgstr ""
 
-#: apps/member/models.py:146
+#: apps/member/models.py:198
 msgid "How long after January 1st the members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:153 templates/member/club_info.html:25
+#: apps/member/models.py:205 templates/member/club_info.html:28
 msgid "membership end"
 msgstr ""
 
-#: apps/member/models.py:154
+#: apps/member/models.py:206
 msgid ""
 "How long the membership can last after January 1st of the next year after "
 "members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:187 apps/member/models.py:229
+#: apps/member/models.py:240 apps/member/models.py:283
 #: apps/note/models/notes.py:139
 msgid "club"
 msgstr ""
 
-#: apps/member/models.py:188
+#: apps/member/models.py:241
 msgid "clubs"
 msgstr ""
 
-#: apps/member/models.py:208 apps/permission/models.py:294
+#: apps/member/models.py:261 apps/permission/models.py:312
 msgid "role"
 msgstr ""
 
-#: apps/member/models.py:209 apps/member/models.py:234
+#: apps/member/models.py:262 apps/member/models.py:288
 msgid "roles"
 msgstr ""
 
-#: apps/member/models.py:239
+#: apps/member/models.py:293
 msgid "membership starts on"
 msgstr ""
 
-#: apps/member/models.py:243
+#: apps/member/models.py:297
 msgid "membership ends on"
 msgstr ""
 
-#: apps/member/models.py:248
+#: apps/member/models.py:302
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:266 apps/member/views.py:500
+#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:768
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:276 apps/member/views.py:509
+#: apps/member/models.py:330 apps/member/views.py:514
 msgid "User is already a member of the club"
 msgstr ""
 
-#: apps/member/models.py:314
+#: apps/member/models.py:381
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr ""
 
-#: apps/member/models.py:317
+#: apps/member/models.py:384
 msgid "membership"
 msgstr ""
 
-#: apps/member/models.py:318
+#: apps/member/models.py:385
 msgid "memberships"
 msgstr ""
 
@@ -459,6 +540,7 @@ msgstr ""
 
 #: apps/member/views.py:65 templates/member/profile_info.html:45
 #: templates/registration/future_profile_detail.html:55
+#: templates/wei/weimembership_form.html:122
 msgid "Update Profile"
 msgstr ""
 
@@ -466,36 +548,36 @@ msgstr ""
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/views.py:180
+#: apps/member/views.py:181
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:495
+#: apps/member/views.py:500 apps/wei/views.py:759
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:513
+#: apps/member/views.py:518
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:518
+#: apps/member/views.py:523
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:528 apps/member/views.py:530 apps/member/views.py:532
-#: apps/registration/views.py:286 apps/registration/views.py:288
-#: apps/registration/views.py:290
+#: apps/member/views.py:540 apps/member/views.py:542 apps/member/views.py:544
+#: apps/registration/views.py:289 apps/registration/views.py:291
+#: apps/registration/views.py:293
 msgid "This field is required."
 msgstr ""
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:99
+#: apps/note/admin.py:120 apps/note/models/transactions.py:100
 msgid "source"
 msgstr ""
 
 #: apps/note/admin.py:128 apps/note/admin.py:170
-#: apps/note/models/transactions.py:54 apps/note/models/transactions.py:112
+#: apps/note/models/transactions.py:55 apps/note/models/transactions.py:113
 msgid "destination"
 msgstr ""
 
@@ -537,7 +619,7 @@ msgstr ""
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:122
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:123
 msgid "created at"
 msgstr ""
 
@@ -591,8 +673,8 @@ msgstr ""
 msgid "alias"
 msgstr ""
 
-#: apps/note/models/notes.py:211 templates/member/club_info.html:43
-#: templates/member/profile_info.html:36
+#: apps/note/models/notes.py:211 templates/member/club_info.html:54
+#: templates/member/profile_info.html:36 templates/wei/weiclub_info.html:48
 msgid "aliases"
 msgstr ""
 
@@ -608,97 +690,98 @@ msgstr ""
 msgid "You can't delete your main alias."
 msgstr ""
 
-#: apps/note/models/transactions.py:30
+#: apps/note/models/transactions.py:31
 msgid "transaction category"
 msgstr ""
 
-#: apps/note/models/transactions.py:31
+#: apps/note/models/transactions.py:32
 msgid "transaction categories"
 msgstr ""
 
-#: apps/note/models/transactions.py:47
+#: apps/note/models/transactions.py:48
 msgid "A template with this name already exist"
 msgstr ""
 
-#: apps/note/models/transactions.py:58 apps/note/models/transactions.py:130
+#: apps/note/models/transactions.py:59 apps/note/models/transactions.py:131
 msgid "amount"
 msgstr ""
 
-#: apps/note/models/transactions.py:59
+#: apps/note/models/transactions.py:60
 msgid "in centimes"
 msgstr ""
 
-#: apps/note/models/transactions.py:70
+#: apps/note/models/transactions.py:71
 msgid "display"
 msgstr ""
 
-#: apps/note/models/transactions.py:80
+#: apps/note/models/transactions.py:81
 msgid "transaction template"
 msgstr ""
 
-#: apps/note/models/transactions.py:81
+#: apps/note/models/transactions.py:82
 msgid "transaction templates"
 msgstr ""
 
-#: apps/note/models/transactions.py:105 apps/note/models/transactions.py:118
+#: apps/note/models/transactions.py:106 apps/note/models/transactions.py:119
 #: apps/note/tables.py:33 apps/note/tables.py:42
 msgid "used alias"
 msgstr ""
 
-#: apps/note/models/transactions.py:126
+#: apps/note/models/transactions.py:127
 msgid "quantity"
 msgstr ""
 
-#: apps/note/models/transactions.py:134
+#: apps/note/models/transactions.py:135
 msgid "reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:144 apps/note/tables.py:95
+#: apps/note/models/transactions.py:145 apps/note/tables.py:95
 msgid "invalidity reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:152
+#: apps/note/models/transactions.py:153
 msgid "transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:153
+#: apps/note/models/transactions.py:154
+#: templates/treasury/sogecredit_detail.html:22
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:207
-#: templates/activity/activity_entry.html:13 templates/base.html:99
+#: apps/note/models/transactions.py:216
+#: templates/activity/activity_entry.html:13 templates/base.html:84
 #: templates/note/transaction_form.html:19
 #: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:226
+#: apps/note/models/transactions.py:240
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:241
+#: apps/note/models/transactions.py:255
 msgid "first_name"
 msgstr ""
 
-#: apps/note/models/transactions.py:246
+#: apps/note/models/transactions.py:260
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:252
+#: apps/note/models/transactions.py:266
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:252 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:266 templates/note/transaction_form.html:28
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:268 apps/note/models/transactions.py:273
+#: apps/note/models/transactions.py:282 apps/note/models/transactions.py:287
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:269
+#: apps/note/models/transactions.py:283 apps/treasury/models.py:227
 msgid "membership transactions"
 msgstr ""
 
@@ -714,12 +797,16 @@ msgstr ""
 msgid "No reason specified"
 msgstr ""
 
-#: apps/note/tables.py:122 apps/note/tables.py:152
+#: apps/note/tables.py:122 apps/note/tables.py:151 apps/wei/tables.py:66
+#: templates/treasury/sogecredit_detail.html:59
+#: templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
 msgstr ""
 
-#: apps/note/tables.py:147 templates/member/club_info.html:55
-#: templates/note/conso_form.html:128
+#: apps/note/tables.py:146 apps/wei/tables.py:42 apps/wei/tables.py:43
+#: templates/member/club_info.html:67 templates/note/conso_form.html:121
+#: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
+#: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:68
 msgid "Edit"
 msgstr ""
 
@@ -731,12 +818,12 @@ msgstr ""
 msgid "Consumptions"
 msgstr ""
 
-#: apps/permission/models.py:82 apps/permission/models.py:281
+#: apps/permission/models.py:82
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr ""
 
-#: apps/permission/models.py:84 apps/permission/models.py:283
+#: apps/permission/models.py:84
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr ""
@@ -753,59 +840,106 @@ msgstr ""
 msgid "permission masks"
 msgstr ""
 
-#: apps/permission/models.py:160
+#: apps/permission/models.py:151
+msgid "query"
+msgstr ""
+
+#: apps/permission/models.py:164
+msgid "mask"
+msgstr ""
+
+#: apps/permission/models.py:170
+msgid "field"
+msgstr ""
+
+#: apps/permission/models.py:181
 msgid "permission"
 msgstr ""
 
-#: apps/permission/models.py:161
+#: apps/permission/models.py:182 apps/permission/models.py:316
 msgid "permissions"
 msgstr ""
 
-#: apps/permission/models.py:166
+#: apps/permission/models.py:187
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 
-#: apps/permission/models.py:304 apps/permission/models.py:305
+#: apps/permission/models.py:323 apps/permission/models.py:324
 msgid "role permissions"
+msgstr ""
+
+#: apps/permission/signals.py:62
+#, python-brace-format
+msgid ""
+"You don't have the permission to change the field {field} on this instance "
+"of model {app_label}.{model_name}."
+msgstr ""
+
+#: apps/permission/signals.py:72
+#, python-brace-format
+msgid ""
+"You don't have the permission to add this instance of model {app_label}."
+"{model_name}."
+msgstr ""
+
+#: apps/permission/signals.py:99
+#, python-brace-format
+msgid ""
+"You don't have the permission to delete this instance of model {app_label}."
+"{model_name}."
+msgstr ""
+
+#: apps/permission/views.py:47
+msgid "All rights"
 msgstr ""
 
 #: apps/registration/apps.py:10
 msgid "registration"
 msgstr ""
 
-#: apps/registration/forms.py:70
+#: apps/registration/forms.py:32
+msgid "Register to the WEI"
+msgstr ""
+
+#: apps/registration/forms.py:34
+msgid ""
+"Check this case if you want to register to the WEI. If you hesitate, you "
+"will be able to register later, after validating your account in the Kfet."
+msgstr ""
+
+#: apps/registration/forms.py:79
 msgid "Join BDE Club"
 msgstr ""
 
-#: apps/registration/forms.py:77
+#: apps/registration/forms.py:86
 msgid "Join Kfet Club"
 msgstr ""
 
-#: apps/registration/views.py:75
+#: apps/registration/views.py:78
 msgid "Email validation"
 msgstr ""
 
-#: apps/registration/views.py:121
+#: apps/registration/views.py:124
 msgid "Email validation unsuccessful"
 msgstr ""
 
-#: apps/registration/views.py:132
+#: apps/registration/views.py:135
 msgid "Email validation email sent"
 msgstr ""
 
-#: apps/registration/views.py:185
+#: apps/registration/views.py:188
 msgid "Unregistered users"
 msgstr ""
 
-#: apps/registration/views.py:252
+#: apps/registration/views.py:255
 msgid "You must join the BDE."
 msgstr ""
 
-#: apps/registration/views.py:274
+#: apps/registration/views.py:277
 msgid "You must join BDE club before joining Kfet club."
 msgstr ""
 
-#: apps/registration/views.py:279
+#: apps/registration/views.py:282
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
@@ -817,10 +951,10 @@ msgstr ""
 #: apps/treasury/forms.py:85 apps/treasury/forms.py:133
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
-#: templates/django_filters/rest_framework/form.html:5
 #: templates/member/add_members.html:14 templates/member/club_form.html:9
-#: templates/note/transactiontemplate_form.html:15
-#: templates/treasury/invoice_form.html:46
+#: templates/treasury/invoice_form.html:46 templates/wei/bus_form.html:13
+#: templates/wei/busteam_form.html:13 templates/wei/weiclub_form.html:15
+#: templates/wei/weiregistration_form.html:14
 msgid "Submit"
 msgstr ""
 
@@ -837,115 +971,134 @@ msgid "You can't change the type of the remittance."
 msgstr ""
 
 #: apps/treasury/forms.py:127 apps/treasury/tables.py:47
-#: templates/note/transaction_form.html:95
+#: apps/treasury/tables.py:113 templates/note/transaction_form.html:133
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr ""
 
-#: apps/treasury/models.py:18
+#: apps/treasury/models.py:20
 msgid "Invoice identifier"
 msgstr ""
 
-#: apps/treasury/models.py:32
+#: apps/treasury/models.py:34
 msgid "BDE"
 msgstr ""
 
-#: apps/treasury/models.py:37
+#: apps/treasury/models.py:39
 msgid "Object"
 msgstr ""
 
-#: apps/treasury/models.py:41
+#: apps/treasury/models.py:43
 msgid "Description"
 msgstr ""
 
-#: apps/treasury/models.py:46 templates/note/transaction_form.html:120
+#: apps/treasury/models.py:48 templates/note/transaction_form.html:91
 msgid "Name"
 msgstr ""
 
-#: apps/treasury/models.py:50
+#: apps/treasury/models.py:52
 msgid "Address"
 msgstr ""
 
-#: apps/treasury/models.py:55
+#: apps/treasury/models.py:57
 msgid "Place"
 msgstr ""
 
-#: apps/treasury/models.py:59
+#: apps/treasury/models.py:61
 msgid "Acquitted"
 msgstr ""
 
-#: apps/treasury/models.py:63
+#: apps/treasury/models.py:65
 msgid "invoice"
 msgstr ""
 
-#: apps/treasury/models.py:64
+#: apps/treasury/models.py:66
 msgid "invoices"
 msgstr ""
 
-#: apps/treasury/models.py:79
+#: apps/treasury/models.py:81
 msgid "Designation"
 msgstr ""
 
-#: apps/treasury/models.py:83
+#: apps/treasury/models.py:85
 msgid "Quantity"
 msgstr ""
 
-#: apps/treasury/models.py:87
+#: apps/treasury/models.py:89
 msgid "Unit price"
 msgstr ""
 
-#: apps/treasury/models.py:103
+#: apps/treasury/models.py:105
 msgid "product"
 msgstr ""
 
-#: apps/treasury/models.py:104
+#: apps/treasury/models.py:106
 msgid "products"
 msgstr ""
 
-#: apps/treasury/models.py:121
+#: apps/treasury/models.py:123
 msgid "remittance type"
 msgstr ""
 
-#: apps/treasury/models.py:122
+#: apps/treasury/models.py:124
 msgid "remittance types"
 msgstr ""
 
-#: apps/treasury/models.py:132
+#: apps/treasury/models.py:134
 msgid "Date"
 msgstr ""
 
-#: apps/treasury/models.py:143
+#: apps/treasury/models.py:145
 msgid "Comment"
 msgstr ""
 
-#: apps/treasury/models.py:148
+#: apps/treasury/models.py:150
 msgid "Closed"
 msgstr ""
 
-#: apps/treasury/models.py:152
+#: apps/treasury/models.py:154
 msgid "remittance"
 msgstr ""
 
-#: apps/treasury/models.py:153
+#: apps/treasury/models.py:155
 msgid "remittances"
 msgstr ""
 
-#: apps/treasury/models.py:185
+#: apps/treasury/models.py:187
 msgid "Remittance #{:d}: {}"
 msgstr ""
 
-#: apps/treasury/models.py:204 apps/treasury/tables.py:76
+#: apps/treasury/models.py:206 apps/treasury/tables.py:76
 #: apps/treasury/tables.py:84 templates/treasury/invoice_list.html:13
 #: templates/treasury/remittance_list.html:13
+#: templates/treasury/sogecredit_list.html:13
 msgid "Remittance"
 msgstr ""
 
-#: apps/treasury/models.py:208
+#: apps/treasury/models.py:210
 msgid "special transaction proxy"
 msgstr ""
 
-#: apps/treasury/models.py:209
+#: apps/treasury/models.py:211
 msgid "special transaction proxies"
+msgstr ""
+
+#: apps/treasury/models.py:233
+msgid "credit transaction"
+msgstr ""
+
+#: apps/treasury/models.py:296
+msgid ""
+"This user doesn't have enough money to pay the memberships with its note. "
+"Please ask her/him to credit the note before invalidating this credit."
+msgstr ""
+
+#: apps/treasury/models.py:308 templates/treasury/sogecredit_detail.html:10
+msgid "Credit from the Société générale"
+msgstr ""
+
+#: apps/treasury/models.py:309
+msgid "Credits from the Société générale"
 msgstr ""
 
 #: apps/treasury/tables.py:19
@@ -954,6 +1107,7 @@ msgstr ""
 
 #: apps/treasury/tables.py:22 templates/treasury/invoice_list.html:10
 #: templates/treasury/remittance_list.html:10
+#: templates/treasury/sogecredit_list.html:10
 msgid "Invoice"
 msgstr ""
 
@@ -973,23 +1127,325 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: note_kfet/settings/__init__.py:63
-msgid ""
-"The Central Authentication Service grants you access to most of our websites "
-"by authenticating only once, so you don't need to type your credentials "
-"again unless your session expires or you logout."
+#: apps/treasury/tables.py:117
+msgid "Valid"
 msgstr ""
 
-#: note_kfet/settings/base.py:153
-msgid "German"
+#: apps/treasury/tables.py:124
+msgid "Yes"
+msgstr ""
+
+#: apps/treasury/tables.py:124
+msgid "No"
+msgstr ""
+
+#: apps/wei/apps.py:10 apps/wei/models.py:45 apps/wei/models.py:46
+#: apps/wei/models.py:57 apps/wei/models.py:162 templates/base.html:116
+msgid "WEI"
+msgstr ""
+
+#: apps/wei/forms/registration.py:47 apps/wei/models.py:109
+#: apps/wei/models.py:271
+msgid "bus"
+msgstr ""
+
+#: apps/wei/forms/registration.py:48
+msgid ""
+"This choice is not definitive. The WEI organizers are free to attribute for "
+"you a bus and a team, in particular if you are a free eletron."
+msgstr ""
+
+#: apps/wei/forms/registration.py:54
+msgid "Team"
+msgstr ""
+
+#: apps/wei/forms/registration.py:56
+msgid ""
+"Leave this field empty if you won't be in a team (staff, bus chief, free "
+"electron)"
+msgstr ""
+
+#: apps/wei/forms/registration.py:61 apps/wei/forms/registration.py:67
+#: apps/wei/models.py:143
+msgid "WEI Roles"
+msgstr ""
+
+#: apps/wei/forms/registration.py:62
+msgid "Select the roles that you are interested in."
+msgstr ""
+
+#: apps/wei/forms/registration.py:72
+msgid "This team doesn't belong to the given bus."
+msgstr ""
+
+#: apps/wei/models.py:20 templates/wei/weiclub_info.html:23
+msgid "year"
+msgstr ""
+
+#: apps/wei/models.py:24 templates/wei/weiclub_info.html:17
+msgid "date start"
+msgstr ""
+
+#: apps/wei/models.py:28 templates/wei/weiclub_info.html:20
+msgid "date end"
+msgstr ""
+
+#: apps/wei/models.py:73
+msgid "survey information"
+msgstr ""
+
+#: apps/wei/models.py:74
+msgid "Information about the survey for new members, encoded in JSON"
+msgstr ""
+
+#: apps/wei/models.py:96
+msgid "Bus"
+msgstr ""
+
+#: apps/wei/models.py:97 templates/wei/weiclub_tables.html:79
+msgid "Buses"
+msgstr ""
+
+#: apps/wei/models.py:117
+msgid "color"
+msgstr ""
+
+#: apps/wei/models.py:118
+msgid "The color of the T-Shirt, stored with its number equivalent"
+msgstr ""
+
+#: apps/wei/models.py:132
+msgid "Bus team"
+msgstr ""
+
+#: apps/wei/models.py:133
+msgid "Bus teams"
+msgstr ""
+
+#: apps/wei/models.py:142
+msgid "WEI Role"
+msgstr ""
+
+#: apps/wei/models.py:167
+msgid "Credit from Société générale"
+msgstr ""
+
+#: apps/wei/models.py:172
+msgid "Caution check given"
+msgstr ""
+
+#: apps/wei/models.py:176 templates/wei/weimembership_form.html:62
+msgid "birth date"
+msgstr ""
+
+#: apps/wei/models.py:182
+msgid "Male"
+msgstr ""
+
+#: apps/wei/models.py:183
+msgid "Female"
+msgstr ""
+
+#: apps/wei/models.py:184
+msgid "Non binary"
+msgstr ""
+
+#: apps/wei/models.py:186 templates/wei/weimembership_form.html:59
+msgid "gender"
+msgstr ""
+
+#: apps/wei/models.py:192 templates/wei/weimembership_form.html:65
+msgid "health issues"
+msgstr ""
+
+#: apps/wei/models.py:197 templates/wei/weimembership_form.html:68
+msgid "emergency contact name"
+msgstr ""
+
+#: apps/wei/models.py:202 templates/wei/weimembership_form.html:71
+msgid "emergency contact phone"
+msgstr ""
+
+#: apps/wei/models.py:207 templates/wei/weimembership_form.html:74
+msgid ""
+"Register on the mailing list to stay informed of the events of the campus (1 "
+"mail/week)"
+msgstr ""
+
+#: apps/wei/models.py:212 templates/wei/weimembership_form.html:77
+msgid ""
+"Register on the mailing list to stay informed of the sport events of the "
+"campus (1 mail/week)"
+msgstr ""
+
+#: apps/wei/models.py:217 templates/wei/weimembership_form.html:80
+msgid ""
+"Register on the mailing list to stay informed of the art events of the "
+"campus (1 mail/week)"
+msgstr ""
+
+#: apps/wei/models.py:222 templates/wei/weimembership_form.html:56
+msgid "first year"
+msgstr ""
+
+#: apps/wei/models.py:223
+msgid "Tells if the user is new in the school."
+msgstr ""
+
+#: apps/wei/models.py:228
+msgid "registration information"
+msgstr ""
+
+#: apps/wei/models.py:229
+msgid ""
+"Information about the registration (buses for old members, survey fot the "
+"new members), encoded in JSON"
+msgstr ""
+
+#: apps/wei/models.py:260
+msgid "WEI User"
+msgstr ""
+
+#: apps/wei/models.py:261
+msgid "WEI Users"
+msgstr ""
+
+#: apps/wei/models.py:281
+msgid "team"
+msgstr ""
+
+#: apps/wei/models.py:291
+msgid "WEI registration"
+msgstr ""
+
+#: apps/wei/models.py:295
+msgid "WEI membership"
+msgstr ""
+
+#: apps/wei/models.py:296
+msgid "WEI memberships"
+msgstr ""
+
+#: apps/wei/tables.py:53 apps/wei/tables.py:54
+#: templates/treasury/sogecredit_detail.html:57
+msgid "Validate"
+msgstr ""
+
+#: apps/wei/tables.py:96
+msgid "Year"
+msgstr ""
+
+#: apps/wei/tables.py:134 templates/wei/bus_tables.html:26
+#: templates/wei/busteam_tables.html:43
+msgid "Teams"
+msgstr ""
+
+#: apps/wei/tables.py:143 apps/wei/tables.py:184
+msgid "Members count"
+msgstr ""
+
+#: apps/wei/tables.py:150 apps/wei/tables.py:181
+msgid "members"
+msgstr ""
+
+#: apps/wei/views.py:201
+msgid "Find WEI Membership"
+msgstr ""
+
+#: apps/wei/views.py:236
+msgid "Find WEI Registration"
+msgstr ""
+
+#: apps/wei/views.py:445 templates/wei/weiclub_info.html:62
+msgid "Register 1A"
+msgstr ""
+
+#: apps/wei/views.py:466 apps/wei/views.py:535
+msgid "This user is already registered to this WEI."
+msgstr ""
+
+#: apps/wei/views.py:471
+msgid ""
+"This user can't be in her/his first year since he/she has already participed "
+"to a WEI."
+msgstr ""
+
+#: apps/wei/views.py:499 templates/wei/weiclub_info.html:65
+msgid "Register 2A+"
+msgstr ""
+
+#: apps/wei/views.py:517 apps/wei/views.py:604
+msgid "You already opened an account in the Société générale."
+msgstr ""
+
+#: apps/wei/views.py:664
+msgid "You don't have the right to delete this WEI registration."
+msgstr ""
+
+#: apps/wei/views.py:763
+msgid "This user didn't give her/his caution check."
+msgstr ""
+
+#: apps/wei/views.py:837 apps/wei/views.py:857 apps/wei/views.py:867
+#: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
+#: templates/wei/survey_end.html:12
+msgid "Survey WEI"
 msgstr ""
 
 #: note_kfet/settings/base.py:154
-msgid "English"
+msgid "German"
 msgstr ""
 
 #: note_kfet/settings/base.py:155
+msgid "English"
+msgstr ""
+
+#: note_kfet/settings/base.py:156
 msgid "French"
+msgstr ""
+
+#: templates/400.html:6
+msgid "Bad request"
+msgstr ""
+
+#: templates/400.html:7
+msgid ""
+"Sorry, your request was bad. Don't know what could be wrong. An email has "
+"been sent to webmasters with the details of the error. You can now drink a "
+"coke."
+msgstr ""
+
+#: templates/403.html:6
+msgid "Permission denied"
+msgstr ""
+
+#: templates/403.html:7
+msgid "You don't have the right to perform this request."
+msgstr ""
+
+#: templates/403.html:10 templates/404.html:10
+msgid "Exception message:"
+msgstr ""
+
+#: templates/404.html:6
+msgid "Page not found"
+msgstr ""
+
+#: templates/404.html:7
+#, python-format
+msgid ""
+"The requested path <code>%(request_path)s</code> was not found on the server."
+msgstr ""
+
+#: templates/500.html:6
+msgid "Server error"
+msgstr ""
+
+#: templates/500.html:7
+msgid ""
+"Sorry, an error occurred when processing your request. An email has been "
+"sent to webmasters with the detail of the error, and this will be fixed "
+"soon. You can now drink a beer."
 msgstr ""
 
 #: templates/activity/activity_detail.html:29
@@ -1065,7 +1521,11 @@ msgstr ""
 msgid "Registrations"
 msgstr ""
 
-#: templates/base.html:165
+#: templates/base.html:120
+msgid "Rights"
+msgstr ""
+
+#: templates/base.html:158
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -1083,49 +1543,6 @@ msgid ""
 "upgrading."
 msgstr ""
 
-#: templates/cas_server/logged.html:4
-msgid ""
-"<h3>Log In Successful</h3>You have successfully logged into the Central "
-"Authentication Service.<br/>For security reasons, please Log Out and Exit "
-"your web browser when you are done accessing services that require "
-"authentication!"
-msgstr ""
-
-#: templates/cas_server/logged.html:8
-msgid "Log me out from all my sessions"
-msgstr ""
-
-#: templates/cas_server/logged.html:14
-msgid "Forget the identity provider"
-msgstr ""
-
-#: templates/cas_server/logged.html:18
-msgid "Logout"
-msgstr ""
-
-#: templates/cas_server/login.html:6
-msgid "Please log in"
-msgstr ""
-
-#: templates/cas_server/login.html:11
-msgid ""
-"If you don't have any Note Kfet account, please follow <a href='/accounts/"
-"signup'>this link to sign up</a>."
-msgstr ""
-
-#: templates/cas_server/login.html:17
-msgid "Login"
-msgstr ""
-
-#: templates/cas_server/warn.html:9
-msgid "Connect to the service"
-msgstr ""
-
-#: templates/django_filters/rest_framework/crispy_form.html:4
-#: templates/django_filters/rest_framework/form.html:2
-msgid "Field filters"
-msgstr ""
-
 #: templates/member/alias_update.html:5
 msgid "Add alias"
 msgstr ""
@@ -1134,19 +1551,25 @@ msgstr ""
 msgid "Club Parent"
 msgstr ""
 
-#: templates/member/club_info.html:29
+#: templates/member/club_info.html:34
 msgid "days"
 msgstr ""
 
-#: templates/member/club_info.html:32
+#: templates/member/club_info.html:38 templates/wei/weiclub_info.html:27
 msgid "membership fee"
 msgstr ""
 
-#: templates/member/club_info.html:52
+#: templates/member/club_info.html:50 templates/member/profile_info.html:33
+#: templates/treasury/sogecredit_detail.html:18
+#: templates/wei/weiclub_info.html:43
+msgid "balance"
+msgstr ""
+
+#: templates/member/club_info.html:64
 msgid "Add member"
 msgstr ""
 
-#: templates/member/club_info.html:59 templates/member/profile_info.html:48
+#: templates/member/club_info.html:71 templates/member/profile_info.html:48
 msgid "View Profile"
 msgstr ""
 
@@ -1159,14 +1582,15 @@ msgid "Create club"
 msgstr ""
 
 #: templates/member/club_list.html:19
-msgid "club listing "
+msgid "Club listing"
 msgstr ""
 
-#: templates/member/club_tables.html:6
+#: templates/member/club_tables.html:7
 msgid "Member of the Club"
 msgstr ""
 
-#: templates/member/club_tables.html:17 templates/member/profile_tables.html:28
+#: templates/member/club_tables.html:20 templates/member/profile_tables.html:28
+#: templates/wei/weiclub_tables.html:105
 msgid "Transaction history"
 msgstr ""
 
@@ -1189,6 +1613,7 @@ msgstr ""
 
 #: templates/member/profile_info.html:17
 #: templates/registration/future_profile_detail.html:19
+#: templates/wei/weimembership_form.html:21
 msgid "username"
 msgstr ""
 
@@ -1202,21 +1627,19 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-#: templates/member/profile_info.html:33
-msgid "balance"
-msgstr ""
-
 #: templates/member/profile_info.html:41
 msgid "Manage auth token"
 msgstr ""
 
 #: templates/member/profile_tables.html:7
 #: templates/registration/future_profile_detail.html:28
+#: templates/wei/weimembership_form.html:30
 msgid "This user doesn't have confirmed his/her e-mail address."
 msgstr ""
 
 #: templates/member/profile_tables.html:8
 #: templates/registration/future_profile_detail.html:29
+#: templates/wei/weimembership_form.html:31
 msgid "Click here to resend a validation link."
 msgstr ""
 
@@ -1228,9 +1651,8 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: templates/member/user_list.html:15
-#: templates/registration/future_user_list.html:17
-msgid "There is no pending user with this pattern."
+#: templates/member/user_list.html:16
+msgid "There is no user with this pattern."
 msgstr ""
 
 #: templates/note/conso_form.html:28
@@ -1334,6 +1756,22 @@ msgstr ""
 msgid "Unable to delete button "
 msgstr ""
 
+#: templates/permission/all_rights.html:10
+msgid "Filter with roles that I have in at least one club"
+msgstr ""
+
+#: templates/permission/all_rights.html:21
+msgid "Own this role in the clubs"
+msgstr ""
+
+#: templates/permission/all_rights.html:26
+msgid "Query:"
+msgstr ""
+
+#: templates/permission/all_rights.html:28
+msgid "No associated permission"
+msgstr ""
+
 #: templates/registration/email_validation_complete.html:6
 msgid "Your email have successfully been validated."
 msgstr ""
@@ -1355,6 +1793,7 @@ msgid ""
 msgstr ""
 
 #: templates/registration/future_profile_detail.html:56
+#: templates/wei/weiregistration_confirm_delete.html:12
 msgid "Delete registration"
 msgstr ""
 
@@ -1363,11 +1802,17 @@ msgid "Validate account"
 msgstr ""
 
 #: templates/registration/future_profile_detail.html:71
+#: templates/wei/weimembership_form.html:132
+#: templates/wei/weimembership_form.html:190
 msgid "Validate registration"
 msgstr ""
 
 #: templates/registration/future_user_list.html:7
 msgid "New user"
+msgstr ""
+
+#: templates/registration/future_user_list.html:17
+msgid "There is no pending user with this pattern."
 msgstr ""
 
 #: templates/registration/logged_out.html:8
@@ -1379,7 +1824,7 @@ msgid "Log in again"
 msgstr ""
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:28
+#: templates/registration/login.html:21
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr ""
@@ -1392,14 +1837,6 @@ msgid ""
 msgstr ""
 
 #: templates/registration/login.html:22
-msgid "You can also register via the central authentification server "
-msgstr ""
-
-#: templates/registration/login.html:23
-msgid "using this link "
-msgstr ""
-
-#: templates/registration/login.html:29
 msgid "Forgotten your password or username?"
 msgstr ""
 
@@ -1487,8 +1924,16 @@ msgid "Reset my password"
 msgstr ""
 
 #: templates/registration/signup.html:5 templates/registration/signup.html:8
-#: templates/registration/signup.html:14
+#: templates/registration/signup.html:19
 msgid "Sign up"
+msgstr ""
+
+#: templates/registration/signup.html:11
+msgid ""
+"If you already signed up, your registration is taken into account. The BDE "
+"must validate your account before your can log in. You have to go to the "
+"Kfet and pay the registration fee. You must also validate your email address "
+"by following the link you received."
 msgstr ""
 
 #: templates/treasury/invoice_form.html:6
@@ -1503,7 +1948,13 @@ msgstr ""
 msgid "Remove product"
 msgstr ""
 
-#: templates/treasury/invoice_list.html:21
+#: templates/treasury/invoice_list.html:16
+#: templates/treasury/remittance_list.html:16
+#: templates/treasury/sogecredit_list.html:16
+msgid "Société générale credits"
+msgstr ""
+
+#: templates/treasury/invoice_list.html:24
 msgid "New invoice"
 msgstr ""
 
@@ -1528,34 +1979,302 @@ msgstr ""
 msgid "There is no transaction linked with this remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:19
+#: templates/treasury/remittance_list.html:22
 msgid "Opened remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:24
+#: templates/treasury/remittance_list.html:27
 msgid "There is no opened remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:28
+#: templates/treasury/remittance_list.html:31
 msgid "New remittance"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:32
+#: templates/treasury/remittance_list.html:35
 msgid "Transfers without remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:37
+#: templates/treasury/remittance_list.html:40
 msgid "There is no transaction without any linked remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:43
+#: templates/treasury/remittance_list.html:46
 msgid "Transfers with opened remittances"
 msgstr ""
 
-#: templates/treasury/remittance_list.html:48
+#: templates/treasury/remittance_list.html:51
 msgid "There is no transaction with an opened linked remittance."
 msgstr ""
 
-#: templates/treasury/remittance_list.html:54
+#: templates/treasury/remittance_list.html:57
 msgid "Closed remittances"
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:29
+msgid "total amount"
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:35
+msgid ""
+"Warning: Validating this credit implies that all membership transactions "
+"will be validated."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:36
+msgid ""
+"If you delete this credit, there all membership transactions will be also "
+"validated, but no credit will be operated."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:37
+msgid ""
+"If this credit is validated, then the user won't be able to ask for a credit "
+"from the Société générale."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:38
+msgid "If you think there is an error, please contact the \"respos info\"."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:44
+msgid "This credit is already validated."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:49
+msgid ""
+"Warning: if you don't validate this credit, the note of the user doesn't "
+"have enough money to pay its memberships."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:50
+msgid "Please ask the user to credit its note before deleting this credit."
+msgstr ""
+
+#: templates/treasury/sogecredit_detail.html:64
+msgid "Return to credit list"
+msgstr ""
+
+#: templates/treasury/sogecredit_list.html:26
+msgid "Filter with unvalidated credits only"
+msgstr ""
+
+#: templates/treasury/sogecredit_list.html:36
+msgid "There is no matched user that have asked for a Société générale credit."
+msgstr ""
+
+#: templates/wei/bus_tables.html:16 templates/wei/busteam_tables.html:16
+msgid "Add team"
+msgstr ""
+
+#: templates/wei/bus_tables.html:39
+msgid "Members"
+msgstr ""
+
+#: templates/wei/bus_tables.html:48 templates/wei/busteam_tables.html:52
+#: templates/wei/weimembership_list.html:30
+msgid "View as PDF"
+msgstr ""
+
+#: templates/wei/survey.html:24
+msgid "Next"
+msgstr ""
+
+#: templates/wei/survey_closed.html:16
+msgid "The inscription for this WEI are now closed."
+msgstr ""
+
+#: templates/wei/survey_closed.html:20
+msgid "Return to WEI detail"
+msgstr ""
+
+#: templates/wei/survey_end.html:16
+msgid "The survey is now ended. Your answers have been saved."
+msgstr ""
+
+#: templates/wei/weiclub_info.html:31
+msgid "WEI fee / including BDE and Kfet fee (paid students)"
+msgstr ""
+
+#: templates/wei/weiclub_info.html:36
+msgid "WEI fee / including BDE and Kfet fee (unpaid students)"
+msgstr ""
+
+#: templates/wei/weiclub_info.html:58
+msgid "WEI list"
+msgstr ""
+
+#: templates/wei/weiclub_info.html:71
+msgid "Add bus"
+msgstr ""
+
+#: templates/wei/weiclub_info.html:75
+msgid "View WEI"
+msgstr ""
+
+#: templates/wei/weiclub_list.html:8
+msgid "search WEI"
+msgstr ""
+
+#: templates/wei/weiclub_list.html:12
+msgid "Create WEI"
+msgstr ""
+
+#: templates/wei/weiclub_list.html:19
+msgid "WEI listing"
+msgstr ""
+
+#: templates/wei/weiclub_tables.html:63
+msgid "Register to the WEI! – 1A"
+msgstr ""
+
+#: templates/wei/weiclub_tables.html:65
+msgid "Register to the WEI! – 2A+"
+msgstr ""
+
+#: templates/wei/weiclub_tables.html:67
+msgid "Update my registration"
+msgstr ""
+
+#: templates/wei/weiclub_tables.html:92
+msgid "Members of the WEI"
+msgstr ""
+
+#: templates/wei/weiclub_tables.html:120
+msgid "Unvalidated registrations"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:14
+msgid "Review registration"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:39
+msgid "ENS year"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:83
+msgid "Payment from Société générale"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:87
+msgid "Suggested bus from the survey:"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:92
+msgid "Raw survey information"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:102
+msgid "The algorithm didn't run."
+msgstr ""
+
+#: templates/wei/weimembership_form.html:105
+msgid "caution check given"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:109
+msgid "preferred bus"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:112
+msgid "preferred team"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:115
+msgid "preferred roles"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:123
+#: templates/wei/weiregistration_confirm_delete.html:31
+msgid "Update registration"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:136
+msgid "The registration is already validated and can't be unvalidated."
+msgstr ""
+
+#: templates/wei/weimembership_form.html:137
+msgid "The user joined the bus"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:138
+msgid "in the team"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:139
+msgid "in no team (staff)"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:139
+msgid "with the following roles:"
+msgstr ""
+
+#: templates/wei/weimembership_form.html:144
+msgid ""
+"\n"
+"                            The WEI will be paid by Société générale. The "
+"membership will be created even if the bank didn't pay the BDE yet.\n"
+"                            The membership transaction will be created but "
+"will be invalid. You will have to validate it once the bank\n"
+"                            validated the creation of the account, or to "
+"change the payment method.\n"
+"                        "
+msgstr ""
+
+#: templates/wei/weimembership_form.html:154
+#, python-format
+msgid ""
+"\n"
+"                                The note don't have enough money "
+"(%(balance)s, %(pretty_fee)s required). The registration may fail.\n"
+"                            "
+msgstr ""
+
+#: templates/wei/weimembership_form.html:161
+msgid "The note has enough money, the registration is possible."
+msgstr ""
+
+#: templates/wei/weimembership_form.html:168
+msgid "The user didn't give her/his caution check."
+msgstr ""
+
+#: templates/wei/weimembership_form.html:176
+#, python-format
+msgid ""
+"\n"
+"                            This user is not a member of the Kfet club. "
+"Please adhere\n"
+"                            <a href=\"%(future_user_detail)s\">here if he/"
+"she is in her/his first year</a>\n"
+"                            or <a href=\"%(club_detail)s\">here if he/she "
+"was an old member</a> before you validate\n"
+"                            the registration of the WEI.\n"
+"                        "
+msgstr ""
+
+#: templates/wei/weimembership_list.html:18
+msgid "There is no membership found with this pattern."
+msgstr ""
+
+#: templates/wei/weimembership_list.html:24
+msgid "View unvalidated registrations..."
+msgstr ""
+
+#: templates/wei/weiregistration_confirm_delete.html:17
+msgid "This registration is already validated and can't be deleted."
+msgstr ""
+
+#: templates/wei/weiregistration_confirm_delete.html:24
+#, python-format
+msgid ""
+"Are you sure you want to delete the registration of %(user)s for the WEI "
+"%(wei_name)s? This action can't be undone."
+msgstr ""
+
+#: templates/wei/weiregistration_list.html:18
+msgid "There is no pre-registration found with this pattern."
+msgstr ""
+
+#: templates/wei/weiregistration_list.html:24
+msgid "View validated memberships..."
 msgstr ""

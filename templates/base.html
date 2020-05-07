@@ -31,9 +31,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
 
     {# JQuery, Bootstrap and Turbolinks JavaScript #}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -91,39 +90,52 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <ul class="navbar-nav">
                 {% if "note.transactiontemplate"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:consos' %}"><i class="fa fa-coffee"></i> {% trans 'Consumptions' %}</a>
+                        <a class="nav-link" href="{% url 'note:consos' %}"><i class="fas fa-coffee"></i> {% trans 'Consumptions' %}</a>
                     </li>
                 {% endif %}
                 {% if "note.transaction"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fa fa-exchange"></i>{% trans 'Transfer' %} </a>
+                        <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i>{% trans 'Transfer' %} </a>
                     </li>
                 {% endif %}
                 {% if "auth.user"|model_list|length >= 2 %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fa fa-user"></i> {% trans 'Users' %}</a>
+                        <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
                     </li>
                 {% endif %}
                 {% if "member.club"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fa fa-users"></i> {% trans 'Clubs' %}</a>
+                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
                     </li>
                 {% endif %}
                 {% if "member.change_profile_registration_valid"|has_perm:user %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'registration:future_user_list' %}">
-                            <i class="fa fa-user-plus"></i> {% trans "Registrations" %}
+                            <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
                         </a>
                     </li>
                 {% endif %}
                 {% if "activity.activity"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fa fa-calendar"></i> {% trans 'Activities' %}</a>
+                        <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
                     </li>
                 {% endif %}
-                {% if "treasury.invoice"|not_empty_model_change_list %}
+                {% if "treasury.invoice"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fa fa-money"></i>{% trans 'Treasury' %} </a>
+                        <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fas fa-credit-card"></i> {% trans 'Treasury' %}</a>
+                    </li>
+                {% endif %}
+                {% if "wei.weiclub"|not_empty_model_list %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'wei:current_wei_detail' %}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
+                </li>
+                {% if user.is_staff %}
+                    <li class="nav-item active">
+                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Administration' %}</a>
                     </li>
                 {% endif %}
             </ul>
@@ -131,28 +143,28 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if user.is_authenticated %}
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user"></i>
+                            <i class="fas fa-user"></i>
                             <span id="user_balance">{{ user.username }} ({{ user.note.balance | pretty_money }})</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right"
                              aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'member:user_detail' pk=user.pk %}">
-                                <i class="fa fa-user"></i> Mon compte
+                                <i class="fas fa-user"></i> Mon compte
                             </a>
                             <a class="dropdown-item" href="{% url 'logout' %}">
-                                <i class="fa fa-sign-out"></i> Se déconnecter
+                                <i class="fas fa-sign-out-alt"></i> Se déconnecter
                             </a>
                         </div>
                     </li>
                 {% else %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'registration:signup' %}">
-                            <i class="fa fa-user-plus"></i> S'inscrire
+                            <i class="fas fa-user-plus"></i> S'inscrire
                         </a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'login' %}">
-                            <i class="fa fa-sign-in"></i> Se connecter
+                            <i class="fas fa-sign-in-alt"></i> Se connecter
                         </a>
                     </li>
                 {% endif %}
