@@ -1,0 +1,46 @@
+{% extends "member/noteowner_detail.html" %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block profile_info %}
+{% include "wei/weiclub_info.html" %}
+{% endblock %}
+
+{% block profile_content %}
+    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+    <hr>
+
+    <div id="registrations_table">
+        {% if table.data %}
+            {% render_table table %}
+        {% else %}
+            <div class="alert alert-warning">
+                {% trans "There is no pre-registration found with this pattern." %}
+            </div>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'wei:wei_memberships' pk=club.pk %}">
+        <button class="btn btn-block btn-info">{% trans "View validated memberships..." %}</button>
+    </a>
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        let old_pattern = null;
+        let searchbar_obj = $("#searchbar");
+
+        function reloadTable() {
+            let pattern = searchbar_obj.val();
+
+            if (pattern === old_pattern)
+                return;
+
+            $("#registrations_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #registrations_table");
+        }
+
+        searchbar_obj.keyup(reloadTable);
+    });
+</script>
+{% endblock %}

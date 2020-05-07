@@ -3,7 +3,7 @@
 
 from json import dumps as json_dumps
 
-from django.forms.widgets import DateTimeBaseInput, NumberInput, TextInput
+from django.forms.widgets import DateTimeBaseInput, NumberInput, TextInput, Widget
 
 
 class AmountInput(NumberInput):
@@ -39,6 +39,29 @@ class Autocomplete(TextInput):
             self.attrs["model_pk"] = int(value)
             return str(self.model.objects.get(pk=int(value)))
         return ""
+
+
+class ColorWidget(Widget):
+    """
+    Pulled from django-colorfield.
+    Select a color.
+    """
+    template_name = 'colorfield/color.html'
+
+    class Media:
+        js = [
+            'colorfield/jscolor/jscolor.min.js',
+            'colorfield/colorfield.js',
+        ]
+
+    def format_value(self, value):
+        if value is None:
+            value = 0xFFFFFF
+        return "#{:06X}".format(value)
+
+    def value_from_datadict(self, data, files, name):
+        val = super().value_from_datadict(data, files, name)
+        return int(val[1:], 16)
 
 
 """

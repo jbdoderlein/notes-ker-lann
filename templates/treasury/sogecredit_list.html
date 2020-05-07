@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load i18n %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+                <a href="{% url "treasury:invoice_list" %}" class="btn btn-sm btn-outline-primary">
+                    {% trans "Invoice" %}s
+                </a>
+                <a href="{% url "treasury:remittance_list" %}" class="btn btn-sm btn-outline-primary">
+                    {% trans "Remittance" %}s
+                </a>
+                <a href="#" class="btn btn-sm btn-outline-primary active">
+                    {% trans "Société générale credits" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+    <div class="form-check">
+        <label for="invalid_only" class="form-check-label">
+            <input id="invalid_only" name="invalid_only" type="checkbox" class="checkboxinput form-check-input">
+            {% trans "Filter with unvalidated credits only" %}
+        </label>
+    </div>
+    <hr>
+
+    <div id="credits_table">
+        {% if table.data %}
+            {% render_table table %}
+        {% else %}
+            <div class="alert alert-warning">
+                {% trans "There is no matched user that have asked for a Société générale credit." %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        let old_pattern = null;
+        let searchbar_obj = $("#searchbar");
+        let invalid_only_obj = $("#invalid_only");
+
+        function reloadTable() {
+            let pattern = searchbar_obj.val();
+
+            if (pattern === old_pattern || pattern === "")
+                return;
+
+            $("#credits_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + (invalid_only_obj.is(':checked') ? "&valid=false" : "") + " #credits_table");
+
+            $(".table-row").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        }
+
+        searchbar_obj.keyup(reloadTable);
+        invalid_only_obj.change(reloadTable);
+    });
+</script>
+{% endblock %}

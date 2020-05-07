@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans "Bad request" %}</h1>
+    {% blocktrans %}Sorry, your request was bad. Don't know what could be wrong. An email has been sent to webmasters with the details of the error. You can now drink a coke.{% endblocktrans %}
+{% endblock %}

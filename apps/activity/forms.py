@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from member.models import Club
 from note.models import NoteUser, Note
 from note_kfet.inputs import DateTimePickerInput, Autocomplete

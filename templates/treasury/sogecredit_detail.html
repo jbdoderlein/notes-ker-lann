@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load pretty_money %}
+{% load perms %}
+
+{% block content %}
+    <div class="card bg-light shadow">
+        <div class="card-header text-center">
+            <h4>{% trans "Credit from the Société générale" %}</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-xl-6 text-right">{% trans 'user'|capfirst %}</dt>
+                <dd class="col-xl-6"><a href="{% url 'member:user_detail' pk=object.user.pk %}">{{ object.user }}</a></dd>
+
+                {% if "note.view_note_balance"|has_perm:object.user.note %}
+                    <dt class="col-xl-6 text-right">{% trans 'balance'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ object.user.note.balance|pretty_money }}</dd>
+                {% endif %}
+
+                <dt class="col-xl-6 text-right">{% trans 'transactions'|capfirst %}</dt>
+                <dd class="col-xl-6">
+                    {% for transaction in object.transactions.all %}
+                        {{ transaction.membership.club }} ({{ transaction.amount|pretty_money }})<br>
+                    {% endfor %}
+                </dd>
+
+                <dt class="col-xl-6 text-right">{% trans 'total amount'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.amount|pretty_money }}</dd>
+            </dl>
+        </div>
+
+        <div class="alert alert-warning">
+            {% trans 'Warning: Validating this credit implies that all membership transactions will be validated.' %}
+            {% trans 'If you delete this credit, there all membership transactions will be also validated, but no credit will be operated.' %}
+            {% trans "If this credit is validated, then the user won't be able to ask for a credit from the Société générale." %}
+            {% trans 'If you think there is an error, please contact the "respos info".' %}
+        </div>
+
+        <div class="card-footer text-center" id="buttons_footer">
+            {% if object.valid %}
+                <div class="alert alert-danger">
+                    {% trans "This credit is already validated." %}
+                </div>
+            {% else %}
+                {% if object.user.note.balance < object.amount %}
+                    <div class="alert alert-warning">
+                        {% trans "Warning: if you don't validate this credit, the note of the user doesn't have enough money to pay its memberships." %}
+                        {% trans "Please ask the user to credit its note before deleting this credit." %}
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="btn-group btn-block">
+                        <button name="validate" class="btn btn-success">{% trans "Validate" %}</button>
+                        {% if object.user.note.balance >= object.amount %}
+                            <button name="delete" class="btn btn-danger">{% trans "Delete" %}</button>
+                        {% endif %}
+                    </div>
+                </form>
+            {% endif %}
+            <a href="{% url 'treasury:soge_credits' %}"><button class="btn btn-primary btn-block">{% trans "Return to credit list" %}</button></a>
+        </div>
+    </div>
+{% endblock %}

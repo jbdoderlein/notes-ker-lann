@@ -120,7 +120,12 @@ class Permission(models.Model):
         ('delete', 'delete')
     ]
 
-    model = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name='+')
+    model = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name='+',
+        verbose_name=_("model"),
+    )
 
     # A json encoded Q object with the following grammar
     #  query -> [] | {}  (the empty query representing all objects)
@@ -142,18 +147,34 @@ class Permission(models.Model):
     # Examples:
     #  Q(is_superuser=True)  := {"is_superuser": true}
     #  ~Q(is_superuser=True) := ["NOT", {"is_superuser": true}]
-    query = models.TextField()
+    query = models.TextField(
+        verbose_name=_("query"),
+    )
 
-    type = models.CharField(max_length=15, choices=PERMISSION_TYPES)
+    type = models.CharField(
+        max_length=15,
+        choices=PERMISSION_TYPES,
+        verbose_name=_("type"),
+    )
 
     mask = models.ForeignKey(
         PermissionMask,
         on_delete=models.PROTECT,
+        related_name="permissions",
+        verbose_name=_("mask"),
     )
 
-    field = models.CharField(max_length=255, blank=True)
+    field = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("field"),
+    )
 
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("description"),
+    )
 
     class Meta:
         unique_together = ('model', 'query', 'type', 'field')
@@ -277,24 +298,22 @@ class Permission(models.Model):
         return InstancedPermission(self.model, query, self.type, self.field, self.mask, **kwargs)
 
     def __str__(self):
-        if self.field:
-            return _("Can {type} {model}.{field} in {query}").format(type=self.type, model=self.model, field=self.field, query=self.query)
-        else:
-            return _("Can {type} {model} in {query}").format(type=self.type, model=self.model, query=self.query)
+        return self.description
 
 
 class RolePermissions(models.Model):
     """
     Permissions associated with a Role
     """
-    role = models.ForeignKey(
+    role = models.OneToOneField(
         Role,
         on_delete=models.PROTECT,
-        related_name='+',
+        related_name='permissions',
         verbose_name=_('role'),
     )
     permissions = models.ManyToManyField(
         Permission,
+        verbose_name=_("permissions"),
     )
 
     def __str__(self):

@@ -45,8 +45,8 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
         context['title'] = _("Activities")
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
-        context['upcoming'] = ActivityTable(data=upcoming_activities
-                                        .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
+        context['upcoming'] = ActivityTable(
+            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
 
         return context
 
@@ -153,7 +153,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         context["title"] = _('Entry for activity "{}"').format(activity.name)
         context["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
         context["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
-        
+
         context["activities_open"] = Activity.objects.filter(open=True).filter(
             PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
             PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()

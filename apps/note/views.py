@@ -30,7 +30,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-id").all()[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at", "-id").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
@@ -93,7 +93,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-id").all()[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at", "-id").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
