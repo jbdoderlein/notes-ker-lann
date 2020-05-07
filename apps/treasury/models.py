@@ -1,11 +1,13 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import datetime
 
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial, SpecialTransaction
+from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction
 
 
 class Invoice(models.Model):
@@ -207,3 +209,101 @@ class SpecialTransactionProxy(models.Model):
     class Meta:
         verbose_name = _("special transaction proxy")
         verbose_name_plural = _("special transaction proxies")
+
+
+class SogeCredit(models.Model):
+    """
+    Manage the credits from the Société générale.
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT,
+        verbose_name=_("user"),
+    )
+
+    transactions = models.ManyToManyField(
+        MembershipTransaction,
+        related_name="+",
+        verbose_name=_("membership transactions"),
+    )
+
+    credit_transaction = models.OneToOneField(
+        SpecialTransaction,
+        on_delete=models.SET_NULL,
+        verbose_name=_("credit transaction"),
+        null=True,
+    )
+
+    @property
+    def valid(self):
+        return self.credit_transaction is not None
+
+    @property
+    def amount(self):
+        return sum(transaction.total for transaction in self.transactions.all())
+
+    def invalidate(self):
+        """
+        Invalidating a Société générale delete the transaction of the bank if it was already created.
+        Treasurers must know what they do, With Great Power Comes Great Responsibility...
+        """
+        if self.valid:
+            self.credit_transaction.valid = False
+            self.credit_transaction._force_save = True
+            self.credit_transaction.save()
+            self.credit_transaction._force_delete = True
+            self.credit_transaction.delete()
+        self.credit_transaction = None
+        for transaction in self.transactions.all():
+            transaction.valid = False
+            transaction._force_save = True
+            transaction.save()
+
+    def validate(self, force=False):
+        if self.valid and not force:
+            # The credit is already done
+            return
+
+        # First invalidate all transaction and delete the credit if already did (and force mode)
+        self.invalidate()
+        self.credit_transaction = SpecialTransaction.objects.create(
+            source=NoteSpecial.objects.get(special_type="Virement bancaire"),
+            destination=self.user.note,
+            quantity=1,
+            amount=self.amount,
+            reason="Crédit société générale",
+            last_name=self.user.last_name,
+            first_name=self.user.first_name,
+            bank="Société générale",
+        )
+        self.save()
+
+        for transaction in self.transactions.all():
+            transaction.valid = True
+            transaction._force_save = True
+            transaction.created_at = datetime.now()
+            transaction.save()
+
+    def delete(self, **kwargs):
+        """
+        Deleting a SogeCredit is equivalent to say that the Société générale didn't pay.
+        Treasurers must know what they do, this is difficult to undo this operation.
+        With Great Power Comes Great Responsibility...
+        """
+
+        total_fee = sum(transaction.total for transaction in self.transactions.all() if not transaction.valid)
+        if self.user.note.balance < total_fee:
+            raise ValidationError(_("This user doesn't have enough money to pay the memberships with its note. "
+                                    "Please ask her/him to credit the note before invalidating this credit."))
+
+        self.invalidate()
+        for transaction in self.transactions.all():
+            transaction._force_save = True
+            transaction.valid = True
+            transaction.created_at = datetime.now()
+            transaction.save()
+        super().delete(**kwargs)
+
+    class Meta:
+        verbose_name = _("Credit from the Société générale")
+        verbose_name_plural = _("Credits from the Société générale")

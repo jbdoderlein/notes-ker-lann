@@ -1,0 +1,129 @@
+{% load render_table from django_tables2 %}
+{% load i18n %}
+<div class="card">
+    <div class="card-header text-center">
+        <h4>WEI</h4>
+    </div>
+    <div class="card-body">
+        <p>LE WEI, c'est cool !</p>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Dapibus ultrices in iaculis nunc sed augue. In hendrerit gravida rutrum quisque non tellus orci
+            ac. Massa vitae tortor condimentum lacinia quis vel eros. Elit ut aliquam purus sit amet. Aliquam faucibus
+            purus in massa tempor. Quisque id diam vel quam elementum pulvinar etiam non. Condimentum id venenatis a
+            condimentum vitae sapien pellentesque habitant. Egestas congue quisque egestas diam in. Vestibulum rhoncus
+            est pellentesque elit ullamcorper. Massa sed elementum tempus egestas sed sed. Sapien pellentesque habitant
+            morbi tristique. Lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare. Sed
+            adipiscing diam donec adipiscing. Leo integer malesuada nunc vel risus commodo viverra maecenas.
+        </p>
+
+        <p>
+            Fusce id velit ut tortor pretium viverra suspendisse. Urna condimentum mattis pellentesque id nibh tortor id
+            aliquet. Vel facilisis volutpat est velit egestas dui. Turpis egestas sed tempus urna et pharetra pharetra
+            massa massa. Eget nunc scelerisque viverra mauris in. Etiam dignissim diam quis enim. Urna cursus eget nunc
+            scelerisque viverra mauris in aliquam sem. Amet porttitor eget dolor morbi non arcu risus quis. Ullamcorper
+            sit amet risus nullam eget felis. Ullamcorper eget nulla facilisi etiam dignissim diam quis. Enim nulla
+            aliquet porttitor lacus luctus accumsan tortor. Urna condimentum mattis pellentesque id nibh tortor id.
+            Feugiat in fermentum posuere urna nec. Risus nec feugiat in fermentum posuere urna nec tincidunt. Porttitor
+            massa id neque aliquam vestibulum morbi. Diam quis enim lobortis scelerisque. Ornare massa eget egestas
+            purus. Ut tortor pretium viverra suspendisse. Purus in mollis nunc sed. Tristique magna sit amet purus
+            gravida.
+        </p>
+
+        <p>
+            Ut porttitor leo a diam sollicitudin tempor. Viverra nam libero justo laoreet sit amet cursus sit amet.
+            Lectus arcu bibendum at varius vel pharetra vel turpis nunc. Vivamus arcu felis bibendum ut tristique et
+            egestas quis ipsum. Parturient montes nascetur ridiculus mus mauris. A cras semper auctor neque vitae
+            tempus quam pellentesque. Netus et malesuada fames ac. Mauris in aliquam sem fringilla ut. Sapien
+            pellentesque habitant morbi tristique. Mauris sit amet massa vitae tortor condimentum. Sagittis
+            aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc. Amet consectetur adipiscing elit
+            duis tristique sollicitudin nibh sit. Nunc mattis enim ut tellus elementum. Sapien eget mi proin sed libero
+            enim. Pulvinar sapien et ligula ullamcorper. Nibh mauris cursus mattis molestie a iaculis at erat
+            pellentesque. Molestie at elementum eu facilisis. Velit sed ullamcorper morbi tincidunt. Quam vulputate
+            dignissim suspendisse in est ante.
+        </p>
+
+        <p>
+            Id cursus metus aliquam eleifend mi. Eu turpis egestas pretium aenean pharetra magna ac. Faucibus ornare
+            suspendisse sed nisi lacus sed viverra tellus. Sed vulputate mi sit amet mauris commodo. Lacus laoreet non
+            curabitur gravida arcu ac. At ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget. Fusce ut
+            placerat orci nulla pellentesque dignissim. Quis blandit turpis cursus in hac habitasse platea dictumst
+            quisque. Tellus id interdum velit laoreet id donec ultrices. Risus feugiat in ante metus dictum. Velit ut
+            tortor pretium viverra suspendisse. Lacus vel facilisis volutpat est velit egestas dui id. Nunc eget lorem
+            dolor sed viverra ipsum nunc aliquet bibendum. Varius quam quisque id diam vel quam. Orci dapibus ultrices
+            in iaculis. Neque gravida in fermentum et sollicitudin ac orci.
+        </p>
+    </div>
+
+    {% if club.is_current_wei %}
+        <div class="card-footer text-center">
+            {% if not my_registration %}
+                {% if not not_first_year %}
+                    <a href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 1A" %}</button></a>
+                {% endif %}
+                <a href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 2A+" %}</button></a>
+            {% else %}
+                <a href="{% url "wei:wei_update_registration" pk=my_registration.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<hr>
+
+{% if buses.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-bus"></i> {% trans "Buses" %}
+            </a>
+        </div>
+        {% render_table buses %}
+    </div>
+
+    <hr>
+{% endif %}
+
+{% if member_list.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold" href="{% url "wei:wei_memberships" pk=club.pk %}">
+                <i class="fa fa-users"></i> {% trans "Members of the WEI" %}
+            </a>
+        </div>
+        {% render_table member_list %}
+    </div>
+
+    <hr>
+{% endif %}
+
+{% if history_list.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="historyListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold">
+                <i class="fa fa-euro"></i> {% trans "Transaction history" %}
+            </a>
+        </div>
+        <div id="history_list">
+            {% render_table history_list %}
+        </div>
+    </div>
+
+    <hr>
+{% endif %}
+
+{% if pre_registrations.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="historyListHeading">
+            <a class="btn btn-link stretched-link font-weight-bold" href="{% url 'wei:wei_registrations' pk=club.pk %}">
+                <i class="fa fa-user-plus"></i> {% trans "Unvalidated registrations" %}
+            </a>
+        </div>
+        <div id="history_list">
+            {% render_table pre_registrations %}
+        </div>
+    </div>
+
+    <hr>
+{% endif %}

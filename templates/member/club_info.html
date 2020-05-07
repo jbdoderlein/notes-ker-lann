@@ -15,18 +15,24 @@
 
             {% if club.parent_club %}
                 <dt class="col-xl-6"><a href="{% url 'member:club_detail' club.parent_club.pk %}">{% trans 'Club Parent'|capfirst %}</a></dt>
-                <dd class="col-xl-6"> {{ club.parent_club.name}}</dd>
+                <dd class="col-xl-6"> {{ club.parent_club.name }}</dd>
             {% endif %}
 
             {% if club.require_memberships %}
-                <dt class="col-xl-6">{% trans 'membership start'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_start }}</dd>
+                {% if club.membership_start %}
+                    <dt class="col-xl-6">{% trans 'membership start'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ club.membership_start }}</dd>
+                {% endif %}
 
-                <dt class="col-xl-6">{% trans 'membership end'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_end }}</dd>
+                {% if club.membership_end %}
+                    <dt class="col-xl-6">{% trans 'membership end'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ club.membership_end }}</dd>
+                {% endif %}
 
-                <dt class="col-xl-6">{% trans 'membership duration'|capfirst %}</dt>
-                <dd class="col-xl-6">{{ club.membership_duration }} {% trans "days" %}</dd>
+                {% if club.membership_duration %}
+                    <dt class="col-xl-6">{% trans 'membership duration'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ club.membership_duration }} {% trans "days" %}</dd>
+                {% endif %}
 
                 {% if club.membership_fee_paid == club.membership_fee_unpaid %}
                     <dt class="col-xl-6">{% trans 'membership fee'|capfirst %}</dt>
@@ -39,23 +45,31 @@
                     <dd class="col-xl-6">{{ club.membership_fee_unpaid|pretty_money }}</dd>
                 {% endif %}
             {% endif %}
+
+            {% if "note.view_note"|has_perm:club.note %}
+                <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ club.note.balance | pretty_money }}</dd>
+            {% endif %}
             
             <dt class="col-xl-6"><a href="{% url 'member:club_alias' club.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
-            <dd class="col-xl-6 text-truncate">{{ object.note.alias_set.all|join:", " }}</dd>
+            <dd class="col-xl-6 text-truncate">{{ club.note.alias_set.all|join:", " }}</dd>
 
-            <dt class="col-xl-3">{% trans 'email'|capfirst %}</dt>
-            <dd class="col-xl-9"><a href="mailto:{{ club.email }}">{{ club.email }}</a></dd>
+            <dt class="col-xl-4">{% trans 'email'|capfirst %}</dt>
+            <dd class="col-xl-8"><a href="mailto:{{ club.email }}">{{ club.email }}</a></dd>
         </dl>
     </div>
-    <div class="card-footer text-center">
-        {% if can_add_members %}
-            <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' club_pk=club.pk %}"> {% trans "Add member" %}</a>
-        {% endif %}
-        {% if ".change_"|has_perm:club %}
-            <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_update' pk=club.pk %}"> {% trans "Edit" %}</a>
-        {% endif %}
-        {% url 'member:club_detail' club.pk as club_detail_url %}
-        {%if request.path_info != club_detail_url %}
-        <a class="btn btn-primary btn-sm my-1" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
-        {% endif %}    </div>
+    {% if not club.weiclub %}
+        <div class="card-footer text-center">
+            {% if can_add_members %}
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_add_member' club_pk=club.pk %}"> {% trans "Add member" %}</a>
+            {% endif %}
+            {% if ".change_"|has_perm:club %}
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'member:club_update' pk=club.pk %}"> {% trans "Edit" %}</a>
+            {% endif %}
+            {% url 'member:club_detail' club.pk as club_detail_url %}
+            {%if request.path_info != club_detail_url %}
+                <a class="btn btn-primary btn-sm my-1" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>

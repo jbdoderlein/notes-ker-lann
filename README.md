@@ -118,6 +118,8 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         DOMAIN=localhost # note.example.com
         CONTACT_EMAIL=tresorerie.bde@localhost
         NOTE_URL=localhost # serveur cas note.example.com si auto-hébergé.
+        NOTE_MAIL=notekfet@localhost  # Adresse expéditrice des mails
+        WEBMASTER_MAIL=notekfet@localhost  # Adresse sur laquelle contacter les webmasters de la note
 
     Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 

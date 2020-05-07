@@ -11,12 +11,12 @@ from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import CreateView, TemplateView, DetailView, FormView
+from django.views.generic import CreateView, TemplateView, DetailView
 from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club, Role
-from note.models import SpecialTransaction, NoteSpecial
+from note.models import SpecialTransaction
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -32,13 +32,13 @@ class UserCreateView(CreateView):
     """
 
     form_class = SignUpForm
-    success_url = reverse_lazy('registration:email_validation_sent')
     template_name = 'registration/signup.html'
     second_form = ProfileForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form()
+        del context["profile_form"].fields["section"]
 
         return context
 
@@ -66,6 +66,9 @@ class UserCreateView(CreateView):
         user.profile.send_email_validation_link()
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('registration:email_validation_sent')
 
 
 class UserValidateView(TemplateView):
@@ -112,7 +115,7 @@ class UserValidateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.get_user(self.kwargs["uidb64"])
+        context['user_object'] = self.get_user(self.kwargs["uidb64"])
         context['login_url'] = resolve_url(settings.LOGIN_URL)
         if self.validlink:
             context['validlink'] = True
@@ -263,17 +266,17 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             fee += kfet_fee
 
         if soge:
-            # Fill payment information if Société Générale pays the inscription
-            credit_type = NoteSpecial.objects.get(special_type="Virement bancaire")
-            credit_amount = fee
-            bank = "Société générale"
+            # If the bank pays, then we don't credit now. Treasurers will validate the transaction
+            # and credit the note later.
+            credit_type = None
 
-        print("OK")
+        if credit_type is None:
+            credit_amount = 0
 
         if join_Kfet and not join_BDE:
             form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
 
-        if fee > credit_amount:
+        if fee > credit_amount and not soge:
             # Check if the user credits enough money
             form.add_error('credit_type',
                            _("The entered amount is not enough for the memberships, should be at least {}")
@@ -295,10 +298,9 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         ret = super().form_valid(form)
         user.is_active = user.profile.email_confirmed or user.is_superuser
         user.profile.registration_valid = True
-        # Store if Société générale paid for next years
-        user.profile.soge = soge
         user.save()
         user.profile.save()
+        user.refresh_from_db()
 
         if credit_type is not None and credit_amount > 0:
             # Credit the note
@@ -316,21 +318,29 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
         if join_BDE:
             # Create membership for the user to the BDE starting today
-            membership = Membership.objects.create(
+            membership = Membership(
                 club=bde,
                 user=user,
                 fee=bde_fee,
             )
+            if soge:
+                membership._soge = True
+            membership.save()
+            membership.refresh_from_db()
             membership.roles.add(Role.objects.get(name="Adhérent BDE"))
             membership.save()
 
         if join_Kfet:
             # Create membership for the user to the Kfet starting today
-            membership = Membership.objects.create(
+            membership = Membership(
                 club=kfet,
                 user=user,
                 fee=kfet_fee,
             )
+            if soge:
+                membership._soge = True
+            membership.save()
+            membership.refresh_from_db()
             membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
             membership.save()
 

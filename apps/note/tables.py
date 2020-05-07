@@ -55,7 +55,7 @@ class HistoryTable(tables.Table):
                 "class": lambda record: str(record.valid).lower() + ' validate',
                 "data-toggle": "tooltip",
                 "title": lambda record: _("Click to invalidate") if record.valid else _("Click to validate"),
-                "onclick": lambda record: 'in_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
+                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
                 "onmouseover": lambda record: '$("#invalidity_reason_'
                                               + str(record.id) + '").show();$("#invalidity_reason_'
                                               + str(record.id) + '").focus();',
@@ -129,13 +129,14 @@ class ButtonTable(tables.Table):
                 'table table-bordered condensed table-hover'
         }
         row_attrs = {
-            'class': lambda record: 'table-row ' + 'table-success' if record.display else 'table-danger',
+            'class': lambda record: 'table-row ' + ('table-success' if record.display else 'table-danger'),
             'id': lambda record: "row-" + str(record.pk),
             'data-href': lambda record: record.pk
         }
 
         model = TransactionTemplate
         exclude = ('id',)
+        order_by = ('type', '-display', 'destination__name', 'name',)
 
     edit = tables.LinkColumn('note:template_update',
                              args=[A('pk')],

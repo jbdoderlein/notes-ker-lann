@@ -139,7 +139,7 @@ class Entry(models.Model):
         verbose_name = _("entry")
         verbose_name_plural = _("entries")
 
-    def save(self, *args,**kwargs):
+    def save(self, *args, **kwargs):
 
         qs = Entry.objects.filter(~Q(pk=self.pk), activity=self.activity, note=self.note, guest=self.guest)
         if qs.exists():
@@ -153,7 +153,7 @@ class Entry(models.Model):
             if self.note.balance < 0:
                 raise ValidationError(_("The balance is negative."))
 
-        ret = super().save(*args,**kwargs)
+        ret = super().save(*args, **kwargs)
 
         if insert and self.guest:
             GuestTransaction.objects.create(

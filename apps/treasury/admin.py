@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from .models import RemittanceType, Remittance
+from .models import RemittanceType, Remittance, SogeCredit
 
 
 @admin.register(RemittanceType)
@@ -25,3 +25,6 @@ class RemittanceAdmin(admin.ModelAdmin):
         if not obj:
             return True
         return not obj.closed and super().has_change_permission(request, obj)
+
+
+admin.site.register(SogeCredit)

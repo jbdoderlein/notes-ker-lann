@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
 from .notes import Note, NoteClub, NoteSpecial
+from ..templatetags.pretty_money import pretty_money
 
 """
 Defines transactions
@@ -198,6 +199,14 @@ class Transaction(PolymorphicModel):
         self.source.save()
         self.destination.save()
 
+    def delete(self, **kwargs):
+        """
+        Whenever we want to delete a transaction (caution with this), we ensure the transaction is invalid first.
+        """
+        self.valid = False
+        self.save(**kwargs)
+        super().delete(**kwargs)
+
     @property
     def total(self):
         return self.amount * self.quantity
@@ -205,6 +214,10 @@ class Transaction(PolymorphicModel):
     @property
     def type(self):
         return _('Transfer')
+
+    def __str__(self):
+        return self.__class__.__name__ + " from " + str(self.source) + " to " + str(self.destination) + " of "\
+            + pretty_money(self.quantity * self.amount) + ("" if self.valid else " invalid")
 
 
 class RecurrentTransaction(Transaction):
@@ -214,8 +227,7 @@ class RecurrentTransaction(Transaction):
 
     template = models.ForeignKey(
         TransactionTemplate,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
     )
     category = models.ForeignKey(
         TemplateCategory,

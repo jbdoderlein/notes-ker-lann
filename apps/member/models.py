@@ -23,18 +23,20 @@ class Profile(models.Model):
 
     We do not want to patch the Django Contrib :model:`auth.User`model;
     so this model add an user profile with additional information.
-
     """
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+
     phone_number = models.CharField(
         verbose_name=_('phone number'),
         max_length=50,
         blank=True,
         null=True,
     )
+
     section = models.CharField(
         verbose_name=_('section'),
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
@@ -42,12 +44,44 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+
+    department = models.CharField(
+        max_length=8,
+        verbose_name=_("department"),
+        choices=[
+            ('A0', _("Informatics (A0)")),
+            ('A1', _("Mathematics (A1)")),
+            ('A2', _("Physics (A2)")),
+            ("A'2", _("Applied physics (A'2)")),
+            ('A''2', _("Chemistry (A''2)")),
+            ('A3', _("Biology (A3)")),
+            ('B1234', _("SAPHIRE (B1234)")),
+            ('B1', _("Mechanics (B1)")),
+            ('B2', _("Civil engineering (B2)")),
+            ('B3', _("Mechanical engineering (B3)")),
+            ('B4', _("EEA (B4)")),
+            ('C', _("Design (C)")),
+            ('D2', _("Economy-management (D2)")),
+            ('D3', _("Social sciences (D3)")),
+            ('E', _("English (E)")),
+            ('EXT', _("External (EXT)")),
+        ]
+    )
+
+    promotion = models.PositiveIntegerField(
+        null=True,
+        default=datetime.date.today().year,
+        verbose_name=_("promotion"),
+        help_text=_("Year of entry to the school (None if not ENS student)"),
+    )
+
     address = models.CharField(
         verbose_name=_('address'),
         max_length=255,
         blank=True,
         null=True,
     )
+
     paid = models.BooleanField(
         verbose_name=_("paid"),
         help_text=_("Tells if the user receive a salary."),
@@ -64,11 +98,29 @@ class Profile(models.Model):
         default=False,
     )
 
-    soge = models.BooleanField(
-        verbose_name=_("Société générale"),
-        help_text=_("Has the user ever be paid by the Société générale?"),
-        default=False,
-    )
+    @property
+    def ens_year(self):
+        """
+        Number of years since the 1st august of the entry year, rounded up.
+        """
+        if self.promotion is None:
+            return 0
+        today = datetime.date.today()
+        years = today.year - self.promotion
+        if today.month >= 8:
+            years += 1
+        return years
+
+    @property
+    def section_generated(self):
+        return str(self.ens_year) + self.department
+
+    @property
+    def soge(self):
+        if "treasury" in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            return SogeCredit.objects.filter(user=self.user, credit_transaction__isnull=False).exists()
+        return False
 
     class Meta:
         verbose_name = _('user profile')
@@ -85,7 +137,7 @@ class Profile(models.Model):
                                               'user': self.user,
                                               'domain': os.getenv("NOTE_URL", "note.example.com"),
                                               'token': email_validation_token.make_token(self.user),
-                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)).decode('UTF-8'),
+                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
         self.user.email_user(subject, message)
 
@@ -171,6 +223,7 @@ class Club(models.Model):
                                                   self.membership_start.month, self.membership_start.day)
             self.membership_end = datetime.date(self.membership_end.year + 1,
                                                 self.membership_end.month, self.membership_end.day)
+            self._force_save = True
             self.save(force_update=True)
 
     def save(self, force_insert=False, force_update=False, using=None,
@@ -220,6 +273,7 @@ class Membership(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
+        related_name="memberships",
         verbose_name=_("user"),
     )
 
@@ -308,7 +362,20 @@ class Membership(models.Model):
                 reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
-            transaction.save(force_insert=True)
+            print(hasattr(self, '_soge'))
+            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS:
+                # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
+                # to treasurers.
+                transaction.valid = False
+                from treasury.models import SogeCredit
+                soge_credit = SogeCredit.objects.get_or_create(user=self.user)[0]
+                soge_credit.refresh_from_db()
+                transaction.save(force_insert=True)
+                transaction.refresh_from_db()
+                soge_credit.transactions.add(transaction)
+                soge_credit.save()
+            else:
+                transaction.save(force_insert=True)
 
     def __str__(self):
         return _("Membership of {user} for the club {club}").format(user=self.user.username, club=self.club.name, )

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
+from note_kfet import settings
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -36,13 +37,15 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        return Permission.objects.annotate(club=F("rolepermissions__role__membership__club")) \
-            .filter(
-                rolepermissions__role__membership__user=user,
-                rolepermissions__role__membership__date_start__lte=datetime.date.today(),
-                rolepermissions__role__membership__date_end__gte=datetime.date.today(),
-                type=t,
-                mask__rank__lte=get_current_session().get("permission_mask", 0),
+        return Permission.objects.annotate(
+            club=F("rolepermissions__role__membership__club"),
+            membership=F("rolepermissions__role__membership"),
+        ).filter(
+            rolepermissions__role__membership__user=user,
+            rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+            rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+            type=t,
+            mask__rank__lte=get_current_session().get("permission_mask", 0),
         ).distinct()
 
     @staticmethod
@@ -55,6 +58,7 @@ class PermissionBackend(ModelBackend):
         :return: A generator of the requested permissions
         """
         clubs = {}
+        memberships = {}
 
         for permission in PermissionBackend.get_raw_permissions(user, type):
             if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.club:
@@ -64,9 +68,16 @@ class PermissionBackend(ModelBackend):
                 clubs[permission.club] = club = Club.objects.get(pk=permission.club)
             else:
                 club = clubs[permission.club]
+
+            if permission.membership not in memberships:
+                memberships[permission.membership] = membership = Membership.objects.get(pk=permission.membership)
+            else:
+                membership = memberships[permission.membership]
+
             permission = permission.about(
                 user=user,
                 club=club,
+                membership=membership,
                 User=User,
                 Club=Club,
                 Membership=Membership,
@@ -75,7 +86,9 @@ class PermissionBackend(ModelBackend):
                 NoteClub=NoteClub,
                 NoteSpecial=NoteSpecial,
                 F=F,
-                Q=Q
+                Q=Q,
+                now=datetime.datetime.now(),
+                today=datetime.date.today(),
             )
             yield permission
 
@@ -95,7 +108,7 @@ class PermissionBackend(ModelBackend):
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -129,9 +142,9 @@ class PermissionBackend(ModelBackend):
 
         sess = get_current_session()
         if sess is not None and sess.session_key is None:
-            return Permission.objects.none()
+            return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user_obj.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             return True
 
         if obj is None:

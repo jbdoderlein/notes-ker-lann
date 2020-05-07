@@ -1,2 +1,1 @@
-django-cas-client==1.5.3
 django-cas-server==1.1.0
