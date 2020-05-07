@@ -58,6 +58,20 @@ SPDX-License-Identifier: GPL-3.0-or-later
             cursor: pointer;
             text-decoration: underline;
         }
+        .tooltip.show {
+           opacity: 1; /* opaque tooltip */
+        }
+        .tooltip-inner {
+            background-color: #fff;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+            border: 1px solid rgba(0,0,0,.250);
+            color: #000;
+            margin: 0 .5rem .25rem .5rem;
+            padding: 0;
+        }
+        .bs-tooltip-bottom .arrow::before {
+            border-bottom-color: rgba(0,0,0,.250);
+        }
     </style>
 
     {% block extracss %}{% endblock %}

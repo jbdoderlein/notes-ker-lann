@@ -3,6 +3,7 @@
 
 from datetime import datetime, timezone
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import F, Q
@@ -138,8 +139,14 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                     | Q(note__noteuser__user__last_name__regex=pattern)
                     | Q(name__regex=pattern)
                     | Q(normalized_name__regex=Alias.normalize(pattern)))) \
-            .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))\
-            .distinct()[:20]
+            .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
+        if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
+            note_qs = note_qs.distinct('note__pk')[:20]
+        else:
+            # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
+            # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
+            # In production mode, please use PostgreSQL.
+            note_qs = note_qs.distinct()[:20]
         for note in note_qs:
             note.type = "Adhérent"
             note.activity = activity

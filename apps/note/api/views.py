@@ -10,8 +10,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
 
-from .serializers import NotePolymorphicSerializer, AliasSerializer, TemplateCategorySerializer, \
-    TransactionTemplateSerializer, TransactionPolymorphicSerializer
+from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
+    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
 from ..models.notes import Note, Alias
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
@@ -72,6 +72,30 @@ class AliasViewSet(ReadProtectedModelViewSet):
             print(e)
             return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_queryset(self):
+        """
+        Parse query and apply filters.
+        :return: The filtered set of requested aliases
+        """
+
+        queryset = super().get_queryset()
+
+        alias = self.request.query_params.get("alias", ".*")
+        queryset = queryset.filter(
+            Q(name__regex="^" + alias)
+            | Q(normalized_name__regex="^" + Alias.normalize(alias))
+            | Q(normalized_name__regex="^" + alias.lower()))
+
+        return queryset
+
+
+class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
+    queryset = Alias.objects.all()
+    serializer_class = ConsumerSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name']
 
     def get_queryset(self):
         """

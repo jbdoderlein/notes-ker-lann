@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
+from note_kfet import settings
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -107,7 +108,7 @@ class PermissionBackend(ModelBackend):
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -141,9 +142,9 @@ class PermissionBackend(ModelBackend):
 
         sess = get_current_session()
         if sess is not None and sess.session_key is None:
-            return Permission.objects.none()
+            return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", 0) >= 42:
+        if user_obj.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
             return True
 
         if obj is None:

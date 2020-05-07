@@ -6,9 +6,17 @@
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
         <h4>
-            {% trans "search button" %}
+            {% trans "Search button" %}
         </h4>
-        <input class="form-control mx-auto w-25" type="text" onkeyup="search_field_moved();return(false);" id="search_field"/>
+        <input class="form-control mx-auto w-25" type="text" id="search_field" placeholder="{% trans "Name of the button..." %}">
+        <div class="form-group">
+            <div id="div_active_only" class="form-check">
+                <label for="active_only" class="form-check-label">
+                    <input type="checkbox" name="active_only" class="checkboxinput form-check-input" checked="" id="active_only">
+                    {% trans "Display visible buttons only" %}
+                </label>
+            </div>
+        </div>
         <hr>
         <a class="btn btn-primary text-center my-1" href="{% url 'note:template_create' %}">{% trans "New button" %}</a>
     </div>
@@ -29,50 +37,65 @@
 
 {% block extrajavascript %}
 <script>
-/* fonction appelée à la fin du timer */
-function getInfo() {
-    var asked = $("#search_field").val();
-    /* on ne fait la requête que si on a au moins un caractère pour chercher */
-    var sel = $(".table-row");
-    if (asked.length >= 1) {
-        $.getJSON("/api/note/transaction/template/?format=json&search="+asked, function(buttons){
-            let selected_id = buttons.results.map((a => "#row-"+a.id));
-            $(".table-row,"+selected_id.join()).show();
-            $(".table-row").not(selected_id.join()).hide();
-            
-        });
-    }else{
-        // show everything
-        $('table tr').show();
-    }       
-}
-var timer;
-var timer_on;
-/* Fontion appelée quand le texte change (délenche le timer) */
-function search_field_moved(secondfield) {
-    if (timer_on) { // Si le timer a déjà été lancé, on réinitialise le compteur.
-        clearTimeout(timer);
-        timer = setTimeout("getInfo(" + secondfield + ")", 300);
+    /* fonction appelée à la fin du timer */
+    function getInfo() {
+        var asked = $("#search_field").val();
+        /* on ne fait la requête que si on a au moins un caractère pour chercher */
+        if (asked.length >= 1) {
+            $.getJSON("/api/note/transaction/template/?format=json&search=" + asked + ($("#active_only").is(":checked") ? "&display=true" : ""), function(buttons) {
+                console.log(buttons);
+                let selected_id = buttons.results.map((a => "#row-" + a.id));
+                console.log(".table-row " + selected_id.join());
+                $(".table-row " + selected_id.join()).removeClass('d-none');
+                $(".table-row").not(selected_id.join()).addClass('d-none');
+            });
+        }
+        else {
+            if ($("#active_only").is(":checked")) {
+                $('.table-success').removeClass('d-none');
+                $('.table-danger').addClass('d-none');
+            }
+            else {
+                // show everything
+                $('table tr').removeClass('d-none');
+            }
+        }
     }
-    else { // Sinon, on le lance et on enregistre le fait qu'il tourne.
-        timer = setTimeout("getInfo(" + secondfield + ")", 300);
-        timer_on = true;
+
+    var timer;
+    var timer_on;
+    /* Fontion appelée quand le texte change (délenche le timer) */
+    function search_field_moved() {
+        if (timer_on) { // Si le timer a déjà été lancé, on réinitialise le compteur.
+            clearTimeout(timer);
+            timer = setTimeout(getInfo, 300);
+        }
+        else { // Sinon, on le lance et on enregistre le fait qu'il tourne.
+            timer = setTimeout(getInfo, 300);
+            timer_on = true;
+        }
     }
-}
-// on click of button "delete" , call the API 
- function delete_button(button_id){
-     $.ajax({
-         url:"/api/note/transaction/template/"+button_id+"/",
-         method:"DELETE",
-         headers: {"X-CSRFTOKEN": CSRF_TOKEN}
-     })
-      .done(function(){
-          addMsg('{% trans "button successfully deleted "%}','success');
-          $("#buttons_table").load("{% url 'note:template_list' %} #buttons_table");
-      })
-      .fail(function(){
-          addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
-      });
- }
+    // on click of button "delete" , call the API
+     function delete_button(button_id) {
+         $.ajax({
+             url:"/api/note/transaction/template/"+button_id+"/",
+             method:"DELETE",
+             headers: {"X-CSRFTOKEN": CSRF_TOKEN}
+         })
+          .done(function(){
+              addMsg('{% trans "button successfully deleted "%}','success');
+              $("#buttons_table").load("{% url 'note:template_list' %} #buttons_table");
+          })
+          .fail(function(){
+              addMsg(' {% trans "Unable to delete button "%} #' + button_id,'danger' )
+          });
+     }
+
+     $(document).ready(function() {
+         $("#search_field").keyup(search_field_moved);
+         $("#active_only").change(search_field_moved);
+
+         search_field_moved();
+     });
 </script>
 {% endblock %}

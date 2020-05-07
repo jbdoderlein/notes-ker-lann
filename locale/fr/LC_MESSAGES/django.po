@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-26 00:45+0200\n"
+"POT-Creation-Date: 2020-04-27 03:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -206,7 +206,7 @@ msgstr "Note"
 msgid "Balance"
 msgstr "Solde du compte"
 
-#: apps/activity/views.py:45 templates/base.html:106
+#: apps/activity/views.py:46 templates/base.html:121
 msgid "Activities"
 msgstr "Activités"
 
@@ -246,7 +246,7 @@ msgstr "Nouvelles données"
 msgid "create"
 msgstr "Créer"
 
-#: apps/logs/models.py:61 apps/note/tables.py:144
+#: apps/logs/models.py:61 apps/note/tables.py:145
 #: templates/activity/activity_detail.html:67
 msgid "edit"
 msgstr "Modifier"
@@ -759,7 +759,7 @@ msgstr "transactions"
 #: apps/note/models/transactions.py:216
 #: templates/activity/activity_entry.html:13 templates/base.html:84
 #: templates/note/transaction_form.html:19
-#: templates/note/transaction_form.html:145
+#: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr "Virement"
 
@@ -818,11 +818,11 @@ msgstr "Supprimer"
 msgid "Edit"
 msgstr "Éditer"
 
-#: apps/note/views.py:40
+#: apps/note/views.py:41
 msgid "Transfer money"
 msgstr "Transférer de l'argent"
 
-#: apps/note/views.py:109 templates/base.html:79
+#: apps/note/views.py:137 templates/base.html:94
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -965,7 +965,7 @@ msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/treasury/apps.py:12 templates/base.html:111
+#: apps/treasury/apps.py:12 templates/base.html:126
 msgid "Treasury"
 msgstr "Trésorerie"
 
@@ -1558,15 +1558,15 @@ msgstr "Toutes les activités"
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: templates/base.html:89
+#: templates/base.html:104
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: templates/base.html:94
+#: templates/base.html:109
 msgid "Clubs"
 msgstr "Clubs"
 
-#: templates/base.html:100
+#: templates/base.html:115
 msgid "Registrations"
 msgstr "Inscriptions"
 
@@ -1709,31 +1709,36 @@ msgstr "Sauvegarder les changements"
 msgid "There is no user with this pattern."
 msgstr "Il n'y a pas d'utilisateur trouvé avec cette entrée."
 
-#: templates/note/conso_form.html:28 templates/note/transaction_form.html:55
-msgid "Select emitters"
-msgstr "Sélection des émetteurs"
+#: templates/note/conso_form.html:28
+msgid "Consum"
+msgstr "Consommer"
 
-#: templates/note/conso_form.html:45
+#: templates/note/conso_form.html:39 templates/note/transaction_form.html:61
+#: templates/note/transaction_form.html:76
+msgid "Name or alias..."
+msgstr ""
+
+#: templates/note/conso_form.html:48
 msgid "Select consumptions"
 msgstr "Sélection des consommations"
 
-#: templates/note/conso_form.html:51
+#: templates/note/conso_form.html:57
 msgid "Consume!"
 msgstr "Consommer !"
 
-#: templates/note/conso_form.html:64
+#: templates/note/conso_form.html:71
 msgid "Most used buttons"
 msgstr "Boutons les plus utilisés"
 
-#: templates/note/conso_form.html:126
+#: templates/note/conso_form.html:134
 msgid "Single consumptions"
 msgstr "Consommations simples"
 
-#: templates/note/conso_form.html:130
+#: templates/note/conso_form.html:139
 msgid "Double consumptions"
 msgstr "Consommations doubles"
 
-#: templates/note/conso_form.html:141 templates/note/transaction_form.html:152
+#: templates/note/conso_form.html:150 templates/note/transaction_form.html:151
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
 
@@ -1741,53 +1746,67 @@ msgstr "Historique des transactions récentes"
 msgid "Gift"
 msgstr "Don"
 
-#: templates/note/transaction_form.html:73
-msgid "External payment"
-msgstr "Paiement externe"
+#: templates/note/transaction_form.html:55
+msgid "Select emitters"
+msgstr "Sélection des émetteurs"
 
-#: templates/note/transaction_form.html:81
-msgid "Transfer type"
-msgstr "Type de transfert"
-
-#: templates/note/transaction_form.html:116
-#: templates/note/transaction_form.html:169
-#: templates/note/transaction_form.html:176
+#: templates/note/transaction_form.html:70
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
 
-#: templates/note/transaction_form.html:138
+#: templates/note/transaction_form.html:87
+msgid "Action"
+msgstr "Action"
+
+#: templates/note/transaction_form.html:102
 msgid "Reason"
 msgstr "Raison"
 
-#: templates/note/transaction_form.html:183
-msgid "Credit note"
-msgstr "Note à recharger"
+#: templates/note/transaction_form.html:110
+msgid "Transfer type"
+msgstr "Type de transfert"
 
-#: templates/note/transaction_form.html:190
-msgid "Debit note"
-msgstr "Note à débiter"
-
-#: templates/note/transactiontemplate_form.html:6
+#: templates/note/transactiontemplate_form.html:10
 msgid "Buttons list"
 msgstr "Liste des boutons"
 
+#: templates/note/transactiontemplate_form.html:21
+msgid "Price history"
+msgstr "Historique des prix"
+
+#: templates/note/transactiontemplate_form.html:24
+msgid "Obsolete since"
+msgstr "Obsolète depuis"
+
+#: templates/note/transactiontemplate_form.html:24
+msgid "Current price"
+msgstr "Prix actuel"
+
 #: templates/note/transactiontemplate_list.html:9
-msgid "search button"
+msgid "Search button"
 msgstr "Chercher un bouton"
 
-#: templates/note/transactiontemplate_list.html:13
+#: templates/note/transactiontemplate_list.html:11
+msgid "Name of the button..."
+msgstr "Nom du bouton ..."
+
+#: templates/note/transactiontemplate_list.html:16
+msgid "Display visible buttons only"
+msgstr "N'afficher que les boutons visibles uniquement"
+
+#: templates/note/transactiontemplate_list.html:21
 msgid "New button"
 msgstr "Nouveau bouton"
 
-#: templates/note/transactiontemplate_list.html:20
+#: templates/note/transactiontemplate_list.html:28
 msgid "buttons listing "
 msgstr "Liste des boutons"
 
-#: templates/note/transactiontemplate_list.html:70
+#: templates/note/transactiontemplate_list.html:86
 msgid "button successfully deleted "
 msgstr "Le bouton a bien été supprimé"
 
-#: templates/note/transactiontemplate_list.html:74
+#: templates/note/transactiontemplate_list.html:90
 msgid "Unable to delete button "
 msgstr "Impossible de supprimer le bouton "
 
