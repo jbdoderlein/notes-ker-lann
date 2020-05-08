@@ -44,14 +44,8 @@ ALLOWED_HOSTS = ['*']
 
 # Emails
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_SSL = False
-# EMAIL_HOST = 'smtp.example.org'
-# EMAIL_PORT = 25
-# EMAIL_HOST_USER = 'change_me'
-# EMAIL_HOST_PASSWORD = 'change_me'
 
-SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN", "example.com")
+SERVER_EMAIL = 'notekfet@localhost'
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False
