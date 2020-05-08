@@ -117,9 +117,14 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         DJANGO_SETTINGS_MODULE="note_kfet.settings
         DOMAIN=localhost # note.example.com
         CONTACT_EMAIL=tresorerie.bde@localhost
-        NOTE_URL=localhost # serveur cas note.example.com si auto-hébergé.
-        NOTE_MAIL=notekfet@localhost  # Adresse expéditrice des mails
-        WEBMASTER_MAIL=notekfet@localhost  # Adresse sur laquelle contacter les webmasters de la note
+        NOTE_URL=localhost # URL où accéder à la note
+        # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
+        NOTE_MAIL=notekfet@localhost
+        EMAIL_HOST=smtp.localhost
+        EMAIL_PORT=443
+        EMAIL_USER=notekfet@localhost
+        EMAIL_PASSWORD=CHANGE_ME
+
 
     Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations
 
