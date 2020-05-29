@@ -36,9 +36,7 @@ class ActivityCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = Activity
     table_class = ActivityTable
-
-    def get_queryset(self):
-        return super().get_queryset().reverse()
+    ordering = ('-date_start',)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,7 +45,9 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
         context['upcoming'] = ActivityTable(
-            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")))
+            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")),
+            prefix='upcoming-',
+        )
 
         return context
 
