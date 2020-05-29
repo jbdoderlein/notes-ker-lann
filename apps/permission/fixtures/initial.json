@@ -2192,7 +2192,7 @@
 				"activity",
 				"activity"
 			],
-			"query": "{\"entry__note__noteuser__user\": [\"user\"]}",
+			"query": "{\"entries__note__user\": [\"user\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
