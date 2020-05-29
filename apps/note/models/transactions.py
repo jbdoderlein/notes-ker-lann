@@ -264,6 +264,17 @@ class SpecialTransaction(Transaction):
     def type(self):
         return _('Credit') if isinstance(self.source, NoteSpecial) else _("Debit")
 
+    def is_credit(self):
+        return isinstance(self.source, NoteSpecial)
+
+    def is_debit(self):
+        return isinstance(self.destination, NoteSpecial)
+
+    def clean(self):
+        # SpecialTransaction are only possible with NoteSpecial object
+        if self.is_credit() == self.is_debit():
+            raise(ValidationError(_("A special transaction is only possible between a  Note associated to a payment method and a User or a Club")))
+
 
 class MembershipTransaction(Transaction):
     """
