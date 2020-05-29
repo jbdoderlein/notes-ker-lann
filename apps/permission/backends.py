@@ -3,6 +3,7 @@
 
 import datetime
 
+from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -52,9 +53,9 @@ class PermissionBackend(ModelBackend):
             & Q(mask__rank__lte=get_current_session().get("permission_mask", 0))
         )
 
-        try:
+        if settings.DATABASES[qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
             qs = qs.distinct('pk', 'club')
-        except:  # SQLite doesn't support distinct fields.
+        else:  # SQLite doesn't support distinct fields.
             qs = qs.distinct()
         return qs
 
