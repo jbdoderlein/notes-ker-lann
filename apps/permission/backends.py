@@ -36,7 +36,7 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        return Permission.objects.annotate(
+        qs = Permission.objects.annotate(
             club=F("rolepermissions__role__membership__club"),
             membership=F("rolepermissions__role__membership"),
         ).filter(
@@ -50,7 +50,13 @@ class PermissionBackend(ModelBackend):
             & Q(rolepermissions__role__membership__user=user)
             & Q(type=t)
             & Q(mask__rank__lte=get_current_session().get("permission_mask", 0))
-        ).distinct()
+        )
+
+        try:
+            qs = qs.distinct('pk', 'club')
+        except:  # SQLite doesn't support distinct fields.
+            qs = qs.distinct()
+        return qs
 
     @staticmethod
     def permissions(user, model, type):
