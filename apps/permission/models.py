@@ -170,6 +170,12 @@ class Permission(models.Model):
         verbose_name=_("field"),
     )
 
+    permanent = models.BooleanField(
+        default=False,
+        help_text=_("Tells if the permission should be granted even if the membership of the user is expired."),
+        verbose_name=_("permanent"),
+    )
+
     description = models.CharField(
         max_length=255,
         blank=True,

@@ -4,7 +4,6 @@
 from django.core.management import BaseCommand, CommandError
 from django.db.models import Q
 from django.db.models.functions import Lower
-
 from wei.models import WEIClub, Bus, BusTeam, WEIMembership
 
 
@@ -65,7 +64,7 @@ class Command(BaseCommand):
 
         if team is not None:
             qs = qs.filter(team=team if team else None)
-            
+
         sep = options["sep"]
 
         self.stdout.write("Nom|Prénom|Date de naissance|Genre|Département|Année|Section|Bus|Équipe|Rôles"

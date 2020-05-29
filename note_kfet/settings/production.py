@@ -33,15 +33,14 @@ ALLOWED_HOSTS = [os.environ.get('NOTE_URL', 'localhost')]
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 
 # Emails
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_USE_SSL = False
-# EMAIL_HOST = 'smtp.example.org'
-# EMAIL_PORT = 25
-# EMAIL_HOST_USER = 'change_me'
-# EMAIL_HOST_PASSWORD = 'change_me'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = False
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 443)
+EMAIL_HOST_USER = os.getenv('EMAIL_USER', 'change_me')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', 'change_me')
 
-SERVER_EMAIL = 'no-reply@' + os.getenv("DOMAIN", "example.com")
+SERVER_EMAIL = os.getenv("NOTE_MAIL", "notekfet@example.com")
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False

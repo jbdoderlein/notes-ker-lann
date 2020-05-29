@@ -4,6 +4,7 @@
 # CAS
 OPTIONAL_APPS = [
 #    'cas_server',
-#    'cas',
 #    'debug_toolbar'
 ]
+
+ADMINS = [('Note Kfet', 'notekfet@example.com')]

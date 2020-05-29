@@ -3,12 +3,12 @@
 
 import datetime
 
+from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
-from note_kfet import settings
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
 
@@ -37,16 +37,27 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        return Permission.objects.annotate(
+        qs = Permission.objects.annotate(
             club=F("rolepermissions__role__membership__club"),
             membership=F("rolepermissions__role__membership"),
         ).filter(
-            rolepermissions__role__membership__user=user,
-            rolepermissions__role__membership__date_start__lte=datetime.date.today(),
-            rolepermissions__role__membership__date_end__gte=datetime.date.today(),
-            type=t,
-            mask__rank__lte=get_current_session().get("permission_mask", 0),
-        ).distinct()
+            (
+                Q(
+                    rolepermissions__role__membership__date_start__lte=datetime.date.today(),
+                    rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+                )
+                | Q(permanent=True)
+            )
+            & Q(rolepermissions__role__membership__user=user)
+            & Q(type=t)
+            & Q(mask__rank__lte=get_current_session().get("permission_mask", 0))
+        )
+
+        if settings.DATABASES[qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
+            qs = qs.distinct('pk', 'club')
+        else:  # SQLite doesn't support distinct fields.
+            qs = qs.distinct()
+        return qs
 
     @staticmethod
     def permissions(user, model, type):
