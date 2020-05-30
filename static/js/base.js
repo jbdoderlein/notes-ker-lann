@@ -335,37 +335,39 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                     })
                 });
 
-    $("#validate_" + id).html("<i class='fa fa-spinner'></i>");
+                $("#validate_" + id).html("<i class='fa fa-spinner'></i>");
 
-    // Perform a PATCH request to the API in order to update the transaction
-    // If the user has insufficient rights, an error message will appear
-    $.ajax({
-        "url": "/api/note/transaction/transaction/" + id + "/",
-        type: "PATCH",
-        dataType: "json",
-        headers: {
-            "X-CSRFTOKEN": CSRF_TOKEN
-        },
-        data: {
-            "resourcetype": "RecurrentTransaction",
-            "valid": !validated,
-            "invalidity_reason": invalidity_reason,
-        },
-        success: function () {
-            // Refresh jQuery objects
-            $(".validate").click(de_validate);
+                // Perform a PATCH request to the API in order to update the transaction
+                // If the user has insufficient rights, an error message will appear
+                $.ajax({
+                    "url": "/api/note/transaction/transaction/" + id + "/",
+                    type: "PATCH",
+                    dataType: "json",
+                    headers: {
+                        "X-CSRFTOKEN": CSRF_TOKEN
+                    },
+                    data: {
+                        "resourcetype": "RecurrentTransaction",
+                        "valid": !validated,
+                        "invalidity_reason": invalidity_reason,
+                    },
+                    success: function () {
+                        // Refresh jQuery objects
+                        $(".validate").click(de_validate);
 
-            refreshBalance();
-            // error if this method doesn't exist. Please define it.
-            refreshHistory();
-        },
-        error: function (err) {
-            addMsg("Une erreur est survenue lors de la validation/dévalidation " +
-                "de cette transaction : " + err.responseText, "danger");
+                        refreshBalance();
+                        // error if this method doesn't exist. Please define it.
+                        refreshHistory();
+                    },
+                    error: function (err) {
+                        addMsg("Une erreur est survenue lors de la validation/dévalidation " +
+                            "de cette transaction : " + err.responseText, "danger");
 
-            refreshBalance();
-            // error if this method doesn't exist. Please define it.
-            refreshHistory();
-        }
+                        refreshBalance();
+                        // error if this method doesn't exist. Please define it.
+                        refreshHistory();
+                    }
+                });
+            });
     });
 }
