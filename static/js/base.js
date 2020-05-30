@@ -335,7 +335,15 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                     })
                 });
 
-    $("#validate_" + id).html("<i class='fa fa-spinner'></i>");
+            });// end getJSON alias
+    });
+}// end function autocomplete
+
+
+// When a validate button is clicked, we switch the validation status
+function de_validate(id, validated) {
+    let invalidity_reason = $("#invalidity_reason_" + id).val();
+    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
 
     // Perform a PATCH request to the API in order to update the transaction
     // If the user has insufficient rights, an error message will appear

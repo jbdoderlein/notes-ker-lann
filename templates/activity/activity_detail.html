@@ -63,7 +63,7 @@
             {% if not activity.open and ".change__valid"|has_perm:activity %}
                 <a class="btn btn-success btn-sm my-1" id="validate_activity"> {% if activity.valid %}{% trans "invalidate"|capfirst %}{% else %}{% trans "validate"|capfirst %}{% endif %}</a>
             {% endif %}
-            {% if ".view_"|has_perm:activity %}
+            {% if ".change_"|has_perm:activity %}
                 <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
             {% endif %}
             {% if activity.activity_type.can_invite and not activity_started %}

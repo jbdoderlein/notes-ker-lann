@@ -1739,7 +1739,7 @@ msgstr "Consommer"
 #: templates/note/conso_form.html:39 templates/note/transaction_form.html:61
 #: templates/note/transaction_form.html:76
 msgid "Name or alias..."
-msgstr ""
+msgstr "Pseudo ou alias ..."
 
 #: templates/note/conso_form.html:48
 msgid "Select consumptions"

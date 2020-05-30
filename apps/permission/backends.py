@@ -1,13 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import datetime
-
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
+from django.utils import timezone
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
 from note_kfet.middlewares import get_current_session
 from member.models import Membership, Club
@@ -43,8 +42,8 @@ class PermissionBackend(ModelBackend):
         ).filter(
             (
                 Q(
-                    rolepermissions__role__membership__date_start__lte=datetime.date.today(),
-                    rolepermissions__role__membership__date_end__gte=datetime.date.today(),
+                    rolepermissions__role__membership__date_start__lte=timezone.now().today(),
+                    rolepermissions__role__membership__date_end__gte=timezone.now().today(),
                 )
                 | Q(permanent=True)
             )
@@ -98,8 +97,8 @@ class PermissionBackend(ModelBackend):
                 NoteSpecial=NoteSpecial,
                 F=F,
                 Q=Q,
-                now=datetime.datetime.now(),
-                today=datetime.date.today(),
+                now=timezone.now(),
+                today=timezone.now().date(),
             )
             yield permission
 
