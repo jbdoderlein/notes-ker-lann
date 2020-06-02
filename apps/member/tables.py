@@ -22,6 +22,7 @@ class ClubTable(tables.Table):
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
+        order_by = ('id',)
         model = Club
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('id', 'name', 'email')
