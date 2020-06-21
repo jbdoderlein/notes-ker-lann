@@ -272,7 +272,7 @@
 				"note",
 				"alias"
 			],
-			"query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__memberships__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
+			"query": "[\"AND\", [\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__memberships__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}], {\"note__is_active\": true}]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
