@@ -50,8 +50,10 @@ class SessionMiddleware(object):
 
     def __call__(self, request):
         user = request.user
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META.get('HTTP_X_FORWARDED_FOR')
+        if 'HTTP_X_REAL_IP' in request.META:
+            ip = request.META.get('HTTP_X_REAL_IP')
+        elif 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
         else:
             ip = request.META.get('REMOTE_ADDR')
 
