@@ -25,6 +25,8 @@
     $(document).ready(function() {
         let old_pattern = null;
         let searchbar_obj = $("#searchbar");
+        var timer_on = false;
+        var timer;
 
         function reloadTable() {
             let pattern = searchbar_obj.val();
@@ -33,17 +35,19 @@
                 return;
 
             $("#user_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
-
-            $(".table-row").click(function() {
-                window.document.location = $(this).data("href");
-            });
         }
 
-        searchbar_obj.keyup(reloadTable);
+        searchbar_obj.keyup(function() {
+            if (timer_on)
+                clearTimeout(timer);
+            timer_on = true;
+            setTimeout(reloadTable, 0);
+        });
 
         function init() {
             $(".table-row").click(function() {
                 window.document.location = $(this).data("href");
+                timer_on = false;
             });
         }
 
