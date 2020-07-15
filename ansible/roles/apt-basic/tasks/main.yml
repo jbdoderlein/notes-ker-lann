@@ -1,0 +1,20 @@
+---
+- name: Install basic APT packages
+  apt:
+    update_cache: true
+    name:
+      - nginx
+      - python3
+      - python3-pip
+      - python3-dev
+      - uwsgi
+      - uwsgi-plugin-python3
+      - python3-venv
+      - git
+      - acl
+      - texlive-latex-extra
+      - texlive-fonts-extra
+      - texlive-lang-french
+    register: pkg_result
+    retries: 3
+    until: pkg_result is succedded

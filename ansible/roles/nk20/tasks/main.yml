@@ -1,0 +1,12 @@
+---
+- name: Create note_kfet dir with good permissions
+  file:
+    path: /var/www
+    owner: www-data
+    group: foo
+    mode: u=rw,g=rws,o=r
+
+- name: Clone Note Kfet
+  git:
+    repo: https://gitlab.crans.org/bde/nk20.git
+    dest: /var/www/note_kfet

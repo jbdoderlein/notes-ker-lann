@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-python
+---
+
+- hosts: beta-nk20
+  roles:
+    - apt-basic
+    - nk20
+    - python-venv
+    - nginx

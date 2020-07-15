@@ -1,0 +1,19 @@
+---
+- name: Update Nginx conf
+  replace:
+    path: /var/www/note_kfet/nginx_note.conf.example
+    dest: /var/www/note_kfet/nginx_note.conf
+    regexp: 'note.example.org'
+    replace: 'bde-nk20-beta.adh.crans.org'
+
+- name: Copy conf to Nginx
+  file:
+    path: /var/www/note_kfet/nginx_note.conf
+    dest: /etc/nginx/sites-enabled/nginx_note.conf
+    state: link
+
+- name: Copy conf to UWSGI
+  file:
+    path: /var/www/note_kfet/uwsgi_note.ini
+    dest: /etc/uwsgi/apps-enabled/uwsgi_note.ini
+    state: link
