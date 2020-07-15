@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
 
-- hosts: dt.adh.crans.org
+- hosts: bde-nk20-beta.adh.crans.org
   roles:
     - 1-apt-basic
     - 2-nk20

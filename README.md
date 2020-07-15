@@ -121,7 +121,7 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
         NOTE_MAIL=notekfet@localhost
         EMAIL_HOST=smtp.localhost
-        EMAIL_PORT=443
+        EMAIL_PORT=465
         EMAIL_USER=notekfet@localhost
         EMAIL_PASSWORD=CHANGE_ME
 
