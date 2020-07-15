@@ -19,3 +19,13 @@
     src: /var/www/note_kfet/uwsgi_note.ini
     dest: /etc/uwsgi/apps-enabled/uwsgi_note.ini
     state: link
+
+- name: Reload Nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: Restart UWSGI
+  systemd:
+    name: uwsgi
+    state: restarted

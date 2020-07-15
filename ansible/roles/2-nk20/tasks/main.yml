@@ -13,6 +13,7 @@
     dest: /var/www/note_kfet
     version: beta-soon
     track_submodules: yes
+    force: true
 
 - name: Update permissions for note_kfet dir
   file:

@@ -1,5 +1,5 @@
 [server]
-bde-nk20-beta.adh.crans.org
+dt.adh.crans.org
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
