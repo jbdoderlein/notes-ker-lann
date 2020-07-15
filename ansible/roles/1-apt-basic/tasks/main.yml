@@ -15,6 +15,6 @@
       - texlive-latex-extra
       - texlive-fonts-extra
       - texlive-lang-french
-    register: pkg_result
-    retries: 3
-    until: pkg_result is succedded
+  register: pkg_result
+  retries: 3
+  until: pkg_result is succeeded

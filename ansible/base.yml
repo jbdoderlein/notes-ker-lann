@@ -1,9 +1,9 @@
-#!/usr/bin/env ansible-python
+#!/usr/bin/env ansible-playbook
 ---
 
-- hosts: beta-nk20
+- hosts: bde-nk20-beta.adh.crans.org
   roles:
-    - apt-basic
-    - nk20
-    - python-venv
-    - nginx
+    - 1-apt-basic
+    - 2-nk20
+    - 3-pip
+    - 4-nginx

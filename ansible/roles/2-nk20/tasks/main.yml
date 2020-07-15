@@ -1,0 +1,23 @@
+---
+- name: Create note_kfet dir with good permissions
+  file:
+    path: /var/www/note_kfet
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: u=rwx,g=rwxs,o=rx
+
+- name: Clone Note Kfet
+  git:
+    repo: https://gitlab.crans.org/bde/nk20.git
+    dest: /var/www/note_kfet
+    version: beta-soon
+    track_submodules: yes
+
+- name: Update permissions for note_kfet dir
+  file:
+    path: /var/www/note_kfet
+    state: directory
+    recurse: yes
+    owner: www-data
+    group: www-data
