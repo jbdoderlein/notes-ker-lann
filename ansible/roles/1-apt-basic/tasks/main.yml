@@ -12,6 +12,7 @@
       - python3-venv
       - git
       - acl
+      - gettext
       - texlive-latex-extra
       - texlive-fonts-extra
       - texlive-lang-french

@@ -25,15 +25,3 @@
     name: note_db
     owner: note
   become_user: postgres
-
-- name: Make Django migrations
-  command: /var/www/note_kfet/env/bin/python manage.py makemigrations
-  args:
-    chdir: /var/www/note_kfet
-  become_user: www-data
-
-- name: Migrate Django database
-  command: /var/www/note_kfet/env/bin/python manage.py migrate
-  args:
-    chdir: /var/www/note_kfet
-  become_user: www-data

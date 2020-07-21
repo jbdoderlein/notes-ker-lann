@@ -1,0 +1,24 @@
+---
+- name: Make Django migrations
+  command: /var/www/note_kfet/env/bin/python manage.py makemigrations
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data
+
+- name: Migrate Django database
+  command: /var/www/note_kfet/env/bin/python manage.py migrate
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data
+
+- name: Compile messages
+  command: /var/www/note_kfet/env/bin/python manage.py compilemessages
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data
+
+- name: Install initial fixtures
+  command: /var/www/note_kfet/env/bin/python manage.py loaddata initial
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data

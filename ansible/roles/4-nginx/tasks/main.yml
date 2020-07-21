@@ -1,20 +1,21 @@
 ---
-- name: Copy example conf of Nginx
-  command: cp /var/www/note_kfet/nginx_note.conf_example /var/www/note_kfet/nginx_note.conf
+- name: Copy conf of Nginx
+  template:
+    src: "nginx_note.conf"
+    dest: /etc/nginx/sites-available/nginx_note.conf
+    mode: 0644
+    owner: www-data
+    group: www-data
 
-- name: Update Nginx conf
-  replace:
-    path: /var/www/note_kfet/nginx_note.conf
-    regexp: 'note.example.org'
-    replace: 'bde-nk20-beta.adh.crans.org'
-
-- name: Copy conf to Nginx
+- name: Enable Nginx site
   file:
-    src: /var/www/note_kfet/nginx_note.conf
+    src: /etc/nginx/sites-available/nginx_note.conf
     dest: /etc/nginx/sites-enabled/nginx_note.conf
+    owner: www-data
+    group: www-data
     state: link
 
-- name: Copy conf to UWSGI
+- name: Copy conf of UWSGI
   file:
     src: /var/www/note_kfet/uwsgi_note.ini
     dest: /etc/uwsgi/apps-enabled/uwsgi_note.ini

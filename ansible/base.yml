@@ -7,4 +7,6 @@
     - 2-nk20
     - 3-pip
     - 4-nginx
-    - 5-psql
+    - 5-certbot
+    - 6-psql
+    - 7-postinstall
