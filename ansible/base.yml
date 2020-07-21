@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- hosts: bde-nk20-beta.adh.crans.org
+  roles:
+    - 1-apt-basic
+    - 2-nk20
+    - 3-pip
+    - 4-nginx
+    - 5-certbot
+    - 6-psql
+    - 7-postinstall

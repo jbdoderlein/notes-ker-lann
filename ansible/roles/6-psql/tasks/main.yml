@@ -1,0 +1,27 @@
+---
+- name: Install PostgreSQL APT packages
+  apt:
+    update_cache: true
+    name:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+  register: pkg_result
+  retries: 3
+  until: pkg_result is succeeded
+
+- name: Install Psycopg2
+  pip:
+    name: psycopg2-binary
+
+- name: Create role note
+  postgresql_user:
+    name: note
+    password: "CHANGE_ME"
+  become_user: postgres
+
+- name: Create NK20 database
+  postgresql_db:
+    name: note_db
+    owner: note
+  become_user: postgres

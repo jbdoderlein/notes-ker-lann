@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,4 +15,10 @@ python manage.py compilemessages
 python manage.py makemigrations
 python manage.py migrate
 
-python manage.py runserver 0.0.0.0:8000
+nginx
+
+if [ "$DJANGO_APP_STAGE" = "prod" ]; then
+    gunicorn -b 0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread note_kfet.wsgi --access-logfile '-' --error-logfile '-';
+else
+    python manage.py runserver 0.0.0.0:8000;
+fi

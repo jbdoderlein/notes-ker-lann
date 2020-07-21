@@ -1,0 +1,14 @@
+---
+- name: Install PIP basic dependencies
+  pip:
+    requirements: /var/www/note_kfet/requirements/base.txt
+    virtualenv: /var/www/note_kfet/env
+    virtualenv_command: /usr/bin/python3 -m venv
+  become_user: www-data
+
+- name: Install PIP production dependencies
+  pip:
+    requirements: /var/www/note_kfet/requirements/production.txt
+    virtualenv: /var/www/note_kfet/env
+    virtualenv_command: /usr/bin/python3 -m venv
+  become_user: www-data

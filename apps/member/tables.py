@@ -25,7 +25,8 @@ class ClubTable(tables.Table):
         order_by = ('id',)
         model = Club
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'name', 'email')
+        fields = ('name', 'email',)
+        order_by = ('name',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),

@@ -272,7 +272,7 @@
 				"note",
 				"alias"
 			],
-			"query": "[\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__memberships__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}]",
+			"query": "[\"AND\", [\"OR\", {\"note__in\": [\"NoteUser\", \"objects\", [\"filter\", {\"user__memberships__club__name\": \"Kfet\"}], [\"all\"]]}, {\"note__in\": [\"NoteClub\", \"objects\", [\"all\"]]}], {\"note__is_active\": true}]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -2201,6 +2201,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 127,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "valid",
+			"permanent": false,
+			"description": "Update validation status of a club transaction if possible"
+		}
+	},
+	{
 		"model": "permission.rolepermissions",
 		"pk": 1,
 		"fields": {
@@ -2287,7 +2303,8 @@
 				27,
 				60,
 				61,
-				62
+				62,
+				127
 			]
 		}
 	},

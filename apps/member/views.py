@@ -299,6 +299,22 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = Club
     table_class = ClubTable
 
+    def get_queryset(self, **kwargs):
+        """
+        Filter the user list with the given pattern.
+        """
+        qs = super().get_queryset().filter()
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+            qs = qs.filter(
+                Q(name__iregex=pattern)
+                | Q(note__alias__name__iregex="^" + pattern)
+                | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
+            )
+
+        return qs
+
 
 class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
