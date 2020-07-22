@@ -163,7 +163,7 @@ class Entry(models.Model):
                 amount=self.activity.activity_type.guest_entry_fee,
                 reason="Invitation " + self.activity.name + " " + self.guest.first_name + " " + self.guest.last_name,
                 valid=True,
-                guest=self.guest,
+                entry=self,
             ).save()
 
         return ret
@@ -240,8 +240,8 @@ class Guest(models.Model):
 
 
 class GuestTransaction(Transaction):
-    guest = models.OneToOneField(
-        Guest,
+    entry = models.OneToOneField(
+        Entry,
         on_delete=models.PROTECT,
     )
 
