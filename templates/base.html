@@ -98,7 +98,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i>{% trans 'Transfer' %} </a>
                     </li>
                 {% endif %}
-                {% if "auth.user"|model_list|length >= 2 %}
+                {% if "auth.user"|model_list_length >= 2 %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
                     </li>

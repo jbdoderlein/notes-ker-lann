@@ -14,7 +14,7 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial
+from .models import TemplateCategory, Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial
 from .models.transactions import SpecialTransaction
 from .tables import HistoryTable, ButtonTable
 
@@ -31,7 +31,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at", "-id").all()[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
@@ -121,19 +121,22 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at", "-id")[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at")[:20]
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        from django.db.models import Count
-        buttons = TransactionTemplate.objects.filter(
+        categories = TemplateCategory.objects.order_by('name').all()
+        for category in categories:
+            category.templates_filtered = category.templates.filter(
+                PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+            ).filter(display=True).order_by('name').all()
+        context['categories'] = [cat for cat in categories if cat.templates_filtered]
+        context['highlighted'] = TransactionTemplate.objects.filter(highlighted=True).filter(
             PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
-        ).filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
-        context['transaction_templates'] = buttons
-        context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
+        ).order_by('name').all()
         context['title'] = _("Consumptions")
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 

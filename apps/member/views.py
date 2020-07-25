@@ -129,7 +129,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         user = context['user_object']
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))\
-            .order_by("-created_at", "-id")\
+            .order_by("-created_at")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
         history_table = HistoryTable(history_list, prefix='transaction-')
         history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
@@ -155,7 +155,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         """
         Filter the user list with the given pattern.
         """
-        qs = super().get_queryset().filter(profile__registration_valid=True)
+        qs = super().get_queryset().distinct().filter(profile__registration_valid=True)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
@@ -332,7 +332,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
-            .order_by('-created_at', '-id')
+            .order_by('-created_at')
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
         context['history_list'] = history_table

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-07 20:56+0200\n"
+"POT-Creation-Date: 2020-07-25 16:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: apps/activity/models.py:23 apps/activity/models.py:48
 #: apps/member/models.py:151 apps/member/models.py:255
 #: apps/note/models/notes.py:188 apps/note/models/transactions.py:25
-#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:249
+#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:261
 #: apps/wei/models.py:64 templates/member/club_info.html:13
 #: templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
@@ -70,7 +70,7 @@ msgstr ""
 msgid "activity types"
 msgstr ""
 
-#: apps/activity/models.py:53 apps/note/models/transactions.py:75
+#: apps/activity/models.py:53 apps/note/models/transactions.py:81
 #: apps/permission/models.py:103 apps/permission/models.py:182
 #: apps/wei/models.py:70 apps/wei/models.py:126
 #: templates/activity/activity_detail.html:16
@@ -78,7 +78,7 @@ msgid "description"
 msgstr ""
 
 #: apps/activity/models.py:60 apps/note/models/notes.py:164
-#: apps/note/models/transactions.py:65 apps/permission/models.py:157
+#: apps/note/models/transactions.py:66 apps/permission/models.py:157
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr ""
@@ -106,7 +106,7 @@ msgstr ""
 msgid "end date"
 msgstr ""
 
-#: apps/activity/models.py:93 apps/note/models/transactions.py:140
+#: apps/activity/models.py:93 apps/note/models/transactions.py:146
 #: templates/activity/activity_detail.html:47
 msgid "valid"
 msgstr ""
@@ -201,11 +201,11 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: apps/activity/tables.py:83 apps/member/tables.py:41
+#: apps/activity/tables.py:83 apps/member/tables.py:42
 msgid "Balance"
 msgstr ""
 
-#: apps/activity/views.py:46 templates/base.html:120
+#: apps/activity/views.py:44 templates/base.html:120
 msgid "Activities"
 msgstr ""
 
@@ -509,11 +509,11 @@ msgstr ""
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:320 apps/member/views.py:505 apps/wei/views.py:768
+#: apps/member/models.py:320 apps/member/views.py:521 apps/wei/views.py:768
 msgid "User is not a member of the parent club"
 msgstr ""
 
-#: apps/member/models.py:330 apps/member/views.py:514
+#: apps/member/models.py:330 apps/member/views.py:530
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -530,7 +530,7 @@ msgstr ""
 msgid "memberships"
 msgstr ""
 
-#: apps/member/tables.py:112
+#: apps/member/tables.py:113
 msgid "Renew"
 msgstr ""
 
@@ -552,32 +552,32 @@ msgstr ""
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:500 apps/wei/views.py:759
+#: apps/member/views.py:516 apps/wei/views.py:759
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:518
+#: apps/member/views.py:534
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:523
+#: apps/member/views.py:539
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:540 apps/member/views.py:542 apps/member/views.py:544
+#: apps/member/views.py:556 apps/member/views.py:558 apps/member/views.py:560
 #: apps/registration/views.py:289 apps/registration/views.py:291
 #: apps/registration/views.py:293
 msgid "This field is required."
 msgstr ""
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:100
+#: apps/note/admin.py:120 apps/note/models/transactions.py:106
 msgid "source"
 msgstr ""
 
 #: apps/note/admin.py:128 apps/note/admin.py:170
-#: apps/note/models/transactions.py:55 apps/note/models/transactions.py:113
+#: apps/note/models/transactions.py:55 apps/note/models/transactions.py:119
 msgid "destination"
 msgstr ""
 
@@ -619,7 +619,7 @@ msgstr ""
 msgid "display image"
 msgstr ""
 
-#: apps/note/models/notes.py:53 apps/note/models/transactions.py:123
+#: apps/note/models/notes.py:53 apps/note/models/transactions.py:129
 msgid "created at"
 msgstr ""
 
@@ -702,7 +702,7 @@ msgstr ""
 msgid "A template with this name already exist"
 msgstr ""
 
-#: apps/note/models/transactions.py:59 apps/note/models/transactions.py:131
+#: apps/note/models/transactions.py:59 apps/note/models/transactions.py:137
 msgid "amount"
 msgstr ""
 
@@ -710,78 +710,94 @@ msgstr ""
 msgid "in centimes"
 msgstr ""
 
-#: apps/note/models/transactions.py:71
+#: apps/note/models/transactions.py:72
 msgid "display"
 msgstr ""
 
-#: apps/note/models/transactions.py:81
+#: apps/note/models/transactions.py:77
+msgid "highlighted"
+msgstr ""
+
+#: apps/note/models/transactions.py:87
 msgid "transaction template"
 msgstr ""
 
-#: apps/note/models/transactions.py:82
+#: apps/note/models/transactions.py:88
 msgid "transaction templates"
 msgstr ""
 
-#: apps/note/models/transactions.py:106 apps/note/models/transactions.py:119
+#: apps/note/models/transactions.py:112 apps/note/models/transactions.py:125
 #: apps/note/tables.py:33 apps/note/tables.py:42
 msgid "used alias"
 msgstr ""
 
-#: apps/note/models/transactions.py:127
+#: apps/note/models/transactions.py:133
 msgid "quantity"
 msgstr ""
 
-#: apps/note/models/transactions.py:135
+#: apps/note/models/transactions.py:141
 msgid "reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:145 apps/note/tables.py:95
+#: apps/note/models/transactions.py:151 apps/note/tables.py:95
 msgid "invalidity reason"
 msgstr ""
 
-#: apps/note/models/transactions.py:153
+#: apps/note/models/transactions.py:159
 msgid "transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:154
+#: apps/note/models/transactions.py:160
 #: templates/treasury/sogecredit_detail.html:22
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:216
+#: apps/note/models/transactions.py:175
+msgid ""
+"The transaction can't be saved since the source note or the destination note "
+"is not active."
+msgstr ""
+
+#: apps/note/models/transactions.py:228
 #: templates/activity/activity_entry.html:13 templates/base.html:98
 #: templates/note/transaction_form.html:19
 #: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:239
+#: apps/note/models/transactions.py:251
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:254
+#: apps/note/models/transactions.py:266
 msgid "first_name"
 msgstr ""
 
-#: apps/note/models/transactions.py:259
+#: apps/note/models/transactions.py:271
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:265
+#: apps/note/models/transactions.py:277
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:24
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:265 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:277 templates/note/transaction_form.html:28
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:281 apps/note/models/transactions.py:286
+#: apps/note/models/transactions.py:288
+msgid ""
+"A special transaction is only possible between a Note associated to a "
+"payment method and a User or a Club"
+msgstr ""
+
+#: apps/note/models/transactions.py:305 apps/note/models/transactions.py:310
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:282 apps/treasury/models.py:227
+#: apps/note/models/transactions.py:306 apps/treasury/models.py:227
 msgid "membership transactions"
 msgstr ""
 
@@ -814,7 +830,7 @@ msgstr ""
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:137 templates/base.html:93
+#: apps/note/views.py:140 templates/base.html:93
 msgid "Consumptions"
 msgstr ""
 
@@ -1692,7 +1708,7 @@ msgid "Consume!"
 msgstr ""
 
 #: templates/note/conso_form.html:71
-msgid "Most used buttons"
+msgid "Highlighted buttons"
 msgstr ""
 
 #: templates/note/conso_form.html:134
@@ -2028,6 +2044,10 @@ msgstr ""
 
 #: templates/treasury/remittance_list.html:57
 msgid "Closed remittances"
+msgstr ""
+
+#: templates/treasury/remittance_list.html:62
+msgid "There is no closed remittance yet."
 msgstr ""
 
 #: templates/treasury/sogecredit_detail.html:29

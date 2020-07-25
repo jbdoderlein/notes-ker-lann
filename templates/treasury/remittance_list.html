@@ -55,5 +55,11 @@
     <hr>
 
     <h2>{% trans "Closed remittances" %}</h2>
-    {% render_table closed_remittances %}
+    {% if closed_remittances.data %}
+        {% render_table closed_remittances %}
+    {% else %}
+        <div class="alert alert-warning">
+            {% trans "There is no closed remittance yet." %}
+        </div>
+    {% endif %}
 {% endblock %}

@@ -62,6 +62,7 @@ class TransactionTemplate(models.Model):
     category = models.ForeignKey(
         TemplateCategory,
         on_delete=models.PROTECT,
+        related_name='templates',
         verbose_name=_('type'),
         max_length=31,
     )
@@ -69,6 +70,11 @@ class TransactionTemplate(models.Model):
     display = models.BooleanField(
         default=True,
         verbose_name=_("display"),
+    )
+
+    highlighted = models.BooleanField(
+        default=False,
+        verbose_name=_("highlighted"),
     )
 
     description = models.CharField(

@@ -222,23 +222,41 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["opened_remittances"] = RemittanceTable(
+        opened_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=False).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
-        context["closed_remittances"] = RemittanceTable(
-            data=Remittance.objects.filter(closed=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all())
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+            prefix="opened-remittances-",
+        )
+        opened_remittances.paginate(page=self.request.GET.get("opened-remittances-page", 1), per_page=10)
+        context["opened_remittances"] = opened_remittances
 
-        context["special_transactions_no_remittance"] = SpecialTransactionTable(
+        closed_remittances = RemittanceTable(
+            data=Remittance.objects.filter(closed=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all(),
+            prefix="closed-remittances-",
+        )
+        closed_remittances.paginate(page=self.request.GET.get("closed-remittances-page", 1), per_page=10)
+        context["closed_remittances"] = closed_remittances
+
+        no_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
-            exclude=('remittance_remove', ))
-        context["special_transactions_with_remittance"] = SpecialTransactionTable(
+                 PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+            exclude=('remittance_remove', ),
+            prefix="no-remittance-",
+        )
+        no_remittance_tr.paginate(page=self.request.GET.get("no-remittance-page", 1), per_page=10)
+        context["special_transactions_no_remittance"] = no_remittance_tr
+
+        with_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance__closed=False).filter(
                 PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
-            exclude=('remittance_add', ))
+            exclude=('remittance_add', ),
+            prefix="with-remittance-",
+        )
+        with_remittance_tr.paginate(page=self.request.GET.get("with-remittance-page", 1), per_page=10)
+        context["special_transactions_with_remittance"] = with_remittance_tr
 
         return context
 

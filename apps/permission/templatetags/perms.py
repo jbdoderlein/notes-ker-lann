@@ -40,7 +40,7 @@ def not_empty_model_change_list(model_name):
 
 
 @stringfilter
-def model_list(model_name, t="view"):
+def model_list(model_name, t="view", fetch=True):
     """
     Return the queryset of all visible instances of the given model.
     """
@@ -49,8 +49,18 @@ def model_list(model_name, t="view"):
         return False
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])
-    qs = ct.model_class().objects.filter(PermissionBackend.filter_queryset(user, ct, t)).all()
+    qs = ct.model_class().objects.filter(PermissionBackend.filter_queryset(user, ct, t))
+    if fetch:
+        qs = qs.all()
     return qs
+
+
+@stringfilter
+def model_list_length(model_name, t="view"):
+    """
+    Return the length of queryset of all visible instances of the given model.
+    """
+    return model_list(model_name, t, False).count()
 
 
 def has_perm(perm, obj):
@@ -85,4 +95,5 @@ register = template.Library()
 register.filter('not_empty_model_list', not_empty_model_list)
 register.filter('not_empty_model_change_list', not_empty_model_change_list)
 register.filter('model_list', model_list)
+register.filter('model_list_length', model_list_length)
 register.filter('has_perm', has_perm)

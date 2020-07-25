@@ -68,15 +68,15 @@
             <div class="card shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
-                        {% trans "Most used buttons" %}
+                        {% trans "Highlighted buttons" %}
                     </p>
                 </div>
                 <div class="card-body text-nowrap" style="overflow:auto hidden">
-                    <div class="d-inline-flex flex-wrap justify-content-center" id="most_used">
-                        {% for button in most_used %}
+                    <div class="d-inline-flex flex-wrap justify-content-center" id="highlighted">
+                        {% for button in highlighted %}
                             {% if button.display %}
                                 <button class="btn btn-outline-dark rounded-0 flex-fill"
-                                        id="most_used_button{{ button.id }}" name="button" value="{{ button.name }}">
+                                        id="highlighted_button{{ button.id }}" name="button" value="{{ button.name }}">
                                     {{ button.name }} ({{ button.amount | pretty_money }})
                                 </button>
                             {% endif %}
@@ -86,7 +86,7 @@
             </div>
 
             {# Regroup buttons under categories #}
-            {% regroup transaction_templates by category as categories %}
+	    {# {% regroup transaction_templates by category as categories %} #}
 
             <div class="card border-primary text-center shadow mb-4">
                 {# Tabs for button categories #}
@@ -94,8 +94,8 @@
                     <ul class="nav nav-tabs nav-fill card-header-tabs">
                         {% for category in categories %}
                             <li class="nav-item">
-                                <a class="nav-link font-weight-bold" data-toggle="tab" href="#{{ category.grouper|slugify }}">
-                                    {{ category.grouper }}
+                                <a class="nav-link font-weight-bold" data-toggle="tab" href="#{{ category.name|slugify }}">
+                                    {{ category.name }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -106,9 +106,9 @@
                 <div class="card-body">
                     <div class="tab-content">
                         {% for category in categories %}
-                            <div class="tab-pane" id="{{ category.grouper|slugify }}">
+                            <div class="tab-pane" id="{{ category.name|slugify }}">
                                 <div class="d-inline-flex flex-wrap justify-content-center">
-                                    {% for button in category.list %}
+                                    {% for button in category.templates_filtered %}
                                         {% if button.display %}
                                             <button class="btn btn-outline-dark rounded-0 flex-fill"
                                                     id="button{{ button.id }}" name="button" value="{{ button.name }}">
@@ -157,24 +157,26 @@
 {% block extrajavascript %}
     <script type="text/javascript" src="{% static "js/consos.js" %}"></script>
     <script type="text/javascript">
-        {% for button in most_used %}
+        {% for button in highlighted %}
             {% if button.display %}
-                $("#most_used_button{{ button.id }}").click(function() {
-                    addConso({{ button.destination.id }}, {{ button.amount }},
-                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                $("#highlighted_button{{ button.id }}").click(function() {
+                    addConso({{ button.destination_id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name }}",
                         {{ button.id }}, "{{ button.name }}");
                 });
             {% endif %}
         {% endfor %}
 
-        {% for button in transaction_templates %}
+        {% for category in categories %}
+            {% for button in category.templates_filtered %}
             {% if button.display %}
                 $("#button{{ button.id }}").click(function() {
-                    addConso({{ button.destination.id }}, {{ button.amount }},
-                        {{ polymorphic_ctype }}, {{ button.category.id }}, "{{ button.category.name }}",
+                    addConso({{ button.destination_id }}, {{ button.amount }},
+                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name }}",
                         {{ button.id }}, "{{ button.name }}");
                 });
             {% endif %}
+            {% endfor %}
         {% endfor %}
     </script>
 {% endblock %}
