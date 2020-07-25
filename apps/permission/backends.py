@@ -37,17 +37,17 @@ class PermissionBackend(ModelBackend):
             return Permission.objects.none()
 
         qs = Permission.objects.annotate(
-            club=F("role__role__membership__club"),
-            membership=F("role__role__membership"),
+            club=F("role__membership__club"),
+            membership=F("role__membership"),
         ).filter(
             (
                 Q(
-                    role__role__membership__date_start__lte=timezone.now().today(),
-                    role__role__membership__date_end__gte=timezone.now().today(),
+                    role__membership__date_start__lte=timezone.now().today(),
+                    role__membership__date_end__gte=timezone.now().today(),
                 )
                 | Q(permanent=True)
             )
-            & Q(role__role__membership__user=user)
+            & Q(role__membership__user=user)
             & Q(type=t)
             & Q(mask__rank__lte=get_current_session().get("permission_mask", 0))
         )
