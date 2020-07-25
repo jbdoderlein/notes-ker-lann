@@ -113,6 +113,7 @@ class BusTeam(models.Model):
 
     name = models.CharField(
         max_length=255,
+        verbose_name=_("name"),
     )
 
     color = models.PositiveIntegerField(  # Use a color picker to get the hexa code

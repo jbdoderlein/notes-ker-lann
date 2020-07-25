@@ -144,7 +144,7 @@ class BusTable(tables.Table):
     )
 
     def render_teams(self, value):
-        return ", ".join(team.name for team in value.all())
+        return ", ".join(team.name for team in value.order_by('name').all())
 
     def render_count(self, value):
         return str(value) + " " + (str(_("members")) if value > 0 else str(_("member")))

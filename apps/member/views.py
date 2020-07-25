@@ -303,7 +303,7 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         """
         Filter the user list with the given pattern.
         """
-        qs = super().get_queryset().filter()
+        qs = super().get_queryset().distinct()
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 

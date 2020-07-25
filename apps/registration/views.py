@@ -164,7 +164,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         :param kwargs:
         :return:
         """
-        qs = super().get_queryset().filter(profile__registration_valid=False)
+        qs = super().get_queryset().distinct().filter(profile__registration_valid=False)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 

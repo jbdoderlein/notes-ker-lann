@@ -96,7 +96,7 @@ class WEIMembershipForm(forms.ModelForm):
 class BusForm(forms.ModelForm):
     class Meta:
         model = Bus
-        fields = '__all__'
+        exclude = ('information_json',)
         widgets = {
             "wei": Autocomplete(
                 WEIClub,
