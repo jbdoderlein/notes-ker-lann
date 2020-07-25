@@ -241,7 +241,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
         no_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).filter(
-                 PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             exclude=('remittance_remove', ),
             prefix="no-remittance-",
         )

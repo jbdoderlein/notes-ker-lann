@@ -8,7 +8,6 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import DatePickerInput, AmountInput
-from permission.backends import PermissionBackend
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
