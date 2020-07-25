@@ -2059,6 +2059,7 @@
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
+			"for_club": 1,
 			"name": "Adh\u00e9rent BDE",
 			"permissions": [
 				1,
@@ -2083,6 +2084,7 @@
 		"model": "permission.role",
 		"pk": 2,
 		"fields": {
+			"for_club": 2,
 			"name": "Adh\u00e9rent Kfet",
 			"permissions": [
 				34,
@@ -2109,13 +2111,16 @@
 		"model": "permission.role",
 		"pk": 3,
 		"fields": {
-			"name": "Membre de club"
+			"for_club": null,
+			"name": "Membre de club",
+			"permissions": []
 		}
 	},
 	{
 		"model": "permission.role",
 		"pk": 4,
 		"fields": {
+			"for_club": null,
 			"name": "Bureau de club",
 			"permissions": [
 				22,
@@ -2128,6 +2133,7 @@
 		"model": "permission.role",
 		"pk": 5,
 		"fields": {
+			"for_club": null,
 			"name": "Pr\u00e9sident\u00b7e de club",
 			"permissions": [
 				50,
@@ -2140,6 +2146,7 @@
 		"model": "permission.role",
 		"pk": 6,
 		"fields": {
+			"for_club": null,
 			"name": "Tr\u00e9sorier\u00b7\u00e8re de club",
 			"permissions": [
 				59,
@@ -2158,6 +2165,7 @@
 		"model": "permission.role",
 		"pk": 7,
 		"fields": {
+			"for_club": 1,
 			"name": "Pr\u00e9sident\u00b7e BDE",
 			"permissions": [
 				24,
@@ -2172,6 +2180,7 @@
 		"model": "permission.role",
 		"pk": 8,
 		"fields": {
+			"for_club": 1,
 			"name": "Tr\u00e9sorier\u00b7\u00e8re BDE",
 			"permissions": [
 				23,
@@ -2208,6 +2217,7 @@
 		"model": "permission.role",
 		"pk": 9,
 		"fields": {
+			"for_club": 1,
 			"name": "Respo info",
 			"permissions": [
 				1,
@@ -2343,6 +2353,7 @@
 		"model": "permission.role",
 		"pk": 10,
 		"fields": {
+			"for_club": 2,
 			"name": "GC Kfet",
 			"permissions": [
 				32,
@@ -2370,6 +2381,7 @@
 		"model": "permission.role",
 		"pk": 11,
 		"fields": {
+			"for_club": 2,
 			"name": "Res[pot]",
 			"permissions": [
 				37,
@@ -2387,6 +2399,7 @@
 		"model": "permission.role",
 		"pk": 12,
 		"fields": {
+			"for_club": null,
 			"name": "GC WEI",
 			"permissions": [
 				76,
@@ -2420,6 +2433,7 @@
 		"model": "permission.role",
 		"pk": 13,
 		"fields": {
+			"for_club": null,
 			"name": "Chef de bus",
 			"permissions": [
 				117,
@@ -2435,6 +2449,7 @@
 		"model": "permission.role",
 		"pk": 14,
 		"fields": {
+			"for_club": null,
 			"name": "Chef d'\u00e9quipe",
 			"permissions": [
 				116,
@@ -2448,27 +2463,34 @@
 		"model": "permission.role",
 		"pk": 15,
 		"fields": {
-			"name": "\u00c9lectron libre"
+			"for_club": null,
+			"name": "\u00c9lectron libre",
+			"permissions": []
 		}
 	},
 	{
 		"model": "permission.role",
 		"pk": 16,
 		"fields": {
-			"name": "\u00c9lectron libre (avec perm)"
+			"for_club": null,
+			"name": "\u00c9lectron libre (avec perm)",
+			"permissions": []
 		}
 	},
 	{
 		"model": "permission.role",
 		"pk": 17,
 		"fields": {
-			"name": "1A"
+			"for_club": null,
+			"name": "1A",
+			"permissions": []
 		}
 	},
 	{
 		"model": "permission.role",
 		"pk": 18,
 		"fields": {
+			"for_club": null,
 			"name": "Adhérent WEI",
 			"permissions": [
 				97,

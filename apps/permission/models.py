@@ -320,6 +320,14 @@ class Role(models.Model):
         verbose_name=_("permissions"),
     )
 
+    for_club = models.ForeignKey(
+        "member.Club",
+        verbose_name=_("for club"),
+        on_delete=models.PROTECT,
+        null=True,
+        default=None,
+    )
+
     def __str__(self):
         return self.name
 
