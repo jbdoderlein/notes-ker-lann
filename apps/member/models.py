@@ -247,24 +247,6 @@ class Club(models.Model):
         return reverse_lazy('member:club_detail', args=(self.pk,))
 
 
-class Role(models.Model):
-    """
-    Role that an :model:`auth.User` can have in a :model:`member.Club`
-    """
-    name = models.CharField(
-        verbose_name=_('name'),
-        max_length=255,
-        unique=True,
-    )
-
-    class Meta:
-        verbose_name = _('role')
-        verbose_name_plural = _('roles')
-
-    def __str__(self):
-        return str(self.name)
-
-
 class Membership(models.Model):
     """
     Register the membership of a user to a club, including roles and membership duration.
@@ -284,7 +266,7 @@ class Membership(models.Model):
     )
 
     roles = models.ManyToManyField(
-        Role,
+        "permission.Role",
         verbose_name=_("roles"),
     )
 

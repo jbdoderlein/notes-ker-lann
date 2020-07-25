@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
-from permission.models import PermissionMask
+from permission.models import PermissionMask, Role
 
-from .models import Profile, Club, Membership, Role
+from .models import Profile, Club, Membership
 
 
 class CustomAuthenticationForm(AuthenticationForm):

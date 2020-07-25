@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q, Model
 from django.utils.translation import gettext_lazy as _
-from member.models import Role
 
 
 class InstancedPermission:
@@ -307,23 +306,22 @@ class Permission(models.Model):
         return self.description
 
 
-class RolePermissions(models.Model):
+class Role(models.Model):
     """
     Permissions associated with a Role
     """
-    role = models.OneToOneField(
-        Role,
-        on_delete=models.PROTECT,
-        related_name='permissions',
-        verbose_name=_('role'),
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("name"),
     )
+
     permissions = models.ManyToManyField(
         Permission,
         verbose_name=_("permissions"),
     )
 
     def __str__(self):
-        return str(self.role)
+        return self.name
 
     class Meta:
         verbose_name = _("role permissions")

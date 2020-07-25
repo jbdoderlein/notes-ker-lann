@@ -1,166 +1,5 @@
 [
 	{
-		"model": "member.role",
-		"pk": 1,
-		"fields": {
-			"name": "Adh\u00e9rent BDE"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 2,
-		"fields": {
-			"name": "Adh\u00e9rent Kfet"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 3,
-		"fields": {
-			"name": "Membre de club"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 4,
-		"fields": {
-			"name": "Bureau de club"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 5,
-		"fields": {
-			"name": "Pr\u00e9sident\u00b7e de club"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 6,
-		"fields": {
-			"name": "Tr\u00e9sorier\u00b7\u00e8re de club"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 7,
-		"fields": {
-			"name": "Pr\u00e9sident\u00b7e BDE"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 8,
-		"fields": {
-			"name": "Tr\u00e9sorier\u00b7\u00e8re BDE"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 9,
-		"fields": {
-			"name": "Respo info"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 10,
-		"fields": {
-			"name": "GC Kfet"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 11,
-		"fields": {
-			"name": "Res[pot]"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 12,
-		"fields": {
-			"name": "GC WEI"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 13,
-		"fields": {
-			"name": "Chef de bus"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 14,
-		"fields": {
-			"name": "Chef d'\u00e9quipe"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 15,
-		"fields": {
-			"name": "\u00c9lectron libre"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 16,
-		"fields": {
-			"name": "\u00c9lectron libre (avec perm)"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 17,
-		"fields": {
-			"name": "1A"
-		}
-	},
-	{
-		"model": "member.role",
-		"pk": 18,
-		"fields": {
-			"name": "Adhérent WEI"
-		}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 12,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 13,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 14,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 15,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 16,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 17,
-		"fields": {}
-	},
-	{
-		"model": "wei.weirole",
-		"pk": 18,
-		"fields": {}
-	},
-	{
 		"model": "permission.permissionmask",
 		"pk": 1,
 		"fields": {
@@ -2217,10 +2056,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 1,
 		"fields": {
-			"role": 1,
+			"name": "Adh\u00e9rent BDE",
 			"permissions": [
 				1,
 				2,
@@ -2241,10 +2080,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 2,
 		"fields": {
-			"role": 2,
+			"name": "Adh\u00e9rent Kfet",
 			"permissions": [
 				34,
 				35,
@@ -2267,10 +2106,17 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
+		"pk": 3,
+		"fields": {
+			"name": "Membre de club"
+		}
+	},
+	{
+		"model": "permission.role",
 		"pk": 4,
 		"fields": {
-			"role": 4,
+			"name": "Bureau de club",
 			"permissions": [
 				22,
 				47,
@@ -2279,10 +2125,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 5,
 		"fields": {
-			"role": 5,
+			"name": "Pr\u00e9sident\u00b7e de club",
 			"permissions": [
 				50,
 				51,
@@ -2291,10 +2137,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 6,
 		"fields": {
-			"role": 6,
+			"name": "Tr\u00e9sorier\u00b7\u00e8re de club",
 			"permissions": [
 				59,
 				19,
@@ -2309,10 +2155,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 7,
 		"fields": {
-			"role": 7,
+			"name": "Pr\u00e9sident\u00b7e BDE",
 			"permissions": [
 				24,
 				25,
@@ -2323,10 +2169,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 8,
 		"fields": {
-			"role": 8,
+			"name": "Tr\u00e9sorier\u00b7\u00e8re BDE",
 			"permissions": [
 				23,
 				24,
@@ -2359,10 +2205,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 9,
 		"fields": {
-			"role": 9,
+			"name": "Respo info",
 			"permissions": [
 				1,
 				2,
@@ -2494,10 +2340,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 10,
 		"fields": {
-			"role": 10,
+			"name": "GC Kfet",
 			"permissions": [
 				32,
 				33,
@@ -2521,10 +2367,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 11,
 		"fields": {
-			"role": 11,
+			"name": "Res[pot]",
 			"permissions": [
 				37,
 				38,
@@ -2538,10 +2384,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 12,
 		"fields": {
-			"role": 12,
+			"name": "GC WEI",
 			"permissions": [
 				76,
 				80,
@@ -2571,10 +2417,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 13,
 		"fields": {
-			"role": 13,
+			"name": "Chef de bus",
 			"permissions": [
 				117,
 				118,
@@ -2586,10 +2432,10 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
 		"pk": 14,
 		"fields": {
-			"role": 14,
+			"name": "Chef d'\u00e9quipe",
 			"permissions": [
 				116,
 				123,
@@ -2599,10 +2445,31 @@
 		}
 	},
 	{
-		"model": "permission.rolepermissions",
+		"model": "permission.role",
+		"pk": 15,
+		"fields": {
+			"name": "\u00c9lectron libre"
+		}
+	},
+	{
+		"model": "permission.role",
 		"pk": 16,
 		"fields": {
-			"role": 18,
+			"name": "\u00c9lectron libre (avec perm)"
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 17,
+		"fields": {
+			"name": "1A"
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 18,
+		"fields": {
+			"name": "Adhérent WEI",
 			"permissions": [
 				97,
 				99,
@@ -2618,5 +2485,40 @@
 				95
 			]
 		}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 12,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 13,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 14,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 15,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 16,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 17,
+		"fields": {}
+	},
+	{
+		"model": "wei.weirole",
+		"pk": 18,
+		"fields": {}
 	}
 ]

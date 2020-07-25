@@ -15,10 +15,11 @@ from django.views.generic import CreateView, TemplateView, DetailView
 from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
-from member.models import Membership, Club, Role
+from member.models import Membership, Club
 from note.models import SpecialTransaction
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
+from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
 from .forms import SignUpForm, ValidationForm

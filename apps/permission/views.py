@@ -5,9 +5,10 @@ from datetime import date
 from django.forms import HiddenInput
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView, TemplateView
-from member.models import Role, Membership
+from member.models import Membership
 
 from .backends import PermissionBackend
+from .models import Role
 
 
 class ProtectQuerysetMixin:

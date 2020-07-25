@@ -22,10 +22,11 @@ from note.models import Alias, NoteUser
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
 from permission.backends import PermissionBackend
+from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
 from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
-from .models import Club, Membership, Role
+from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable
 
 

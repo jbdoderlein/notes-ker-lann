@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from .models import Permission, PermissionMask, RolePermissions
+from .models import Permission, PermissionMask, Role
 
 
 @admin.register(PermissionMask)
@@ -22,9 +22,9 @@ class PermissionAdmin(admin.ModelAdmin):
     list_display = ('type', 'model', 'field', 'mask', 'description', )
 
 
-@admin.register(RolePermissions)
-class RolePermissionsAdmin(admin.ModelAdmin):
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
     """
-    Admin customisation for RolePermissions
+    Admin customisation for Role
     """
-    list_display = ('role', )
+    list_display = ('name', )

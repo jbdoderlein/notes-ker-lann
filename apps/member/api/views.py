@@ -4,8 +4,8 @@
 from rest_framework.filters import SearchFilter
 from api.viewsets import ReadProtectedModelViewSet
 
-from .serializers import ProfileSerializer, ClubSerializer, RoleSerializer, MembershipSerializer
-from ..models import Profile, Club, Role, Membership
+from .serializers import ProfileSerializer, ClubSerializer, MembershipSerializer
+from ..models import Profile, Club, Membership
 
 
 class ProfileViewSet(ReadProtectedModelViewSet):
@@ -26,18 +26,6 @@ class ClubViewSet(ReadProtectedModelViewSet):
     """
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['$name', ]
-
-
-class RoleViewSet(ReadProtectedModelViewSet):
-    """
-    REST API View set.
-    The djangorestframework plugin will get all `Role` objects, serialize it to JSON with the given serializer,
-    then render it on /api/members/role/
-    """
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$name', ]
 
