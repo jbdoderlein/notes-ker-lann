@@ -147,7 +147,7 @@ class BusTable(tables.Table):
         return ", ".join(team.name for team in value.order_by('name').all())
 
     def render_count(self, value):
-        return str(value) + " " + (str(_("members")) if value > 0 else str(_("member")))
+        return str(value) + " " + (str(_("members")) if value > 1 else str(_("member")))
 
     class Meta:
         attrs = {
@@ -178,7 +178,7 @@ class BusTeamTable(tables.Table):
     )
 
     def render_count(self, value):
-        return str(value) + " " + (str(_("members")) if value > 0 else str(_("member")))
+        return str(value) + " " + (str(_("members")) if value > 1 else str(_("member")))
 
     count = tables.Column(
         verbose_name=_("Members count"),

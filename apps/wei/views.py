@@ -177,7 +177,7 @@ class WEIMembershipsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs).filter(club=self.club)
+        qs = super().get_queryset(**kwargs).filter(club=self.club).distinct()
 
         pattern = self.request.GET.get("search", "")
 
@@ -214,7 +214,7 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs).filter(wei=self.club, membership=None)
+        qs = super().get_queryset(**kwargs).filter(wei=self.club, membership=None).distinct()
 
         pattern = self.request.GET.get("search", "")
 
