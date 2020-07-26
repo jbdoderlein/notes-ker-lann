@@ -11,7 +11,7 @@
   git:
     repo: https://gitlab.crans.org/bde/nk20.git
     dest: /var/www/note_kfet
-    version: beta-soon
+    version: master
     force: true
 
 - name: Use default env vars (should be updated!)
@@ -19,6 +19,7 @@
     src: "env_example"
     dest: "/var/www/note_kfet/.env"
     mode: 0644
+    force: false
 
 - name: Update permissions for note_kfet dir
   file:
