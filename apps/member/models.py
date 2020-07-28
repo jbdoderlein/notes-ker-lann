@@ -302,12 +302,13 @@ class Membership(models.Model):
             if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
                 raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
 
-        for role in self.roles.all():
-            club = role.for_club
-            if club is not None:
-                if club.pk != self.club_id:
-                    raise ValidationError(_('The role {role} does not apply to the club {club}.')
-                                          .format(role=role.name, club=club.name))
+        if self.pk:
+            for role in self.roles.all():
+                club = role.for_club
+                if club is not None:
+                    if club.pk != self.club_id:
+                        raise ValidationError(_('The role {role} does not apply to the club {club}.')
+                                              .format(role=role.name, club=club.name))
 
         created = not self.pk
         if created:
