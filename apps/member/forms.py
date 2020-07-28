@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
+from note.models import NoteSpecial, Alias
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
 from permission.models import PermissionMask, Role
 
@@ -38,6 +38,15 @@ class ProfileForm(forms.ModelForm):
 
 
 class ClubForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if not self.instance.pk:    # Creating a club
+            if Alias.objects.filter(normalized_name=Alias.normalize(self.cleaned_data["name"])).exists():
+                self.add_error('name', _("An alias with a similar name already exists."))
+
+        return cleaned_data
+
     class Meta:
         model = Club
         fields = '__all__'
