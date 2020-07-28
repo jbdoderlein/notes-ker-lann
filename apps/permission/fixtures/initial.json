@@ -2056,6 +2056,70 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 128,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "{\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "clothing_cut",
+			"permanent": false,
+			"description": "Update the clothing cut field of any WEI Registration"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 129,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "clothing_cut",
+			"permanent": false,
+			"description": "Update the clothing cut field of my own WEI Registration"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 130,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "{\"wei\": [\"club\"], \"wei__membership_end__gte\": [\"today\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "clothing_size",
+			"permanent": false,
+			"description": "Update the clothing size field of any WEI Registration"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 131,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"]}, [\"OR\", {\"wei\": [\"club\"]}, {\"wei__year\": [\"today\", \"year\"], \"membership\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "clothing_size",
+			"permanent": false,
+			"description": "Update the clothing size field of my own WEI Registration"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {

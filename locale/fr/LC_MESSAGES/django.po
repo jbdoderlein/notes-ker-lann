@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-25 19:55+0200\n"
+"POT-Creation-Date: 2020-07-28 20:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/activity/models.py:23 apps/activity/models.py:48
 #: apps/member/models.py:151 apps/note/models/notes.py:188
 #: apps/note/models/transactions.py:25 apps/note/models/transactions.py:45
-#: apps/note/models/transactions.py:261 apps/permission/models.py:315
+#: apps/note/models/transactions.py:261 apps/permission/models.py:321
 #: apps/wei/models.py:65 apps/wei/models.py:117
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
@@ -206,11 +206,11 @@ msgstr "Note"
 msgid "Balance"
 msgstr "Solde du compte"
 
-#: apps/activity/views.py:44 templates/base.html:120
+#: apps/activity/views.py:47 templates/base.html:120
 msgid "Activities"
 msgstr "Activités"
 
-#: apps/activity/views.py:160
+#: apps/activity/views.py:163
 msgid "Entry for activity \"{}\""
 msgstr "Entrées pour l'activité « {} »"
 
@@ -510,29 +510,29 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:303 apps/member/views.py:527 apps/wei/views.py:768
+#: apps/member/models.py:303 apps/member/views.py:527 apps/wei/views.py:770
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:309
+#: apps/member/models.py:310
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:320 apps/member/views.py:536
+#: apps/member/models.py:321 apps/member/views.py:536
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:371
+#: apps/member/models.py:372
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:374
+#: apps/member/models.py:375
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:375
+#: apps/member/models.py:376
 msgid "memberships"
 msgstr "adhésions"
 
@@ -558,7 +558,7 @@ msgstr "Un alias avec un nom similaire existe déjà."
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:522 apps/wei/views.py:759
+#: apps/member/views.py:522 apps/wei/views.py:761
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -766,8 +766,8 @@ msgid ""
 "The transaction can't be saved since the source note or the destination note "
 "is not active."
 msgstr ""
-"La transaction ne peut pas être sauvegardée puisque la note source ou la note "
-"de destination n'est pas active."
+"La transaction ne peut pas être sauvegardée puisque la note source ou la "
+"note de destination n'est pas active."
 
 #: apps/note/models/transactions.py:228
 #: templates/activity/activity_entry.html:13 templates/base.html:98
@@ -803,8 +803,8 @@ msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
 msgstr ""
-"Une transaction spéciale n'est possible que entre une note associée à "
-"un mode de paiement et un utilisateur ou un club."
+"Une transaction spéciale n'est possible que entre une note associée à un "
+"mode de paiement et un utilisateur ou un club."
 
 #: apps/note/models/transactions.py:305 apps/note/models/transactions.py:310
 msgid "membership transaction"
@@ -897,7 +897,7 @@ msgstr "permanent"
 msgid "permission"
 msgstr "permission"
 
-#: apps/permission/models.py:187 apps/permission/models.py:320
+#: apps/permission/models.py:187 apps/permission/models.py:326
 msgid "permissions"
 msgstr "permissions"
 
@@ -907,11 +907,11 @@ msgstr ""
 "Spécifie le champ concerné, ne fonctionne que pour les permissions view et "
 "change."
 
-#: apps/permission/models.py:325
+#: apps/permission/models.py:331
 msgid "for club"
 msgstr "s'applique au club"
 
-#: apps/permission/models.py:335 apps/permission/models.py:336
+#: apps/permission/models.py:341 apps/permission/models.py:342
 msgid "role permissions"
 msgstr "Permissions par rôles"
 
@@ -1207,7 +1207,7 @@ msgid "WEI"
 msgstr "WEI"
 
 #: apps/wei/forms/registration.py:47 apps/wei/models.py:112
-#: apps/wei/models.py:275
+#: apps/wei/models.py:297
 msgid "bus"
 msgstr "Bus"
 
@@ -1307,11 +1307,11 @@ msgstr "Chèque de caution donné"
 msgid "birth date"
 msgstr "date de naissance"
 
-#: apps/wei/models.py:186
+#: apps/wei/models.py:186 apps/wei/models.py:196
 msgid "Male"
 msgstr "Homme"
 
-#: apps/wei/models.py:187
+#: apps/wei/models.py:187 apps/wei/models.py:197
 msgid "Female"
 msgstr "Femme"
 
@@ -1323,19 +1323,27 @@ msgstr "Non-binaire"
 msgid "gender"
 msgstr "genre"
 
-#: apps/wei/models.py:196 templates/wei/weimembership_form.html:65
+#: apps/wei/models.py:199
+msgid "clothing cut"
+msgstr "coupe de vêtement"
+
+#: apps/wei/models.py:212
+msgid "clothing size"
+msgstr "taille de vêtement"
+
+#: apps/wei/models.py:218 templates/wei/weimembership_form.html:65
 msgid "health issues"
 msgstr "problèmes de santé"
 
-#: apps/wei/models.py:201 templates/wei/weimembership_form.html:68
+#: apps/wei/models.py:223 templates/wei/weimembership_form.html:68
 msgid "emergency contact name"
 msgstr "Nom du contact en cas d'urgence"
 
-#: apps/wei/models.py:206 templates/wei/weimembership_form.html:71
+#: apps/wei/models.py:228 templates/wei/weimembership_form.html:71
 msgid "emergency contact phone"
 msgstr "Téléphone du contact en cas d'urgence"
 
-#: apps/wei/models.py:211 templates/wei/weimembership_form.html:74
+#: apps/wei/models.py:233 templates/wei/weimembership_form.html:74
 msgid ""
 "Register on the mailing list to stay informed of the events of the campus (1 "
 "mail/week)"
@@ -1343,7 +1351,7 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des événements sur "
 "le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:216 templates/wei/weimembership_form.html:77
+#: apps/wei/models.py:238 templates/wei/weimembership_form.html:77
 msgid ""
 "Register on the mailing list to stay informed of the sport events of the "
 "campus (1 mail/week)"
@@ -1351,7 +1359,7 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des actualités "
 "sportives sur le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:221 templates/wei/weimembership_form.html:80
+#: apps/wei/models.py:243 templates/wei/weimembership_form.html:80
 msgid ""
 "Register on the mailing list to stay informed of the art events of the "
 "campus (1 mail/week)"
@@ -1359,19 +1367,19 @@ msgstr ""
 "S'inscrire sur la liste de diffusion pour rester informé des actualités "
 "artistiques sur le campus (1 mail par semaine)"
 
-#: apps/wei/models.py:226 templates/wei/weimembership_form.html:56
+#: apps/wei/models.py:248 templates/wei/weimembership_form.html:56
 msgid "first year"
 msgstr "première année"
 
-#: apps/wei/models.py:227
+#: apps/wei/models.py:249
 msgid "Tells if the user is new in the school."
 msgstr "Indique si l'utilisateur est nouveau dans l'école."
 
-#: apps/wei/models.py:232
+#: apps/wei/models.py:254
 msgid "registration information"
 msgstr "informations sur l'inscription"
 
-#: apps/wei/models.py:233
+#: apps/wei/models.py:255
 msgid ""
 "Information about the registration (buses for old members, survey fot the "
 "new members), encoded in JSON"
@@ -1379,27 +1387,27 @@ msgstr ""
 "Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
 "1A), encodées en JSON"
 
-#: apps/wei/models.py:264
+#: apps/wei/models.py:286
 msgid "WEI User"
 msgstr "Participant au WEI"
 
-#: apps/wei/models.py:265
+#: apps/wei/models.py:287
 msgid "WEI Users"
 msgstr "Participants au WEI"
 
-#: apps/wei/models.py:285
+#: apps/wei/models.py:307
 msgid "team"
 msgstr "équipe"
 
-#: apps/wei/models.py:295
+#: apps/wei/models.py:317
 msgid "WEI registration"
 msgstr "inscription au WEI"
 
-#: apps/wei/models.py:299
+#: apps/wei/models.py:321
 msgid "WEI membership"
 msgstr "adhésion au WEI"
 
-#: apps/wei/models.py:300
+#: apps/wei/models.py:322
 msgid "WEI memberships"
 msgstr "adhésions au WEI"
 
@@ -1425,23 +1433,23 @@ msgstr "Nombre de membres"
 msgid "members"
 msgstr "adhérents"
 
-#: apps/wei/views.py:201
+#: apps/wei/views.py:203
 msgid "Find WEI Membership"
 msgstr "Trouver une adhésion au WEI"
 
-#: apps/wei/views.py:236
+#: apps/wei/views.py:238
 msgid "Find WEI Registration"
 msgstr "Trouver une inscription au WEI"
 
-#: apps/wei/views.py:445 templates/wei/weiclub_info.html:62
+#: apps/wei/views.py:447 templates/wei/weiclub_info.html:62
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/views.py:466 apps/wei/views.py:535
+#: apps/wei/views.py:468 apps/wei/views.py:537
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:471
+#: apps/wei/views.py:473
 msgid ""
 "This user can't be in her/his first year since he/she has already participed "
 "to a WEI."
@@ -1449,23 +1457,23 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:499 templates/wei/weiclub_info.html:65
+#: apps/wei/views.py:501 templates/wei/weiclub_info.html:65
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
-#: apps/wei/views.py:517 apps/wei/views.py:604
+#: apps/wei/views.py:519 apps/wei/views.py:606
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:664
+#: apps/wei/views.py:666
 msgid "You don't have the right to delete this WEI registration."
 msgstr "Vous n'avez pas la permission de supprimer cette inscription au WEI."
 
-#: apps/wei/views.py:763
+#: apps/wei/views.py:765
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
 
-#: apps/wei/views.py:837 apps/wei/views.py:857 apps/wei/views.py:867
+#: apps/wei/views.py:839 apps/wei/views.py:859 apps/wei/views.py:869
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"

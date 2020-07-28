@@ -190,6 +190,28 @@ class WEIRegistration(models.Model):
         verbose_name=_("gender"),
     )
 
+    clothing_cut = models.CharField(
+        max_length=16,
+        choices=(
+            ('male', _("Male")),
+            ('female', _("Female")),
+        ),
+        verbose_name=_("clothing cut"),
+    )
+
+    clothing_size = models.CharField(
+        max_length=4,
+        choices=(
+            ('XS',"XS"),
+            ('S', "S"),
+            ('M', "M"),
+            ('L', "L"),
+            ('XL', "XL"),
+            ('XXL', "XXL"),
+        ),
+        verbose_name=_("clothing size"),
+    )
+
     health_issues = models.TextField(
         blank=True,
         default="",
