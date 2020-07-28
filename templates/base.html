@@ -178,6 +178,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
             </div>
         {% endif %}
         {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
+        <div class="alert alert-warning">
+            Attention : la Note Kfet 2020 est en phase de beta. Des fonctionnalités pourront être rajoutées d'ici à la version
+            finale, et des bugs peuvent survenir. Pour tout problème, merci d'envoyer un mail à l'adresse
+            <a href="mailto:&#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;">
+                &#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;</a>,
+            ou bien levez une issue sur le dépôt <a href="https://gitlab.crans.org/bde/nk20/-/issues">Gitlab</a>,
+            ou encore posez un commentaire sur le <a href="https://pad.crans.org/p/todoNK20">pad</a>.<br><br>
+
+            Certaines données ont été anonymisées afin de limiter les fuites de données, et peuvent ne pas correspondre avec vos données réelles.
+        </div>
         <div id="messages"></div>
         {% block content %}
             <p>Default content...</p>
