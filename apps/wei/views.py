@@ -132,6 +132,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         else:
             # Check if the user has the right to create a registration of a random first year member.
             empty_fy_registration = WEIRegistration(
+                wei=club,
                 user=random_user,
                 first_year=True,
                 birth_date="1970-01-01",
@@ -144,6 +145,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
             # Check if the user has the right to create a registration of a random old member.
             empty_old_registration = WEIRegistration(
+                wei=club,
                 user=User.objects.filter(~Q(wei__wei__in=[club])).first(),
                 first_year=False,
                 birth_date="1970-01-01",
