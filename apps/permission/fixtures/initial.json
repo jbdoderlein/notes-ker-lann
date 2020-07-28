@@ -1743,7 +1743,7 @@
 				"wei",
 				"bus"
 			],
-			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"registration\", \"first_year\"]], {\"wei__date_end__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"weimembership\", \"registration\", \"first_year\"]], {\"wei__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
@@ -1759,7 +1759,7 @@
 				"wei",
 				"busteam"
 			],
-			"query": "[\"AND\", {\"bus__wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"registration\", \"first_year\"]], {\"bus__wei__date_end__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"bus__wei\": [\"club\"]}, [\"OR\", [\"NOT\", [\"membership\", \"weimembership\", \"registration\", \"first_year\"]], {\"bus__wei__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",

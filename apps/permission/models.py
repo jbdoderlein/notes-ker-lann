@@ -238,6 +238,9 @@ class Permission(models.Model):
                     field = Permission.compute_param(value[i], **kwargs)
                     continue
 
+                if not hasattr(field, value[i][0]):
+                    return False
+
                 field = getattr(field, value[i][0])
                 params = []
                 call_kwargs = {}
@@ -251,6 +254,9 @@ class Permission(models.Model):
                         params.append(param)
                 field = field(*params, **call_kwargs)
             else:
+                if not hasattr(field, value[i]):
+                    return False
+
                 field = getattr(field, value[i])
         return field
 
@@ -275,7 +281,7 @@ class Permission(models.Model):
             elif query[0] == 'NOT':
                 return ~Permission._about(query[1], **kwargs)
             else:
-                return Q(pk=F("pk"))
+                return Q(pk=F("pk")) if Permission.compute_param(query, **kwargs) else ~Q(pk=F("pk"))
         elif isinstance(query, dict):
             q_kwargs = {}
             for key in query:
