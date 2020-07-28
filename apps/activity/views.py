@@ -38,6 +38,9 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
     table_class = ActivityTable
     ordering = ('-date_start',)
 
+    def get_queryset(self):
+        return super().get_queryset().distinct()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

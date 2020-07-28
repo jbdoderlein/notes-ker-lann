@@ -642,7 +642,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         del form.fields['bank']
 
         club = self.object.club
-        form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=isinstance(club, WEIClub))
+        form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not isinstance(club, WEIClub))
                                                             & (Q(for_club__isnull=True) | Q(for_club=club))).all()
 
         return form
