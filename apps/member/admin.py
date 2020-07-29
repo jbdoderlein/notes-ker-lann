@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+from note_kfet.admin import admin_site
 from .forms import ProfileForm
 from .models import Club, Membership, Profile
 
@@ -33,9 +34,8 @@ class CustomUserAdmin(UserAdmin):
 
 
 # Update Django User with profile
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+admin_site.register(User, CustomUserAdmin)
 
 # Add other models
-admin.site.register(Club)
-admin.site.register(Membership)
+admin_site.register(Club)
+admin_site.register(Membership)

@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import stringfilter
 from django import template
@@ -16,9 +17,9 @@ def not_empty_model_list(model_name):
     """
     user = get_current_authenticated_user()
     session = get_current_session()
-    if user is None:
+    if user is None or isinstance(user, AnonymousUser):
         return False
-    elif user.is_superuser and session.get("permission_mask", 0) >= 42:
+    elif user.is_superuser and session.get("permission_mask", -1) >= 42:
         return True
     qs = model_list(model_name)
     return qs.exists()
@@ -31,9 +32,9 @@ def not_empty_model_change_list(model_name):
     """
     user = get_current_authenticated_user()
     session = get_current_session()
-    if user is None:
+    if user is None or isinstance(user, AnonymousUser):
         return False
-    elif user.is_superuser and session.get("permission_mask", 0) >= 42:
+    elif user.is_superuser and session.get("permission_mask", -1) >= 42:
         return True
     qs = model_list(model_name, "change")
     return qs.exists()
@@ -45,11 +46,11 @@ def model_list(model_name, t="view", fetch=True):
     Return the queryset of all visible instances of the given model.
     """
     user = get_current_authenticated_user()
-    if user is None:
-        return False
     spl = model_name.split(".")
     ct = ContentType.objects.get(app_label=spl[0], model=spl[1])
     qs = ct.model_class().objects.filter(PermissionBackend.filter_queryset(user, ct, t))
+    if user is None or isinstance(user, AnonymousUser):
+        return qs.none()
     if fetch:
         qs = qs.all()
     return qs
@@ -73,9 +74,9 @@ def can_create_transaction():
     """
     user = get_current_authenticated_user()
     session = get_current_session()
-    if user is None:
+    if user is None or isinstance(user, AnonymousUser):
         return False
-    elif user.is_superuser and session.get("permission_mask", 0) >= 42:
+    elif user.is_superuser and session.get("permission_mask", -1) >= 42:
         return True
     if session.get("can_create_transaction", None):
         return session.get("can_create_transaction", None) == 1

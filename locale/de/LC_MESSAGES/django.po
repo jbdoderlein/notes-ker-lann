@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-28 20:42+0200\n"
+"POT-Creation-Date: 2020-07-29 10:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,12 +186,12 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/member/forms.py:83
+#: apps/activity/tables.py:77 apps/member/forms.py:92
 #: apps/registration/forms.py:64 apps/treasury/forms.py:120
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/member/forms.py:88
+#: apps/activity/tables.py:79 apps/member/forms.py:97
 #: apps/registration/forms.py:69 apps/treasury/forms.py:122
 #: templates/note/transaction_form.html:126
 msgid "First name"
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: apps/activity/views.py:47 templates/base.html:120
+#: apps/activity/views.py:47 templates/base.html:121
 msgid "Activities"
 msgstr ""
 
@@ -279,31 +279,35 @@ msgstr ""
 msgid "member"
 msgstr ""
 
-#: apps/member/forms.py:62 apps/registration/forms.py:44
+#: apps/member/forms.py:46 apps/member/views.py:77
+msgid "An alias with a similar name already exists."
+msgstr ""
+
+#: apps/member/forms.py:71 apps/registration/forms.py:44
 msgid "Inscription paid by Société Générale"
 msgstr ""
 
-#: apps/member/forms.py:64 apps/registration/forms.py:46
+#: apps/member/forms.py:73 apps/registration/forms.py:46
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr ""
 
-#: apps/member/forms.py:69 apps/registration/forms.py:51
+#: apps/member/forms.py:78 apps/registration/forms.py:51
 msgid "Credit type"
 msgstr ""
 
-#: apps/member/forms.py:70 apps/registration/forms.py:52
+#: apps/member/forms.py:79 apps/registration/forms.py:52
 msgid "No credit"
 msgstr ""
 
-#: apps/member/forms.py:72
+#: apps/member/forms.py:81
 msgid "You can credit the note of the user."
 msgstr ""
 
-#: apps/member/forms.py:76 apps/registration/forms.py:57
+#: apps/member/forms.py:85 apps/registration/forms.py:57
 msgid "Credit amount"
 msgstr ""
 
-#: apps/member/forms.py:93 apps/registration/forms.py:74
+#: apps/member/forms.py:102 apps/registration/forms.py:74
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:132
 msgid "Bank"
 msgstr ""
@@ -541,12 +545,8 @@ msgstr ""
 
 #: apps/member/views.py:67 templates/member/profile_info.html:47
 #: templates/registration/future_profile_detail.html:48
-#: templates/wei/weimembership_form.html:124
+#: templates/wei/weimembership_form.html:130
 msgid "Update Profile"
-msgstr ""
-
-#: apps/member/views.py:77
-msgid "An alias with a similar name already exists."
 msgstr ""
 
 #: apps/member/views.py:183
@@ -760,7 +760,7 @@ msgid ""
 msgstr ""
 
 #: apps/note/models/transactions.py:228
-#: templates/activity/activity_entry.html:13 templates/base.html:98
+#: templates/activity/activity_entry.html:13 templates/base.html:99
 #: templates/note/transaction_form.html:19
 #: templates/note/transaction_form.html:140
 msgid "Transfer"
@@ -831,7 +831,7 @@ msgstr ""
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:140 templates/base.html:93
+#: apps/note/views.py:140 templates/base.html:94
 msgid "Consumptions"
 msgstr ""
 
@@ -975,7 +975,7 @@ msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 
-#: apps/treasury/apps.py:12 templates/base.html:125
+#: apps/treasury/apps.py:12 templates/base.html:126
 msgid "Treasury"
 msgstr ""
 
@@ -1173,7 +1173,7 @@ msgid "No"
 msgstr ""
 
 #: apps/wei/apps.py:10 apps/wei/models.py:48 apps/wei/models.py:49
-#: apps/wei/models.py:60 apps/wei/models.py:166 templates/base.html:130
+#: apps/wei/models.py:60 apps/wei/models.py:166 templates/base.html:131
 msgid "WEI"
 msgstr ""
 
@@ -1267,7 +1267,7 @@ msgstr ""
 msgid "Caution check given"
 msgstr ""
 
-#: apps/wei/models.py:180 templates/wei/weimembership_form.html:62
+#: apps/wei/models.py:180 templates/wei/weimembership_form.html:68
 msgid "birth date"
 msgstr ""
 
@@ -1287,39 +1287,39 @@ msgstr ""
 msgid "gender"
 msgstr ""
 
-#: apps/wei/models.py:199
+#: apps/wei/models.py:199 templates/wei/weimembership_form.html:62
 msgid "clothing cut"
 msgstr ""
 
-#: apps/wei/models.py:212
+#: apps/wei/models.py:212 templates/wei/weimembership_form.html:65
 msgid "clothing size"
 msgstr ""
 
-#: apps/wei/models.py:218 templates/wei/weimembership_form.html:65
+#: apps/wei/models.py:218 templates/wei/weimembership_form.html:71
 msgid "health issues"
 msgstr ""
 
-#: apps/wei/models.py:223 templates/wei/weimembership_form.html:68
+#: apps/wei/models.py:223 templates/wei/weimembership_form.html:74
 msgid "emergency contact name"
 msgstr ""
 
-#: apps/wei/models.py:228 templates/wei/weimembership_form.html:71
+#: apps/wei/models.py:228 templates/wei/weimembership_form.html:77
 msgid "emergency contact phone"
 msgstr ""
 
-#: apps/wei/models.py:233 templates/wei/weimembership_form.html:74
+#: apps/wei/models.py:233 templates/wei/weimembership_form.html:80
 msgid ""
 "Register on the mailing list to stay informed of the events of the campus (1 "
 "mail/week)"
 msgstr ""
 
-#: apps/wei/models.py:238 templates/wei/weimembership_form.html:77
+#: apps/wei/models.py:238 templates/wei/weimembership_form.html:83
 msgid ""
 "Register on the mailing list to stay informed of the sport events of the "
 "campus (1 mail/week)"
 msgstr ""
 
-#: apps/wei/models.py:243 templates/wei/weimembership_form.html:80
+#: apps/wei/models.py:243 templates/wei/weimembership_form.html:86
 msgid ""
 "Register on the mailing list to stay informed of the art events of the "
 "campus (1 mail/week)"
@@ -1550,27 +1550,27 @@ msgstr ""
 msgid "The ENS Paris-Saclay BDE note."
 msgstr ""
 
-#: templates/base.html:103
+#: templates/base.html:104
 msgid "Users"
 msgstr ""
 
-#: templates/base.html:108
+#: templates/base.html:109
 msgid "Clubs"
 msgstr ""
 
-#: templates/base.html:114
+#: templates/base.html:115
 msgid "Registrations"
 msgstr ""
 
-#: templates/base.html:134
+#: templates/base.html:135
 msgid "Rights"
 msgstr ""
 
-#: templates/base.html:138
+#: templates/base.html:139
 msgid "Administration"
 msgstr ""
 
-#: templates/base.html:177
+#: templates/base.html:178
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -1850,8 +1850,8 @@ msgid "Validate account"
 msgstr ""
 
 #: templates/registration/future_profile_detail.html:64
-#: templates/wei/weimembership_form.html:134
-#: templates/wei/weimembership_form.html:192
+#: templates/wei/weimembership_form.html:140
+#: templates/wei/weimembership_form.html:198
 msgid "Validate registration"
 msgstr ""
 
@@ -1872,7 +1872,7 @@ msgid "Log in again"
 msgstr ""
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:21
+#: templates/registration/login.html:22
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr ""
@@ -1881,10 +1881,11 @@ msgstr ""
 #, python-format
 msgid ""
 "You are authenticated as %(username)s, but are not authorized to access this "
-"page. Would you like to login to a different account?"
+"page. Would you like to login to a different account, or with a higher "
+"permission mask?"
 msgstr ""
 
-#: templates/registration/login.html:22
+#: templates/registration/login.html:23
 msgid "Forgotten your password or username?"
 msgstr ""
 
@@ -2204,64 +2205,64 @@ msgstr ""
 msgid "ENS year"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:83
+#: templates/wei/weimembership_form.html:89
 msgid "Payment from Société générale"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:87
+#: templates/wei/weimembership_form.html:93
 msgid "Suggested bus from the survey:"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:92
+#: templates/wei/weimembership_form.html:98
 msgid "Raw survey information"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:102
+#: templates/wei/weimembership_form.html:108
 msgid "The algorithm didn't run."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:105
+#: templates/wei/weimembership_form.html:111
 msgid "caution check given"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:109
+#: templates/wei/weimembership_form.html:115
 msgid "preferred bus"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:112
+#: templates/wei/weimembership_form.html:118
 msgid "preferred team"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:115
+#: templates/wei/weimembership_form.html:121
 msgid "preferred roles"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:122
+#: templates/wei/weimembership_form.html:128
 #: templates/wei/weiregistration_confirm_delete.html:31
 msgid "Update registration"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:138
+#: templates/wei/weimembership_form.html:144
 msgid "The registration is already validated and can't be unvalidated."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:139
+#: templates/wei/weimembership_form.html:145
 msgid "The user joined the bus"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:140
+#: templates/wei/weimembership_form.html:146
 msgid "in the team"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:141
+#: templates/wei/weimembership_form.html:147
 msgid "in no team (staff)"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:141
+#: templates/wei/weimembership_form.html:147
 msgid "with the following roles:"
 msgstr ""
 
-#: templates/wei/weimembership_form.html:146
+#: templates/wei/weimembership_form.html:152
 msgid ""
 "\n"
 "                            The WEI will be paid by Société générale. The "
@@ -2273,7 +2274,7 @@ msgid ""
 "                        "
 msgstr ""
 
-#: templates/wei/weimembership_form.html:156
+#: templates/wei/weimembership_form.html:162
 #, python-format
 msgid ""
 "\n"
@@ -2282,15 +2283,15 @@ msgid ""
 "                            "
 msgstr ""
 
-#: templates/wei/weimembership_form.html:163
+#: templates/wei/weimembership_form.html:169
 msgid "The note has enough money, the registration is possible."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:170
+#: templates/wei/weimembership_form.html:176
 msgid "The user didn't give her/his caution check."
 msgstr ""
 
-#: templates/wei/weimembership_form.html:178
+#: templates/wei/weimembership_form.html:184
 #, python-format
 msgid ""
 "\n"

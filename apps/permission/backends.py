@@ -42,7 +42,7 @@ class PermissionBackend(ModelBackend):
 
         for membership in memberships:
             for role in membership.roles.all():
-                for perm in role.permissions.filter(type=t, mask__rank__lte=get_current_session().get("permission_mask", 42)).all():
+                for perm in role.permissions.filter(type=t, mask__rank__lte=get_current_session().get("permission_mask", -1)).all():
                     if not perm.permanent:
                         if membership.date_start > timezone.now().date() or membership.date_end < timezone.now().date():
                             continue
@@ -101,7 +101,7 @@ class PermissionBackend(ModelBackend):
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
+        if user.is_superuser and get_current_session().get("permission_mask", -1) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -137,7 +137,7 @@ class PermissionBackend(ModelBackend):
         if sess is not None and sess.session_key is None:
             return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
+        if user_obj.is_superuser and get_current_session().get("permission_mask", -1) >= 42:
             return True
 
         if obj is None:

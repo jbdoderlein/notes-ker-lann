@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
 
+from note_kfet.admin import admin_site
+
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser
 from .models.transactions import Transaction, TemplateCategory, TransactionTemplate, \
     RecurrentTransaction, MembershipTransaction, SpecialTransaction
@@ -19,7 +21,7 @@ class AliasInlines(admin.TabularInline):
     model = Alias
 
 
-@admin.register(Note)
+@admin.register(Note, site=admin_site)
 class NoteAdmin(PolymorphicParentModelAdmin):
     """
     Parent regrouping all note types as children
@@ -42,7 +44,7 @@ class NoteAdmin(PolymorphicParentModelAdmin):
     search_fields = ['alias__name']
 
 
-@admin.register(NoteClub)
+@admin.register(NoteClub, site=admin_site)
 class NoteClubAdmin(PolymorphicChildModelAdmin):
     """
     Child for a club note, see NoteAdmin
@@ -66,7 +68,7 @@ class NoteClubAdmin(PolymorphicChildModelAdmin):
         return False
 
 
-@admin.register(NoteSpecial)
+@admin.register(NoteSpecial, site=admin_site)
 class NoteSpecialAdmin(PolymorphicChildModelAdmin):
     """
     Child for a special note, see NoteAdmin
@@ -74,7 +76,7 @@ class NoteSpecialAdmin(PolymorphicChildModelAdmin):
     readonly_fields = ('balance',)
 
 
-@admin.register(NoteUser)
+@admin.register(NoteUser, site=admin_site)
 class NoteUserAdmin(PolymorphicChildModelAdmin):
     """
     Child for an user note, see NoteAdmin
@@ -97,7 +99,7 @@ class NoteUserAdmin(PolymorphicChildModelAdmin):
         return False
 
 
-@admin.register(Transaction)
+@admin.register(Transaction, site=admin_site)
 class TransactionAdmin(PolymorphicParentModelAdmin):
     """
     Admin customisation for Transaction
@@ -138,21 +140,21 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
         return []
 
 
-@admin.register(MembershipTransaction)
+@admin.register(MembershipTransaction, site=admin_site)
 class MembershipTransactionAdmin(PolymorphicChildModelAdmin):
     """
     Admin customisation for MembershipTransaction
     """
 
 
-@admin.register(SpecialTransaction)
+@admin.register(SpecialTransaction, site=admin_site)
 class SpecialTransactionAdmin(PolymorphicChildModelAdmin):
     """
     Admin customisation for SpecialTransaction
     """
 
 
-@admin.register(TransactionTemplate)
+@admin.register(TransactionTemplate, site=admin_site)
 class TransactionTemplateAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate
@@ -170,7 +172,7 @@ class TransactionTemplateAdmin(admin.ModelAdmin):
     poly_destination.short_description = _('destination')
 
 
-@admin.register(TemplateCategory)
+@admin.register(TemplateCategory, site=admin_site)
 class TemplateCategoryAdmin(admin.ModelAdmin):
     """
     Admin customisation for TransactionTemplate

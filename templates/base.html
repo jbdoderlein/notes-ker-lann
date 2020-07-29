@@ -134,7 +134,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
                 </li>
-                {% if user.is_staff %}
+                {% if user.is_staff and ""|has_perm:user %}
                     <li class="nav-item active">
                         <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Administration' %}</a>
                     </li>
