@@ -2188,22 +2188,6 @@
 		"pk": 136,
 		"fields": {
 			"model": [
-				"auth",
-				"user"
-			],
-			"query": "{}",
-			"type": "change",
-			"mask": 3,
-			"field": "",
-			"permanent": false,
-			"description": "Change any user"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 137,
-		"fields": {
-			"model": [
 				"member",
 				"profile"
 			],
@@ -2217,7 +2201,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 138,
+		"pk": 137,
 		"fields": {
 			"model": [
 				"member",
@@ -2233,7 +2217,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 139,
+		"pk": 138,
 		"fields": {
 			"model": [
 				"member",
@@ -2249,7 +2233,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 140,
+		"pk": 139,
 		"fields": {
 			"model": [
 				"member",
@@ -2265,7 +2249,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 141,
+		"pk": 140,
 		"fields": {
 			"model": [
 				"member",
@@ -2448,8 +2432,7 @@
 				137,
 				138,
 				139,
-				140,
-				141
+				140
 			]
 		}
 	},
@@ -2599,8 +2582,7 @@
 				137,
 				138,
 				139,
-				140,
-				141
+				140
 			]
 		}
 	},
