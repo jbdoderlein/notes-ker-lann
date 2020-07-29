@@ -2205,22 +2205,6 @@
 		"fields": {
 			"model": [
 				"member",
-				"profile"
-			],
-			"query": "{}",
-			"type": "change",
-			"mask": 3,
-			"field": "",
-			"permanent": false,
-			"description": "Change any profile"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 138,
-		"fields": {
-			"model": [
-				"member",
 				"club"
 			],
 			"query": "{}",
@@ -2233,7 +2217,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 139,
+		"pk": 138,
 		"fields": {
 			"model": [
 				"member",
@@ -2249,7 +2233,7 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 140,
+		"pk": 139,
 		"fields": {
 			"model": [
 				"member",
@@ -2431,8 +2415,7 @@
 				136,
 				137,
 				138,
-				139,
-				140
+				139
 			]
 		}
 	},
@@ -2581,8 +2564,7 @@
 				136,
 				137,
 				138,
-				139,
-				140
+				139
 			]
 		}
 	},
