@@ -131,7 +131,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "last_login",
-			"permanent": false,
+			"permanent": true,
 			"description": "Change myself's last login"
 		}
 	},
@@ -211,7 +211,7 @@
 			"type": "delete",
 			"mask": 1,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "Delete API Token"
 		}
 	},
@@ -369,7 +369,7 @@
 			],
 			"query": "{\"pk\": [\"club\", \"pk\"]}",
 			"type": "view",
-			"mask": 1,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
 			"description": "View club infos"
@@ -2168,6 +2168,118 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 135,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "View any user"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 136,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Change any user"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 137,
+		"fields": {
+			"model": [
+				"member",
+				"profile"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "View any profile"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 138,
+		"fields": {
+			"model": [
+				"member",
+				"profile"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Change any profile"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 139,
+		"fields": {
+			"model": [
+				"member",
+				"club"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "View any club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 140,
+		"fields": {
+			"model": [
+				"member",
+				"club"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Change any club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 141,
+		"fields": {
+			"model": [
+				"member",
+				"club"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Create any club"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2330,7 +2442,14 @@
 				72,
 				73,
 				132,
-				134
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141
 			]
 		}
 	},
@@ -2474,7 +2593,14 @@
 				131,
 				132,
 				133,
-				134
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141
 			]
 		}
 	},
