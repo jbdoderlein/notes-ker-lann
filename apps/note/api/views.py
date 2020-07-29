@@ -109,7 +109,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = queryset.filter(
             Q(name__regex="^" + alias)
             | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower()))
+            | Q(normalized_name__regex="^" + alias.lower())).order_by('name')
 
         return queryset
 
