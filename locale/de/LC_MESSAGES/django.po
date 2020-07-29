@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-29 10:56+0200\n"
+"POT-Creation-Date: 2020-07-29 22:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,12 +186,12 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/member/forms.py:92
+#: apps/activity/tables.py:77 apps/member/forms.py:105
 #: apps/registration/forms.py:64 apps/treasury/forms.py:120
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/member/forms.py:97
+#: apps/activity/tables.py:79 apps/member/forms.py:110
 #: apps/registration/forms.py:69 apps/treasury/forms.py:122
 #: templates/note/transaction_form.html:126
 msgid "First name"
@@ -279,35 +279,35 @@ msgstr ""
 msgid "member"
 msgstr ""
 
-#: apps/member/forms.py:46 apps/member/views.py:77
+#: apps/member/forms.py:59 apps/member/views.py:78
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/forms.py:71 apps/registration/forms.py:44
+#: apps/member/forms.py:84 apps/registration/forms.py:44
 msgid "Inscription paid by Société Générale"
 msgstr ""
 
-#: apps/member/forms.py:73 apps/registration/forms.py:46
+#: apps/member/forms.py:86 apps/registration/forms.py:46
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr ""
 
-#: apps/member/forms.py:78 apps/registration/forms.py:51
+#: apps/member/forms.py:91 apps/registration/forms.py:51
 msgid "Credit type"
 msgstr ""
 
-#: apps/member/forms.py:79 apps/registration/forms.py:52
+#: apps/member/forms.py:92 apps/registration/forms.py:52
 msgid "No credit"
 msgstr ""
 
-#: apps/member/forms.py:81
+#: apps/member/forms.py:94
 msgid "You can credit the note of the user."
 msgstr ""
 
-#: apps/member/forms.py:85 apps/registration/forms.py:57
+#: apps/member/forms.py:98 apps/registration/forms.py:57
 msgid "Credit amount"
 msgstr ""
 
-#: apps/member/forms.py:102 apps/registration/forms.py:74
+#: apps/member/forms.py:115 apps/registration/forms.py:74
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:132
 msgid "Bank"
 msgstr ""
@@ -509,7 +509,7 @@ msgstr ""
 msgid "fee"
 msgstr ""
 
-#: apps/member/models.py:303 apps/member/views.py:527 apps/wei/views.py:770
+#: apps/member/models.py:303 apps/member/views.py:528 apps/wei/views.py:770
 msgid "User is not a member of the parent club"
 msgstr ""
 
@@ -518,7 +518,7 @@ msgstr ""
 msgid "The role {role} does not apply to the club {club}."
 msgstr ""
 
-#: apps/member/models.py:321 apps/member/views.py:536
+#: apps/member/models.py:321 apps/member/views.py:537
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -539,45 +539,45 @@ msgstr ""
 msgid "Renew"
 msgstr ""
 
-#: apps/member/views.py:64 apps/registration/forms.py:23
+#: apps/member/views.py:65 apps/registration/forms.py:23
 msgid "This address must be valid."
 msgstr ""
 
-#: apps/member/views.py:67 templates/member/profile_info.html:47
+#: apps/member/views.py:68 templates/member/profile_info.html:47
 #: templates/registration/future_profile_detail.html:48
 #: templates/wei/weimembership_form.html:130
 msgid "Update Profile"
 msgstr ""
 
-#: apps/member/views.py:183
+#: apps/member/views.py:184
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:522 apps/wei/views.py:761
+#: apps/member/views.py:523 apps/wei/views.py:761
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:540
+#: apps/member/views.py:541
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:545
+#: apps/member/views.py:546
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:562 apps/member/views.py:564 apps/member/views.py:566
+#: apps/member/views.py:563 apps/member/views.py:565 apps/member/views.py:567
 #: apps/registration/views.py:290 apps/registration/views.py:292
 #: apps/registration/views.py:294
 msgid "This field is required."
 msgstr ""
 
-#: apps/note/admin.py:120 apps/note/models/transactions.py:106
+#: apps/note/admin.py:122 apps/note/models/transactions.py:106
 msgid "source"
 msgstr ""
 
-#: apps/note/admin.py:128 apps/note/admin.py:170
+#: apps/note/admin.py:130 apps/note/admin.py:172
 #: apps/note/models/transactions.py:55 apps/note/models/transactions.py:119
 msgid "destination"
 msgstr ""
@@ -761,7 +761,7 @@ msgstr ""
 
 #: apps/note/models/transactions.py:228
 #: templates/activity/activity_entry.html:13 templates/base.html:99
-#: templates/note/transaction_form.html:19
+#: templates/note/transaction_form.html:15
 #: templates/note/transaction_form.html:140
 msgid "Transfer"
 msgstr ""
@@ -780,11 +780,11 @@ msgstr ""
 
 #: apps/note/models/transactions.py:277
 #: templates/activity/activity_entry.html:17
-#: templates/note/transaction_form.html:24
+#: templates/note/transaction_form.html:20
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:277 templates/note/transaction_form.html:28
+#: apps/note/models/transactions.py:277 templates/note/transaction_form.html:24
 msgid "Debit"
 msgstr ""
 
@@ -1522,7 +1522,7 @@ msgid "Guests list"
 msgstr ""
 
 #: templates/activity/activity_entry.html:22
-#: templates/note/transaction_form.html:33
+#: templates/note/transaction_form.html:29
 msgid "Entries"
 msgstr ""
 
@@ -1707,7 +1707,7 @@ msgstr ""
 msgid "Consum"
 msgstr ""
 
-#: templates/note/conso_form.html:39 templates/note/transaction_form.html:61
+#: templates/note/conso_form.html:39 templates/note/transaction_form.html:57
 #: templates/note/transaction_form.html:76
 msgid "Name or alias..."
 msgstr ""
@@ -1736,12 +1736,12 @@ msgstr ""
 msgid "Recent transactions history"
 msgstr ""
 
-#: templates/note/transaction_form.html:15
-msgid "Gift"
+#: templates/note/transaction_form.html:51
+msgid "Select emitters"
 msgstr ""
 
-#: templates/note/transaction_form.html:55
-msgid "Select emitters"
+#: templates/note/transaction_form.html:60
+msgid "I am the emitter"
 msgstr ""
 
 #: templates/note/transaction_form.html:70

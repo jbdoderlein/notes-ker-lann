@@ -71,16 +71,6 @@ $(document).ready(function() {
     let source = $("#source_note");
     let dest = $("#dest_note");
 
-    $("#type_gift").click(function() {
-        $("#special_transaction_div").addClass('d-none');
-        source.attr('disabled', true);
-        source.val(username);
-        source.tooltip('hide');
-        $("#source_note_list").addClass('d-none');
-        dest.attr('disabled', false);
-        $("#dest_note_list").removeClass('d-none');
-    });
-
     $("#type_transfer").click(function() {
         $("#special_transaction_div").addClass('d-none');
         source.attr('disabled', false);
@@ -131,13 +121,11 @@ $(document).ready(function() {
                 dest.val(type);
         });
 
-    // Ensure we begin in gift mode. Removing these lines may cause problems when reloading.
-    let type_gift = $("#type_gift"); // Default mode
-    type_gift.removeAttr('checked');
-    $("#type_transfer").removeAttr('checked');
+    // Ensure we begin in transfer mode. Removing these lines may cause problems when reloading.
+    let type_transfer = $("#type_transfer"); // Default mode
+    type_transfer.removeAttr('checked');
     $("#type_credit").removeAttr('checked');
     $("#type_debit").removeAttr('checked');
-    $("label[for='type_gift']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_transfer']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_credit']").attr('class', 'btn btn-sm btn-outline-primary');
     $("label[for='type_debit']").attr('class', 'btn btn-sm btn-outline-primary');
@@ -145,62 +133,39 @@ $(document).ready(function() {
     if (location.hash)
         $("#type_" + location.hash.substr(1)).click();
     else
-        type_gift.click();
+        type_transfer.click();
     location.hash = "";
+
+    $("#source_me").click(function() {
+        // Shortcut to set the current user as the only emitter
+        reset();
+
+        let source_note = $("#source_note");
+        source_note.focus();
+        source_note.val(username);
+        let event = jQuery.Event("keyup");
+        event.originalEvent = {charCode: 0};
+        source_note.trigger(event);
+        console.log(sources.length);
+        let fill_note = function() {
+            if (sources.length === 0) {
+                setTimeout(fill_note, 100);
+                return;
+            }
+            event = jQuery.Event("keypress");
+            event.originalEvent = {charCode: 13};
+            source_note.trigger(event);
+
+            source_note.tooltip('hide');
+            source_note.val('');
+            $("#dest_note").focus();
+        };
+        fill_note();
+    });
 });
 
 $("#btn_transfer").click(function() {
-    if ($("#type_gift").is(':checked')) {
-        dests_notes_display.forEach(function (dest) {
-            $.post("/api/note/transaction/transaction/",
-                {
-                    "csrfmiddlewaretoken": CSRF_TOKEN,
-                    "quantity": dest.quantity,
-                    "amount": 100 * $("#amount").val(),
-                    "reason": $("#reason").val(),
-                    "valid": true,
-                    "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
-                    "resourcetype": "Transaction",
-                    "source": user_id,
-                    "destination": dest.note.id,
-                    "destination_alias": dest.name
-                }).done(function () {
-                    addMsg("Le transfert de "
-                        + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
-                        + " vers la note " + dest.name + " a été fait avec succès !", "success");
-
-                    reset();
-                }).fail(function () { // do it again but valid = false
-                    $.post("/api/note/transaction/transaction/",
-                    {
-                        "csrfmiddlewaretoken": CSRF_TOKEN,
-                        "quantity": dest.quantity,
-                        "amount": 100 * $("#amount").val(),
-                        "reason": $("#reason").val(),
-                        "valid": false,
-                        "invalidity_reason": "Solde insuffisant",
-                        "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
-                        "resourcetype": "Transaction",
-                        "source": user_id,
-                        "destination": dest.note.id,
-                        "destination_alias": dest.name
-                    }).done(function () {
-                        addMsg("Le transfert de "
-                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
-                            + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
-
-                        reset();
-                    }).fail(function (err) {
-                        addMsg("Le transfert de "
-                            + pretty_money(dest.quantity * 100 * $("#amount").val()) + " de votre note "
-                            + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
-
-                    reset();
-                });
-            });
-        });
-    }
-    else if ($("#type_transfer").is(':checked')) {
+    if ($("#type_transfer").is(':checked')) {
         sources_notes_display.forEach(function (source) {
             dests_notes_display.forEach(function (dest) {
                 $.post("/api/note/transaction/transaction/",
