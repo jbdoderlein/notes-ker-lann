@@ -118,9 +118,8 @@ class ConsumerSerializer(serializers.ModelSerializer):
         """
         # If the user has no right to see the note, then we only display the note identifier
         if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note):
-            print(obj.pk)
             return NotePolymorphicSerializer().to_representation(obj.note)
-        return dict(id=obj.id)
+        return dict(id=obj.note.id)
 
     def get_email_confirmed(self, obj):
         if isinstance(obj.note, NoteUser):
