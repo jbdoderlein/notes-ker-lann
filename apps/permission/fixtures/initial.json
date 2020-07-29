@@ -2136,6 +2136,38 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 133,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "invalidity_reason",
+			"permanent": false,
+			"description": "Update invalidity reason of a club transaction if possible"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 134,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 1,
+			"field": "invalidity_reason",
+			"permanent": false,
+			"description": "Update invalidity reason of a transaction"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2243,7 +2275,8 @@
 				60,
 				61,
 				62,
-				127
+				127,
+				133
 			]
 		}
 	},
@@ -2296,7 +2329,8 @@
 				71,
 				72,
 				73,
-				132
+				132,
+				134
 			]
 		}
 	},
@@ -2438,7 +2472,9 @@
 				129,
 				130,
 				131,
-				132
+				132,
+				133,
+				134
 			]
 		}
 	},
