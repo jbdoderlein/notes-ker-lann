@@ -20,6 +20,19 @@ class CustomAuthenticationForm(AuthenticationForm):
     )
 
 
+class UserForm(forms.ModelForm):
+    def _get_validation_exclusions(self):
+        # Django usernames can only contain letters, numbers, @, ., +, - and _.
+        # We want to allow users to have uncommon and unpractical usernames:
+        # That is their problem, and we have normalized aliases for us.
+        return super()._get_validation_exclusions() + ["username"]
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email',)
+
+
+
 class ProfileForm(forms.ModelForm):
     """
     A form for the extras field provided by the :model:`member.Profile` model.

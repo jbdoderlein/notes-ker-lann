@@ -26,7 +26,7 @@ from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 from wei.models import WEIClub
 
-from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm
+from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable
 
@@ -47,9 +47,10 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     Update the user information.
     """
     model = User
-    fields = ['first_name', 'last_name', 'username', 'email']
+    form_class = UserForm
     template_name = 'member/profile_update.html'
     context_object_name = 'user_object'
+
     profile_form = ProfileForm
 
     def get_context_data(self, **kwargs):
