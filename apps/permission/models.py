@@ -44,7 +44,9 @@ class InstancedPermission:
                 else:
                     oldpk = obj.pk
                 # Ensure previous models are deleted
-                self.model.model_class().objects.filter(pk=obj.pk).annotate(_force_delete=F("pk")).delete()
+                for o in self.model.model_class().objects.filter(pk=obj.pk).all():
+                    o._force_delete = True
+                    Model.delete(o)
                 # Force insertion, no data verification, no trigger
                 obj._force_save = True
                 Model.save(obj, force_insert=True)
