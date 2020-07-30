@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 from PIL import Image
 from django.conf import settings
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
@@ -21,6 +22,7 @@ from note.forms import ImageForm
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
+from note_kfet.middlewares import _set_current_user_and_ip
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin
@@ -38,6 +40,8 @@ class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
 
     def form_valid(self, form):
+        logout(self.request)
+        _set_current_user_and_ip(form.get_user(), self.request.session, None)
         self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
         return super().form_valid(form)
 

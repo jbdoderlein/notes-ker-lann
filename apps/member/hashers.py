@@ -3,8 +3,11 @@
 
 import hashlib
 
-from django.contrib.auth.hashers import PBKDF2PasswordHasher
+from django.conf import settings
+from django.contrib.auth.hashers import PBKDF2PasswordHasher, BasePasswordHasher
 from django.utils.crypto import constant_time_compare
+
+from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 
 
 class CustomNK15Hasher(PBKDF2PasswordHasher):
@@ -20,8 +23,37 @@ class CustomNK15Hasher(PBKDF2PasswordHasher):
     """
     algorithm = "custom_nk15"
 
+    def must_update(self, encoded):
+        if settings.DEBUG:
+            current_user = get_current_authenticated_user()
+            if current_user is not None and current_user.is_superuser:
+                return False
+        return True
+
     def verify(self, password, encoded):
+        if settings.DEBUG:
+            current_user = get_current_authenticated_user()
+            if current_user is not None and current_user.is_superuser\
+                    and get_current_session().get("permission_mask", -1) >= 42:
+                return True
+
         if '|' in encoded:
             salt, db_hashed_pass = encoded.split('$')[2].split('|')
             return constant_time_compare(hashlib.sha256((salt + password).encode("utf-8")).hexdigest(), db_hashed_pass)
+        return super().verify(password, encoded)
+
+
+class DebugSuperuserBackdoor(PBKDF2PasswordHasher):
+    """
+    In debug mode and during the beta, superusers can login into other accounts for tests.
+    """
+    def must_update(self, encoded):
+        return False
+
+    def verify(self, password, encoded):
+        if settings.DEBUG:
+            current_user = get_current_authenticated_user()
+            if current_user is not None and current_user.is_superuser\
+                    and get_current_session().get("permission_mask", -1) >= 42:
+                return True
         return super().verify(password, encoded)

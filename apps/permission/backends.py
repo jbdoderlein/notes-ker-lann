@@ -1,7 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -137,7 +136,7 @@ class PermissionBackend(ModelBackend):
         if sess is not None and sess.session_key is None:
             return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", -1) >= 42:
+        if user_obj.is_superuser and sess.get("permission_mask", -1) >= 42:
             return True
 
         if obj is None:
