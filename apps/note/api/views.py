@@ -106,10 +106,8 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(
-            Q(name__regex="^" + alias)
-            | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower())).order_by('name')
+        queryset = queryset.filter(normalized_name__iregex="^" + Alias.normalize(alias))\
+            .order_by('name').prefetch_related('note')
 
         return queryset
 
