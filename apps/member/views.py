@@ -26,7 +26,6 @@ from note_kfet.middlewares import _set_current_user_and_ip
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin
-from wei.models import WEIClub
 
 from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm
 from .models import Club, Membership
@@ -432,7 +431,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"], weiclub=None)
             form.fields['credit_amount'].initial = club.membership_fee_paid
-            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not isinstance(club, WEIClub))
+            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
                                                                 & (Q(for_club__isnull=True) | Q(for_club=club))).all()
             form.fields['roles'].initial = Role.objects.filter(name="Membre de club").all()
 
@@ -453,7 +452,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             user = old_membership.user
             form.fields['user'].initial = user
             form.fields['user'].disabled = True
-            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not isinstance(club, WEIClub))
+            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
                                                                 & (Q(for_club__isnull=True) | Q(for_club=club))).all()
             form.fields['roles'].initial = old_membership.roles.all()
             form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
@@ -647,10 +646,10 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         del form.fields['bank']
 
         club = self.object.club
-        form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not isinstance(club, WEIClub))
+        form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
                                                             & (Q(for_club__isnull=True) | Q(for_club=club))).all()
 
         return form
 
     def get_success_url(self):
-        return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
+        return reverse_lazy('member:user_detail', kwargs={'pk': self.object.user.id})

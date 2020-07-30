@@ -801,7 +801,7 @@
 			],
 			"query": "{\"club\": [\"club\"]}",
 			"type": "view",
-			"mask": 1,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
 			"description": "View club's memberships"
@@ -833,7 +833,7 @@
 			],
 			"query": "{\"club\": [\"club\"]}",
 			"type": "change",
-			"mask": 2,
+			"mask": 3,
 			"field": "roles",
 			"permanent": false,
 			"description": "Update user roles"
@@ -2236,6 +2236,22 @@
 		"pk": 139,
 		"fields": {
 			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Create any noteclub"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 140,
+		"fields": {
+			"model": [
 				"member",
 				"club"
 			],
@@ -2245,6 +2261,38 @@
 			"field": "",
 			"permanent": false,
 			"description": "Create any club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 141,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{\"memberships__club\": [\"club\"], \"memberships__date__start__lte\": [\"today\"], \"memberships__date__end__gte\": [\"today\"]}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "View members of our club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 142,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "{\"club\": [\"club\"]}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "View club note"
 		}
 	},
 	{
@@ -2323,7 +2371,8 @@
 			"permissions": [
 				22,
 				47,
-				49
+				49,
+				140
 			]
 		}
 	},
@@ -2335,8 +2384,9 @@
 			"name": "Pr\u00e9sident\u00b7e de club",
 			"permissions": [
 				50,
-				51,
-				62
+				62,
+				141,
+				142
 			]
 		}
 	},
@@ -2356,7 +2406,9 @@
 				61,
 				62,
 				127,
-				133
+				133,
+				141,
+				142
 			]
 		}
 	},
@@ -2564,7 +2616,10 @@
 				136,
 				137,
 				138,
-				139
+				139,
+				140,
+				141,
+				142
 			]
 		}
 	},
