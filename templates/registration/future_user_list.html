@@ -32,7 +32,7 @@
             if (pattern === old_pattern || pattern === "")
                 return;
 
-            $("#user_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
+            $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
 
             $(".table-row").click(function() {
                 window.document.location = $(this).data("href");

@@ -92,7 +92,7 @@
      })
       .done(function() {
           addMsg('Invité supprimé','success');
-          $("#guests_table").load(location.href + " #guests_table");
+          $("#guests_table").load(location.pathname + " #guests_table");
       })
       .fail(function(xhr, textStatus, error) {
           errMsg(xhr.responseJSON);

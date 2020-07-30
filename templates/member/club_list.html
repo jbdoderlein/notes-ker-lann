@@ -36,7 +36,7 @@
 
         function reloadTable() {
             let pattern = searchbar_obj.val();
-            $("#club_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #club_table", init);
+            $("#club_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #club_table", init);
         }
 
         searchbar_obj.keyup(function() {

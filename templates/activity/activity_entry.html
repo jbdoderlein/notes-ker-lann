@@ -51,7 +51,7 @@
             if ((pattern === old_pattern || pattern === "") && !force)
                 return;
 
-            $("#entry_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #entry_table", init);
+            $("#entry_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #entry_table", init);
             refreshBalance();
         }
 

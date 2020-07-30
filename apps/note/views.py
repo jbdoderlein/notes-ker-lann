@@ -5,6 +5,7 @@ import json
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView
 from django_tables2 import SingleTableView
@@ -71,6 +72,19 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
     """
     model = TransactionTemplate
     table_class = ButtonTable
+
+    def get_queryset(self, **kwargs):
+        """
+        Filter the user list with the given pattern.
+        """
+        qs = super().get_queryset().distinct()
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+            qs = qs.filter(Q(name__iregex="^" + pattern) | Q(destination__club__name__iregex="^" + pattern))
+
+        qs = qs.order_by('-display', 'category__name', 'destination__club__name', 'name')
+
+        return qs
 
 
 class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):

@@ -1784,10 +1784,6 @@ msgstr ""
 msgid "Name of the button..."
 msgstr ""
 
-#: templates/note/transactiontemplate_list.html:16
-msgid "Display visible buttons only"
-msgstr ""
-
 #: templates/note/transactiontemplate_list.html:21
 msgid "New button"
 msgstr ""

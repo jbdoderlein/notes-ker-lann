@@ -1846,10 +1846,6 @@ msgstr "Chercher un bouton"
 msgid "Name of the button..."
 msgstr "Nom du bouton ..."
 
-#: templates/note/transactiontemplate_list.html:16
-msgid "Display visible buttons only"
-msgstr "N'afficher que les boutons visibles uniquement"
-
 #: templates/note/transactiontemplate_list.html:21
 msgid "New button"
 msgstr "Nouveau bouton"
