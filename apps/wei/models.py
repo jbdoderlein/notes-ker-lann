@@ -202,7 +202,7 @@ class WEIRegistration(models.Model):
     clothing_size = models.CharField(
         max_length=4,
         choices=(
-            ('XS',"XS"),
+            ('XS', "XS"),
             ('S', "S"),
             ('M', "M"),
             ('L', "L"),

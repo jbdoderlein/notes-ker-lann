@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from note_kfet.admin import admin_site
+
 from .models import WEIClub, WEIRegistration, WEIMembership, WEIRole, Bus, BusTeam
 
 admin_site.register(WEIClub)

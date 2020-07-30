@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from django.contrib.auth.models import User
+
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
 from note_kfet.middlewares import get_current_authenticated_user
@@ -50,9 +50,6 @@ def pre_save_object(sender, instance, **kwargs):
 
         # In the other case, we check if he/she has the right to change one field
         previous = qs.get()
-
-        if isinstance(instance, User) and instance.last_login != previous.last_login:
-            pass #return
 
         for field in instance._meta.fields:
             field_name = field.name

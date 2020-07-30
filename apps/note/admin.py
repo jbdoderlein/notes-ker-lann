@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from polymorphic.admin import PolymorphicChildModelAdmin, \
     PolymorphicChildModelFilter, PolymorphicParentModelAdmin
-
 from note_kfet.admin import admin_site
 
 from .models.notes import Alias, Note, NoteClub, NoteSpecial, NoteUser

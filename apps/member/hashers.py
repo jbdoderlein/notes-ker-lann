@@ -4,9 +4,8 @@
 import hashlib
 
 from django.conf import settings
-from django.contrib.auth.hashers import PBKDF2PasswordHasher, BasePasswordHasher
+from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.utils.crypto import constant_time_compare
-
 from note_kfet.middlewares import get_current_authenticated_user, get_current_session
 
 

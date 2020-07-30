@@ -4,8 +4,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-
 from note_kfet.admin import admin_site
+
 from .forms import ProfileForm
 from .models import Club, Membership, Profile
 

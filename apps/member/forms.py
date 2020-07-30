@@ -32,7 +32,6 @@ class UserForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'username', 'email',)
 
 
-
 class ProfileForm(forms.ModelForm):
     """
     A form for the extras field provided by the :model:`member.Profile` model.

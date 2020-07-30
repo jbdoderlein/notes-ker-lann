@@ -36,7 +36,7 @@ class PermissionBackend(ModelBackend):
             return Permission.objects.none()
 
         memberships = Membership.objects.filter(user=user).all()
-        
+
         perms = []
 
         for membership in memberships:
@@ -48,7 +48,6 @@ class PermissionBackend(ModelBackend):
                     perm.membership = membership
                     perms.append(perm)
         return perms
-
 
     @staticmethod
     def permissions(user, model, type):

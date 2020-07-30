@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-lateré
 
 from django.contrib import admin
-
 from note_kfet.admin import admin_site
+
 from .models import RemittanceType, Remittance, SogeCredit
 
 
