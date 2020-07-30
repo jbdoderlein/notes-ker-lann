@@ -8,6 +8,8 @@ from django.db.models import F
 from django.utils.html import format_html
 from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 
 from .models.notes import Alias
 from .models.transactions import Transaction, TransactionTemplate
@@ -52,14 +54,26 @@ class HistoryTable(tables.Table):
         attrs={
             "td": {
                 "id": lambda record: "validate_" + str(record.id),
-                "class": lambda record: str(record.valid).lower() + ' validate',
+                "class": lambda record:
+                str(record.valid).lower()
+                + (' validate' if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                               "note.change_transaction_invalidity_reason",
+                                                               record) else ''),
                 "data-toggle": "tooltip",
-                "title": lambda record: _("Click to invalidate") if record.valid else _("Click to validate"),
-                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')',
+                "title": lambda record: (_("Click to invalidate") if record.valid else _("Click to validate"))
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "note.change_transaction_invalidity_reason", record) else None,
+                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')'
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "note.change_transaction_invalidity_reason", record) else None,
                 "onmouseover": lambda record: '$("#invalidity_reason_'
                                               + str(record.id) + '").show();$("#invalidity_reason_'
-                                              + str(record.id) + '").focus();',
-                "onmouseout": lambda record: '$("#invalidity_reason_' + str(record.id) + '").hide()',
+                                              + str(record.id) + '").focus();'
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "note.change_transaction_invalidity_reason", record) else None,
+                "onmouseout": lambda record: '$("#invalidity_reason_' + str(record.id) + '").hide()'
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "note.change_transaction_invalidity_reason", record) else None,
             }
         }
     )
@@ -88,6 +102,10 @@ class HistoryTable(tables.Table):
         When the validation status is hovered, an input field is displayed to let the user specify an invalidity reason
         """
         val = "✔" if value else "✖"
+        if not PermissionBackend\
+                .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record):
+            return val
+
         val += "<input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
                + "' value='" + (html.escape(record.invalidity_reason)
                                 if record.invalidity_reason else ("" if value else str(_("No reason specified")))) \

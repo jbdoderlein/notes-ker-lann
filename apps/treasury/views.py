@@ -171,7 +171,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             del tex
 
             # The file has to be rendered twice
-            for _ in range(2):
+            for ignored in range(2):
                 error = subprocess.Popen(
                     ["pdflatex", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
