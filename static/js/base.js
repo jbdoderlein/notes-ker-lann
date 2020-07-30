@@ -95,6 +95,8 @@ function li(id, text, extra_css) {
  * @param note The concerned note.
  */
 function displayStyle(note) {
+    if (!note)
+        return "";
     let balance = note.balance;
     var css = "";
     if (balance < -5000)
@@ -274,7 +276,6 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                 field.attr('data-original-title', aliases_matched_html).tooltip('show');
 
                 consumers.results.forEach(function (consumer) {
-                    let note = consumer.note;
                     let consumer_obj = $("#" + alias_prefix + "_" + consumer.id);
                     consumer_obj.hover(function () {
                         displayNote(consumer.note, consumer.name, user_note_field, profile_pic_field)
@@ -282,8 +283,8 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                     consumer_obj.click(function () {
                         var disp = null;
                         notes_display.forEach(function (d) {
-                            // We compare the note ids
-                            if (d.id === note.id) {
+                            // We compare the alias ids
+                            if (d.id === consumer.id) {
                                 d.quantity += 1;
                                 disp = d;
                             }
@@ -293,7 +294,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                             disp = {
                                 name: consumer.name,
                                 id: consumer.id,
-                                note: note,
+                                note: consumer.note,
                                 quantity: 1
                             };
                             notes_display.push(disp);
