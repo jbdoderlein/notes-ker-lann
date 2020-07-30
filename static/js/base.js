@@ -130,7 +130,6 @@ function displayNote(note, alias, user_note_field = null, profile_pic_field = nu
         if (profile_pic_field != null) {
             $("#" + profile_pic_field).attr('src', img);
             $("#" + profile_pic_field).click(function () {
-                console.log(note);
                 if (note.resourcetype === "NoteUser") {
                     document.location.href = "/accounts/user/" + note.user;
                 } else if (note.resourcetype === "NoteClub") {
@@ -223,9 +222,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 
     // When the user type "Enter", the first alias is clicked
     field.keypress(function (event) {
-            console.log(notes);
         if (event.originalEvent.charCode === 13 && notes.length > 0) {
-            console.log(42);
             let li_obj = field.parent().find("ul li").first();
             displayNote(notes[0], li_obj.text(), user_note_field, profile_pic_field);
             li_obj.trigger("click");

@@ -7,7 +7,7 @@ function refreshHistory() {
     $("#history").load("/note/transfer/ #history");
 }
 
-function reset() {
+function reset(refresh=true) {
     sources_notes_display.length = 0;
     sources.length = 0;
     dests_notes_display.length = 0;
@@ -21,8 +21,10 @@ function reset() {
     $("#bank").val("");
     $("#user_note").val("");
     $("#profile_pic").attr("src", "/media/pic/default.png");
-    refreshBalance();
-    refreshHistory();
+    if (refresh) {
+        refreshBalance();
+        refreshHistory();
+    }
 }
 
 $(document).ready(function() {
@@ -138,15 +140,18 @@ $(document).ready(function() {
 
     $("#source_me").click(function() {
         // Shortcut to set the current user as the only emitter
-        reset();
+        reset(false);
 
         let source_note = $("#source_note");
         source_note.focus();
-        source_note.val(username);
+        source_note.val("");
         let event = jQuery.Event("keyup");
-        event.originalEvent = {charCode: 0};
+        event.originalEvent = {charCode: 97};
         source_note.trigger(event);
-        console.log(sources.length);
+        source_note.val(username);
+        event = jQuery.Event("keyup");
+        event.originalEvent = {charCode: 97};
+        source_note.trigger(event);
         let fill_note = function() {
             if (sources.length === 0) {
                 setTimeout(fill_note, 100);
