@@ -23,6 +23,7 @@ from .tables import ActivityTable, GuestTable, EntryTable
 class ActivityCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Activity
     form_class = ActivityForm
+    extra_context = {"title": _("Create new activity")}
 
     def form_valid(self, form):
         form.instance.creater = self.request.user
@@ -37,14 +38,13 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
     model = Activity
     table_class = ActivityTable
     ordering = ('-date_start',)
+    extra_context = {"title": _("Activities")}
 
     def get_queryset(self):
         return super().get_queryset().distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['title'] = _("Activities")
 
         upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
         context['upcoming'] = ActivityTable(
@@ -58,6 +58,7 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
 class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = Activity
     context_object_name = "activity"
+    extra_context = {"title": _("Activity detail")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -74,6 +75,7 @@ class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = Activity
     form_class = ActivityForm
+    extra_context = {"title": _("Update activity")}
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
@@ -83,6 +85,12 @@ class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Guest
     form_class = GuestForm
     template_name = "activity/activity_invite.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        activity = context["form"].activity
+        context["title"] = _('Invite guest to the activity "{}"').format(activity.name)
+        return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)

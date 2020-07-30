@@ -4,9 +4,6 @@
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
-        <h4>
-            {% trans "search clubs" %}
-        </h4>
         <input class="form-control mx-auto w-25" type="text" id="search_field"/>
         <hr>
         <a class="btn btn-primary text-center my-4" href="{% url 'member:club_create' %}">{% trans "Create club" %}</a>

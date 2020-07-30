@@ -5,9 +5,6 @@
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
-        <h4>
-            {% trans "Search button" %}
-        </h4>
         <input class="form-control mx-auto w-25" type="text" id="search_field" placeholder="{% trans "Name of the button..." %}">
         <hr>
         <a class="btn btn-primary text-center my-1" href="{% url 'note:template_create' %}">{% trans "New button" %}</a>

@@ -30,6 +30,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     model = Transaction
     # Transaction history table
     table_class = HistoryTable
+    extra_context = {"title": _("Transfer money")}
 
     def get_queryset(self, **kwargs):
         return super().get_queryset(**kwargs).order_by("-created_at").all()[:20]
@@ -39,7 +40,6 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Transfer money')
         context['amount_widget'] = AmountInput(attrs={"id": "amount"})
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
         context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
@@ -64,6 +64,7 @@ class TransactionTemplateCreateView(ProtectQuerysetMixin, LoginRequiredMixin, Cr
     model = TransactionTemplate
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
+    extra_context = {"title": _("Create new button")}
 
 
 class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -72,6 +73,7 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
     """
     model = TransactionTemplate
     table_class = ButtonTable
+    extra_context = {"title": _("Search button")}
 
     def get_queryset(self, **kwargs):
         """
@@ -94,6 +96,7 @@ class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, Up
     model = TransactionTemplate
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
+    extra_context = {"title": _("Update button")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,6 +133,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     model = Transaction
     template_name = "note/conso_form.html"
+    extra_context = {"title": _("Consumptions")}
 
     # Transaction history table
     table_class = HistoryTable
@@ -151,7 +155,6 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         context['highlighted'] = TransactionTemplate.objects.filter(highlighted=True).filter(
             PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
         ).order_by('name').all()
-        context['title'] = _("Consumptions")
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
         # select2 compatibility

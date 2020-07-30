@@ -35,6 +35,7 @@ class UserCreateView(CreateView):
     form_class = SignUpForm
     template_name = 'registration/signup.html'
     second_form = ProfileForm
+    extra_context = {"title": _("Register new user")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -78,6 +79,7 @@ class UserValidateView(TemplateView):
     """
     title = _("Email validation")
     template_name = 'registration/email_validation_complete.html'
+    extra_context = {"title": _("Validate a registration")}
 
     def get(self, *args, **kwargs):
         """
@@ -133,7 +135,7 @@ class UserValidationEmailSentView(TemplateView):
     Display the information that the validation link has been sent.
     """
     template_name = 'registration/email_validation_email_sent.html'
-    title = _('Email validation email sent')
+    extra_context = {"title": _('Email validation email sent')}
 
 
 class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, DetailView):
@@ -141,6 +143,7 @@ class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, De
     Rensend the email validation link.
     """
     model = User
+    extra_context = {"title": _("Resend email validation link")}
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
@@ -158,6 +161,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
     model = User
     table_class = FutureUserTable
     template_name = 'registration/future_user_list.html'
+    extra_context = {"title": _("Pre-registered users list")}
 
     def get_queryset(self, **kwargs):
         """
@@ -199,6 +203,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
     form_class = ValidationForm
     context_object_name = "user_object"
     template_name = "registration/future_profile_detail.html"
+    extra_context = {"title": _("Registration detail")}
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -355,6 +360,7 @@ class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
     """
     Delete a pre-registered user.
     """
+    extra_context = {"title": _("Invalidate pre-registration")}
 
     def get(self, request, *args, **kwargs):
         """

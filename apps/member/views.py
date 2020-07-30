@@ -53,6 +53,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     form_class = UserForm
     template_name = 'member/profile_update.html'
     context_object_name = 'user_object'
+    extra_context = {"title": _("Update Profile")}
 
     profile_form = ProfileForm
 
@@ -68,7 +69,6 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.fields['email'].help_text = _("This address must be valid.")
 
         context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
-        context['title'] = _("Update Profile")
         return context
 
     def form_valid(self, form):
@@ -123,6 +123,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = User
     context_object_name = "user_object"
     template_name = "member/profile_detail.html"
+    extra_context = {"title": _("Profile detail")}
 
     def get_queryset(self, **kwargs):
         """
@@ -156,6 +157,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = User
     table_class = UserTable
     template_name = 'member/user_list.html'
+    extra_context = {"title": _("Search user")}
 
     def get_queryset(self, **kwargs):
         """
@@ -181,13 +183,6 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
         return qs[:20]
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context["title"] = _("Search user")
-
-        return context
-
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
@@ -196,6 +191,7 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = User
     template_name = 'member/profile_alias.html'
     context_object_name = 'user_object'
+    extra_context = {"title": _("Note aliases")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -209,6 +205,7 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
     Update profile picture of the user note.
     """
     form_class = ImageForm
+    extra_context = {"title": _("Update note picture")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -266,6 +263,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     """
     model = Token
     template_name = "member/manage_auth_tokens.html"
+    extra_context = {"title": _("Manage auth token")}
 
     def get(self, request, *args, **kwargs):
         if 'regenerate' in request.GET and Token.objects.filter(user=request.user).exists():
@@ -293,6 +291,7 @@ class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Club
     form_class = ClubForm
     success_url = reverse_lazy('member:club_list')
+    extra_context = {"title": _("Create new club")}
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -304,6 +303,7 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     model = Club
     table_class = ClubTable
+    extra_context = {"title": _("Search club")}
 
     def get_queryset(self, **kwargs):
         """
@@ -328,6 +328,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
     model = Club
     context_object_name = "club"
+    extra_context = {"title": _("Club detail")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -372,6 +373,7 @@ class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = Club
     template_name = 'member/club_alias.html'
     context_object_name = 'club'
+    extra_context = {"title": _("Note aliases")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -388,6 +390,7 @@ class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     context_object_name = "club"
     form_class = ClubForm
     template_name = "member/club_form.html"
+    extra_context = {"title": _("Update club")}
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -421,6 +424,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
+    extra_context = {"title": _("Add new member to the club")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -627,6 +631,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = Membership
     form_class = MembershipForm
     template_name = 'member/add_members.html'
+    extra_context = {"title": _("Manage roles of an user in the club")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

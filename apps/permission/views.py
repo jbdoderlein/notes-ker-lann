@@ -41,6 +41,7 @@ class ProtectQuerysetMixin:
 
 class RightsView(TemplateView):
     template_name = "permission/all_rights.html"
+    extra_context = {"title": _("Rights")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

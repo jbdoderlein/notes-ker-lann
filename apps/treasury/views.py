@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import BaseFormView
@@ -35,6 +36,7 @@ class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = Invoice
     form_class = InvoiceForm
+    extra_context = {"title": _("Create new invoice")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,6 +79,7 @@ class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView)
     """
     model = Invoice
     table_class = InvoiceTable
+    extra_context = {"title": _("Invoices list")}
 
 
 class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -85,6 +88,7 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = Invoice
     form_class = InvoiceForm
+    extra_context = {"title": _("Update an invoice")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -198,6 +202,7 @@ class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView)
     """
     model = Remittance
     form_class = RemittanceForm
+    extra_context = {"title": _("Create a new remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -218,6 +223,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     List existing Remittances
     """
     template_name = "treasury/remittance_list.html"
+    extra_context = {"title": _("Remittances list")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -267,6 +273,7 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
     """
     model = Remittance
     form_class = RemittanceForm
+    extra_context = {"title": _("Update a remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -289,9 +296,9 @@ class LinkTransactionToRemittanceView(ProtectQuerysetMixin, LoginRequiredMixin, 
     """
     Attach a special transaction to a remittance
     """
-
     model = SpecialTransactionProxy
     form_class = LinkTransactionToRemittanceForm
+    extra_context = {"title": _("Attach a transaction to a remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -335,6 +342,7 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
     """
     model = SogeCredit
     table_class = SogeCreditTable
+    extra_context = {"title": _("List of credits from the Société générale")}
 
     def get_queryset(self, **kwargs):
         """
@@ -373,6 +381,7 @@ class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormVie
     """
     model = SogeCredit
     form_class = Form
+    extra_context = {"title": _("Manage credits from the Société générale")}
 
     def form_valid(self, form):
         if "validate" in form.data:
