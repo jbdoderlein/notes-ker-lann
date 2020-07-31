@@ -54,6 +54,11 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     ordering = '-year'
     extra_context = {"title": _("Search WEI")}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub())
+        return context
+
 
 class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
