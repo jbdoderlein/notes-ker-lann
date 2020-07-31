@@ -1889,8 +1889,8 @@ msgid "Club listing"
 msgstr "Liste des clubs"
 
 #: templates/member/club_tables.html:7
-msgid "Member of the Club"
-msgstr "Membre du club"
+msgid "Club members"
+msgstr "Membres du club"
 
 #: templates/member/club_tables.html:20 templates/member/profile_tables.html:28
 #: templates/wei/weiclub_tables.html:105

@@ -3,8 +3,8 @@
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
-                <i class="fa fa-users"></i> {% trans "Member of the Club" %}
+            <a class="btn btn-link stretched-link font-weight-bold" href="{% url 'member:club_members' pk=club.pk %}">
+                <i class="fa fa-users"></i> {% trans "Club members" %}
             </a>
         </div>
         {% render_table member_list %}

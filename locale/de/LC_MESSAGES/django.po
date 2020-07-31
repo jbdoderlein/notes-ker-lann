@@ -1829,7 +1829,7 @@ msgid "Club listing"
 msgstr ""
 
 #: templates/member/club_tables.html:7
-msgid "Member of the Club"
+msgid "Club members"
 msgstr ""
 
 #: templates/member/club_tables.html:20 templates/member/profile_tables.html:28

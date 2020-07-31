@@ -13,6 +13,7 @@ from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
@@ -349,7 +350,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
         membership_table = MembershipTable(data=club_member, prefix="membership-")
-        membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        membership_table.paginate(per_page=5, page=self.request.GET.get('membership-page', 1))
         context['member_list'] = membership_table
 
         # Check if the user has the right to create a membership, to display the button.
@@ -652,3 +653,40 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('member:user_detail', kwargs={'pk': self.object.user.id})
+
+
+class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+    model = Membership
+    table_class = MembershipTable
+    template_name = "member/club_members.html"
+    extra_context = {"title": _("Members of the club")}
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset().filter(club_id=self.kwargs["pk"])
+
+        if 'search' in self.request.GET:
+            pattern = self.request.GET['search']
+            qs = qs.filter(
+                Q(user__first_name__iregex='^' + pattern) |
+                Q(user__last_name__iregex='^' + pattern) |
+                Q(user__note__alias__normalized_name__iregex='^' + Alias.normalize(pattern))
+            )
+
+        if 'only_active' in self.request.GET:
+            only_active = self.request.GET["only_active"] != '0'
+        else:
+            only_active = True
+
+        if only_active:
+            qs = qs.filter(date_start__lte=timezone.now().today(), date_end__gte=timezone.now().today())
+
+        qs = qs.order_by('-date_start', 'user__username')
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["club"] = Club.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Club, "view")
+        ).get(pk=self.kwargs["pk"])
+        return context
