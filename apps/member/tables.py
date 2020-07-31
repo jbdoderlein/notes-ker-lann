@@ -130,3 +130,31 @@ class MembershipTable(tables.Table):
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user', 'club', 'date_start', 'date_end', 'roles', 'fee', )
         model = Membership
+
+
+class ClubManagerTable(tables.Table):
+    """
+    List managers of a club.
+    """
+
+    def render_user(self, value):
+        # If the user has the right, link the displayed user with the page of its detail.
+        s = value.username
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "auth.view_user", value):
+            s = format_html("<a href={url}>{name}</a>",
+                            url=reverse_lazy('member:user_detail', kwargs={"pk": value.pk}), name=s)
+
+        return s
+
+    def render_roles(self, record):
+        roles = record.roles.all()
+        return ", ".join(str(role) for role in roles)
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover',
+            'style': 'table-layout: fixed;'
+        }
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('user', 'user.first_name', 'user.last_name', 'roles', )
+        model = Membership

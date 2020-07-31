@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-30 17:22+0200\n"
+"POT-Creation-Date: 2020-07-31 17:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,12 +187,12 @@ msgstr "supprimer"
 msgid "Type"
 msgstr "Type"
 
-#: apps/activity/tables.py:77 apps/member/forms.py:104
+#: apps/activity/tables.py:77 apps/member/forms.py:102
 #: apps/registration/forms.py:64 apps/treasury/forms.py:120
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: apps/activity/tables.py:79 apps/member/forms.py:109
+#: apps/activity/tables.py:79 apps/member/forms.py:107
 #: apps/registration/forms.py:69 apps/treasury/forms.py:122
 #: templates/note/transaction_form.html:126
 msgid "First name"
@@ -262,12 +262,12 @@ msgstr "Nouvelles données"
 msgid "create"
 msgstr "Créer"
 
-#: apps/logs/models.py:61 apps/note/tables.py:143
+#: apps/logs/models.py:61 apps/note/tables.py:161
 #: templates/activity/activity_detail.html:67
 msgid "edit"
 msgstr "Modifier"
 
-#: apps/logs/models.py:62 apps/note/tables.py:120 apps/note/tables.py:148
+#: apps/logs/models.py:62 apps/note/tables.py:138 apps/note/tables.py:166
 #: apps/wei/tables.py:65
 msgid "delete"
 msgstr "Supprimer"
@@ -296,38 +296,46 @@ msgstr "journaux de modifications"
 msgid "member"
 msgstr "adhérent"
 
-#: apps/member/forms.py:58 apps/member/views.py:81
+#: apps/member/forms.py:58 apps/member/views.py:82
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
-#: apps/member/forms.py:83 apps/registration/forms.py:44
+#: apps/member/forms.py:81 apps/registration/forms.py:44
 msgid "Inscription paid by Société Générale"
 msgstr "Inscription payée par la Société générale"
 
-#: apps/member/forms.py:85 apps/registration/forms.py:46
+#: apps/member/forms.py:83 apps/registration/forms.py:46
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
-#: apps/member/forms.py:90 apps/registration/forms.py:51
+#: apps/member/forms.py:88 apps/registration/forms.py:51
 msgid "Credit type"
 msgstr "Type de rechargement"
 
-#: apps/member/forms.py:91 apps/registration/forms.py:52
+#: apps/member/forms.py:89 apps/registration/forms.py:52
 msgid "No credit"
 msgstr "Pas de rechargement"
 
-#: apps/member/forms.py:93
+#: apps/member/forms.py:91
 msgid "You can credit the note of the user."
 msgstr "Vous pouvez créditer la note de l'utisateur avant l'adhésion."
 
-#: apps/member/forms.py:97 apps/registration/forms.py:57
+#: apps/member/forms.py:95 apps/registration/forms.py:57
 msgid "Credit amount"
 msgstr "Montant à créditer"
 
-#: apps/member/forms.py:114 apps/registration/forms.py:74
+#: apps/member/forms.py:112 apps/registration/forms.py:74
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:132
 msgid "Bank"
 msgstr "Banque"
+
+#: apps/member/forms.py:138
+msgid "User"
+msgstr "Utilisateur"
+
+#: apps/member/forms.py:152
+msgid "Roles"
+msgstr "Rôles"
 
 #: apps/member/models.py:34
 #: templates/registration/future_profile_detail.html:40
@@ -530,7 +538,7 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:303 apps/member/views.py:535 apps/wei/views.py:787
+#: apps/member/models.py:303 apps/member/views.py:534 apps/wei/views.py:787
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -539,7 +547,7 @@ msgstr "L'utilisateur n'est pas membre du club parent"
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:321 apps/member/views.py:544
+#: apps/member/models.py:321 apps/member/views.py:543
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
@@ -560,57 +568,57 @@ msgstr "adhésions"
 msgid "Renew"
 msgstr "Renouveler"
 
-#: apps/member/views.py:56 templates/member/profile_info.html:47
+#: apps/member/views.py:57 templates/member/profile_info.html:47
 #: templates/registration/future_profile_detail.html:48
 #: templates/wei/weimembership_form.html:130
 msgid "Update Profile"
 msgstr "Modifier le profil"
 
-#: apps/member/views.py:69 apps/registration/forms.py:23
+#: apps/member/views.py:70 apps/registration/forms.py:23
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:126
+#: apps/member/views.py:127
 msgid "Profile detail"
 msgstr "Détails de l'utilisateur"
 
-#: apps/member/views.py:160
+#: apps/member/views.py:161
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:194 apps/member/views.py:376
+#: apps/member/views.py:195 apps/member/views.py:381
 msgid "Note aliases"
 msgstr "Alias de la note"
 
-#: apps/member/views.py:208
+#: apps/member/views.py:209
 msgid "Update note picture"
 msgstr "Modifier la photo de la note"
 
-#: apps/member/views.py:266 templates/member/profile_info.html:43
+#: apps/member/views.py:267 templates/member/profile_info.html:43
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: apps/member/views.py:294
+#: apps/member/views.py:295
 msgid "Create new club"
 msgstr "Créer un nouveau club"
 
-#: apps/member/views.py:306
+#: apps/member/views.py:307
 msgid "Search club"
 msgstr "Chercher un club"
 
-#: apps/member/views.py:331
+#: apps/member/views.py:332
 msgid "Club detail"
 msgstr "Détails du club"
 
-#: apps/member/views.py:393
+#: apps/member/views.py:398
 msgid "Update club"
 msgstr "Modifier le club"
 
-#: apps/member/views.py:427
+#: apps/member/views.py:432
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:530 apps/wei/views.py:778
+#: apps/member/views.py:529 apps/wei/views.py:778
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -618,23 +626,27 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:548
+#: apps/member/views.py:547
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:553
+#: apps/member/views.py:552
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:570 apps/member/views.py:572 apps/member/views.py:574
+#: apps/member/views.py:569 apps/member/views.py:571 apps/member/views.py:573
 #: apps/registration/views.py:295 apps/registration/views.py:297
 #: apps/registration/views.py:299
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
-#: apps/member/views.py:634
+#: apps/member/views.py:641
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
+
+#: apps/member/views.py:666
+msgid "Members of the club"
+msgstr "Membres du club"
 
 #: apps/note/admin.py:121 apps/note/models/transactions.py:106
 msgid "source"
@@ -792,7 +804,7 @@ msgid "transaction templates"
 msgstr "modèles de transaction"
 
 #: apps/note/models/transactions.py:112 apps/note/models/transactions.py:125
-#: apps/note/tables.py:33 apps/note/tables.py:42
+#: apps/note/tables.py:35 apps/note/tables.py:44
 msgid "used alias"
 msgstr "alias utilisé"
 
@@ -804,7 +816,7 @@ msgstr "quantité"
 msgid "reason"
 msgstr "raison"
 
-#: apps/note/models/transactions.py:151 apps/note/tables.py:95
+#: apps/note/models/transactions.py:151 apps/note/tables.py:113
 msgid "invalidity reason"
 msgstr "Motif d'invalidité"
 
@@ -870,25 +882,25 @@ msgstr "Transaction d'adhésion"
 msgid "membership transactions"
 msgstr "Transactions d'adhésion"
 
-#: apps/note/tables.py:57
+#: apps/note/tables.py:63
 msgid "Click to invalidate"
 msgstr "Cliquez pour dévalider"
 
-#: apps/note/tables.py:57
+#: apps/note/tables.py:63
 msgid "Click to validate"
 msgstr "Cliquez pour valider"
 
-#: apps/note/tables.py:93
+#: apps/note/tables.py:111
 msgid "No reason specified"
 msgstr "Pas de motif spécifié"
 
-#: apps/note/tables.py:122 apps/note/tables.py:150 apps/wei/tables.py:66
+#: apps/note/tables.py:140 apps/note/tables.py:168 apps/wei/tables.py:66
 #: templates/treasury/sogecredit_detail.html:59
 #: templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
 msgstr "Supprimer"
 
-#: apps/note/tables.py:145 apps/wei/tables.py:42 apps/wei/tables.py:43
+#: apps/note/tables.py:163 apps/wei/tables.py:42 apps/wei/tables.py:43
 #: templates/member/club_info.html:67 templates/note/conso_form.html:128
 #: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
 #: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:68
@@ -1888,11 +1900,28 @@ msgstr "Créer un club"
 msgid "Club listing"
 msgstr "Liste des clubs"
 
+#: templates/member/club_members.html:16
+msgid "Display only active memberships"
+msgstr "N'afficher que les adhésions encore valides"
+
+#: templates/member/club_members.html:21
+msgid "Filter roles:"
+msgstr "Filtrer par rôle :"
+
+#: templates/member/club_members.html:37
+#: templates/wei/weimembership_list.html:18
+msgid "There is no membership found with this pattern."
+msgstr "Il n'y a pas d'adhésion trouvée avec cette entrée."
+
 #: templates/member/club_tables.html:7
+msgid "Club managers"
+msgstr "Bureau du club"
+
+#: templates/member/club_tables.html:20
 msgid "Club members"
 msgstr "Membres du club"
 
-#: templates/member/club_tables.html:20 templates/member/profile_tables.html:28
+#: templates/member/club_tables.html:33 templates/member/profile_tables.html:28
 #: templates/wei/weiclub_tables.html:105
 msgid "Transaction history"
 msgstr "Historique des transactions"
@@ -2590,10 +2619,6 @@ msgstr ""
 "valider\n"
 "l'inscription au WEI.\n"
 "                        "
-
-#: templates/wei/weimembership_list.html:18
-msgid "There is no membership found with this pattern."
-msgstr "Il n'y a pas d'adhésion trouvée avec cette entrée."
 
 #: templates/wei/weimembership_list.html:24
 msgid "View unvalidated registrations..."

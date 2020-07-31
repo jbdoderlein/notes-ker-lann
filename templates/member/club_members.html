@@ -3,11 +3,30 @@
 {% load render_table from django_tables2 %}
 
 {% block profile_info %}
-{% include "member/club_info.html" %}
+    {% include "member/club_info.html" %}
 {% endblock %}
 
 {% block profile_content %}
     <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+    <div class="form-group">
+        <div class="form-check">
+            <label class="form-check-label" for="only_active">
+                <input type="checkbox" class="checkboxinput form-check-input" id="only_active"
+                       {% if only_active %}checked{% endif %}>
+                {% trans "Display only active memberships" %}
+            </label>
+        </div>
+    </div>
+    <div id="div_id_roles" class="form-group">
+        <label for="id_roles" class="col-form-label">{% trans "Filter roles:" %}</label>
+        <div class="">
+            <select name="roles" class="selectmultiple form-control" id="roles" multiple="">
+                {% for role in applicable_roles %}
+                    <option value="{{ role.id }}" selected>{{ role.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <hr>
 
     <div id="memberships_table">
@@ -22,21 +41,29 @@
 {% endblock %}
 
 {% block extrajavascript %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        let old_pattern = null;
-        let searchbar_obj = $("#searchbar");
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let searchbar_obj = $("#searchbar");
+            let only_active_obj = $("#only_active");
+            let roles_obj = $("#roles");
 
-        function reloadTable() {
-            let pattern = searchbar_obj.val();
+            function reloadTable() {
+                let pattern = searchbar_obj.val();
 
-            if (pattern === old_pattern)
-                return;
+                let roles = [];
+                $("#roles option:selected").each(function() {
+                    roles.push($(this).val());
+                });
+                let roles_str = roles.join(',');
 
-            $("#memberships_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #memberships_table");
-        }
+                $("#memberships_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20")
+                    + "&only_active=" + (only_active_obj.is(':checked') ? '1' : '0')
+                    + "&roles=" + roles_str + " #memberships_table");
+            }
 
-        searchbar_obj.keyup(reloadTable);
-    });
-</script>
+            searchbar_obj.keyup(reloadTable);
+            only_active_obj.change(reloadTable);
+            roles_obj.change(reloadTable);
+        });
+    </script>
 {% endblock %}

@@ -30,7 +30,7 @@ from permission.views import ProtectQuerysetMixin
 
 from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm, MembershipRolesForm
 from .models import Club, Membership
-from .tables import ClubTable, UserTable, MembershipTable
+from .tables import ClubTable, UserTable, MembershipTable, ClubManagerTable
 
 
 class CustomLoginView(LoginView):
@@ -337,6 +337,10 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club = context["club"]
         if PermissionBackend.check_perm(self.request.user, "member.change_club_membership_start", club):
             club.update_membership_dates()
+
+        managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club")\
+            .order_by('user__last_name').all()
+        context["managers"] = ClubManagerTable(data=managers, prefix="managers-")
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
@@ -672,13 +676,17 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
                 Q(user__note__alias__normalized_name__iregex='^' + Alias.normalize(pattern))
             )
 
-        if 'only_active' in self.request.GET:
-            only_active = self.request.GET["only_active"] != '0'
-        else:
-            only_active = True
+        only_active = "only_active" not in self.request.GET or self.request.GET["only_active"] != '0'
 
         if only_active:
             qs = qs.filter(date_start__lte=timezone.now().today(), date_end__gte=timezone.now().today())
+
+        if "roles" in self.request.GET:
+            if not self.request.GET["roles"]:
+                return qs.none()
+            roles_str = self.request.GET["roles"].replace(' ', '').split(',')
+            roles_int = map(int, roles_str)
+            qs = qs.filter(roles__in=roles_int)
 
         qs = qs.order_by('-date_start', 'user__username')
 
@@ -686,7 +694,15 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["club"] = Club.objects.filter(
+        club = Club.objects.filter(
             PermissionBackend.filter_queryset(self.request.user, Club, "view")
         ).get(pk=self.kwargs["pk"])
+        context["club"] = club
+
+        applicable_roles = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
+                                               & (Q(for_club__isnull=True) | Q(for_club=club))).all()
+        context["applicable_roles"] = applicable_roles
+
+        context["only_active"] = "only_active" not in self.request.GET or self.request.GET["only_active"] != '0'
+
         return context
