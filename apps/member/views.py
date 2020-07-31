@@ -27,7 +27,7 @@ from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
-from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm
+from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm, MembershipRolesForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable
 
@@ -435,9 +435,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"], weiclub=None)
             form.fields['credit_amount'].initial = club.membership_fee_paid
-            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
-                                                                & (Q(for_club__isnull=True) | Q(for_club=club))).all()
-            form.fields['roles'].initial = Role.objects.filter(name="Membre de club").all()
 
             # If the concerned club is the BDE, then we add the option that Société générale pays the membership.
             if club.name != "BDE":
@@ -456,9 +453,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             user = old_membership.user
             form.fields['user'].initial = user
             form.fields['user'].disabled = True
-            form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
-                                                                & (Q(for_club__isnull=True) | Q(for_club=club))).all()
-            form.fields['roles'].initial = old_membership.roles.all()
             form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
             form.fields['credit_amount'].initial = club.membership_fee_paid if user.profile.paid \
                 else club.membership_fee_unpaid
@@ -588,6 +582,10 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         ret = super().form_valid(form)
 
+        member_role = Role.objects.filter(name="Membre de club").all()
+        form.instance.roles.set(member_role)
+        form.instance.save()
+
         # If Société générale pays, then we assume that this is the BDE membership, and we auto-renew the
         # Kfet membership.
         if soge:
@@ -629,7 +627,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     Manage the roles of a user in a club
     """
     model = Membership
-    form_class = MembershipForm
+    form_class = MembershipRolesForm
     template_name = 'member/add_members.html'
     extra_context = {"title": _("Manage roles of an user in the club")}
 
@@ -641,14 +639,6 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        # We don't create a full membership, we only update one field
-        form.fields['user'].disabled = True
-        del form.fields['date_start']
-        del form.fields['credit_type']
-        del form.fields['credit_amount']
-        del form.fields['last_name']
-        del form.fields['first_name']
-        del form.fields['bank']
 
         club = self.object.club
         form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))

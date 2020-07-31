@@ -77,8 +77,6 @@ class ClubForm(forms.ModelForm):
 
 
 class MembershipForm(forms.ModelForm):
-    roles = forms.ModelMultipleChoiceField(queryset=Role.objects.filter(weirole=None).all())
-
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,
@@ -117,7 +115,7 @@ class MembershipForm(forms.ModelForm):
 
     class Meta:
         model = Membership
-        fields = ('user', 'roles', 'date_start')
+        fields = ('user', 'date_start')
         # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
         # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
         # et récupère les noms d'utilisateur valides
@@ -133,3 +131,27 @@ class MembershipForm(forms.ModelForm):
                 ),
             'date_start': DatePickerInput(),
         }
+
+class MembershipRolesForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        queryset=User.objects,
+        label=_("User"),
+        disabled=True,
+        widget=Autocomplete(
+                    User,
+                    attrs={
+                        'api_url': '/api/user/',
+                        'name_field': 'username',
+                        'placeholder': 'Nom ...',
+                    },
+                ),
+    )
+
+    roles = forms.ModelMultipleChoiceField(
+        queryset=Role.objects.filter(weirole=None).all(),
+        label=_("Roles"),
+    )
+
+    class Meta:
+        model = Membership
+        fields = ('user', 'roles')
