@@ -568,7 +568,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                     form.add_error('bank', _("This field is required."))
                 return self.form_invalid(form)
 
-            SpecialTransaction.objects.create(
+            transaction = SpecialTransaction(
                 source=credit_type,
                 destination=user.note,
                 quantity=1,
@@ -579,11 +579,14 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 bank=bank,
                 valid=True,
             )
+            transaction._force_save = True
+            transaction.save()
 
         ret = super().form_valid(form)
 
         member_role = Role.objects.filter(name="Membre de club").all()
         form.instance.roles.set(member_role)
+        form.instance._force_save = True
         form.instance.save()
 
         # If Société générale pays, then we assume that this is the BDE membership, and we auto-renew the
@@ -607,6 +610,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 date_start=old_membership.get().date_end + timedelta(days=1)
                 if old_membership.exists() else form.instance.date_start,
             )
+            membership._force_save = True
             membership._soge = True
             membership.save()
             membership.refresh_from_db()
