@@ -189,7 +189,7 @@ $("#btn_transfer").click(function() {
                     }).done(function () {
                         addMsg("Le transfert de "
                             + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                            + " vers la note " + dest.name + " a été fait avec succès !", "success");
+                            + " vers la note " + dest.name + " a été fait avec succès !", "success", 10000);
 
                         reset();
                     }).fail(function (err) { // do it again but valid = false
@@ -210,15 +210,11 @@ $("#btn_transfer").click(function() {
                         }).done(function () {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                                + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger");
-
-                            reset();
+                                + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger", 10000);
                         }).fail(function (err) {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
-
-                            reset();
+                                + " vers la note " + dest.name + " a échoué : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
                     });
                 });
             });
@@ -261,11 +257,10 @@ $("#btn_transfer").click(function() {
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
             }).done(function () {
-                addMsg("Le crédit/retrait a bien été effectué !", "success");
+                addMsg("Le crédit/retrait a bien été effectué !", "success", 10000);
                 reset();
             }).fail(function (err) {
-                addMsg("Le crédit/retrait a échoué : " + err.responseText, "danger");
-                reset();
+                addMsg("Le crédit/retrait a échoué : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
         });
     }
 });

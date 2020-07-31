@@ -369,7 +369,7 @@ function de_validate(id, validated) {
         },
         error: function (err) {
             addMsg("Une erreur est survenue lors de la validation/dévalidation " +
-                "de cette transaction : " + err.responseText, "danger");
+                "de cette transaction : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
 
             refreshBalance();
             // error if this method doesn't exist. Please define it.
