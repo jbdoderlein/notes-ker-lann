@@ -161,8 +161,8 @@
             {% if button.display %}
                 $("#highlighted_button{{ button.id }}").click(function() {
                     addConso({{ button.destination_id }}, {{ button.amount }},
-                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name }}",
-                        {{ button.id }}, "{{ button.name }}");
+                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name|escapejs }}",
+                        {{ button.id }}, "{{ button.name|escapejs }}");
                 });
             {% endif %}
         {% endfor %}
@@ -172,8 +172,8 @@
             {% if button.display %}
                 $("#button{{ button.id }}").click(function() {
                     addConso({{ button.destination_id }}, {{ button.amount }},
-                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name }}",
-                        {{ button.id }}, "{{ button.name }}");
+                        {{ polymorphic_ctype }}, {{ button.category_id }}, "{{ button.category.name|escapejs }}",
+                        {{ button.id }}, "{{ button.name|escapejs }}");
                 });
             {% endif %}
             {% endfor %}

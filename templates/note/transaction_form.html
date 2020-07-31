@@ -160,7 +160,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         TRANSFER_POLYMORPHIC_CTYPE = {{ polymorphic_ctype }};
         SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
         user_id = {{ user.note.pk }};
-        username = "{{ user.username }}";
+        username = "{{ user.username|escapejs }}";
     </script>
     <script src="/static/js/transfer.js"></script>
 {% endblock %}
