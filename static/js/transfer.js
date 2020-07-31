@@ -14,8 +14,14 @@ function reset(refresh=true) {
     dests.length = 0;
     $("#source_note_list").html("");
     $("#dest_note_list").html("");
-    $("#amount").val("");
-    $("#reason").val("");
+    let amount_field = $("#amount");
+    amount_field.val("");
+    amount_field.removeClass('is-invalid');
+    $("#amount-required").html("");
+    let reason_field = $("#reason");
+    reason_field.val("");
+    reason_field.removeClass('is-invalid');
+    $("#reason-required").html("");
     $("#last_name").val("");
     $("#first_name").val("");
     $("#bank").val("");
@@ -140,7 +146,9 @@ $(document).ready(function() {
 
     $("#source_me").click(function() {
         // Shortcut to set the current user as the only emitter
-        reset(false);
+        sources_notes_display.length = 0;
+        sources.length = 0;
+        $("#source_note_list").html("");
 
         let source_note = $("#source_note");
         source_note.focus();
@@ -170,15 +178,45 @@ $(document).ready(function() {
 });
 
 $("#btn_transfer").click(function() {
+    let error = false;
+
+    let amount_field = $("#amount");
+    amount_field.removeClass('is-invalid');
+    $("#amount-required").html("");
+
+    let reason_field = $("#reason");
+    reason_field.removeClass('is-invalid');
+    $("#reason-required").html("");
+
+    if (!amount_field.val() || isNaN(amount_field.val()) || amount_field.val() <= 0) {
+        amount_field.addClass('is-invalid');
+        $("#amount-required").html("<strong>Ce champ est requis et doit comporter un nombre décimal strictement positif.</strong>");
+        error = true;
+    }
+
+    if (!reason_field.val()) {
+        reason_field.addClass('is-invalid');
+        $("#reason-required").html("<strong>Ce champ est requis.</strong>");
+        error = true;
+    }
+
+    if (error)
+        return;
+
+    let amount = 100 * amount_field.val();
+    let reason = reason_field.val();
+
     if ($("#type_transfer").is(':checked')) {
-        sources_notes_display.forEach(function (source) {
-            dests_notes_display.forEach(function (dest) {
+
+        // We copy the arrays to ensure that transactions are well-processed even if the form is reset
+        [...sources_notes_display].forEach(function (source) {
+            [...dests_notes_display].forEach(function (dest) {
                 $.post("/api/note/transaction/transaction/",
                     {
                         "csrfmiddlewaretoken": CSRF_TOKEN,
                         "quantity": source.quantity * dest.quantity,
-                        "amount": 100 * $("#amount").val(),
-                        "reason": $("#reason").val(),
+                        "amount": amount,
+                        "reason": reason,
                         "valid": true,
                         "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
                         "resourcetype": "Transaction",
@@ -188,7 +226,7 @@ $("#btn_transfer").click(function() {
                         "destination_alias": dest.name
                     }).done(function () {
                         addMsg("Le transfert de "
-                            + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                            + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                             + " vers la note " + dest.name + " a été fait avec succès !", "success", 10000);
 
                         reset();
@@ -197,8 +235,8 @@ $("#btn_transfer").click(function() {
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
                             "quantity": source.quantity * dest.quantity,
-                            "amount": 100 * $("#amount").val(),
-                            "reason": $("#reason").val(),
+                            "amount": amount,
+                            "reason": reason,
                             "valid": false,
                             "invalidity_reason": "Solde insuffisant",
                             "polymorphic_ctype": TRANSFER_POLYMORPHIC_CTYPE,
@@ -209,12 +247,12 @@ $("#btn_transfer").click(function() {
                             "destination_alias": dest.name
                         }).done(function () {
                             addMsg("Le transfert de "
-                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
+                                + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                                 + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger", 10000);
                         }).fail(function (err) {
                             addMsg("Le transfert de "
-                                + pretty_money(source.quantity * dest.quantity * 100 * $("#amount").val()) + " de la note " + source.name
-                                + " vers la note " + dest.name + " a échoué : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
+                                + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
                     });
                 });
             });
@@ -222,7 +260,7 @@ $("#btn_transfer").click(function() {
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
         let special_note = $("#credit_type").val();
         let user_note;
-        let given_reason = $("#reason").val();
+        let given_reason = reason;
         let source, dest, reason;
         if ($("#type_credit").is(':checked')) {
             user_note = dests_notes_display[0].note.id;
@@ -244,7 +282,7 @@ $("#btn_transfer").click(function() {
             {
                 "csrfmiddlewaretoken": CSRF_TOKEN,
                 "quantity": 1,
-                "amount": 100 * $("#amount").val(),
+                "amount": amount,
                 "reason": reason,
                 "valid": true,
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,

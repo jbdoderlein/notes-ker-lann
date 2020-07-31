@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
@@ -56,7 +57,11 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub())
+        context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub(
+            year=0,
+            date_start=timezone.now().date(),
+            date_end=timezone.now().date(),
+        ))
         return context
 
 

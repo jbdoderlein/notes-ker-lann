@@ -4,6 +4,7 @@
 import functools
 import json
 import operator
+from time import sleep
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -44,6 +45,14 @@ class InstancedPermission:
                 else:
                     oldpk = obj.pk
                 # Ensure previous models are deleted
+                count = 0
+                while count < 1000:
+                    if self.model.model_class().objects.filter(pk=obj.pk).exists():
+                        # If the object exists, that means that one permission is currently checked.
+                        # We wait before the other permission, at most 1 second.
+                        sleep(1)
+                        continue
+                    break
                 for o in self.model.model_class().objects.filter(pk=obj.pk).all():
                     o._force_delete = True
                     Model.delete(o)
