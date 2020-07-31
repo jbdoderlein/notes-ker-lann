@@ -36,7 +36,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our User object"
+			"description": "Voir son compte utilisateur"
 		}
 	},
 	{
@@ -52,7 +52,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our profile"
+			"description": "Voir son profil"
 		}
 	},
 	{
@@ -68,7 +68,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our own note"
+			"description": "Vioir sa propre note d'utilisateur"
 		}
 	},
 	{
@@ -84,7 +84,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our API token"
+			"description": "Voir son jeton d'authentification à l'API"
 		}
 	},
 	{
@@ -100,7 +100,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our own transactions"
+			"description": "Voir ses propres transactions"
 		}
 	},
 	{
@@ -116,7 +116,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View aliases of clubs and members of Kfet club"
+			"description": "Voir les aliases des notes des clubs et des adhérents du club Kfet"
 		}
 	},
 	{
@@ -132,7 +132,7 @@
 			"mask": 1,
 			"field": "last_login",
 			"permanent": true,
-			"description": "Change myself's last login"
+			"description": "Modifier sa propre date de dernière connexion"
 		}
 	},
 	{
@@ -148,7 +148,7 @@
 			"mask": 1,
 			"field": "username",
 			"permanent": true,
-			"description": "Change myself's username"
+			"description": "Changer son propre pseudo"
 		}
 	},
 	{
@@ -164,7 +164,7 @@
 			"mask": 1,
 			"field": "first_name",
 			"permanent": true,
-			"description": "Change myself's first name"
+			"description": "Changer son propre prénom"
 		}
 	},
 	{
@@ -180,7 +180,7 @@
 			"mask": 1,
 			"field": "last_name",
 			"permanent": true,
-			"description": "Change myself's last name"
+			"description": "Changer son propre nom de famille"
 		}
 	},
 	{
@@ -196,7 +196,7 @@
 			"mask": 1,
 			"field": "email",
 			"permanent": true,
-			"description": "Change myself's email"
+			"description": "Changer sa propre adresse e-mail"
 		}
 	},
 	{
@@ -212,7 +212,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "Delete API Token"
+			"description": "Supprimer son jeton d'authentification à l'API"
 		}
 	},
 	{
@@ -228,7 +228,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "Create API Token"
+			"description": "Créer un jeton d'authentification à l'API"
 		}
 	},
 	{
@@ -244,7 +244,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Remove alias"
+			"description": "Supprimer un alias à sa note"
 		}
 	},
 	{
@@ -260,7 +260,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add alias"
+			"description": "Ajouter un alias à sa note"
 		}
 	},
 	{
@@ -276,7 +276,7 @@
 			"mask": 1,
 			"field": "display_image",
 			"permanent": false,
-			"description": "Change myself's display image"
+			"description": "Changer l'image de sa note"
 		}
 	},
 	{
@@ -292,23 +292,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Transfer from myself's note"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 18,
-		"fields": {
-			"model": [
-				"note",
-				"note"
-			],
-			"query": "{}",
-			"type": "change",
-			"mask": 1,
-			"field": "balance",
-			"permanent": false,
-			"description": "Update a note balance with a transaction"
+			"description": "Transférer de l'argent depuis sa propre note en restant positif"
 		}
 	},
 	{
@@ -324,7 +308,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View notes of club members"
+			"description": "Voir les notes des membres du club"
 		}
 	},
 	{
@@ -340,7 +324,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Create transactions with a club"
+			"description": "Créer une transaction de ou vers la note d'un club"
 		}
 	},
 	{
@@ -356,7 +340,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Create transactions from buttons with a club"
+			"description": "Créer une transaction en appuyant sur un bouton lié à un club"
 		}
 	},
 	{
@@ -372,7 +356,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View club infos"
+			"description": "Voir les informations d'un club"
 		}
 	},
 	{
@@ -388,7 +372,7 @@
 			"mask": 1,
 			"field": "valid",
 			"permanent": false,
-			"description": "Update validation status of a transaction"
+			"description": "Mettre à jour le statut de validation d'une transaction"
 		}
 	},
 	{
@@ -404,7 +388,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View all transactions"
+			"description": "Voir toutes les transactions"
 		}
 	},
 	{
@@ -420,7 +404,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Display credit/debit interface"
+			"description": "Afficher l'interface crédit/retrait"
 		}
 	},
 	{
@@ -436,7 +420,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Create credit/debit transaction"
+			"description": "Créer un crédit ou un retrait quelconque"
 		}
 	},
 	{
@@ -452,7 +436,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View button categories"
+			"description": "Voir toutes les catégories de boutons"
 		}
 	},
 	{
@@ -468,7 +452,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change button category"
+			"description": "Changer une catégorie de boutons"
 		}
 	},
 	{
@@ -484,7 +468,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Add button category"
+			"description": "Créer une catégorie de boutons"
 		}
 	},
 	{
@@ -500,7 +484,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View buttons"
+			"description": "Voir tous les boutons"
 		}
 	},
 	{
@@ -516,7 +500,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Add buttons"
+			"description": "Ajouter un bouton"
 		}
 	},
 	{
@@ -532,7 +516,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Update buttons"
+			"description": "Modifier un bouton"
 		}
 	},
 	{
@@ -548,7 +532,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Create any transaction"
+			"description": "Créer n'importe quelle transaction"
 		}
 	},
 	{
@@ -564,7 +548,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View valid activites"
+			"description": "Voir toutes les activités valides"
 		}
 	},
 	{
@@ -580,7 +564,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Change our activities"
+			"description": "Modifier les activités non validées dont on est l'auteur"
 		}
 	},
 	{
@@ -596,7 +580,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add activities"
+			"description": "Proposer des activités"
 		}
 	},
 	{
@@ -612,7 +596,7 @@
 			"mask": 2,
 			"field": "valid",
 			"permanent": false,
-			"description": "Validate activities"
+			"description": "Valider des activités"
 		}
 	},
 	{
@@ -628,7 +612,7 @@
 			"mask": 2,
 			"field": "open",
 			"permanent": false,
-			"description": "Open activities"
+			"description": "Ouvrir des activités"
 		}
 	},
 	{
@@ -644,7 +628,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Invite people to activities"
+			"description": "Inviter des personnes à des activités"
 		}
 	},
 	{
@@ -660,7 +644,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View invited people"
+			"description": "Voir les personnes qu'on a invitées"
 		}
 	},
 	{
@@ -676,7 +660,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View all activities"
+			"description": "Voir toutes les activités"
 		}
 	},
 	{
@@ -692,7 +676,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View all invited people"
+			"description": "Voir toutes les personnes invitées"
 		}
 	},
 	{
@@ -703,12 +687,12 @@
 				"activity",
 				"entry"
 			],
-			"query": "{}",
+			"query": "{\"activity__open\": true}",
 			"type": "add",
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Manage entries"
+			"description": "Gérer les entrées d'une activité ouverte"
 		}
 	},
 	{
@@ -724,7 +708,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Add invitation transactions"
+			"description": "Créer une transaction d'invitation"
 		}
 	},
 	{
@@ -740,7 +724,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View invitation transactions"
+			"description": "Voir toutes les transactions d'invitation"
 		}
 	},
 	{
@@ -756,7 +740,7 @@
 			"mask": 2,
 			"field": "valid",
 			"permanent": false,
-			"description": "Validate invitation transactions"
+			"description": "Valider les transactions d'invitation"
 		}
 	},
 	{
@@ -772,7 +756,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Update club"
+			"description": "Modifier un club"
 		}
 	},
 	{
@@ -788,7 +772,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View our memberships"
+			"description": "Voir mes adhésions"
 		}
 	},
 	{
@@ -804,7 +788,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View club's memberships"
+			"description": "Voir les adhérents du club"
 		}
 	},
 	{
@@ -820,7 +804,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Add a membership to a club"
+			"description": "Ajouter un membre à un club"
 		}
 	},
 	{
@@ -836,7 +820,7 @@
 			"mask": 3,
 			"field": "roles",
 			"permanent": false,
-			"description": "Update user roles"
+			"description": "Modifier les rôles d'un adhérent d'un club"
 		}
 	},
 	{
@@ -852,7 +836,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Change own profile"
+			"description": "Modifier son profil"
 		}
 	},
 	{
@@ -865,10 +849,10 @@
 			],
 			"query": "{}",
 			"type": "change",
-			"mask": 2,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change any profile"
+			"description": "Modifier n'importe quel profil"
 		}
 	},
 	{
@@ -881,10 +865,10 @@
 			],
 			"query": "{}",
 			"type": "change",
-			"mask": 2,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change any user"
+			"description": "Modifier n'import quel utilisateur"
 		}
 	},
 	{
@@ -900,7 +884,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add user"
+			"description": "Ajouter un utilisateur"
 		}
 	},
 	{
@@ -916,7 +900,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add profile"
+			"description": "Ajouter un profil"
 		}
 	},
 	{
@@ -929,10 +913,10 @@
 			],
 			"query": "{\"profile__registration_valid\": false}",
 			"type": "delete",
-			"mask": 2,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Delete pre-registered user"
+			"description": "Supprimer une pré-inscription"
 		}
 	},
 	{
@@ -945,10 +929,10 @@
 			],
 			"query": "{\"registration_valid\": false}",
 			"type": "delete",
-			"mask": 2,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Delete pre-registered user profile"
+			"description": "Supprimer le profil d'une pré-inscription"
 		}
 	},
 	{
@@ -964,7 +948,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "New club button"
+			"description": "Voir les boutons d'un club"
 		}
 	},
 	{
@@ -977,10 +961,10 @@
 			],
 			"query": "{\"destination\": [\"club\", \"note\"]}",
 			"type": "add",
-			"mask": 2,
+			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create club button"
+			"description": "Créer un bouton d'un club"
 		}
 	},
 	{
@@ -996,7 +980,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Update club button"
+			"description": "Modifier le bouton d'un club"
 		}
 	},
 	{
@@ -1012,7 +996,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View transactions of a club"
+			"description": "Voir les transactions d'un club"
 		}
 	},
 	{
@@ -1028,7 +1012,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View invoices"
+			"description": "Voir les factures"
 		}
 	},
 	{
@@ -1044,7 +1028,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Add invoice"
+			"description": "Ajouter une facture"
 		}
 	},
 	{
@@ -1060,7 +1044,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change invoice"
+			"description": "Modifier une facture"
 		}
 	},
 	{
@@ -1076,7 +1060,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View products"
+			"description": "Voir les produits"
 		}
 	},
 	{
@@ -1092,7 +1076,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Add products"
+			"description": "Ajouter des produits"
 		}
 	},
 	{
@@ -1108,7 +1092,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change product"
+			"description": "Modifier un produit"
 		}
 	},
 	{
@@ -1124,7 +1108,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Delete product"
+			"description": "Supprimer un produit"
 		}
 	},
 	{
@@ -1140,7 +1124,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add Soci\u00e9t\u00e9 g\u00e9n\u00e9rale credit"
+			"description": "Ajouter un crédit de la Soci\u00e9t\u00e9 g\u00e9n\u00e9rale"
 		}
 	},
 	{
@@ -1156,7 +1140,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View all Soci\u00e9t\u00e9 g\u00e9n\u00e9rale credits"
+			"description": "Voir tous les crédits de la Soci\u00e9t\u00e9 g\u00e9n\u00e9rale"
 		}
 	},
 	{
@@ -1172,7 +1156,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Update Soci\u00e9t\u00e9 g\u00e9n\u00e9rale credit"
+			"description": "Modifier un crédit de la Soci\u00e9t\u00e9 g\u00e9n\u00e9rale"
 		}
 	},
 	{
@@ -1188,7 +1172,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Delete Soci\u00e9t\u00e9 g\u00e9n\u00e9rale credit"
+			"description": "Supprimer un crédit de la Soci\u00e9t\u00e9 g\u00e9n\u00e9rale"
 		}
 	},
 	{
@@ -1204,7 +1188,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create a WEI"
+			"description": "Créer un WEI"
 		}
 	},
 	{
@@ -1220,7 +1204,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Update all WEI"
+			"description": "Modifier tous les WEI"
 		}
 	},
 	{
@@ -1236,7 +1220,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Update this WEI"
+			"description": "Modifier ce WEI"
 		}
 	},
 	{
@@ -1252,7 +1236,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View my WEI"
+			"description": "Voir mon WEI"
 		}
 	},
 	{
@@ -1268,7 +1252,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View last WEI"
+			"description": "Voir le dernier WEI"
 		}
 	},
 	{
@@ -1284,55 +1268,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View WEI Roles"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 80,
-		"fields": {
-			"model": [
-				"wei",
-				"weirole"
-			],
-			"query": "{}",
-			"type": "add",
-			"mask": 3,
-			"field": "",
-			"permanent": false,
-			"description": "Add WEI Role"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 81,
-		"fields": {
-			"model": [
-				"wei",
-				"weirole"
-			],
-			"query": "{}",
-			"type": "change",
-			"mask": 3,
-			"field": "",
-			"permanent": false,
-			"description": "Change WEI Role"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 82,
-		"fields": {
-			"model": [
-				"wei",
-				"weirole"
-			],
-			"query": "{}",
-			"type": "delete",
-			"mask": 3,
-			"field": "",
-			"permanent": false,
-			"description": "Delete WEI Role"
+			"description": "Voir les rôles pour le WEI"
 		}
 	},
 	{
@@ -1348,7 +1284,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Register myself to the last WEI"
+			"description": "M'inscrire au dernier WEI"
 		}
 	},
 	{
@@ -1364,7 +1300,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Register first year members to the last WEI"
+			"description": "Inscrire un 1A au WEI"
 		}
 	},
 	{
@@ -1380,7 +1316,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Register anyone to this WEI"
+			"description": "Inscrire n'importe qui au WEI"
 		}
 	},
 	{
@@ -1396,7 +1332,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Delete WEI registration"
+			"description": "Supprimer une inscription WEI"
 		}
 	},
 	{
@@ -1412,7 +1348,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "View my own WEI registration"
+			"description": "Voir ma propre inscription WEI"
 		}
 	},
 	{
@@ -1428,7 +1364,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View all WEI Registrations"
+			"description": "Voir toutes les inscriptions WEI"
 		}
 	},
 	{
@@ -1444,7 +1380,7 @@
 			"mask": 1,
 			"field": "soge_credit",
 			"permanent": false,
-			"description": "Update the soge credit field of any WEI Registration"
+			"description": "Indiquer si une inscription WEI est payée par la Société générale"
 		}
 	},
 	{
@@ -1460,7 +1396,7 @@
 			"mask": 1,
 			"field": "soge_credit",
 			"permanent": false,
-			"description": "Update the soge credit field of my own WEI Registration"
+			"description": "Indiquer si mon inscription WEI est payée par la Société générale tant qu'elle n'est pas validée"
 		}
 	},
 	{
@@ -1476,7 +1412,7 @@
 			"mask": 1,
 			"field": "caution_check",
 			"permanent": false,
-			"description": "Update the caution check field of any WEI Registration"
+			"description": "Dire si un chèque de caution est donné pour une inscription WEI"
 		}
 	},
 	{
@@ -1492,7 +1428,7 @@
 			"mask": 1,
 			"field": "birth_date",
 			"permanent": false,
-			"description": "Update the birth date of any WEI Registration"
+			"description": "Modifier la date de naissance d'une inscription WEI"
 		}
 	},
 	{
@@ -1508,7 +1444,7 @@
 			"mask": 1,
 			"field": "birth_date",
 			"permanent": false,
-			"description": "Update the birth date of my own WEI Registration"
+			"description": "Modifier la date de naissance de ma propre inscription WEI"
 		}
 	},
 	{
@@ -1524,7 +1460,7 @@
 			"mask": 1,
 			"field": "gender",
 			"permanent": false,
-			"description": "Update the gender of any WEI Registration"
+			"description": "Modifier le genre de toute inscription WEI"
 		}
 	},
 	{
@@ -1540,7 +1476,7 @@
 			"mask": 1,
 			"field": "gender",
 			"permanent": false,
-			"description": "Update the gender of my own WEI Registration"
+			"description": "Modifier le genre de ma propre inscription WEI"
 		}
 	},
 	{
@@ -1556,7 +1492,7 @@
 			"mask": 1,
 			"field": "health_issues",
 			"permanent": false,
-			"description": "Update the health issues of any WEI Registration"
+			"description": "Modifier les problèmes de santé de toutes les inscriptions WEI"
 		}
 	},
 	{
@@ -1572,7 +1508,7 @@
 			"mask": 1,
 			"field": "health_issues",
 			"permanent": false,
-			"description": "Update the health issues of my own WEI Registration"
+			"description": "Modifier mes problèmes de santé de mon inscription WEI"
 		}
 	},
 	{
@@ -1588,7 +1524,7 @@
 			"mask": 1,
 			"field": "emergency_contact_name",
 			"permanent": false,
-			"description": "Update the emergency contact name of any WEI Registration"
+			"description": "Modifier le nom du contact en cas d'urgence de toute inscription WEI"
 		}
 	},
 	{
@@ -1604,7 +1540,7 @@
 			"mask": 1,
 			"field": "emergency_contact_name",
 			"permanent": false,
-			"description": "Update the emergency contact name of my own WEI Registration"
+			"description": "Modifier le nom du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
 	{
@@ -1620,7 +1556,7 @@
 			"mask": 1,
 			"field": "emergency_contact_phone",
 			"permanent": false,
-			"description": "Update the emergency contact phone of any WEI Registration"
+			"description": "Modifier le téléphone du contact en cas d'urgence de toute inscription WEI"
 		}
 	},
 	{
@@ -1636,7 +1572,7 @@
 			"mask": 1,
 			"field": "emergency_contact_phone",
 			"permanent": false,
-			"description": "Update the emergency contact phone of my own WEI Registration"
+			"description": "Modifier le nom du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
 	{
@@ -1652,7 +1588,7 @@
 			"mask": 1,
 			"field": "information_json",
 			"permanent": false,
-			"description": "Update information of any WEI registration"
+			"description": "Modifier les informations (sondage 1A, ...) d'une inscription WEI"
 		}
 	},
 	{
@@ -1668,7 +1604,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Add a bus for the current WEI"
+			"description": "Ajouter un bus au WEI"
 		}
 	},
 	{
@@ -1684,7 +1620,7 @@
 			"mask": 3,
 			"field": "name",
 			"permanent": false,
-			"description": "Update the name of a bus for the last WEI"
+			"description": "Modifier le nom d'un bus d'un WEI"
 		}
 	},
 	{
@@ -1700,7 +1636,7 @@
 			"mask": 3,
 			"field": "description",
 			"permanent": false,
-			"description": "Update the description of a bus for the last WEI"
+			"description": "Modifier la description d'un bus d'un WEI"
 		}
 	},
 	{
@@ -1716,7 +1652,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create a bus team for the last WEI"
+			"description": "Créer une équipe WEI"
 		}
 	},
 	{
@@ -1732,7 +1668,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Update a bus team for the last WEI"
+			"description": "Modifier une équipe WEI"
 		}
 	},
 	{
@@ -1748,7 +1684,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View buses of the last WEI"
+			"description": "Voir tous les bus WEI si on est en 2A+ ou que le WEI est terminé"
 		}
 	},
 	{
@@ -1764,7 +1700,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View bus teams of the last WEI"
+			"description": "Voir toutes les équipes WEI si on est en 2A+ ou que le WEI est terminé"
 		}
 	},
 	{
@@ -1780,7 +1716,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create a WEI membership for the last WEI"
+			"description": "Créer une adhésion WEI pour le dernier WEI"
 		}
 	},
 	{
@@ -1796,7 +1732,7 @@
 			"mask": 1,
 			"field": "bus",
 			"permanent": false,
-			"description": "Update the bus of a WEI membership"
+			"description": "Modifier le bus d'une adhésion WEI"
 		}
 	},
 	{
@@ -1812,7 +1748,7 @@
 			"mask": 1,
 			"field": "team",
 			"permanent": false,
-			"description": "Update the team of a WEI membership"
+			"description": "Modifier l'équipe d'une adhésion WEI"
 		}
 	},
 	{
@@ -1828,7 +1764,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View all WEI Memberships for the last WEI"
+			"description": "Voir toutes les adhésions au WEI"
 		}
 	},
 	{
@@ -1839,12 +1775,12 @@
 				"wei",
 				"weimembership"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"], \"club\": [\"club\"]}, [\"OR\", {\"registration__first_year\": false, \"club__weiclub__date_end__lte\": [\"today\"]}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"], \"club\": [\"club\"]}, [\"OR\", {\"registration__first_year\": false}, {\"club__weiclub__date_end__lte\": [\"today\"]}]]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View my own WEI membership if I am an old member or if the WEI is past"
+			"description": "Voir mes adhésions WEI passées"
 		}
 	},
 	{
@@ -1860,7 +1796,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View the members of the bus"
+			"description": "Voir les membres du bus"
 		}
 	},
 	{
@@ -1876,7 +1812,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View the members of the team"
+			"description": "Voir les membres de l'équipe"
 		}
 	},
 	{
@@ -1892,7 +1828,7 @@
 			"mask": 1,
 			"field": "name",
 			"permanent": false,
-			"description": "Update the name of my bus"
+			"description": "Modifier le nom du bus"
 		}
 	},
 	{
@@ -1908,7 +1844,7 @@
 			"mask": 1,
 			"field": "description",
 			"permanent": false,
-			"description": "Update the description of my bus"
+			"description": "Modifier la description du bus"
 		}
 	},
 	{
@@ -1924,7 +1860,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Add a team to my bus"
+			"description": "Ajouter une équipe à mon bus"
 		}
 	},
 	{
@@ -1940,7 +1876,7 @@
 			"mask": 1,
 			"field": "name",
 			"permanent": false,
-			"description": "Update the name of a team of my bus"
+			"description": "Modifier le nom d'une équipe de mon bus"
 		}
 	},
 	{
@@ -1956,7 +1892,7 @@
 			"mask": 1,
 			"field": "color",
 			"permanent": false,
-			"description": "Update the color of a team of my bus"
+			"description": "Modifier la couleur d'une équipe de mon bus"
 		}
 	},
 	{
@@ -1972,7 +1908,7 @@
 			"mask": 1,
 			"field": "description",
 			"permanent": false,
-			"description": "Update the description of a team of my bus"
+			"description": "Modifier la description d'une équipe de mon bus"
 		}
 	},
 	{
@@ -1988,7 +1924,7 @@
 			"mask": 1,
 			"field": "name",
 			"permanent": false,
-			"description": "Update the name of my team"
+			"description": "Modifier le nom de mon équipe"
 		}
 	},
 	{
@@ -2004,7 +1940,7 @@
 			"mask": 1,
 			"field": "color",
 			"permanent": false,
-			"description": "Update the color of my team"
+			"description": "Modifier la couleur de mon équipe"
 		}
 	},
 	{
@@ -2020,7 +1956,7 @@
 			"mask": 1,
 			"field": "description",
 			"permanent": false,
-			"description": "Update the description of my team"
+			"description": "Modifier la description de mon équipe"
 		}
 	},
 	{
@@ -2036,7 +1972,7 @@
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "View my past activities"
+			"description": "Voir mes activitées passées, même après la fin de l'adhésion BDE"
 		}
 	},
 	{
@@ -2049,10 +1985,10 @@
 			],
 			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
 			"type": "change",
-			"mask": 1,
+			"mask": 2,
 			"field": "valid",
 			"permanent": false,
-			"description": "Update validation status of a club transaction if possible"
+			"description": "Modifier le statut de validation d'une transaction de club si c'est possible"
 		}
 	},
 	{
@@ -2068,7 +2004,7 @@
 			"mask": 1,
 			"field": "clothing_cut",
 			"permanent": false,
-			"description": "Update the clothing cut field of any WEI Registration"
+			"description": "Modifier la coupe de vêtements d'une inscription WEI"
 		}
 	},
 	{
@@ -2084,7 +2020,7 @@
 			"mask": 1,
 			"field": "clothing_cut",
 			"permanent": false,
-			"description": "Update the clothing cut field of my own WEI Registration"
+			"description": "Modifier ma coupe de vêtements de mon inscription WEI"
 		}
 	},
 	{
@@ -2100,7 +2036,7 @@
 			"mask": 1,
 			"field": "clothing_size",
 			"permanent": false,
-			"description": "Update the clothing size field of any WEI Registration"
+			"description": "Modifier la taille de vêtements d'une inscription WEI"
 		}
 	},
 	{
@@ -2116,7 +2052,7 @@
 			"mask": 1,
 			"field": "clothing_size",
 			"permanent": false,
-			"description": "Update the clothing size field of my own WEI Registration"
+			"description": "Modifier la taille de vêtements de mon inscription WEI"
 		}
 	},
 	{
@@ -2132,7 +2068,7 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Create any recurrent transaction"
+			"description": "Créer une transaction depuis un bouton"
 		}
 	},
 	{
@@ -2148,7 +2084,7 @@
 			"mask": 1,
 			"field": "invalidity_reason",
 			"permanent": false,
-			"description": "Update invalidity reason of a club transaction if possible"
+			"description": "Modifier la raison d'invalidité d'une transaction de club"
 		}
 	},
 	{
@@ -2164,7 +2100,7 @@
 			"mask": 1,
 			"field": "invalidity_reason",
 			"permanent": false,
-			"description": "Update invalidity reason of a transaction"
+			"description": "Modifier la raison d'invalidité d'une transaction"
 		}
 	},
 	{
@@ -2180,7 +2116,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View any user"
+			"description": "Voir n'importe quel utilisateur"
 		}
 	},
 	{
@@ -2196,7 +2132,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View any profile"
+			"description": "Voir n'importe quel profil"
 		}
 	},
 	{
@@ -2212,7 +2148,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View any club"
+			"description": "Voir n'importe quel club"
 		}
 	},
 	{
@@ -2228,7 +2164,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Change any club"
+			"description": "Modifier n'importe quel club"
 		}
 	},
 	{
@@ -2244,7 +2180,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create any noteclub"
+			"description": "Créer une note de club"
 		}
 	},
 	{
@@ -2260,7 +2196,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Create any club"
+			"description": "Créer un club"
 		}
 	},
 	{
@@ -2276,7 +2212,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "View members of our club"
+			"description": "Voir les membres de mon club"
 		}
 	},
 	{
@@ -2292,7 +2228,23 @@
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "View club note"
+			"description": "Voir la note de mon club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 143,
+		"fields": {
+			"model": [
+				"note",
+				"noteuser"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Créer une note d'utilisateur"
 		}
 	},
 	{
@@ -2338,7 +2290,6 @@
 				15,
 				16,
 				17,
-				18,
 				78,
 				79,
 				83,
@@ -2468,7 +2419,8 @@
 				136,
 				137,
 				138,
-				139
+				139,
+				143
 			]
 		}
 	},
@@ -2496,7 +2448,6 @@
 				15,
 				16,
 				17,
-				18,
 				19,
 				20,
 				21,
@@ -2558,9 +2509,6 @@
 				77,
 				78,
 				79,
-				80,
-				81,
-				82,
 				83,
 				84,
 				85,
@@ -2620,7 +2568,8 @@
 				139,
 				140,
 				141,
-				142
+				142,
+				143
 			]
 		}
 	},
@@ -2648,7 +2597,8 @@
 				28,
 				29,
 				30,
-				31
+				31,
+				143
 			]
 		}
 	},
@@ -2678,9 +2628,6 @@
 			"name": "GC WEI",
 			"permissions": [
 				76,
-				80,
-				81,
-				82,
 				85,
 				86,
 				88,
@@ -2713,6 +2660,7 @@
 			"for_club": null,
 			"name": "Chef de bus",
 			"permissions": [
+				84,
 				117,
 				118,
 				120,
@@ -2729,6 +2677,7 @@
 			"for_club": null,
 			"name": "Chef d'\u00e9quipe",
 			"permissions": [
+				84,
 				116,
 				123,
 				124,
@@ -2742,7 +2691,9 @@
 		"fields": {
 			"for_club": null,
 			"name": "\u00c9lectron libre",
-			"permissions": []
+			"permissions": [
+				84
+			]
 		}
 	},
 	{
@@ -2751,7 +2702,9 @@
 		"fields": {
 			"for_club": null,
 			"name": "\u00c9lectron libre (avec perm)",
-			"permissions": []
+			"permissions": [
+				84
+			]
 		}
 	},
 	{
@@ -2771,7 +2724,6 @@
 			"name": "Adhérent WEI",
 			"permissions": [
 				77,
-				84,
 				87,
 				90,
 				93,

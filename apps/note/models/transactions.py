@@ -208,7 +208,9 @@ class Transaction(PolymorphicModel):
         super().save(*args, **kwargs)
 
         # Save notes
+        self.source._force_save = True
         self.source.save()
+        self.destination._force_save = True
         self.destination.save()
 
     def delete(self, **kwargs):

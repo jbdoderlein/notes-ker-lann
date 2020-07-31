@@ -124,10 +124,10 @@ class PermissionMask(models.Model):
 class Permission(models.Model):
 
     PERMISSION_TYPES = [
-        ('add', 'add'),
-        ('view', 'view'),
-        ('change', 'change'),
-        ('delete', 'delete')
+        ('add', _('add')),
+        ('view', _('view')),
+        ('change', _('change')),
+        ('delete', _('delete'))
     ]
 
     model = models.ForeignKey(
