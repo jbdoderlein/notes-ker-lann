@@ -9,7 +9,7 @@
   command: /var/www/note_kfet/env/bin/python manage.py migrate
   args:
     chdir: /var/www/note_kfet
-  become_user: www-data
+  become_user: postgres
 
 - name: Compile messages
   command: /var/www/note_kfet/env/bin/python manage.py compilemessages
@@ -21,4 +21,4 @@
   command: /var/www/note_kfet/env/bin/python manage.py loaddata initial
   args:
     chdir: /var/www/note_kfet
-  become_user: www-data
+  become_user: postgres
