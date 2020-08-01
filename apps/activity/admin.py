@@ -3,9 +3,11 @@
 
 from django.contrib import admin
 
-from .models import Activity, ActivityType, Guest
+from note_kfet.admin import admin_site
+from .models import Activity, ActivityType, Guest, Entry
 
 
+@admin.register(Activity, site=admin_site)
 class ActivityAdmin(admin.ModelAdmin):
     """
     Admin customisation for Activity
@@ -19,6 +21,7 @@ class ActivityAdmin(admin.ModelAdmin):
     ordering = ['-date_start']
 
 
+@admin.register(ActivityType, site=admin_site)
 class ActivityTypeAdmin(admin.ModelAdmin):
     """
     Admin customisation for ActivityType
@@ -26,7 +29,17 @@ class ActivityTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'can_invite', 'guest_entry_fee')
 
 
-# Register your models here.
-admin.site.register(Activity, ActivityAdmin)
-admin.site.register(ActivityType, ActivityTypeAdmin)
-admin.site.register(Guest)
+@admin.register(Guest, site=admin_site)
+class GuestAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Guest
+    """
+    list_display = ('last_name', 'first_name', 'activity', 'inviter')
+
+
+@admin.register(Entry, site=admin_site)
+class EntryAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Entry
+    """
+    list_display = ('note', 'activity', 'time', 'guest')

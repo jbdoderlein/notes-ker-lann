@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction
 
@@ -53,7 +54,7 @@ class Invoice(models.Model):
     )
 
     date = models.DateField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name=_("Place"),
     )
 
@@ -130,7 +131,7 @@ class Remittance(models.Model):
     """
 
     date = models.DateTimeField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name=_("Date"),
     )
 
