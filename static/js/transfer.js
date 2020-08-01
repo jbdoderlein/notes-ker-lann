@@ -80,6 +80,7 @@ $(document).ready(function() {
     let dest = $("#dest_note");
 
     $("#type_transfer").click(function() {
+        $("#source_me_div").removeClass('d-none');
         $("#special_transaction_div").addClass('d-none');
         source.attr('disabled', false);
         $("#source_note_list").removeClass('d-none');
@@ -88,6 +89,7 @@ $(document).ready(function() {
     });
 
     $("#type_credit").click(function() {
+        $("#source_me_div").addClass('d-none');
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").addClass('d-none');
         $("#dest_note_list").removeClass('d-none');
@@ -105,6 +107,7 @@ $(document).ready(function() {
     });
 
     $("#type_debit").click(function() {
+        $("#source_me_div").addClass('d-none');
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").removeClass('d-none');
         $("#dest_note_list").addClass('d-none');

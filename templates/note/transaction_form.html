@@ -55,10 +55,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </ul>
                 <div class="card-body">
                     <input class="form-control mx-auto d-block" type="text" id="source_note" placeholder="{% trans "Name or alias..." %}" />
-                    <hr>
-                    <span class="form-control mx-auto d-block btn btn-secondary" id="source_me">
-                        {% trans "I am the emitter" %}
-                    </span>
+                    <div id="source_me_div">
+                        <hr>
+                        <span class="form-control mx-auto d-block btn btn-secondary" id="source_me">
+                            {% trans "I am the emitter" %}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
