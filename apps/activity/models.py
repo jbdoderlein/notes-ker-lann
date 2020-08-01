@@ -99,6 +99,9 @@ class Activity(models.Model):
         verbose_name=_('open'),
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = _("activity")
         verbose_name_plural = _("activities")
@@ -233,6 +236,9 @@ class Guest(models.Model):
                 raise ValidationError(_("You can't invite more than 3 people to this activity."))
 
         return super().save(force_insert, force_update, using, update_fields)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name
 
     class Meta:
         verbose_name = _("guest")
