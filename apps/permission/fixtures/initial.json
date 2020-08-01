@@ -2248,6 +2248,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 144,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"], \"first_year\": false, \"membership\": null}]",
+			"type": "change",
+			"mask": 1,
+			"field": "information_json",
+			"permanent": false,
+			"description": "Modifier mes préférences en terme de bus et d'équipe si mon inscription n'est pas validée et que je suis en 2A+"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2300,7 +2316,8 @@
 				99,
 				101,
 				108,
-				109
+				109,
+				144
 			]
 		}
 	},
@@ -2569,7 +2586,8 @@
 				140,
 				141,
 				142,
-				143
+				143,
+				144
 			]
 		}
 	},
