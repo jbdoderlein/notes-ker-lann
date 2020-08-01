@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 22:25+0200\n"
+"POT-Creation-Date: 2020-08-01 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,6 +457,10 @@ msgstr "inscription valid"
 msgid "user profile"
 msgstr "profil utilisateur"
 
+#: apps/member/models.py:134
+msgid "Activate your Note Kfet account"
+msgstr "Activez votre compte Note Kfet"
+
 #: apps/member/models.py:156 templates/member/club_info.html:57
 #: templates/registration/future_profile_detail.html:22
 #: templates/wei/weiclub_info.html:52 templates/wei/weimembership_form.html:24
@@ -538,7 +542,7 @@ msgstr "l'adhésion finit le"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/models.py:303 apps/member/views.py:534 apps/wei/views.py:797
+#: apps/member/models.py:303 apps/member/views.py:535 apps/wei/views.py:797
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -547,7 +551,7 @@ msgstr "L'utilisateur n'est pas membre du club parent"
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:321 apps/member/views.py:543
+#: apps/member/models.py:321 apps/member/views.py:544
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
@@ -578,47 +582,47 @@ msgstr "Modifier le profil"
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:127
+#: apps/member/views.py:128
 msgid "Profile detail"
 msgstr "Détails de l'utilisateur"
 
-#: apps/member/views.py:161
+#: apps/member/views.py:162
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:195 apps/member/views.py:381
+#: apps/member/views.py:196 apps/member/views.py:382
 msgid "Note aliases"
 msgstr "Alias de la note"
 
-#: apps/member/views.py:209
+#: apps/member/views.py:210
 msgid "Update note picture"
 msgstr "Modifier la photo de la note"
 
-#: apps/member/views.py:267 templates/member/profile_info.html:43
+#: apps/member/views.py:268 templates/member/profile_info.html:43
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: apps/member/views.py:295
+#: apps/member/views.py:296
 msgid "Create new club"
 msgstr "Créer un nouveau club"
 
-#: apps/member/views.py:307
+#: apps/member/views.py:308
 msgid "Search club"
 msgstr "Chercher un club"
 
-#: apps/member/views.py:332
+#: apps/member/views.py:333
 msgid "Club detail"
 msgstr "Détails du club"
 
-#: apps/member/views.py:398
+#: apps/member/views.py:399
 msgid "Update club"
 msgstr "Modifier le club"
 
-#: apps/member/views.py:432
+#: apps/member/views.py:433
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:529 apps/wei/views.py:788
+#: apps/member/views.py:530 apps/wei/views.py:788
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -626,25 +630,25 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:547
+#: apps/member/views.py:548
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:552
+#: apps/member/views.py:553
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:569 apps/member/views.py:571 apps/member/views.py:573
-#: apps/registration/views.py:295 apps/registration/views.py:297
-#: apps/registration/views.py:299
+#: apps/member/views.py:570 apps/member/views.py:572 apps/member/views.py:574
+#: apps/registration/views.py:292 apps/registration/views.py:294
+#: apps/registration/views.py:296
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
-#: apps/member/views.py:641
+#: apps/member/views.py:642
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
 
-#: apps/member/views.py:666
+#: apps/member/views.py:667
 msgid "Members of the club"
 msgstr "Membres du club"
 
@@ -1076,49 +1080,49 @@ msgid "Email validation"
 msgstr "Validation de l'adresse mail"
 
 #: apps/registration/views.py:82
-msgid "Validate a registration"
-msgstr "Valider l'inscription"
+msgid "Validate email"
+msgstr "Valider l'adresse e-mail"
 
-#: apps/registration/views.py:127
+#: apps/registration/views.py:124
 msgid "Email validation unsuccessful"
 msgstr " La validation de l'adresse mail a échoué"
 
-#: apps/registration/views.py:138
+#: apps/registration/views.py:135
 msgid "Email validation email sent"
 msgstr "L'email de vérification de l'adresse email a bien été envoyé."
 
-#: apps/registration/views.py:146
+#: apps/registration/views.py:143
 msgid "Resend email validation link"
 msgstr "Renvoyer le lien de validation"
 
-#: apps/registration/views.py:164
+#: apps/registration/views.py:161
 msgid "Pre-registered users list"
 msgstr "Liste des utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:193
+#: apps/registration/views.py:190
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:206
+#: apps/registration/views.py:203
 msgid "Registration detail"
 msgstr "Détails de l'inscription"
 
-#: apps/registration/views.py:261
+#: apps/registration/views.py:258
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
-#: apps/registration/views.py:283
+#: apps/registration/views.py:280
 msgid "You must join BDE club before joining Kfet club."
 msgstr "Vous devez adhérer au club BDE avant d'adhérer au club Kfet."
 
-#: apps/registration/views.py:288
+#: apps/registration/views.py:285
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:363
+#: apps/registration/views.py:360
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
@@ -2660,3 +2664,6 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 #: templates/wei/weiregistration_list.html:24
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
+
+#~ msgid "Validate a registration"
+#~ msgstr "Valider l'inscription"

@@ -108,6 +108,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             if olduser.email != user.email:
                 # If the user changed her/his email, then it is unvalidated and a confirmation link is sent.
                 user.profile.email_confirmed = False
+                user.profile.save()
                 user.profile.send_email_validation_link()
 
         return super().form_valid(form)

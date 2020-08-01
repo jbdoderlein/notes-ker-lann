@@ -79,7 +79,7 @@ class UserValidateView(TemplateView):
     """
     title = _("Email validation")
     template_name = 'registration/email_validation_complete.html'
-    extra_context = {"title": _("Validate a registration")}
+    extra_context = {"title": _("Validate email")}
 
     def get(self, *args, **kwargs):
         """
@@ -93,16 +93,13 @@ class UserValidateView(TemplateView):
 
         # Validate the token
         if user is not None and email_validation_token.check_token(user, token):
-            self.validlink = True
             # The user must wait that someone validates the account before the user can be active and login.
+            self.validlink = True
             user.is_active = user.profile.registration_valid or user.is_superuser
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
-            return super().dispatch(*args, **kwargs)
-        else:
-            # Display the "Email validation unsuccessful" page.
-            return self.render_to_response(self.get_context_data())
+        return self.render_to_response(self.get_context_data())
 
     def get_user(self, uidb64):
         """
