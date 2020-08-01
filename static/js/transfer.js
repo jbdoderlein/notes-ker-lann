@@ -14,6 +14,14 @@ function reset(refresh=true) {
     dests.length = 0;
     $("#source_note_list").html("");
     $("#dest_note_list").html("");
+    let source_field = $("#source_note");
+    source_field.val("");
+    source_field.trigger("keyup");
+    source_field.removeClass('is-invalid');
+    let dest_field = $("#dest_note");
+    dest_field.val("");
+    dest_field.trigger("keyup");
+    dest_field.removeClass('is-invalid');
     let amount_field = $("#amount");
     amount_field.val("");
     amount_field.removeClass('is-invalid');
@@ -81,6 +89,8 @@ $(document).ready(function() {
 
     $("#type_transfer").click(function() {
         $("#source_me_div").removeClass('d-none');
+        $("#source_note").removeClass('is-invalid');
+        $("#dest_note").removeClass('is-invalid');
         $("#special_transaction_div").addClass('d-none');
         source.attr('disabled', false);
         $("#source_note_list").removeClass('d-none');
@@ -90,6 +100,8 @@ $(document).ready(function() {
 
     $("#type_credit").click(function() {
         $("#source_me_div").addClass('d-none');
+        $("#source_note").removeClass('is-invalid');
+        $("#dest_note").removeClass('is-invalid');
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").addClass('d-none');
         $("#dest_note_list").removeClass('d-none');
@@ -108,6 +120,8 @@ $(document).ready(function() {
 
     $("#type_debit").click(function() {
         $("#source_me_div").addClass('d-none');
+        $("#source_note").removeClass('is-invalid');
+        $("#dest_note").removeClass('is-invalid');
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").removeClass('d-none');
         $("#dest_note_list").addClass('d-none');
@@ -210,7 +224,6 @@ $("#btn_transfer").click(function() {
     let reason = reason_field.val();
 
     if ($("#type_transfer").is(':checked')) {
-
         // We copy the arrays to ensure that transactions are well-processed even if the form is reset
         [...sources_notes_display].forEach(function (source) {
             [...dests_notes_display].forEach(function (dest) {
@@ -228,12 +241,31 @@ $("#btn_transfer").click(function() {
                         "destination": dest.note.id,
                         "destination_alias": dest.name
                     }).done(function () {
+                        if (!isNaN(source.note.balance)) {
+                            let newBalance = source.note.balance - source.quantity * dest.quantity * amount;
+                            if (newBalance <= -5000) {
+                                addMsg("Le transfert de "
+                                    + pretty_money(source.quantity * dest.quantity * amount) + " de la note "
+                                    + source.name + " vers la note " + dest.name + " a été fait avec succès, " +
+                                    "mais la note émettrice passe en négatif sévère.", "danger", 10000);
+                                reset();
+                                return;
+                            }
+                            else if (newBalance < 0) {
+                                addMsg("Le transfert de "
+                                    + pretty_money(source.quantity * dest.quantity * amount) + " de la note "
+                                    + source.name + " vers la note " + dest.name + " a été fait avec succès, " +
+                                    "mais la note émettrice passe en négatif.", "warning", 10000);
+                                reset();
+                                return;
+                            }
+                        }
                         addMsg("Le transfert de "
                             + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                             + " vers la note " + dest.name + " a été fait avec succès !", "success", 10000);
 
                         reset();
-                    }).fail(function (err) { // do it again but valid = false
+                    }).fail(function () { // do it again but valid = false
                         $.post("/api/note/transaction/transaction/",
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
@@ -264,19 +296,29 @@ $("#btn_transfer").click(function() {
         let special_note = $("#credit_type").val();
         let user_note;
         let given_reason = reason;
-        let source, dest, reason;
+        let source_id, dest_id;
         if ($("#type_credit").is(':checked')) {
+            if (!dests_notes_display.length) {
+                $("#dest_note").addClass('is-invalid');
+                return;
+            }
+
             user_note = dests_notes_display[0].note.id;
-            source = special_note;
-            dest = user_note;
+            source_id = special_note;
+            dest_id = user_note;
             reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
             if (given_reason.length > 0)
                 reason += " (" + given_reason + ")";
         }
         else {
+            if (!sources_notes_display.length) {
+                $("#source_note").addClass('is-invalid');
+                return;
+            }
+
             user_note = sources_notes_display[0].note.id;
-            source = user_note;
-            dest = special_note;
+            source_id = user_note;
+            dest_id = special_note;
             reason = "Retrait " + $("#credit_type option:selected").text().toLowerCase();
             if (given_reason.length > 0)
                 reason += " (" + given_reason + ")";
@@ -290,10 +332,10 @@ $("#btn_transfer").click(function() {
                 "valid": true,
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,
                 "resourcetype": "SpecialTransaction",
-                "source": source,
-                "source_alias": source.name,
-                "destination": dest,
-                "destination_alias": dest.name,
+                "source": source_id,
+                "source_alias": sources_notes_display[0].name,
+                "destination": dest_id,
+                "destination_alias": dests_notes_display[0].name,
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
@@ -301,7 +343,8 @@ $("#btn_transfer").click(function() {
                 addMsg("Le crédit/retrait a bien été effectué !", "success", 10000);
                 reset();
             }).fail(function (err) {
-                addMsg("Le crédit/retrait a échoué : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
+                addMsg("Le crédit/retrait a échoué : " + JSON.parse(err.responseText)["detail"],
+                    "danger", 10000);
         });
     }
 });
