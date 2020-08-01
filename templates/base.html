@@ -109,13 +109,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
                     </li>
                 {% endif %}
-                {% if "member.change_profile_registration_valid"|has_perm:user %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'registration:future_user_list' %}">
-                            <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
-                        </a>
-                    </li>
-                {% endif %}
                 {% if "activity.activity"|not_empty_model_list %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
@@ -138,7 +131,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% endif %}
                 {% if user.is_staff and ""|has_perm:user %}
                     <li class="nav-item active">
-                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Administration' %}</a>
+                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
                     </li>
                 {% endif %}
             </ul>

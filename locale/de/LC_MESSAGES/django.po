@@ -1795,7 +1795,7 @@ msgid "Registrations"
 msgstr ""
 
 #: templates/base.html:141
-msgid "Administration"
+msgid "Admin"
 msgstr ""
 
 #: templates/base.html:180

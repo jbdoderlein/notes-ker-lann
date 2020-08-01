@@ -1850,8 +1850,8 @@ msgid "Registrations"
 msgstr "Inscriptions"
 
 #: templates/base.html:141
-msgid "Administration"
-msgstr "Administration"
+msgid "Admin"
+msgstr "Admin"
 
 #: templates/base.html:180
 msgid ""
