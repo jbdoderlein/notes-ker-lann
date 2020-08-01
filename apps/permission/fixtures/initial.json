@@ -2207,7 +2207,7 @@
 				"auth",
 				"user"
 			],
-			"query": "{\"memberships__club\": [\"club\"], \"memberships__date__start__lte\": [\"today\"], \"memberships__date__end__gte\": [\"today\"]}",
+			"query": "{\"memberships__club\": [\"club\"], \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
 			"type": "view",
 			"mask": 3,
 			"field": "",
