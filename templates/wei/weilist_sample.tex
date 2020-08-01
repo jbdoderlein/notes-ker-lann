@@ -14,11 +14,11 @@
 \huge{Liste des inscrits \og {{ wei.name }} \fg{}}
 
 {% if bus %}
-\LARGE{Bus {{ bus.name }}}
+\LARGE{Bus {{ bus.name|safe }}}
 
 
 {% if team %}
-\Large{Équipe {{ team.name }}}
+\Large{Équipe {{ team.name|safe }}}
 {% endif %}
 {% endif %}
 \end{center}

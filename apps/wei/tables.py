@@ -103,7 +103,7 @@ class WEIMembershipTable(tables.Table):
 
     team = tables.LinkColumn(
         'wei:manage_bus_team',
-        args=[A('bus.pk')],
+        args=[A('team.pk')],
     )
 
     def render_year(self, record):

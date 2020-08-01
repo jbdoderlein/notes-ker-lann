@@ -38,7 +38,6 @@ class NoteAdmin(PolymorphicParentModelAdmin):
 
     # Organize notes by registration date
     date_hierarchy = 'created_at'
-    ordering = ['name']
 
     # Search by aliases
     search_fields = ['alias__name']
