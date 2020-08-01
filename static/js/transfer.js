@@ -16,11 +16,13 @@ function reset(refresh=true) {
     $("#dest_note_list").html("");
     let source_field = $("#source_note");
     source_field.val("");
-    source_field.trigger("keyup");
+    let event = jQuery.Event("keyup");
+    event.originalEvent = {charCode: 97};
+    source_field.trigger(event);
     source_field.removeClass('is-invalid');
     let dest_field = $("#dest_note");
     dest_field.val("");
-    dest_field.trigger("keyup");
+    dest_field.trigger(event);
     dest_field.removeClass('is-invalid');
     let amount_field = $("#amount");
     amount_field.val("");
