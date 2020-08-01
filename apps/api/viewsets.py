@@ -14,9 +14,11 @@ class ReadProtectedModelViewSet(viewsets.ModelViewSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
+        self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
+
+    def get_queryset(self):
         user = get_current_authenticated_user()
-        self.queryset = model.objects.filter(PermissionBackend.filter_queryset(user, model, "view"))
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))
 
 
 class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -26,6 +28,8 @@ class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
+        self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
+
+    def get_queryset(self):
         user = get_current_authenticated_user()
-        self.queryset = model.objects.filter(PermissionBackend.filter_queryset(user, model, "view"))
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))

@@ -1,7 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -36,27 +35,19 @@ class PermissionBackend(ModelBackend):
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
-        qs = Permission.objects.annotate(
-            club=F("rolepermissions__role__membership__club"),
-            membership=F("rolepermissions__role__membership"),
-        ).filter(
-            (
-                Q(
-                    rolepermissions__role__membership__date_start__lte=timezone.now().today(),
-                    rolepermissions__role__membership__date_end__gte=timezone.now().today(),
-                )
-                | Q(permanent=True)
-            )
-            & Q(rolepermissions__role__membership__user=user)
-            & Q(type=t)
-            & Q(mask__rank__lte=get_current_session().get("permission_mask", 0))
-        )
+        memberships = Membership.objects.filter(user=user).all()
 
-        if settings.DATABASES[qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
-            qs = qs.distinct('pk', 'club')
-        else:  # SQLite doesn't support distinct fields.
-            qs = qs.distinct()
-        return qs
+        perms = []
+
+        for membership in memberships:
+            for role in membership.roles.all():
+                for perm in role.permissions.filter(type=t, mask__rank__lte=get_current_session().get("permission_mask", -1)).all():
+                    if not perm.permanent:
+                        if membership.date_start > timezone.now().date() or membership.date_end < timezone.now().date():
+                            continue
+                    perm.membership = membership
+                    perms.append(perm)
+        return perms
 
     @staticmethod
     def permissions(user, model, type):
@@ -67,22 +58,13 @@ class PermissionBackend(ModelBackend):
         :param type: The type of the permissions: view, change, add or delete
         :return: A generator of the requested permissions
         """
-        clubs = {}
-        memberships = {}
 
         for permission in PermissionBackend.get_raw_permissions(user, type):
-            if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.club:
+            if not isinstance(model.model_class()(), permission.model.model_class()) or not permission.membership:
                 continue
 
-            if permission.club not in clubs:
-                clubs[permission.club] = club = Club.objects.get(pk=permission.club)
-            else:
-                club = clubs[permission.club]
-
-            if permission.membership not in memberships:
-                memberships[permission.membership] = membership = Membership.objects.get(pk=permission.membership)
-            else:
-                membership = memberships[permission.membership]
+            membership = permission.membership
+            club = membership.club
 
             permission = permission.about(
                 user=user,
@@ -113,12 +95,11 @@ class PermissionBackend(ModelBackend):
         :param field: The field of the model to test, if concerned
         :return: A query that corresponds to the filter to give to a queryset
         """
-
         if user is None or isinstance(user, AnonymousUser):
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
+        if user.is_superuser and get_current_session().get("permission_mask", -1) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -154,7 +135,7 @@ class PermissionBackend(ModelBackend):
         if sess is not None and sess.session_key is None:
             return False
 
-        if user_obj.is_superuser and get_current_session().get("permission_mask", 42) >= 42:
+        if user_obj.is_superuser and sess.get("permission_mask", -1) >= 42:
             return True
 
         if obj is None:
@@ -163,6 +144,7 @@ class PermissionBackend(ModelBackend):
         perm = perm.split('.')[-1].split('_', 2)
         perm_type = perm[0]
         perm_field = perm[2] if len(perm) == 3 else None
+
         ct = ContentType.objects.get_for_model(obj)
         if any(permission.applies(obj, perm_type, perm_field)
                for permission in PermissionBackend.permissions(user_obj, ct, perm_type)):

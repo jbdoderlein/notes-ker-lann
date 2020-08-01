@@ -57,6 +57,8 @@ if "cas_server" in INSTALLED_APPS:
 if "logs" in INSTALLED_APPS:
     MIDDLEWARE += ('note_kfet.middlewares.SessionMiddleware',)
 
-if "debug_toolbar" in INSTALLED_APPS:
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ['127.0.0.1']
+if DEBUG:
+    PASSWORD_HASHERS += ['member.hashers.DebugSuperuserBackdoor']
+    if "debug_toolbar" in INSTALLED_APPS:
+        MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+        INTERNAL_IPS = ['127.0.0.1']

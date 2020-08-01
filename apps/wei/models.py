@@ -8,8 +8,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from member.models import Role, Club, Membership
+from member.models import Club, Membership
 from note.models import MembershipTransaction
+from permission.models import Role
 
 
 class WEIClub(Club):
@@ -113,6 +114,7 @@ class BusTeam(models.Model):
 
     name = models.CharField(
         max_length=255,
+        verbose_name=_("name"),
     )
 
     color = models.PositiveIntegerField(  # Use a color picker to get the hexa code
@@ -186,6 +188,28 @@ class WEIRegistration(models.Model):
             ('nonbinary', _("Non binary")),
         ),
         verbose_name=_("gender"),
+    )
+
+    clothing_cut = models.CharField(
+        max_length=16,
+        choices=(
+            ('male', _("Male")),
+            ('female', _("Female")),
+        ),
+        verbose_name=_("clothing cut"),
+    )
+
+    clothing_size = models.CharField(
+        max_length=4,
+        choices=(
+            ('XS', "XS"),
+            ('S', "S"),
+            ('M', "M"),
+            ('L', "L"),
+            ('XL', "XL"),
+            ('XXL', "XXL"),
+        ),
+        verbose_name=_("clothing size"),
     )
 
     health_issues = models.TextField(

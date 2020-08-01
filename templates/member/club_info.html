@@ -11,7 +11,7 @@
     <div class="card-body" id="profile_infos">
         <dl class="row">
             <dt class="col-xl-6">{% trans 'name'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ club.name}}</dd>
+            <dd class="col-xl-6">{{ club.name }}</dd>
 
             {% if club.parent_club %}
                 <dt class="col-xl-6"><a href="{% url 'member:club_detail' club.parent_club.pk %}">{% trans 'Club Parent'|capfirst %}</a></dt>

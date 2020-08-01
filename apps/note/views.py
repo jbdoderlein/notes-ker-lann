@@ -5,6 +5,7 @@ import json
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView
 from django_tables2 import SingleTableView
@@ -14,7 +15,7 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import TransactionTemplateForm
-from .models import Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial
+from .models import TemplateCategory, Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial
 from .models.transactions import SpecialTransaction
 from .tables import HistoryTable, ButtonTable
 
@@ -29,16 +30,16 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     model = Transaction
     # Transaction history table
     table_class = HistoryTable
+    extra_context = {"title": _("Transfer money")}
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at", "-id").all()[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = _('Transfer money')
         context['amount_widget'] = AmountInput(attrs={"id": "amount"})
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
         context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
@@ -63,6 +64,7 @@ class TransactionTemplateCreateView(ProtectQuerysetMixin, LoginRequiredMixin, Cr
     model = TransactionTemplate
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
+    extra_context = {"title": _("Create new button")}
 
 
 class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -71,6 +73,20 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
     """
     model = TransactionTemplate
     table_class = ButtonTable
+    extra_context = {"title": _("Search button")}
+
+    def get_queryset(self, **kwargs):
+        """
+        Filter the user list with the given pattern.
+        """
+        qs = super().get_queryset().distinct()
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+            qs = qs.filter(Q(name__iregex="^" + pattern) | Q(destination__club__name__iregex="^" + pattern))
+
+        qs = qs.order_by('-display', 'category__name', 'destination__club__name', 'name')
+
+        return qs
 
 
 class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -80,6 +96,7 @@ class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, Up
     model = TransactionTemplate
     form_class = TransactionTemplateForm
     success_url = reverse_lazy('note:template_list')
+    extra_context = {"title": _("Update button")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -116,25 +133,28 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     model = Transaction
     template_name = "note/conso_form.html"
+    extra_context = {"title": _("Consumptions")}
 
     # Transaction history table
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at", "-id")[:20]
+        return super().get_queryset(**kwargs).order_by("-created_at")[:20]
 
     def get_context_data(self, **kwargs):
         """
         Add some context variables in template such as page title
         """
         context = super().get_context_data(**kwargs)
-        from django.db.models import Count
-        buttons = TransactionTemplate.objects.filter(
+        categories = TemplateCategory.objects.order_by('name').all()
+        for category in categories:
+            category.templates_filtered = category.templates.filter(
+                PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+            ).filter(display=True).order_by('name').all()
+        context['categories'] = [cat for cat in categories if cat.templates_filtered]
+        context['highlighted'] = TransactionTemplate.objects.filter(highlighted=True).filter(
             PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
-        ).filter(display=True).annotate(clicks=Count('recurrenttransaction')).order_by('category__name', 'name')
-        context['transaction_templates'] = buttons
-        context['most_used'] = buttons.order_by('-clicks', 'name')[:10]
-        context['title'] = _("Consumptions")
+        ).order_by('name').all()
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
         # select2 compatibility

@@ -95,6 +95,8 @@ function li(id, text, extra_css) {
  * @param note The concerned note.
  */
 function displayStyle(note) {
+    if (!note)
+        return "";
     let balance = note.balance;
     var css = "";
     if (balance < -5000)
@@ -130,7 +132,6 @@ function displayNote(note, alias, user_note_field = null, profile_pic_field = nu
         if (profile_pic_field != null) {
             $("#" + profile_pic_field).attr('src', img);
             $("#" + profile_pic_field).click(function () {
-                console.log(note);
                 if (note.resourcetype === "NoteUser") {
                     document.location.href = "/accounts/user/" + note.user;
                 } else if (note.resourcetype === "NoteClub") {
@@ -275,7 +276,6 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                 field.attr('data-original-title', aliases_matched_html).tooltip('show');
 
                 consumers.results.forEach(function (consumer) {
-                    let note = consumer.note;
                     let consumer_obj = $("#" + alias_prefix + "_" + consumer.id);
                     consumer_obj.hover(function () {
                         displayNote(consumer.note, consumer.name, user_note_field, profile_pic_field)
@@ -283,8 +283,8 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                     consumer_obj.click(function () {
                         var disp = null;
                         notes_display.forEach(function (d) {
-                            // We compare the note ids
-                            if (d.id === note.id) {
+                            // We compare the alias ids
+                            if (d.id === consumer.id) {
                                 d.quantity += 1;
                                 disp = d;
                             }
@@ -294,7 +294,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                             disp = {
                                 name: consumer.name,
                                 id: consumer.id,
-                                note: note,
+                                note: consumer.note,
                                 quantity: 1
                             };
                             notes_display.push(disp);
@@ -343,7 +343,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 // When a validate button is clicked, we switch the validation status
 function de_validate(id, validated) {
     let invalidity_reason = $("#invalidity_reason_" + id).val();
-    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳ ...</strong>");
+    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳</strong>");
 
     // Perform a PATCH request to the API in order to update the transaction
     // If the user has insufficient rights, an error message will appear
@@ -369,7 +369,7 @@ function de_validate(id, validated) {
         },
         error: function (err) {
             addMsg("Une erreur est survenue lors de la validation/dévalidation " +
-                "de cette transaction : " + err.responseText, "danger");
+                "de cette transaction : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
 
             refreshBalance();
             // error if this method doesn't exist. Please define it.

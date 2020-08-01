@@ -156,7 +156,7 @@ function reset() {
 function consumeAll() {
     notes_display.forEach(function(note_display) {
         buttons.forEach(function(button) {
-            consume(note_display.note.id, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
+            consume(note_display.note, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
                 button.name + " (" + button.category_name + ")", button.type, button.category_id, button.id);
        });
     });
@@ -164,7 +164,7 @@ function consumeAll() {
 
 /**
  * Create a new transaction from a button through the API.
- * @param source The note that paid the item (type: int)
+ * @param source The note that paid the item (type: note)
  * @param source_alias The alias used for the source (type: str)
  * @param dest The note that sold the item (type: int)
  * @param quantity The quantity sold (type: int)
@@ -184,13 +184,25 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
             "valid": true,
             "polymorphic_ctype": type,
             "resourcetype": "RecurrentTransaction",
-            "source": source,
+            "source": source.id,
             "source_alias": source_alias,
             "destination": dest,
             "category": category,
             "template": template
-        }, reset).fail(function (e) {
-            $.post("/api/note/transaction/transaction/",
+        })
+        .done(function () {
+            if (!isNaN(source.balance)) {
+                let newBalance = source.balance - quantity * amount;
+                if (newBalance <= -5000)
+                    addMsg("Attention, la note émettrice " + source_alias + " passe en négatif sévère.",
+                        "danger", 10000);
+                else if (newBalance < 0)
+                    addMsg("Attention, la note émettrice " + source_alias + " passe en négatif.",
+                        "warning", 10000);
+            }
+            reset();
+        }).fail(function (e) {
+        $.post("/api/note/transaction/transaction/",
             {
                 "csrfmiddlewaretoken": CSRF_TOKEN,
                 "quantity": quantity,
@@ -207,10 +219,10 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
                 "template": template
             }).done(function() {
                 reset();
-                addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger");
+                addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger", 10000);
             }).fail(function () {
                 reset();
-                errMsg(e.responseJSON);
+                errMsg(e.responseJSON, 10000);
             });
     });
 }

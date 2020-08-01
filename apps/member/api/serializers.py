@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from ..models import Profile, Club, Role, Membership
+from ..models import Profile, Club, Membership
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -26,17 +26,6 @@ class ClubSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Club
-        fields = '__all__'
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    """
-    REST API Serializer for Roles.
-    The djangorestframework plugin will analyse the model `Role` and parse all fields in the API.
-    """
-
-    class Meta:
-        model = Role
         fields = '__all__'
 
 

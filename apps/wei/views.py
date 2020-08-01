@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
@@ -52,6 +53,16 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     model = WEIClub
     table_class = WEITable
     ordering = '-year'
+    extra_context = {"title": _("Search WEI")}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub(
+            year=0,
+            date_start=timezone.now().date(),
+            date_end=timezone.now().date(),
+        ))
+        return context
 
 
 class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
@@ -60,6 +71,7 @@ class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = WEIClub
     form_class = WEIForm
+    extra_context = {"title": _("Create WEI")}
 
     def form_valid(self, form):
         form.instance.requires_membership = True
@@ -79,6 +91,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
     model = WEIClub
     context_object_name = "club"
+    extra_context = {"title": _("WEI Detail")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -132,6 +145,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         else:
             # Check if the user has the right to create a registration of a random first year member.
             empty_fy_registration = WEIRegistration(
+                wei=club,
                 user=random_user,
                 first_year=True,
                 birth_date="1970-01-01",
@@ -144,6 +158,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
             # Check if the user has the right to create a registration of a random old member.
             empty_old_registration = WEIRegistration(
+                wei=club,
                 user=User.objects.filter(~Q(wei__wei__in=[club])).first(),
                 first_year=False,
                 birth_date="1970-01-01",
@@ -171,13 +186,14 @@ class WEIMembershipsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
     """
     model = WEIMembership
     table_class = WEIMembershipTable
+    extra_context = {"title": _("View members of the WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs).filter(club=self.club)
+        qs = super().get_queryset(**kwargs).filter(club=self.club).distinct()
 
         pattern = self.request.GET.get("search", "")
 
@@ -208,13 +224,14 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
     """
     model = WEIRegistration
     table_class = WEIRegistrationTable
+    extra_context = {"title": _("View registrations to the WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs).filter(wei=self.club, membership=None)
+        qs = super().get_queryset(**kwargs).filter(wei=self.club, membership=None).distinct()
 
         pattern = self.request.GET.get("search", "")
 
@@ -244,6 +261,7 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     model = WEIClub
     context_object_name = "club"
     form_class = WEIForm
+    extra_context = {"title": _("Update the WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = self.get_object()
@@ -264,6 +282,7 @@ class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = Bus
     form_class = BusForm
+    extra_context = {"title": _("Create new bus")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["pk"])
@@ -294,6 +313,7 @@ class BusUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = Bus
     form_class = BusForm
+    extra_context = {"title": _("Update bus")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = self.get_object().wei
@@ -323,6 +343,7 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     Manage Bus
     """
     model = Bus
+    extra_context = {"title": _("Manage bus")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -330,7 +351,7 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         bus = self.object
         teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view")) \
-            .filter(bus=bus).annotate(count=Count("memberships"))
+            .filter(bus=bus).annotate(count=Count("memberships")).order_by("name")
         teams_table = BusTeamTable(data=teams, prefix="team-")
         context["teams"] = teams_table
 
@@ -349,6 +370,7 @@ class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = BusTeam
     form_class = BusTeamForm
+    extra_context = {"title": _("Create new team")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(buses__pk=self.kwargs["pk"])
@@ -380,6 +402,7 @@ class BusTeamUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = BusTeam
     form_class = BusTeamForm
+    extra_context = {"title": _("Update team")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = self.get_object().bus.wei
@@ -410,6 +433,7 @@ class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     Manage Bus team
     """
     model = BusTeam
+    extra_context = {"title": _("Manage WEI team")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -431,6 +455,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
+    extra_context = {"title": _("Register first year student to the WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
@@ -485,6 +510,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
+    extra_context = {"title": _("Register old student to the WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
@@ -562,6 +588,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
+    extra_context = {"title": _("Update WEI Registration")}
 
     def get_queryset(self, **kwargs):
         return WEIRegistration.objects
@@ -651,6 +678,7 @@ class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Delete
     Delete a non-validated WEI registration
     """
     model = WEIRegistration
+    extra_context = {"title": _("Delete WEI registration")}
 
     def dispatch(self, request, *args, **kwargs):
         object = self.get_object()
@@ -680,6 +708,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
     """
     model = WEIMembership
     form_class = WEIMembershipForm
+    extra_context = {"title": _("Validate WEI registration")}
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei
@@ -797,6 +826,7 @@ class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
     model = WEIRegistration
     template_name = "wei/survey.html"
     survey = None
+    extra_context = {"title": _("Survey WEI")}
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -834,7 +864,6 @@ class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = self.object.wei
-        context["title"] = _("Survey WEI")
         return context
 
     def form_valid(self, form):
@@ -850,21 +879,21 @@ class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
 
 class WEISurveyEndView(LoginRequiredMixin, TemplateView):
     template_name = "wei/survey_end.html"
+    extra_context = {"title": _("Survey WEI")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei
-        context["title"] = _("Survey WEI")
         return context
 
 
 class WEIClosedView(LoginRequiredMixin, TemplateView):
     template_name = "wei/survey_closed.html"
+    extra_context = {"title": _("Survey WEI")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = WEIClub.objects.get(pk=self.kwargs["pk"])
-        context["title"] = _("Survey WEI")
         return context
 
 

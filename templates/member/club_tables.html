@@ -1,10 +1,23 @@
 {% load render_table from django_tables2 %}
 {% load i18n %}
+{% if managers.data %}
+    <div class="card">
+        <div class="card-header position-relative" id="clubListHeading">
+            <a class="font-weight-bold">
+                <i class="fa fa-users"></i> {% trans "Club managers" %}
+            </a>
+        </div>
+        {% render_table managers %}
+    </div>
+
+    <hr>
+{% endif %}
+
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
-                <i class="fa fa-users"></i> {% trans "Member of the Club" %}
+            <a class="stretched-link font-weight-bold" href="{% url 'member:club_members' pk=club.pk %}">
+                <i class="fa fa-users"></i> {% trans "Club members" %}
             </a>
         </div>
         {% render_table member_list %}
@@ -16,7 +29,7 @@
 {% if history_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
+            <a class="font-weight-bold">
                 <i class="fa fa-euro"></i> {% trans "Transaction history" %}
             </a>
         </div>

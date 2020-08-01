@@ -16,6 +16,7 @@ urlpatterns = [
     path('club/<int:pk>/update/', views.ClubUpdateView.as_view(), name="club_update"),
     path('club/<int:pk>/update_pic/', views.ClubPictureUpdateView.as_view(), name="club_update_pic"),
     path('club/<int:pk>/aliases/', views.ClubAliasView.as_view(), name="club_alias"),
+    path('club/<int:pk>/members/', views.ClubMembersListView.as_view(), name="club_members"),
 
     path('user/', views.UserListView.as_view(), name="user_list"),
     path('user/<int:pk>/', views.UserDetailView.as_view(), name="user_detail"),

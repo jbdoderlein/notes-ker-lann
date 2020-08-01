@@ -131,7 +131,7 @@ class Profile(models.Model):
         return reverse('user_detail', args=(self.pk,))
 
     def send_email_validation_link(self):
-        subject = "Activate your Note Kfet account"
+        subject = _("Activate your Note Kfet account")
         message = loader.render_to_string('registration/mails/email_validation_email.html',
                                           {
                                               'user': self.user,
@@ -247,24 +247,6 @@ class Club(models.Model):
         return reverse_lazy('member:club_detail', args=(self.pk,))
 
 
-class Role(models.Model):
-    """
-    Role that an :model:`auth.User` can have in a :model:`member.Club`
-    """
-    name = models.CharField(
-        verbose_name=_('name'),
-        max_length=255,
-        unique=True,
-    )
-
-    class Meta:
-        verbose_name = _('role')
-        verbose_name_plural = _('roles')
-
-    def __str__(self):
-        return str(self.name)
-
-
 class Membership(models.Model):
     """
     Register the membership of a user to a club, including roles and membership duration.
@@ -284,7 +266,7 @@ class Membership(models.Model):
     )
 
     roles = models.ManyToManyField(
-        Role,
+        "permission.Role",
         verbose_name=_("roles"),
     )
 
@@ -302,6 +284,7 @@ class Membership(models.Model):
         verbose_name=_('fee'),
     )
 
+    @property
     def valid(self):
         """
         A membership is valid if today is between the start and the end date.
@@ -318,6 +301,14 @@ class Membership(models.Model):
         if self.club.parent_club is not None:
             if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
                 raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
+
+        if self.pk:
+            for role in self.roles.all():
+                club = role.for_club
+                if club is not None:
+                    if club.pk != self.club_id:
+                        raise ValidationError(_('The role {role} does not apply to the club {club}.')
+                                              .format(role=role.name, club=club.name))
 
         created = not self.pk
         if created:

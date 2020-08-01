@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from ..models import Permission, RolePermissions
+from ..models import Permission, Role
 
 
 class PermissionSerializer(serializers.ModelSerializer):
@@ -17,12 +17,12 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RolePermissionsSerializer(serializers.ModelSerializer):
+class RoleSerializer(serializers.ModelSerializer):
     """
-    REST API Serializer for RolePermissions types.
-    The djangorestframework plugin will analyse the model `RolePermissions` and parse all fields in the API.
+    REST API Serializer for Role types.
+    The djangorestframework plugin will analyse the model `Role` and parse all fields in the API.
     """
 
     class Meta:
-        model = RolePermissions
+        model = Role
         fields = '__all__'

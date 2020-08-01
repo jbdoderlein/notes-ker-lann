@@ -5,11 +5,11 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
+from note.models import NoteSpecial, Alias
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
-from permission.models import PermissionMask
+from permission.models import PermissionMask, Role
 
-from .models import Profile, Club, Membership, Role
+from .models import Profile, Club, Membership
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -18,6 +18,18 @@ class CustomAuthenticationForm(AuthenticationForm):
         queryset=PermissionMask.objects.order_by("rank"),
         empty_label=None,
     )
+
+
+class UserForm(forms.ModelForm):
+    def _get_validation_exclusions(self):
+        # Django usernames can only contain letters, numbers, @, ., +, - and _.
+        # We want to allow users to have uncommon and unpractical usernames:
+        # That is their problem, and we have normalized aliases for us.
+        return super()._get_validation_exclusions() + ["username"]
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email',)
 
 
 class ProfileForm(forms.ModelForm):
@@ -38,6 +50,15 @@ class ProfileForm(forms.ModelForm):
 
 
 class ClubForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if not self.instance.pk:    # Creating a club
+            if Alias.objects.filter(normalized_name=Alias.normalize(self.cleaned_data["name"])).exists():
+                self.add_error('name', _("An alias with a similar name already exists."))
+
+        return cleaned_data
+
     class Meta:
         model = Club
         fields = '__all__'
@@ -56,8 +77,6 @@ class ClubForm(forms.ModelForm):
 
 
 class MembershipForm(forms.ModelForm):
-    roles = forms.ModelMultipleChoiceField(queryset=Role.objects.filter(weirole=None).all())
-
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,
@@ -96,7 +115,7 @@ class MembershipForm(forms.ModelForm):
 
     class Meta:
         model = Membership
-        fields = ('user', 'roles', 'date_start')
+        fields = ('user', 'date_start')
         # Le champ d'utilisateur est remplacé par un champ d'auto-complétion.
         # Quand des lettres sont tapées, une requête est envoyée sur l'API d'auto-complétion
         # et récupère les noms d'utilisateur valides
@@ -112,3 +131,28 @@ class MembershipForm(forms.ModelForm):
                 ),
             'date_start': DatePickerInput(),
         }
+
+
+class MembershipRolesForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        queryset=User.objects,
+        label=_("User"),
+        disabled=True,
+        widget=Autocomplete(
+            User,
+            attrs={
+                'api_url': '/api/user/',
+                'name_field': 'username',
+                'placeholder': 'Nom ...',
+            },
+        ),
+    )
+
+    roles = forms.ModelMultipleChoiceField(
+        queryset=Role.objects.filter(weirole=None).all(),
+        label=_("Roles"),
+    )
+
+    class Meta:
+        model = Membership
+        fields = ('user', 'roles')

@@ -77,6 +77,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
     {% block extracss %}{% endblock %}
 </head>
 <body class="d-flex w-100 h-100 flex-column">
+{% if debug %}<div style="background:#ffeeba;text-align:center">Mode DEBUG activé.</div>{% endif %}
 <main class="mb-auto">
     <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar shadow-sm">
         <a class="navbar-brand" href="/">{{ request.site.name }}</a>
@@ -98,7 +99,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i>{% trans 'Transfer' %} </a>
                     </li>
                 {% endif %}
-                {% if "auth.user"|model_list|length >= 2 %}
+                {% if "auth.user"|model_list_length >= 2 %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
                     </li>
@@ -106,13 +107,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if "member.club"|not_empty_model_list %}
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
-                    </li>
-                {% endif %}
-                {% if "member.change_profile_registration_valid"|has_perm:user %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'registration:future_user_list' %}">
-                            <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
-                        </a>
                     </li>
                 {% endif %}
                 {% if "activity.activity"|not_empty_model_list %}
@@ -130,12 +124,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <a class="nav-link" href="{% url 'wei:current_wei_detail' %}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
                     </li>
                 {% endif %}
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
-                </li>
-                {% if user.is_staff %}
+                {% if user.is_authenticated %}
                     <li class="nav-item active">
-                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Administration' %}</a>
+                        <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
+                    </li>
+                {% endif %}
+                {% if user.is_staff and ""|has_perm:user %}
+                    <li class="nav-item active">
+                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
                     </li>
                 {% endif %}
             </ul>
@@ -178,6 +174,17 @@ SPDX-License-Identifier: GPL-3.0-or-later
             </div>
         {% endif %}
         {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
+            Attention : la Note Kfet 2020 est en phase de beta. Des fonctionnalités pourront être rajoutées d'ici à la version
+            finale, et des bugs peuvent survenir. Pour tout problème, merci d'envoyer un mail à l'adresse
+            <a href="mailto:&#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;">
+                &#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;</a>,
+            ou bien levez une issue sur le dépôt <a href="https://gitlab.crans.org/bde/nk20/-/issues">Gitlab</a>,
+            ou encore posez un commentaire sur le <a href="https://pad.crans.org/p/todoNK20">pad</a>.<br><br>
+
+            Certaines données ont été anonymisées afin de limiter les fuites de données, et peuvent ne pas correspondre avec vos données réelles.
+        </div>
         <div id="messages"></div>
         {% block content %}
             <p>Default content...</p>

@@ -50,6 +50,7 @@ def pre_save_object(sender, instance, **kwargs):
 
         # In the other case, we check if he/she has the right to change one field
         previous = qs.get()
+
         for field in instance._meta.fields:
             field_name = field.name
             old_value = getattr(previous, field.name)
@@ -81,7 +82,8 @@ def pre_delete_object(instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_force_delete"):
+    if hasattr(instance, "_force_delete") or hasattr(instance, "pk") and instance.pk == 0:
+        # Don't check permissions on force-deleted objects
         return
 
     user = get_current_authenticated_user()

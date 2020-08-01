@@ -5,9 +5,10 @@ from datetime import date
 from django.forms import HiddenInput
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView, TemplateView
-from member.models import Role, Membership
+from member.models import Membership
 
 from .backends import PermissionBackend
+from .models import Role
 
 
 class ProtectQuerysetMixin:
@@ -19,7 +20,7 @@ class ProtectQuerysetMixin:
     """
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view")).distinct()
+        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view"))
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -40,6 +41,7 @@ class ProtectQuerysetMixin:
 
 class RightsView(TemplateView):
     template_name = "permission/all_rights.html"
+    extra_context = {"title": _("Rights")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

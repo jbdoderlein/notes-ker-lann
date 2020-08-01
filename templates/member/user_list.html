@@ -2,6 +2,7 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+{% load perms %}
 
 {% block content %}
     <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
@@ -18,6 +19,13 @@
         {% endif %}
     </div>
 
+    <hr>
+
+    {% if "member.change_profile_registration_valid"|has_perm:user %}
+        <a class="btn btn-block btn-secondary" href="{% url 'registration:future_user_list' %}">
+            <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
+        </a>
+    {% endif %}
 {% endblock %}
 
 {% block extrajavascript %}
@@ -34,7 +42,7 @@
             if (pattern === old_pattern || pattern === "")
                 return;
 
-            $("#user_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
+            $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
         }
 
         searchbar_obj.keyup(function() {

@@ -75,7 +75,7 @@
 {% if buses.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
+            <a class="font-weight-bold">
                 <i class="fa fa-bus"></i> {% trans "Buses" %}
             </a>
         </div>
@@ -88,7 +88,7 @@
 {% if member_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold" href="{% url "wei:wei_memberships" pk=club.pk %}">
+            <a class="stretched-link font-weight-bold" href="{% url "wei:wei_memberships" pk=club.pk %}">
                 <i class="fa fa-users"></i> {% trans "Members of the WEI" %}
             </a>
         </div>
@@ -101,7 +101,7 @@
 {% if history_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold">
+            <a class="font-weight-bold">
                 <i class="fa fa-euro"></i> {% trans "Transaction history" %}
             </a>
         </div>
@@ -116,7 +116,7 @@
 {% if pre_registrations.data %}
     <div class="card">
         <div class="card-header position-relative" id="historyListHeading">
-            <a class="btn btn-link stretched-link font-weight-bold" href="{% url 'wei:wei_registrations' pk=club.pk %}">
+            <a class="stretched-link font-weight-bold" href="{% url 'wei:wei_registrations' pk=club.pk %}">
                 <i class="fa fa-user-plus"></i> {% trans "Unvalidated registrations" %}
             </a>
         </div>

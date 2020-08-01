@@ -4,12 +4,11 @@
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
-        <h4>
-            {% trans "search WEI" %}
-        </h4>
         <input class="form-control mx-auto w-25" type="text" onkeyup="search_field_moved()" id="search_field"/>
-        <hr>
-        <a class="btn btn-primary text-center my-4" href="{% url 'wei:wei_create' %}">{% trans "Create WEI" %}</a>
+        {% if can_create_wei %}
+            <hr>
+            <a class="btn btn-primary text-center my-4" href="{% url 'wei:wei_create' %}">{% trans "Create WEI" %}</a>
+        {% endif %}
     </div>
 </div>
 <div class="row justify-content-center">   

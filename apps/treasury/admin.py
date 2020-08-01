@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-lateré
 
 from django.contrib import admin
+from note_kfet.admin import admin_site
 
 from .models import RemittanceType, Remittance, SogeCredit
 
 
-@admin.register(RemittanceType)
+@admin.register(RemittanceType, site=admin_site)
 class RemittanceTypeAdmin(admin.ModelAdmin):
     """
     Admin customisation for RemiitanceType
@@ -14,7 +15,7 @@ class RemittanceTypeAdmin(admin.ModelAdmin):
     list_display = ('note', )
 
 
-@admin.register(Remittance)
+@admin.register(Remittance, site=admin_site)
 class RemittanceAdmin(admin.ModelAdmin):
     """
     Admin customisation for Remittance
@@ -27,4 +28,14 @@ class RemittanceAdmin(admin.ModelAdmin):
         return not obj.closed and super().has_change_permission(request, obj)
 
 
-admin.site.register(SogeCredit)
+@admin.register(SogeCredit, site=admin_site)
+class SogeCreditAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Remittance
+    """
+    list_display = ('user', 'valid',)
+    readonly_fields = ('transactions', 'credit_transaction',)
+
+    def has_add_permission(self, request):
+        # Don't create a credit manually
+        return False

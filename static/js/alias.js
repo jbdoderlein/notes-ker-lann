@@ -13,7 +13,7 @@
                 "note": note_id
             }
      ).done(function(){
-         $("#alias_table").load(location.href+ " #alias_table");
+         $("#alias_table").load(location.pathname+ " #alias_table");
          addMsg("Alias ajouté","success");
      })
       .fail(function(xhr, textStatus, error){
@@ -29,7 +29,7 @@
      })
       .done(function(){
           addMsg('Alias supprimé','success');
-          $("#alias_table").load(location.href + " #alias_table");
+          $("#alias_table").load(location.pathname + " #alias_table");
       })
       .fail(function(xhr,textStatus, error){
           errMsg(xhr.responseJSON);

@@ -25,7 +25,7 @@ DATABASES = {
 }
 
 # Break it, fix it!
-DEBUG = True
+DEBUG = False
 
 # Mandatory !
 ALLOWED_HOSTS = [os.environ.get('NOTE_URL', 'localhost')]
@@ -36,11 +36,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = False
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
-EMAIL_PORT = os.getenv('EMAIL_PORT', 443)
-EMAIL_HOST_USER = os.getenv('EMAIL_USER', 'change_me')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', 'change_me')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 465)
+EMAIL_HOST_USER = os.getenv('EMAIL_USER', None)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', None)
 
 SERVER_EMAIL = os.getenv("NOTE_MAIL", "notekfet@example.com")
+DEFAULT_FROM_EMAIL = "NoteKfet2020 <" + SERVER_EMAIL + ">"
 
 # Security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False

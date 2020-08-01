@@ -4,13 +4,13 @@
 import functools
 import json
 import operator
+from time import sleep
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q, Model
 from django.utils.translation import gettext_lazy as _
-from member.models import Role
 
 
 class InstancedPermission:
@@ -45,7 +45,17 @@ class InstancedPermission:
                 else:
                     oldpk = obj.pk
                 # Ensure previous models are deleted
-                self.model.model_class().objects.filter(pk=obj.pk).annotate(_force_delete=F("pk")).delete()
+                count = 0
+                while count < 1000:
+                    if self.model.model_class().objects.filter(pk=obj.pk).exists():
+                        # If the object exists, that means that one permission is currently checked.
+                        # We wait before the other permission, at most 1 second.
+                        sleep(1)
+                        continue
+                    break
+                for o in self.model.model_class().objects.filter(pk=obj.pk).all():
+                    o._force_delete = True
+                    Model.delete(o)
                 # Force insertion, no data verification, no trigger
                 obj._force_save = True
                 Model.save(obj, force_insert=True)
@@ -114,10 +124,10 @@ class PermissionMask(models.Model):
 class Permission(models.Model):
 
     PERMISSION_TYPES = [
-        ('add', 'add'),
-        ('view', 'view'),
-        ('change', 'change'),
-        ('delete', 'delete')
+        ('add', _('add')),
+        ('view', _('view')),
+        ('change', _('change')),
+        ('delete', _('delete'))
     ]
 
     model = models.ForeignKey(
@@ -239,6 +249,9 @@ class Permission(models.Model):
                     field = Permission.compute_param(value[i], **kwargs)
                     continue
 
+                if not hasattr(field, value[i][0]):
+                    return False
+
                 field = getattr(field, value[i][0])
                 params = []
                 call_kwargs = {}
@@ -252,6 +265,9 @@ class Permission(models.Model):
                         params.append(param)
                 field = field(*params, **call_kwargs)
             else:
+                if not hasattr(field, value[i]):
+                    return False
+
                 field = getattr(field, value[i])
         return field
 
@@ -276,7 +292,7 @@ class Permission(models.Model):
             elif query[0] == 'NOT':
                 return ~Permission._about(query[1], **kwargs)
             else:
-                return Q(pk=F("pk"))
+                return Q(pk=F("pk")) if Permission.compute_param(query, **kwargs) else ~Q(pk=F("pk"))
         elif isinstance(query, dict):
             q_kwargs = {}
             for key in query:
@@ -307,23 +323,30 @@ class Permission(models.Model):
         return self.description
 
 
-class RolePermissions(models.Model):
+class Role(models.Model):
     """
     Permissions associated with a Role
     """
-    role = models.OneToOneField(
-        Role,
-        on_delete=models.PROTECT,
-        related_name='permissions',
-        verbose_name=_('role'),
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("name"),
     )
+
     permissions = models.ManyToManyField(
         Permission,
         verbose_name=_("permissions"),
     )
 
+    for_club = models.ForeignKey(
+        "member.Club",
+        verbose_name=_("for club"),
+        on_delete=models.PROTECT,
+        null=True,
+        default=None,
+    )
+
     def __str__(self):
-        return str(self.role)
+        return self.name
 
     class Meta:
         verbose_name = _("role permissions")

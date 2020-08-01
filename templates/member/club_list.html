@@ -4,9 +4,6 @@
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
-        <h4>
-            {% trans "search clubs" %}
-        </h4>
         <input class="form-control mx-auto w-25" type="text" id="search_field"/>
         <hr>
         <a class="btn btn-primary text-center my-4" href="{% url 'member:club_create' %}">{% trans "Create club" %}</a>
@@ -36,7 +33,7 @@
 
         function reloadTable() {
             let pattern = searchbar_obj.val();
-            $("#club_table").load(location.href + "?search=" + pattern.replace(" ", "%20") + " #club_table", init);
+            $("#club_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #club_table", init);
         }
 
         searchbar_obj.keyup(function() {

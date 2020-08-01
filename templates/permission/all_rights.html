@@ -15,15 +15,15 @@
     {% regroup active_memberships by roles as memberships_per_role %}
     {% for role in roles %}
         <li class="{% if not role.clubs %}no-club{% endif %}">
-            {{ role }} {% if role.weirole %}(<em>Pour le WEI</em>){% endif %}
+            {{ role }} {% if role.weirole %}(<em>Pour le WEI</em>){% endif %} {% if role.for_club %}(<em>Pour le club {{ role.for_club }} uniquement</em>){% endif %}
             {% if role.clubs %}
                 <div class="alert alert-success">
                     {% trans "Own this role in the clubs" %} {{ role.clubs|join:", " }}
                 </div>
             {% endif %}
             <ul>
-            {% for permission in role.permissions.permissions.all %}
-                <li data-toggle="tooltip" title="{% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.type }} {{ permission.model }}{% if permission.permanent %}, {% trans "permanent" %}{% endif %})</li>
+            {% for permission in role.permissions.all %}
+                <li data-toggle="tooltip" title="{% trans "Mask:" %} {{ permission.mask }}, {% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.get_type_display }} {{ permission.model }}{% if permission.permanent %}, {% trans "permanent" %}{% endif %})</li>
             {% empty %}
                 <em>{% trans "No associated permission" %}</em>
             {% endfor %}

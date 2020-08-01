@@ -15,10 +15,11 @@ from django.views.generic import CreateView, TemplateView, DetailView
 from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
-from member.models import Membership, Club, Role
+from member.models import Membership, Club
 from note.models import SpecialTransaction
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
+from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
 from .forms import SignUpForm, ValidationForm
@@ -34,6 +35,7 @@ class UserCreateView(CreateView):
     form_class = SignUpForm
     template_name = 'registration/signup.html'
     second_form = ProfileForm
+    extra_context = {"title": _("Register new user")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,6 +79,7 @@ class UserValidateView(TemplateView):
     """
     title = _("Email validation")
     template_name = 'registration/email_validation_complete.html'
+    extra_context = {"title": _("Validate email")}
 
     def get(self, *args, **kwargs):
         """
@@ -90,16 +93,13 @@ class UserValidateView(TemplateView):
 
         # Validate the token
         if user is not None and email_validation_token.check_token(user, token):
-            self.validlink = True
             # The user must wait that someone validates the account before the user can be active and login.
+            self.validlink = True
             user.is_active = user.profile.registration_valid or user.is_superuser
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
-            return super().dispatch(*args, **kwargs)
-        else:
-            # Display the "Email validation unsuccessful" page.
-            return self.render_to_response(self.get_context_data())
+        return self.render_to_response(self.get_context_data())
 
     def get_user(self, uidb64):
         """
@@ -132,7 +132,7 @@ class UserValidationEmailSentView(TemplateView):
     Display the information that the validation link has been sent.
     """
     template_name = 'registration/email_validation_email_sent.html'
-    title = _('Email validation email sent')
+    extra_context = {"title": _('Email validation email sent')}
 
 
 class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, DetailView):
@@ -140,6 +140,7 @@ class UserResendValidationEmailView(LoginRequiredMixin, ProtectQuerysetMixin, De
     Rensend the email validation link.
     """
     model = User
+    extra_context = {"title": _("Resend email validation link")}
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
@@ -157,6 +158,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
     model = User
     table_class = FutureUserTable
     template_name = 'registration/future_user_list.html'
+    extra_context = {"title": _("Pre-registered users list")}
 
     def get_queryset(self, **kwargs):
         """
@@ -164,7 +166,7 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         :param kwargs:
         :return:
         """
-        qs = super().get_queryset().filter(profile__registration_valid=False)
+        qs = super().get_queryset().distinct().filter(profile__registration_valid=False)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
@@ -198,6 +200,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
     form_class = ValidationForm
     context_object_name = "user_object"
     template_name = "registration/future_profile_detail.html"
+    extra_context = {"title": _("Registration detail")}
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -354,6 +357,7 @@ class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
     """
     Delete a pre-registered user.
     """
+    extra_context = {"title": _("Invalidate pre-registration")}
 
     def get(self, request, *args, **kwargs):
         """

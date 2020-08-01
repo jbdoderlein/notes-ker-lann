@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import BaseFormView
@@ -35,6 +36,7 @@ class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     """
     model = Invoice
     form_class = InvoiceForm
+    extra_context = {"title": _("Create new invoice")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,6 +79,7 @@ class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView)
     """
     model = Invoice
     table_class = InvoiceTable
+    extra_context = {"title": _("Invoices list")}
 
 
 class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -85,6 +88,7 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """
     model = Invoice
     form_class = InvoiceForm
+    extra_context = {"title": _("Update an invoice")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -167,7 +171,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             del tex
 
             # The file has to be rendered twice
-            for _ in range(2):
+            for ignored in range(2):
                 error = subprocess.Popen(
                     ["pdflatex", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
@@ -198,6 +202,7 @@ class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView)
     """
     model = Remittance
     form_class = RemittanceForm
+    extra_context = {"title": _("Create a new remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -218,27 +223,46 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     List existing Remittances
     """
     template_name = "treasury/remittance_list.html"
+    extra_context = {"title": _("Remittances list")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["opened_remittances"] = RemittanceTable(
+        opened_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=False).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
-        context["closed_remittances"] = RemittanceTable(
-            data=Remittance.objects.filter(closed=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all())
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+            prefix="opened-remittances-",
+        )
+        opened_remittances.paginate(page=self.request.GET.get("opened-remittances-page", 1), per_page=10)
+        context["opened_remittances"] = opened_remittances
 
-        context["special_transactions_no_remittance"] = SpecialTransactionTable(
+        closed_remittances = RemittanceTable(
+            data=Remittance.objects.filter(closed=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all(),
+            prefix="closed-remittances-",
+        )
+        closed_remittances.paginate(page=self.request.GET.get("closed-remittances-page", 1), per_page=10)
+        context["closed_remittances"] = closed_remittances
+
+        no_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).filter(
                 PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
-            exclude=('remittance_remove', ))
-        context["special_transactions_with_remittance"] = SpecialTransactionTable(
+            exclude=('remittance_remove', ),
+            prefix="no-remittance-",
+        )
+        no_remittance_tr.paginate(page=self.request.GET.get("no-remittance-page", 1), per_page=10)
+        context["special_transactions_no_remittance"] = no_remittance_tr
+
+        with_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance__closed=False).filter(
                 PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
-            exclude=('remittance_add', ))
+            exclude=('remittance_add', ),
+            prefix="with-remittance-",
+        )
+        with_remittance_tr.paginate(page=self.request.GET.get("with-remittance-page", 1), per_page=10)
+        context["special_transactions_with_remittance"] = with_remittance_tr
 
         return context
 
@@ -249,6 +273,7 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
     """
     model = Remittance
     form_class = RemittanceForm
+    extra_context = {"title": _("Update a remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -271,9 +296,9 @@ class LinkTransactionToRemittanceView(ProtectQuerysetMixin, LoginRequiredMixin, 
     """
     Attach a special transaction to a remittance
     """
-
     model = SpecialTransactionProxy
     form_class = LinkTransactionToRemittanceForm
+    extra_context = {"title": _("Attach a transaction to a remittance")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -317,6 +342,7 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
     """
     model = SogeCredit
     table_class = SogeCreditTable
+    extra_context = {"title": _("List of credits from the Société générale")}
 
     def get_queryset(self, **kwargs):
         """
@@ -355,6 +381,7 @@ class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormVie
     """
     model = SogeCredit
     form_class = Form
+    extra_context = {"title": _("Manage credits from the Société générale")}
 
     def form_valid(self, form):
         if "validate" in form.data:

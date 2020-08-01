@@ -3,12 +3,13 @@
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import path, include
 from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
 from django.views.generic import RedirectView
 
 from member.views import CustomLoginView
+
+from .admin import admin_site
 
 urlpatterns = [
     # Dev so redirect to something random
@@ -25,7 +26,7 @@ urlpatterns = [
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls, name="admin"),
+    path('admin/', admin_site.urls, name="admin"),
     path('accounts/login/', CustomLoginView.as_view()),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),

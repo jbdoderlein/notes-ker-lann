@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'note',
     'permission',
     'registration',
+    'scripts',
     'treasury',
     'wei',
 ]

@@ -4,8 +4,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from api.viewsets import ReadOnlyProtectedModelViewSet
 
-from .serializers import PermissionSerializer, RolePermissionsSerializer
-from ..models import Permission, RolePermissions
+from .serializers import PermissionSerializer, RoleSerializer
+from ..models import Permission, Role
 
 
 class PermissionViewSet(ReadOnlyProtectedModelViewSet):
@@ -20,13 +20,13 @@ class PermissionViewSet(ReadOnlyProtectedModelViewSet):
     filterset_fields = ['model', 'type', ]
 
 
-class RolePermissionsViewSet(ReadOnlyProtectedModelViewSet):
+class RoleViewSet(ReadOnlyProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `RolePermission` objects, serialize it to JSON with the given serializer
     then render it on /api/permission/roles/
     """
-    queryset = RolePermissions.objects.all()
-    serializer_class = RolePermissionsSerializer
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['role', ]

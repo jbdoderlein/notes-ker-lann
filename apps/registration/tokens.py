@@ -24,7 +24,8 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         # Truncate microseconds so that tokens are consistent even if the
         # database doesn't support microseconds.
         login_timestamp = '' if user.last_login is None else user.last_login.replace(microsecond=0, tzinfo=None)
-        return str(user.pk) + str(user.profile.email_confirmed) + str(login_timestamp) + str(timestamp)
+        return str(user.pk) + str(user.email) + str(user.profile.email_confirmed)\
+               + str(login_timestamp) + str(timestamp)
 
 
 email_validation_token = AccountActivationTokenGenerator()
