@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from note.models import NoteUser, Transaction
@@ -118,7 +119,7 @@ class Entry(models.Model):
     )
 
     time = models.DateTimeField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name=_("entry time"),
     )
 

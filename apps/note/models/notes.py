@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
@@ -51,7 +52,7 @@ class Note(PolymorphicModel):
     )
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
-        auto_now_add=True,
+        default=timezone.now,
     )
 
     class Meta:

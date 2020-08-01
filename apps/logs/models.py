@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -68,7 +69,7 @@ class Changelog(models.Model):
     timestamp = models.DateTimeField(
         null=False,
         blank=False,
-        auto_now_add=True,
+        default=timezone.now,
         name='timestamp',
         verbose_name=_('timestamp'),
     )
