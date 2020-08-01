@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-
 from note.templatetags.pretty_money import pretty_money
 from note_kfet.admin import admin_site
 

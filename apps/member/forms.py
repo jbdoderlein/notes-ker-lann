@@ -132,19 +132,20 @@ class MembershipForm(forms.ModelForm):
             'date_start': DatePickerInput(),
         }
 
+
 class MembershipRolesForm(forms.ModelForm):
     user = forms.ModelChoiceField(
         queryset=User.objects,
         label=_("User"),
         disabled=True,
         widget=Autocomplete(
-                    User,
-                    attrs={
-                        'api_url': '/api/user/',
-                        'name_field': 'username',
-                        'placeholder': 'Nom ...',
-                    },
-                ),
+            User,
+            attrs={
+                'api_url': '/api/user/',
+                'name_field': 'username',
+                'placeholder': 'Nom ...',
+            },
+        ),
     )
 
     roles = forms.ModelMultipleChoiceField(

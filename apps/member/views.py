@@ -672,9 +672,9 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
         if 'search' in self.request.GET:
             pattern = self.request.GET['search']
             qs = qs.filter(
-                Q(user__first_name__iregex='^' + pattern) |
-                Q(user__last_name__iregex='^' + pattern) |
-                Q(user__note__alias__normalized_name__iregex='^' + Alias.normalize(pattern))
+                Q(user__first_name__iregex='^' + pattern)
+                | Q(user__last_name__iregex='^' + pattern)
+                | Q(user__note__alias__normalized_name__iregex='^' + Alias.normalize(pattern))
             )
 
         only_active = "only_active" not in self.request.GET or self.request.GET["only_active"] != '0'

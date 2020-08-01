@@ -39,4 +39,3 @@ class SogeCreditAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Don't create a credit manually
         return False
-
