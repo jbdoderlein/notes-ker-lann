@@ -2128,33 +2128,33 @@ msgstr ""
 msgid "Forgotten your password or username?"
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:3
+#: templates/registration/mails/email_validation_email.txt:3
 msgid "Hi"
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:5
+#: templates/registration/mails/email_validation_email.txt:5
 msgid ""
 "You recently registered on the Note Kfet. Please click on the link below to "
 "confirm your registration."
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:9
+#: templates/registration/mails/email_validation_email.txt:9
 msgid ""
 "This link is only valid for a couple of days, after that you will need to "
 "contact us to validate your email."
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:11
+#: templates/registration/mails/email_validation_email.txt:11
 msgid ""
 "After that, you'll have to wait that someone validates your account before "
 "you can log in. You will need to pay your membership in the Kfet."
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:13
+#: templates/registration/mails/email_validation_email.txt:13
 msgid "Thanks"
 msgstr ""
 
-#: templates/registration/mails/email_validation_email.html:15
+#: templates/registration/mails/email_validation_email.txt:15
 msgid "The Note Kfet team."
 msgstr ""
 

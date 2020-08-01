@@ -131,15 +131,22 @@ class Profile(models.Model):
         return reverse('user_detail', args=(self.pk,))
 
     def send_email_validation_link(self):
-        subject = _("Activate your Note Kfet account")
-        message = loader.render_to_string('registration/mails/email_validation_email.html',
+        subject = "[Note Kfet]" + _("Activate your Note Kfet account")
+        message = loader.render_to_string('registration/mails/email_validation_email.txt',
                                           {
                                               'user': self.user,
                                               'domain': os.getenv("NOTE_URL", "note.example.com"),
                                               'token': email_validation_token.make_token(self.user),
                                               'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
-        self.user.email_user(subject, message)
+        html = loader.render_to_string('registration/mails/email_validation_email.txt',
+                                          {
+                                              'user': self.user,
+                                              'domain': os.getenv("NOTE_URL", "note.example.com"),
+                                              'token': email_validation_token.make_token(self.user),
+                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
+                                          })
+        self.user.email_user(subject, message, html_message=html)
 
 
 class Club(models.Model):

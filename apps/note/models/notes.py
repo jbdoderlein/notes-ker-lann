@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
@@ -66,6 +67,13 @@ class Note(PolymorphicModel):
         return str(self)
 
     pretty.short_description = _('Note')
+
+    @property
+    def last_negative_duration(self):
+        if self.balance >= 0 or self.last_negative is None:
+            return None
+        delta = timezone.now() - self.last_negative
+        return "{:d} jours".format(delta.days)
 
     def save(self, *args, **kwargs):
         """
@@ -127,6 +135,21 @@ class NoteUser(Note):
 
     def pretty(self):
         return _("%(user)s's note") % {'user': str(self.user)}
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.balance < 0:
+            old_note = NoteUser.objects.get(pk=self.pk)
+            if old_note.balance >= 0:
+                # Passage en négatif
+                self.last_negative = timezone.now()
+                self.send_mail_negative_balance()
+        super().save(*args, **kwargs)
+
+    def send_mail_negative_balance(self):
+        plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
+        html = render_to_string("note/mails/negative_balance.html", dict(note=self))
+        self.user.email_user("[Note Kfet] Passage en négatif (compte n°{:d})"
+                             .format(self.user.pk), plain_text, html_message=html)
 
 
 class NoteClub(Note):

@@ -1,15 +1,41 @@
 {% load i18n %}
 
-{% trans "Hi" %} {{ user.username }},
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Passage en négatif (compte n°{{ note.user.pk }})</title>
+</head>
+<body>
 
-{% trans "You recently registered on the Note Kfet. Please click on the link below to confirm your registration." %}
+<p>
+    {% trans "Hi" %} {{ user.username }},
+</p>
 
-https://{{ domain }}{% url 'registration:email_validation' uidb64=uid token=token %}
+<p>
+    {% trans "You recently registered on the Note Kfet. Please click on the link below to confirm your registration." %}
+</p>
 
-{% trans "This link is only valid for a couple of days, after that you will need to contact us to validate your email." %}
+<p>
+    <a href="https://{{ domain }}{% url 'registration:email_validation' uidb64=uid token=token %}">
+        https://{{ domain }}{% url 'registration:email_validation' uidb64=uid token=token %}
+    </a>
+</p>
 
-{% trans "After that, you'll have to wait that someone validates your account before you can log in. You will need to pay your membership in the Kfet." %}
+<p>
+    {% trans "This link is only valid for a couple of days, after that you will need to contact us to validate your email." %}
+</p>
 
-{% trans "Thanks" %},
+<p>
+    {% trans "After that, you'll have to wait that someone validates your account before you can log in. You will need to pay your membership in the Kfet." %}
+</p>
 
-{% trans "The Note Kfet team." %}
+<p>
+    {% trans "Thanks" %},
+</p>
+
+--
+<p>
+    {% trans "The Note Kfet team." %}
+    Mail généré par la Note Kfet le {% now "j F Y à H:i:s" %}
+</p>

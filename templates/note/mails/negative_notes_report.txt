@@ -1,0 +1,12 @@
+{% load pretty_money %}
+
+         Nom         |   Prénom   |     Pseudo      |               Email               |  Solde   |   Durée
+---------------------+------------+-----------------+-----------------------------------+----------+-----------
+{% for note in notes %}
+{{ note.user.last_name }} | {{ note.user.first_name }} | {{ note.user.username }} | {{ note.user.email }} | {{ note.balance|pretty_money }} | {{ note.last_negative_duration }}
+{% endfor %}
+
+--
+Le BDE
+
+Mail généré par la Note Kfet le {% now "j F Y à H:i:s" %}

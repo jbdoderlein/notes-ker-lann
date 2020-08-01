@@ -1,0 +1,44 @@
+{% load pretty_money %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Passage en négatif (compte n°{{ note.user.pk }})</title>
+</head>
+<body>
+<p>
+    Bonjour {{ note.user.first_name }} {{ note.user.last_name }},
+</p>
+
+<p>
+    Ce mail t'a été envoyé parce que le solde de ta Note Kfet {{ note }} est négatif !
+</p>
+
+<p>
+    Ton solde actuel est de {{ note.balance|pretty_money }}.
+</p>
+
+<p>
+    Par ailleurs, le BDE ne sert pas d'alcool aux adhérents dont le solde
+    est inférieur à 0 € depuis plus de 24h.
+</p>
+
+<p>
+    Si tu ne comprends pas ton solde, tu peux consulter ton historique
+    sur <a href="{% url "member:user_detail" pk=note.user.pk %}">ton compte</a>.
+</p>
+
+<p>
+    Tu peux venir recharger ta note rapidement à la Kfet, ou envoyer un mail à
+    la trésorerie du BdE (<a href="mailto:tresorerie.bde@lists.crans.org">tresorerie.bde@lists.crans.org</a>)
+    pour payer par virement bancaire.
+</p>
+
+--
+<p>
+    Le BDE<br>
+    Mail généré par la Note Kfet le {% now "j F Y à H:i:s" %}
+</p>
+</body>
+</html>

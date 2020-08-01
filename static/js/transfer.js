@@ -333,9 +333,9 @@ $("#btn_transfer").click(function() {
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,
                 "resourcetype": "SpecialTransaction",
                 "source": source_id,
-                "source_alias": sources_notes_display[0].name,
+                "source_alias": sources_notes_display.length ? sources_notes_display[0].name : null,
                 "destination": dest_id,
-                "destination_alias": dests_notes_display[0].name,
+                "destination_alias": dests_notes_display.length ? dests_notes_display[0].name : null,
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
