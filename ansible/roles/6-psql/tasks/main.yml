@@ -17,7 +17,7 @@
 - name: Create role note
   postgresql_user:
     name: note
-    password: "CHANGE_ME"
+    password: "{{ DB_PASSWORD }}"
   become_user: postgres
 
 - name: Create NK20 database

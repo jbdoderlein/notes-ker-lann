@@ -2,6 +2,10 @@
 ---
 
 - hosts: bde-nk20-beta.adh.crans.org
+  vars_prompt:
+    - name: DB_PASSWORD
+      prompt: "Password of the database"
+      private: yes
   roles:
     - 1-apt-basic
     - 2-nk20
