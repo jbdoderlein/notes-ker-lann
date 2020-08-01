@@ -28,4 +28,15 @@ class RemittanceAdmin(admin.ModelAdmin):
         return not obj.closed and super().has_change_permission(request, obj)
 
 
-admin_site.register(SogeCredit)
+@admin.register(SogeCredit, site=admin_site)
+class SogeCreditAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Remittance
+    """
+    list_display = ('user', 'valid',)
+    readonly_fields = ('transactions', 'credit_transaction',)
+
+    def has_add_permission(self, request):
+        # Don't create a credit manually
+        return False
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-01 10:47+0200\n"
+"POT-Creation-Date: 2020-08-01 15:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,7 +194,7 @@ msgstr "Nom de famille"
 
 #: apps/activity/tables.py:79 apps/member/forms.py:107
 #: apps/registration/forms.py:69 apps/treasury/forms.py:122
-#: templates/note/transaction_form.html:127
+#: templates/note/transaction_form.html:129
 msgid "First name"
 msgstr "Prénom"
 
@@ -292,6 +292,24 @@ msgstr "journal de modification"
 msgid "changelogs"
 msgstr "journaux de modifications"
 
+#: apps/member/admin.py:53 apps/member/models.py:178
+#: templates/member/club_info.html:41
+msgid "membership fee (paid students)"
+msgstr "cotisation pour adhérer (normalien élève)"
+
+#: apps/member/admin.py:54 apps/member/models.py:183
+#: templates/member/club_info.html:44
+msgid "membership fee (unpaid students)"
+msgstr "cotisation pour adhérer (normalien étudiant)"
+
+#: apps/member/admin.py:68 apps/member/models.py:270
+msgid "roles"
+msgstr "rôles"
+
+#: apps/member/admin.py:69 apps/member/models.py:284
+msgid "fee"
+msgstr "cotisation"
+
 #: apps/member/apps.py:14 apps/wei/tables.py:150 apps/wei/tables.py:181
 msgid "member"
 msgstr "adhérent"
@@ -325,7 +343,7 @@ msgid "Credit amount"
 msgstr "Montant à créditer"
 
 #: apps/member/forms.py:112 apps/registration/forms.py:74
-#: apps/treasury/forms.py:124 templates/note/transaction_form.html:133
+#: apps/treasury/forms.py:124 templates/note/transaction_form.html:135
 msgid "Bank"
 msgstr "Banque"
 
@@ -479,14 +497,6 @@ msgstr "nécessite des adhésions"
 msgid "Uncheck if this club don't require memberships."
 msgstr "Décochez si ce club n'utilise pas d'adhésions."
 
-#: apps/member/models.py:178 templates/member/club_info.html:41
-msgid "membership fee (paid students)"
-msgstr "cotisation pour adhérer (normalien élève)"
-
-#: apps/member/models.py:183 templates/member/club_info.html:44
-msgid "membership fee (unpaid students)"
-msgstr "cotisation pour adhérer (normalien étudiant)"
-
 #: apps/member/models.py:189 templates/member/club_info.html:33
 msgid "membership duration"
 msgstr "durée de l'adhésion"
@@ -526,10 +536,6 @@ msgstr "club"
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:270
-msgid "roles"
-msgstr "rôles"
-
 #: apps/member/models.py:275
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
@@ -537,10 +543,6 @@ msgstr "l'adhésion commence le"
 #: apps/member/models.py:279
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
-
-#: apps/member/models.py:284
-msgid "fee"
-msgstr "cotisation"
 
 #: apps/member/models.py:303 apps/member/views.py:535 apps/wei/views.py:797
 msgid "User is not a member of the parent club"
@@ -652,14 +654,19 @@ msgstr "Gérer les rôles d'un utilisateur dans le club"
 msgid "Members of the club"
 msgstr "Membres du club"
 
-#: apps/note/admin.py:121 apps/note/models/transactions.py:106
+#: apps/note/admin.py:134 apps/note/models/transactions.py:106
 msgid "source"
 msgstr "source"
 
-#: apps/note/admin.py:129 apps/note/admin.py:171
+#: apps/note/admin.py:142 apps/note/admin.py:192
 #: apps/note/models/transactions.py:55 apps/note/models/transactions.py:119
 msgid "destination"
 msgstr "destination"
+
+#: apps/note/admin.py:197 apps/note/models/transactions.py:59
+#: apps/note/models/transactions.py:137
+msgid "amount"
+msgstr "montant"
 
 #: apps/note/forms.py:14
 msgid "select an image"
@@ -783,10 +790,6 @@ msgstr "catégories de transaction"
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:59 apps/note/models/transactions.py:137
-msgid "amount"
-msgstr "montant"
-
 #: apps/note/models/transactions.py:60
 msgid "in centimes"
 msgstr "en centimes"
@@ -844,7 +847,7 @@ msgstr ""
 #: apps/note/models/transactions.py:230
 #: templates/activity/activity_entry.html:13 templates/base.html:99
 #: templates/note/transaction_form.html:15
-#: templates/note/transaction_form.html:141
+#: templates/note/transaction_form.html:143
 msgid "Transfer"
 msgstr "Virement"
 
@@ -1155,7 +1158,7 @@ msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
 #: apps/treasury/forms.py:126 apps/treasury/tables.py:47
-#: apps/treasury/tables.py:113 templates/note/transaction_form.html:95
+#: apps/treasury/tables.py:113 templates/note/transaction_form.html:97
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr "Montant"
@@ -1176,7 +1179,7 @@ msgstr "Objet"
 msgid "Description"
 msgstr "Description"
 
-#: apps/treasury/models.py:48 templates/note/transaction_form.html:121
+#: apps/treasury/models.py:48 templates/note/transaction_form.html:123
 msgid "Name"
 msgstr "Nom"
 
@@ -2002,7 +2005,7 @@ msgid "Consum"
 msgstr "Consommer"
 
 #: templates/note/conso_form.html:39 templates/note/transaction_form.html:57
-#: templates/note/transaction_form.html:76
+#: templates/note/transaction_form.html:78
 msgid "Name or alias..."
 msgstr "Pseudo ou alias ..."
 
@@ -2026,7 +2029,7 @@ msgstr "Consommations simples"
 msgid "Double consumptions"
 msgstr "Consommations doubles"
 
-#: templates/note/conso_form.html:150 templates/note/transaction_form.html:152
+#: templates/note/conso_form.html:150 templates/note/transaction_form.html:154
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
 
@@ -2034,23 +2037,23 @@ msgstr "Historique des transactions récentes"
 msgid "Select emitters"
 msgstr "Sélection des émetteurs"
 
-#: templates/note/transaction_form.html:60
+#: templates/note/transaction_form.html:61
 msgid "I am the emitter"
 msgstr "Je suis l'émetteur"
 
-#: templates/note/transaction_form.html:70
+#: templates/note/transaction_form.html:72
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
 
-#: templates/note/transaction_form.html:87
+#: templates/note/transaction_form.html:89
 msgid "Action"
 msgstr "Action"
 
-#: templates/note/transaction_form.html:102
+#: templates/note/transaction_form.html:104
 msgid "Reason"
 msgstr "Raison"
 
-#: templates/note/transaction_form.html:111
+#: templates/note/transaction_form.html:113
 msgid "Transfer type"
 msgstr "Type de transfert"
 
@@ -2166,7 +2169,7 @@ msgid "Log in again"
 msgstr "Se connecter à nouveau"
 
 #: templates/registration/login.html:7 templates/registration/login.html:8
-#: templates/registration/login.html:22
+#: templates/registration/login.html:31
 #: templates/registration/password_reset_complete.html:10
 msgid "Log in"
 msgstr "Se connecter"
@@ -2183,6 +2186,14 @@ msgstr ""
 "masque de permissions plus fort ?"
 
 #: templates/registration/login.html:23
+msgid ""
+"You must be logged with a staff account with the higher mask to access "
+"Django Admin."
+msgstr ""
+"Vous devez être connecté avec un compte staff avec le masque le plus haut "
+"pour accéder à Django Admin."
+
+#: templates/registration/login.html:32
 msgid "Forgotten your password or username?"
 msgstr "Mot de passe ou pseudo oublié ?"
 

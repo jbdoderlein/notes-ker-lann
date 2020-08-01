@@ -20,7 +20,9 @@ class PermissionAdmin(admin.ModelAdmin):
     """
     Admin customisation for Permission
     """
-    list_display = ('type', 'model', 'field', 'mask', 'description', )
+    list_display = ('description', 'type', 'model', 'field', 'mask', )
+    list_filter = ('type', 'mask', 'model',)
+    search_fields = ('description', 'field',)
 
 
 @admin.register(Role, site=admin_site)

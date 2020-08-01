@@ -17,6 +17,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
             {% endblocktrans %}
         </p>
     {% endif %}
+
+    {% if request.resolver_match.view_name == 'admin:login' %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                You must be logged with a staff account with the higher mask to access Django Admin.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
     <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
         {{ form | crispy }}
         <input type="submit" value="{% trans 'Log in' %}" class="btn btn-primary">
