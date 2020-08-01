@@ -247,7 +247,7 @@ $("#btn_transfer").click(function() {
                                 addMsg("Le transfert de "
                                     + pretty_money(source.quantity * dest.quantity * amount) + " de la note "
                                     + source.name + " vers la note " + dest.name + " a été fait avec succès, " +
-                                    "mais la note émettrice passe en négatif sévère.", "danger", 10000);
+                                    "mais la note émettrice est en négatif sévère.", "danger", 10000);
                                 reset();
                                 return;
                             }
@@ -255,7 +255,7 @@ $("#btn_transfer").click(function() {
                                 addMsg("Le transfert de "
                                     + pretty_money(source.quantity * dest.quantity * amount) + " de la note "
                                     + source.name + " vers la note " + dest.name + " a été fait avec succès, " +
-                                    "mais la note émettrice passe en négatif.", "warning", 10000);
+                                    "mais la note émettrice est en négatif.", "warning", 10000);
                                 reset();
                                 return;
                             }

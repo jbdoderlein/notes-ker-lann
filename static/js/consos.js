@@ -194,10 +194,12 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
             if (!isNaN(source.balance)) {
                 let newBalance = source.balance - quantity * amount;
                 if (newBalance <= -5000)
-                    addMsg("Attention, la note émettrice " + source_alias + " passe en négatif sévère.",
+                    addMsg("Attention, La transaction depuis la note " + source_alias + " a été réalisée avec " +
+                        "succès, mais la note émettrice " + source_alias + " est en négatif sévère.",
                         "danger", 10000);
                 else if (newBalance < 0)
-                    addMsg("Attention, la note émettrice " + source_alias + " passe en négatif.",
+                    addMsg("Attention, La transaction depuis la note " + source_alias + " a été réalisée avec " +
+                        "succès, mais la note émettrice " + source_alias + " est en négatif.",
                         "warning", 10000);
             }
             reset();
