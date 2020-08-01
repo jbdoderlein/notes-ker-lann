@@ -131,7 +131,7 @@ class Profile(models.Model):
         return reverse('user_detail', args=(self.pk,))
 
     def send_email_validation_link(self):
-        subject = "[Note Kfet]" + _("Activate your Note Kfet account")
+        subject = "[Note Kfet]" + str(_("Activate your Note Kfet account"))
         message = loader.render_to_string('registration/mails/email_validation_email.txt',
                                           {
                                               'user': self.user,
