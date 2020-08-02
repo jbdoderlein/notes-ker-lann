@@ -45,12 +45,11 @@ class InstancedPermission:
                 else:
                     oldpk = obj.pk
                 # Ensure previous models are deleted
-                count = 0
-                while count < 1000:
+                for ignored in range(1000):
                     if self.model.model_class().objects.filter(pk=obj.pk).exists():
                         # If the object exists, that means that one permission is currently checked.
                         # We wait before the other permission, at most 1 second.
-                        sleep(1)
+                        sleep(0.001)
                         continue
                     break
                 for o in self.model.model_class().objects.filter(pk=obj.pk).all():
