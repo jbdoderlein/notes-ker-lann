@@ -2264,6 +2264,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 145,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les notes de club"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2757,6 +2773,28 @@
 				114,
 				128,
 				130
+			]
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 19,
+		"fields": {
+			"for_club": 1,
+			"name": "Secrétaire BDE",
+			"permissions": [
+				54,
+				55,
+				56,
+				57,
+				58,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				145
 			]
 		}
 	},
