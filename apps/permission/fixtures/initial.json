@@ -353,7 +353,7 @@
 			],
 			"query": "{\"pk\": [\"club\", \"pk\"]}",
 			"type": "view",
-			"mask": 3,
+			"mask": 1,
 			"field": "",
 			"permanent": false,
 			"description": "Voir les informations d'un club"
@@ -2282,6 +2282,7 @@
 				11,
 				12,
 				13,
+				22,
 				48,
 				52,
 				126
@@ -2306,6 +2307,7 @@
 				15,
 				16,
 				17,
+				22,
 				78,
 				79,
 				83,
@@ -2327,7 +2329,9 @@
 		"fields": {
 			"for_club": null,
 			"name": "Membre de club",
-			"permissions": []
+			"permissions": [
+				22
+			]
 		}
 	},
 	{
@@ -2337,7 +2341,6 @@
 			"for_club": null,
 			"name": "Bureau de club",
 			"permissions": [
-				22,
 				47,
 				49,
 				50,
