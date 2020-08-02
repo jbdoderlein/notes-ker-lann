@@ -18,7 +18,8 @@ $(document).ready(function () {
                 html += li(prefix + "_" + obj.id, obj[name_field]);
             });
 
-            $("#" + prefix + "_list").html(html);
+            let results_list = $("#" + prefix + "_list");
+            results_list.html(html);
 
             objects.results.forEach(function (obj) {
                 $("#" + prefix + "_" + obj.id).click(function() {
@@ -32,6 +33,10 @@ $(document).ready(function () {
                 if (input === obj[name_field])
                     $("#" + prefix + "_pk").val(obj.id);
             });
+
+            if (results_list.children().length === 1 && e.originalEvent.keyCode >= 32) {
+                results_list.children().first().trigger("click");
+            }
         });
     });
 });
