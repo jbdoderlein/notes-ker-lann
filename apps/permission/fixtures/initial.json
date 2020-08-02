@@ -2280,6 +2280,38 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 146,
+		"fields": {
+			"model": [
+				"member",
+				"membership"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir tous les adhérents du club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 147,
+		"fields": {
+			"model": [
+				"member",
+				"membership"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter un membre à n'importe quel club"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2456,7 +2488,9 @@
 				137,
 				138,
 				139,
-				143
+				143,
+				146,
+				147
 			]
 		}
 	},
@@ -2606,7 +2640,10 @@
 				141,
 				142,
 				143,
-				144
+				144,
+				145,
+				146,
+				147
 			]
 		}
 	},
@@ -2794,7 +2831,9 @@
 				138,
 				139,
 				140,
-				145
+				145,
+				146,
+				147
 			]
 		}
 	},
