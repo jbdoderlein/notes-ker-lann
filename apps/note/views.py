@@ -33,7 +33,9 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     extra_context = {"title": _("Transfer money")}
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at").all()[:20]
+        return Transaction.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+        ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
@@ -139,7 +141,9 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def get_queryset(self, **kwargs):
-        return super().get_queryset(**kwargs).order_by("-created_at")[:20]
+        return Transaction.objects.filter(
+            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+        ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
         """
