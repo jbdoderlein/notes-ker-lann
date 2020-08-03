@@ -296,6 +296,7 @@ $("#btn_transfer").click(function() {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                                 + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger", 10000);
+                            reset();
                         }).fail(function (err) {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
