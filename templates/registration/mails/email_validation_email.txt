@@ -8,7 +8,7 @@ https://{{ domain }}{% url 'registration:email_validation' uidb64=uid token=toke
 
 {% trans "This link is only valid for a couple of days, after that you will need to contact us to validate your email." %}
 
-{% trans "After that, you'll have to wait that someone validates your account before you can log in. You will need to pay your membership in the Kfet." %}
+{% trans "After that, you'll have to wait that someone validates your account before you can log in. You will need to pay your membership in the Kfet. Note that the WEI registration includes the Kfet membership." %}
 
 {% trans "Thanks" %},
 

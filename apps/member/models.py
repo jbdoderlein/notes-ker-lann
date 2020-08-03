@@ -139,7 +139,7 @@ class Profile(models.Model):
                                               'token': email_validation_token.make_token(self.user),
                                               'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
-        html = loader.render_to_string('registration/mails/email_validation_email.txt',
+        html = loader.render_to_string('registration/mails/email_validation_email.html',
                                           {
                                               'user': self.user,
                                               'domain': os.getenv("NOTE_URL", "note.example.com"),

@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
+from note.models import NoteSpecial, Alias
 from note_kfet.inputs import AmountInput
 
 
@@ -21,6 +21,12 @@ class SignUpForm(UserCreationForm):
         self.fields['last_name'].required = True
         self.fields['email'].required = True
         self.fields['email'].help_text = _("This address must be valid.")
+
+    def clean_username(self):
+        value = self.cleaned_data["username"]
+        if Alias.objects.filter(normalized_name=Alias.normalize(value)).exists():
+            self.add_error("username", _("An alias with a similar name already exists."))
+        return value
 
     class Meta:
         model = User
