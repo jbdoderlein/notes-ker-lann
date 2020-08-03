@@ -23,16 +23,22 @@ class AmountInput(NumberInput):
 class Autocomplete(TextInput):
     template_name = "member/autocomplete_model.html"
 
-    def __init__(self, model, attrs=None):
+    def __init__(self, model, resetable=False, attrs=None):
         super().__init__(attrs)
 
         self.model = model
+        self.resetable = resetable
         self.model_pk = None
 
     class Media:
         """JS/CSS resources needed to render the date-picker calendar."""
 
         js = ('js/autocomplete_model.js', )
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['resetable'] = self.resetable
+        return context
 
     def format_value(self, value):
         if value:

@@ -3,10 +3,11 @@
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
+from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
-from note_kfet.inputs import Autocomplete, AmountInput
+from note_kfet.inputs import Autocomplete, AmountInput, DateTimePickerInput
 
-from .models import TransactionTemplate, NoteClub
+from .models import TransactionTemplate, NoteClub, Alias
 
 
 class ImageForm(forms.Form):
@@ -38,3 +39,80 @@ class TransactionTemplateForm(forms.ModelForm):
                 ),
             'amount': AmountInput(),
         }
+
+
+class SearchTransactionForm(forms.Form):
+    source = forms.ModelChoiceField(
+        queryset=Alias.objects.all(),
+        label=_("Source"),
+        required=False,
+        widget=Autocomplete(
+            Alias,
+            resetable=True,
+            attrs={
+                'api_url': '/api/note/alias/',
+                'placeholder': 'Note ...',
+            },
+        ),
+    )
+
+    destination = forms.ModelChoiceField(
+        queryset=Alias.objects.all(),
+        label=_("Destination"),
+        required=False,
+        widget=Autocomplete(
+            Alias,
+            resetable=True,
+            attrs={
+                'api_url': '/api/note/alias/',
+                'placeholder': 'Note ...',
+            },
+        ),
+    )
+
+    type = forms.ModelMultipleChoiceField(
+        queryset=ContentType.objects.filter(app_label="note", model__endswith="transaction"),
+        initial=ContentType.objects.filter(app_label="note", model__endswith="transaction"),
+        label=_("Type"),
+        required=False,
+        widget=CheckboxSelectMultiple(),
+    )
+
+    reason = forms.CharField(
+        label=_("Reason"),
+        required=False,
+    )
+
+    valid = forms.BooleanField(
+        label=_("Valid"),
+        initial=False,
+        required=False,
+    )
+
+    amount_gte = forms.Field(
+        label=_("Total amount greater than"),
+        initial=0,
+        required=False,
+        widget=AmountInput(),
+    )
+
+    amount_lte = forms.Field(
+        initial=2 ** 31 - 1,
+        label=_("Total amount less than"),
+        required=False,
+        widget=AmountInput(),
+    )
+
+    created_after = forms.Field(
+        label=_("Created after"),
+        initial="2000-01-01 00:00",
+        required=False,
+        widget=DateTimePickerInput(),
+    )
+
+    created_before = forms.Field(
+        label=_("Created before"),
+        initial="2042-12-31 21:42",
+        required=False,
+        widget=DateTimePickerInput(),
+    )

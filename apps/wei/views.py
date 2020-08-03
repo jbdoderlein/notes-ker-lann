@@ -130,7 +130,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["my_registration"] = my_registration
 
         buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view")) \
-            .filter(wei=self.object).annotate(count=Count("memberships"))
+            .filter(wei=self.object).annotate(count=Count("memberships")).order_by("name")
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
 
@@ -588,9 +588,6 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     model = WEIRegistration
     form_class = WEIRegistrationForm
     extra_context = {"title": _("Update WEI Registration")}
-
-    def get_queryset(self, **kwargs):
-        return WEIRegistration.objects
 
     def dispatch(self, request, *args, **kwargs):
         wei = self.get_object().wei

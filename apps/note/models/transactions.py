@@ -243,6 +243,7 @@ class RecurrentTransaction(Transaction):
         TransactionTemplate,
         on_delete=models.PROTECT,
     )
+
     category = models.ForeignKey(
         TemplateCategory,
         on_delete=models.PROTECT,
@@ -251,6 +252,10 @@ class RecurrentTransaction(Transaction):
     @property
     def type(self):
         return _('Template')
+
+    class Meta:
+        verbose_name = _("recurrent transaction")
+        verbose_name_plural = _("recurrent transactions")
 
 
 class SpecialTransaction(Transaction):
@@ -289,6 +294,10 @@ class SpecialTransaction(Transaction):
         if self.is_credit() == self.is_debit():
             raise(ValidationError(_("A special transaction is only possible between a"
                                     " Note associated to a payment method and a User or a Club")))
+
+    class Meta:
+        verbose_name = _("Special transaction")
+        verbose_name_plural = _("Special transactions")
 
 
 class MembershipTransaction(Transaction):

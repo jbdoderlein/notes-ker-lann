@@ -5,9 +5,9 @@ import json
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 from django_tables2 import SingleTableView
 from django.urls import reverse_lazy
 
@@ -16,8 +16,8 @@ from note_kfet.inputs import AmountInput
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
-from .forms import TransactionTemplateForm
-from .models import TemplateCategory, Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial
+from .forms import TransactionTemplateForm, SearchTransactionForm
+from .models import TemplateCategory, Transaction, TransactionTemplate, RecurrentTransaction, NoteSpecial, Note
 from .models.transactions import SpecialTransaction
 from .tables import HistoryTable, ButtonTable
 
@@ -169,5 +169,53 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
         # select2 compatibility
         context['no_cache'] = True
+
+        return context
+
+
+class TransactionSearchView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    model = Note
+    context_object_name = "note"
+    template_name = "note/search_transactions.html"
+    extra_context = {"title": _("Search transactions")}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        form = SearchTransactionForm(data=self.request.GET if self.request.GET else None)
+        context["form"] = form
+
+        form.full_clean()
+        if form.is_valid():
+            data = form.cleaned_data
+        else:
+            data = {}
+
+        transactions = Transaction.objects.annotate(total_amount=F("quantity") * F("amount")).filter(
+            PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
+            .filter(Q(source=self.object) | Q(destination=self.object)).order_by('-created_at')
+
+        if "source" in data and data["source"]:
+            transactions = transactions.filter(source_id=data["source"].note_id)
+        if "destination" in data and data["destination"]:
+            transactions = transactions.filter(destination_id=data["destination"].note_id)
+        if "type" in data and data["type"]:
+            transactions = transactions.filter(polymorphic_ctype__in=data["type"])
+        if "reason" in data and data["reason"]:
+            transactions = transactions.filter(reason__iregex=data["reason"])
+        if "valid" in data and data["valid"]:
+            transactions = transactions.filter(valid=data["valid"])
+        if "amount_gte" in data and data["amount_gte"]:
+            transactions = transactions.filter(total_amount__gte=data["amount_gte"])
+        if "amount_lte" in data and data["amount_lte"]:
+            transactions = transactions.filter(total_amount__lte=data["amount_lte"])
+        if "created_after" in data and data["created_after"]:
+            transactions = transactions.filter(created_at__gte=data["created_after"])
+        if "created_before" in data and data["created_before"]:
+            transactions = transactions.filter(created_at__lte=data["created_before"])
+
+        table = HistoryTable(transactions)
+        table.paginate(per_page=20)
+        context["table"] = table
 
         return context

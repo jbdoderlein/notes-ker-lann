@@ -10,6 +10,7 @@ $(document).ready(function () {
         if (!name_field)
             name_field = "name";
         let input = target.val();
+        $("#" + prefix + "_reset").removeClass("d-none");
 
         $.getJSON(api_url + (api_url.includes("?") ? "&" : "?") + "format=json&search=^" + input + api_url_suffix, function(objects) {
             let html = "";
@@ -38,5 +39,13 @@ $(document).ready(function () {
                 results_list.children().first().trigger("click");
             }
         });
+    });
+
+    $(".autocomplete-reset").click(function() {
+        let name = $(this).attr("id").replace("_reset", "");
+        $("#" + name + "_pk").val("");
+        $("#" + name).val("");
+        $("#" + name + "_list").html("");
+        $(this).addClass("d-none");
     });
 });

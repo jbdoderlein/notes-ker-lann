@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 12:35+0200\n"
+"POT-Creation-Date: 2020-08-03 18:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: apps/activity/models.py:24 apps/activity/models.py:49
 #: apps/member/models.py:158 apps/note/models/notes.py:212
 #: apps/note/models/transactions.py:25 apps/note/models/transactions.py:45
-#: apps/note/models/transactions.py:263 apps/permission/models.py:339
+#: apps/note/models/transactions.py:268 apps/permission/models.py:339
 #: apps/wei/models.py:65 apps/wei/models.py:117
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
@@ -182,16 +182,16 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
-#: apps/activity/tables.py:75 apps/treasury/models.py:141
+#: apps/activity/tables.py:75 apps/note/forms.py:76 apps/treasury/models.py:141
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:77 apps/member/forms.py:102
+#: apps/activity/tables.py:77 apps/member/forms.py:103
 #: apps/registration/forms.py:70 apps/treasury/forms.py:120
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/member/forms.py:107
+#: apps/activity/tables.py:79 apps/member/forms.py:108
 #: apps/registration/forms.py:75 apps/treasury/forms.py:122
 #: templates/note/transaction_form.html:129
 msgid "First name"
@@ -225,7 +225,7 @@ msgstr ""
 msgid "Invite guest to the activity \"{}\""
 msgstr ""
 
-#: apps/activity/views.py:171
+#: apps/activity/views.py:181
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -313,45 +313,45 @@ msgstr ""
 msgid "member"
 msgstr ""
 
-#: apps/member/forms.py:58 apps/member/views.py:82
+#: apps/member/forms.py:59 apps/member/views.py:82
 #: apps/registration/forms.py:28
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/forms.py:81 apps/registration/forms.py:50
+#: apps/member/forms.py:82 apps/registration/forms.py:50
 msgid "Inscription paid by Société Générale"
 msgstr ""
 
-#: apps/member/forms.py:83 apps/registration/forms.py:52
+#: apps/member/forms.py:84 apps/registration/forms.py:52
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr ""
 
-#: apps/member/forms.py:88 apps/registration/forms.py:57
+#: apps/member/forms.py:89 apps/registration/forms.py:57
 msgid "Credit type"
 msgstr ""
 
-#: apps/member/forms.py:89 apps/registration/forms.py:58
+#: apps/member/forms.py:90 apps/registration/forms.py:58
 msgid "No credit"
 msgstr ""
 
-#: apps/member/forms.py:91
+#: apps/member/forms.py:92
 msgid "You can credit the note of the user."
 msgstr ""
 
-#: apps/member/forms.py:95 apps/registration/forms.py:63
+#: apps/member/forms.py:96 apps/registration/forms.py:63
 msgid "Credit amount"
 msgstr ""
 
-#: apps/member/forms.py:112 apps/registration/forms.py:80
+#: apps/member/forms.py:113 apps/registration/forms.py:80
 #: apps/treasury/forms.py:124 templates/note/transaction_form.html:135
 msgid "Bank"
 msgstr ""
 
-#: apps/member/forms.py:139
+#: apps/member/forms.py:140
 msgid "User"
 msgstr ""
 
-#: apps/member/forms.py:153
+#: apps/member/forms.py:154
 msgid "Roles"
 msgstr ""
 
@@ -540,7 +540,7 @@ msgstr ""
 msgid "membership ends on"
 msgstr ""
 
-#: apps/member/models.py:310 apps/member/views.py:535 apps/wei/views.py:795
+#: apps/member/models.py:310 apps/member/views.py:535 apps/wei/views.py:793
 msgid "User is not a member of the parent club"
 msgstr ""
 
@@ -620,7 +620,7 @@ msgstr ""
 msgid "Add new member to the club"
 msgstr ""
 
-#: apps/member/views.py:530 apps/wei/views.py:786
+#: apps/member/views.py:530 apps/wei/views.py:784
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -662,12 +662,44 @@ msgstr ""
 msgid "amount"
 msgstr ""
 
-#: apps/note/forms.py:14
+#: apps/note/forms.py:15
 msgid "select an image"
 msgstr ""
 
-#: apps/note/forms.py:15
+#: apps/note/forms.py:16
 msgid "Maximal size: 2MB"
+msgstr ""
+
+#: apps/note/forms.py:47
+msgid "Source"
+msgstr ""
+
+#: apps/note/forms.py:61
+msgid "Destination"
+msgstr ""
+
+#: apps/note/forms.py:82 templates/note/transaction_form.html:104
+msgid "Reason"
+msgstr ""
+
+#: apps/note/forms.py:87 apps/treasury/tables.py:117
+msgid "Valid"
+msgstr ""
+
+#: apps/note/forms.py:93
+msgid "Total amount greater than"
+msgstr ""
+
+#: apps/note/forms.py:101
+msgid "Total amount less than"
+msgstr ""
+
+#: apps/note/forms.py:107
+msgid "Created after"
+msgstr ""
+
+#: apps/note/forms.py:114
+msgid "Created before"
 msgstr ""
 
 #: apps/note/models/notes.py:29
@@ -842,39 +874,55 @@ msgstr ""
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:253
+#: apps/note/models/transactions.py:254
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:268
-msgid "first_name"
+#: apps/note/models/transactions.py:257
+msgid "recurrent transaction"
+msgstr ""
+
+#: apps/note/models/transactions.py:258
+msgid "recurrent transactions"
 msgstr ""
 
 #: apps/note/models/transactions.py:273
+msgid "first_name"
+msgstr ""
+
+#: apps/note/models/transactions.py:278
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:279
+#: apps/note/models/transactions.py:284
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:20
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:279 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:284 templates/note/transaction_form.html:24
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:290
+#: apps/note/models/transactions.py:295
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
 msgstr ""
 
-#: apps/note/models/transactions.py:307 apps/note/models/transactions.py:312
+#: apps/note/models/transactions.py:299
+msgid "Special transaction"
+msgstr ""
+
+#: apps/note/models/transactions.py:300
+msgid "Special transactions"
+msgstr ""
+
+#: apps/note/models/transactions.py:316 apps/note/models/transactions.py:321
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:308 apps/treasury/models.py:228
+#: apps/note/models/transactions.py:317 apps/treasury/models.py:228
 msgid "membership transactions"
 msgstr ""
 
@@ -903,24 +951,28 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: apps/note/views.py:33
+#: apps/note/views.py:35
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:69
+#: apps/note/views.py:75
 msgid "Create new button"
 msgstr ""
 
-#: apps/note/views.py:78
+#: apps/note/views.py:84
 msgid "Search button"
 msgstr ""
 
-#: apps/note/views.py:101
+#: apps/note/views.py:107
 msgid "Update button"
 msgstr ""
 
-#: apps/note/views.py:138 templates/base.html:94
+#: apps/note/views.py:144 templates/base.html:94
 msgid "Consumptions"
+msgstr ""
+
+#: apps/note/views.py:180
+msgid "Search transactions"
 msgstr ""
 
 #: apps/permission/models.py:99
@@ -1288,10 +1340,6 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: apps/treasury/tables.py:117
-msgid "Valid"
-msgstr ""
-
 #: apps/treasury/tables.py:124
 msgid "Yes"
 msgstr ""
@@ -1342,37 +1390,37 @@ msgstr ""
 msgid "WEI"
 msgstr ""
 
-#: apps/wei/forms/registration.py:47 apps/wei/models.py:112
+#: apps/wei/forms/registration.py:48 apps/wei/models.py:112
 #: apps/wei/models.py:297
 msgid "bus"
 msgstr ""
 
-#: apps/wei/forms/registration.py:48
+#: apps/wei/forms/registration.py:49
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
 msgstr ""
 
-#: apps/wei/forms/registration.py:54
+#: apps/wei/forms/registration.py:56
 msgid "Team"
 msgstr ""
 
-#: apps/wei/forms/registration.py:56
+#: apps/wei/forms/registration.py:58
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
 msgstr ""
 
-#: apps/wei/forms/registration.py:61 apps/wei/forms/registration.py:67
+#: apps/wei/forms/registration.py:64 apps/wei/forms/registration.py:74
 #: apps/wei/models.py:147
 msgid "WEI Roles"
 msgstr ""
 
-#: apps/wei/forms/registration.py:62
+#: apps/wei/forms/registration.py:65
 msgid "Select the roles that you are interested in."
 msgstr ""
 
-#: apps/wei/forms/registration.py:72
+#: apps/wei/forms/registration.py:81
 msgid "This team doesn't belong to the given bus."
 msgstr ""
 
@@ -1618,7 +1666,7 @@ msgstr ""
 msgid "Register 1A"
 msgstr ""
 
-#: apps/wei/views.py:489 apps/wei/views.py:559
+#: apps/wei/views.py:489 apps/wei/views.py:560
 msgid "This user is already registered to this WEI."
 msgstr ""
 
@@ -1636,31 +1684,31 @@ msgstr ""
 msgid "Register 2A+"
 msgstr ""
 
-#: apps/wei/views.py:541 apps/wei/views.py:629
+#: apps/wei/views.py:542 apps/wei/views.py:627
 msgid "You already opened an account in the Société générale."
 msgstr ""
 
-#: apps/wei/views.py:589
+#: apps/wei/views.py:590
 msgid "Update WEI Registration"
 msgstr ""
 
-#: apps/wei/views.py:679
+#: apps/wei/views.py:677
 msgid "Delete WEI registration"
 msgstr ""
 
-#: apps/wei/views.py:690
+#: apps/wei/views.py:688
 msgid "You don't have the right to delete this WEI registration."
 msgstr ""
 
-#: apps/wei/views.py:709
+#: apps/wei/views.py:707
 msgid "Validate WEI registration"
 msgstr ""
 
-#: apps/wei/views.py:790
+#: apps/wei/views.py:788
 msgid "This user didn't give her/his caution check."
 msgstr ""
 
-#: apps/wei/views.py:827 apps/wei/views.py:880 apps/wei/views.py:890
+#: apps/wei/views.py:825 apps/wei/views.py:878 apps/wei/views.py:888
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
@@ -1820,6 +1868,10 @@ msgstr ""
 
 #: templates/member/alias_update.html:5
 msgid "Add alias"
+msgstr ""
+
+#: templates/member/autocomplete_model.html:11
+msgid "Reset"
 msgstr ""
 
 #: templates/member/club_info.html:17
@@ -1988,10 +2040,6 @@ msgstr ""
 
 #: templates/note/transaction_form.html:89
 msgid "Action"
-msgstr ""
-
-#: templates/note/transaction_form.html:104
-msgid "Reason"
 msgstr ""
 
 #: templates/note/transaction_form.html:113

@@ -1,5 +1,7 @@
 {% load render_table from django_tables2 %}
 {% load i18n %}
+{% load perms %}
+
 {% if managers.data %}
     <div class="card">
         <div class="card-header position-relative" id="clubListHeading">
@@ -29,7 +31,7 @@
 {% if history_list.data %}
     <div class="card">
         <div class="card-header position-relative" id="historyListHeading">
-            <a class="font-weight-bold">
+            <a class="stretched-link font-weight-bold" {% if "note.view_note"|has_perm:club.note %} href="{% url 'note:transactions' pk=club.note.pk %}" {% endif %}>
                 <i class="fa fa-euro"></i> {% trans "Transaction history" %}
             </a>
         </div>

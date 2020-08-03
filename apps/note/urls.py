@@ -12,4 +12,5 @@ urlpatterns = [
     path('buttons/update/<int:pk>/', views.TransactionTemplateUpdateView.as_view(), name='template_update'),
     path('buttons/', views.TransactionTemplateListView.as_view(), name='template_list'),
     path('consos/', views.ConsoView.as_view(), name='consos'),
+    path('transactions/<int:pk>/', views.TransactionSearchView.as_view(), name='transactions'),
 ]

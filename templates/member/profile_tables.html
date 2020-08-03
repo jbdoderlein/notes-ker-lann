@@ -2,10 +2,10 @@
 {% load i18n %}
 {% load perms %}
 
-{% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:object.profile %}
+{% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:user.profile %}
     <div class="alert alert-warning">
         {% trans "This user doesn't have confirmed his/her e-mail address." %}
-        <a href="{% url "registration:email_validation_resend" pk=object.pk %}">{% trans "Click here to resend a validation link." %}</a>
+        <a href="{% url "registration:email_validation_resend" pk=user.pk %}">{% trans "Click here to resend a validation link." %}</a>
     </div>
 {% endif %}
 
@@ -22,9 +22,7 @@
 
 <div class="card">
     <div class="card-header position-relative" id="historyListHeading">
-        <a class="collapsed font-weight-bold"
-           data-toggle="collapse" data-target="#historyListCollapse"
-           aria-expanded="true" aria-controls="historyListCollapse">
+            <a class="stretched-link font-weight-bold" {% if "note.view_note"|has_perm:user.note %} href="{% url 'note:transactions' pk=user.note.pk %}" {% endif %}>
             <i class="fa fa-euro"></i> {% trans "Transaction history" %}
         </a>
     </div>
