@@ -236,14 +236,12 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
         pattern = self.request.GET.get("search", "")
 
         if not pattern:
-            return qs.none()
-
-        qs = qs.filter(
-            Q(user__first_name__iregex=pattern)
-            | Q(user__last_name__iregex=pattern)
-            | Q(user__note__alias__name__iregex="^" + pattern)
-            | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-        )
+            qs = qs.filter(
+                Q(user__first_name__iregex=pattern)
+                | Q(user__last_name__iregex=pattern)
+                | Q(user__note__alias__name__iregex="^" + pattern)
+                | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+            )
 
         return qs[:20]
 

@@ -179,8 +179,6 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
                 | Q(profile__section__iregex=pattern)
                 | Q(username__iregex="^" + pattern)
             )
-        else:
-            qs = qs.none()
 
         return qs[:20]
 
