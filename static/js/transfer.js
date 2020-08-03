@@ -219,6 +219,16 @@ $("#btn_transfer").click(function() {
         error = true;
     }
 
+    if (!sources_notes_display.length && !$("#type_credit").is(':checked')) {
+        $("#source_note").addClass('is-invalid');
+        error = true;
+    }
+
+    if (!dests_notes_display.length && !$("#type_debit").is(':checked')) {
+        $("#dest_note").addClass('is-invalid');
+        error = true;
+    }
+
     if (error)
         return;
 
@@ -300,11 +310,6 @@ $("#btn_transfer").click(function() {
         let given_reason = reason;
         let source_id, dest_id;
         if ($("#type_credit").is(':checked')) {
-            if (!dests_notes_display.length) {
-                $("#dest_note").addClass('is-invalid');
-                return;
-            }
-
             user_note = dests_notes_display[0].note.id;
             source_id = special_note;
             dest_id = user_note;
@@ -313,11 +318,6 @@ $("#btn_transfer").click(function() {
                 reason += " (" + given_reason + ")";
         }
         else {
-            if (!sources_notes_display.length) {
-                $("#source_note").addClass('is-invalid');
-                return;
-            }
-
             user_note = sources_notes_display[0].note.id;
             source_id = user_note;
             dest_id = special_note;

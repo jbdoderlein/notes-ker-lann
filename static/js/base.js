@@ -217,6 +217,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
     // Clear search on click
     field.click(function () {
         field.tooltip('hide');
+        field.removeClass('is-invalid');
         field.val("");
     });
 
@@ -233,6 +234,8 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 
     // When the user type something, the matched aliases are refreshed
     field.keyup(function (e) {
+        field.removeClass('is-invalid');
+
         if (e.originalEvent.charCode === 13)
             return;
 

@@ -154,6 +154,22 @@ function reset() {
  * Apply all transactions: all notes in `notes` buy each item in `buttons`
  */
 function consumeAll() {
+    let error = false;
+
+    if (notes_display.length === 0) {
+        $("#note").addClass('is-invalid');
+        $("#note_list").html(li("", "<strong>Ajoutez des émetteurs.</strong>", "text-danger"));
+        error = true;
+    }
+
+    if (buttons.length === 0) {
+        $("#consos_list").html(li("", "<strong>Ajoutez des consommations.</strong>", "text-danger"));
+        error = true;
+    }
+
+    if (error)
+        return;
+
     notes_display.forEach(function(note_display) {
         buttons.forEach(function(button) {
             consume(note_display.note, note_display.name, button.dest, button.quantity * note_display.quantity, button.amount,
