@@ -6,6 +6,7 @@ django-allauth==0.39.1
 django-crispy-forms==1.7.2
 django-extensions==2.1.9
 django-filter==2.2.0
+django-mailer==2.0.1
 django-polymorphic==2.0.3
 django-tables2==2.1.0
 docutils==0.14

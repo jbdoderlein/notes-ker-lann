@@ -33,7 +33,8 @@ ALLOWED_HOSTS = [os.environ.get('NOTE_URL', 'localhost')]
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 
 # Emails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'mailer.backend.DbBackend'  # Mailer place emails in a queue before sending them to avoid spam
+MAILER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = False
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
 EMAIL_PORT = os.getenv('EMAIL_PORT', 465)

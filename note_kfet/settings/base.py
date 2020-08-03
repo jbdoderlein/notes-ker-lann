@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # 'theme',
 
     # External apps
+    'mailer',
     'polymorphic',
     'crispy_forms',
     'django_tables2',
