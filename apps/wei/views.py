@@ -728,8 +728,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         context["kfet_member"] = Membership.objects.filter(
             club__name="Kfet",
             user=registration.user,
-            date_start__lte=datetime.now().date(),
-            date_end__gte=datetime.now().date(),
+            date_start__gte=registration.wei.parent_club.membership_start,
         ).exists()
 
         return context
@@ -788,9 +787,15 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
             form.add_error('bus', _("This user didn't give her/his caution check."))
             return super().form_invalid(form)
 
-        if club.parent_club is not None:
-            if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
-                form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
+        if club.parent_club is not None:   # parent_club is never None: this is Kfet.
+            # We want that the user is member of the Kfet club *of this year*: the Kfet membership is included
+            # in the WEI registration.
+            if not Membership.objects.filter(
+                user=form.instance.user,
+                club=club.parent_club,  # Kfet
+                date_start__gte=club.parent_club.membership_start,
+            ).exists():
+                form.add_error('bus', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
                 return super().form_invalid(form)
 
         # Now, all is fine, the membership can be created.

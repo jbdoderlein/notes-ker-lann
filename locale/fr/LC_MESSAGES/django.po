@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 18:38+0200\n"
+"POT-Creation-Date: 2020-08-03 23:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -545,7 +545,7 @@ msgstr "l'adhésion commence le"
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:310 apps/member/views.py:535 apps/wei/views.py:793
+#: apps/member/models.py:310 apps/member/views.py:540 apps/wei/views.py:798
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -554,7 +554,7 @@ msgstr "L'utilisateur n'est pas membre du club parent"
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:328 apps/member/views.py:544
+#: apps/member/models.py:328 apps/member/views.py:549
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
@@ -625,7 +625,7 @@ msgstr "Modifier le club"
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:530 apps/wei/views.py:784
+#: apps/member/views.py:530 apps/wei/views.py:783
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -633,25 +633,25 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:548
+#: apps/member/views.py:553
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:553
+#: apps/member/views.py:558
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:570 apps/member/views.py:572 apps/member/views.py:574
+#: apps/member/views.py:575 apps/member/views.py:577 apps/member/views.py:579
 #: apps/registration/views.py:290 apps/registration/views.py:292
 #: apps/registration/views.py:294
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
-#: apps/member/views.py:642
+#: apps/member/views.py:647
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
 
-#: apps/member/views.py:667
+#: apps/member/views.py:672
 msgid "Members of the club"
 msgstr "Membres du club"
 
@@ -1483,7 +1483,7 @@ msgstr ""
 msgid "Bus"
 msgstr "Bus"
 
-#: apps/wei/models.py:100 templates/wei/weiclub_tables.html:79
+#: apps/wei/models.py:100 templates/wei/weiclub_tables.html:32
 msgid "Buses"
 msgstr "Bus"
 
@@ -1750,25 +1750,25 @@ msgstr "Vous n'avez pas la permission de supprimer cette inscription au WEI."
 msgid "Validate WEI registration"
 msgstr "Valider l'inscription WEI"
 
-#: apps/wei/views.py:788
+#: apps/wei/views.py:787
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
 
-#: apps/wei/views.py:825 apps/wei/views.py:878 apps/wei/views.py:888
+#: apps/wei/views.py:830 apps/wei/views.py:883 apps/wei/views.py:893
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
 msgstr "Questionnaire WEI"
 
-#: note_kfet/settings/base.py:155
+#: note_kfet/settings/base.py:156
 msgid "German"
 msgstr "Allemand"
 
-#: note_kfet/settings/base.py:156
+#: note_kfet/settings/base.py:157
 msgid "English"
 msgstr "Anglais"
 
-#: note_kfet/settings/base.py:157
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Français"
 
@@ -1981,16 +1981,16 @@ msgstr "Filtrer par rôle :"
 msgid "There is no membership found with this pattern."
 msgstr "Il n'y a pas d'adhésion trouvée avec cette entrée."
 
-#: templates/member/club_tables.html:7
+#: templates/member/club_tables.html:9
 msgid "Club managers"
 msgstr "Bureau du club"
 
-#: templates/member/club_tables.html:20
+#: templates/member/club_tables.html:22
 msgid "Club members"
 msgstr "Membres du club"
 
-#: templates/member/club_tables.html:33 templates/member/profile_tables.html:28
-#: templates/wei/weiclub_tables.html:105
+#: templates/member/club_tables.html:35 templates/member/profile_tables.html:26
+#: templates/wei/weiclub_tables.html:58
 msgid "Transaction history"
 msgstr "Historique des transactions"
 
@@ -2579,23 +2579,23 @@ msgstr "Voir le WEI"
 msgid "WEI listing"
 msgstr "Liste des WEI"
 
-#: templates/wei/weiclub_tables.html:63
+#: templates/wei/weiclub_tables.html:16
 msgid "Register to the WEI! – 1A"
 msgstr "M'inscrire au WEI ! – 1A"
 
-#: templates/wei/weiclub_tables.html:65
+#: templates/wei/weiclub_tables.html:18
 msgid "Register to the WEI! – 2A+"
 msgstr "M'inscrire au WEI ! – 2A+"
 
-#: templates/wei/weiclub_tables.html:67
+#: templates/wei/weiclub_tables.html:20
 msgid "Update my registration"
 msgstr "Modifier mon inscription"
 
-#: templates/wei/weiclub_tables.html:92
+#: templates/wei/weiclub_tables.html:45
 msgid "Members of the WEI"
 msgstr "Membres du WEI"
 
-#: templates/wei/weiclub_tables.html:120
+#: templates/wei/weiclub_tables.html:73
 msgid "Unvalidated registrations"
 msgstr "Inscriptions non validées"
 
@@ -2666,14 +2666,10 @@ msgstr "avec les rôles suivants :"
 
 #: templates/wei/weimembership_form.html:152
 msgid ""
-"\n"
-"                            The WEI will be paid by Société générale. The "
-"membership will be created even if the bank didn't pay the BDE yet.\n"
-"                            The membership transaction will be created but "
-"will be invalid. You will have to validate it once the bank\n"
-"                            validated the creation of the account, or to "
-"change the payment method.\n"
-"                        "
+"The WEI will be paid by Société générale. The membership will be created "
+"even if the bank didn't pay the BDE yet. The membership transaction will be "
+"created but will be invalid. You will have to validate it once the bank "
+"validated the creation of the account, or to change the payment method."
 msgstr ""
 "\n"
 "Le WEI va être payé par la Société générale. L'adhésion sera créée même si "
@@ -2684,12 +2680,9 @@ msgstr ""
 "                    "
 
 #: templates/wei/weimembership_form.html:162
-#, python-format
 msgid ""
-"\n"
-"                                The note don't have enough money "
-"(%(balance)s, %(pretty_fee)s required). The registration may fail.\n"
-"                            "
+"The note don't have enough money (%(balance)s, %(pretty_fee)s required). The "
+"registration may fail."
 msgstr ""
 "\n"
 "La note n'a pas assez d'argent (%(balance)s, %(pretty_fee)s requis). "
@@ -2705,20 +2698,14 @@ msgid "The user didn't give her/his caution check."
 msgstr "L'utilisateur n'a pas donné son chèque de caution."
 
 #: templates/wei/weimembership_form.html:184
-#, python-format
 msgid ""
-"\n"
-"                            This user is not a member of the Kfet club. "
-"Please adhere\n"
-"                            <a href=\"%(future_user_detail)s\">here if he/"
-"she is in her/his first year</a>\n"
-"                            or <a href=\"%(club_detail)s\">here if he/she "
-"was an old member</a> before you validate\n"
-"                            the registration of the WEI.\n"
-"                        "
+"This user is not a member of the Kfet club for the comming year. Please "
+"adhere <a href=\"%(future_user_detail)s\">here if he/she is in her/his first "
+"year</a> or <a href=\"%(club_detail)s\">here if he/she was an old member</a> "
+"before you validate the registration of the WEI."
 msgstr ""
 "\n"
-"Cet utilisateur n'est pas membre du club Kfet. Merci de le faire adhérer\n"
+"Cet utilisateur n'est pas membre du club Kfet pour l'année à venir. Merci de le faire adhérer\n"
 "<a href=\"%(future_user_detail)s\">ici s'iel est en première année</a>\n"
 "ou <a href=\"%(club_detail)s\">ici s'iel est un ancien membre</a> avant de "
 "valider\n"
@@ -2749,6 +2736,3 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 #: templates/wei/weiregistration_list.html:24
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
-
-#~ msgid "Validate a registration"
-#~ msgstr "Valider l'inscription"

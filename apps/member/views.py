@@ -531,7 +531,12 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
         if club.parent_club is not None:
-            if not Membership.objects.filter(user=form.instance.user, club=club.parent_club).exists():
+            if not Membership.objects.filter(
+                user=form.instance.user,
+                club=club.parent_club,
+                date_start__lte=form.instance.date_start,
+                date_end__gte=form.instance.date_start,
+            ).exists():
                 form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
                 return super().form_invalid(form)
 

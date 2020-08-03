@@ -149,7 +149,7 @@
             {% else %}
                 {% if registration.soge_credit %}
                     <div class="alert alert-warning">
-                        {% blocktrans %}
+                        {% blocktrans trimmed %}
                             The WEI will be paid by Société générale. The membership will be created even if the bank didn't pay the BDE yet.
                             The membership transaction will be created but will be invalid. You will have to validate it once the bank
                             validated the creation of the account, or to change the payment method.
@@ -159,7 +159,7 @@
                     {% if registration.user.note.balance < fee %}
                         <div class="alert alert-danger">
                             {% with pretty_fee=fee|pretty_money %}
-                            {% blocktrans with balance=registration.user.note.balance|pretty_money %}
+                            {% blocktrans trimmed with balance=registration.user.note.balance|pretty_money %}
                                 The note don't have enough money ({{ balance }}, {{ pretty_fee }} required). The registration may fail.
                             {% endblocktrans %}
                             {% endwith %}
@@ -181,8 +181,8 @@
                     <div class="alert alert-danger">
                         {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
                     {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
-                        {% blocktrans %}
-                            This user is not a member of the Kfet club. Please adhere
+                        {% blocktrans trimmed %}
+                            This user is not a member of the Kfet club for the comming year. Please adhere
                             <a href="{{ future_user_detail }}">here if he/she is in her/his first year</a>
                             or <a href="{{ club_detail }}">here if he/she was an old member</a> before you validate
                             the registration of the WEI.
