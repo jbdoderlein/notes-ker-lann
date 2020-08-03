@@ -114,28 +114,31 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
-            .get(pk=self.kwargs["pk"])
+            .distinct().get(pk=self.kwargs["pk"])
         context["activity"] = activity
 
         matched = []
 
-        pattern = "^$"
-        if "search" in self.request.GET:
-            pattern = self.request.GET["search"]
-
-        if not pattern:
-            pattern = "^$"
-
-        if pattern[0] != "^":
-            pattern = "^" + pattern
-
         guest_qs = Guest.objects\
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
-            .filter(Q(first_name__regex=pattern) | Q(last_name__regex=pattern)
-                    | Q(inviter__alias__name__regex=pattern)
-                    | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))) \
+            .filter(activity=activity)\
             .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view"))\
-            .distinct()[:20]
+            .order_by('last_name', 'first_name').distinct()
+
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+            if pattern[0] != "^":
+                pattern = "^" + pattern
+            guest_qs = guest_qs.filter(
+                Q(first_name__regex=pattern)
+                | Q(last_name__regex=pattern)
+                | Q(inviter__alias__name__regex=pattern)
+                | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))
+            )
+        else:
+            pattern = None
+            guest_qs = guest_qs.none()
+
         for guest in guest_qs:
             guest.type = "Invité"
             matched.append(guest)
@@ -145,12 +148,18 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                                          username=F("note__noteuser__user__username"),
                                          note_name=F("name"),
                                          balance=F("note__balance"))\
-            .filter(Q(note__polymorphic_ctype__model="noteuser")
-                    & (Q(note__noteuser__user__first_name__regex=pattern)
-                    | Q(note__noteuser__user__last_name__regex=pattern)
-                    | Q(name__regex=pattern)
-                    | Q(normalized_name__regex=Alias.normalize(pattern)))) \
+            .filter(note__polymorphic_ctype__model="noteuser")\
             .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
+        if pattern:
+            note_qs = note_qs.filter(
+                Q(note__noteuser__user__first_name__regex=pattern)
+                | Q(note__noteuser__user__last_name__regex=pattern)
+                | Q(name__regex=pattern)
+                | Q(normalized_name__regex=Alias.normalize(pattern))
+            )
+        else:
+            note_qs = note_qs.none()
+
         if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
             note_qs = note_qs.distinct('note__pk')[:20]
         else:
@@ -158,6 +167,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
             # In production mode, please use PostgreSQL.
             note_qs = note_qs.distinct()[:20]
+
         for note in note_qs:
             note.type = "Adhérent"
             note.activity = activity

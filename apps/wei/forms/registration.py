@@ -4,6 +4,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
@@ -47,6 +48,7 @@ class WEIChooseBusForm(forms.Form):
         label=_("bus"),
         help_text=_("This choice is not definitive. The WEI organizers are free to attribute for you a bus and a team,"
                     + " in particular if you are a free eletron."),
+        widget=CheckboxSelectMultiple(),
     )
 
     team = forms.ModelMultipleChoiceField(
@@ -54,17 +56,24 @@ class WEIChooseBusForm(forms.Form):
         label=_("Team"),
         required=False,
         help_text=_("Leave this field empty if you won't be in a team (staff, bus chief, free electron)"),
+        widget=CheckboxSelectMultiple(),
     )
 
     roles = forms.ModelMultipleChoiceField(
         queryset=WEIRole.objects.filter(~Q(name="1A")),
         label=_("WEI Roles"),
         help_text=_("Select the roles that you are interested in."),
+        initial=WEIRole.objects.filter(name="Adhérent WEI").all(),
+        widget=CheckboxSelectMultiple(),
     )
 
 
 class WEIMembershipForm(forms.ModelForm):
-    roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects, label=_("WEI Roles"))
+    roles = forms.ModelMultipleChoiceField(
+        queryset=WEIRole.objects,
+        label=_("WEI Roles"),
+        widget=CheckboxSelectMultiple(),
+    )
 
     def clean(self):
         cleaned_data = super().clean()
