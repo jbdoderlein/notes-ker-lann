@@ -10,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView
 from django_tables2 import SingleTableView
 from django.urls import reverse_lazy
+
+from activity.models import Entry
 from note_kfet.inputs import AmountInput
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
@@ -52,9 +54,13 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
         # Add a shortcut for entry page for open activities
         if "activity" in settings.INSTALLED_APPS:
             from activity.models import Activity
-            context["activities_open"] = Activity.objects.filter(open=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
-                PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()
+            activities_open = Activity.objects.filter(open=True).filter(
+                PermissionBackend.filter_queryset(self.request.user, Activity, "view")).distinct().all()
+            context["activities_open"] = [a for a in activities_open
+                                          if PermissionBackend.check_perm(self.request.user,
+                                                                          "activity.add_entry",
+                                                                          Entry(activity=a,
+                                                                                note=self.request.user.note, ))]
 
         return context
 

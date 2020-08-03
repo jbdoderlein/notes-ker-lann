@@ -9,6 +9,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -150,3 +152,7 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$reason', ]
+
+    def get_queryset(self):
+        user = get_current_authenticated_user()
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))

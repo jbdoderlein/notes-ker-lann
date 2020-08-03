@@ -182,8 +182,11 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         context["noteuser_ctype"] = ContentType.objects.get_for_model(NoteUser).pk
         context["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
 
-        context["activities_open"] = Activity.objects.filter(open=True).filter(
-            PermissionBackend.filter_queryset(self.request.user, Activity, "view")).filter(
-            PermissionBackend.filter_queryset(self.request.user, Activity, "change")).all()
+        activities_open = Activity.objects.filter(open=True).filter(
+            PermissionBackend.filter_queryset(self.request.user, Activity, "view")).distinct().all()
+        context["activities_open"] = [a for a in activities_open
+                                      if PermissionBackend.check_perm(self.request.user,
+                                                                      "activity.add_entry",
+                                                                      Entry(activity=a, note=self.request.user.note,))]
 
         return context
