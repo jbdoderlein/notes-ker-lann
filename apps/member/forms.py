@@ -4,6 +4,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial, Alias
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
@@ -151,6 +152,7 @@ class MembershipRolesForm(forms.ModelForm):
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.filter(weirole=None).all(),
         label=_("Roles"),
+        widget=CheckboxSelectMultiple(),
     )
 
     class Meta:

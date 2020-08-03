@@ -527,8 +527,9 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             context["form"].fields["user"].disabled = True
 
         choose_bus_form = WEIChooseBusForm()
-        choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"])
-        choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])
+        choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"]).order_by('name')
+        choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])\
+            .order_by('bus__name', 'name')
         context['membership_form'] = choose_bus_form
 
         return context
