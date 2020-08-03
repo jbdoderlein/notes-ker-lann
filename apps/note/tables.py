@@ -68,12 +68,8 @@ class HistoryTable(tables.Table):
                                                 "note.change_transaction_invalidity_reason", record) else None,
                 "onmouseover": lambda record: '$("#invalidity_reason_'
                                               + str(record.id) + '").show();$("#invalidity_reason_'
-                                              + str(record.id) + '").focus();'
-                if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "note.change_transaction_invalidity_reason", record) else None,
-                "onmouseout": lambda record: '$("#invalidity_reason_' + str(record.id) + '").hide()'
-                if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "note.change_transaction_invalidity_reason", record) else None,
+                                              + str(record.id) + '").focus();',
+                "onmouseout": lambda record: '$("#invalidity_reason_' + str(record.id) + '").hide()',
             }
         }
     )
@@ -101,15 +97,18 @@ class HistoryTable(tables.Table):
         """
         When the validation status is hovered, an input field is displayed to let the user specify an invalidity reason
         """
+        has_perm = PermissionBackend\
+            .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record)
+
         val = "✔" if value else "✖"
-        if not PermissionBackend\
-                .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record):
+
+        if value and not has_perm:
             return val
 
         val += "<input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
                + "' value='" + (html.escape(record.invalidity_reason)
                                 if record.invalidity_reason else ("" if value else str(_("No reason specified")))) \
-               + "'" + ("" if value else " disabled") \
+               + "'" + ("" if value and has_perm else " disabled") \
                + " placeholder='" + html.escape(_("invalidity reason").capitalize()) + "'" \
                + " style='position: absolute; width: 15em; margin-left: -15.5em; margin-top: -2em; display: none;'>"
         return format_html(val)
