@@ -3,9 +3,13 @@
 
 import django_tables2 as tables
 from django.urls import reverse_lazy
+from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership
 
 
@@ -53,8 +57,12 @@ class WEIRegistrationTable(tables.Table):
         verbose_name=_("Validate"),
         text=_("Validate"),
         attrs={
+            'th': {
+                'id': 'validate-membership-header'
+            },
             'a': {
-                'class': 'btn btn-success'
+                'class': 'btn btn-success',
+                'data-type': 'validate-membership'
             }
         }
     )
@@ -65,11 +73,32 @@ class WEIRegistrationTable(tables.Table):
         verbose_name=_("delete"),
         text=_("Delete"),
         attrs={
+            'th': {
+                'id': 'delete-membership-header'
+            },
             'a': {
-                'class': 'btn btn-danger'
+                'class': 'btn btn-danger',
+                'data-type': 'delete-membership'
             }
         },
     )
+
+    def render_validate(self, record):
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
+                club=record.wei,
+                user=record.user,
+                date_start=timezone.now().date(),
+                date_end=timezone.now().date(),
+                fee=0,
+                registration=record,
+        )):
+            return _("Validate")
+        return format_html("<span class='no-perm'></span>")
+
+    def render_delete(self, record):
+        if PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record):
+            return _("Delete")
+        return format_html("<span class='no-perm'></span>")
 
     class Meta:
         attrs = {

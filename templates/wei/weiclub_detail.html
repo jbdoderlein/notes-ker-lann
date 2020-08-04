@@ -15,6 +15,16 @@
             $("#profile_infos").load("{% url 'wei:wei_detail' pk=object.pk %} #profile_infos");
         }
 
-        window.history.replaceState({}, document.title, location.pathname);
+        $(document).ready(function() {
+            $(".no-perm").parent().addClass("d-none");
+            if ($("a[data-type='validate-membership']:not(.d-none)").length === 0) {
+                $("a[data-type='validate-membership']").parent().addClass("d-none");
+                $("#validate-membership-header").addClass("d-none");
+            }
+            if ($("a[data-type='delete-membership']:not(.d-none)").length === 0) {
+                $("a[data-type='delete-membership']").parent().addClass("d-none");
+                $("#delete-membership-header").addClass("d-none");
+            }
+        });
     </script>
 {% endblock %}

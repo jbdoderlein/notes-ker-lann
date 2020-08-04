@@ -166,7 +166,9 @@
                         </div>
                     {% else %}
                         <div class="alert alert-success">
-                            {% trans "The note has enough money, the registration is possible." %}
+                            {% blocktrans trimmed with pretty_fee=fee|pretty_money %}
+                                The note has enough money ({{ pretty_fee }} required), the registration is possible.
+                            {% endblocktrans %}
                         </div>
                     {% endif %}
                 {% endif %}
@@ -178,14 +180,12 @@
                 {% endif %}
 
                 {% if not kfet_member %}
-                    <div class="alert alert-danger">
+                    <div class="alert alert-warning">
                         {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
                     {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
                         {% blocktrans trimmed %}
-                            This user is not a member of the Kfet club for the comming year. Please adhere
-                            <a href="{{ future_user_detail }}">here if he/she is in her/his first year</a>
-                            or <a href="{{ club_detail }}">here if he/she was an old member</a> before you validate
-                            the registration of the WEI.
+                            This user is not a member of the Kfet club for the coming year. The membership will be
+                            processed automatically, the WEI registration includes the membership fee.
                         {% endblocktrans %}
                     </div>
                 {% endif %}

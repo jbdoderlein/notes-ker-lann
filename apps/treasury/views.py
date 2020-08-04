@@ -353,18 +353,13 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
         qs = super().get_queryset()
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
-
-            if not pattern:
-                return qs.none()
-
-            qs = qs.filter(
-                Q(user__first_name__iregex=pattern)
-                | Q(user__last_name__iregex=pattern)
-                | Q(user__note__alias__name__iregex="^" + pattern)
-                | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-            )
-        else:
-            qs = qs.none()
+            if pattern:
+                qs = qs.filter(
+                    Q(user__first_name__iregex=pattern)
+                    | Q(user__last_name__iregex=pattern)
+                    | Q(user__note__alias__name__iregex="^" + pattern)
+                    | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                )
 
         if "valid" in self.request.GET:
             q = Q(credit_transaction=None)

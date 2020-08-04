@@ -24,10 +24,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from member.models import Membership, Club
-from note.models import Transaction, NoteClub, Alias
+from note.models import Transaction, NoteClub, Alias, SpecialTransaction, NoteSpecial
 from note.tables import HistoryTable
 from note_kfet.settings import BASE_DIR
 from permission.backends import PermissionBackend
+from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
 from .forms.registration import WEIChooseBusForm
@@ -666,6 +667,15 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             survey = CurrentSurvey(self.object)
             if not survey.is_complete():
                 return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
+        if PermissionBackend.check_perm(self.request.user, "wei.add_weimembership", WEIMembership(
+            club=self.object.wei,
+            user=self.object.user,
+            date_start=timezone.now().date(),
+            date_end=timezone.now().date(),
+            fee=0,
+            registration=self.object,
+        )):
+            return reverse_lazy("wei:validate_registration", kwargs={"pk": self.object.pk})
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.wei.pk})
 
 
@@ -723,19 +733,55 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         if survey.information.valid:
             context["suggested_bus"] = survey.information.get_selected_bus()
         context["club"] = registration.wei
-        context["fee"] = registration.wei.membership_fee_paid if registration.user.profile.paid \
-            else registration.wei.membership_fee_unpaid
+
+        kfet = registration.wei.parent_club
+        bde = kfet.parent_club
+
         context["kfet_member"] = Membership.objects.filter(
-            club__name="Kfet",
+            club__name=kfet.name,
             user=registration.user,
-            date_start__gte=registration.wei.parent_club.membership_start,
+            date_start__gte=kfet.membership_start,
         ).exists()
+        context["bde_member"] = Membership.objects.filter(
+            club__name=bde.name,
+            user=registration.user,
+            date_start__gte=bde.membership_start,
+        ).exists()
+
+        fee = registration.wei.membership_fee_paid if registration.user.profile.paid \
+            else registration.wei.membership_fee_unpaid
+        if not context["kfet_member"]:
+            fee += kfet.membership_fee_paid if registration.user.profile.paid \
+                else kfet.membership_fee_unpaid
+        if not context["bde_member"]:
+            fee += bde.membership_fee_paid if registration.user.profile.paid \
+                else bde.membership_fee_unpaid
+
+        context["fee"] = fee
+
+        form = context["form"]
+        if registration.soge_credit:
+            form.fields["credit_amount"].initial = fee
+        else:
+            form.fields["credit_amount"].initial = max(0, fee - registration.user.note.balance)
 
         return context
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        form.fields["last_name"].initial = registration.user.last_name
+        form.fields["first_name"].initial = registration.user.first_name
+
+        if registration.soge_credit:
+            form.fields["credit_type"].disabled = True
+            form.fields["credit_type"].initial = NoteSpecial.objects.get(special_type="Virement bancaire")
+            form.fields["credit_amount"].disabled = True
+            form.fields["last_name"].disabled = True
+            form.fields["first_name"].disabled = True
+            form.fields["bank"].disabled = True
+            form.fields["bank"].initial = "Société générale"
+
         form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
         if registration.first_year:
             # Use the results of the survey to fill initial data
@@ -750,7 +796,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
             if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
                 form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
             if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
-                form["team"].initial = Bus.objects.get(pk=information["preferred_team_pk"][0])
+                form["team"].initial = BusTeam.objects.get(pk=information["preferred_team_pk"][0])
             if "preferred_roles_pk" in information:
                 form["roles"].initial = WEIRole.objects.filter(
                     Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
@@ -770,38 +816,80 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         membership.club = club
         membership.date_start = min(date.today(), club.date_start)
         membership.registration = registration
+        # Force the membership of the clubs BDE and Kfet
+        membership._force_renew_parent = True
 
         if user.profile.paid:
             fee = club.membership_fee_paid
         else:
             fee = club.membership_fee_unpaid
 
-        if not registration.soge_credit and user.note.balance < fee:
-            # Users must have money before registering to the WEI.
-            # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
-            form.add_error('bus',
-                           _("This user don't have enough money to join this club, and can't have a negative balance."))
-            return super().form_invalid(form)
+        kfet = club.parent_club
+        bde = kfet.parent_club
+
+        kfet_member = Membership.objects.filter(
+            club__name=kfet.name,
+            user=registration.user,
+            date_start__gte=kfet.membership_start,
+        ).exists()
+        bde_member = Membership.objects.filter(
+            club__name=bde.name,
+            user=registration.user,
+            date_start__gte=bde.membership_start,
+        ).exists()
+
+        if not kfet_member:
+            fee += kfet.membership_fee_paid if registration.user.profile.paid else kfet.membership_fee_unpaid
+        if not bde_member:
+            fee += bde.membership_fee_paid if registration.user.profile.paid else bde.membership_fee_unpaid
+
+        credit_type = form.cleaned_data["credit_type"]
+        credit_amount = form.cleaned_data["credit_amount"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+
+        if credit_type is None or registration.soge_credit:
+            credit_amount = 0
 
         if not registration.caution_check and not registration.first_year:
             form.add_error('bus', _("This user didn't give her/his caution check."))
             return super().form_invalid(form)
 
-        if club.parent_club is not None:   # parent_club is never None: this is Kfet.
-            # We want that the user is member of the Kfet club *of this year*: the Kfet membership is included
-            # in the WEI registration.
-            if not Membership.objects.filter(
-                user=form.instance.user,
-                club=club.parent_club,  # Kfet
-                date_start__gte=club.parent_club.membership_start,
-            ).exists():
-                form.add_error('bus', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
+        if not registration.soge_credit and user.note.balance < fee + credit_amount:
+            # Users must have money before registering to the WEI.
+            form.add_error('bus',
+                           _("This user don't have enough money to join this club, and can't have a negative balance."))
+            return super().form_invalid(form)
+
+        if credit_amount:
+            if not last_name:
+                form.add_error('last_name', _("This field is required."))
                 return super().form_invalid(form)
+
+            if not first_name:
+                form.add_error('first_name', _("This field is required."))
+                return super().form_invalid(form)
+
+            # Credit note before adding the membership
+            SpecialTransaction.objects.create(
+                source=credit_type,
+                destination=registration.user.note,
+                amount=credit_amount,
+                reason="Crédit " + str(credit_type) + " (WEI)",
+                last_name=last_name,
+                first_name=first_name,
+                bank=bank,
+            )
 
         # Now, all is fine, the membership can be created.
 
+        if registration.soge_credit:
+            form.instance._soge = True
+
         if registration.first_year:
             membership = form.instance
+            # If the user is not a member of the club Kfet, then the membership is created.
             membership.save()
             membership.refresh_from_db()
             membership.roles.set(WEIRole.objects.filter(name="1A").all())

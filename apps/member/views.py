@@ -442,6 +442,16 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 .get(pk=self.kwargs["club_pk"], weiclub=None)
             form.fields['credit_amount'].initial = club.membership_fee_paid
 
+            c = club
+            clubs_renewal = []
+            additional_fee_renewal = 0
+            while c.parent_club is not None:
+                c = c.parent_club
+                clubs_renewal.append(c)
+                additional_fee_renewal += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
+            context["clubs_renewal"] = clubs_renewal
+            context["additional_fee_renewal"] = additional_fee_renewal
+
             # If the concerned club is the BDE, then we add the option that Société générale pays the membership.
             if club.name != "BDE":
                 del form.fields['soge']
@@ -454,26 +464,54 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 context["total_fee"] = "{:.02f}".format(fee / 100, )
         else:
             # This is a renewal. Fields can be pre-completed.
+            context["renewal"] = True
+
             old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
             club = old_membership.club
             user = old_membership.user
+
+            c = club
+            clubs_renewal = []
+            additional_fee_renewal = 0
+            while c.parent_club is not None:
+                c = c.parent_club
+                if not Membership.objects.filter(
+                        club=c,
+                        user=user,
+                        date_start__gte=c.membership_start,
+                ).exists():
+                    clubs_renewal.append(c)
+                    additional_fee_renewal += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
+            context["clubs_renewal"] = clubs_renewal
+            context["additional_fee_renewal"] = additional_fee_renewal
+
             form.fields['user'].initial = user
             form.fields['user'].disabled = True
             form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
-            form.fields['credit_amount'].initial = club.membership_fee_paid if user.profile.paid \
-                else club.membership_fee_unpaid
+            form.fields['credit_amount'].initial = (club.membership_fee_paid if user.profile.paid
+                else club.membership_fee_unpaid) + additional_fee_renewal
             form.fields['last_name'].initial = user.last_name
             form.fields['first_name'].initial = user.first_name
 
             # If this is a renewal of a BDE membership, Société générale can pays, if it is not yet done
-            if club.name != "BDE" or user.profile.soge:
+            if (club.name != "BDE" and club.name != "Kfet") or user.profile.soge:
                 del form.fields['soge']
             else:
                 fee = 0
                 bde = Club.objects.get(name="BDE")
-                fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
+                if not Membership.objects.filter(
+                    club=bde,
+                    user=user,
+                    date_start__gte=bde.membership_start,
+                ).exists():
+                    fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
                 kfet = Club.objects.get(name="Kfet")
-                fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+                if not Membership.objects.filter(
+                    club=kfet,
+                    user=user,
+                    date_start__gte=bde.membership_start,
+                ).exists():
+                    fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
                 context["total_fee"] = "{:.02f}".format(fee / 100, )
 
         context['club'] = club
@@ -502,7 +540,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
         bank = form.cleaned_data["bank"]
-        soge = form.cleaned_data["soge"] and not user.profile.soge and club.name == "BDE"
+        soge = form.cleaned_data["soge"] and not user.profile.soge and (club.name == "BDE" or club.name == "Kfet")
 
         # If Société générale pays, then we store that information but the payment must be controlled by treasurers
         # later. The membership transaction will be invalidated.
@@ -513,10 +551,17 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         if credit_type is None:
             credit_amount = 0
 
-        if user.profile.paid:
-            fee = club.membership_fee_paid
-        else:
-            fee = club.membership_fee_unpaid
+        fee = 0
+        c = club
+        while c is not None:
+            if not Membership.objects.filter(
+                    club=c,
+                    user=user,
+                    date_start__gte=c.membership_start,
+            ).exists():
+                fee += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
+            c = c.parent_club
+
         if user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
@@ -524,21 +569,10 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 date_end__gte=datetime.now().date(),
         ).exists():
             # Users without a valid Kfet membership can't have a negative balance.
-            # Club 2 = Kfet (hard-code :'( )
             # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
             form.add_error('user',
                            _("This user don't have enough money to join this club, and can't have a negative balance."))
             return super().form_invalid(form)
-
-        if club.parent_club is not None:
-            if not Membership.objects.filter(
-                user=form.instance.user,
-                club=club.parent_club,
-                date_start__lte=form.instance.date_start,
-                date_end__gte=form.instance.date_start,
-            ).exists():
-                form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
-                return super().form_invalid(form)
 
         if Membership.objects.filter(
                 user=form.instance.user,
@@ -561,7 +595,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         # Now, all is fine, the membership can be created.
 
-        if club.name == "BDE":
+        if club.name == "BDE" or club.name == "Kfet":
             # When we renew the BDE membership, we update the profile section.
             # We could automate that and remove the section field from the Profile model,
             # but with this way users can customize their section as they want.
@@ -593,6 +627,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             transaction._force_save = True
             transaction.save()
 
+        form.instance._force_renew_parent = True
+
         ret = super().form_valid(form)
 
         member_role = Role.objects.filter(name="Membre de club").all()
@@ -603,33 +639,40 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         # If Société générale pays, then we assume that this is the BDE membership, and we auto-renew the
         # Kfet membership.
         if soge:
+            # If not already done, create BDE and Kfet memberships
+            bde = Club.objects.get(name="BDE")
             kfet = Club.objects.get(name="Kfet")
-            kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
 
-            # Get current membership, to get the end date
-            old_membership = Membership.objects.filter(
-                club__name="Kfet",
-                user=user,
-                date_start__lte=datetime.today(),
-                date_end__gte=datetime.today(),
-            )
+            soge_clubs = [bde, kfet]
+            for club in soge_clubs:
+                fee = club.membership_fee_paid if user.profile.paid else club.membership_fee_unpaid
 
-            membership = Membership(
-                club=kfet,
-                user=user,
-                fee=kfet_fee,
-                date_start=old_membership.get().date_end + timedelta(days=1)
-                if old_membership.exists() else form.instance.date_start,
-            )
-            membership._force_save = True
-            membership._soge = True
-            membership.save()
-            membership.refresh_from_db()
-            if old_membership.exists():
-                membership.roles.set(old_membership.get().roles.all())
-            else:
-                membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
-            membership.save()
+                # Get current membership, to get the end date
+                old_membership = Membership.objects.filter(
+                    club=club,
+                    user=user,
+                ).order_by("-date_start")
+
+                if old_membership.filter(date_start__gte=club.membership_start).exists():
+                    # Membership is already renewed
+                    continue
+
+                membership = Membership(
+                    club=club,
+                    user=user,
+                    fee=fee,
+                    date_start=max(old_membership.first().date_end + timedelta(days=1), club.membership_start)
+                    if old_membership.exists() else form.instance.date_start,
+                )
+                membership._force_save = True
+                membership._soge = True
+                membership.save()
+                membership.refresh_from_db()
+                if old_membership.exists():
+                    membership.roles.set(old_membership.get().roles.all())
+                else:
+                    membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
+                membership.save()
 
         return ret
 

@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.template import loader
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
@@ -301,13 +302,34 @@ class Membership(models.Model):
         else:
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
 
+    def renew(self):
+        if Membership.objects.filter(
+                user=self.user,
+                club=self.club,
+                date_start__gte=self.club.membership_start,
+        ).exists():
+            # Membership is already renewed
+            return
+        new_membership = Membership(
+            user=self.user,
+            club=self.club,
+            date_start=max(self.date_end + datetime.timedelta(days=1), self.club.membership_start),
+        )
+        from django.forms import model_to_dict
+        if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
+            new_membership._force_renew_parent = True
+        if hasattr(self, '_soge') and self._soge:
+            new_membership._soge = True
+        if hasattr(self, '_force_save') and self._force_save:
+            new_membership._force_save = True
+        new_membership.save()
+        new_membership.roles.set(self.roles.all())
+        new_membership.save()
+
     def save(self, *args, **kwargs):
         """
         Calculate fee and end date before saving the membership and creating the transaction if needed.
         """
-        if self.club.parent_club is not None:
-            if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
-                raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
 
         if self.pk:
             for role in self.roles.all():
@@ -327,17 +349,54 @@ class Membership(models.Model):
             ).exists():
                 raise ValidationError(_('User is already a member of the club'))
 
-            if self.user.profile.paid:
-                self.fee = self.club.membership_fee_paid
-            else:
-                self.fee = self.club.membership_fee_unpaid
+        if self.club.parent_club is not None:
+            if not Membership.objects.filter(
+                user=self.user,
+                club=self.club.parent_club,
+                date_start__gte=self.club.parent_club.membership_start,
+            ).exists():
+                if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
+                    parent_membership = Membership.objects.filter(
+                        user=self.user,
+                        club=self.club.parent_club,
+                    ).order_by("-date_start")
+                    if parent_membership.exists():
+                        # Renew the previous membership of the parent club
+                        parent_membership = parent_membership.first()
+                        parent_membership._force_renew_parent = True
+                        if hasattr(self, '_soge'):
+                            parent_membership._soge = True
+                        if hasattr(self, '_force_save'):
+                            parent_membership._force_save = True
+                        parent_membership.renew()
+                    else:
+                        # Create a new membership in the parent club
+                        parent_membership = Membership(
+                            user=self.user,
+                            club=self.club.parent_club,
+                            date_start=self.date_start,
+                        )
+                        parent_membership._force_renew_parent = True
+                        if hasattr(self, '_soge'):
+                            parent_membership._soge = True
+                        if hasattr(self, '_force_save'):
+                            parent_membership._force_save = True
+                        parent_membership.save()
+                else:
+                    raise ValidationError(_('User is not a member of the parent club')
+                                          + ' ' + self.club.parent_club.name)
 
-            if self.club.membership_duration is not None:
-                self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
-            else:
-                self.date_end = self.date_start + datetime.timedelta(days=424242)
-            if self.club.membership_end is not None and self.date_end > self.club.membership_end:
-                self.date_end = self.club.membership_end
+        if self.user.profile.paid:
+            self.fee = self.club.membership_fee_paid
+        else:
+            self.fee = self.club.membership_fee_unpaid
+
+        if self.club.membership_duration is not None:
+            self.date_end = self.date_start + datetime.timedelta(days=self.club.membership_duration)
+        else:
+            self.date_end = self.date_start + datetime.timedelta(days=424242)
+        if self.club.membership_end is not None and self.date_end > self.club.membership_end:
+            self.date_end = self.club.membership_end
 
         super().save(*args, **kwargs)
 
@@ -360,8 +419,9 @@ class Membership(models.Model):
                 reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
-            print(hasattr(self, '_soge'))
-            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS:
+            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS\
+                    and (self.club.name == "BDE" or self.club.name == "Kfet" or
+                         ("wei" in settings.INSTALLED_APPS and hasattr(self.club, "weiclub") and self.club.weiclub)):
                 # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
                 # to treasurers.
                 transaction.valid = False

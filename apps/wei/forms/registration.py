@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
+
+from note.models import NoteSpecial
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
 from ..models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
@@ -73,6 +75,35 @@ class WEIMembershipForm(forms.ModelForm):
         queryset=WEIRole.objects,
         label=_("WEI Roles"),
         widget=CheckboxSelectMultiple(),
+    )
+
+    credit_type = forms.ModelChoiceField(
+        queryset=NoteSpecial.objects.all(),
+        label=_("Credit type"),
+        empty_label=_("No credit"),
+        required=False,
+    )
+
+    credit_amount = forms.IntegerField(
+        label=_("Credit amount"),
+        widget=AmountInput(),
+        initial=0,
+        required=False,
+    )
+
+    last_name = forms.CharField(
+        label=_("Last name"),
+        required=False,
+    )
+
+    first_name = forms.CharField(
+        label=_("First name"),
+        required=False,
+    )
+
+    bank = forms.CharField(
+        label=_("Bank"),
+        required=False,
     )
 
     def clean(self):
