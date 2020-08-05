@@ -28,3 +28,16 @@
     recurse: yes
     owner: www-data
     group: www-data
+
+- name: Setup cron jobs
+  file:
+    src: /var/www/note_kfet/note.cron
+    dest: /etc/cron.d/note
+    state: link
+    owner: root
+    group: root
+
+- name: Reload cron service
+  systemd:
+    name: cron
+    state: reloaded
