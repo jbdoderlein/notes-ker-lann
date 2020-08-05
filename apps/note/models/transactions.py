@@ -164,10 +164,43 @@ class Transaction(PolymorphicModel):
             models.Index(fields=['destination']),
         ]
 
+    def validate(self, reset=False):
+        previous_source_balance = self.source.balance
+        previous_dest_balance = self.destination.balance
+
+        created = self.pk is None
+        to_transfer = self.amount * self.quantity
+        if not created:
+            # Revert old transaction
+            old_transaction = Transaction.objects.get(pk=self.pk)
+            if old_transaction.valid:
+                self.source.balance += to_transfer
+                self.destination.balance -= to_transfer
+
+        if self.valid:
+            self.source.balance -= to_transfer
+            self.destination.balance += to_transfer
+
+            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
+            # previously invalid
+            self.invalidity_reason = None
+
+        source_balance = self.source.balance
+        dest_balance = self.destination.balance
+
+        if reset:
+            self.source.balance = previous_source_balance
+            self.destination.balance = previous_dest_balance
+
+        if source_balance > 2147483647 or source_balance < -2147483648\
+                or dest_balance > 2147483647 or dest_balance < -2147483648:
+            raise ValidationError(_("The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."))
+
     def save(self, *args, **kwargs):
         """
         When saving, also transfer money between two notes
         """
+        self.validate(False)
 
         if not self.source.is_active or not self.destination.is_active:
             if 'force_insert' not in kwargs or not kwargs['force_insert']:
@@ -186,23 +219,6 @@ class Transaction(PolymorphicModel):
             # When source == destination, no money is transferred
             super().save(*args, **kwargs)
             return
-
-        created = self.pk is None
-        to_transfer = self.amount * self.quantity
-        if not created:
-            # Revert old transaction
-            old_transaction = Transaction.objects.get(pk=self.pk)
-            if old_transaction.valid:
-                self.source.balance += to_transfer
-                self.destination.balance -= to_transfer
-
-        if self.valid:
-            self.source.balance -= to_transfer
-            self.destination.balance += to_transfer
-
-            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
-            # previously invalid
-            self.invalidity_reason = None
 
         # We save first the transaction, in case of the user has no right to transfer money
         super().save(*args, **kwargs)

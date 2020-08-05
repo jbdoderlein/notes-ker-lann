@@ -213,6 +213,13 @@ $("#btn_transfer").click(function() {
         error = true;
     }
 
+    let amount = Math.floor(100 * amount_field.val());
+    if (amount > 2147483647) {
+        amount_field.addClass('is-invalid');
+        $("#amount-required").html("<strong>Le montant ne doit pas excéder 21474836.47 €.</strong>");
+        error = true;
+    }
+
     if (!reason_field.val()) {
         reason_field.addClass('is-invalid');
         $("#reason-required").html("<strong>Ce champ est requis.</strong>");
@@ -232,7 +239,6 @@ $("#btn_transfer").click(function() {
     if (error)
         return;
 
-    let amount = 100 * amount_field.val();
     let reason = reason_field.val();
 
     if ($("#type_transfer").is(':checked')) {
@@ -277,7 +283,15 @@ $("#btn_transfer").click(function() {
                             + " vers la note " + dest.name + " a été fait avec succès !", "success", 10000);
 
                         reset();
-                    }).fail(function () { // do it again but valid = false
+                    }).fail(function (err) { // do it again but valid = false
+                        let errObj = JSON.parse(err.responseText);
+                        if (errObj["non_field_errors"]) {
+                            addMsg("Le transfert de "
+                                + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
+                                + " vers la note " + dest.name + " a échoué : " + errObj["non_field_errors"], "danger");
+                            return;
+                        }
+
                         $.post("/api/note/transaction/transaction/",
                         {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
@@ -298,9 +312,13 @@ $("#btn_transfer").click(function() {
                                 + " vers la note " + dest.name + " a échoué : Solde insuffisant", "danger", 10000);
                             reset();
                         }).fail(function (err) {
+                            let errObj = JSON.parse(err.responseText);
+                            let error = errObj["detail"] ? errObj["detail"] : errObj["non_field_errors"]
+                            if (!error)
+                                error = err.responseText;
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
-                                + " vers la note " + dest.name + " a échoué : " + err.responseText, "danger");
+                                + " vers la note " + dest.name + " a échoué : " + error, "danger");
                     });
                 });
             });
@@ -346,8 +364,11 @@ $("#btn_transfer").click(function() {
                 addMsg("Le crédit/retrait a bien été effectué !", "success", 10000);
                 reset();
             }).fail(function (err) {
-                addMsg("Le crédit/retrait a échoué : " + JSON.parse(err.responseText)["detail"],
-                    "danger", 10000);
+                let errObj = JSON.parse(err.responseText);
+                let error = errObj["detail"] ? errObj["detail"] : errObj["non_field_errors"]
+                if (!error)
+                    error = err.responseText;
+                addMsg("Le crédit/retrait a échoué : " + error, "danger", 10000);
         });
     }
 });

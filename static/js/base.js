@@ -371,8 +371,12 @@ function de_validate(id, validated) {
             refreshHistory();
         },
         error: function (err) {
+            let errObj = JSON.parse(err.responseText);
+            let error = errObj["detail"] ? errObj["detail"] : errObj["non_field_errors"];
+            if (!error)
+                error = err.responseText;
             addMsg("Une erreur est survenue lors de la validation/dévalidation " +
-                "de cette transaction : " + JSON.parse(err.responseText)["detail"], "danger", 10000);
+                "de cette transaction : " + error, "danger");
 
             refreshBalance();
             // error if this method doesn't exist. Please define it.

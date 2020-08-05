@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
+from rest_framework.utils import model_meta
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
@@ -208,6 +209,24 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
         model_serializer_mapping[GuestTransaction] = GuestTransactionSerializer
     except ImportError:  # Activity app is not loaded
         pass
+
+    def validate(self, attrs):
+        resource_type = attrs.pop(self.resource_type_field_name)
+        serializer = self._get_serializer_from_resource_type(resource_type)
+        if self.instance:
+            instance = self.instance
+            info = model_meta.get_field_info(instance)
+            for attr, value in attrs.items():
+                if attr in info.relations and info.relations[attr].to_many:
+                    field = getattr(instance, attr)
+                    field.set(value)
+                else:
+                    setattr(instance, attr, value)
+            instance.validate(True)
+        else:
+            serializer.Meta.model(**attrs).validate(True)
+        attrs[self.resource_type_field_name] = resource_type
+        return super().validate(attrs)
 
     class Meta:
         model = Transaction

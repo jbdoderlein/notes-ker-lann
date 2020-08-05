@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-05 13:58+0200\n"
+"POT-Creation-Date: 2020-08-05 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: apps/activity/models.py:24 apps/activity/models.py:49
 #: apps/member/models.py:162 apps/note/models/notes.py:212
 #: apps/note/models/transactions.py:25 apps/note/models/transactions.py:45
-#: apps/note/models/transactions.py:268 apps/permission/models.py:339
+#: apps/note/models/transactions.py:284 apps/permission/models.py:339
 #: apps/wei/models.py:67 apps/wei/models.py:119
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
@@ -550,7 +550,7 @@ msgstr ""
 msgid "The role {role} does not apply to the club {club}."
 msgstr ""
 
-#: apps/member/models.py:353 apps/member/views.py:589
+#: apps/member/models.py:353 apps/member/views.py:588
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -585,71 +585,71 @@ msgstr ""
 msgid "This address must be valid."
 msgstr ""
 
-#: apps/member/views.py:134
+#: apps/member/views.py:133
 msgid "Profile detail"
 msgstr ""
 
-#: apps/member/views.py:168
+#: apps/member/views.py:167
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:202 apps/member/views.py:388
+#: apps/member/views.py:201 apps/member/views.py:387
 msgid "Note aliases"
 msgstr ""
 
-#: apps/member/views.py:216
+#: apps/member/views.py:215
 msgid "Update note picture"
 msgstr ""
 
-#: apps/member/views.py:274 templates/member/profile_info.html:43
+#: apps/member/views.py:273 templates/member/profile_info.html:43
 msgid "Manage auth token"
 msgstr ""
 
-#: apps/member/views.py:302
+#: apps/member/views.py:301
 msgid "Create new club"
 msgstr ""
 
-#: apps/member/views.py:314
+#: apps/member/views.py:313
 msgid "Search club"
 msgstr ""
 
-#: apps/member/views.py:339
+#: apps/member/views.py:338
 msgid "Club detail"
 msgstr ""
 
-#: apps/member/views.py:405
+#: apps/member/views.py:404
 msgid "Update club"
 msgstr ""
 
-#: apps/member/views.py:439
+#: apps/member/views.py:438
 msgid "Add new member to the club"
 msgstr ""
 
-#: apps/member/views.py:580 apps/wei/views.py:862
+#: apps/member/views.py:579 apps/wei/views.py:862
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:593
+#: apps/member/views.py:592
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:598
+#: apps/member/views.py:597
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:615 apps/member/views.py:617 apps/member/views.py:619
+#: apps/member/views.py:614 apps/member/views.py:616 apps/member/views.py:618
 #: apps/registration/views.py:290 apps/registration/views.py:292
 #: apps/registration/views.py:294 apps/wei/views.py:867 apps/wei/views.py:871
 msgid "This field is required."
 msgstr ""
 
-#: apps/member/views.py:703
+#: apps/member/views.py:702
 msgid "Manage roles of an user in the club"
 msgstr ""
 
-#: apps/member/views.py:728
+#: apps/member/views.py:727
 msgid "Members of the club"
 msgstr ""
 
@@ -866,68 +866,73 @@ msgstr ""
 msgid "transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:175
+#: apps/note/models/transactions.py:197
+msgid ""
+"The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."
+msgstr ""
+
+#: apps/note/models/transactions.py:208
 msgid ""
 "The transaction can't be saved since the source note or the destination note "
 "is not active."
 msgstr ""
 
-#: apps/note/models/transactions.py:230
+#: apps/note/models/transactions.py:246
 #: templates/activity/activity_entry.html:13 templates/base.html:99
 #: templates/note/transaction_form.html:15
 #: templates/note/transaction_form.html:143
 msgid "Transfer"
 msgstr ""
 
-#: apps/note/models/transactions.py:254
+#: apps/note/models/transactions.py:270
 msgid "Template"
 msgstr ""
 
-#: apps/note/models/transactions.py:257
+#: apps/note/models/transactions.py:273
 msgid "recurrent transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:258
+#: apps/note/models/transactions.py:274
 msgid "recurrent transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:273
+#: apps/note/models/transactions.py:289
 msgid "first_name"
 msgstr ""
 
-#: apps/note/models/transactions.py:278
+#: apps/note/models/transactions.py:294
 msgid "bank"
 msgstr ""
 
-#: apps/note/models/transactions.py:284
+#: apps/note/models/transactions.py:300
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:20
 msgid "Credit"
 msgstr ""
 
-#: apps/note/models/transactions.py:284 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:300 templates/note/transaction_form.html:24
 msgid "Debit"
 msgstr ""
 
-#: apps/note/models/transactions.py:295
+#: apps/note/models/transactions.py:311
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
 msgstr ""
 
-#: apps/note/models/transactions.py:299
+#: apps/note/models/transactions.py:315
 msgid "Special transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:300
+#: apps/note/models/transactions.py:316
 msgid "Special transactions"
 msgstr ""
 
-#: apps/note/models/transactions.py:316 apps/note/models/transactions.py:321
+#: apps/note/models/transactions.py:332 apps/note/models/transactions.py:337
 msgid "membership transaction"
 msgstr ""
 
-#: apps/note/models/transactions.py:317 apps/treasury/models.py:228
+#: apps/note/models/transactions.py:333 apps/treasury/models.py:228
 msgid "membership transactions"
 msgstr ""
 

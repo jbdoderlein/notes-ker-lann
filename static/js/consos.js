@@ -212,11 +212,11 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
                 if (newBalance <= -5000)
                     addMsg("Attention, La transaction depuis la note " + source_alias + " a été réalisée avec " +
                         "succès, mais la note émettrice " + source_alias + " est en négatif sévère.",
-                        "danger", 10000);
+                        "danger", 30000);
                 else if (newBalance < 0)
                     addMsg("Attention, La transaction depuis la note " + source_alias + " a été réalisée avec " +
                         "succès, mais la note émettrice " + source_alias + " est en négatif.",
-                        "warning", 10000);
+                        "warning", 30000);
             }
             reset();
         }).fail(function (e) {
@@ -240,7 +240,7 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
                 addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", "danger", 10000);
             }).fail(function () {
                 reset();
-                errMsg(e.responseJSON, 10000);
+                errMsg(e.responseJSON);
             });
     });
 }
