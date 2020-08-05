@@ -11,10 +11,10 @@ from django.db import models
 from django.db.models import Q
 from django.template import loader
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from permission.models import Role
 from registration.tokens import email_validation_token
@@ -34,7 +34,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
     )
 
-    phone_number = models.CharField(
+    phone_number = PhoneNumberField(
         verbose_name=_('phone number'),
         max_length=50,
         blank=True,

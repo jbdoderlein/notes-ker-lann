@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     # External apps
     'mailer',
+    'phonenumber_field',
     'polymorphic',
     'crispy_forms',
     'django_tables2',
@@ -195,3 +196,7 @@ MEDIA_URL = '/media/'
 # Profile Picture Settings
 PIC_WIDTH = 200
 PIC_RATIO = 1
+
+
+PHONENUMBER_DB_FORMAT = 'NATIONAL'
+PHONENUMBER_DEFAULT_REGION = 'FR'

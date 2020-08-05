@@ -8,6 +8,8 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
 from member.models import Club, Membership
 from note.models import MembershipTransaction
 from permission.models import Role
@@ -223,7 +225,7 @@ class WEIRegistration(models.Model):
         verbose_name=_("emergency contact name"),
     )
 
-    emergency_contact_phone = models.CharField(
+    emergency_contact_phone = PhoneNumberField(
         max_length=32,
         verbose_name=_("emergency contact phone"),
     )

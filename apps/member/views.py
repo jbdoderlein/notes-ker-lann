@@ -69,7 +69,9 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.fields['email'].required = True
         form.fields['email'].help_text = _("This address must be valid.")
 
-        context['profile_form'] = self.profile_form(instance=context['user_object'].profile)
+        context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
+                                                    data=self.request.POST if self.request.POST else None)
+
         return context
 
     def form_valid(self, form):
@@ -86,30 +88,33 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             data=self.request.POST,
             instance=self.object.profile,
         )
-        if form.is_valid() and profile_form.is_valid():
-            new_username = form.data['username']
-            alias = Alias.objects.filter(name=new_username)
-            # Si le nouveau pseudo n'est pas un de nos alias,
-            # on supprime éventuellement un alias similaire pour le remplacer
-            if not alias.exists():
-                similar = Alias.objects.filter(
-                    normalized_name=Alias.normalize(new_username))
-                if similar.exists():
-                    similar.delete()
+        profile_form.full_clean()
+        if not profile_form.is_valid():
+            return super().form_invalid(form)
 
-            olduser = User.objects.get(pk=form.instance.pk)
+        new_username = form.data['username']
+        alias = Alias.objects.filter(name=new_username)
+        # Si le nouveau pseudo n'est pas un de nos alias,
+        # on supprime éventuellement un alias similaire pour le remplacer
+        if not alias.exists():
+            similar = Alias.objects.filter(
+                normalized_name=Alias.normalize(new_username))
+            if similar.exists():
+                similar.delete()
 
-            user = form.save(commit=False)
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
-            user.save()
+        olduser = User.objects.get(pk=form.instance.pk)
 
-            if olduser.email != user.email:
-                # If the user changed her/his email, then it is unvalidated and a confirmation link is sent.
-                user.profile.email_confirmed = False
-                user.profile.save()
-                user.profile.send_email_validation_link()
+        user = form.save(commit=False)
+        profile = profile_form.save(commit=False)
+        profile.user = user
+        profile.save()
+        user.save()
+
+        if olduser.email != user.email:
+            # If the user changed her/his email, then it is unvalidated and a confirmation link is sent.
+            user.profile.email_confirmed = False
+            user.profile.save()
+            user.profile.send_email_validation_link()
 
         return super().form_valid(form)
 
