@@ -64,6 +64,7 @@ class RemittanceTable(tables.Table):
         model = Remittance
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('id', 'date', 'remittance_type', 'comment', 'count', 'amount', 'view',)
+        order_by = ('-date',)
 
 
 class SpecialTransactionTable(tables.Table):
@@ -100,7 +101,8 @@ class SpecialTransactionTable(tables.Table):
         }
         model = SpecialTransaction
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('id', 'source', 'destination', 'last_name', 'first_name', 'bank', 'amount', 'reason',)
+        fields = ('created_at', 'source', 'destination', 'last_name', 'first_name', 'bank', 'amount', 'reason',)
+        order_by = ('-created_at',)
 
 
 class SogeCreditTable(tables.Table):

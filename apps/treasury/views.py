@@ -238,7 +238,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
 
         closed_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all(),
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             prefix="closed-remittances-",
         )
         closed_remittances.paginate(page=self.request.GET.get("closed-remittances-page", 1), per_page=10)
@@ -281,8 +281,6 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["table"] = RemittanceTable(data=Remittance.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
         data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
             PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
         context["special_transactions"] = SpecialTransactionTable(

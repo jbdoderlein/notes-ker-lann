@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-05 16:18+0200\n"
+"POT-Creation-Date: 2020-08-05 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,13 +188,13 @@ msgid "Type"
 msgstr "Type"
 
 #: apps/activity/tables.py:77 apps/member/forms.py:103
-#: apps/registration/forms.py:70 apps/treasury/forms.py:120
+#: apps/registration/forms.py:70 apps/treasury/forms.py:126
 #: apps/wei/forms/registration.py:95
 msgid "Last name"
 msgstr "Nom de famille"
 
 #: apps/activity/tables.py:79 apps/member/forms.py:108
-#: apps/registration/forms.py:75 apps/treasury/forms.py:122
+#: apps/registration/forms.py:75 apps/treasury/forms.py:128
 #: apps/wei/forms/registration.py:100 templates/note/transaction_form.html:129
 msgid "First name"
 msgstr "Prénom"
@@ -348,7 +348,7 @@ msgid "Credit amount"
 msgstr "Montant à créditer"
 
 #: apps/member/forms.py:113 apps/registration/forms.py:80
-#: apps/treasury/forms.py:124 apps/wei/forms/registration.py:105
+#: apps/treasury/forms.py:130 apps/wei/forms/registration.py:105
 #: templates/note/transaction_form.html:135
 msgid "Bank"
 msgstr "Banque"
@@ -694,7 +694,7 @@ msgstr "Destination"
 msgid "Reason"
 msgstr "Raison"
 
-#: apps/note/forms.py:87 apps/treasury/tables.py:117
+#: apps/note/forms.py:87 apps/treasury/tables.py:119
 msgid "Valid"
 msgstr "Valide"
 
@@ -1198,7 +1198,7 @@ msgstr "Invalider l'inscription"
 msgid "Treasury"
 msgstr "Trésorerie"
 
-#: apps/treasury/forms.py:84 apps/treasury/forms.py:132
+#: apps/treasury/forms.py:84 apps/treasury/forms.py:138
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
@@ -1222,8 +1222,20 @@ msgstr "La remise est déjà fermée."
 msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
-#: apps/treasury/forms.py:126 apps/treasury/tables.py:47
-#: apps/treasury/tables.py:113 templates/note/transaction_form.html:97
+#: apps/treasury/forms.py:120 apps/treasury/models.py:207
+#: apps/treasury/tables.py:77 apps/treasury/tables.py:85
+#: templates/treasury/invoice_list.html:13
+#: templates/treasury/remittance_list.html:13
+#: templates/treasury/sogecredit_list.html:13
+msgid "Remittance"
+msgstr "Remise"
+
+#: apps/treasury/forms.py:121
+msgid "No attached remittance"
+msgstr "Pas de remise associée"
+
+#: apps/treasury/forms.py:132 apps/treasury/tables.py:47
+#: apps/treasury/tables.py:115 templates/note/transaction_form.html:97
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
 msgstr "Montant"
@@ -1320,13 +1332,6 @@ msgstr "remises"
 msgid "Remittance #{:d}: {}"
 msgstr "Remise n°{:d} : {}"
 
-#: apps/treasury/models.py:207 apps/treasury/tables.py:76
-#: apps/treasury/tables.py:84 templates/treasury/invoice_list.html:13
-#: templates/treasury/remittance_list.html:13
-#: templates/treasury/sogecredit_list.html:13
-msgid "Remittance"
-msgstr "Remise"
-
 #: apps/treasury/models.py:211
 msgid "special transaction proxy"
 msgstr "Proxy de transaction spéciale"
@@ -1373,19 +1378,19 @@ msgstr "Nombre de transactions"
 msgid "View"
 msgstr "Voir"
 
-#: apps/treasury/tables.py:78
+#: apps/treasury/tables.py:79
 msgid "Add"
 msgstr "Ajouter"
 
-#: apps/treasury/tables.py:86
+#: apps/treasury/tables.py:87
 msgid "Remove"
 msgstr "supprimer"
 
-#: apps/treasury/tables.py:124
+#: apps/treasury/tables.py:126
 msgid "Yes"
 msgstr "Oui"
 
-#: apps/treasury/tables.py:124
+#: apps/treasury/tables.py:126
 msgid "No"
 msgstr "Non"
 
@@ -2218,18 +2223,18 @@ msgstr ""
 "Le lien est invalide. Le jeton a sans doute expiré. Merci de nous contacter "
 "pour activer votre compte."
 
-#: templates/registration/email_validation_email_sent.html:4
+#: templates/registration/email_validation_email_sent.html:5
 msgid "Account activation"
 msgstr "Activation du compte"
 
-#: templates/registration/email_validation_email_sent.html:7
+#: templates/registration/email_validation_email_sent.html:8
 msgid ""
 "An email has been sent. Please click on the link to activate your account."
 msgstr ""
 "Un email vient de vous être envoyé. Merci de cliquer sur le lien de "
 "validation pour activer votre compte."
 
-#: templates/registration/email_validation_email_sent.html:11
+#: templates/registration/email_validation_email_sent.html:12
 msgid ""
 "You must also go to the Kfet to pay your membership. The WEI registration "
 "includes the BDE membership."

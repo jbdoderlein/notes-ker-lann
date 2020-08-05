@@ -82,7 +82,7 @@ class Product(models.Model):
         verbose_name=_("Designation"),
     )
 
-    quantity = models.PositiveIntegerField(
+    quantity = models.IntegerField(
         verbose_name=_("Quantity")
     )
 
