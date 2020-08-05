@@ -37,6 +37,7 @@ function reset(refresh=true) {
     $("#bank").val("");
     $("#user_note").val("");
     $("#profile_pic").attr("src", "/media/pic/default.png");
+    $("#profile_pic_link").attr("href", "#");
     if (refresh) {
         refreshBalance();
         refreshHistory();

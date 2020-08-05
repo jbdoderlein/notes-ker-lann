@@ -131,13 +131,9 @@ function displayNote(note, alias, user_note_field = null, profile_pic_field = nu
         $("#" + user_note_field).text(alias + (note.balance == null ? "" : (" :\n" + pretty_money(note.balance))));
         if (profile_pic_field != null) {
             $("#" + profile_pic_field).attr('src', img);
-            $("#" + profile_pic_field).click(function () {
-                if (note.resourcetype === "NoteUser") {
-                    document.location.href = "/accounts/user/" + note.user;
-                } else if (note.resourcetype === "NoteClub") {
-                    document.location.href = "/accounts/club/" + note.club;
-                }
-            });
+            $("#" + profile_pic_field + "_link").attr('href', note.resourcetype === "NoteUser" ?
+                "/accounts/user/" + note.user : note.resourcetype === "NoteClub" ?
+                    "/accounts/club/" + note.club : "#");
         }
     }
 }
