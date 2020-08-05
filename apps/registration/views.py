@@ -39,7 +39,7 @@ class UserCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form()
+        context["profile_form"] = self.second_form(self.request.POST)
         del context["profile_form"].fields["section"]
 
         return context
