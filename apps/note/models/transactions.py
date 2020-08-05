@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -196,38 +196,51 @@ class Transaction(PolymorphicModel):
                 or dest_balance > 2147483647 or dest_balance < -2147483648:
             raise ValidationError(_("The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."))
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         When saving, also transfer money between two notes
         """
-        self.validate(False)
+        with transaction.atomic():
+            self.refresh_from_db()
+            self.source.refresh_from_db()
+            self.destination.refresh_from_db()
+            self.validate(False)
 
-        if not self.source.is_active or not self.destination.is_active:
-            if 'force_insert' not in kwargs or not kwargs['force_insert']:
-                if 'force_update' not in kwargs or not kwargs['force_update']:
-                    raise ValidationError(_("The transaction can't be saved since the source note "
-                                            "or the destination note is not active."))
+            if not self.source.is_active or not self.destination.is_active:
+                if 'force_insert' not in kwargs or not kwargs['force_insert']:
+                    if 'force_update' not in kwargs or not kwargs['force_update']:
+                        raise ValidationError(_("The transaction can't be saved since the source note "
+                                                "or the destination note is not active."))
 
-        # If the aliases are not entered, we assume that the used alias is the name of the note
-        if not self.source_alias:
-            self.source_alias = str(self.source)
+            # If the aliases are not entered, we assume that the used alias is the name of the note
+            if not self.source_alias:
+                self.source_alias = str(self.source)
 
-        if not self.destination_alias:
-            self.destination_alias = str(self.destination)
+            if not self.destination_alias:
+                self.destination_alias = str(self.destination)
 
-        if self.source.pk == self.destination.pk:
-            # When source == destination, no money is transferred
+            if self.source.pk == self.destination.pk:
+                # When source == destination, no money is transferred
+                super().save(*args, **kwargs)
+                return
+
+            self.log("Saving")
+            # We save first the transaction, in case of the user has no right to transfer money
             super().save(*args, **kwargs)
-            return
+            self.log("Saved")
 
-        # We save first the transaction, in case of the user has no right to transfer money
-        super().save(*args, **kwargs)
+            # Save notes
+            self.source._force_save = True
+            self.source.save()
+            self.log("Source saved")
+            self.destination._force_save = True
+            self.destination.save()
+            self.log("Destination saved")
 
-        # Save notes
-        self.source._force_save = True
-        self.source.save()
-        self.destination._force_save = True
-        self.destination.save()
+    def log(self, msg):
+        with open("/tmp/log", "a") as f:
+            f.write(msg + "\n")
 
     def delete(self, **kwargs):
         """

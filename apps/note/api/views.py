@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import  get_current_session
 from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
@@ -154,5 +154,7 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     search_fields = ['$reason', ]
 
     def get_queryset(self):
-        user = get_current_authenticated_user()
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))\
+            .order_by("created_at", "id")

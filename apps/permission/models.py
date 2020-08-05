@@ -10,7 +10,7 @@ from time import sleep
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.core.mail import mail_admins
-from django.db import models
+from django.db import models, transaction
 from django.db.models import F, Q, Model
 from django.forms import model_to_dict
 from django.utils.translation import gettext_lazy as _
@@ -43,35 +43,28 @@ class InstancedPermission:
 
                 obj = copy(obj)
                 obj.pk = 0
-                # Ensure previous models are deleted
-                for ignored in range(1000):
-                    if self.model.model_class().objects.filter(pk=0).exists():
-                        # If the object exists, that means that one permission is currently checked.
-                        # We wait before the other permission, at most 1 second.
-                        sleep(0.001)
-                        continue
-                    break
-                for o in self.model.model_class().objects.filter(pk=0).all():
-                    o._force_delete = True
-                    Model.delete(o)
-                    # An object with pk 0 wouldn't deleted. That's not normal, we alert admins.
-                    msg = "Lors de la vérification d'une permission d'ajout, un objet de clé primaire nulle était "\
-                          "encore présent.\n"\
-                          "Type de permission : " + self.type + "\n"\
-                          "Modèle : " + str(self.model) + "\n"\
-                          "Objet trouvé : " + str(model_to_dict(o)) + "\n\n"\
-                          "--\nLe BDE"
-                    mail_admins("[Note Kfet] Un objet a été supprimé de force", msg)
+                with transaction.atomic():
+                    for o in self.model.model_class().objects.filter(pk=0).all():
+                        o._force_delete = True
+                        Model.delete(o)
+                        # An object with pk 0 wouldn't deleted. That's not normal, we alert admins.
+                        msg = "Lors de la vérification d'une permission d'ajout, un objet de clé primaire nulle était "\
+                              "encore présent.\n"\
+                              "Type de permission : " + self.type + "\n"\
+                              "Modèle : " + str(self.model) + "\n"\
+                              "Objet trouvé : " + str(model_to_dict(o)) + "\n\n"\
+                              "--\nLe BDE"
+                        mail_admins("[Note Kfet] Un objet a été supprimé de force", msg)
 
-                # Force insertion, no data verification, no trigger
-                obj._force_save = True
-                Model.save(obj, force_insert=True)
-                # We don't want log anything
-                obj._no_log = True
-                ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
-                # Delete testing object
-                obj._force_delete = True
-                Model.delete(obj)
+                    # Force insertion, no data verification, no trigger
+                    obj._force_save = True
+                    Model.save(obj, force_insert=True)
+                    # We don't want log anything
+                    obj._no_log = True
+                    ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
+                    # Delete testing object
+                    obj._force_delete = True
+                    Model.delete(obj)
 
                 with open("/tmp/log", "w") as f:
                     f.write(str(obj) + ", " + str(obj.pk) + ", " + str(self.model.model_class().objects.filter(pk=0).exists()))
