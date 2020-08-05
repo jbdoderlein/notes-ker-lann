@@ -11,6 +11,7 @@ from django.db import models
 from django.db.models import Q
 from django.template import loader
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
@@ -90,6 +91,16 @@ class Profile(models.Model):
         verbose_name=_("paid"),
         help_text=_("Tells if the user receive a salary."),
         default=False,
+    )
+
+    report_frequency = models.PositiveSmallIntegerField(
+        verbose_name=_("report frequency (in days)"),
+        default=0,
+    )
+
+    last_report = models.DateField(
+        verbose_name=_("last report date"),
+        default=timezone.now,
     )
 
     email_confirmed = models.BooleanField(

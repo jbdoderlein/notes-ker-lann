@@ -17,8 +17,23 @@
 </head>
 <body>
 <p>
+    Bonjour,
+</p>
+
+<p>
+    Vous recevez ce mail car vous avez défini une « Fréquence des rapports » dans la Note.<br>
+    Le premier rapport récapitule toutes vos consommations depuis la création de votre compte.<br>
+    Ensuite, un rapport vous est envoyé à la fréquence demandée seulement si vous avez consommé
+    depuis le dernier rapport.<br>
+    Pour arrêter de recevoir des rapports, il vous suffit de modifier votre profil Note et de
+    mettre la fréquence des rapports à 0 ou -1.<br>
+    Pour toutes suggestions par rapport à ce service, contactez
+    <a href="mailto:notekfet2020@lists.crans.org">notekfet2020@lists.crans.org</a>.
+</p>
+
+<p>
     Rapport d'activité de {{ user.first_name }} {{ user.last_name }} (note : {{ user }})
-    depuis le {{ last_week }} jusqu'au {{ now }}.
+    depuis le {{ last_report }} jusqu'au {{ now }}.
 </p>
 
 <p>

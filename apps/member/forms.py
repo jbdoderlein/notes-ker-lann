@@ -37,6 +37,7 @@ class ProfileForm(forms.ModelForm):
     """
     A form for the extras field provided by the :model:`member.Profile` model.
     """
+    last_report = forms.DateField(required=False, disabled=True, label=_("Last report date"))
 
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data

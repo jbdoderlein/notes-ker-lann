@@ -71,6 +71,8 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
         context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
                                                     data=self.request.POST if self.request.POST else None)
+        if not self.object.profile.report_frequency:
+            del context['profile_form'].fields["last_report"]
 
         return context
 
