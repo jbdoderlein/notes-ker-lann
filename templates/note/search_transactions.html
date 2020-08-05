@@ -12,7 +12,7 @@
             {% include "member/club_info.html" %}
         {% endwith %}
     {% elif note.user %}
-        {% with user=note.user %}
+        {% with user_object=note.user %}
             {% include "member/profile_info.html"  %}
         {% endwith %}
     {% endif %}
