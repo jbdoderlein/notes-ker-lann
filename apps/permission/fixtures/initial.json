@@ -61,7 +61,7 @@
 		"fields": {
 			"model": [
 				"note",
-				"noteuser"
+				"note"
 			],
 			"query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
 			"type": "view",
@@ -2221,9 +2221,9 @@
 		"fields": {
 			"model": [
 				"note",
-				"noteclub"
+				"note"
 			],
-			"query": "{\"club\": [\"club\"]}",
+			"query": "{\"noteclub__club\": [\"club\"]}",
 			"type": "view",
 			"mask": 2,
 			"field": "",
@@ -2341,6 +2341,22 @@
 			"field": "",
 			"permanent": false,
 			"description": "Supprimer une activité non validée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 150,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les notes"
 		}
 	},
 	{
@@ -2522,7 +2538,8 @@
 				139,
 				143,
 				146,
-				147
+				147,
+				150
 			]
 		}
 	},
@@ -2677,7 +2694,8 @@
 				146,
 				147,
 				148,
-				149
+				149,
+				150
 			]
 		}
 	},
@@ -2737,6 +2755,7 @@
 			"for_club": null,
 			"name": "GC WEI",
 			"permissions": [
+				22,
 				76,
 				85,
 				86,
@@ -2770,6 +2789,7 @@
 			"for_club": null,
 			"name": "Chef de bus",
 			"permissions": [
+				22,
 				84,
 				117,
 				118,
@@ -2787,6 +2807,7 @@
 			"for_club": null,
 			"name": "Chef d'\u00e9quipe",
 			"permissions": [
+				22,
 				84,
 				116,
 				123,
@@ -2802,6 +2823,7 @@
 			"for_club": null,
 			"name": "\u00c9lectron libre",
 			"permissions": [
+				22,
 				84
 			]
 		}
@@ -2813,6 +2835,7 @@
 			"for_club": null,
 			"name": "\u00c9lectron libre (avec perm)",
 			"permissions": [
+				22,
 				84
 			]
 		}

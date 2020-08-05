@@ -631,7 +631,12 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         ret = super().form_valid(form)
 
-        member_role = Role.objects.filter(name="Membre de club").all()
+        if club.name == "BDE":
+            member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all()
+        elif club.name == "Kfet":
+            member_role = Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all()
+        else:
+            member_role = Role.objects.filter(name="Membre de club").all()
         form.instance.roles.set(member_role)
         form.instance._force_save = True
         form.instance.save()
@@ -670,8 +675,10 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
                 membership.refresh_from_db()
                 if old_membership.exists():
                     membership.roles.set(old_membership.get().roles.all())
-                else:
-                    membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
+                elif c.name == "BDE":
+                    membership.roles.set(Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
+                elif c.name == "Kfet":
+                    membership.roles.set(Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
                 membership.save()
 
         return ret

@@ -8,12 +8,15 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+
+from permission.models import Role
 from registration.tokens import email_validation_token
 from note.models import MembershipTransaction
 
@@ -381,6 +384,17 @@ class Membership(models.Model):
                             parent_membership._soge = True
                         if hasattr(self, '_force_save'):
                             parent_membership._force_save = True
+                        parent_membership.save()
+                        parent_membership.refresh_from_db()
+
+                        if self.club.parent_club.name == "BDE":
+                            parent_membership.roles.set(
+                                Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
+                        elif self.club.parent_club.name == "Kfet":
+                            parent_membership.roles.set(
+                                Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
+                        else:
+                            parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
                         parent_membership.save()
                 else:
                     raise ValidationError(_('User is not a member of the parent club')
