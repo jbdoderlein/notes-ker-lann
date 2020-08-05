@@ -1,19 +1,19 @@
 # Attention, il faut *copier* ce fichier dans /etc/cron.d, owner root:root et droits 644
 # Les cronjobs dont a besoin la Note Kfet
 
-# m  h   dom mon dow     user       command
+# m  h   dom mon dow     user   command
 # Envoyer les mails en attente
- *   *     *   *   *     www-data   (/var/www/note_kfet/env/python /var/www/note_kfet/manage.py send_mail >> /var/www/note_kfet/cron_mail.log 2>&1)
- *   *     *   *   *     www-data   (/var/www/note_kfet/env/python /var/www/note_kfet/manage.py retry_deferred >> /var/www/note_kfet/cron_mail_deferred.log 2>&1)
- 00  0     *   *   *     www-data   (/var/www/note_kfet/env/python /var/www/note_kfet/manage.py purge_mail_log 7 >> /var/www/note_kfet/cron_mail_purge.log 2>&1)
+ *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail >> /var/www/note_kfet/cron_mail.log
+ *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py retry_deferred >> /var/www/note_kfet/cron_mail_deferred.log
+ 00  0     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py purge_mail_log 7 >> /var/www/note_kfet/cron_mail_purge.log
 # Vérifier la cohérence de la base et mailer en cas de problème
- 00  4     *   *   *     www-data   /var/www/note_kfet/env/python /var/www/note_kfet/manage.py check_consistency --sum-all --check-all --mail
+ 00  4     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py check_consistency --sum-all --check-all --mail
 # TODO
 # Mettre à jour le wiki (modification sans (dé)validation, activités passées)
-#30  5     *   *   *     www-data   /home/note/note-kfet-2015-serveur/serveur/Wiki.py --human --raw
+#30  5     *   *   *     root   /home/note/note-kfet-2015-serveur/serveur/Wiki.py --human --raw
 # Spammer les gens en négatif
- 00  5     *   *   2     www-data   /var/www/note_kfet/env/python /var/www/note_kfet/manage.py send_mail_to_negative_balances --spam
+ 00  5     *   *   2     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --spam
 # Envoyer le rapport mensuel aux trésoriers et respos info
- 00  8     6   *   *     www-data   /var/www/note_kfet/env/python /var/www/note_kfet/manage.py send_mail_to_negative_balances --report
+ 00  8     6   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --report
 # Envoyer les rapports aux gens
- 55  6     *   *   *     www-data   /var/www/note_kfet/env/python /var/www/note_kfet/manage.py send_reports
+ 55  6     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_reports
