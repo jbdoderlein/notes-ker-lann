@@ -1,8 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.serializers import ListSerializer
 from rest_polymorphic.serializers import PolymorphicSerializer
+
+from member.api.serializers import MembershipSerializer
+from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
 from rest_framework.utils import model_meta
@@ -109,6 +113,8 @@ class ConsumerSerializer(serializers.ModelSerializer):
 
     email_confirmed = serializers.SerializerMethodField()
 
+    membership = serializers.SerializerMethodField()
+
     class Meta:
         model = Alias
         fields = '__all__'
@@ -126,6 +132,17 @@ class ConsumerSerializer(serializers.ModelSerializer):
         if isinstance(obj.note, NoteUser):
             return obj.note.user.profile.email_confirmed
         return True
+
+    def get_membership(self, obj):
+        if isinstance(obj.note, NoteUser):
+            memberships = Membership.objects.filter(
+                PermissionBackend.filter_queryset(get_current_authenticated_user(), Membership, "view")).filter(
+                user=obj.note.user,
+                club=2,  # Kfet
+            ).order_by("-date_start")
+            if memberships.exists():
+                return MembershipSerializer().to_representation(memberships.first())
+        return None
 
 
 class TemplateCategorySerializer(serializers.ModelSerializer):

@@ -105,8 +105,10 @@ function displayStyle(note) {
         css += " text-danger";
     else if (balance < 0)
         css += " text-warning";
-    if (!note.email_confirmed)
+    else if (!note.email_confirmed)
         css += " text-white bg-primary";
+    else if (note.membership && note.membership.date_end < new Date().toISOString())
+        css += "text-white bg-info";
     return css;
 }
 
@@ -263,6 +265,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                 consumers.results.forEach(function (consumer) {
                     let note = consumer.note;
                     note.email_confirmed = consumer.email_confirmed;
+                    note.membership = consumer.membership;
                     let extra_css = displayStyle(note);
                     aliases_matched_html += li(alias_prefix + '_' + consumer.id,
                         consumer.name,

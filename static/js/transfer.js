@@ -260,6 +260,13 @@ $("#btn_transfer").click(function() {
                         "destination": dest.note.id,
                         "destination_alias": dest.name
                     }).done(function () {
+                        if (source.note.membership && source.note.membership.date_end > new Date().toISOString())
+                            addMsg("Attention : la note émettrice " + source.name + " n'est plus adhérente.",
+                                "danger", 30000);
+                        if (dest.note.membership && dest.note.membership.date_end > new Date().toISOString())
+                            addMsg("Attention : la note destination " + dest.name + " n'est plus adhérente.",
+                                "danger", 30000);
+
                         if (!isNaN(source.note.balance)) {
                             let newBalance = source.note.balance - source.quantity * dest.quantity * amount;
                             if (newBalance <= -5000) {
@@ -327,19 +334,22 @@ $("#btn_transfer").click(function() {
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
         let special_note = $("#credit_type").val();
         let user_note;
+        let alias;
         let given_reason = reason;
         let source_id, dest_id;
         if ($("#type_credit").is(':checked')) {
-            user_note = dests_notes_display[0].note.id;
+            user_note = dests_notes_display[0].note;
+            alias = dests_notes_display[0].name;
             source_id = special_note;
-            dest_id = user_note;
+            dest_id = user_note.id;
             reason = "Crédit " + $("#credit_type option:selected").text().toLowerCase();
             if (given_reason.length > 0)
                 reason += " (" + given_reason + ")";
         }
         else {
-            user_note = sources_notes_display[0].note.id;
-            source_id = user_note;
+            user_note = sources_notes_display[0].note;
+            alias = sources_notes_display[0].name;
+            source_id = user_note.id;
             dest_id = special_note;
             reason = "Retrait " + $("#credit_type option:selected").text().toLowerCase();
             if (given_reason.length > 0)
@@ -355,14 +365,16 @@ $("#btn_transfer").click(function() {
                 "polymorphic_ctype": SPECIAL_TRANSFER_POLYMORPHIC_CTYPE,
                 "resourcetype": "SpecialTransaction",
                 "source": source_id,
-                "source_alias": sources_notes_display.length ? sources_notes_display[0].name : null,
+                "source_alias": sources_notes_display.length ? alias : null,
                 "destination": dest_id,
-                "destination_alias": dests_notes_display.length ? dests_notes_display[0].name : null,
+                "destination_alias": dests_notes_display.length ? alias : null,
                 "last_name": $("#last_name").val(),
                 "first_name": $("#first_name").val(),
                 "bank": $("#bank").val()
             }).done(function () {
                 addMsg("Le crédit/retrait a bien été effectué !", "success", 10000);
+                if (user_note.membership && user_note.membership.date_end > new Date().toISOString())
+                    addMsg("Attention : la note " + alias +  " n'est plus adhérente.", "danger", 10000);
                 reset();
             }).fail(function (err) {
                 let errObj = JSON.parse(err.responseText);
