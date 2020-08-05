@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load render_table from django_tables2 %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+        <h2>{% trans "Users that have surnormal rights" %}</h2>
+        {% render_table special_memberships_table %}
+
+        <hr>
+    {% endif %}
+
+    <h2>{% trans "Roles description" %}</h2>
     {% if user.is_authenticated %}
         <div class="form-check">
             <label for="owned_only" class="form-check-label">
@@ -11,6 +20,7 @@
             </label>
         </div>
     {% endif %}
+
     <ul>
     {% regroup active_memberships by roles as memberships_per_role %}
     {% for role in roles %}

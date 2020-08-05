@@ -2,13 +2,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from datetime import date
 
+from django.db.models import Q
 from django.forms import HiddenInput
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView, TemplateView
 from member.models import Membership
 
 from .backends import PermissionBackend
 from .models import Role
+from .tables import RightsTable
 
 
 class ProtectQuerysetMixin:
@@ -58,5 +61,17 @@ class RightsView(TemplateView):
 
         for role in roles:
             role.clubs = [membership.club for membership in active_memberships if role in membership.roles.all()]
+
+        if self.request.user.is_authenticated:
+            special_memberships = Membership.objects.filter(
+                date_start__lte=timezone.now().date(),
+                date_end__gte=timezone.now().date(),
+            ).filter(roles__in=Role.objects.filter(~(Q(name="Adhérent BDE")
+                                                     | Q(name="Adhérent Kfet")
+                                                     | Q(name="Membre de club")
+                                                     | Q(name="Adhérent WEI")
+                                                     | Q(name="1A")))).order_by("club", "user__last_name")\
+                .distinct().all()
+            context["special_memberships_table"] = RightsTable(special_memberships)
 
         return context

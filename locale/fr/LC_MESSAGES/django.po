@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-05 16:49+0200\n"
+"POT-Creation-Date: 2020-08-05 21:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/activity/models.py:24 apps/activity/models.py:49
 #: apps/member/models.py:162 apps/note/models/notes.py:212
 #: apps/note/models/transactions.py:25 apps/note/models/transactions.py:45
-#: apps/note/models/transactions.py:284 apps/permission/models.py:339
+#: apps/note/models/transactions.py:298 apps/permission/models.py:332
 #: apps/wei/models.py:67 apps/wei/models.py:119
 #: templates/member/club_info.html:13 templates/member/profile_info.html:14
 #: templates/registration/future_profile_detail.html:16
@@ -72,14 +72,14 @@ msgid "activity types"
 msgstr "types d'activité"
 
 #: apps/activity/models.py:54 apps/note/models/transactions.py:81
-#: apps/permission/models.py:120 apps/permission/models.py:199
+#: apps/permission/models.py:113 apps/permission/models.py:192
 #: apps/wei/models.py:73 apps/wei/models.py:130
 #: templates/activity/activity_detail.html:16
 msgid "description"
 msgstr "description"
 
 #: apps/activity/models.py:61 apps/note/models/notes.py:188
-#: apps/note/models/transactions.py:66 apps/permission/models.py:174
+#: apps/note/models/transactions.py:66 apps/permission/models.py:167
 #: templates/activity/activity_detail.html:19
 msgid "type"
 msgstr "type"
@@ -188,13 +188,13 @@ msgid "Type"
 msgstr "Type"
 
 #: apps/activity/tables.py:77 apps/member/forms.py:103
-#: apps/registration/forms.py:70 apps/treasury/forms.py:126
+#: apps/registration/forms.py:70 apps/treasury/forms.py:130
 #: apps/wei/forms/registration.py:95
 msgid "Last name"
 msgstr "Nom de famille"
 
 #: apps/activity/tables.py:79 apps/member/forms.py:108
-#: apps/registration/forms.py:75 apps/treasury/forms.py:128
+#: apps/registration/forms.py:75 apps/treasury/forms.py:132
 #: apps/wei/forms/registration.py:100 templates/note/transaction_form.html:129
 msgid "First name"
 msgstr "Prénom"
@@ -243,7 +243,7 @@ msgstr "Logs"
 msgid "IP Address"
 msgstr "Adresse IP"
 
-#: apps/logs/models.py:36 apps/permission/models.py:144
+#: apps/logs/models.py:36 apps/permission/models.py:137
 msgid "model"
 msgstr "Modèle"
 
@@ -269,7 +269,7 @@ msgid "edit"
 msgstr "Modifier"
 
 #: apps/logs/models.py:63 apps/note/tables.py:137 apps/note/tables.py:165
-#: apps/permission/models.py:137 apps/wei/tables.py:73
+#: apps/permission/models.py:130 apps/wei/tables.py:73
 msgid "delete"
 msgstr "Supprimer"
 
@@ -348,7 +348,7 @@ msgid "Credit amount"
 msgstr "Montant à créditer"
 
 #: apps/member/forms.py:113 apps/registration/forms.py:80
-#: apps/treasury/forms.py:130 apps/wei/forms/registration.py:105
+#: apps/treasury/forms.py:134 apps/wei/forms/registration.py:105
 #: templates/note/transaction_form.html:135
 msgid "Bank"
 msgstr "Banque"
@@ -881,7 +881,7 @@ msgstr ""
 "Les montants des notes doivent se trouver entre - 21 474 836.47 € et 21 474 "
 "836.47 €. Ne cherchez pas à capitaliser l'argent du BDE."
 
-#: apps/note/models/transactions.py:208
+#: apps/note/models/transactions.py:214
 msgid ""
 "The transaction can't be saved since the source note or the destination note "
 "is not active."
@@ -889,44 +889,44 @@ msgstr ""
 "La transaction ne peut pas être sauvegardée puisque la note source ou la "
 "note de destination n'est pas active."
 
-#: apps/note/models/transactions.py:246
+#: apps/note/models/transactions.py:260
 #: templates/activity/activity_entry.html:13 templates/base.html:99
 #: templates/note/transaction_form.html:15
 #: templates/note/transaction_form.html:143
 msgid "Transfer"
 msgstr "Virement"
 
-#: apps/note/models/transactions.py:270
+#: apps/note/models/transactions.py:284
 msgid "Template"
 msgstr "Bouton"
 
-#: apps/note/models/transactions.py:273
+#: apps/note/models/transactions.py:287
 msgid "recurrent transaction"
 msgstr "Transaction issue de bouton"
 
-#: apps/note/models/transactions.py:274
+#: apps/note/models/transactions.py:288
 msgid "recurrent transactions"
 msgstr "Transactions issues de boutons"
 
-#: apps/note/models/transactions.py:289
+#: apps/note/models/transactions.py:303
 msgid "first_name"
 msgstr "prénom"
 
-#: apps/note/models/transactions.py:294
+#: apps/note/models/transactions.py:308
 msgid "bank"
 msgstr "banque"
 
-#: apps/note/models/transactions.py:300
+#: apps/note/models/transactions.py:314
 #: templates/activity/activity_entry.html:17
 #: templates/note/transaction_form.html:20
 msgid "Credit"
 msgstr "Crédit"
 
-#: apps/note/models/transactions.py:300 templates/note/transaction_form.html:24
+#: apps/note/models/transactions.py:314 templates/note/transaction_form.html:24
 msgid "Debit"
 msgstr "Débit"
 
-#: apps/note/models/transactions.py:311
+#: apps/note/models/transactions.py:325
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
@@ -934,19 +934,19 @@ msgstr ""
 "Une transaction spéciale n'est possible que entre une note associée à un "
 "mode de paiement et un utilisateur ou un club."
 
-#: apps/note/models/transactions.py:315
+#: apps/note/models/transactions.py:329
 msgid "Special transaction"
 msgstr "Transaction de crédit/retrait"
 
-#: apps/note/models/transactions.py:316
+#: apps/note/models/transactions.py:330
 msgid "Special transactions"
 msgstr "Transactions de crédit/retrait"
 
-#: apps/note/models/transactions.py:332 apps/note/models/transactions.py:337
+#: apps/note/models/transactions.py:346 apps/note/models/transactions.py:351
 msgid "membership transaction"
 msgstr "Transaction d'adhésion"
 
-#: apps/note/models/transactions.py:333 apps/treasury/models.py:228
+#: apps/note/models/transactions.py:347 apps/treasury/models.py:228
 msgid "membership transactions"
 msgstr "Transactions d'adhésion"
 
@@ -969,7 +969,7 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: apps/note/tables.py:162 apps/wei/tables.py:46 apps/wei/tables.py:47
-#: templates/member/club_info.html:67 templates/note/conso_form.html:128
+#: templates/member/club_info.html:67 templates/note/conso_form.html:130
 #: templates/wei/bus_tables.html:15 templates/wei/busteam_tables.html:15
 #: templates/wei/busteam_tables.html:33 templates/wei/weiclub_info.html:68
 msgid "Edit"
@@ -999,53 +999,53 @@ msgstr "Consommations"
 msgid "Search transactions"
 msgstr "Rechercher des transactions"
 
-#: apps/permission/models.py:99
+#: apps/permission/models.py:92
 #, python-brace-format
 msgid "Can {type} {model}.{field} in {query}"
 msgstr "Can {type} {model}.{field} in {query}"
 
-#: apps/permission/models.py:101
+#: apps/permission/models.py:94
 #, python-brace-format
 msgid "Can {type} {model} in {query}"
 msgstr "Can {type} {model} in {query}"
 
-#: apps/permission/models.py:114
+#: apps/permission/models.py:107
 msgid "rank"
 msgstr "Rang"
 
-#: apps/permission/models.py:127
+#: apps/permission/models.py:120
 msgid "permission mask"
 msgstr "masque de permissions"
 
-#: apps/permission/models.py:128
+#: apps/permission/models.py:121
 msgid "permission masks"
 msgstr "masques de permissions"
 
-#: apps/permission/models.py:134
+#: apps/permission/models.py:127
 msgid "add"
 msgstr "ajouter"
 
-#: apps/permission/models.py:135
+#: apps/permission/models.py:128
 msgid "view"
 msgstr "voir"
 
-#: apps/permission/models.py:136
+#: apps/permission/models.py:129
 msgid "change"
 msgstr "modifier"
 
-#: apps/permission/models.py:168
+#: apps/permission/models.py:161
 msgid "query"
 msgstr "requête"
 
-#: apps/permission/models.py:181
+#: apps/permission/models.py:174
 msgid "mask"
 msgstr "masque"
 
-#: apps/permission/models.py:187
+#: apps/permission/models.py:180
 msgid "field"
 msgstr "champ"
 
-#: apps/permission/models.py:192
+#: apps/permission/models.py:185
 msgid ""
 "Tells if the permission should be granted even if the membership of the user "
 "is expired."
@@ -1053,29 +1053,29 @@ msgstr ""
 "Indique si la permission doit être attribuée même si l'adhésion de "
 "l'utilisateur est expirée."
 
-#: apps/permission/models.py:193 templates/permission/all_rights.html:26
+#: apps/permission/models.py:186 templates/permission/all_rights.html:36
 msgid "permanent"
 msgstr "permanent"
 
-#: apps/permission/models.py:204
+#: apps/permission/models.py:197
 msgid "permission"
 msgstr "permission"
 
-#: apps/permission/models.py:205 apps/permission/models.py:344
+#: apps/permission/models.py:198 apps/permission/models.py:337
 msgid "permissions"
 msgstr "permissions"
 
-#: apps/permission/models.py:210
+#: apps/permission/models.py:203
 msgid "Specifying field applies only to view and change permission types."
 msgstr ""
 "Spécifie le champ concerné, ne fonctionne que pour les permissions view et "
 "change."
 
-#: apps/permission/models.py:349
+#: apps/permission/models.py:342
 msgid "for club"
 msgstr "s'applique au club"
 
-#: apps/permission/models.py:359 apps/permission/models.py:360
+#: apps/permission/models.py:352 apps/permission/models.py:353
 msgid "role permissions"
 msgstr "Permissions par rôles"
 
@@ -1106,11 +1106,11 @@ msgstr ""
 "Vous n'avez pas la permission de supprimer cette instance du modèle "
 "{app_label}.{model_name}."
 
-#: apps/permission/views.py:44 templates/base.html:129
+#: apps/permission/views.py:47 templates/base.html:129
 msgid "Rights"
 msgstr "Droits"
 
-#: apps/permission/views.py:49
+#: apps/permission/views.py:52
 msgid "All rights"
 msgstr "Tous les droits"
 
@@ -1198,7 +1198,7 @@ msgstr "Invalider l'inscription"
 msgid "Treasury"
 msgstr "Trésorerie"
 
-#: apps/treasury/forms.py:84 apps/treasury/forms.py:138
+#: apps/treasury/forms.py:88 apps/treasury/forms.py:142
 #: templates/activity/activity_form.html:9
 #: templates/activity/activity_invite.html:8
 #: templates/django_filters/rest_framework/form.html:5
@@ -1210,19 +1210,19 @@ msgstr "Trésorerie"
 msgid "Submit"
 msgstr "Envoyer"
 
-#: apps/treasury/forms.py:86
+#: apps/treasury/forms.py:90
 msgid "Close"
 msgstr "Fermer"
 
-#: apps/treasury/forms.py:95
+#: apps/treasury/forms.py:99
 msgid "Remittance is already closed."
 msgstr "La remise est déjà fermée."
 
-#: apps/treasury/forms.py:100
+#: apps/treasury/forms.py:104
 msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
-#: apps/treasury/forms.py:120 apps/treasury/models.py:207
+#: apps/treasury/forms.py:124 apps/treasury/models.py:207
 #: apps/treasury/tables.py:77 apps/treasury/tables.py:85
 #: templates/treasury/invoice_list.html:13
 #: templates/treasury/remittance_list.html:13
@@ -1230,11 +1230,11 @@ msgstr "Vous ne pouvez pas changer le type de la remise."
 msgid "Remittance"
 msgstr "Remise"
 
-#: apps/treasury/forms.py:121
+#: apps/treasury/forms.py:125
 msgid "No attached remittance"
 msgstr "Pas de remise associée"
 
-#: apps/treasury/forms.py:132 apps/treasury/tables.py:47
+#: apps/treasury/forms.py:136 apps/treasury/tables.py:47
 #: apps/treasury/tables.py:115 templates/note/transaction_form.html:97
 #: templates/treasury/remittance_form.html:18
 msgid "Amount"
@@ -1419,15 +1419,15 @@ msgstr "Liste des remises"
 msgid "Update a remittance"
 msgstr "Modifier la remise"
 
-#: apps/treasury/views.py:301
+#: apps/treasury/views.py:299
 msgid "Attach a transaction to a remittance"
 msgstr "Joindre une transaction à une remise"
 
-#: apps/treasury/views.py:345
+#: apps/treasury/views.py:343
 msgid "List of credits from the Société générale"
 msgstr "Liste des crédits de la Société générale"
 
-#: apps/treasury/views.py:379
+#: apps/treasury/views.py:377
 msgid "Manage credits from the Société générale"
 msgstr "Gérer les crédits de la Société générale"
 
@@ -2090,36 +2090,36 @@ msgstr "Il n'y a pas d'utilisateur trouvé avec cette entrée."
 msgid "Registrations"
 msgstr "Inscriptions"
 
-#: templates/note/conso_form.html:28
+#: templates/note/conso_form.html:30
 msgid "Consum"
 msgstr "Consommer"
 
-#: templates/note/conso_form.html:39 templates/note/transaction_form.html:57
+#: templates/note/conso_form.html:41 templates/note/transaction_form.html:57
 #: templates/note/transaction_form.html:78
 msgid "Name or alias..."
 msgstr "Pseudo ou alias ..."
 
-#: templates/note/conso_form.html:48
+#: templates/note/conso_form.html:50
 msgid "Select consumptions"
 msgstr "Sélection des consommations"
 
-#: templates/note/conso_form.html:57
+#: templates/note/conso_form.html:59
 msgid "Consume!"
 msgstr "Consommer !"
 
-#: templates/note/conso_form.html:71
+#: templates/note/conso_form.html:73
 msgid "Highlighted buttons"
 msgstr "Boutons mis en avant"
 
-#: templates/note/conso_form.html:134
+#: templates/note/conso_form.html:136
 msgid "Single consumptions"
 msgstr "Consommations simples"
 
-#: templates/note/conso_form.html:139
+#: templates/note/conso_form.html:141
 msgid "Double consumptions"
 msgstr "Consommations doubles"
 
-#: templates/note/conso_form.html:150 templates/note/transaction_form.html:154
+#: templates/note/conso_form.html:152 templates/note/transaction_form.html:154
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
 
@@ -2179,23 +2179,31 @@ msgstr "Le bouton a bien été supprimé"
 msgid "Unable to delete button "
 msgstr "Impossible de supprimer le bouton "
 
-#: templates/permission/all_rights.html:10
+#: templates/permission/all_rights.html:8
+msgid "Users that have surnormal rights"
+msgstr "Liste des utilisateurs ayant des droits surnormaux"
+
+#: templates/permission/all_rights.html:14
+msgid "Roles description"
+msgstr "Description de tous les rôles"
+
+#: templates/permission/all_rights.html:19
 msgid "Filter with roles that I have in at least one club"
 msgstr "Filtrer les rôles que je possède dans au moins un club"
 
-#: templates/permission/all_rights.html:21
+#: templates/permission/all_rights.html:31
 msgid "Own this role in the clubs"
 msgstr "Possède ce rôle dans les clubs"
 
-#: templates/permission/all_rights.html:26
+#: templates/permission/all_rights.html:36
 msgid "Mask:"
 msgstr "Masque :"
 
-#: templates/permission/all_rights.html:26
+#: templates/permission/all_rights.html:36
 msgid "Query:"
 msgstr "Requête :"
 
-#: templates/permission/all_rights.html:28
+#: templates/permission/all_rights.html:38
 msgid "No associated permission"
 msgstr "Pas de permission associée"
 
