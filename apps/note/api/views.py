@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
-from note_kfet.middlewares import  get_current_session
+from note_kfet.middlewares import get_current_session
 from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\

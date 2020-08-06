@@ -1,11 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from datetime import timedelta, datetime
 from threading import Thread
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.management import call_command
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone

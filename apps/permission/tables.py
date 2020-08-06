@@ -4,7 +4,6 @@
 import django_tables2 as tables
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-
 from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend

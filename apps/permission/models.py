@@ -5,7 +5,6 @@ import functools
 import json
 import operator
 from copy import copy
-from time import sleep
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError

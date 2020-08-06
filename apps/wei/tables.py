@@ -7,9 +7,9 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
-
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
+
 from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership
 
 

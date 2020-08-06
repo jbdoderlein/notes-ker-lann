@@ -1,10 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from django.utils import timezone
-from rest_framework import serializers
-from rest_framework.serializers import ListSerializer
-from rest_polymorphic.serializers import PolymorphicSerializer
 
+from rest_framework import serializers
+from rest_polymorphic.serializers import PolymorphicSerializer
 from member.api.serializers import MembershipSerializer
 from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user

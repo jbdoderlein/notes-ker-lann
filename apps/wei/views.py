@@ -28,7 +28,6 @@ from note.models import Transaction, NoteClub, Alias, SpecialTransaction, NoteSp
 from note.tables import HistoryTable
 from note_kfet.settings import BASE_DIR
 from permission.backends import PermissionBackend
-from permission.models import Role
 from permission.views import ProtectQuerysetMixin
 
 from .forms.registration import WEIChooseBusForm

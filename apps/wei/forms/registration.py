@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
-
 from note.models import NoteSpecial
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 

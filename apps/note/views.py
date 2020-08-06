@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
 from django_tables2 import SingleTableView
 from django.urls import reverse_lazy
-
 from activity.models import Entry
 from note_kfet.inputs import AmountInput
 from permission.backends import PermissionBackend

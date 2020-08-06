@@ -16,7 +16,6 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-
 from permission.models import Role
 from registration.tokens import email_validation_token
 from note.models import MembershipTransaction
@@ -155,12 +154,12 @@ class Profile(models.Model):
                                               'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
         html = loader.render_to_string('registration/mails/email_validation_email.html',
-                                          {
-                                              'user': self.user,
-                                              'domain': os.getenv("NOTE_URL", "note.example.com"),
-                                              'token': email_validation_token.make_token(self.user),
-                                              'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
-                                          })
+                                       {
+                                           'user': self.user,
+                                           'domain': os.getenv("NOTE_URL", "note.example.com"),
+                                           'token': email_validation_token.make_token(self.user),
+                                           'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
+                                       })
         self.user.email_user(subject, message, html_message=html)
 
 
@@ -329,7 +328,6 @@ class Membership(models.Model):
             club=self.club,
             date_start=max(self.date_end + datetime.timedelta(days=1), self.club.membership_start),
         )
-        from django.forms import model_to_dict
         if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
             new_membership._force_renew_parent = True
         if hasattr(self, '_soge') and self._soge:
@@ -445,8 +443,8 @@ class Membership(models.Model):
             )
             transaction._force_save = True
             if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS\
-                    and (self.club.name == "BDE" or self.club.name == "Kfet" or
-                         ("wei" in settings.INSTALLED_APPS and hasattr(self.club, "weiclub") and self.club.weiclub)):
+                    and (self.club.name == "BDE" or self.club.name == "Kfet"
+                         or ("wei" in settings.INSTALLED_APPS and hasattr(self.club, "weiclub") and self.club.weiclub)):
                 # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
                 # to treasurers.
                 transaction.valid = False

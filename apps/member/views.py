@@ -455,7 +455,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             while c.parent_club is not None:
                 c = c.parent_club
                 clubs_renewal.append(c)
-                additional_fee_renewal += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
+                additional_fee_renewal += c.membership_fee_paid
             context["clubs_renewal"] = clubs_renewal
             context["additional_fee_renewal"] = additional_fee_renewal
 
@@ -496,7 +496,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             form.fields['user'].disabled = True
             form.fields['date_start'].initial = old_membership.date_end + timedelta(days=1)
             form.fields['credit_amount'].initial = (club.membership_fee_paid if user.profile.paid
-                else club.membership_fee_unpaid) + additional_fee_renewal
+                                                    else club.membership_fee_unpaid) + additional_fee_renewal
             form.fields['last_name'].initial = user.last_name
             form.fields['first_name'].initial = user.first_name
 
