@@ -24,8 +24,6 @@
     \FPround{\prix}{#3}{2}
     \FPround{\montant}{#4}{2}
     \FPadd{\TotalHT}{\TotalHT}{\montant}
-
-    \eaddto\ListeProduits{#1    &    \prix    &    #2    &    \montant    \cr}
 }
 
 \newcommand{\AfficheResultat}{%
@@ -48,14 +46,11 @@
     \textbf{Total TTC}    & & &    \TotalTTC
 }
 
-\newcommand*\eaddto[2]{% version développée de \addto
-   \edef\tmp{#2}%
-   \expandafter\addto
-   \expandafter#1%
-   \expandafter{\tmp}%
+\newcommand	{\ListeProduits}{
+    {% for product in products %}
+        {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex }}    &    {{ product.quantity|safe|escape_tex }}    &    {{ product.total_euros|safe|escape_tex }}   \cr
+    {% endfor %}
 }
-
-\newcommand	{\ListeProduits}{}
 
 % Logo du BDE
 \AddToShipoutPicture*{
