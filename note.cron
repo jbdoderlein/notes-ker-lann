@@ -17,3 +17,5 @@
  00  8     6   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --report
 # Envoyer les rapports aux gens
  55  6     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_reports
+# Envoyer les rapports aux gens
+ 00  9     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py refresh_highlighted_buttons
