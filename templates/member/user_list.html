@@ -58,8 +58,10 @@
                 timer_on = false;
             });
 
-            $("tr > td:eq(0), tr > td:eq(1), tr > td:eq(2), tr > td:eq(3), tr > td:eq(5)").each(function() {
-                $(this).html($(this).text().replace(new RegExp(searchbar_obj.val(), 'i'), "<mark>$&</mark>"));
+            $("tr").each(function() {
+                $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function() {
+                    $(this).html($(this).text().replace(new RegExp(searchbar_obj.val(), 'i'), "<mark>$&</mark>"));
+                });
             });
         }
 
