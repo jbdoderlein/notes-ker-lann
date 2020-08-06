@@ -1,3 +1,5 @@
+{% load escape_tex %}
+
 \nonstopmode
 \documentclass[11pt]{article}
 
@@ -81,22 +83,22 @@
 \def\IBAN{FR76\CodeBanque\CodeGuichet\NCompte\CleRib}
 \def\CodeBic{{"{"}}{{ obj.bic }}}
 
-\def\FactureNum            {{"{"}}{{obj.id}}}    % Numéro de facture
+\def\FactureNum            {{"{"}}{{ obj.id }}}    % Numéro de facture
 \def\FactureAcquittee    {% if obj.acquitted %} {oui} {% else %} {non} {% endif %}     % Facture acquittée : oui/non
-\def\FactureLieu    {{"{"}}{{ obj.place }}}    % Lieu de l'édition de la facture
+\def\FactureLieu    {{"{"}}{{ obj.place|safe|escape_tex }}}    % Lieu de l'édition de la facture
 \def\FactureDate    {{"{"}}{{ obj.date }}}    % Date de l'édition de la facture
-\def\FactureObjet   {{"{"}}{{ obj.object|safe }} }    % Objet du document
+\def\FactureObjet   {{"{"}}{{ obj.object|safe|escape_tex }} }    % Objet du document
 % Description de la facture
-\def\FactureDescr   {{"{"}}{{ obj.description|safe }}}
+\def\FactureDescr   {{"{"}}{{ obj.description|safe|escape_tex }}}
 
 % Infos Client
-\def\ClientNom{{"{"}}{{obj.name|safe}}}    % Nom du client
-\def\ClientAdresse{{"{"}}{{ obj.address|safe }}} % Adresse du client
+\def\ClientNom{{"{"}}{{ obj.name|safe|escape_tex }}}    % Nom du client
+\def\ClientAdresse{{"{"}}{{ obj.address|safe|escape_tex }}} % Adresse du client
 
 % Liste des produits facturés : Désignation, quantité, prix unitaire HT
 
 {% for product in products %}
-\AjouterProduit{ {{product.designation|safe}}} { {{product.quantity|safe}}} { {{product.amount_euros|safe}}} { {{product.total_euros|safe}}}
+\AjouterProduit{ {{ product.designation|safe|escape_tex }}} { {{ product.quantity|safe|escape_tex }}} { {{ product.amount_euros|safe|escape_tex }}} { {{ product.total_euros|safe|escape_tex }}}
 {% endfor %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
