@@ -17,7 +17,7 @@ def do_latex_escape(value):
 
 
 def fp_value(value):
-    return value.replace("-", "neg ")
+    return value.replace("-", "").replace("-", "neg")
 
 
 register = template.Library()
