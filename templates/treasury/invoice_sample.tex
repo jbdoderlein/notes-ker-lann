@@ -98,7 +98,7 @@
 % Liste des produits facturés : Désignation, quantité, prix unitaire HT
 
 {% for product in products %}
-\AjouterProduit{ {{ product.designation|safe|escape_tex }}} { {{ product.quantity|safe|escape_tex }}} { {{ product.amount_euros|safe|escape_tex }}} { {{ product.total_euros|safe|escape_tex }}}
+\AjouterProduit{ {{ product.designation|safe|escape_tex }}} { {{ product.quantity|safe|escape_tex|fp_value }}} { {{ product.amount_euros|safe|escape_tex|fp_value }}} { {{ product.total_euros|safe|escape_tex|fp_value }}}
 {% endfor %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

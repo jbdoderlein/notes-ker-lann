@@ -16,5 +16,10 @@ def do_latex_escape(value):
     )
 
 
+def fp_value(value):
+    return value.replace("-", "neg ")
+
+
 register = template.Library()
 register.filter("escape_tex", do_latex_escape)
+register.filter("fp_value", fp_value)
