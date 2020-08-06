@@ -260,10 +260,10 @@ $("#btn_transfer").click(function() {
                         "destination": dest.note.id,
                         "destination_alias": dest.name
                     }).done(function () {
-                        if (source.note.membership && source.note.membership.date_end > new Date().toISOString())
+                        if (source.note.membership && source.note.membership.date_end < new Date().toISOString())
                             addMsg("Attention : la note émettrice " + source.name + " n'est plus adhérente.",
                                 "danger", 30000);
-                        if (dest.note.membership && dest.note.membership.date_end > new Date().toISOString())
+                        if (dest.note.membership && dest.note.membership.date_end < new Date().toISOString())
                             addMsg("Attention : la note destination " + dest.name + " n'est plus adhérente.",
                                 "danger", 30000);
 
@@ -373,7 +373,7 @@ $("#btn_transfer").click(function() {
                 "bank": $("#bank").val()
             }).done(function () {
                 addMsg("Le crédit/retrait a bien été effectué !", "success", 10000);
-                if (user_note.membership && user_note.membership.date_end > new Date().toISOString())
+                if (user_note.membership && user_note.membership.date_end < new Date().toISOString())
                     addMsg("Attention : la note " + alias +  " n'est plus adhérente.", "danger", 10000);
                 reset();
             }).fail(function (err) {
