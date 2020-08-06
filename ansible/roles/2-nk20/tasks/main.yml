@@ -41,3 +41,9 @@
   systemd:
     name: cron
     state: restarted
+
+- name: Update permissions for the cron file
+  file:
+    path: /var/www/note_kfet/note.cron
+    owner: root
+    group: www-data
