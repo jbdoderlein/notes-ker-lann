@@ -202,8 +202,6 @@ class Transaction(PolymorphicModel):
         When saving, also transfer money between two notes
         """
         with transaction.atomic():
-            if self.pk:
-                self.refresh_from_db()
             self.source.refresh_from_db()
             self.destination.refresh_from_db()
             self.validate(False)
