@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-06 17:40+0200\n"
+"POT-Creation-Date: 2020-08-06 19:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,13 +198,13 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:81 apps/member/forms.py:104
+#: apps/activity/tables.py:81 apps/member/forms.py:106
 #: apps/registration/forms.py:70 apps/treasury/forms.py:130
 #: apps/wei/forms/registration.py:94
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:83 apps/member/forms.py:109
+#: apps/activity/tables.py:83 apps/member/forms.py:111
 #: apps/registration/forms.py:75 apps/treasury/forms.py:132
 #: apps/wei/forms/registration.py:99 templates/note/transaction_form.html:131
 msgid "First name"
@@ -327,52 +327,56 @@ msgid "member"
 msgstr ""
 
 #: apps/member/forms.py:40
+msgid "Report frequency"
+msgstr ""
+
+#: apps/member/forms.py:42
 msgid "Last report date"
 msgstr ""
 
-#: apps/member/forms.py:60 apps/member/views.py:86
+#: apps/member/forms.py:62 apps/member/views.py:86
 #: apps/registration/forms.py:28
 msgid "An alias with a similar name already exists."
 msgstr ""
 
-#: apps/member/forms.py:83 apps/registration/forms.py:50
+#: apps/member/forms.py:85 apps/registration/forms.py:50
 msgid "Inscription paid by Société Générale"
 msgstr ""
 
-#: apps/member/forms.py:85 apps/registration/forms.py:52
+#: apps/member/forms.py:87 apps/registration/forms.py:52
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr ""
 
-#: apps/member/forms.py:90 apps/registration/forms.py:57
+#: apps/member/forms.py:92 apps/registration/forms.py:57
 #: apps/wei/forms/registration.py:81
 msgid "Credit type"
 msgstr ""
 
-#: apps/member/forms.py:91 apps/registration/forms.py:58
+#: apps/member/forms.py:93 apps/registration/forms.py:58
 #: apps/wei/forms/registration.py:82
 msgid "No credit"
 msgstr ""
 
-#: apps/member/forms.py:93
+#: apps/member/forms.py:95
 msgid "You can credit the note of the user."
 msgstr ""
 
-#: apps/member/forms.py:97 apps/registration/forms.py:63
+#: apps/member/forms.py:99 apps/registration/forms.py:63
 #: apps/wei/forms/registration.py:87
 msgid "Credit amount"
 msgstr ""
 
-#: apps/member/forms.py:114 apps/registration/forms.py:80
+#: apps/member/forms.py:116 apps/registration/forms.py:80
 #: apps/treasury/forms.py:134 apps/wei/forms/registration.py:104
 #: templates/note/transaction_form.html:137
 msgid "Bank"
 msgstr ""
 
-#: apps/member/forms.py:141
+#: apps/member/forms.py:143
 msgid "User"
 msgstr ""
 
-#: apps/member/forms.py:155
+#: apps/member/forms.py:157
 msgid "Roles"
 msgstr ""
 

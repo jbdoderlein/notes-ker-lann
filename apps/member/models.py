@@ -99,7 +99,7 @@ class Profile(models.Model):
 
     last_report = models.DateField(
         verbose_name=_("last report date"),
-        default=timezone.now,
+        default=timezone.now().date(),
     )
 
     email_confirmed = models.BooleanField(
