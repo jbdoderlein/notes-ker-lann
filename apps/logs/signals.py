@@ -23,6 +23,9 @@ EXCLUDED = [
     'cas_server.userattributes',
     'contenttypes.contenttype',
     'logs.changelog',  # Never remove this line
+    'mailer.dontsendentry',
+    'mailer.message',
+    'mailer.messagelog',
     'migrations.migration',
     'note.note'  # We only store the subclasses
     'note.transaction',
