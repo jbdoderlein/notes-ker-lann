@@ -1,0 +1,78 @@
+{% load i18n %}
+{% load perms %}
+{% load pretty_money %}
+
+{% url 'activity:activity_detail' activity.pk as activity_detail_url %}
+
+<div id="activity_info" class="card bg-light shadow">
+    <div class="card-header text-center">
+        <h4>
+            {% if request.path_info != activity_detail_url %}
+                <a href="{{ activity_detail_url }}">{{ activity.name }}</a>
+            {% else %}
+                {{ activity.name }}
+            {% endif %}
+        </h4>
+    </div>
+    <div class="card-body" id="profile_infos">
+        <dl class="row">
+            <dt class="col-xl-6">{% trans 'description'|capfirst %}</dt>
+            <dd class="col-xl-6"> {{ activity.description }}</dd>
+
+            <dt class="col-xl-6">{% trans 'type'|capfirst %}</dt>
+            <dd class="col-xl-6"> {{ activity.activity_type }}</dd>
+
+            <dt class="col-xl-6">{% trans 'start date'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ activity.date_start }}</dd>
+
+            <dt class="col-xl-6">{% trans 'end date'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ activity.date_end }}</dd>
+
+            {% if ".view_"|has_perm:activity.creater %}
+                <dt class="col-xl-6">{% trans 'creater'|capfirst %}</dt>
+                <dd class="col-xl-6"><a href="{% url "member:user_detail" pk=activity.creater.pk %}">{{ activity.creater }}</a></dd>
+            {% endif %}
+
+            <dt class="col-xl-6">{% trans 'organizer'|capfirst %}</dt>
+            <dd class="col-xl-6"><a href="{% url "member:club_detail" pk=activity.organizer.pk %}">{{ activity.organizer }}</a></dd>
+
+            <dt class="col-xl-6">{% trans 'attendees club'|capfirst %}</dt>
+            <dd class="col-xl-6"><a href="{% url "member:club_detail" pk=activity.attendees_club.pk %}">{{ activity.attendees_club }}</a></dd>
+
+            <dt class="col-xl-6">{% trans 'can invite'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ activity.activity_type.can_invite|yesno }}</dd>
+
+            {% if activity.activity_type.can_invite %}
+                <dt class="col-xl-6">{% trans 'guest entry fee'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ activity.activity_type.guest_entry_fee|pretty_money }}</dd>
+            {% endif %}
+
+            <dt class="col-xl-6">{% trans 'valid'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ activity.valid|yesno }}</dd>
+
+            <dt class="col-xl-6">{% trans 'opened'|capfirst %}</dt>
+            <dd class="col-xl-6">{{ activity.open|yesno }}</dd>
+        </dl>
+    </div>
+
+    <div class="card-footer text-center">
+        {% if activity.open and activity.activity_type.manage_entries and ".change__open"|has_perm:activity %}
+            <a class="btn btn-warning btn-sm my-1" href="{% url 'activity:activity_entry' pk=activity.pk %}"> {% trans "Entry page" %}</a>
+        {% endif %}
+
+        {% if request.path_info == activity_detail_url %}
+            {% if activity.valid and ".change__open"|has_perm:activity %}
+                <a class="btn btn-warning btn-sm my-1" id="open_activity"> {% if activity.open %}{% trans "close"|capfirst %}{% else %}{% trans "open"|capfirst %}{% endif %}</a>
+            {% endif %}
+            {% if not activity.open and ".change__valid"|has_perm:activity %}
+                <a class="btn btn-success btn-sm my-1" id="validate_activity"> {% if activity.valid %}{% trans "invalidate"|capfirst %}{% else %}{% trans "validate"|capfirst %}{% endif %}</a>
+            {% endif %}
+            {% if ".change_"|has_perm:activity %}
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
+            {% endif %}
+            {% if activity.activity_type.can_invite and not activity_started %}
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_invite' pk=activity.pk %}"> {% trans "Invite" %}</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

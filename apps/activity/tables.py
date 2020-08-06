@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
@@ -66,6 +66,10 @@ def get_row_class(record):
         qs = Entry.objects.filter(note=record.note, activity=record.activity, guest=None)
         if qs.exists():
             c += " table-success"
+        elif not record.note.user.memberships.filter(club=record.activity.attendees_club,
+                                                     date_start__lte=timezone.now(),
+                                                     date_end__gte=timezone.now()).exists():
+            c += " table-info"
         elif record.note.balance < 0:
             c += " table-danger"
     return c

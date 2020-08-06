@@ -43,7 +43,7 @@ class GuestForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        if self.activity.date_start > timezone.now():
+        if timezone.now() > timezone.localtime(self.activity.date_start):
             self.add_error("inviter", _("You can't invite someone once the activity is started."))
 
         if not self.activity.valid:
@@ -52,20 +52,21 @@ class GuestForm(forms.ModelForm):
         one_year = timedelta(days=365)
 
         qs = Guest.objects.filter(
-            first_name=cleaned_data["first_name"],
-            last_name=cleaned_data["last_name"],
+            first_name__iexact=cleaned_data["first_name"],
+            last_name__iexact=cleaned_data["last_name"],
             activity__date_start__gte=self.activity.date_start - one_year,
+            entry__isnull=False,
         )
-        if len(qs) >= 5:
+        if qs.count() >= 5:
             self.add_error("last_name", _("This person has been already invited 5 times this year."))
 
         qs = qs.filter(activity=self.activity)
         if qs.exists():
             self.add_error("last_name", _("This person is already invited."))
 
-        qs = Guest.objects.filter(inviter=cleaned_data["inviter"], activity=self.activity)
-        if len(qs) >= 3:
-            self.add_error("inviter", _("You can't invite more than 3 people to this activity."))
+        if "inviter" in cleaned_data:
+            if Guest.objects.filter(inviter=cleaned_data["inviter"], activity=self.activity).count() >= 3:
+                self.add_error("inviter", _("You can't invite more than 3 people to this activity."))
 
         return cleaned_data
 

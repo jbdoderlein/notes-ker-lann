@@ -27,11 +27,21 @@ class ActivityType(models.Model):
         verbose_name=_('name'),
         max_length=255,
     )
+
+    manage_entries = models.BooleanField(
+        verbose_name=_('manage entries'),
+        help_text=_('Enable the support of entries for this activity.'),
+        default=False,
+    )
+
     can_invite = models.BooleanField(
         verbose_name=_('can invite'),
+        default=False,
     )
+
     guest_entry_fee = models.PositiveIntegerField(
         verbose_name=_('guest entry fee'),
+        default=0,
     )
 
     class Meta:
@@ -236,18 +246,18 @@ class Guest(models.Model):
         one_year = timedelta(days=365)
 
         if not force_insert:
-            if self.activity.date_start > timezone.now():
+            if timezone.now() > timezone.localtime(self.activity.date_start):
                 raise ValidationError(_("You can't invite someone once the activity is started."))
 
             if not self.activity.valid:
                 raise ValidationError(_("This activity is not validated yet."))
 
             qs = Guest.objects.filter(
-                first_name=self.first_name,
-                last_name=self.last_name,
+                first_name__iexact=self.first_name,
+                last_name__iexact=self.last_name,
                 activity__date_start__gte=self.activity.date_start - one_year,
             )
-            if len(qs) >= 5:
+            if qs.count() >= 5:
                 raise ValidationError(_("This person has been already invited 5 times this year."))
 
             qs = qs.filter(activity=self.activity)
@@ -255,7 +265,7 @@ class Guest(models.Model):
                 raise ValidationError(_("This person is already invited."))
 
             qs = Guest.objects.filter(inviter=self.inviter, activity=self.activity)
-            if len(qs) >= 3:
+            if qs.count() >= 3:
                 raise ValidationError(_("You can't invite more than 3 people to this activity."))
 
         return super().save(force_insert, force_update, using, update_fields)

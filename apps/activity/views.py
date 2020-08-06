@@ -1,13 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import datetime, timezone
-
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import F, Q
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django_tables2.views import SingleTableView
@@ -46,11 +45,16 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        upcoming_activities = Activity.objects.filter(date_end__gt=datetime.now())
+        upcoming_activities = Activity.objects.filter(date_end__gt=timezone.now())
         context['upcoming'] = ActivityTable(
             data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")),
             prefix='upcoming-',
         )
+
+        started_activities = Activity.objects\
+            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+            .filter(open=True, valid=True).all()
+        context["started_activities"] = started_activities
 
         return context
 
@@ -67,7 +71,7 @@ class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
                            .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view")))
         context["guests"] = table
 
-        context["activity_started"] = datetime.now(timezone.utc) > self.object.date_start
+        context["activity_started"] = timezone.now() > timezone.localtime(self.object.date_start)
 
         return context
 
@@ -148,7 +152,12 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                                          username=F("note__noteuser__user__username"),
                                          note_name=F("name"),
                                          balance=F("note__balance"))\
-            .filter(note__polymorphic_ctype__model="noteuser")\
+            .filter(note__noteuser__isnull=False)\
+            .filter(
+            note__noteuser__user__memberships__club=activity.attendees_club,
+            note__noteuser__user__memberships__date_start__lte=timezone.now(),
+            note__noteuser__user__memberships__date_end__gte=timezone.now(),
+            )\
             .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
         if pattern:
             note_qs = note_qs.filter(

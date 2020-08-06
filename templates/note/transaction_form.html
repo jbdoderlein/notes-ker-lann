@@ -19,10 +19,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
                         <input type="radio" name="transaction_type" id="type_credit">
                         {% trans "Credit" %}
                     </label>
-                    <label type="type_debit" class="btn btn-sm btn-outline-primary">
-                        <input type="radio" name="transaction_type" id="type_debit">
-                        {% trans "Debit" %}
-                    </label>
+                    {% if not activities_open %}
+                        <label type="type_debit" class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="transaction_type" id="type_debit">
+                            {% trans "Debit" %}
+                        </label>
+                    {% endif %}
                 {% endif %}
                 {% for activity in activities_open %}
                     <a href="{% url "activity:activity_entry" pk=activity.pk %}" class="btn btn-sm btn-outline-primary">

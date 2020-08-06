@@ -76,7 +76,10 @@
                         note: id,
                         guest: null
                     }).done(function () {
-                        addMsg("Entrée effectuée !", "success", 4000);
+                        if (target.hasClass("table-info"))
+                            addMsg("Entrée effectuée, mais attention : la personne n'est plus adhérente Kfet.", "warning", 10000);
+                        else
+                            addMsg("Entrée effectuée !", "success", 4000);
                         reloadTable(true);
                     }).fail(function(xhr) {
                         errMsg(xhr.responseJSON, 4000);
@@ -104,7 +107,10 @@
                             note: target.attr("data-inviter"),
                             guest: id
                         }).done(function () {
-                            addMsg("Entrée effectuée !", "success", 4000);
+                            if (target.hasClass("table-info"))
+                                addMsg("Entrée effectuée, mais attention : la personne n'est plus adhérente Kfet.", "warning", 10000);
+                            else
+                                addMsg("Entrée effectuée !", "success", 4000);
                             reloadTable(true);
                         }).fail(function (xhr) {
                             errMsg(xhr.responseJSON, 4000);
