@@ -1,4 +1,5 @@
 {% load escape_tex %}
+{% load l10n %}
 
 \nonstopmode
 \documentclass[11pt]{article}
@@ -47,9 +48,11 @@
 }
 
 \newcommand	{\ListeProduits}{
-    {% for product in products %}
-        {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex|floatformat:2 }}    &    {{ product.quantity|safe|escape_tex|floatformat:2 }}    &    {{ product.total_euros|safe|escape_tex|floatformat:2 }}   \cr
-    {% endfor %}
+    {% localize off %}
+        {% for product in products %}
+            {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex|floatformat:2 }}    &    {{ product.quantity|safe|escape_tex|floatformat:2 }}    &    {{ product.total_euros|safe|escape_tex|floatformat:2 }}   \cr
+        {% endfor %}
+    {% endlocalize %}
 }
 
 % Logo du BDE
@@ -76,7 +79,7 @@
 \def\CodeGuichet{{"{"}}{{ obj.desk_code|stringformat:".05d" }}}
 \def\NCompte{{"{"}}{{ obj.account_number|stringformat:".011d" }}}
 \def\CleRib{{"{"}}{{ obj.rib_key|stringformat:".02d" }}}
-\def\IBAN{FR76 \CodeBanque\CodeGuichet\NCompte\CleRib}
+\def\IBAN{FR76\CodeBanque\CodeGuichet\NCompte\CleRib}
 \def\CodeBic{{"{"}}{{ obj.bic }}}
 
 \def\FactureNum            {{"{"}}{{ obj.id }}}    % Numéro de facture
