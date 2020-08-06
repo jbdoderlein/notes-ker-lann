@@ -124,6 +124,8 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         EMAIL_PORT=465
         EMAIL_USER=notekfet@localhost
         EMAIL_PASSWORD=CHANGE_ME
+        WIKI_USER=NoteKfet2020
+        WIKI_PASSWORD=CHANGE_ME
 
 
     Ensuite on (re)bascule dans l'environement virtuel et on lance les migrations

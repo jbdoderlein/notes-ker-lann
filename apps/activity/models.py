@@ -1,8 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 from datetime import timedelta, datetime
+from threading import Thread
 
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -54,6 +57,13 @@ class Activity(models.Model):
         verbose_name=_('description'),
     )
 
+    location = models.CharField(
+        verbose_name=_('location'),
+        max_length=255,
+        blank=True,
+        default="",
+    )
+
     activity_type = models.ForeignKey(
         ActivityType,
         on_delete=models.PROTECT,
@@ -98,6 +108,19 @@ class Activity(models.Model):
         default=False,
         verbose_name=_('open'),
     )
+
+    def save(self, *args, **kwargs):
+        """
+        Update the activity wiki page each time the activity is updated (validation, change description, ...)
+        """
+        ret = super().save(*args, **kwargs)
+        if self.pk and "scripts" in settings.INSTALLED_APPS:
+            def refresh_activities():
+                from scripts.management.commands.refresh_activities import Command as RefreshActivitiesCommand
+                RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name)
+                RefreshActivitiesCommand.refresh_raw_wiki_page("Modification de l'activité " + self.name)
+            Thread(daemon=True, target=refresh_activities).start()
+        return ret
 
     def __str__(self):
         return self.name
