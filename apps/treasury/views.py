@@ -142,10 +142,10 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         products = Product.objects.filter(invoice=invoice).all()
 
         # Informations of the BDE. Should be updated when the school will move.
-        invoice.place = "Cachan"
-        invoice.my_name = "BDE ENS Cachan"
-        invoice.my_address_street = "61 avenue du Président Wilson"
-        invoice.my_city = "94230 Cachan"
+        invoice.place = "Gif-sur-Yvette"
+        invoice.my_name = "BDE ENS Paris-Saclay"
+        invoice.my_address_street = "4 avenue des Sciences"
+        invoice.my_city = "91190 Gif-sur-Yvette"
         invoice.bank_code = 30003
         invoice.desk_code = 3894
         invoice.account_number = 37280662
