@@ -38,6 +38,8 @@ class UserTable(tables.Table):
     """
     List all users.
     """
+    alias = tables.Column()
+
     section = tables.Column(accessor='profile.section')
 
     balance = tables.Column(accessor='note.balance', verbose_name=_("Balance"))
@@ -50,7 +52,7 @@ class UserTable(tables.Table):
             'class': 'table table-condensed table-striped table-hover'
         }
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('last_name', 'first_name', 'username', 'email')
+        fields = ('last_name', 'first_name', 'username', 'alias', 'email')
         model = User
         row_attrs = {
             'class': 'table-row',

@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.db.models import Q
+from django.db.models import Q, F
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -172,7 +172,9 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         """
         Filter the user list with the given pattern.
         """
-        qs = super().get_queryset().distinct().filter(profile__registration_valid=True)
+        qs = super().get_queryset().distinct("pk").annotate(alias=F("note__alias__name"))\
+            .annotate(normalized_alias=F("note__alias__normalized_name"))\
+            .filter(profile__registration_valid=True)
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
@@ -184,8 +186,8 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
                 | Q(last_name__iregex=pattern)
                 | Q(profile__section__iregex=pattern)
                 | Q(username__iregex="^" + pattern)
-                | Q(note__alias__name__iregex="^" + pattern)
-                | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
+                | Q(alias__iregex="^" + pattern)
+                | Q(normalized_alias__iregex=Alias.normalize("^" + pattern))
             )
         else:
             qs = qs.none()
