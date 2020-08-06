@@ -326,8 +326,8 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
             qs = qs.filter(
                 Q(name__iregex=pattern)
-                | Q(note__alias__name__iregex="^" + pattern)
-                | Q(note__alias__normalized_name__iregex=Alias.normalize("^" + pattern))
+                | Q(note__alias__name__iregex=pattern)
+                | Q(note__alias__normalized_name__iregex=Alias.normalize(pattern))
             )
 
         return qs

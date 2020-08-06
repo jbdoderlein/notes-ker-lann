@@ -54,7 +54,7 @@ class UserViewSet(ReadProtectedModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active', ]
-    search_fields = ['$username', '$first_name', '$last_name', ]
+    search_fields = ['$username', '$first_name', '$last_name', '$note__alias__name', '$note__alias__normalized_name', ]
 
 
 # This ViewSet is the only one that is accessible from all authenticated users!
