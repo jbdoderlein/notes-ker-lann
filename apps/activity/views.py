@@ -125,7 +125,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view"))\
             .order_by('last_name', 'first_name').distinct()
 
-        if "search" in self.request.GET:
+        if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
             if pattern[0] != "^":
                 pattern = "^" + pattern

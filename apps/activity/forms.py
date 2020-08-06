@@ -1,9 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import timedelta, datetime
+
+from datetime import timedelta
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from member.models import Club
 from note.models import NoteUser, Note
@@ -41,7 +43,7 @@ class GuestForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        if self.activity.date_start > datetime.now():
+        if self.activity.date_start > timezone.now():
             self.add_error("inviter", _("You can't invite someone once the activity is started."))
 
         if not self.activity.valid:

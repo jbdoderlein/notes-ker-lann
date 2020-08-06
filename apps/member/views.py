@@ -484,7 +484,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             additional_fee_renewal = 0
             while c.parent_club is not None:
                 c = c.parent_club
-                if not Membership.objects.filter(
+                if c.membership_start and not Membership.objects.filter(
                         club=c,
                         user=user,
                         date_start__gte=c.membership_start,
@@ -562,7 +562,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
         fee = 0
         c = club
-        while c is not None:
+        while c is not None and c.membership_start:
             if not Membership.objects.filter(
                     club=c,
                     user=user,

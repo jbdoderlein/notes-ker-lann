@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import timedelta, datetime
+from datetime import timedelta
 from threading import Thread
 
 from django.conf import settings
@@ -236,7 +236,7 @@ class Guest(models.Model):
         one_year = timedelta(days=365)
 
         if not force_insert:
-            if self.activity.date_start > datetime.now():
+            if self.activity.date_start > timezone.now():
                 raise ValidationError(_("You can't invite someone once the activity is started."))
 
             if not self.activity.valid:
