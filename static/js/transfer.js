@@ -246,6 +246,13 @@ $("#btn_transfer").click(function() {
         // We copy the arrays to ensure that transactions are well-processed even if the form is reset
         [...sources_notes_display].forEach(function (source) {
             [...dests_notes_display].forEach(function (dest) {
+                if (source.note.id === dest.note.id) {
+                    addMsg("Attention : la transaction de " + pretty_money(amount) + " de la note " + source.name
+                        + " vers la note " + dest.name + " n'a pas été faite car il s'agit de la même note au départ" +
+                        " et à l'arrivée.","warning", 10000);
+                    return;
+                }
+
                 $.post("/api/note/transaction/transaction/",
                     {
                         "csrfmiddlewaretoken": CSRF_TOKEN,
