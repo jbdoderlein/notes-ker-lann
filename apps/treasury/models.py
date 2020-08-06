@@ -55,7 +55,7 @@ class Invoice(models.Model):
 
     date = models.DateField(
         default=timezone.now,
-        verbose_name=_("Place"),
+        verbose_name=_("Date"),
     )
 
     acquitted = models.BooleanField(
