@@ -57,6 +57,10 @@
                 window.document.location = $(this).data("href");
                 timer_on = false;
             });
+
+            $("tr > td:eq(0), tr > td:eq(1), tr > td:eq(2), tr > td:eq(3), tr > td:eq(5)").each(function() {
+                $(this).html($(this).text().replace(new RegExp(searchbar_obj.val(), 'i'), "<mark>$&</mark>"));
+            });
         }
 
         init();
