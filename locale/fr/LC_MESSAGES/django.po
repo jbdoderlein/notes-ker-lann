@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-06 19:55+0200\n"
+"POT-Creation-Date: 2020-08-06 22:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgid "type"
 msgstr "type"
 
 #: apps/activity/models.py:87 apps/logs/models.py:22 apps/member/models.py:280
-#: apps/note/models/notes.py:126 apps/treasury/models.py:222
+#: apps/note/models/notes.py:126 apps/treasury/models.py:253
 #: apps/wei/models.py:160 templates/treasury/sogecredit_detail.html:14
 #: templates/wei/survey.html:16
 msgid "user"
@@ -195,7 +195,7 @@ msgstr "Entré le "
 msgid "remove"
 msgstr "supprimer"
 
-#: apps/activity/tables.py:79 apps/note/forms.py:76 apps/treasury/models.py:141
+#: apps/activity/tables.py:79 apps/note/forms.py:76 apps/treasury/models.py:172
 msgid "Type"
 msgstr "Type"
 
@@ -974,7 +974,7 @@ msgstr "Transactions de crédit/retrait"
 msgid "membership transaction"
 msgstr "Transaction d'adhésion"
 
-#: apps/note/models/transactions.py:344 apps/treasury/models.py:228
+#: apps/note/models/transactions.py:344 apps/treasury/models.py:259
 msgid "membership transactions"
 msgstr "Transactions d'adhésion"
 
@@ -1232,7 +1232,7 @@ msgstr "Trésorerie"
 #: templates/django_filters/rest_framework/form.html:5
 #: templates/member/add_members.html:31 templates/member/club_form.html:9
 #: templates/note/transactiontemplate_form.html:15
-#: templates/treasury/invoice_form.html:46 templates/wei/bus_form.html:13
+#: templates/treasury/invoice_form.html:56 templates/wei/bus_form.html:13
 #: templates/wei/busteam_form.html:13 templates/wei/weiclub_form.html:15
 #: templates/wei/weiregistration_form.html:14
 msgid "Submit"
@@ -1250,7 +1250,7 @@ msgstr "La remise est déjà fermée."
 msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
-#: apps/treasury/forms.py:124 apps/treasury/models.py:207
+#: apps/treasury/forms.py:124 apps/treasury/models.py:238
 #: apps/treasury/tables.py:77 apps/treasury/tables.py:85
 #: templates/treasury/invoice_list.html:13
 #: templates/treasury/remittance_list.html:13
@@ -1268,111 +1268,113 @@ msgstr "Pas de remise associée"
 msgid "Amount"
 msgstr "Montant"
 
-#: apps/treasury/models.py:21
+#: apps/treasury/models.py:22
 msgid "Invoice identifier"
 msgstr "Numéro de facture"
 
-#: apps/treasury/models.py:35
+#: apps/treasury/models.py:36
 msgid "BDE"
 msgstr "BDE"
 
-#: apps/treasury/models.py:40
+#: apps/treasury/models.py:41
 msgid "Object"
 msgstr "Objet"
 
-#: apps/treasury/models.py:44
+#: apps/treasury/models.py:45
 msgid "Description"
 msgstr "Description"
 
-#: apps/treasury/models.py:49 templates/note/transaction_form.html:125
+#: apps/treasury/models.py:50 templates/note/transaction_form.html:125
 msgid "Name"
 msgstr "Nom"
 
-#: apps/treasury/models.py:53
+#: apps/treasury/models.py:54
 msgid "Address"
 msgstr "Adresse"
 
-#: apps/treasury/models.py:58
-msgid "Place"
-msgstr "Lieu"
-
-#: apps/treasury/models.py:62
-msgid "Acquitted"
-msgstr "Acquittée"
-
-#: apps/treasury/models.py:66
-msgid "invoice"
-msgstr "facture"
-
-#: apps/treasury/models.py:67
-msgid "invoices"
-msgstr "factures"
-
-#: apps/treasury/models.py:82
-msgid "Designation"
-msgstr "Désignation"
-
-#: apps/treasury/models.py:86
-msgid "Quantity"
-msgstr "Quantité"
-
-#: apps/treasury/models.py:90
-msgid "Unit price"
-msgstr "Prix unitaire"
-
-#: apps/treasury/models.py:106
-msgid "product"
-msgstr "produit"
-
-#: apps/treasury/models.py:107
-msgid "products"
-msgstr "produits"
-
-#: apps/treasury/models.py:124
-msgid "remittance type"
-msgstr "type de remise"
-
-#: apps/treasury/models.py:125
-msgid "remittance types"
-msgstr "types de remises"
-
-#: apps/treasury/models.py:135
+#: apps/treasury/models.py:59 apps/treasury/models.py:166
 msgid "Date"
 msgstr "Date"
 
-#: apps/treasury/models.py:146
+#: apps/treasury/models.py:63
+msgid "Acquitted"
+msgstr "Acquittée"
+
+#: apps/treasury/models.py:68
+#, fuzzy
+#| msgid "source"
+msgid "tex source"
+msgstr "source"
+
+#: apps/treasury/models.py:95 apps/treasury/models.py:108
+msgid "invoice"
+msgstr "facture"
+
+#: apps/treasury/models.py:96
+msgid "invoices"
+msgstr "factures"
+
+#: apps/treasury/models.py:113
+msgid "Designation"
+msgstr "Désignation"
+
+#: apps/treasury/models.py:117
+msgid "Quantity"
+msgstr "Quantité"
+
+#: apps/treasury/models.py:121
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+#: apps/treasury/models.py:137
+msgid "product"
+msgstr "produit"
+
+#: apps/treasury/models.py:138
+msgid "products"
+msgstr "produits"
+
+#: apps/treasury/models.py:155
+msgid "remittance type"
+msgstr "type de remise"
+
+#: apps/treasury/models.py:156
+msgid "remittance types"
+msgstr "types de remises"
+
+#: apps/treasury/models.py:177
 msgid "Comment"
 msgstr "Commentaire"
 
-#: apps/treasury/models.py:151
+#: apps/treasury/models.py:182
 msgid "Closed"
 msgstr "Fermée"
 
-#: apps/treasury/models.py:155
+#: apps/treasury/models.py:186
 msgid "remittance"
 msgstr "remise"
 
-#: apps/treasury/models.py:156
+#: apps/treasury/models.py:187
 msgid "remittances"
 msgstr "remises"
 
-#: apps/treasury/models.py:188
+#: apps/treasury/models.py:219
 msgid "Remittance #{:d}: {}"
 msgstr "Remise n°{:d} : {}"
 
-#: apps/treasury/models.py:211
+#: apps/treasury/models.py:242
 msgid "special transaction proxy"
 msgstr "Proxy de transaction spéciale"
 
-#: apps/treasury/models.py:212
+#: apps/treasury/models.py:243
 msgid "special transaction proxies"
 msgstr "Proxys de transactions spéciales"
 
-#: apps/treasury/models.py:234
+#: apps/treasury/models.py:265
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:297
+#: apps/treasury/models.py:328
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -1380,11 +1382,11 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:309 templates/treasury/sogecredit_detail.html:10
+#: apps/treasury/models.py:340 templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:310
+#: apps/treasury/models.py:341
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
@@ -1434,28 +1436,28 @@ msgstr "Liste des factures"
 msgid "Update an invoice"
 msgstr "Modifier la facture"
 
-#: apps/treasury/views.py:205
+#: apps/treasury/views.py:188
 msgid "Create a new remittance"
 msgstr "Créer une nouvelle remise"
 
-#: apps/treasury/views.py:226 templates/treasury/remittance_form.html:9
+#: apps/treasury/views.py:209 templates/treasury/remittance_form.html:9
 #: templates/treasury/specialtransactionproxy_form.html:7
 msgid "Remittances list"
 msgstr "Liste des remises"
 
-#: apps/treasury/views.py:276
+#: apps/treasury/views.py:259
 msgid "Update a remittance"
 msgstr "Modifier la remise"
 
-#: apps/treasury/views.py:299
+#: apps/treasury/views.py:282
 msgid "Attach a transaction to a remittance"
 msgstr "Joindre une transaction à une remise"
 
-#: apps/treasury/views.py:343
+#: apps/treasury/views.py:326
 msgid "List of credits from the Société générale"
 msgstr "Liste des crédits de la Société générale"
 
-#: apps/treasury/views.py:377
+#: apps/treasury/views.py:360
 msgid "Manage credits from the Société générale"
 msgstr "Gérer les crédits de la Société générale"
 
@@ -2467,11 +2469,20 @@ msgstr ""
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
 
-#: templates/treasury/invoice_form.html:41
+#: templates/treasury/invoice_form.html:10
+msgid ""
+"Warning: the LaTeX template is saved with this object. Updating the invoice "
+"implies regenerate it. Be careful if you manipulate old invoices."
+msgstr ""
+"Attention : le template LaTeX est enregistré avec cet objet. Modifier la "
+"facture implique la regénérer. Faites attention si vous manipulez de "
+"vieilles factures."
+
+#: templates/treasury/invoice_form.html:51
 msgid "Add product"
 msgstr "Ajouter produit"
 
-#: templates/treasury/invoice_form.html:42
+#: templates/treasury/invoice_form.html:52
 msgid "Remove product"
 msgstr "Retirer produit"
 
@@ -2808,3 +2819,6 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 #: templates/wei/weiregistration_list.html:24
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
+
+#~ msgid "Place"
+#~ msgstr "Lieu"

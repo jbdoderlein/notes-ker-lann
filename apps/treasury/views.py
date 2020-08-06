@@ -139,23 +139,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
         invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request.user, Invoice, "view")).get(pk=pk)
-        products = Product.objects.filter(invoice=invoice).all()
-
-        invoice.place = "Gif-sur-Yvette"
-        invoice.my_name = "BDE ENS Cachan"
-        invoice.my_address_street = "4 avenue des Sciences"
-        invoice.my_city = "91190 Gif-sur-Yvette"
-        invoice.bank_code = 30003
-        invoice.desk_code = 3894
-        invoice.account_number = 37280662
-        invoice.rib_key = 14
-        invoice.bic = "SOGEFRPP"
-
-        # Replace line breaks with the LaTeX equivalent
-        invoice.description = invoice.description.replace("\r", "").replace("\n", "\\\\ ")
-        invoice.address = invoice.address.replace("\r", "").replace("\n", "\\\\ ")
-        # Fill the template with the information
-        tex = render_to_string("treasury/invoice_sample.tex", dict(obj=invoice, products=products))
+        tex = invoice.tex
 
         try:
             os.mkdir(BASE_DIR + "/tmp")

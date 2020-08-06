@@ -1,5 +1,4 @@
 {% load escape_tex %}
-{% load l10n %}
 
 \nonstopmode
 \documentclass[11pt]{article}
@@ -48,11 +47,9 @@
 }
 
 \newcommand	{\ListeProduits}{
-    {% localize off %}
-        {% for product in products %}
-            {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex|floatformat:2 }}    &    {{ product.quantity|safe|escape_tex|floatformat:2 }}    &    {{ product.total_euros|safe|escape_tex|floatformat:2 }}   \cr
-        {% endfor %}
-    {% endlocalize %}
+    {% for product in products %}
+        {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex|floatformat:2 }}    &    {{ product.quantity|safe|escape_tex|floatformat:2 }}    &    {{ product.total_euros|safe|escape_tex|floatformat:2 }}   \cr
+    {% endfor %}
 }
 
 % Logo du BDE
@@ -70,9 +67,9 @@
 
 %%%%%%%%%%%%%%%%%%%%% A MODIFIER DANS LA FACTURE %%%%%%%%%%%%%%%%%%%%%
 % Infos Association
-\def\MonNom{{"{"}}{{ obj.my_name }}} % Nom de l'association
-\def\MonAdresseRue{{"{"}}{{ obj.my_address_street }}} % Adresse de l'association
-\def\MonAdresseVille{{"{"}}{{ obj.my_city }}}
+\def\MonNom{{"{"}}{{ obj.my_name|safe|escape_tex }}} % Nom de l'association
+\def\MonAdresseRue{{"{"}}{{ obj.my_address_street|safe|escape_tex }}} % Adresse de l'association
+\def\MonAdresseVille{{"{"}}{{ obj.my_city|safe|escape_tex }}}
 
 % Informations bancaires de l'association
 \def\CodeBanque{{"{"}}{{ obj.bank_code|stringformat:".05d" }}}

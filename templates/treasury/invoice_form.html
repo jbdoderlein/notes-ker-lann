@@ -4,6 +4,16 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <p><a class="btn btn-default" href="{% url 'treasury:invoice_list' %}">{% trans "Invoices list" %}</a></p>
+
+    {% if not object.pk %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                Warning: the LaTeX template is saved with this object. Updating the invoice implies regenerate it.
+                Be careful if you manipulate old invoices.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
     <form method="post" action="">
         {% csrf_token %}
         {# Render the invoice form #}

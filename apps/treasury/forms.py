@@ -28,7 +28,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
-        exclude = ('bde', )
+        exclude = ('bde', 'tex', )
 
 
 class ProductForm(forms.ModelForm):

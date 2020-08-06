@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction
@@ -62,6 +63,34 @@ class Invoice(models.Model):
         verbose_name=_("Acquitted"),
     )
 
+    tex = models.TextField(
+        default="",
+        verbose_name=_("tex source"),
+    )
+
+    def save(self, *args, **kwargs):
+        """
+        When an invoice is generated, we store the tex source.
+        The advantage is to never change the template.
+        Warning: editing this model regenerate the tex source, so be careful.
+        """
+        products = self.products.all()
+
+        self.place = "Gif-sur-Yvette"
+        self.my_name = "BDE ENS Cachan"
+        self.my_address_street = "4 avenue des Sciences"
+        self.my_city = "91190 Gif-sur-Yvette"
+        self.bank_code = 30003
+        self.desk_code = 3894
+        self.account_number = 37280662
+        self.rib_key = 14
+        self.bic = "SOGEFRPP"
+
+        # Fill the template with the information
+        self.tex = render_to_string("treasury/invoice_sample.tex", dict(obj=self, products=products))
+
+        return super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = _("invoice")
         verbose_name_plural = _("invoices")
@@ -75,6 +104,8 @@ class Product(models.Model):
     invoice = models.ForeignKey(
         Invoice,
         on_delete=models.PROTECT,
+        related_name="products",
+        verbose_name=_("invoice"),
     )
 
     designation = models.CharField(

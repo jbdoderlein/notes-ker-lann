@@ -13,6 +13,8 @@ def do_latex_escape(value):
         .replace("_", "\\_")
         .replace("{", "\\{")
         .replace("}", "\\}")
+        .replace("\n", "\\\\")
+        .replace("\r", "")
     )
 
 
