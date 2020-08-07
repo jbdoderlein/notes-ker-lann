@@ -214,7 +214,7 @@ class TransactionSearchView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView
             transactions = transactions.filter(created_at__lte=data["created_before"])
 
         table = HistoryTable(transactions)
-        table.paginate(per_page=100)
+        table.paginate(per_page=100, page=self.request.GET.get("page", 1))
         context["table"] = table
 
         return context
