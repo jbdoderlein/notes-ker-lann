@@ -918,6 +918,7 @@ class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
+        self.object = obj
 
         wei = obj.wei
         today = date.today()

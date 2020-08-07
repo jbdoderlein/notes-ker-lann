@@ -44,6 +44,13 @@ class WEIBusInformation:
     def __init__(self, bus: Bus):
         self.__dict__.update(bus.information)
         self.bus = bus
+        self.save()
+
+    def save(self):
+        d = self.__dict__.copy()
+        d.pop("bus")
+        self.bus.information = d
+        self.bus.save()
 
 
 class WEISurveyAlgorithm:

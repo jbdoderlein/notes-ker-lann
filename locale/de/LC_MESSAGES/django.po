@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 14:17+0200\n"
+"POT-Creation-Date: 2020-08-07 19:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1484,6 +1484,10 @@ msgstr ""
 msgid "This team doesn't belong to the given bus."
 msgstr ""
 
+#: apps/wei/forms/surveys/wei2020.py:26
+msgid "Choose a word:"
+msgstr ""
+
 #: apps/wei/models.py:24 templates/wei/weiclub_info.html:23
 msgid "year"
 msgstr ""
@@ -1768,7 +1772,7 @@ msgstr ""
 msgid "This user didn't give her/his caution check."
 msgstr ""
 
-#: apps/wei/views.py:917 apps/wei/views.py:970 apps/wei/views.py:980
+#: apps/wei/views.py:917 apps/wei/views.py:971 apps/wei/views.py:981
 #: templates/wei/survey.html:12 templates/wei/survey_closed.html:12
 #: templates/wei/survey_end.html:12
 msgid "Survey WEI"
