@@ -14,19 +14,39 @@ class InvoiceTable(tables.Table):
     """
     List all invoices.
     """
-    id = tables.LinkColumn("treasury:invoice_update",
-                           args=[A("pk")],
-                           text=lambda record: _("Invoice #{:d}").format(record.id), )
+    id = tables.LinkColumn(
+        "treasury:invoice_update",
+        args=[A("pk")],
+        text=lambda record: _("Invoice #{:d}").format(record.id),
+    )
 
-    invoice = tables.LinkColumn("treasury:invoice_render",
-                                verbose_name=_("Invoice"),
-                                args=[A("pk")],
-                                accessor="pk",
-                                text="",
-                                attrs={
-                                    'a': {'class': 'fa fa-file-pdf-o'},
-                                    'td': {'data-turbolinks': 'false'}
-                                })
+    invoice = tables.LinkColumn(
+        "treasury:invoice_render",
+        verbose_name=_("Invoice"),
+        args=[A("pk")],
+        accessor="pk",
+        text="",
+        attrs={
+            'a': {'class': 'fa fa-file-pdf-o'},
+            'td': {'data-turbolinks': 'false'}
+        }
+    )
+
+    delete = tables.LinkColumn(
+        'treasury:invoice_delete',
+        args=[A('pk')],
+        verbose_name=_("delete"),
+        text=_("Delete"),
+        attrs={
+            'th': {
+                'id': 'delete-membership-header'
+            },
+            'a': {
+                'class': 'btn btn-danger',
+                'data-type': 'delete-membership'
+            }
+        },
+    )
 
     class Meta:
         attrs = {

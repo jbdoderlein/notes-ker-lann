@@ -4,9 +4,8 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from note_kfet.inputs import DatePickerInput, AmountInput
+from note_kfet.inputs import AmountInput
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
@@ -16,19 +15,25 @@ class InvoiceForm(forms.ModelForm):
     Create and generate invoices.
     """
 
-    # Django forms don't support date fields. We have to add it manually
-    date = forms.DateField(
-        initial=timezone.now,
-        widget=DatePickerInput(),
-    )
+    def clean(self):
+        if self.instance and self.instance.locked:
+            for field_name in self.fields:
+                self.cleaned_data[field_name] = getattr(self.instance, field_name)
+            self.errors.clear()
+            return self.cleaned_data
+        return super().clean()
 
-    def clean_date(self):
-        self.instance.date = self.data.get("date")
-        return self.instance.date
+    def save(self, commit=True):
+        """
+        If the invoice is locked, don't save it
+        """
+        if not self.instance.locked:
+            super().save(commit)
+        return self.instance
 
     class Meta:
         model = Invoice
-        exclude = ('bde', 'tex', )
+        exclude = ('bde', 'date', 'tex', )
 
 
 class ProductForm(forms.ModelForm):

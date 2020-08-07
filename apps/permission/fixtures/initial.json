@@ -2360,6 +2360,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 151,
+		"fields": {
+			"model": [
+				"treasury",
+				"invoice"
+			],
+			"query": "{}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une facture"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2539,7 +2555,8 @@
 				143,
 				146,
 				147,
-				150
+				150,
+				151
 			]
 		}
 	},
@@ -2695,7 +2712,8 @@
 				147,
 				148,
 				149,
-				150
+				150,
+				151
 			]
 		}
 	},

@@ -5,11 +5,17 @@
 {% block content %}
     <p><a class="btn btn-default" href="{% url 'treasury:invoice_list' %}">{% trans "Invoices list" %}</a></p>
 
-    {% if not object.pk %}
+    {% if object.pk and not object.locked %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
                 Warning: the LaTeX template is saved with this object. Updating the invoice implies regenerate it.
                 Be careful if you manipulate old invoices.
+            {% endblocktrans %}
+        </div>
+    {% elif object.locked %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                This invoice is locked and can no longer be edited.
             {% endblocktrans %}
         </div>
     {% endif %}
@@ -47,10 +53,12 @@
         </table>
 
         {# Display buttons to add and remove products #}
-        <div class="btn-group btn-block" role="group">
-            <button type="button" id="add_more" class="btn btn-primary">{% trans "Add product" %}</button>
-            <button type="button" id="remove_one" class="btn btn-danger">{% trans "Remove product" %}</button>
-        </div>
+        {% if not object.locked %}
+            <div class="btn-group btn-block" role="group">
+                <button type="button" id="add_more" class="btn btn-primary">{% trans "Add product" %}</button>
+                <button type="button" id="remove_one" class="btn btn-danger">{% trans "Remove product" %}</button>
+            </div>
+        {% endif %}
 
         <div class="btn-block">
             <button type="submit" class="btn btn-block btn-primary">{% trans "Submit" %}</button>
@@ -78,21 +86,21 @@
         {# Script that handles add and remove lines #}
         IDS = {};
 
-        $("#id_product_set-TOTAL_FORMS").val($(".row-formset").length - 1);
+        $("#id_products-TOTAL_FORMS").val($(".row-formset").length - 1);
 
         $('#add_more').click(function () {
-            var form_idx = $('#id_product_set-TOTAL_FORMS').val();
+            let form_idx = $('#id_products-TOTAL_FORMS').val();
             $('#form_body').append($('#for_real').html().replace(/__prefix__/g, form_idx));
-            $('#id_product_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-            $('#id_product_set-' + parseInt(form_idx) + '-id').val(IDS[parseInt(form_idx)]);
+            $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            $('#id_products-' + parseInt(form_idx) + '-id').val(IDS[parseInt(form_idx)]);
         });
 
         $('#remove_one').click(function () {
-            let form_idx = $('#id_product_set-TOTAL_FORMS').val();
+            let form_idx = $('#id_products-TOTAL_FORMS').val();
             if (form_idx > 0) {
-                IDS[parseInt(form_idx) - 1] = $('#id_product_set-' + (parseInt(form_idx) - 1) + '-id').val();
+                IDS[parseInt(form_idx) - 1] = $('#id_products-' + (parseInt(form_idx) - 1) + '-id').val();
                 $('#form_body tr:last-child').remove();
-                $('#id_product_set-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+                $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) - 1);
             }
         });
     </script>

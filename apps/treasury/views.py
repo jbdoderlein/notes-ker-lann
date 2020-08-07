@@ -18,7 +18,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from note.models import SpecialTransaction, NoteSpecial, Alias
 from note_kfet.settings.base import BASE_DIR
@@ -97,13 +97,19 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.helper = FormHelper()
         # Remove form tag on the generation of the form in the template (already present on the template)
         form.helper.form_tag = False
-        # Fill the intial value for the date field, with the initial date of the model instance
-        form.fields['date'].initial = form.instance.date
         # The formset handles the set of the products
-        form_set = ProductFormSet(instance=form.instance)
+        form_set = ProductFormSet(instance=self.object)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
         context['no_cache'] = True
+
+        if self.object.locked:
+            for field_name in form.fields:
+                form.fields[field_name].disabled = True
+            for f in form_set.forms:
+                for field_name in f.fields:
+                    f.fields[field_name].disabled = True
+
 
         return context
 
@@ -126,6 +132,17 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             Product.objects.filter(~Q(pk__in=saved), invoice=form.instance).delete()
 
         return ret
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:invoice_list')
+
+
+class InvoiceDeleteView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
+    """
+    Delete a non-validated WEI registration
+    """
+    model = Invoice
+    extra_context = {"title": _("Delete invoice")}
 
     def get_success_url(self):
         return reverse_lazy('treasury:invoice_list')

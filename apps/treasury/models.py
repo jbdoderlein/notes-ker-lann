@@ -61,6 +61,13 @@ class Invoice(models.Model):
 
     acquitted = models.BooleanField(
         verbose_name=_("Acquitted"),
+        default=False,
+    )
+
+    locked = models.BooleanField(
+        verbose_name=_("Locked"),
+        help_text=_("An invoice can't be edited when it is locked."),
+        default=False,
     )
 
     tex = models.TextField(
@@ -74,6 +81,12 @@ class Invoice(models.Model):
         The advantage is to never change the template.
         Warning: editing this model regenerate the tex source, so be careful.
         """
+
+        old_invoice = Invoice.objects.filter(id=self.id)
+        if old_invoice.exists():
+            if old_invoice.get().locked:
+                raise ValidationError(_("This invoice is locked and can no longer be edited."))
+
         products = self.products.all()
 
         self.place = "Gif-sur-Yvette"
@@ -103,7 +116,7 @@ class Product(models.Model):
 
     invoice = models.ForeignKey(
         Invoice,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="products",
         verbose_name=_("invoice"),
     )
