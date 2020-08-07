@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 11:03+0200\n"
+"POT-Creation-Date: 2020-08-07 14:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgstr "lieu"
 msgid "type"
 msgstr "type"
 
-#: apps/activity/models.py:87 apps/logs/models.py:22 apps/member/models.py:280
+#: apps/activity/models.py:87 apps/logs/models.py:22 apps/member/models.py:277
 #: apps/note/models/notes.py:126 apps/treasury/models.py:266
 #: apps/wei/models.py:160 templates/treasury/sogecredit_detail.html:14
 #: templates/wei/survey.html:16
@@ -316,11 +316,11 @@ msgstr "cotisation pour adhérer (normalien élève)"
 msgid "membership fee (unpaid students)"
 msgstr "cotisation pour adhérer (normalien étudiant)"
 
-#: apps/member/admin.py:67 apps/member/models.py:291
+#: apps/member/admin.py:67 apps/member/models.py:288
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/admin.py:68 apps/member/models.py:305
+#: apps/member/admin.py:68 apps/member/models.py:302
 msgid "fee"
 msgstr "cotisation"
 
@@ -545,63 +545,59 @@ msgid "membership start"
 msgstr "début de l'adhésion"
 
 #: apps/member/models.py:219
-msgid "How long after January 1st the members can renew their membership."
+msgid "Date from which the members can renew their membership."
 msgstr ""
-"Combien de temps après le 1er Janvier les adhérents peuvent renouveler leur "
+"Date à partir de laquelle les adhérents peuvent renouveler leur "
 "adhésion."
 
-#: apps/member/models.py:226 templates/member/club_info.html:28
+#: apps/member/models.py:225 templates/member/club_info.html:28
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
-#: apps/member/models.py:227
-msgid ""
-"How long the membership can last after January 1st of the next year after "
-"members can renew their membership."
-msgstr ""
-"Combien de temps l'adhésion peut durer après le 1er Janvier de l'année "
-"suivante avant que les adhérents peuvent renouveler leur adhésion."
+#: apps/member/models.py:226
+msgid "Maximal date of a membership, after which members must renew it."
+msgstr "Date maximale d'une fin d'adhésion, après laquelle les adhérents doivent la renouveler."
 
-#: apps/member/models.py:261 apps/member/models.py:286
+#: apps/member/models.py:258 apps/member/models.py:283
 #: apps/note/models/notes.py:163
 msgid "club"
 msgstr "club"
 
-#: apps/member/models.py:262
+#: apps/member/models.py:259
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:296
+#: apps/member/models.py:293
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:300
+#: apps/member/models.py:297
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:351
+#: apps/member/models.py:348
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:362 apps/member/views.py:592
+#: apps/member/models.py:359 apps/member/views.py:592
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:409
+#: apps/member/models.py:406
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:462
+#: apps/member/models.py:459
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:465
+#: apps/member/models.py:462
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:466
+#: apps/member/models.py:463
 msgid "memberships"
 msgstr "adhésions"
 
@@ -1312,10 +1308,8 @@ msgid "An invoice can't be edited when it is locked."
 msgstr "Une facture ne peut plus être modifiée si elle est verrouillée."
 
 #: apps/treasury/models.py:75
-#, fuzzy
-#| msgid "source"
 msgid "tex source"
-msgstr "source"
+msgstr "Fichier TeX source"
 
 #: apps/treasury/models.py:88 templates/treasury/invoice_form.html:17
 msgid "This invoice is locked and can no longer be edited."
@@ -1452,10 +1446,8 @@ msgid "Update an invoice"
 msgstr "Modifier la facture"
 
 #: apps/treasury/views.py:145 templates/treasury/invoice_confirm_delete.html:8
-#, fuzzy
-#| msgid "New invoice"
 msgid "Delete invoice"
-msgstr "Nouvelle facture"
+msgstr "Supprimer la facture"
 
 #: apps/treasury/views.py:205
 msgid "Create a new remittance"
@@ -2491,27 +2483,18 @@ msgstr ""
 "lien que vous avez reçu."
 
 #: templates/treasury/invoice_confirm_delete.html:13
-#, fuzzy
-#| msgid "This registration is already validated and can't be deleted."
 msgid "This invoice is locked and can't be deleted."
-msgstr "L'inscription a déjà été validée et ne peut pas être supprimée."
+msgstr "Cette facture est verrouillée et ne peut pas être supprimée."
 
 #: templates/treasury/invoice_confirm_delete.html:19
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete the registration of %(user)s for the WEI "
-#| "%(wei_name)s? This action can't be undone."
 msgid ""
 "Are you sure you want to delete this invoice? This action can't be undone."
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer l'inscription de %(user)s pour le WEI "
-"%(wei_name)s ? Cette action ne pourra pas être annulée."
+"Êtes-vous sûr de vouloir supprimer cette facture ? Cette action ne pourra pas être annulée."
 
 #: templates/treasury/invoice_confirm_delete.html:26
-#, fuzzy
-#| msgid "Return to credit list"
 msgid "Return to invoices list"
-msgstr "Retour à la liste des crédits"
+msgstr "Retour à la liste des factures"
 
 #: templates/treasury/invoice_form.html:10
 msgid ""
@@ -2863,6 +2846,3 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 #: templates/wei/weiregistration_list.html:24
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
-
-#~ msgid "Place"
-#~ msgstr "Lieu"

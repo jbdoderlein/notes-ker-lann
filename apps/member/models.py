@@ -216,17 +216,14 @@ class Club(models.Model):
         blank=True,
         null=True,
         verbose_name=_('membership start'),
-        help_text=_('How long after January 1st the members can renew '
-                    'their membership.'),
+        help_text=_('Date from which the members can renew their membership.'),
     )
 
     membership_end = models.DateField(
         blank=True,
         null=True,
         verbose_name=_('membership end'),
-        help_text=_('How long the membership can last after January 1st '
-                    'of the next year after members can renew their '
-                    'membership.'),
+        help_text=_('Maximal date of a membership, after which members must renew it.'),
     )
 
     def update_membership_dates(self):
