@@ -39,7 +39,7 @@ class ProfileForm(forms.ModelForm):
     """
     report_frequency = forms.IntegerField(required=False, initial=0, label=_("Report frequency"))
 
-    last_report = forms.DateField(required=False, disabled=True, label=_("Last report date"))
+    last_report = forms.DateTimeField(required=False, disabled=True, label=_("Last report date"))
 
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data
@@ -50,7 +50,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = '__all__'
-        exclude = ('user', 'email_confirmed', 'registration_valid', )
+        exclude = ('user', )
 
 
 class ClubForm(forms.ModelForm):

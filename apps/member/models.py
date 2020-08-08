@@ -97,7 +97,7 @@ class Profile(models.Model):
         default=0,
     )
 
-    last_report = models.DateField(
+    last_report = models.DateTimeField(
         verbose_name=_("last report date"),
         default=timezone.now,
     )
