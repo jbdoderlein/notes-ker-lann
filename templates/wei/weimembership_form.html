@@ -125,7 +125,7 @@
             </dl>
         </div>
         <div class="card-footer text-center">
-            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.pk %}">{% trans 'Update registration' %}</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.pk %}" data-turbolinks="false">{% trans 'Update registration' %}</a>
             {% if "auth.change_user"|has_perm:registration.user %}
                 <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' registration.user.pk %}">{% trans 'Update Profile' %}</a>
             {% endif %}

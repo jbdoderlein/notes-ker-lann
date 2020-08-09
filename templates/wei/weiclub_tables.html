@@ -13,11 +13,11 @@
         <div class="card-footer text-center">
             {% if not my_registration %}
                 {% if not not_first_year %}
-                    <a href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 1A" %}</button></a>
+                    <a href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}" data-turbolinks="false"><button class="btn btn-success">{% trans "Register to the WEI! – 1A" %}</button></a>
                 {% endif %}
-                <a href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}"><button class="btn btn-success">{% trans "Register to the WEI! – 2A+" %}</button></a>
+                <a href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}" data-turbolinks="false"><button class="btn btn-success">{% trans "Register to the WEI! – 2A+" %}</button></a>
             {% else %}
-                <a href="{% url "wei:wei_update_registration" pk=my_registration.pk %}"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
+                <a href="{% url "wei:wei_update_registration" pk=my_registration.pk %}" data-turbolinks="false"><button class="btn btn-warning">{% trans "Update my registration" %}</button></a>
             {% endif %}
         </div>
     {% endif %}

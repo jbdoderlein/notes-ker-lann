@@ -59,16 +59,16 @@
         {% endif %}
         {% if club.is_current_wei %}
             {% if can_add_first_year_member %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_register_1A' wei_pk=club.pk %}"> {% trans "Register 1A" %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_register_1A' wei_pk=club.pk %}" data-turbolinks="false"> {% trans "Register 1A" %}</a>
             {% endif %}
             {% if can_add_any_member %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_register_2A' wei_pk=club.pk %}"> {% trans "Register 2A+" %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_register_2A' wei_pk=club.pk %}" data-turbolinks="false"> {% trans "Register 2A+" %}</a>
             {% endif %}
             {% if "wei.change_"|has_perm:club %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_update' pk=club.pk %}"> {% trans "Edit" %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:wei_update' pk=club.pk %}" data-turbolinks="false"> {% trans "Edit" %}</a>
             {% endif %}
             {% if can_add_bus %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:add_bus' pk=club.pk %}"> {% trans "Add bus" %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:add_bus' pk=club.pk %}" data-turbolinks="false"> {% trans "Add bus" %}</a>
             {% endif %}
             {% url 'wei:wei_detail' club.pk as club_detail_url %}
             {%if request.path_info != club_detail_url %}

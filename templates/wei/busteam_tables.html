@@ -12,8 +12,8 @@
     </div>
 
     <div class="card-footer text-center">
-        <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:update_bus' pk=bus.pk %}">{% trans "Edit" %}</a>
-        <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:add_team' pk=bus.pk %}">{% trans "Add team" %}</a>
+        <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:update_bus' pk=bus.pk %}" data-turbolinks="false">{% trans "Edit" %}</a>
+        <a class="btn btn-primary btn-sm my-1" href="{% url 'wei:add_team' pk=bus.pk %}" data-turbolinks="false">{% trans "Add team" %}</a>
     </div>
 </div>
 

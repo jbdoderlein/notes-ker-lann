@@ -68,10 +68,10 @@
                 <a class="btn btn-success btn-sm my-1" id="validate_activity"> {% if activity.valid %}{% trans "invalidate"|capfirst %}{% else %}{% trans "validate"|capfirst %}{% endif %}</a>
             {% endif %}
             {% if ".change_"|has_perm:activity %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}"> {% trans "edit"|capfirst %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_update' pk=activity.pk %}" data-turbolinks="false"> {% trans "edit"|capfirst %}</a>
             {% endif %}
             {% if activity.activity_type.can_invite and not activity_started %}
-                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_invite' pk=activity.pk %}"> {% trans "Invite" %}</a>
+                <a class="btn btn-primary btn-sm my-1" href="{% url 'activity:activity_invite' pk=activity.pk %}" data-turbolinks="false"> {% trans "Invite" %}</a>
             {% endif %}
         {% endif %}
     </div>

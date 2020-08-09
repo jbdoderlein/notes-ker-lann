@@ -47,7 +47,8 @@ class WEIRegistrationTable(tables.Table):
         text=_("Edit"),
         attrs={
             'a': {
-                'class': 'btn btn-warning'
+                'class': 'btn btn-warning',
+                'data-turbolinks': 'false',
             }
         }
     )

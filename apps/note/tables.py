@@ -156,7 +156,10 @@ class ButtonTable(tables.Table):
     edit = tables.LinkColumn('note:template_update',
                              args=[A('pk')],
                              attrs={'td': {'class': 'col-sm-1'},
-                                    'a': {'class': 'btn btn-sm btn-primary'}},
+                                    'a': {
+                                        'class': 'btn btn-sm btn-primary',
+                                        'data-turbolinks': 'false',
+                                    }},
                              text=_('edit'),
                              accessor='pk',
                              verbose_name=_("Edit"),)
