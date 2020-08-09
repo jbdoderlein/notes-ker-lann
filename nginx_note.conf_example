@@ -1,32 +1,25 @@
-# nginx_songbook.conf
-# the upstream component nginx needs to connect to
-upstream note{
-    server unix:///var/www/note_kfet/note_kfet.sock; # file socket
-}
+# This is an example NGINX site configuration for note_kfet behind a reverse proxy
+# Only HTTP, please use a reverse proxy to secure it!
 
-# configuration of the server
 server {
-    # the port your site will be served on
-    listen      80;
-    # the domain name it will serve for
-    server_name note.example.org; # substitute your machine's IP address or FQDN
-    charset     utf-8;
+    # Serve this site by default on HTTP
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-    # max upload size
-    client_max_body_size 75M;   # adjust to taste
+    # Max upload size
+    client_max_body_size 75M;
 
-    # Django media
-    location /media  {
-        alias /var/www/note_kfet/media;  # your Django project's media files - amend as required
-    }
-
+    # Django statics and media
     location /static {
-        alias /var/www/note_kfet/static; # your Django project's static files - amend as required
+        alias /var/www/note_kfet/static;
+    }
+    location /media  {
+        alias /var/www/note_kfet/media;
     }
 
-    # Finally, send all non-media requests to the Django server.
+    # Send all non-media requests to the Django server.
     location / {
-        uwsgi_pass note;
-        include     /var/www/note_kfet/uwsgi_params; # the uwsgi_params file you installed
+        uwsgi_pass unix:///var/www/note_kfet/note_kfet.sock;
+        include /etc/nginx/uwsgi_params;
     }
 }
