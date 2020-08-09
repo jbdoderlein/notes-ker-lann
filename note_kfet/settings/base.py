@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 DEBUG = os.getenv('DJANGO_DEBUG', False)
 
 ALLOWED_HOSTS = [
-    os.getenv('DJANGO_ALLOWED_HOST', 'localhost'),
+    os.getenv('NOTE_URL', 'localhost'),
 ]
 
 

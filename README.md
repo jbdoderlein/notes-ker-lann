@@ -115,7 +115,7 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         DJANGO_DB_PORT=
         DJANGO_SECRET_KEY=CHANGE_ME
         DJANGO_SETTINGS_MODULE="note_kfet.settings
-        DJANGO_ALLOWED_HOST=localhost # URL où accéder à la note
+        NOTE_URL=localhost # URL où accéder à la note
         DOMAIN=localhost # note.example.com
         CONTACT_EMAIL=tresorerie.bde@localhost
         # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
