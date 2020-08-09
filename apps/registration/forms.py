@@ -28,6 +28,12 @@ class SignUpForm(UserCreationForm):
             self.add_error("username", _("An alias with a similar name already exists."))
         return value
 
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if User.objects.filter(email=email).exists():
+            self.add_error("email", _("This email address is already used."))
+        return email
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', )
