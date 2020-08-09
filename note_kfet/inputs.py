@@ -97,7 +97,7 @@ class DatePickerDictionary:
 class BasePickerInput(DateTimeBaseInput):
     """Base Date-Picker input class for widgets of this package."""
 
-    template_name = 'bootstrap_datepicker_plus/date_picker.html'
+    template_name = 'bootstrap_datepicker_plus/date-picker.html'
     picker_type = 'DATE'
     format = '%Y-%m-%d'
     config = {}
