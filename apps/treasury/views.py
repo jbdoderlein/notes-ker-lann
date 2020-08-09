@@ -13,7 +13,6 @@ from django.db.models import Q
 from django.forms import Form
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, DetailView
@@ -109,7 +108,6 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
             for f in form_set.forms:
                 for field_name in f.fields:
                     f.fields[field_name].disabled = True
-
 
         return context
 
