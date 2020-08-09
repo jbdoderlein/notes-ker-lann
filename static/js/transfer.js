@@ -1,4 +1,4 @@
-let LOCK = true;
+var LOCK = false;
 
 sources = [];
 sources_notes_display = [];

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // When a transaction is performed, lock the interface to prevent spam clicks.
-let LOCK = false;
+var LOCK = false;
 
 /**
  * Refresh the history table on the consumptions page.
