@@ -2373,7 +2373,7 @@ msgid ""
 "You recently registered on the Note Kfet. Please click on the link below to "
 "confirm your registration."
 msgstr ""
-"Vous vous êtes inscrits récemment sur la Note Kfet. Merci de cliquer sur le "
+"Vous vous êtes inscrit·e récemment sur la Note Kfet. Merci de cliquer sur le "
 "lien ci-dessous pour confirmer votre adresse email."
 
 #: templates/registration/mails/email_validation_email.html:26
