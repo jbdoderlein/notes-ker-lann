@@ -142,7 +142,10 @@ class Profile(models.Model):
         indexes = [models.Index(fields=['user'])]
 
     def get_absolute_url(self):
-        return reverse('user_detail', args=(self.pk,))
+        return reverse('member:user_detail', args=(self.user_id,))
+
+    def __str__(self):
+        return str(self.user)
 
     def send_email_validation_link(self):
         subject = "[Note Kfet]" + str(_("Activate your Note Kfet account"))

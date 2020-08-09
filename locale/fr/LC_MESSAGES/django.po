@@ -504,7 +504,7 @@ msgstr "adresse email confirmée"
 
 #: apps/member/models.py:111
 msgid "registration valid"
-msgstr "inscription valid"
+msgstr "inscription valide"
 
 #: apps/member/models.py:140 apps/member/models.py:141
 msgid "user profile"
