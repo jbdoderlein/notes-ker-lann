@@ -1,3 +1,5 @@
+let LOCK = true;
+
 sources = [];
 sources_notes_display = [];
 dests = [];
@@ -42,6 +44,8 @@ function reset(refresh=true) {
         refreshBalance();
         refreshHistory();
     }
+
+    LOCK = false;
 }
 
 $(document).ready(function() {
@@ -91,6 +95,9 @@ $(document).ready(function() {
     let dest = $("#dest_note");
 
     $("#type_transfer").click(function() {
+        if (LOCK)
+            return;
+
         $("#source_me_div").removeClass('d-none');
         $("#source_note").removeClass('is-invalid');
         $("#dest_note").removeClass('is-invalid');
@@ -102,6 +109,9 @@ $(document).ready(function() {
     });
 
     $("#type_credit").click(function() {
+        if (LOCK)
+            return;
+
         $("#source_me_div").addClass('d-none');
         $("#source_note").removeClass('is-invalid');
         $("#dest_note").removeClass('is-invalid');
@@ -122,6 +132,9 @@ $(document).ready(function() {
     });
 
     $("#type_debit").click(function() {
+        if (LOCK)
+            return;
+
         $("#source_me_div").addClass('d-none');
         $("#source_note").removeClass('is-invalid');
         $("#dest_note").removeClass('is-invalid');
@@ -165,6 +178,9 @@ $(document).ready(function() {
     location.hash = "";
 
     $("#source_me").click(function() {
+        if (LOCK)
+            return;
+
         // Shortcut to set the current user as the only emitter
         sources_notes_display.length = 0;
         sources.length = 0;
@@ -198,6 +214,11 @@ $(document).ready(function() {
 });
 
 $("#btn_transfer").click(function() {
+    if (LOCK)
+        return;
+
+    LOCK = true;
+
     let error = false;
 
     let amount_field = $("#amount");
@@ -237,8 +258,10 @@ $("#btn_transfer").click(function() {
         error = true;
     }
 
-    if (error)
+    if (error) {
+        LOCK = false;
         return;
+    }
 
     let reason = reason_field.val();
 

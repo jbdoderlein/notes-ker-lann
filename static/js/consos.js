@@ -1,6 +1,9 @@
 // Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+// When a transaction is performed, lock the interface to prevent spam clicks.
+let LOCK = false;
+
 /**
  * Refresh the history table on the consumptions page.
  */
@@ -35,8 +38,11 @@ $(document).ready(function() {
             note_list_obj.html("");
 
             buttons.forEach(function(button) {
-                $("#conso_button_" + button.id).click(removeNote(button, "conso_button", buttons,
-                    "consos_list"));
+                $("#conso_button_" + button.id).click(function() {
+                    if (LOCK)
+                        return;
+                    removeNote(button, "conso_button", buttons,"consos_list");
+                });
             });
         }
     });
@@ -52,8 +58,11 @@ $(document).ready(function() {
                 $("#note_list").html(consos_list_obj.html());
                 consos_list_obj.html("");
                 buttons.forEach(function(button) {
-                    $("#conso_button_" + button.id).click(removeNote(button, "conso_button", buttons,
-                        "note_list"));
+                    $("#conso_button_" + button.id).click(function() {
+                        if (LOCK)
+                            return;
+                        removeNote(button, "conso_button", buttons,"note_list");
+                    });
                 });
             }
             else {
@@ -127,7 +136,11 @@ function addConso(dest, amount, type, category_id, category_name, template_id, t
         $("#" + list).html(html);
 
         buttons.forEach(function(button) {
-            $("#conso_button_" + button.id).click(removeNote(button, "conso_button", buttons, list));
+            $("#conso_button_" + button.id).click(function() {
+                if (LOCK)
+                    return;
+                removeNote(button, "conso_button", buttons, list);
+            });
         });
     }
     else
@@ -148,6 +161,7 @@ function reset() {
     $("#profile_pic_link").attr("href", "#");
     refreshHistory();
     refreshBalance();
+    LOCK = false;
 }
 
 
@@ -155,6 +169,11 @@ function reset() {
  * Apply all transactions: all notes in `notes` buy each item in `buttons`
  */
 function consumeAll() {
+    if (LOCK)
+        return;
+
+    LOCK = true;
+
     let error = false;
 
     if (notes_display.length === 0) {
@@ -168,8 +187,10 @@ function consumeAll() {
         error = true;
     }
 
-    if (error)
+    if (error) {
+        LOCK = false;
         return;
+    }
 
     notes_display.forEach(function(note_display) {
         buttons.forEach(function(button) {
