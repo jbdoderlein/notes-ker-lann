@@ -151,14 +151,21 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                                          first_name=F("note__noteuser__user__first_name"),
                                          username=F("note__noteuser__user__username"),
                                          note_name=F("name"),
-                                         balance=F("note__balance"))\
-            .filter(note__noteuser__isnull=False)\
-            .filter(
+                                         balance=F("note__balance"))
+
+        # Keep only users that have a note
+        note_qs = note_qs.filter(note__noteuser__isnull=False)
+
+        # Keep only members
+        note_qs = note_qs.filter(
             note__noteuser__user__memberships__club=activity.attendees_club,
             note__noteuser__user__memberships__date_start__lte=timezone.now(),
             note__noteuser__user__memberships__date_end__gte=timezone.now(),
-            )\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
+        )
+
+        # Filter with permission backend
+        note_qs = note_qs.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
+
         if pattern:
             note_qs = note_qs.filter(
                 Q(note__noteuser__user__first_name__regex=pattern)
