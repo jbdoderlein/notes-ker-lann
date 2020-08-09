@@ -2,45 +2,32 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
-import sys
-
-from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-APPS_DIR = os.path.realpath(os.path.join(BASE_DIR, "apps"))
-sys.path.append(APPS_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'CHANGE_ME_IN_LOCAL_SETTINGS!'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_LOCAL_SETTINGS!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ADMINS = (
-    # ('Admin', 'webmaster@example.com'),
-)
-
-SITE_ID = 1
+DEBUG = os.getenv('DJANGO_DEBUG', False)
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    # Theme overrides Django Admin templates
-    # 'theme',
-
     # External apps
     'mailer',
     'phonenumber_field',
     'polymorphic',
     'crispy_forms',
     'django_tables2',
+
     # Django contrib
     'django.contrib.admin',
     'django.contrib.admindocs',
@@ -51,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.forms',
+
     # API
     'rest_framework',
     'rest_framework.authtoken',
@@ -67,7 +55,6 @@ INSTALLED_APPS = [
     'treasury',
     'wei',
 ]
-LOGIN_REDIRECT_URL = '/note/transfer/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -97,15 +84,27 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
-                #  'django.template.context_processors.media',
             ],
         },
     },
 ]
 
-FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
-
 WSGI_APPLICATION = 'note_kfet.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('DJANGO_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DJANGO_DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.getenv('DJANGO_DB_USER', 'note'),
+        'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
+        'PORT': os.getenv('DJANGO_DB_PORT', ''),  # Use default port
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -125,16 +124,71 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Use our custom hasher in order to import NK15 passwords
+
+# Internationalization
+# https://docs.djangoproject.com/en/2.2/topics/i18n/
+
+LANGUAGE_CODE = 'en'
+
+TIME_ZONE = 'Europe/Paris'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+# Limit available languages to this subset
+from django.utils.translation import gettext_lazy as _
+LANGUAGES = [
+    ('de', _('German')),
+    ('en', _('English')),
+    ('fr', _('French')),
+]
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATIC_URL = '/static/'
+
+# Add some custom statics from /note_kfet/static
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'note_kfet/static'),
+]
+
+# Collect statics to /static/
+# THIS FOLDER SOULD NOT BE IN GIT TREE!!!
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+# Add /apps/ directory to Python modules search path
+import sys
+sys.path.append(os.path.realpath(os.path.join(BASE_DIR, 'apps')))
+print(BASE_DIR, sys.path)
+
+# Use /locale/ for locale files
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+# Use /note_kfet/fixtures for database fixtures
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'note_kfet/fixtures')]
+
+# NK15 password hasher for retrocompatibility
+# On first login the password will be rehashed with PBKDF2PasswordHasher
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'member.hashers.CustomNK15Hasher',
 ]
 
+# Custom role-based permission system
 AUTHENTICATION_BACKENDS = (
-    'permission.backends.PermissionBackend',  # Custom role-based permission system
+    'permission.backends.PermissionBackend',
 )
 
+# Use /media/ for user uploaded media (user profile pictures)
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+
+# Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         # Control API access with our role-based permission system
@@ -148,55 +202,34 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+# Take control on how widget templates are sourced
+# See https://docs.djangoproject.com/en/2.2/ref/forms/renderers/#templatessetting
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-LANGUAGE_CODE = 'en'
+# After login redirect user to transfer page
+LOGIN_REDIRECT_URL = '/note/transfer/'
 
-LANGUAGES = [
-    ('de', _('German')),
-    ('en', _('English')),
-    ('fr', _('French')),
-]
-
-TIME_ZONE = 'Europe/Paris'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
-
-FIXTURE_DIRS = [os.path.join(BASE_DIR, "note_kfet/fixtures")]
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-# STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, 'static')]
-STATICFILES_DIRS = []
+# Use Crispy Bootstrap4 theme
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
 
+# Use Django Table2 Bootstrap4 theme
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
+
+# Use only one Django Sites
+SITE_ID = 1
+
+# When a server error occured, send an email to these addresses
+ADMINS = (
+    # ('Admin', 'webmaster@example.com'),
+)
+
+# Default regex to validate users aliases
 ALIAS_VALIDATOR_REGEX = r''
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-MEDIA_URL = '/media/'
-
-# Profile Picture Settings
+# Profile picture cropping
 PIC_WIDTH = 200
 PIC_RATIO = 1
 
-
+# Custom phone number format
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'FR'
