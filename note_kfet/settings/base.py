@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'polymorphic',
     'crispy_forms',
     'django_tables2',
+    'bootstrap_datepicker_plus',
+    'colorfield',
 
     # Django contrib
     'django.contrib.admin',
