@@ -3,8 +3,8 @@
 
 from django.contrib import admin
 from note_kfet.admin import admin_site
-from .forms import ProductForm
 
+from .forms import ProductForm
 from .models import RemittanceType, Remittance, SogeCredit, Invoice, Product
 
 
