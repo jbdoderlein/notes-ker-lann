@@ -153,16 +153,20 @@ class ButtonTable(tables.Table):
         model = TransactionTemplate
         exclude = ('id',)
 
-    edit = tables.LinkColumn('note:template_update',
-                             args=[A('pk')],
-                             attrs={'td': {'class': 'col-sm-1'},
-                                    'a': {
-                                        'class': 'btn btn-sm btn-primary',
-                                        'data-turbolinks': 'false',
-                                    }},
-                             text=_('edit'),
-                             accessor='pk',
-                             verbose_name=_("Edit"),)
+    edit = tables.LinkColumn(
+        'note:template_update',
+        args=[A('pk')],
+        attrs={
+            'td': {'class': 'col-sm-1'},
+            'a': {
+                'class': 'btn btn-sm btn-primary',
+                'data-turbolinks': 'false',
+            }
+        },
+        text=_('edit'),
+        accessor='pk',
+        verbose_name=_("Edit"),
+    )
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
