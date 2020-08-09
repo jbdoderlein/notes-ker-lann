@@ -237,9 +237,9 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
                     field.set(value)
                 else:
                     setattr(instance, attr, value)
-            instance.validate(True)
+            instance.validate()
         else:
-            serializer.Meta.model(**attrs).validate(True)
+            serializer.Meta.model(**attrs).validate()
         attrs[self.resource_type_field_name] = resource_type
         return super().validate(attrs)
 

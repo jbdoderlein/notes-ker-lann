@@ -164,7 +164,7 @@ class Transaction(PolymorphicModel):
             models.Index(fields=['destination']),
         ]
 
-    def validate(self, reset=False):
+    def validate(self):
         previous_source_balance = self.source.balance
         previous_dest_balance = self.destination.balance
 
@@ -188,13 +188,11 @@ class Transaction(PolymorphicModel):
         source_balance = self.source.balance
         dest_balance = self.destination.balance
 
-        if reset:
-            self.source.balance = previous_source_balance
-            self.destination.balance = previous_dest_balance
-
         if source_balance > 2147483647 or source_balance < -2147483648\
                 or dest_balance > 2147483647 or dest_balance < -2147483648:
             raise ValidationError(_("The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."))
+
+        return source_balance - previous_source_balance, dest_balance - previous_dest_balance
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -202,9 +200,7 @@ class Transaction(PolymorphicModel):
         When saving, also transfer money between two notes
         """
         with transaction.atomic():
-            self.source.refresh_from_db()
-            self.destination.refresh_from_db()
-            self.validate(False)
+            diff_source, diff_dest = self.validate()
 
             if not self.source.is_active or not self.destination.is_active:
                 if 'force_insert' not in kwargs or not kwargs['force_insert']:
@@ -229,9 +225,13 @@ class Transaction(PolymorphicModel):
             self.log("Saved")
 
             # Save notes
+            self.source.refresh_from_db()
+            self.source.balance += diff_source
             self.source._force_save = True
             self.source.save()
             self.log("Source saved")
+            self.destination.refresh_from_db()
+            self.destination.balance += diff_dest
             self.destination._force_save = True
             self.destination.save()
             self.log("Destination saved")
