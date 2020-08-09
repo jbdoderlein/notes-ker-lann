@@ -265,7 +265,10 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
                 consumers.results.forEach(function (consumer) {
                     let note = consumer.note;
                     note.email_confirmed = consumer.email_confirmed;
-                    note.membership = consumer.membership;
+                    if (consumer.hasOwnProperty("membership") && consumer.membership)
+                        note.membership = consumer.membership;
+                    else
+                        note.membership = undefined;
                     let extra_css = displayStyle(note);
                     aliases_matched_html += li(alias_prefix + '_' + consumer.id,
                         consumer.name,
