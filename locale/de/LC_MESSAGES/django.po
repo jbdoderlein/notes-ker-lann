@@ -847,10 +847,6 @@ msgstr ""
 msgid "A template with this name already exist"
 msgstr ""
 
-#: apps/note/models/transactions.py:60
-msgid "in centimes"
-msgstr ""
-
 #: apps/note/models/transactions.py:72
 msgid "display"
 msgstr ""

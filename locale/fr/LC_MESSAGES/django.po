@@ -854,10 +854,6 @@ msgstr "catégories de transaction"
 msgid "A template with this name already exist"
 msgstr "Un modèle de transaction avec un nom similaire existe déjà."
 
-#: apps/note/models/transactions.py:60
-msgid "in centimes"
-msgstr "en centimes"
-
 #: apps/note/models/transactions.py:72
 msgid "display"
 msgstr "afficher"

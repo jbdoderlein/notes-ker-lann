@@ -57,7 +57,6 @@ class TransactionTemplate(models.Model):
 
     amount = models.PositiveIntegerField(
         verbose_name=_('amount'),
-        help_text=_('in centimes'),
     )
     category = models.ForeignKey(
         TemplateCategory,
