@@ -218,26 +218,18 @@ class Transaction(PolymorphicModel):
                 # When source == destination, no money is transferred and no transaction is created
                 return
 
-            self.log("Saving")
             # We save first the transaction, in case of the user has no right to transfer money
             super().save(*args, **kwargs)
-            self.log("Saved")
 
             # Save notes
             self.source.refresh_from_db()
             self.source.balance += diff_source
             self.source._force_save = True
             self.source.save()
-            self.log("Source saved")
             self.destination.refresh_from_db()
             self.destination.balance += diff_dest
             self.destination._force_save = True
             self.destination.save()
-            self.log("Destination saved")
-
-    def log(self, msg):
-        with open("/tmp/log", "a") as f:
-            f.write(msg + "\n")
 
     def delete(self, **kwargs):
         """

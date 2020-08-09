@@ -65,8 +65,6 @@ class InstancedPermission:
                     obj._force_delete = True
                     Model.delete(obj)
 
-                with open("/tmp/log", "w") as f:
-                    f.write(str(obj) + ", " + str(obj.pk) + ", " + str(self.model.model_class().objects.filter(pk=0).exists()))
                 return ret
 
         if permission_type == self.type:
