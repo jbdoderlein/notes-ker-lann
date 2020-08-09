@@ -1,6 +1,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+# This file implements sane defaults to use in production.
+# Some settings are overridable with an environment variable.
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -10,12 +13,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_LOCAL_SETTINGS!')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'CHANGE_ME_IN_ENV_SETTINGS')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.getenv('DJANGO_ALLOWED_HOST', 'localhost'),
+]
 
 
 # Application definition
@@ -97,9 +102,10 @@ WSGI_APPLICATION = 'note_kfet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DJANGO_DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.getenv('DJANGO_DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'ENGINE': os.getenv('DJANGO_DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DJANGO_DB_NAME', 'note_db'),
         'USER': os.getenv('DJANGO_DB_USER', 'note'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS'),
         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),
         'PORT': os.getenv('DJANGO_DB_PORT', ''),  # Use default port
     }
@@ -164,7 +170,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # Add /apps/ directory to Python modules search path
 import sys
 sys.path.append(os.path.realpath(os.path.join(BASE_DIR, 'apps')))
-print(BASE_DIR, sys.path)
 
 # Use /locale/ for locale files
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
@@ -188,6 +193,19 @@ AUTHENTICATION_BACKENDS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
+# Use mailer in production to place emails in a queue before sending them to avoid spam
+EMAIL_BACKEND = 'mailer.backend.DbBackend'
+MAILER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False)
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 25)
+EMAIL_HOST_USER = os.getenv('EMAIL_USER', None)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', None)
+
+# Mail will be sent from this address
+SERVER_EMAIL = os.getenv("NOTE_MAIL", "notekfet@example.com")
+DEFAULT_FROM_EMAIL = "NoteKfet2020 <" + SERVER_EMAIL + ">"
+
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -209,6 +227,9 @@ FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 # After login redirect user to transfer page
 LOGIN_REDIRECT_URL = '/note/transfer/'
 
+# An user session will expired after 3 hours
+SESSION_COOKIE_AGE = 60 * 60 * 3
+
 # Use Crispy Bootstrap4 theme
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -217,11 +238,6 @@ DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 
 # Use only one Django Sites
 SITE_ID = 1
-
-# When a server error occured, send an email to these addresses
-ADMINS = (
-    # ('Admin', 'webmaster@example.com'),
-)
 
 # Default regex to validate users aliases
 ALIAS_VALIDATOR_REGEX = r''

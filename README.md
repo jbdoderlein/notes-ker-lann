@@ -107,7 +107,7 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
     et on renseigne des secrets et des paramètres :
     
         DJANGO_APP_STAGE=dev # ou "prod" 
-        DJANGO_DEV_STORE_METHOD=sqllite # ou "postgres"
+        DJANGO_DEV_STORE_METHOD=sqlite # ou "postgres"
         DJANGO_DB_HOST=localhost
         DJANGO_DB_NAME=note_db
         DJANGO_DB_USER=note
@@ -115,13 +115,13 @@ On supposera pour la suite que vous utilisez Debian/Ubuntu sur un serveur tout n
         DJANGO_DB_PORT=
         DJANGO_SECRET_KEY=CHANGE_ME
         DJANGO_SETTINGS_MODULE="note_kfet.settings
+        DJANGO_ALLOWED_HOST=localhost # URL où accéder à la note
         DOMAIN=localhost # note.example.com
         CONTACT_EMAIL=tresorerie.bde@localhost
-        NOTE_URL=localhost # URL où accéder à la note
         # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
         NOTE_MAIL=notekfet@localhost
         EMAIL_HOST=smtp.localhost
-        EMAIL_PORT=465
+        EMAIL_PORT=25
         EMAIL_USER=notekfet@localhost
         EMAIL_PASSWORD=CHANGE_ME
         WIKI_USER=NoteKfet2020
