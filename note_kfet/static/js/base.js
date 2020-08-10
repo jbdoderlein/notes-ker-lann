@@ -213,14 +213,15 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
         fallbackPlacement: 'clockwise'
     });
 
+    let old_pattern = null;
+
     // Clear search on click
     field.click(function () {
         field.tooltip('hide');
         field.removeClass('is-invalid');
         field.val("");
+        old_pattern = "";
     });
-
-    let old_pattern = null;
 
     // When the user type "Enter", the first alias is clicked
     field.keypress(function (event) {
