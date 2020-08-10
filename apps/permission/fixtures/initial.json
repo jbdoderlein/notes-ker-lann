@@ -287,7 +287,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, [\"OR\", {\"amount__lte\": [\"user\", \"note\", \"balance\"]}, {\"valid\": false}]]",
+			"query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, [\"OR\", {\"source__balance__gte\": {\"F\": [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 1,
 			"field": "",
@@ -319,7 +319,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 2,
 			"field": "",
@@ -335,7 +335,7 @@
 				"note",
 				"recurrenttransaction"
 			],
-			"query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
+			"query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 2,
 			"field": "",
@@ -1572,7 +1572,7 @@
 			"mask": 1,
 			"field": "emergency_contact_phone",
 			"permanent": false,
-			"description": "Modifier le nom du contact en cas d'urgence de mon inscription WEI"
+			"description": "Modifier le téléphone du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
 	{
@@ -1983,7 +1983,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]]",
 			"type": "change",
 			"mask": 2,
 			"field": "valid",
@@ -2079,9 +2079,9 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]]",
 			"type": "change",
-			"mask": 1,
+			"mask": 2,
 			"field": "invalidity_reason",
 			"permanent": false,
 			"description": "Modifier la raison d'invalidité d'une transaction de club"
