@@ -100,7 +100,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% endif %}
                 {% if "note.transaction"|not_empty_model_list %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i>{% trans 'Transfer' %} </a>
+                        <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i> {% trans 'Transfer' %} </a>
                     </li>
                 {% endif %}
                 {% if "auth.user"|model_list_length >= 2 %}
