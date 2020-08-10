@@ -204,11 +204,27 @@ En mettant `0.0.0.0:8000` après `runserver`, vous rendez votre instance Django
 accessible depuis l'ensemble de votre réseau, pratique pour tester le rendu
 de la note sur un téléphone !
 
-## Cahier des Charges 
-
-Il est disponible [ici](https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC). 
-
 ## Documentation
 
-La documentation est générée par django et son module admindocs.
+Le cahier des charges initial est disponible [sur le Wiki Crans](https://wiki.crans.org/NoteKfet/NoteKfet2018/CdC).
+
+La documentation des classes et fonctions est directement dans le code et est explorable à partir de la partie documentation de l'interface d'administration de Django.
 **Commentez votre code !**
+
+La documentation plus haut niveau sur le développement est disponible sur [le Wiki associé au dépôt Git](https://gitlab.crans.org/bde/nk20/-/wikis/home).
+
+## FAQ
+
+### Regénérer les fichiers de traduction
+
+Pour regénérer les traductions vous pouvez vous placer à la racine du projet et lancer le script `makemessages`. Il faut penser à ignorer les dossiers ne contenant pas notre code, dont le virtualenv.
+
+```bash
+django-admin makemessages -i env
+```
+
+Une fois les fichiers édités, vous pouvez compiler les nouvelles traductions avec
+
+```bash
+django-admin compilemessages
+```
