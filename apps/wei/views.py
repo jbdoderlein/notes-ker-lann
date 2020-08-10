@@ -855,7 +855,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
             form.add_error('bus', _("This user didn't give her/his caution check."))
             return super().form_invalid(form)
 
-        if not registration.soge_credit and user.note.balance < fee + credit_amount:
+        if not registration.soge_credit and user.note.balance + credit_amount < fee:
             # Users must have money before registering to the WEI.
             form.add_error('bus',
                            _("This user don't have enough money to join this club, and can't have a negative balance."))

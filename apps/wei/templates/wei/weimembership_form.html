@@ -160,7 +160,8 @@
                         <div class="alert alert-danger">
                             {% with pretty_fee=fee|pretty_money %}
                             {% blocktrans trimmed with balance=registration.user.note.balance|pretty_money %}
-                                The note don't have enough money ({{ balance }}, {{ pretty_fee }} required). The registration may fail.
+                                The note don't have enough money ({{ balance }}, {{ pretty_fee }} required).
+                                The registration may fail if you don't credit the note now.
                             {% endblocktrans %}
                             {% endwith %}
                         </div>

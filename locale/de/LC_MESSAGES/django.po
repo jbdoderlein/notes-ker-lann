@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-10 18:08+0200\n"
+"POT-Creation-Date: 2020-08-10 19:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1570,7 +1570,7 @@ msgstr ""
 
 #: apps/registration/templates/registration/future_profile_detail.html:64
 #: apps/wei/templates/wei/weimembership_form.html:140
-#: apps/wei/templates/wei/weimembership_form.html:198
+#: apps/wei/templates/wei/weimembership_form.html:199
 msgid "Validate registration"
 msgstr ""
 
@@ -2441,21 +2441,21 @@ msgstr ""
 #, python-format
 msgid ""
 "The note don't have enough money (%(balance)s, %(pretty_fee)s required). The "
-"registration may fail."
+"registration may fail if you don't credit the note now."
 msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:169
+#: apps/wei/templates/wei/weimembership_form.html:170
 #, python-format
 msgid ""
 "The note has enough money (%(pretty_fee)s required), the registration is "
 "possible."
 msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:178
+#: apps/wei/templates/wei/weimembership_form.html:179
 msgid "The user didn't give her/his caution check."
 msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:186
+#: apps/wei/templates/wei/weimembership_form.html:187
 msgid ""
 "This user is not a member of the Kfet club for the coming year. The "
 "membership will be processed automatically, the WEI registration includes "
