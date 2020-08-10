@@ -40,8 +40,8 @@ secrets.py
 map.json
 *.log
 backups/
-static/
-media/
+/static/
+/media/
 
 # Virtualenv
 env/
