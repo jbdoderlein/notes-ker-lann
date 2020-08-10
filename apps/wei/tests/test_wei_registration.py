@@ -307,7 +307,7 @@ class TestWEIRegistration(TestCase):
             roles=[],
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.context["form"].is_valid())
+        self.assertFalse(response.context["membership_form"].is_valid())
 
         response = self.client.post(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)), dict(
             user=user.id,
@@ -490,7 +490,7 @@ class TestWEIRegistration(TestCase):
         # Check that if the WEI is started, we can't update a registration
         self.wei.date_start = '2000-01-01'
         self.wei.save()
-        response = self.client.get(reverse("wei:wei_update_registration", kwargs=dict(wei_pk=self.registration.pk)))
+        response = self.client.get(reverse("wei:validate_registration", kwargs=dict(pk=self.registration.pk)))
         self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
 
     def test_delete_registration(self):
