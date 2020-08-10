@@ -244,12 +244,12 @@ class Alias(models.Model):
     @staticmethod
     def normalize(string):
         """
-        Normalizes a string: removes most diacritics and does casefolding
+        Normalizes a string: removes most diacritics, does casefolding and ignore non-ASCII characters
         """
         return ''.join(
-            char for char in unicodedata.normalize('NFKD', string.casefold())
+            char for char in unicodedata.normalize('NFKD', string.casefold().replace('æ', 'ae').replace('œ', 'oe'))
             if all(not unicodedata.category(char).startswith(cat)
-                   for cat in {'M', 'P', 'Z', 'C'})).casefold()
+                   for cat in {'M', 'P', 'Z', 'C'})).casefold().encode('ascii', 'ignore').decode('ascii')
 
     def clean(self):
         normalized_name = self.normalize(self.name)
