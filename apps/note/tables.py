@@ -19,8 +19,7 @@ from .templatetags.pretty_money import pretty_money
 class HistoryTable(tables.Table):
     class Meta:
         attrs = {
-            'class':
-                'table table-condensed table-striped table-hover'
+            'class': 'table table-condensed table-striped'
         }
         model = Transaction
         exclude = ("id", "polymorphic_ctype", "invalidity_reason", "source_alias", "destination_alias",)
@@ -123,7 +122,7 @@ DELETE_TEMPLATE = """
 class AliasTable(tables.Table):
     class Meta:
         attrs = {
-            'class': 'table table condensed table-striped table-hover',
+            'class': 'table table condensed table-striped',
             'id': "alias_table"
         }
         model = Alias
@@ -142,8 +141,7 @@ class AliasTable(tables.Table):
 class ButtonTable(tables.Table):
     class Meta:
         attrs = {
-            'class':
-                'table table-bordered condensed table-hover'
+            'class': 'table table-bordered condensed'
         }
         row_attrs = {
             'class': lambda record: 'table-row ' + ('table-success' if record.display else 'table-danger'),

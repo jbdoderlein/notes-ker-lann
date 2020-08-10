@@ -128,7 +128,7 @@ class MembershipTable(tables.Table):
 
     class Meta:
         attrs = {
-            'class': 'table table-condensed table-striped table-hover',
+            'class': 'table table-condensed table-striped',
             'style': 'table-layout: fixed;'
         }
         template_name = 'django_tables2/bootstrap4.html'
