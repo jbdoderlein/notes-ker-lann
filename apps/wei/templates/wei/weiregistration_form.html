@@ -16,27 +16,29 @@
 {% endblock %}
 
 {% block extrajavascript %}
-    <script>
-    $(document).ready(function() {
-        function refreshTeams() {
-            let buses = [];
-            $("input[name='bus']:checked").each(function(ignored) {
-                buses.push($(this).parent().text().trim());
-            });
-            console.log(buses);
-            $("input[name='team']").each(function() {
-                let label = $(this).parent();
-                $(this).parent().addClass('d-none');
-                buses.forEach(function(bus) {
-                    if (label.text().includes(bus))
-                        label.removeClass('d-none');
+    {% if not object.membership %}
+        <script>
+        $(document).ready(function() {
+            function refreshTeams() {
+                let buses = [];
+                $("input[name='bus']:checked").each(function(ignored) {
+                    buses.push($(this).parent().text().trim());
                 });
-            });
-        }
+                console.log(buses);
+                $("input[name='team']").each(function() {
+                    let label = $(this).parent();
+                    $(this).parent().addClass('d-none');
+                    buses.forEach(function(bus) {
+                        if (label.text().includes(bus))
+                            label.removeClass('d-none');
+                    });
+                });
+            }
 
-        $("input[name='bus']").change(refreshTeams);
+            $("input[name='bus']").change(refreshTeams);
 
-        refreshTeams();
-    });
-    </script>
+            refreshTeams();
+        });
+        </script>
+    {% endif %}
 {% endblock %}

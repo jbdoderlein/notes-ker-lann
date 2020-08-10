@@ -129,7 +129,8 @@ class WEIMembershipForm(forms.ModelForm):
                 attrs={
                     'api_url': '/api/wei/team/',
                     'placeholder': 'Équipe ...',
-                }
+                },
+                resetable=True,
             ),
         }
 

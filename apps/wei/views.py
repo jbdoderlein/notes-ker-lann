@@ -607,6 +607,11 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
                 if not PermissionBackend.check_perm(
                         self.request.user, "wei.change_membership_" + field_name, self.object.membership):
                     field.widget = HiddenInput()
+            del membership_form.fields["credit_type"]
+            del membership_form.fields["credit_amount"]
+            del membership_form.fields["first_name"]
+            del membership_form.fields["last_name"]
+            del membership_form.fields["bank"]
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request.user, "wei.change_weiregistration_information_json", self.object):
