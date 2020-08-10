@@ -209,7 +209,8 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
         placement: 'bottom',
         title: 'Loading...',
         trigger: 'manual',
-        container: field.parent()
+        container: field.parent(),
+        fallbackPlacement: 'clockwise'
     });
 
     // Clear search on click
