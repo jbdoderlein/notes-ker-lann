@@ -27,13 +27,14 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     # External apps
+    'bootstrap_datepicker_plus',
+    'colorfield',
+    'crispy_forms',
+    'django_htcpcp_tea',
+    'django_tables2',
     'mailer',
     'phonenumber_field',
     'polymorphic',
-    'crispy_forms',
-    'django_tables2',
-    'bootstrap_datepicker_plus',
-    'colorfield',
 
     # Django contrib
     'django.contrib.admin',
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'django_htcpcp_tea.middleware.HTCPCPTeaMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
 ]
 
