@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+import subprocess
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -370,10 +371,24 @@ class TestWEIRegistration(TestCase):
         response = self.client.get(reverse("wei:wei_memberships", kwargs=dict(pk=self.wei.pk)))
         self.assertEqual(response.status_code, 200)
 
+    def is_latex_installed(self):
+        """
+        Check if LaTeX is installed in the machine. Don't check pages that generate a PDF file if LaTeX is not
+        installed, like in Gitlab.
+        """
+        return subprocess.call(
+            ["which", "pdflatex"],
+            stdout=open('/dev/null', 'wb'),
+            stderr=open('/dev/null', 'wb'),
+        ) == 0
+
     def test_memberships_pdf_list(self):
         """
         Test display the membership list as a PDF file
         """
+        if not self.is_latex_installed():
+            return
+
         response = self.client.get(reverse("wei:wei_memberships_pdf", kwargs=dict(wei_pk=self.wei.pk)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["content-type"], "application/pdf")
@@ -382,6 +397,9 @@ class TestWEIRegistration(TestCase):
         """
         Test display the membership list of a bus as a PDF file
         """
+        if not self.is_latex_installed():
+            return
+
         response = self.client.get(reverse("wei:wei_memberships_bus_pdf", kwargs=dict(wei_pk=self.wei.pk,
                                                                                       bus_pk=self.bus.pk)))
         self.assertEqual(response.status_code, 200)
@@ -391,6 +409,9 @@ class TestWEIRegistration(TestCase):
         """
         Test display the membership list of a bus team as a PDF file
         """
+        if not self.is_latex_installed():
+            return
+
         response = self.client.get(reverse("wei:wei_memberships_team_pdf", kwargs=dict(wei_pk=self.wei.pk,
                                                                                        bus_pk=self.bus.pk,
                                                                                        team_pk=self.team.pk)))
