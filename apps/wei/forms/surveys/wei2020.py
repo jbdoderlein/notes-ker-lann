@@ -37,7 +37,7 @@ class WEISurveyForm2020(forms.Form):
         words = [choice(WORDS) for _ in range(10)]
         words = [(w, w) for w in words]
         if self.data:
-            self.fields["word"].choices = WORDS
+            self.fields["word"].choices = [(w, w) for w in WORDS]
             if self.is_valid():
                 return
         self.fields["word"].choices = words

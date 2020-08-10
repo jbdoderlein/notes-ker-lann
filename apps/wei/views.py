@@ -391,7 +391,7 @@ class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         self.object.refresh_from_db()
-        return reverse_lazy("wei:manage_bus", kwargs={"pk": self.object.bus.pk})
+        return reverse_lazy("wei:manage_bus_team", kwargs={"pk": self.object.pk})
 
 
 class BusTeamUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -526,7 +526,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         if "myself" in self.request.path:
             context["form"].fields["user"].disabled = True
 
-        choose_bus_form = WEIChooseBusForm()
+        choose_bus_form = WEIChooseBusForm(self.request.POST if self.request.POST else None)
         choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"]).order_by('name')
         choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])\
             .order_by('bus__name', 'name')
@@ -602,7 +602,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         context["club"] = self.object.wei
 
         if self.object.is_validated:
-            membership_form = WEIMembershipForm(instance=self.object.membership)
+            membership_form = WEIMembershipForm(instance=self.object.membership,
+                                                data=self.request.POST if self.request.POST else None)
             for field_name, field in membership_form.fields.items():
                 if not PermissionBackend.check_perm(
                         self.request.user, "wei.change_membership_" + field_name, self.object.membership):
@@ -616,7 +617,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request.user, "wei.change_weiregistration_information_json", self.object):
             choose_bus_form = WEIChooseBusForm(
-                dict(
+                self.request.POST if self.request.POST else dict(
                     bus=Bus.objects.filter(pk__in=self.object.information["preferred_bus_pk"]).all(),
                     team=BusTeam.objects.filter(pk__in=self.object.information["preferred_team_pk"]).all(),
                     roles=WEIRole.objects.filter(pk__in=self.object.information["preferred_roles_pk"]).all(),
