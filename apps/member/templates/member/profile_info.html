@@ -1,4 +1,4 @@
-{% load i18n static pretty_money %}
+{% load i18n static pretty_money perms %}
 
 <div class="card bg-light shadow">
     <div class="card-header text-center" >
@@ -32,8 +32,10 @@
             <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
             <dd class="col-xl-6">{{ user_object.profile.address }}</dd>
 
-            <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ user_object.note.balance | pretty_money }}</dd>
+            {% if "note.view_note"|has_perm:user_object.note %}
+                <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ user_object.note.balance | pretty_money }}</dd>
+            {% endif %}
 
             <dt class="col-xl-6"> <a href="{% url 'member:user_alias' user_object.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
             <dd class="col-xl-6 text-truncate">{{ user_object.note.alias_set.all|join:", " }}</dd>

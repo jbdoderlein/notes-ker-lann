@@ -1,9 +1,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import datetime
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from django.utils.html import format_html
@@ -44,8 +44,9 @@ class UserTable(tables.Table):
 
     balance = tables.Column(accessor='note.balance', verbose_name=_("Balance"))
 
-    def render_balance(self, value):
-        return pretty_money(value)
+    def render_balance(self, record, value):
+        return pretty_money(value)\
+            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", record.note) else "—"
 
     class Meta:
         attrs = {
@@ -105,8 +106,8 @@ class MembershipTable(tables.Table):
                     empty_membership = Membership(
                         club=record.club,
                         user=record.user,
-                        date_start=datetime.now().date(),
-                        date_end=datetime.now().date(),
+                        date_start=timezone.now().date(),
+                        date_end=timezone.now().date(),
                         fee=0,
                     )
                     if PermissionBackend.check_perm(get_current_authenticated_user(),
