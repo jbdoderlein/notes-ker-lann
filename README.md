@@ -1,7 +1,7 @@
 # NoteKfet 2020
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.txt)
-[![pipeline status](https://gitlab.crans.org/bde/nk20/badges/master/pipeline.svg)](https://gitlab.crans.org/bde/nk20/nk20/commits/master)
+[![pipeline status](https://gitlab.crans.org/bde/nk20/badges/master/pipeline.svg)](https://gitlab.crans.org/bde/nk20/commits/master)
 [![coverage report](https://gitlab.crans.org/bde/nk20/badges/master/coverage.svg)](https://gitlab.crans.org/bde/nk20/commits/master)
 
 ## Installation sur un serveur
@@ -169,7 +169,7 @@ Il est possible de travailler sur une instance Docker.
 
         $ docker-compose up -d nk20
 
-## Lancer un serveur de développement
+### Lancer un serveur de développement
 
 Avec `./manage.py runserver` il est très rapide de mettre en place
 un serveur de développement par exemple sur son ordinateur.
