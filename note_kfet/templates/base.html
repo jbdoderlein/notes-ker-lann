@@ -3,7 +3,7 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
 <!DOCTYPE html>
-<html lang="en" class="position-relative h-100">
+<html lang="{{ LANGUAGE_CODE|default:"en" }}" class="position-relative h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,6 +22,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static "favicon/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
+
+    {# Disable turbolink cache for some pages #}
     {% if no_cache %}
         <meta name="turbolinks-cache-control" content="no-cache">
     {% endif %}
