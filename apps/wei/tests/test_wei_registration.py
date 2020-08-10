@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 import subprocess
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,6 +16,27 @@ from note.models import NoteClub
 from ..forms import CurrentSurvey
 from ..models import WEIClub, Bus, BusTeam, WEIRole, WEIRegistration, WEIMembership
 
+
+class TestWEIList(TestCase):
+    fixtures = ('initial',)
+
+    def setUp(self):
+        self.user = User.objects.create_superuser(
+            username="weiadmin",
+            password="admin",
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
+        sess = self.client.session
+        sess["permission_mask"] = 42
+        sess.save()
+
+    def test_current_wei_detail(self):
+        """
+        Test that when no WEI is created, the WEI button redirect to the WEI list
+        """
+        response = self.client.get(reverse("wei:current_wei_detail"))
+        self.assertRedirects(response, reverse("wei:wei_list"), 302, 200)
 
 class TestWEIRegistration(TestCase):
     """
@@ -43,11 +66,11 @@ class TestWEIRegistration(TestCase):
             parent_club_id=2,
             membership_fee_paid=12500,
             membership_fee_unpaid=5500,
-            membership_start=str(self.year) + "-08-01",
+            membership_start=str(self.year) + "-01-01",
             membership_end=str(self.year) + "-12-31",
             year=self.year,
-            date_start=str(self.year) + "-09-01",
-            date_end=str(self.year) + "-09-03",
+            date_start=timezone.now().date() + timedelta(days=2),
+            date_end=str(self.year) + "-12-31",
         )
         NoteClub.objects.create(club=self.wei)
         self.bus = Bus.objects.create(
@@ -132,6 +155,12 @@ class TestWEIRegistration(TestCase):
         self.assertRedirects(response, reverse("wei:wei_detail", kwargs=dict(pk=self.wei.pk)), 302, 200)
         self.assertTrue(qs.exists())
 
+        # Check that if the WEI is started, we can't update a wei
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:wei_update", kwargs=dict(pk=self.wei.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_wei_closed(self):
         """
         Test display the page when a WEI is closed.
@@ -150,6 +179,9 @@ class TestWEIRegistration(TestCase):
         """
         Test create a new bus.
         """
+        response = self.client.get(reverse("wei:add_bus", kwargs=dict(pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.post(reverse("wei:add_bus", kwargs=dict(pk=self.wei.pk)), dict(
             wei=self.wei.id,
             name="Create Bus Test",
@@ -159,6 +191,12 @@ class TestWEIRegistration(TestCase):
         self.assertTrue(qs.exists())
         bus = qs.get()
         self.assertRedirects(response, reverse("wei:manage_bus", kwargs=dict(pk=bus.pk)), 302, 200)
+
+        # Check that if the WEI is started, we can't create a bus
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:add_bus", kwargs=dict(pk=self.wei.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
 
     def test_detail_bus(self):
         """
@@ -171,6 +209,9 @@ class TestWEIRegistration(TestCase):
         """
         Test update a bus.
         """
+        response = self.client.get(reverse("wei:update_bus", kwargs=dict(pk=self.bus.pk)))
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.post(reverse("wei:update_bus", kwargs=dict(pk=self.bus.pk)), dict(
             name="Update Bus Test",
             description="This bus was updated.",
@@ -179,10 +220,19 @@ class TestWEIRegistration(TestCase):
         self.assertRedirects(response, reverse("wei:manage_bus", kwargs=dict(pk=self.bus.pk)), 302, 200)
         self.assertTrue(qs.exists())
 
+        # Check that if the WEI is started, we can't update a bus
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:update_bus", kwargs=dict(pk=self.bus.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_add_team(self):
         """
         Test create a new team.
         """
+        response = self.client.get(reverse("wei:add_team", kwargs=dict(pk=self.bus.pk)))
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.post(reverse("wei:add_team", kwargs=dict(pk=self.bus.pk)), dict(
             bus=self.bus.id,
             name="Create Team Test",
@@ -193,6 +243,12 @@ class TestWEIRegistration(TestCase):
         self.assertTrue(qs.exists())
         team = qs.get()
         self.assertRedirects(response, reverse("wei:manage_bus_team", kwargs=dict(pk=team.pk)), 302, 200)
+
+        # Check that if the WEI is started, we can't create a team
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:add_team", kwargs=dict(pk=self.bus.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
 
     def test_detail_team(self):
         """
@@ -205,6 +261,9 @@ class TestWEIRegistration(TestCase):
         """
         Test update a team.
         """
+        response = self.client.get(reverse("wei:update_bus_team", kwargs=dict(pk=self.team.pk)))
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.post(reverse("wei:update_bus_team", kwargs=dict(pk=self.team.pk)), dict(
             name="Update Team Test",
             color="#A6AA",
@@ -214,11 +273,42 @@ class TestWEIRegistration(TestCase):
         self.assertRedirects(response, reverse("wei:manage_bus_team", kwargs=dict(pk=self.team.pk)), 302, 200)
         self.assertTrue(qs.exists())
 
+        # Check that if the WEI is started, we can't update a team
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:update_bus_team", kwargs=dict(pk=self.team.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_register_2a(self):
         """
         Test register a new 2A+ to the WEI.
         """
+        response = self.client.get(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse("wei:wei_register_2A_myself", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
         user = User.objects.create(username="toto", email="toto@example.com")
+
+        # Try with an invalid form
+        response = self.client.post(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)), dict(
+            user=user.id,
+            soge_credit=True,
+            birth_date='2000-01-01',
+            gender='nonbinary',
+            clothing_cut='female',
+            clothing_size='XS',
+            health_issues='I am a bot',
+            emergency_contact_name='NoteKfet2020',
+            emergency_contact_phone='+33123456789',
+            bus=[],
+            team=[],
+            roles=[],
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["form"].is_valid())
+
         response = self.client.post(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)), dict(
             user=user.id,
             soge_credit=True,
@@ -237,12 +327,42 @@ class TestWEIRegistration(TestCase):
         self.assertTrue(qs.exists())
         self.assertRedirects(response, reverse("wei:wei_survey", kwargs=dict(pk=qs.get().pk)), 302, 302)
 
+        # Check that the user can't be registered twice
+        response = self.client.post(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)), dict(
+            user=user.id,
+            soge_credit=True,
+            birth_date='2000-01-01',
+            gender='nonbinary',
+            clothing_cut='female',
+            clothing_size='XS',
+            health_issues='I am a bot',
+            emergency_contact_name='NoteKfet2020',
+            emergency_contact_phone='+33123456789',
+            bus=[self.bus.id],
+            team=[self.team.id],
+            roles=[role.id for role in WEIRole.objects.filter(~Q(name="1A")).all()],
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("This user is already registered to this WEI." in str(response.context["form"].errors))
+
+        # Check that if the WEI is started, we can't register anyone
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_register_1a(self):
         """
         Test register a first year member to the WEI and complete the survey.
         """
+        response = self.client.get(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse("wei:wei_register_1A_myself", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
         user = User.objects.create(username="toto", email="toto@example.com")
-        response = self.client.post(reverse("wei:wei_register_1A_myself", kwargs=dict(wei_pk=self.wei.pk)), dict(
+        response = self.client.post(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)), dict(
             user=user.id,
             soge_credit=True,
             birth_date='2000-01-01',
@@ -273,6 +393,57 @@ class TestWEIRegistration(TestCase):
         survey = CurrentSurvey(registration)
         self.assertTrue(survey.is_complete())
 
+        # Check that the user can't be registered twice
+        response = self.client.post(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)), dict(
+            user=user.id,
+            soge_credit=True,
+            birth_date='2000-01-01',
+            gender='nonbinary',
+            clothing_cut='female',
+            clothing_size='XS',
+            health_issues='I am a bot',
+            emergency_contact_name='NoteKfet2020',
+            emergency_contact_phone='+33123456789',
+            ml_events_registration=True,
+            ml_sport_registration=False,
+            ml_art_registration=False,
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("This user is already registered to this WEI." in str(response.context["form"].errors))
+
+        # Check that the user can't be registered twice as a first year member
+        second_wei = WEIClub.objects.create(
+            name="Second WEI",
+            year=self.year + 1,
+            date_start=str(self.year + 1) + "-01-01",
+            date_end=str(self.year + 1) + "-12-31",
+            membership_start=str(self.year) + "-01-01",
+            membership_end=str(self.year + 1) + "-12-31",
+        )
+        response = self.client.post(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=second_wei.pk)), dict(
+            user=user.id,
+            soge_credit=True,
+            birth_date='2000-01-01',
+            gender='nonbinary',
+            clothing_cut='female',
+            clothing_size='XS',
+            health_issues='I am a bot',
+            emergency_contact_name='NoteKfet2020',
+            emergency_contact_phone='+33123456789',
+            ml_events_registration=True,
+            ml_sport_registration=False,
+            ml_art_registration=False,
+        ))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue("This user can&#39;t be in her/his first year since he/she has already participated to a WEI."
+                        in str(response.context["form"].errors))
+
+        # Check that if the WEI is started, we can't register anyone
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_wei_survey_ended(self):
         """
         Test display the end page of a survey.
@@ -281,6 +452,12 @@ class TestWEIRegistration(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_update_registration(self):
+        """
+        Test update a registration.
+        """
+        response = self.client.get(reverse("wei:wei_update_registration", kwargs=dict(pk=self.registration.pk)))
+        self.assertEqual(response.status_code, 200)
+
         self.registration.information = dict(
             preferred_bus_pk=[],
             preferred_team_pk=[],
@@ -310,6 +487,12 @@ class TestWEIRegistration(TestCase):
         self.assertTrue(qs.exists())
         self.assertRedirects(response, reverse("wei:validate_registration", kwargs=dict(pk=qs.get().pk)), 302, 200)
 
+        # Check that if the WEI is started, we can't update a registration
+        self.wei.date_start = '2000-01-01'
+        self.wei.save()
+        response = self.client.get(reverse("wei:wei_update_registration", kwargs=dict(wei_pk=self.registration.pk)))
+        self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
     def test_delete_registration(self):
         """
         Test delete a WEI registration.
@@ -321,6 +504,9 @@ class TestWEIRegistration(TestCase):
         """
         Test validate a membership.
         """
+        response = self.client.get(reverse("wei:validate_registration", kwargs=dict(pk=self.registration.pk)))
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.post(reverse("wei:validate_registration", kwargs=dict(pk=self.registration.pk)), dict(
             roles=[WEIRole.objects.get(name="GC WEI").id],
             bus=self.bus.pk,
@@ -359,16 +545,22 @@ class TestWEIRegistration(TestCase):
 
     def test_registrations_list(self):
         """
-        Test display the registration list
+        Test display the registration list, with or without a research
         """
         response = self.client.get(reverse("wei:wei_registrations", kwargs=dict(pk=self.wei.pk)))
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.get(reverse("wei:wei_registrations", kwargs=dict(pk=self.wei.pk)) + "?search=.")
+        self.assertEqual(response.status_code, 200)
+
     def test_memberships_list(self):
         """
-        Test display the memberships list
+        Test display the memberships list, with or without a research
         """
         response = self.client.get(reverse("wei:wei_memberships", kwargs=dict(pk=self.wei.pk)))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse("wei:wei_memberships", kwargs=dict(pk=self.wei.pk)) + "?search=.")
         self.assertEqual(response.status_code, 200)
 
     def is_latex_installed(self):
@@ -376,11 +568,12 @@ class TestWEIRegistration(TestCase):
         Check if LaTeX is installed in the machine. Don't check pages that generate a PDF file if LaTeX is not
         installed, like in Gitlab.
         """
-        return subprocess.call(
-            ["which", "pdflatex"],
-            stdout=open('/dev/null', 'wb'),
-            stderr=open('/dev/null', 'wb'),
-        ) == 0
+        with open("/dev/null", "wb") as devnull:
+            return subprocess.call(
+                ["which", "pdflatex"],
+                stdout=devnull,
+                stderr=devnull,
+            ) == 0
 
     def test_memberships_pdf_list(self):
         """

@@ -2547,7 +2547,7 @@ msgstr ""
 
 #: apps/wei/views.py:494
 msgid ""
-"This user can't be in her/his first year since he/she has already participed "
+"This user can't be in her/his first year since he/she has already participated "
 "to a WEI."
 msgstr ""
 

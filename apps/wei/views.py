@@ -235,7 +235,7 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
 
         pattern = self.request.GET.get("search", "")
 
-        if not pattern:
+        if pattern:
             qs = qs.filter(
                 Q(user__first_name__iregex=pattern)
                 | Q(user__last_name__iregex=pattern)
@@ -266,7 +266,7 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         today = date.today()
         # We can't update a past WEI
         # But we can update it while it is not officially opened
-        if today > wei.membership_end:
+        if today > wei.date_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
         return super().dispatch(request, *args, **kwargs)
 
@@ -492,7 +492,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
             # Check if the user can be in her/his first year (yeah, no cheat)
             if WEIRegistration.objects.filter(user=form.instance.user).exists():
                 form.add_error('user', _("This user can't be in her/his first year since he/she has already"
-                                         " participed to a WEI."))
+                                         " participated to a WEI."))
                 return self.form_invalid(form)
 
         return super().form_valid(form)
@@ -1046,19 +1046,20 @@ class MemberListRenderView(LoginRequiredMixin, View):
                 f.write(tex.encode("UTF-8"))
             del tex
 
-            error = subprocess.Popen(
-                ["pdflatex", "{}/wei-list.tex".format(tmp_dir)],
-                cwd=tmp_dir,
-                stdin=open(os.devnull, "r"),
-                stderr=open(os.devnull, "wb"),
-                stdout=open(os.devnull, "wb"),
-            ).wait()
+            with open(os.devnull, "wb") as devnull:
+                error = subprocess.Popen(
+                    ["pdflatex", "{}/wei-list.tex".format(tmp_dir)],
+                    cwd=tmp_dir,
+                    stderr=devnull,
+                    stdout=devnull,
+                ).wait()
 
             if error:
                 raise IOError("An error attempted while generating a WEI list (code=" + str(error) + ")")
 
             # Display the generated pdf as a HTTP Response
-            pdf = open("{}/wei-list.pdf".format(tmp_dir), 'rb').read()
+            with open("{}/wei-list.pdf".format(tmp_dir), 'rb') as f:
+                pdf = f.read()
             response = HttpResponse(pdf, content_type="application/pdf")
             response['Content-Disposition'] = "inline;filename=Liste%20des%20participants%20au%20WEI.pdf"
         except IOError as e:

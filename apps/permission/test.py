@@ -82,5 +82,3 @@ class PermissionQueryTestCase(TestCase):
                 if instanced.query:
                     print("Compiled query:", instanced.query)
                 raise
-
-        print("All permission queries are well formed")
