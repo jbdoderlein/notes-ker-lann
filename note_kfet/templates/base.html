@@ -72,6 +72,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
         .bs-tooltip-bottom .arrow::before {
             border-bottom-color: rgba(0,0,0,.250);
         }
+        .container-fluid {
+            max-width: 1600px;
+        }
     </style>
 
     {% block extracss %}{% endblock %}
@@ -167,7 +170,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             </ul>
         </div>
     </nav>
-    <div class="container-fluid my-3" style="max-width: 1600px;">
+    <div class="{% block containertype %}container{% endblock %} my-3">
         {% if request.user.is_authenticated and not request.user.profile.email_confirmed %}
             <div class="alert alert-warning">
                 {% trans "Your e-mail address is not validated. Please check your mail inbox and click on the validation link." %}
