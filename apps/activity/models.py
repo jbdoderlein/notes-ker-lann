@@ -10,8 +10,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
 from note.models import NoteUser, Transaction
+from rest_framework.exceptions import ValidationError
 
 
 class ActivityType(models.Model):

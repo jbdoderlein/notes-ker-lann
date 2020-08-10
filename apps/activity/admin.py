@@ -4,7 +4,7 @@
 from django.contrib import admin
 from note_kfet.admin import admin_site
 
-from .models import Activity, ActivityType, Guest, Entry
+from .models import Activity, ActivityType, Entry, Guest
 
 
 @admin.register(Activity, site=admin_site)

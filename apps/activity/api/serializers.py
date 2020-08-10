@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from ..models import ActivityType, Activity, Guest, Entry, GuestTransaction
+from ..models import Activity, ActivityType, Entry, Guest, GuestTransaction
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):

@@ -1,12 +1,12 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from api.viewsets import ReadProtectedModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-from api.viewsets import ReadProtectedModelViewSet
 
-from .serializers import ActivityTypeSerializer, ActivitySerializer, GuestSerializer, EntrySerializer
-from ..models import ActivityType, Activity, Guest, Entry
+from .serializers import ActivitySerializer, ActivityTypeSerializer, EntrySerializer, GuestSerializer
+from ..models import Activity, ActivityType, Entry, Guest
 
 
 class ActivityTypeViewSet(ReadProtectedModelViewSet):

@@ -8,8 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from member.models import Club
-from note.models import NoteUser, Note
-from note_kfet.inputs import DateTimePickerInput, Autocomplete
+from note.models import Note, NoteUser
+from note_kfet.inputs import Autocomplete, DateTimePickerInput
 
 from .models import Activity, Guest
 

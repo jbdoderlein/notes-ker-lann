@@ -7,7 +7,7 @@ import django_tables2 as tables
 from django_tables2 import A
 from note.templatetags.pretty_money import pretty_money
 
-from .models import Activity, Guest, Entry
+from .models import Activity, Entry, Guest
 
 
 class ActivityTable(tables.Table):

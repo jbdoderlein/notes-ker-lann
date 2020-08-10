@@ -7,16 +7,16 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import F, Q
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
-from note.models import NoteUser, Alias, NoteSpecial
+from note.models import Alias, NoteSpecial, NoteUser
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin
 
 from .forms import ActivityForm, GuestForm
-from .models import Activity, Guest, Entry
-from .tables import ActivityTable, GuestTable, EntryTable
+from .models import Activity, Entry, Guest
+from .tables import ActivityTable, EntryTable, GuestTable
 
 
 class ActivityCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
