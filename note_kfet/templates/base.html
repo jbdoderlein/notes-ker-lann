@@ -79,6 +79,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
         .container-fluid {
             max-width: 1600px;
         }
+
+        /* Apply Bootstrap table-responsive to all Django tables */
+        .table-container {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 
     {% block extracss %}{% endblock %}
