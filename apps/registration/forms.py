@@ -22,6 +22,11 @@ class SignUpForm(UserCreationForm):
         self.fields['email'].required = True
         self.fields['email'].help_text = _("This address must be valid.")
 
+        # Give some example
+        self.fields['first_name'].widget.attrs.update({"placeholder": "Sacha"})
+        self.fields['last_name'].widget.attrs.update({"placeholder": "Ketchum"})
+        self.fields['email'].widget.attrs.update({"placeholder": "mail@example.com"})
+
     def clean_username(self):
         value = self.cleaned_data["username"]
         if Alias.objects.filter(normalized_name=Alias.normalize(value)).exists():

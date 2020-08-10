@@ -41,6 +41,10 @@ class ProfileForm(forms.ModelForm):
 
     last_report = forms.DateTimeField(required=False, disabled=True, label=_("Last report date"))
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['address'].widget.attrs.update({"placeholder": "4 avenue des Sciences, 91190 GIF-SUR-YVETTE"})
+
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data
                                          or "promotion" in self.changed_data) and "section" not in self.changed_data):
