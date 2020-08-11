@@ -824,10 +824,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Crea
         # Force the membership of the clubs BDE and Kfet
         membership._force_renew_parent = True
 
-        if user.profile.paid:
-            fee = club.membership_fee_paid
-        else:
-            fee = club.membership_fee_unpaid
+        fee = club.membership_fee_paid if user.profile.paid else club.membership_fee_unpaid
 
         kfet = club.parent_club
         bde = kfet.parent_club

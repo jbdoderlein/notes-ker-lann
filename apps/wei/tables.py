@@ -85,21 +85,21 @@ class WEIRegistrationTable(tables.Table):
     )
 
     def render_validate(self, record):
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
+        hasperm = PermissionBackend.check_perm(
+            get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
                 club=record.wei,
                 user=record.user,
                 date_start=timezone.now().date(),
                 date_end=timezone.now().date(),
                 fee=0,
                 registration=record,
-        )):
-            return _("Validate")
-        return format_html("<span class='no-perm'></span>")
+            )
+        )
+        return _("Validate") if hasperm else format_html("<span class='no-perm'></span>")
 
     def render_delete(self, record):
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record):
-            return _("Delete")
-        return format_html("<span class='no-perm'></span>")
+        hasperm = PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record)
+        return _("Delete") if hasperm else format_html("<span class='no-perm'></span>")
 
     class Meta:
         attrs = {
