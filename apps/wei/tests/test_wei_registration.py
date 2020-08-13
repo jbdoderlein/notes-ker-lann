@@ -99,9 +99,6 @@ class TestWEIRegistration(TestCase):
             health_issues="I am a bot",
             emergency_contact_name="Pikachu",
             emergency_contact_phone="+33123456789",
-            ml_events_registration=True,
-            ml_sport_registration=True,
-            ml_art_registration=True,
             first_year=False,
         )
 
@@ -387,9 +384,6 @@ class TestWEIRegistration(TestCase):
             health_issues='I am a bot',
             emergency_contact_name='NoteKfet2020',
             emergency_contact_phone='+33123456789',
-            ml_events_registration=True,
-            ml_sport_registration=False,
-            ml_art_registration=False,
         ))
         qs = WEIRegistration.objects.filter(user_id=user.id)
         self.assertTrue(qs.exists())
@@ -422,9 +416,6 @@ class TestWEIRegistration(TestCase):
             health_issues='I am a bot',
             emergency_contact_name='NoteKfet2020',
             emergency_contact_phone='+33123456789',
-            ml_events_registration=True,
-            ml_sport_registration=False,
-            ml_art_registration=False,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("This user is already registered to this WEI." in str(response.context["form"].errors))
@@ -448,9 +439,6 @@ class TestWEIRegistration(TestCase):
             health_issues='I am a bot',
             emergency_contact_name='NoteKfet2020',
             emergency_contact_phone='+33123456789',
-            ml_events_registration=True,
-            ml_sport_registration=False,
-            ml_art_registration=False,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("This user can&#39;t be in her/his first year since he/she has already participated to a WEI."
@@ -813,9 +801,6 @@ class TestWEISurveyAlgorithm(TestCase):
             health_issues="I am a bot",
             emergency_contact_name="Pikachu",
             emergency_contact_phone="+33123456789",
-            ml_events_registration=True,
-            ml_sport_registration=True,
-            ml_art_registration=True,
             first_year=True,
         )
         CurrentSurvey(self.registration).save()

@@ -77,15 +77,6 @@
                 <dt class="col-xl-6">{% trans 'emergency contact phone'|capfirst %}</dt>
                 <dd class="col-xl-6">{{ registration.emergency_contact_phone }}</dd>
 
-                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the events of the campus (1 mail/week)' %}</dt>
-                <dd class="col-xl-6">{{ registration.ml_events_registration|yesno }}</dd>
-
-                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)' %}</dt>
-                <dd class="col-xl-6">{{ registration.ml_sport_registration|yesno }}</dd>
-
-                <dt class="col-xl-6">{% trans 'Register on the mailing list to stay informed of the art events of the campus (1 mail/week)' %}</dt>
-                <dd class="col-xl-6">{{ registration.ml_art_registration|yesno }}</dd>
-
                 <dt class="col-xl-6">{% trans 'Payment from Société générale' %}</dt>
                 <dd class="col-xl-6">{{ registration.soge_credit|yesno }}</dd>
 

@@ -594,9 +594,6 @@ class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreat
 
         del form.fields["caution_check"]
         del form.fields["first_year"]
-        del form.fields["ml_events_registration"]
-        del form.fields["ml_art_registration"]
-        del form.fields["ml_sport_registration"]
         del form.fields["information_json"]
 
         return form

@@ -229,21 +229,6 @@ class WEIRegistration(models.Model):
         verbose_name=_("emergency contact phone"),
     )
 
-    ml_events_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
-    )
-
-    ml_sport_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
-    )
-
-    ml_art_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
-    )
-
     first_year = models.BooleanField(
         default=False,
         verbose_name=_("first year"),
