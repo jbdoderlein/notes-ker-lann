@@ -92,10 +92,11 @@ class Profile(models.Model):
         default=False,
     )
 
-    ml_events_registration = models.BooleanField(
+    ml_events_registration = models.CharField(
         blank=True,
         null=True,
         default=None,
+        max_length=2,
         choices=[
             (None, _("No")),
             ('fr', _("Yes (receive them in french)")),
