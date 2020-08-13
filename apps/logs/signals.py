@@ -81,7 +81,7 @@ def save_object(sender, instance, **kwargs):
         if instance.last_login != previous.last_login:
             return
 
-    fields = '__all__'
+    changed_fields = '__all__'
     if previous:
         # On ne garde que les champs modifiés
         changed_fields = []
