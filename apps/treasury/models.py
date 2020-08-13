@@ -55,7 +55,7 @@ class Invoice(models.Model):
     )
 
     date = models.DateField(
-        default=timezone.now,
+        default=datetime.today,
         verbose_name=_("Date"),
     )
 
