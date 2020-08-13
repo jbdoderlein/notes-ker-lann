@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 15:15+0200\n"
+"POT-Creation-Date: 2020-08-13 18:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/member/models.py:175 apps/member/templates/member/club_info.html:13
 #: apps/member/templates/member/profile_info.html:14
 #: apps/note/models/notes.py:212 apps/note/models/transactions.py:25
-#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:286
+#: apps/note/models/transactions.py:45 apps/note/models/transactions.py:296
 #: apps/permission/models.py:329
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/wei/models.py:66 apps/wei/models.py:118
@@ -239,7 +239,7 @@ msgid "Guests list"
 msgstr "Liste des invités"
 
 #: apps/activity/templates/activity/activity_entry.html:13
-#: apps/note/models/transactions.py:248
+#: apps/note/models/transactions.py:258
 #: apps/note/templates/note/transaction_form.html:15
 #: apps/note/templates/note/transaction_form.html:145
 #: note_kfet/templates/base.html:113
@@ -247,7 +247,7 @@ msgid "Transfer"
 msgstr "Virement"
 
 #: apps/activity/templates/activity/activity_entry.html:17
-#: apps/note/models/transactions.py:302
+#: apps/note/models/transactions.py:312
 #: apps/note/templates/note/transaction_form.html:20
 msgid "Credit"
 msgstr "Crédit"
@@ -350,7 +350,9 @@ msgstr "Invitation pour l'activité « {} »"
 
 #: apps/activity/views.py:148
 msgid "You are not allowed to display the entry interface for this activity."
-msgstr "Vous n'êtes pas autorisé à afficher l'interface des entrées pour cette activité."
+msgstr ""
+"Vous n'êtes pas autorisé à afficher l'interface des entrées pour cette "
+"activité."
 
 #: apps/activity/views.py:151
 msgid "This activity does not support activity entries."
@@ -1174,14 +1176,23 @@ msgstr "Transaction"
 msgid "transactions"
 msgstr "Transactions"
 
-#: apps/note/models/transactions.py:192
+#: apps/note/models/transactions.py:181
+#, python-brace-format
 msgid ""
-"The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."
+"You can't update the {field} on a Transaction. Please invalidate it and "
+"create one other."
 msgstr ""
-"Les montants des notes doivent se trouver entre - 21 474 836.47 € et 21 474 "
-"836.47 €. Ne cherchez pas à capitaliser l'argent du BDE."
 
-#: apps/note/models/transactions.py:207
+#: apps/note/models/transactions.py:201
+msgid ""
+"The note balances must be between - 92 233 720 368 547 758.08 € and 92 233 "
+"720 368 547 758.07 €."
+msgstr ""
+"Les montants des notes doivent se trouver entre - 92 233 720 368 547 758.08 "
+"€ et 92 233 720 368 547 758.07 €. Ne cherchez pas à capitaliser l'argent du "
+"BDE."
+
+#: apps/note/models/transactions.py:217
 msgid ""
 "The transaction can't be saved since the source note or the destination note "
 "is not active."
@@ -1189,32 +1200,32 @@ msgstr ""
 "La transaction ne peut pas être sauvegardée puisque la note source ou la "
 "note de destination n'est pas active."
 
-#: apps/note/models/transactions.py:272
+#: apps/note/models/transactions.py:282
 msgid "Template"
 msgstr "Bouton"
 
-#: apps/note/models/transactions.py:275
+#: apps/note/models/transactions.py:285
 msgid "recurrent transaction"
 msgstr "Transaction issue de bouton"
 
-#: apps/note/models/transactions.py:276
+#: apps/note/models/transactions.py:286
 msgid "recurrent transactions"
 msgstr "Transactions issues de boutons"
 
-#: apps/note/models/transactions.py:291
+#: apps/note/models/transactions.py:301
 msgid "first_name"
 msgstr "prénom"
 
-#: apps/note/models/transactions.py:296
+#: apps/note/models/transactions.py:306
 msgid "bank"
 msgstr "banque"
 
-#: apps/note/models/transactions.py:302
+#: apps/note/models/transactions.py:312
 #: apps/note/templates/note/transaction_form.html:25
 msgid "Debit"
 msgstr "Débit"
 
-#: apps/note/models/transactions.py:313
+#: apps/note/models/transactions.py:323
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
@@ -1222,19 +1233,19 @@ msgstr ""
 "Une transaction spéciale n'est possible que entre une note associée à un "
 "mode de paiement et un utilisateur ou un club."
 
-#: apps/note/models/transactions.py:317
+#: apps/note/models/transactions.py:327
 msgid "Special transaction"
 msgstr "Transaction de crédit/retrait"
 
-#: apps/note/models/transactions.py:318
+#: apps/note/models/transactions.py:328
 msgid "Special transactions"
 msgstr "Transactions de crédit/retrait"
 
-#: apps/note/models/transactions.py:334 apps/note/models/transactions.py:339
+#: apps/note/models/transactions.py:344 apps/note/models/transactions.py:349
 msgid "membership transaction"
 msgstr "Transaction d'adhésion"
 
-#: apps/note/models/transactions.py:335 apps/treasury/models.py:272
+#: apps/note/models/transactions.py:345 apps/treasury/models.py:272
 msgid "membership transactions"
 msgstr "Transactions d'adhésion"
 
@@ -2697,15 +2708,15 @@ msgstr "Valider l'inscription WEI"
 msgid "This user didn't give her/his caution check."
 msgstr "Cet utilisateur n'a pas donné son chèque de caution."
 
-#: note_kfet/settings/base.py:154
+#: note_kfet/settings/base.py:155
 msgid "German"
 msgstr "Allemand"
 
-#: note_kfet/settings/base.py:155
+#: note_kfet/settings/base.py:156
 msgid "English"
 msgstr "Anglais"
 
-#: note_kfet/settings/base.py:156
+#: note_kfet/settings/base.py:157
 msgid "French"
 msgstr "Français"
 

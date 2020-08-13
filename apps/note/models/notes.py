@@ -25,7 +25,7 @@ class Note(PolymorphicModel):
     A Note can be searched find throught an :model:`note.Alias`
 
     """
-    balance = models.IntegerField(
+    balance = models.BigIntegerField(
         verbose_name=_('account balance'),
         help_text=_('in centimes, money credited for this instance'),
         default=0,

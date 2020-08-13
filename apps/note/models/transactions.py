@@ -196,9 +196,10 @@ class Transaction(PolymorphicModel):
             # previously invalid
             self.invalidity_reason = None
 
-        if source_balance > 2147483647 or source_balance < -2147483648\
-                or dest_balance > 2147483647 or dest_balance < -2147483648:
-            raise ValidationError(_("The note balances must be between - 21 474 836.47 € and 21 474 836.47 €."))
+        if source_balance > 9223372036854775807 or source_balance < -9223372036854775808\
+                or dest_balance > 9223372036854775807 or dest_balance < -9223372036854775808:
+            raise ValidationError(_("The note balances must be between - 92 233 720 368 547 758.08 € "
+                                    "and 92 233 720 368 547 758.07 €."))
 
         return source_balance - previous_source_balance, dest_balance - previous_dest_balance
 
