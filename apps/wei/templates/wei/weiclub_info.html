@@ -28,13 +28,15 @@
                     <dd class="col-xl-6">{{ club.membership_fee_paid|pretty_money }}</dd>
                 {% else %}
                     {% with bde_kfet_fee=club.parent_club.membership_fee_paid|add:club.parent_club.parent_club.membership_fee_paid %}
-                        <dt class="col-xl-6">{% trans 'WEI fee / including BDE and Kfet fee (paid students)'|capfirst %}</dt>
-                        <dd class="col-xl-6">{{ club.membership_fee_paid|pretty_money }} / {{ club.membership_fee_paid|add:bde_kfet_fee|pretty_money }}</dd>
+                        <dt class="col-xl-6">{% trans 'WEI fee (paid students)'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ club.membership_fee_paid|add:bde_kfet_fee|pretty_money }}
+                            <i class="fas fa-question-circle" title="{% trans "The BDE membership is included in the WEI registration." %}"></i></dd>
                     {% endwith %}
 
                     {% with bde_kfet_fee=club.parent_club.membership_fee_unpaid|add:club.parent_club.parent_club.membership_fee_unpaid %}
-                        <dt class="col-xl-6">{% trans 'WEI fee / including BDE and Kfet fee (unpaid students)'|capfirst %}</dt>
-                        <dd class="col-xl-6">{{ club.membership_fee_unpaid|pretty_money }} / {{ club.membership_fee_unpaid|add:bde_kfet_fee|pretty_money }}</dd>
+                        <dt class="col-xl-6">{% trans 'WEI fee (unpaid students)'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ club.membership_fee_unpaid|add:bde_kfet_fee|pretty_money }}
+                        <i class="fas fa-question-circle" title="{% trans "The BDE membership is included in the WEI registration." %}"></i></dd>
                     {% endwith %}
                 {% endif %}
             {% endif %}

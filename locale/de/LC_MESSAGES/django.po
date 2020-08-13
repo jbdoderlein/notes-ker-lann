@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 18:02+0200\n"
+"POT-Creation-Date: 2020-08-13 19:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -631,7 +631,7 @@ msgstr ""
 
 #: apps/member/models.py:180 apps/member/templates/member/club_info.html:57
 #: apps/registration/templates/registration/future_profile_detail.html:22
-#: apps/wei/templates/wei/weiclub_info.html:52
+#: apps/wei/templates/wei/weiclub_info.html:54
 #: apps/wei/templates/wei/weimembership_form.html:24
 msgid "email"
 msgstr ""
@@ -758,13 +758,13 @@ msgstr ""
 #: apps/member/templates/member/club_info.html:50
 #: apps/member/templates/member/profile_info.html:36
 #: apps/treasury/templates/treasury/sogecredit_detail.html:18
-#: apps/wei/templates/wei/weiclub_info.html:43
+#: apps/wei/templates/wei/weiclub_info.html:45
 msgid "balance"
 msgstr ""
 
 #: apps/member/templates/member/club_info.html:54
 #: apps/member/templates/member/profile_info.html:40
-#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:48
+#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:50
 msgid "aliases"
 msgstr ""
 
@@ -777,7 +777,7 @@ msgstr ""
 #: apps/wei/tables.py:47 apps/wei/templates/wei/bus_tables.html:15
 #: apps/wei/templates/wei/busteam_tables.html:15
 #: apps/wei/templates/wei/busteam_tables.html:33
-#: apps/wei/templates/wei/weiclub_info.html:68
+#: apps/wei/templates/wei/weiclub_info.html:70
 msgid "Edit"
 msgstr ""
 
@@ -2338,30 +2338,35 @@ msgid "The survey is now ended. Your answers have been saved."
 msgstr ""
 
 #: apps/wei/templates/wei/weiclub_info.html:31
-msgid "WEI fee / including BDE and Kfet fee (paid students)"
+msgid "WEI fee (paid students)"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:36
-msgid "WEI fee / including BDE and Kfet fee (unpaid students)"
+#: apps/wei/templates/wei/weiclub_info.html:33
+#: apps/wei/templates/wei/weiclub_info.html:39
+msgid "The BDE membership is included in the WEI registration."
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:58
+#: apps/wei/templates/wei/weiclub_info.html:37
+msgid "WEI fee (unpaid students)"
+msgstr ""
+
+#: apps/wei/templates/wei/weiclub_info.html:60
 msgid "WEI list"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:62 apps/wei/views.py:507
+#: apps/wei/templates/wei/weiclub_info.html:64 apps/wei/views.py:507
 msgid "Register 1A"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:65 apps/wei/views.py:574
+#: apps/wei/templates/wei/weiclub_info.html:67 apps/wei/views.py:574
 msgid "Register 2A+"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:71
+#: apps/wei/templates/wei/weiclub_info.html:73
 msgid "Add bus"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:75
+#: apps/wei/templates/wei/weiclub_info.html:77
 msgid "View WEI"
 msgstr ""
 
