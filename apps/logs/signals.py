@@ -81,18 +81,26 @@ def save_object(sender, instance, **kwargs):
         if instance.last_login != previous.last_login:
             return
 
-    # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
+    fields = '__all__'
+    if previous:
+        # On ne garde que les champs modifiés
+        changed_fields = []
+        for field in instance._meta.fields:
+            if getattr(instance, field.name) != getattr(previous, field.name):
+                changed_fields.append(field.name)
+
+    if len(changed_fields) == 0:
+        # Pas de log s'il n'y a pas de modification
+        return
+
+    # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles avec uniquement les champs modifiés
     class CustomSerializer(ModelSerializer):
         class Meta:
             model = instance.__class__
-            fields = '__all__'
+            fields = changed_fields
 
     previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else None
     instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
-
-    if previous_json == instance_json:
-        # Pas de log s'il n'y a pas de modification
-        return
 
     Changelog.objects.create(user=user,
                              ip=ip,

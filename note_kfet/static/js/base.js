@@ -349,8 +349,15 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 
 // When a validate button is clicked, we switch the validation status
 function de_validate(id, validated) {
+    let validate_obj = $("#validate_" + id);
+
+    if (validate_obj.data("pending"))
+        // The button is already clicked
+        return;
+
     let invalidity_reason = $("#invalidity_reason_" + id).val();
-    $("#validate_" + id).html("<strong style=\"font-size: 16pt;\">⟳</strong>");
+    validate_obj.html("<strong style=\"font-size: 16pt;\">⟳</strong>");
+    validate_obj.data("pending", true);
 
     // Perform a PATCH request to the API in order to update the transaction
     // If the user has insufficient rights, an error message will appear

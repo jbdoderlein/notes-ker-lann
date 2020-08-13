@@ -167,25 +167,34 @@ class Transaction(PolymorphicModel):
         previous_source_balance = self.source.balance
         previous_dest_balance = self.destination.balance
 
+        source_balance = self.source.balance
+        dest_balance = self.destination.balance
+
         created = self.pk is None
         to_transfer = self.amount * self.quantity
         if not created:
             # Revert old transaction
             old_transaction = Transaction.objects.get(pk=self.pk)
+            # Check that nothing important changed
+            for field_name in ["source_id", "destination_id", "quantity", "amount"]:
+                if getattr(self, field_name) != getattr(old_transaction, field_name):
+                    raise ValidationError(_("You can't update the {field} on a Transaction. "
+                                            "Please invalidate it and create one other.").format(field=field_name))
+
+            if old_transaction.valid == self.valid:
+                # Don't change anything
+                return 0, 0
             if old_transaction.valid:
-                self.source.balance += to_transfer
-                self.destination.balance -= to_transfer
+                source_balance += to_transfer
+                dest_balance -= to_transfer
 
         if self.valid:
-            self.source.balance -= to_transfer
-            self.destination.balance += to_transfer
+            source_balance -= to_transfer
+            dest_balance += to_transfer
 
             # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
             # previously invalid
             self.invalidity_reason = None
-
-        source_balance = self.source.balance
-        dest_balance = self.destination.balance
 
         if source_balance > 2147483647 or source_balance < -2147483648\
                 or dest_balance > 2147483647 or dest_balance < -2147483648:
