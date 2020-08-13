@@ -1,12 +1,14 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from datetime import date
 
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import UpdateView, TemplateView
+from django.views.generic import UpdateView, TemplateView, CreateView
 from member.models import Membership
 
 from .backends import PermissionBackend
@@ -40,6 +42,30 @@ class ProtectQuerysetMixin:
                 form.fields[key].widget = HiddenInput()
 
         return form
+
+
+class ProtectedCreateView(CreateView):
+    """
+    Extends a CreateView to check is the user has the right to create a sample instance of the given Model.
+    If not, a 403 error is displayed.
+    """
+
+    def get_sample_object(self):
+        """
+        return a sample instance of the Model.
+        It should be valid (can be stored properly in database), but must not collide with existing data.
+        """
+        raise NotImplementedError
+
+    def dispatch(self, request, *args, **kwargs):
+        model_class = self.model
+        # noinspection PyProtectedMember
+        app_label, model_name = model_class._meta.app_label, model_class._meta.model_name.lower()
+        perm = app_label + ".add_" + model_name
+        if not PermissionBackend.check_perm(request.user, perm, self.get_sample_object()):
+            raise PermissionDenied(_("You don't have the permission to add an instance of model "
+                                     "{app_label}.{model_name}.").format(app_label=app_label, model_name=model_name))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class RightsView(TemplateView):

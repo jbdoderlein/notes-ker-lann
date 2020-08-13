@@ -4,25 +4,38 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.db.models import F, Q
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
+from django.views.generic import DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
 from note.models import Alias, NoteSpecial, NoteUser
 from permission.backends import PermissionBackend
-from permission.views import ProtectQuerysetMixin
+from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import ActivityForm, GuestForm
 from .models import Activity, Entry, Guest
 from .tables import ActivityTable, EntryTable, GuestTable
 
 
-class ActivityCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class ActivityCreateView(LoginRequiredMixin, ProtectedCreateView):
     model = Activity
     form_class = ActivityForm
     extra_context = {"title": _("Create new activity")}
+
+    def get_sample_object(self):
+        return Activity(
+            name="",
+            description="",
+            creater=self.request.user,
+            activity_type_id=1,
+            organizer_id=1,
+            attendees_club_id=1,
+            date_start=timezone.now(),
+            date_end=timezone.now(),
+        )
 
     def form_valid(self, form):
         form.instance.creater = self.request.user
@@ -85,10 +98,19 @@ class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
 
 
-class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     model = Guest
     form_class = GuestForm
     template_name = "activity/activity_invite.html"
+
+    def get_sample_object(self):
+        activity = Activity.objects.get(pk=self.kwargs["pk"])
+        return Guest(
+            activity=activity,
+            first_name="",
+            last_name="",
+            inviter=self.request.user.note,
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -113,6 +135,24 @@ class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
 
 class ActivityEntryView(LoginRequiredMixin, TemplateView):
     template_name = "activity/activity_entry.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Don't display the entry interface if the user has no right to see it (no right to add an entry for itself),
+        it is closed or doesn't manage entries.
+        """
+        activity = Activity.objects.get(pk=self.kwargs["pk"])
+
+        sample_entry = Entry(activity=activity, note=self.request.user.note)
+        if not PermissionBackend.check_perm(self.request.user, "activity.add_entry", sample_entry):
+            raise PermissionDenied(_("You are not allowed to display the entry interface for this activity."))
+
+        if not activity.activity_type.manage_entries:
+            raise PermissionDenied(_("This activity does not support activity entries."))
+
+        if not activity.open:
+            raise PermissionDenied(_("This activity is closed."))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

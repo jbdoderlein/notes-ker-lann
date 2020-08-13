@@ -124,7 +124,7 @@ class Activity(models.Model):
         Update the activity wiki page each time the activity is updated (validation, change description, ...)
         """
         ret = super().save(*args, **kwargs)
-        if self.pk and "scripts" in settings.INSTALLED_APPS:
+        if settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
             def refresh_activities():
                 from scripts.management.commands.refresh_activities import Command as RefreshActivitiesCommand
                 RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name)

@@ -4,7 +4,7 @@
 import os
 import shutil
 import subprocess
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from tempfile import mkdtemp
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,7 +19,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import DetailView, UpdateView, CreateView, RedirectView, TemplateView
+from django.views.generic import DetailView, UpdateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
@@ -28,7 +28,7 @@ from note.models import Transaction, NoteClub, Alias, SpecialTransaction, NoteSp
 from note.tables import HistoryTable
 from note_kfet.settings import BASE_DIR
 from permission.backends import PermissionBackend
-from permission.views import ProtectQuerysetMixin
+from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms.registration import WEIChooseBusForm
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
@@ -58,6 +58,8 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub(
+            name="",
+            email="weiclub@example.com",
             year=0,
             date_start=timezone.now().date(),
             date_end=timezone.now().date(),
@@ -65,13 +67,23 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         return context
 
 
-class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create WEI
     """
+
     model = WEIClub
     form_class = WEIForm
     extra_context = {"title": _("Create WEI")}
+
+    def get_sample_object(self):
+        return WEIClub(
+            name="",
+            email="weiclub@example.com",
+            year=0,
+            date_start=timezone.now().date(),
+            date_end=timezone.now().date(),
+        )
 
     def form_valid(self, form):
         form.instance.requires_membership = True
@@ -274,13 +286,20 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
 
 
-class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create Bus
     """
     model = Bus
     form_class = BusForm
     extra_context = {"title": _("Create new bus")}
+
+    def get_sample_object(self):
+        wei = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return Bus(
+            wei=wei,
+            name="",
+        )
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["pk"])
@@ -362,13 +381,21 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create BusTeam
     """
     model = BusTeam
     form_class = BusTeamForm
     extra_context = {"title": _("Create new team")}
+
+    def get_sample_object(self):
+        bus = Bus.objects.get(pk=self.kwargs["pk"])
+        return BusTeam(
+            name="",
+            bus=bus,
+            color=0,
+        )
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(buses__pk=self.kwargs["pk"])
@@ -447,13 +474,25 @@ class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Register a new user to the WEI
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
     extra_context = {"title": _("Register first year student to the WEI")}
+
+    def get_sample_object(self):
+        wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        return WEIRegistration(
+            wei=wei,
+            user=self.request.user,
+            first_year=True,
+            birth_date="1970-01-01",
+            gender="No",
+            emergency_contact_name="No",
+            emergency_contact_phone="No",
+        )
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
@@ -502,13 +541,25 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
 
 
-class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Register an old user to the WEI
     """
     model = WEIRegistration
     form_class = WEIRegistrationForm
     extra_context = {"title": _("Register old student to the WEI")}
+
+    def get_sample_object(self):
+        wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        return WEIRegistration(
+            wei=wei,
+            user=self.request.user,
+            first_year=True,
+            birth_date="1970-01-01",
+            gender="No",
+            emergency_contact_name="No",
+            emergency_contact_phone="No",
+        )
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
@@ -713,13 +764,24 @@ class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Delete
         return reverse_lazy('wei:wei_detail', args=(self.object.wei.pk,))
 
 
-class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Validate WEI Registration
     """
     model = WEIMembership
     form_class = WEIMembershipForm
     extra_context = {"title": _("Validate WEI registration")}
+
+    def get_sample_object(self):
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        return WEIMembership(
+            club=registration.wei,
+            user=registration.user,
+            date_start=timezone.now().date(),
+            date_end=timezone.now().date() + timedelta(days=1),
+            fee=0,
+            registration=registration,
+        )
 
     def dispatch(self, request, *args, **kwargs):
         wei = WEIRegistration.objects.get(pk=self.kwargs["pk"]).wei

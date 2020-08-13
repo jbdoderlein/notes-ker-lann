@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-10 19:56+0200\n"
+"POT-Creation-Date: 2020-08-13 15:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -327,27 +327,39 @@ msgstr ""
 msgid "All activities"
 msgstr ""
 
-#: apps/activity/views.py:25
+#: apps/activity/views.py:26
 msgid "Create new activity"
 msgstr ""
 
-#: apps/activity/views.py:40 note_kfet/templates/base.html:128
+#: apps/activity/views.py:53 note_kfet/templates/base.html:128
 msgid "Activities"
 msgstr ""
 
-#: apps/activity/views.py:65
+#: apps/activity/views.py:78
 msgid "Activity detail"
 msgstr ""
 
-#: apps/activity/views.py:82
+#: apps/activity/views.py:95
 msgid "Update activity"
 msgstr ""
 
-#: apps/activity/views.py:96
+#: apps/activity/views.py:118
 msgid "Invite guest to the activity \"{}\""
 msgstr ""
 
-#: apps/activity/views.py:197
+#: apps/activity/views.py:148
+msgid "You are not allowed to display the entry interface for this activity."
+msgstr ""
+
+#: apps/activity/views.py:151
+msgid "This activity does not support activity entries."
+msgstr ""
+
+#: apps/activity/views.py:154
+msgid "This activity is closed."
+msgstr ""
+
+#: apps/activity/views.py:237
 msgid "Entry for activity \"{}\""
 msgstr ""
 
@@ -682,7 +694,7 @@ msgstr ""
 msgid "The role {role} does not apply to the club {club}."
 msgstr ""
 
-#: apps/member/models.py:362 apps/member/views.py:592
+#: apps/member/models.py:362 apps/member/views.py:619
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -774,11 +786,11 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: apps/member/templates/member/club_list.html:9
+#: apps/member/templates/member/club_list.html:11
 msgid "Create club"
 msgstr ""
 
-#: apps/member/templates/member/club_list.html:16
+#: apps/member/templates/member/club_list.html:19
 msgid "Club listing"
 msgstr ""
 
@@ -890,7 +902,7 @@ msgstr ""
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:205 apps/member/views.py:391
+#: apps/member/views.py:205 apps/member/views.py:405
 msgid "Note aliases"
 msgstr ""
 
@@ -902,47 +914,47 @@ msgstr ""
 msgid "Create new club"
 msgstr ""
 
-#: apps/member/views.py:317
+#: apps/member/views.py:323
 msgid "Search club"
 msgstr ""
 
-#: apps/member/views.py:342
+#: apps/member/views.py:356
 msgid "Club detail"
 msgstr ""
 
-#: apps/member/views.py:408
+#: apps/member/views.py:422
 msgid "Update club"
 msgstr ""
 
-#: apps/member/views.py:442
+#: apps/member/views.py:456
 msgid "Add new member to the club"
 msgstr ""
 
-#: apps/member/views.py:583 apps/wei/views.py:861
+#: apps/member/views.py:610 apps/wei/views.py:926
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:596
+#: apps/member/views.py:623
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:601
+#: apps/member/views.py:628
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:618 apps/member/views.py:620 apps/member/views.py:622
+#: apps/member/views.py:645 apps/member/views.py:647 apps/member/views.py:649
 #: apps/registration/views.py:292 apps/registration/views.py:294
-#: apps/registration/views.py:296 apps/wei/views.py:866 apps/wei/views.py:870
+#: apps/registration/views.py:296 apps/wei/views.py:931 apps/wei/views.py:935
 msgid "This field is required."
 msgstr ""
 
-#: apps/member/views.py:706
+#: apps/member/views.py:733
 msgid "Manage roles of an user in the club"
 msgstr ""
 
-#: apps/member/views.py:731
+#: apps/member/views.py:758
 msgid "Members of the club"
 msgstr ""
 
@@ -1223,7 +1235,7 @@ msgstr ""
 #: apps/note/tables.py:138 apps/note/tables.py:172 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:28
 #: apps/treasury/templates/treasury/sogecredit_detail.html:59
-#: apps/wei/tables.py:75 apps/wei/tables.py:101
+#: apps/wei/tables.py:75 apps/wei/tables.py:102
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
 msgstr ""
@@ -1340,27 +1352,31 @@ msgstr ""
 msgid "Unable to delete button "
 msgstr ""
 
-#: apps/note/views.py:34
+#: apps/note/views.py:36
 msgid "Transfer money"
 msgstr ""
 
-#: apps/note/views.py:74
+#: apps/note/views.py:76
 msgid "Create new button"
 msgstr ""
 
-#: apps/note/views.py:83
+#: apps/note/views.py:85
 msgid "Search button"
 msgstr ""
 
-#: apps/note/views.py:106
+#: apps/note/views.py:108
 msgid "Update button"
 msgstr ""
 
-#: apps/note/views.py:143 note_kfet/templates/base.html:108
+#: apps/note/views.py:145 note_kfet/templates/base.html:108
 msgid "Consumptions"
 msgstr ""
 
-#: apps/note/views.py:179
+#: apps/note/views.py:155
+msgid "You can't see any button."
+msgstr ""
+
+#: apps/note/views.py:189
 msgid "Search transactions"
 msgstr ""
 
@@ -1448,10 +1464,10 @@ msgid ""
 "of model {app_label}.{model_name}."
 msgstr ""
 
-#: apps/permission/signals.py:73
+#: apps/permission/signals.py:73 apps/permission/views.py:66
 #, python-brace-format
 msgid ""
-"You don't have the permission to add this instance of model {app_label}."
+"You don't have the permission to add an instance of model {app_label}."
 "{model_name}."
 msgstr ""
 
@@ -1490,11 +1506,11 @@ msgstr ""
 msgid "No associated permission"
 msgstr ""
 
-#: apps/permission/views.py:47 note_kfet/templates/base.html:143
+#: apps/permission/views.py:73 note_kfet/templates/base.html:143
 msgid "Rights"
 msgstr ""
 
-#: apps/permission/views.py:52
+#: apps/permission/views.py:78
 msgid "All rights"
 msgstr ""
 
@@ -1864,7 +1880,7 @@ msgid "No"
 msgstr ""
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:8
-#: apps/treasury/views.py:143
+#: apps/treasury/views.py:164
 msgid "Delete invoice"
 msgstr ""
 
@@ -1882,7 +1898,7 @@ msgid "Return to invoices list"
 msgstr ""
 
 #: apps/treasury/templates/treasury/invoice_form.html:6
-#: apps/treasury/views.py:81
+#: apps/treasury/views.py:90
 msgid "Invoices list"
 msgstr ""
 
@@ -1916,7 +1932,7 @@ msgstr ""
 
 #: apps/treasury/templates/treasury/remittance_form.html:9
 #: apps/treasury/templates/treasury/specialtransactionproxy_form.html:7
-#: apps/treasury/views.py:224
+#: apps/treasury/views.py:251
 msgid "Remittances list"
 msgstr ""
 
@@ -2009,7 +2025,7 @@ msgid "Please ask the user to credit its note before deleting this credit."
 msgstr ""
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:57
-#: apps/wei/tables.py:58 apps/wei/tables.py:59 apps/wei/tables.py:96
+#: apps/wei/tables.py:58 apps/wei/tables.py:59 apps/wei/tables.py:98
 msgid "Validate"
 msgstr ""
 
@@ -2029,27 +2045,32 @@ msgstr ""
 msgid "Create new invoice"
 msgstr ""
 
-#: apps/treasury/views.py:90
+#: apps/treasury/views.py:101 apps/treasury/views.py:259
+#: apps/treasury/views.py:381
+msgid "You are not able to see the treasury interface."
+msgstr ""
+
+#: apps/treasury/views.py:111
 msgid "Update an invoice"
 msgstr ""
 
-#: apps/treasury/views.py:203
+#: apps/treasury/views.py:224
 msgid "Create a new remittance"
 msgstr ""
 
-#: apps/treasury/views.py:274
+#: apps/treasury/views.py:310
 msgid "Update a remittance"
 msgstr ""
 
-#: apps/treasury/views.py:297
+#: apps/treasury/views.py:333
 msgid "Attach a transaction to a remittance"
 msgstr ""
 
-#: apps/treasury/views.py:341
+#: apps/treasury/views.py:377
 msgid "List of credits from the Société générale"
 msgstr ""
 
-#: apps/treasury/views.py:375
+#: apps/treasury/views.py:416
 msgid "Manage credits from the Société générale"
 msgstr ""
 
@@ -2287,8 +2308,8 @@ msgstr ""
 
 #: apps/wei/templates/wei/survey.html:12
 #: apps/wei/templates/wei/survey_closed.html:12
-#: apps/wei/templates/wei/survey_end.html:12 apps/wei/views.py:917
-#: apps/wei/views.py:971 apps/wei/views.py:981
+#: apps/wei/templates/wei/survey_end.html:12 apps/wei/views.py:982
+#: apps/wei/views.py:1036 apps/wei/views.py:1046
 msgid "Survey WEI"
 msgstr ""
 
@@ -2320,11 +2341,11 @@ msgstr ""
 msgid "WEI list"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:62 apps/wei/views.py:468
+#: apps/wei/templates/wei/weiclub_info.html:62 apps/wei/views.py:507
 msgid "Register 1A"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_info.html:65 apps/wei/views.py:523
+#: apps/wei/templates/wei/weiclub_info.html:65 apps/wei/views.py:574
 msgid "Register 2A+"
 msgstr ""
 
@@ -2336,7 +2357,7 @@ msgstr ""
 msgid "View WEI"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_list.html:10 apps/wei/views.py:74
+#: apps/wei/templates/wei/weiclub_list.html:10 apps/wei/views.py:77
 msgid "Create WEI"
 msgstr ""
 
@@ -2489,93 +2510,93 @@ msgstr ""
 msgid "Search WEI"
 msgstr ""
 
-#: apps/wei/views.py:94
+#: apps/wei/views.py:106
 msgid "WEI Detail"
 msgstr ""
 
-#: apps/wei/views.py:189
+#: apps/wei/views.py:201
 msgid "View members of the WEI"
 msgstr ""
 
-#: apps/wei/views.py:217
+#: apps/wei/views.py:229
 msgid "Find WEI Membership"
 msgstr ""
 
-#: apps/wei/views.py:227
+#: apps/wei/views.py:239
 msgid "View registrations to the WEI"
 msgstr ""
 
-#: apps/wei/views.py:251
+#: apps/wei/views.py:263
 msgid "Find WEI Registration"
 msgstr ""
 
-#: apps/wei/views.py:262
+#: apps/wei/views.py:274
 msgid "Update the WEI"
 msgstr ""
 
-#: apps/wei/views.py:283
+#: apps/wei/views.py:295
 msgid "Create new bus"
 msgstr ""
 
-#: apps/wei/views.py:314
+#: apps/wei/views.py:333
 msgid "Update bus"
 msgstr ""
 
-#: apps/wei/views.py:344
+#: apps/wei/views.py:363
 msgid "Manage bus"
 msgstr ""
 
-#: apps/wei/views.py:371
+#: apps/wei/views.py:390
 msgid "Create new team"
 msgstr ""
 
-#: apps/wei/views.py:403
+#: apps/wei/views.py:430
 msgid "Update team"
 msgstr ""
 
-#: apps/wei/views.py:434
+#: apps/wei/views.py:461
 msgid "Manage WEI team"
 msgstr ""
 
-#: apps/wei/views.py:456
+#: apps/wei/views.py:483
 msgid "Register first year student to the WEI"
 msgstr ""
 
-#: apps/wei/views.py:489 apps/wei/views.py:560
+#: apps/wei/views.py:528 apps/wei/views.py:611
 msgid "This user is already registered to this WEI."
 msgstr ""
 
-#: apps/wei/views.py:494
+#: apps/wei/views.py:533
 msgid ""
-"This user can't be in her/his first year since he/she has already participated "
-"to a WEI."
+"This user can't be in her/his first year since he/she has already "
+"participated to a WEI."
 msgstr ""
 
-#: apps/wei/views.py:511
+#: apps/wei/views.py:550
 msgid "Register old student to the WEI"
 msgstr ""
 
-#: apps/wei/views.py:542 apps/wei/views.py:627
+#: apps/wei/views.py:593 apps/wei/views.py:684
 msgid "You already opened an account in the Société générale."
 msgstr ""
 
-#: apps/wei/views.py:590
+#: apps/wei/views.py:641
 msgid "Update WEI Registration"
 msgstr ""
 
-#: apps/wei/views.py:686
+#: apps/wei/views.py:743
 msgid "Delete WEI registration"
 msgstr ""
 
-#: apps/wei/views.py:697
+#: apps/wei/views.py:754
 msgid "You don't have the right to delete this WEI registration."
 msgstr ""
 
-#: apps/wei/views.py:716
+#: apps/wei/views.py:773
 msgid "Validate WEI registration"
 msgstr ""
 
-#: apps/wei/views.py:855
+#: apps/wei/views.py:920
 msgid "This user didn't give her/his caution check."
 msgstr ""
 

@@ -8,34 +8,43 @@ from tempfile import mkdtemp
 
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.db.models import Q
 from django.forms import Form
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from note.models import SpecialTransaction, NoteSpecial, Alias
 from note_kfet.settings.base import BASE_DIR
 from permission.backends import PermissionBackend
-from permission.views import ProtectQuerysetMixin
+from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
 
 
-class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create Invoice
     """
     model = Invoice
     form_class = InvoiceForm
     extra_context = {"title": _("Create new invoice")}
+
+    def get_sample_object(self):
+        return Invoice(
+            id=0,
+            object="",
+            description="",
+            name="",
+            address="",
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -72,13 +81,25 @@ class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         return reverse_lazy('treasury:invoice_list')
 
 
-class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+class InvoiceListView(LoginRequiredMixin, SingleTableView):
     """
     List existing Invoices
     """
     model = Invoice
     table_class = InvoiceTable
     extra_context = {"title": _("Invoices list")}
+
+    def dispatch(self, request, *args, **kwargs):
+        sample_invoice = Invoice(
+            id=0,
+            object="",
+            description="",
+            name="",
+            address="",
+        )
+        if not PermissionBackend.check_perm(self.request.user, "treasury.add_invoice", sample_invoice):
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -194,13 +215,19 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         return response
 
 
-class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create Remittance
     """
     model = Remittance
     form_class = RemittanceForm
     extra_context = {"title": _("Create a new remittance")}
+
+    def get_sample_object(self):
+        return Remittance(
+            remittance_type_id=1,
+            comment="",
+        )
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -222,6 +249,15 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     """
     template_name = "treasury/remittance_list.html"
     extra_context = {"title": _("Remittances list")}
+
+    def dispatch(self, request, *args, **kwargs):
+        sample_remittance = Remittance(
+            remittance_type_id=1,
+            comment="",
+        )
+        if not PermissionBackend.check_perm(self.request.user, "treasury.add_remittance", sample_remittance):
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -339,6 +375,11 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
     model = SogeCredit
     table_class = SogeCreditTable
     extra_context = {"title": _("List of credits from the Société générale")}
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.get_queryset().exists():
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
         """

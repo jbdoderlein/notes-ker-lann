@@ -10,7 +10,7 @@ from member.models import Club, Membership
 from note.models import NoteUser, Note, NoteClub, NoteSpecial
 from wei.models import WEIMembership, WEIRegistration, WEIClub, Bus, BusTeam
 
-from .models import Permission
+from ..models import Permission
 
 
 class PermissionQueryTestCase(TestCase):

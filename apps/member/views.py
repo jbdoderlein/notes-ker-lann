@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView
+from django.views.generic import DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
@@ -26,7 +26,7 @@ from note.tables import HistoryTable, AliasTable
 from note_kfet.middlewares import _set_current_user_and_ip
 from permission.backends import PermissionBackend
 from permission.models import Role
-from permission.views import ProtectQuerysetMixin
+from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import ProfileForm, ClubForm, MembershipForm, CustomAuthenticationForm, UserForm, MembershipRolesForm
 from .models import Club, Membership
@@ -295,7 +295,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
 # ******************************* #
 
 
-class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Create Club
     """
@@ -303,6 +303,12 @@ class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     form_class = ClubForm
     success_url = reverse_lazy('member:club_list')
     extra_context = {"title": _("Create new club")}
+
+    def get_sample_object(self):
+        return Club(
+            name="",
+            email="",
+        )
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -331,6 +337,14 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
             )
 
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_add_club"] = PermissionBackend.check_perm(self.request.user, "member.add_club", Club(
+            name="",
+            email="club@example.com",
+        ))
+        return context
 
 
 class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
@@ -432,7 +446,7 @@ class ClubPictureUpdateView(PictureUpdateView):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.id})
 
 
-class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
     """
     Add a membership to a club.
     """
@@ -440,6 +454,19 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
     form_class = MembershipForm
     template_name = 'member/add_members.html'
     extra_context = {"title": _("Add new member to the club")}
+
+    def get_sample_object(self):
+        if "club_pk" in self.kwargs:
+            club = Club.objects.get(pk=self.kwargs["club_pk"])
+        else:
+            club = Membership.objects.get(pk=self.kwargs["pk"]).club
+        return Membership(
+            user=self.request.user,
+            club=club,
+            fee=0,
+            date_start=timezone.now(),
+            date_end=timezone.now() + timedelta(days=1),
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -3,6 +3,7 @@
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from note.models import TransactionTemplate, TemplateCategory
 
 """
 Test that login page still works
@@ -16,6 +17,8 @@ class TemplateLoggedOutTests(TestCase):
 
 
 class TemplateLoggedInTests(TestCase):
+    fixtures = ('initial', )
+
     def setUp(self):
         self.user = User.objects.create_superuser(
             username="admin",
@@ -48,5 +51,12 @@ class TemplateLoggedInTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_consos_page(self):
+        # Create one button and ensure that it is visible
+        cat = TemplateCategory.objects.create()
+        TransactionTemplate.objects.create(
+            destination_id=5,
+            category=cat,
+            amount=0,
+        )
         response = self.client.get('/note/consos/')
         self.assertEqual(response.status_code, 200)

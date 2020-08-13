@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% load render_table from django_tables2 %}
 {% load i18n %}
+
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
         <input class="form-control mx-auto w-25" type="text" id="search_field"/>
         <hr>
-        <a class="btn btn-primary text-center my-4" href="{% url 'member:club_create' %}" data-turbolinks="false">{% trans "Create club" %}</a>
+        {% if can_add_club %}
+            <a class="btn btn-primary text-center my-4" href="{% url 'member:club_create' %}" data-turbolinks="false">{% trans "Create club" %}</a>
+        {% endif %}
     </div>
 </div>
 <div class="row justify-content-center">   
