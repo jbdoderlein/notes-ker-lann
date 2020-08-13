@@ -121,7 +121,7 @@ class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, Up
             for log in update_logs.all():
                 old_dict = json.loads(log.previous)
                 new_dict = json.loads(log.data)
-                if not "amount" in old_price:
+                if "amount" not in old_dict:
                     # The amount price of the button was not modified in this changelog
                     continue
                 old_price = old_dict["amount"]
