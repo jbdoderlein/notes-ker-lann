@@ -48,7 +48,7 @@
 
 \newcommand	{\ListeProduits}{
     {% for product in products %}
-        {{ product.designation|escape_tex }}    &    {{ product.amount_euros|escape_tex|floatformat:2 }}    &    {{ product.quantity|escape_tex|floatformat:2 }}    &    {{ product.total_euros|escape_tex|floatformat:2 }}   \cr
+        {{ product.designation|escape_tex }}    &    {{ product.amount_euros|floatformat:2 }}    &    {{ product.quantity|floatformat:2 }}    &    {{ product.total_euros|floatformat:2 }}   \cr
     {% endfor %}
 }
 
@@ -94,7 +94,7 @@
 % Liste des produits facturés : Désignation, quantité, prix unitaire HT
 
 {% for product in products %}
-\AjouterProduit{{"{"}}{{ product.designation|escape_tex }}} {{"{"}}{{ product.quantity|escape_tex }}} {{"{"}}{{ product.amount_euros|escape_tex }}} {{"{"}}{{ product.total_euros|escape_tex }}}
+\AjouterProduit{{"{"}}{{ product.designation|escape_tex }}} {{"{"}}{{ product.quantity }}} {{"{"}}{{ product.amount_euros }}} {{"{"}}{{ product.total_euros }}}
 {% endfor %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
