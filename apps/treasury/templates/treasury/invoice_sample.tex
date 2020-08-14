@@ -48,7 +48,7 @@
 
 \newcommand	{\ListeProduits}{
     {% for product in products %}
-        {{ product.designation|escape_tex }}    &    {{ product.amount_euros|floatformat:2 }}    &    {{ product.quantity|floatformat:2 }}    &    {{ product.total_euros|floatformat:2 }}   \cr
+        {{ product.designation|escape_tex }}    &    {{ product.amount_euros }}    &    {{ product.quantity }}    &    {{ product.total_euros }}   \cr
     {% endfor %}
 }
 
