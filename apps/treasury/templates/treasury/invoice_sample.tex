@@ -48,7 +48,7 @@
 
 \newcommand	{\ListeProduits}{
     {% for product in products %}
-        {{ product.designation|safe|escape_tex }}    &    {{ product.amount_euros|safe|escape_tex|floatformat:2 }}    &    {{ product.quantity|safe|escape_tex|floatformat:2 }}    &    {{ product.total_euros|safe|escape_tex|floatformat:2 }}   \cr
+        {{ product.designation|escape_tex }}    &    {{ product.amount_euros|escape_tex|floatformat:2 }}    &    {{ product.quantity|escape_tex|floatformat:2 }}    &    {{ product.total_euros|escape_tex|floatformat:2 }}   \cr
     {% endfor %}
 }
 
@@ -67,9 +67,9 @@
 
 %%%%%%%%%%%%%%%%%%%%% A MODIFIER DANS LA FACTURE %%%%%%%%%%%%%%%%%%%%%
 % Infos Association
-\def\MonNom{{"{"}}{{ obj.my_name|safe|escape_tex }}} % Nom de l'association
-\def\MonAdresseRue{{"{"}}{{ obj.my_address_street|safe|escape_tex }}} % Adresse de l'association
-\def\MonAdresseVille{{"{"}}{{ obj.my_city|safe|escape_tex }}}
+\def\MonNom{{"{"}}{{ obj.my_name|escape_tex }}} % Nom de l'association
+\def\MonAdresseRue{{"{"}}{{ obj.my_address_street|escape_tex }}} % Adresse de l'association
+\def\MonAdresseVille{{"{"}}{{ obj.my_city|escape_tex }}}
 
 % Informations bancaires de l'association
 \def\CodeBanque{{"{"}}{{ obj.bank_code|stringformat:".05d" }}}
@@ -81,20 +81,20 @@
 
 \def\FactureNum            {{"{"}}{{ obj.id }}}    % Numéro de facture
 \def\FactureAcquittee    {% if obj.acquitted %} {oui} {% else %} {non} {% endif %}     % Facture acquittée : oui/non
-\def\FactureLieu    {{"{"}}{{ obj.place|safe|escape_tex }}}    % Lieu de l'édition de la facture
+\def\FactureLieu    {{"{"}}{{ obj.place|escape_tex }}}    % Lieu de l'édition de la facture
 \def\FactureDate    {{"{"}}{{ obj.date }}}    % Date de l'édition de la facture
-\def\FactureObjet   {{"{"}}{{ obj.object|safe|escape_tex }} }    % Objet du document
+\def\FactureObjet   {{"{"}}{{ obj.object|escape_tex }} }    % Objet du document
 % Description de la facture
-\def\FactureDescr   {{"{"}}{{ obj.description|safe|escape_tex }}}
+\def\FactureDescr   {{"{"}}{{ obj.description|escape_tex }}}
 
 % Infos Client
-\def\ClientNom{{"{"}}{{ obj.name|safe|escape_tex }}}    % Nom du client
-\def\ClientAdresse{{"{"}}{{ obj.address|safe|escape_tex }}} % Adresse du client
+\def\ClientNom{{"{"}}{{ obj.name|escape_tex }}}    % Nom du client
+\def\ClientAdresse{{"{"}}{{ obj.address|escape_tex }}} % Adresse du client
 
 % Liste des produits facturés : Désignation, quantité, prix unitaire HT
 
 {% for product in products %}
-\AjouterProduit{{"{"}}{{ product.designation|safe|escape_tex }}} {{"{"}}{{ product.quantity|safe|escape_tex }}} {{"{"}}{{ product.amount_euros|safe|escape_tex }}} {{"{"}}{{ product.total_euros|safe|escape_tex }}}
+\AjouterProduit{{"{"}}{{ product.designation|escape_tex }}} {{"{"}}{{ product.quantity|escape_tex }}} {{"{"}}{{ product.amount_euros|escape_tex }}} {{"{"}}{{ product.total_euros|escape_tex }}}
 {% endfor %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
