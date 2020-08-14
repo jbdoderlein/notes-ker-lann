@@ -4,7 +4,7 @@
 import os
 import shutil
 import subprocess
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from tempfile import mkdtemp
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -119,7 +119,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         club_member = WEIMembership.objects.filter(
             club=club,
-            date_end__gte=datetime.today(),
+            date_end__gte=date.today(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
         membership_table = WEIMembershipTable(data=club_member, prefix="membership-")
         membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))

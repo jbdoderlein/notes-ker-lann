@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import io
-from datetime import datetime, timedelta
+from datetime import timedelta, date
 
 from PIL import Image
 from django.conf import settings
@@ -151,7 +151,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
         context['history_list'] = history_table
 
-        club_list = Membership.objects.filter(user=user, date_end__gte=datetime.today())\
+        club_list = Membership.objects.filter(user=user, date_end__gte=date.today())\
             .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
         membership_table = MembershipTable(data=club_list, prefix='membership-')
         membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
@@ -374,7 +374,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context['history_list'] = history_table
         club_member = Membership.objects.filter(
             club=club,
-            date_end__gte=datetime.today(),
+            date_end__gte=date.today(),
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
         membership_table = MembershipTable(data=club_member, prefix="membership-")

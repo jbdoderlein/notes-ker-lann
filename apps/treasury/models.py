@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import datetime
+
+from datetime import date
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -55,7 +56,7 @@ class Invoice(models.Model):
     )
 
     date = models.DateField(
-        default=datetime.today,
+        default=date.today,
         verbose_name=_("Date"),
     )
 
@@ -326,7 +327,7 @@ class SogeCredit(models.Model):
         for transaction in self.transactions.all():
             transaction.valid = True
             transaction._force_save = True
-            transaction.created_at = datetime.now()
+            transaction.created_at = timezone.now()
             transaction.save()
 
     def delete(self, **kwargs):
@@ -345,7 +346,7 @@ class SogeCredit(models.Model):
         for transaction in self.transactions.all():
             transaction._force_save = True
             transaction.valid = True
-            transaction.created_at = datetime.now()
+            transaction.created_at = timezone.now()
             transaction.save()
         super().delete(**kwargs)
 
