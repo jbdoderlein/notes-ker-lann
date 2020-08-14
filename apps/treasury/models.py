@@ -137,7 +137,7 @@ class Product(models.Model):
 
     @property
     def amount_euros(self):
-        return self.amount / 100
+        return "{:.2f}".format(self.amount / 100)
 
     @property
     def total(self):
@@ -145,7 +145,7 @@ class Product(models.Model):
 
     @property
     def total_euros(self):
-        return self.total / 100
+        return "{:.2f}".format(self.total / 100)
 
     class Meta:
         verbose_name = _("product")

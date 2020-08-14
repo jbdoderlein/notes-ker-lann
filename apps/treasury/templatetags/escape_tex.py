@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django import template
+from django.utils.safestring import mark_safe
 
 
 def do_latex_escape(value):
-    return (
+    return mark_safe(
         value.replace("&", "\\&")
         .replace("$", "\\$")
         .replace("%", "\\%")
