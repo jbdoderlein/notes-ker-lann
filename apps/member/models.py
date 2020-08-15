@@ -384,7 +384,8 @@ class Membership(models.Model):
             ).exists():
                 raise ValidationError(_('User is already a member of the club'))
 
-            if self.club.parent_club is not None:
+            if self.club.parent_club is not None and not self.pk:
+                # Check that the user is already a member of the parent club if the membership is created
                 if not Membership.objects.filter(
                     user=self.user,
                     club=self.club.parent_club,
