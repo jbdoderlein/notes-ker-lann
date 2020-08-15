@@ -3,8 +3,8 @@
 
 from django.contrib import admin
 from note_kfet.admin import admin_site
-from .forms import GuestForm
 
+from .forms import GuestForm
 from .models import Activity, ActivityType, Entry, Guest
 
 
