@@ -295,7 +295,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
 # ******************************* #
 
 
-class ClubCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class ClubCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Club
     """
@@ -446,7 +446,7 @@ class ClubPictureUpdateView(PictureUpdateView):
         return reverse_lazy('member:club_detail', kwargs={'pk': self.object.id})
 
 
-class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Add a membership to a club.
     """

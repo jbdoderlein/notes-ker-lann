@@ -20,7 +20,7 @@ from .models import Activity, Entry, Guest
 from .tables import ActivityTable, EntryTable, GuestTable
 
 
-class ActivityCreateView(LoginRequiredMixin, ProtectedCreateView):
+class ActivityCreateView(ProtectedCreateView):
     model = Activity
     form_class = ActivityForm
     extra_context = {"title": _("Create new activity")}
@@ -98,7 +98,7 @@ class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy('activity:activity_detail', kwargs={"pk": self.kwargs["pk"]})
 
 
-class ActivityInviteView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
     model = Guest
     form_class = GuestForm
     template_name = "activity/activity_invite.html"

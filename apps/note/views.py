@@ -156,6 +156,10 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     table_class = HistoryTable
 
     def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         templates = TransactionTemplate.objects.filter(
             PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
         )

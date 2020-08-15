@@ -67,7 +67,7 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         return context
 
 
-class WEICreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class WEICreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create WEI
     """
@@ -286,7 +286,7 @@ class WEIUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy("wei:wei_detail", kwargs={"pk": self.object.pk})
 
 
-class BusCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class BusCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Bus
     """
@@ -381,7 +381,7 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class BusTeamCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class BusTeamCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create BusTeam
     """
@@ -474,7 +474,7 @@ class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Register a new user to the WEI
     """
@@ -541,7 +541,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreat
         return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
 
 
-class WEIRegister2AView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Register an old user to the WEI
     """
@@ -761,7 +761,7 @@ class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Delete
         return reverse_lazy('wei:wei_detail', args=(self.object.wei.pk,))
 
 
-class WEIValidateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Validate WEI Registration
     """

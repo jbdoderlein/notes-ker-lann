@@ -3,6 +3,7 @@
 
 from datetime import date
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
@@ -44,7 +45,7 @@ class ProtectQuerysetMixin:
         return form
 
 
-class ProtectedCreateView(CreateView):
+class ProtectedCreateView(LoginRequiredMixin, CreateView):
     """
     Extends a CreateView to check is the user has the right to create a sample instance of the given Model.
     If not, a 403 error is displayed.
@@ -58,6 +59,10 @@ class ProtectedCreateView(CreateView):
         raise NotImplementedError
 
     def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated before that he/she has the permission to access here
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         model_class = self.model
         # noinspection PyProtectedMember
         app_label, model_name = model_class._meta.app_label, model_class._meta.model_name.lower()

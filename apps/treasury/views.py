@@ -29,7 +29,7 @@ from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeC
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
 
 
-class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Invoice
     """
@@ -90,6 +90,10 @@ class InvoiceListView(LoginRequiredMixin, SingleTableView):
     extra_context = {"title": _("Invoices list")}
 
     def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         sample_invoice = Invoice(
             id=0,
             object="",
@@ -215,7 +219,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         return response
 
 
-class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreateView):
+class RemittanceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Remittance
     """
@@ -251,6 +255,10 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     extra_context = {"title": _("Remittances list")}
 
     def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         sample_remittance = Remittance(
             remittance_type_id=1,
             comment="",
@@ -377,6 +385,10 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
     extra_context = {"title": _("List of credits from the Société générale")}
 
     def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
         if not self.get_queryset().exists():
             raise PermissionDenied(_("You are not able to see the treasury interface."))
         return super().dispatch(request, *args, **kwargs)
