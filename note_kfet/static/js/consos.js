@@ -41,7 +41,7 @@ $(document).ready(function() {
                 $("#conso_button_" + button.id).click(function() {
                     if (LOCK)
                         return;
-                    removeNote(button, "conso_button", buttons,"consos_list");
+                    removeNote(button, "conso_button", buttons,"consos_list")();
                 });
             });
         }
@@ -61,7 +61,7 @@ $(document).ready(function() {
                     $("#conso_button_" + button.id).click(function() {
                         if (LOCK)
                             return;
-                        removeNote(button, "conso_button", buttons,"note_list");
+                        removeNote(button, "conso_button", buttons,"note_list")();
                     });
                 });
             }
@@ -139,7 +139,7 @@ function addConso(dest, amount, type, category_id, category_name, template_id, t
             $("#conso_button_" + button.id).click(function() {
                 if (LOCK)
                     return;
-                removeNote(button, "conso_button", buttons, list);
+                removeNote(button, "conso_button", buttons, list)();
             });
         });
     }
