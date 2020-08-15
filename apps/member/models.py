@@ -72,7 +72,7 @@ class Profile(models.Model):
         ]
     )
 
-    promotion = models.PositiveIntegerField(
+    promotion = models.PositiveSmallIntegerField(
         null=True,
         default=datetime.date.today().year,
         verbose_name=_("promotion"),

@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import CheckboxSelectMultiple
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial, Alias
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
@@ -41,9 +42,16 @@ class ProfileForm(forms.ModelForm):
 
     last_report = forms.DateTimeField(required=False, disabled=True, label=_("Last report date"))
 
+    def clean_promotion(self):
+        promotion = self.cleaned_data["promotion"]
+        if promotion > timezone.now().year:
+            self.add_error("promotion", _("You can't register to the note if you come from the future."))
+        return promotion
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['address'].widget.attrs.update({"placeholder": "4 avenue des Sciences, 91190 GIF-SUR-YVETTE"})
+        self.fields['promotion'].widget.attrs.update({"max": timezone.now().year})
 
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data
