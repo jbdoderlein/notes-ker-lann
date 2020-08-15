@@ -1,4 +1,5 @@
 {% load pretty_money %}
+{% load getenv %}
 {% load i18n %}
 
 Bonjour {{ note.user.first_name }} {{ note.user.last_name }},
@@ -12,7 +13,7 @@ Par ailleurs, le BDE ne sert pas d'alcool aux adhérents dont le solde
 est inférieur à 0 € depuis plus de 24h.
 
 Si tu ne comprends pas ton solde, tu peux consulter ton historique
-sur ton compte {% url "member:user_detail" pk=note.user.pk %}
+sur ton compte {% "NOTE_URL"|getenv %}{% url "member:user_detail" pk=note.user.pk %}
 
 Tu peux venir recharger ta note rapidement à la Kfet, ou envoyer un mail à
 la trésorerie du BdE (tresorerie.bde@lists.crans.org) pour payer par

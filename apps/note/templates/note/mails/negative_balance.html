@@ -1,4 +1,5 @@
 {% load pretty_money %}
+{% load getenv %}
 {% load i18n %}
 
 <!DOCTYPE html>
@@ -27,7 +28,7 @@
 
 <p>
     Si tu ne comprends pas ton solde, tu peux consulter ton historique
-    sur <a href="{% url "member:user_detail" pk=note.user.pk %}">ton compte</a>.
+    sur <a href="https://{{ "NOTE_URL"|getenv }}{% url "member:user_detail" pk=note.user.pk %}">ton compte</a>.
 </p>
 
 <p>
