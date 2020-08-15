@@ -553,22 +553,6 @@
 	},
 	{
 		"model": "permission.permission",
-		"pk": 35,
-		"fields": {
-			"model": [
-				"activity",
-				"activity"
-			],
-			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
-			"type": "change",
-			"mask": 1,
-			"field": "",
-			"permanent": false,
-			"description": "Modifier les activités non validées dont on est l'auteur"
-		}
-	},
-	{
-		"model": "permission.permission",
 		"pk": 36,
 		"fields": {
 			"model": [
@@ -2376,6 +2360,134 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 152,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "name",
+			"permanent": false,
+			"description": "Modifier le nom d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 153,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "description",
+			"permanent": false,
+			"description": "Modifier la description d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 154,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "location",
+			"permanent": false,
+			"description": "Modifier le lieu d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 155,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "activity_type",
+			"permanent": false,
+			"description": "Modifier le type d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 156,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "organizer",
+			"mask": 1,
+			"field": "name",
+			"permanent": false,
+			"description": "Modifier l'organisateur d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 157,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "attendees_club",
+			"permanent": false,
+			"description": "Modifier le club attendu d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 158,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "date_start",
+			"permanent": false,
+			"description": "Modifier la date de début d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 159,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "date_end",
+			"permanent": false,
+			"description": "Modifier la date de fin d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2409,7 +2521,6 @@
 			"name": "Adh\u00e9rent Kfet",
 			"permissions": [
 				34,
-				35,
 				36,
 				6,
 				39,
@@ -2431,7 +2542,15 @@
 				101,
 				108,
 				109,
-				144
+				144,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159
 			]
 		}
 	},
@@ -2600,7 +2719,6 @@
 				32,
 				33,
 				34,
-				35,
 				36,
 				37,
 				38,
@@ -2713,7 +2831,15 @@
 				148,
 				149,
 				150,
-				151
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159
 			]
 		}
 	},
