@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -208,38 +209,38 @@ class Transaction(PolymorphicModel):
         """
         When saving, also transfer money between two notes
         """
-        with transaction.atomic():
-            diff_source, diff_dest = self.validate()
+        if self.source.pk == self.destination.pk:
+            # When source == destination, no money is transferred and no transaction is created
+            return
 
-            if not self.source.is_active or not self.destination.is_active:
-                if 'force_insert' not in kwargs or not kwargs['force_insert']:
-                    if 'force_update' not in kwargs or not kwargs['force_update']:
-                        raise ValidationError(_("The transaction can't be saved since the source note "
-                                                "or the destination note is not active."))
+        # We refresh the notes with the "select for update" tag to avoid concurrency issues
+        self.source = Note.objects.filter(pk=self.source_id).select_for_update().get()
+        self.destination = Note.objects.filter(pk=self.destination_id).select_for_update().get()
 
-            # If the aliases are not entered, we assume that the used alias is the name of the note
-            if not self.source_alias:
-                self.source_alias = str(self.source)
+        # Check that the amounts stay between big integer bounds
+        diff_source, diff_dest = self.validate()
 
-            if not self.destination_alias:
-                self.destination_alias = str(self.destination)
+        if not self.source.is_active or not self.destination.is_active:
+            if 'force_insert' not in kwargs or not kwargs['force_insert']:
+                if 'force_update' not in kwargs or not kwargs['force_update']:
+                    raise ValidationError(_("The transaction can't be saved since the source note "
+                                            "or the destination note is not active."))
 
-            if self.source.pk == self.destination.pk:
-                # When source == destination, no money is transferred and no transaction is created
-                return
+        # If the aliases are not entered, we assume that the used alias is the name of the note
+        if not self.source_alias:
+            self.source_alias = str(self.source)
 
-            # We save first the transaction, in case of the user has no right to transfer money
-            super().save(*args, **kwargs)
+        if not self.destination_alias:
+            self.destination_alias = str(self.destination)
 
-            # Save notes
-            self.source.refresh_from_db()
-            self.source.balance += diff_source
-            self.source._force_save = True
-            self.source.save()
-            self.destination.refresh_from_db()
-            self.destination.balance += diff_dest
-            self.destination._force_save = True
-            self.destination.save()
+        # We save first the transaction, in case of the user has no right to transfer money
+        super().save(*args, **kwargs)
+
+        # Save notes
+        self.source.balance += diff_source
+        self.source.save()
+        self.destination.balance += diff_dest
+        self.destination.save()
 
     def delete(self, **kwargs):
         """
