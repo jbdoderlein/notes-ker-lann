@@ -62,7 +62,8 @@ class HistoryTable(tables.Table):
                 "title": lambda record: (_("Click to invalidate") if record.valid else _("Click to validate"))
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
                                                 "note.change_transaction_invalidity_reason", record) else None,
-                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower() + ')'
+                "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower()
+                                          + ', "' + str(record.__class__.__name__) + '")'
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
                                                 "note.change_transaction_invalidity_reason", record) else None,
                 "onmouseover": lambda record: '$("#invalidity_reason_'

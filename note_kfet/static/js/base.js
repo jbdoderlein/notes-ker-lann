@@ -348,7 +348,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 
 
 // When a validate button is clicked, we switch the validation status
-function de_validate(id, validated) {
+function de_validate(id, validated, resourcetype) {
     let validate_obj = $("#validate_" + id);
 
     if (validate_obj.data("pending"))
@@ -369,14 +369,11 @@ function de_validate(id, validated) {
             "X-CSRFTOKEN": CSRF_TOKEN
         },
         data: {
-            "resourcetype": "RecurrentTransaction",
+            "resourcetype": resourcetype,
             "valid": !validated,
             "invalidity_reason": invalidity_reason,
         },
         success: function () {
-            // Refresh jQuery objects
-            $(".validate").click(de_validate);
-
             refreshBalance();
             // error if this method doesn't exist. Please define it.
             refreshHistory();
