@@ -20,6 +20,9 @@
 
 {% block profile_content %}
     {% crispy form %}
+{% endblock %}
+
+{% block extra_content %}
     <div id="table">
         {% render_table table %}
     </div>

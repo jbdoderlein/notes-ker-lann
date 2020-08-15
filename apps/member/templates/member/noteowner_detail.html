@@ -5,16 +5,19 @@
 {% load pretty_money %}
 
 {% block content %}
-<div class="row mt-4">
-    <div class="col-xl-4">
-        {% block profile_info %}
-        {% endblock %}
+    <div class="row mt-4">
+        <div class="col-xl-4">
+            {% block profile_info %}
+            {% endblock %}
+        </div>
+        <div class="col-xl-8">
+            {% block profile_content %}
+            {% endblock %}
+        </div>
     </div>
-    <div class="col-xl-8">
-        {% block profile_content %}
-        {% endblock %}
-    </div>
-</div>
+
+    {% block extra_content %}
+    {% endblock %}
 {% endblock %}
 
 {% block extrajavascript %}
