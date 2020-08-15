@@ -327,6 +327,7 @@ $("#btn_transfer").click(function() {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                                 + " vers la note " + dest.name + " a échoué : " + errObj["non_field_errors"], "danger");
+                            LOCK = false;
                             return;
                         }
 
@@ -357,6 +358,7 @@ $("#btn_transfer").click(function() {
                             addMsg("Le transfert de "
                                 + pretty_money(source.quantity * dest.quantity * amount) + " de la note " + source.name
                                 + " vers la note " + dest.name + " a échoué : " + error, "danger");
+                            LOCK = false;
                     });
                 });
             });
@@ -412,6 +414,7 @@ $("#btn_transfer").click(function() {
                 if (!error)
                     error = err.responseText;
                 addMsg("Le crédit/retrait a échoué : " + error, "danger", 10000);
+                LOCK = false;
         });
     }
 });
