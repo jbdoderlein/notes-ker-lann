@@ -385,8 +385,8 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         empty_membership = Membership(
             club=club,
             user=User.objects.first(),
-            date_start=datetime.now().date(),
-            date_end=datetime.now().date(),
+            date_start=date.today(),
+            date_end=date.today(),
             fee=0,
         )
         context["can_add_members"] = PermissionBackend()\
@@ -601,8 +601,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, LoginRequiredMixin, ProtectedCreat
         if user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
-                date_start__lte=datetime.now().date(),
-                date_end__gte=datetime.now().date(),
+                date_start__lte=date.today(),
+                date_end__gte=date.today(),
         ).exists():
             # Users without a valid Kfet membership can't have a negative balance.
             # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note

@@ -5,7 +5,6 @@ from datetime import date
 
 from django.core.management import BaseCommand
 from django.db.models import Q
-
 from member.models import Membership, Club
 from wei.models import WEIClub
 
