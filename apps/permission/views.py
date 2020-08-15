@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView, TemplateView, CreateView
 from member.models import Membership
@@ -95,8 +94,8 @@ class RightsView(TemplateView):
 
         if self.request.user.is_authenticated:
             special_memberships = Membership.objects.filter(
-                date_start__lte=timezone.now().date(),
-                date_end__gte=timezone.now().date(),
+                date_start__lte=date.today(),
+                date_end__gte=date.today(),
             ).filter(roles__in=Role.objects.filter(~(Q(name="Adhérent BDE")
                                                      | Q(name="Adhérent Kfet")
                                                      | Q(name="Membre de club")

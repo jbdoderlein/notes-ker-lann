@@ -17,7 +17,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, UpdateView, RedirectView, TemplateView
 from django.utils.translation import gettext_lazy as _
@@ -61,8 +60,8 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
             name="",
             email="weiclub@example.com",
             year=0,
-            date_start=timezone.now().date(),
-            date_end=timezone.now().date(),
+            date_start=date.today(),
+            date_end=date.today(),
         ))
         return context
 
@@ -81,8 +80,8 @@ class WEICreateView(ProtectQuerysetMixin, ProtectedCreateView):
             name="",
             email="weiclub@example.com",
             year=0,
-            date_start=timezone.now().date(),
-            date_end=timezone.now().date(),
+            date_start=date.today(),
+            date_end=date.today(),
         )
 
     def form_valid(self, form):
@@ -723,8 +722,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         if PermissionBackend.check_perm(self.request.user, "wei.add_weimembership", WEIMembership(
             club=self.object.wei,
             user=self.object.user,
-            date_start=timezone.now().date(),
-            date_end=timezone.now().date(),
+            date_start=date.today(),
+            date_end=date.today(),
             fee=0,
             registration=self.object,
         )):
@@ -774,8 +773,8 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
         return WEIMembership(
             club=registration.wei,
             user=registration.user,
-            date_start=timezone.now().date(),
-            date_end=timezone.now().date() + timedelta(days=1),
+            date_start=date.today(),
+            date_end=date.today() + timedelta(days=1),
             fee=0,
             registration=registration,
         )

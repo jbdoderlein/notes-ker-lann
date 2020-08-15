@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from datetime import date
+
 from django.contrib.auth.models import User
 from django.core.exceptions import FieldError
 from django.db.models import F, Q
@@ -22,14 +24,14 @@ class PermissionQueryTestCase(TestCase):
         NoteUser.objects.create(user=user)
         wei = WEIClub.objects.create(
             name="wei",
-            date_start=timezone.now().date(),
-            date_end=timezone.now().date(),
+            date_start=date.today(),
+            date_end=date.today(),
         )
         NoteClub.objects.create(club=wei)
         weiregistration = WEIRegistration.objects.create(
             user=user,
             wei=wei,
-            birth_date=timezone.now().date(),
+            birth_date=date.today(),
         )
         bus = Bus.objects.create(
             name="bus",
@@ -68,7 +70,7 @@ class PermissionQueryTestCase(TestCase):
                 F=F,
                 Q=Q,
                 now=timezone.now(),
-                today=timezone.now().date(),
+                today=date.today(),
             )
             try:
                 instanced.update_query()

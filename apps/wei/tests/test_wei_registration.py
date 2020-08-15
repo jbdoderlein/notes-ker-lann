@@ -72,7 +72,7 @@ class TestWEIRegistration(TestCase):
             membership_start=date(self.year, 1, 1),
             membership_end=date(self.year, 12, 31),
             year=self.year,
-            date_start=timezone.now().date() + timedelta(days=2),
+            date_start=date.today() + timedelta(days=2),
             date_end=date(self.year, 12, 31),
         )
         NoteClub.objects.create(club=self.wei)
@@ -772,7 +772,7 @@ class TestWEISurveyAlgorithm(TestCase):
             membership_start=date(self.year, 1, 1),
             membership_end=date(self.year, 12, 31),
             year=self.year,
-            date_start=timezone.now().date() + timedelta(days=2),
+            date_start=date.today() + timedelta(days=2),
             date_end=date(self.year, 12, 31),
         )
         NoteClub.objects.create(club=self.wei)

@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -84,18 +84,18 @@ class TestPermissionDenied(TestCase):
 
     def test_create_wei_bus(self):
         wei = WEIClub.objects.create(
-            membership_start=timezone.now().date(),
-            date_start=timezone.now().date() + timedelta(days=1),
-            date_end=timezone.now().date() + timedelta(days=1),
+            membership_start=date.today(),
+            date_start=date.today() + timedelta(days=1),
+            date_end=date.today() + timedelta(days=1),
         )
         response = self.client.get(reverse("wei:add_bus", kwargs=dict(pk=wei.pk)))
         self.assertEqual(response.status_code, 403)
 
     def test_create_wei_team(self):
         wei = WEIClub.objects.create(
-            membership_start=timezone.now().date(),
-            date_start=timezone.now().date() + timedelta(days=1),
-            date_end=timezone.now().date() + timedelta(days=1),
+            membership_start=date.today(),
+            date_start=date.today() + timedelta(days=1),
+            date_end=date.today() + timedelta(days=1),
         )
         bus = Bus.objects.create(wei=wei)
         response = self.client.get(reverse("wei:add_team", kwargs=dict(pk=bus.pk)))
@@ -103,27 +103,27 @@ class TestPermissionDenied(TestCase):
 
     def test_create_1a_weiregistration(self):
         wei = WEIClub.objects.create(
-            membership_start=timezone.now().date(),
-            date_start=timezone.now().date() + timedelta(days=1),
-            date_end=timezone.now().date() + timedelta(days=1),
+            membership_start=date.today(),
+            date_start=date.today() + timedelta(days=1),
+            date_end=date.today() + timedelta(days=1),
         )
         response = self.client.get(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=wei.pk)))
         self.assertEqual(response.status_code, 403)
 
     def test_create_old_weiregistration(self):
         wei = WEIClub.objects.create(
-            membership_start=timezone.now().date(),
-            date_start=timezone.now().date() + timedelta(days=1),
-            date_end=timezone.now().date() + timedelta(days=1),
+            membership_start=date.today(),
+            date_start=date.today() + timedelta(days=1),
+            date_end=date.today() + timedelta(days=1),
         )
         response = self.client.get(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=wei.pk)))
         self.assertEqual(response.status_code, 403)
 
     def test_validate_weiregistration(self):
         wei = WEIClub.objects.create(
-            membership_start=timezone.now().date(),
-            date_start=timezone.now().date() + timedelta(days=1),
-            date_end=timezone.now().date() + timedelta(days=1),
+            membership_start=date.today(),
+            date_start=date.today() + timedelta(days=1),
+            date_end=date.today() + timedelta(days=1),
         )
         registration = WEIRegistration.objects.create(wei=wei, user=self.user, birth_date="2000-01-01")
         response = self.client.get(reverse("wei:validate_registration", kwargs=dict(pk=registration.pk)))

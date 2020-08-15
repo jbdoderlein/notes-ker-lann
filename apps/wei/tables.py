@@ -1,9 +1,10 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from datetime import date
+
 import django_tables2 as tables
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
@@ -89,8 +90,8 @@ class WEIRegistrationTable(tables.Table):
             get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
                 club=record.wei,
                 user=record.user,
-                date_start=timezone.now().date(),
-                date_end=timezone.now().date(),
+                date_start=date.today(),
+                date_end=date.today(),
                 fee=0,
                 registration=record,
             )
