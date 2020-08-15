@@ -86,6 +86,9 @@ def save_object(sender, instance, **kwargs):
         # On ne garde que les champs modifiés
         changed_fields = []
         for field in instance._meta.fields:
+            if field.name.endswith("_ptr"):
+                # A field ending with _ptr is a OneToOneRel with a subclass, e.g. NoteClub.note_ptr -> Note
+                continue
             if getattr(instance, field.name) != getattr(previous, field.name):
                 changed_fields.append(field.name)
 
