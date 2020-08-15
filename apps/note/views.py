@@ -91,7 +91,12 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
         qs = super().get_queryset().distinct()
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
-            qs = qs.filter(Q(name__iregex="^" + pattern) | Q(destination__club__name__iregex="^" + pattern))
+            qs = qs.filter(
+                Q(name__iregex="^" + pattern)
+                | Q(destination__club__name__iregex="^" + pattern)
+                | Q(category__name__iregex="^" + pattern)
+                | Q(description__iregex=pattern)
+            )
 
         qs = qs.order_by('-display', 'category__name', 'destination__club__name', 'name')
 
