@@ -52,6 +52,10 @@
             $("#table").load(location.pathname + "?" + filters.replaceAll(" ", "%20") + " #table");
         }
 
+        function autocompleted() {
+            refreshFilters();
+        }
+
         $(document).ready(function() {
             $("input").change(refreshFilters);
             $("input").keyup(refreshFilters);
