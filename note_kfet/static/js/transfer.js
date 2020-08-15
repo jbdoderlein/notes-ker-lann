@@ -273,6 +273,7 @@ $("#btn_transfer").click(function() {
                     addMsg("Attention : la transaction de " + pretty_money(amount) + " de la note " + source.name
                         + " vers la note " + dest.name + " n'a pas été faite car il s'agit de la même note au départ" +
                         " et à l'arrivée.","warning", 10000);
+                    LOCK = false;
                     return;
                 }
 
