@@ -55,9 +55,8 @@ class GuestForm(forms.ModelForm):
             first_name__iexact=cleaned_data["first_name"],
             last_name__iexact=cleaned_data["last_name"],
             activity__date_start__gte=self.activity.date_start - one_year,
-            entry__isnull=False,
         )
-        if qs.count() >= 5:
+        if qs.filter(entry__isnull=False).count() >= 5:
             self.add_error("last_name", _("This person has been already invited 5 times this year."))
 
         qs = qs.filter(activity=self.activity)

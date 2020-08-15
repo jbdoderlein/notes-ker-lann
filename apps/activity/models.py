@@ -257,7 +257,7 @@ class Guest(models.Model):
                 last_name__iexact=self.last_name,
                 activity__date_start__gte=self.activity.date_start - one_year,
             )
-            if qs.count() >= 5:
+            if qs.filter(entry__isnull=False).count() >= 5:
                 raise ValidationError(_("This person has been already invited 5 times this year."))
 
             qs = qs.filter(activity=self.activity)
