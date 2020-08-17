@@ -138,6 +138,7 @@ class Activity(models.Model):
     class Meta:
         verbose_name = _("activity")
         verbose_name_plural = _("activities")
+        unique_together = ("name", "date_start", "date_end",)
 
 
 class Entry(models.Model):
