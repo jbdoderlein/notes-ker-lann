@@ -238,8 +238,10 @@ class Transaction(PolymorphicModel):
 
         # Save notes
         self.source.balance += diff_source
+        self.source._force_save = True
         self.source.save()
         self.destination.balance += diff_dest
+        self.destination._force_save = True
         self.destination.save()
 
     def delete(self, **kwargs):
