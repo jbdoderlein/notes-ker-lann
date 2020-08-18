@@ -57,7 +57,6 @@ class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
         form_set = ProductFormSet(instance=form.instance)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
-        context['no_cache'] = True
 
         return context
 
@@ -125,7 +124,6 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form_set = ProductFormSet(instance=self.object)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
-        context['no_cache'] = True
 
         if self.object.locked:
             for field_name in form.fields:

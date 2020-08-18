@@ -188,9 +188,6 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         ).order_by('name').all()
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
-        # select2 compatibility
-        context['no_cache'] = True
-
         return context
 
 
