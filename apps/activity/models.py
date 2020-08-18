@@ -123,6 +123,9 @@ class Activity(models.Model):
         """
         Update the activity wiki page each time the activity is updated (validation, change description, ...)
         """
+        if self.date_end < self.date_start:
+            raise ValidationError(_("The end date must be after the start date."))
+
         ret = super().save(*args, **kwargs)
         if settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
             def refresh_activities():
