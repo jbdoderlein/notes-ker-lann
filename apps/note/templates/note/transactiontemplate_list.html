@@ -5,6 +5,7 @@
 {% block content %}
 <div class="row justify-content-center mb-4">
     <div class="col-md-10 text-center">
+        {# Search field , see js #}
         <input class="form-control mx-auto w-25" type="text" id="search_field" placeholder="{% trans "Name of the button..." %}" value="{{ request.GET.search }}">
         <hr>
         <a class="btn btn-primary text-center my-1" href="{% url 'note:template_create' %}" data-turbolinks="false">{% trans "New button" %}</a>

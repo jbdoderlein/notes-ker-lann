@@ -29,21 +29,19 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     e.g. for donation/transfer between people and clubs or for credit/debit with :models:`note.NoteSpecial`
     """
     template_name = "note/transaction_form.html"
-
+    # SingleTableView creates `context["table"]` we will  load it with transaction history
     model = Transaction
     # Transaction history table
     table_class = HistoryTable
     extra_context = {"title": _("Transfer money")}
 
     def get_queryset(self, **kwargs):
+        # retrieves only Transaction that user has the right to see.
         return Transaction.objects.filter(
             PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
         ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
-        """
-        Add some context variables in template such as page title
-        """
         context = super().get_context_data(**kwargs)
         context['amount_widget'] = AmountInput(attrs={"id": "amount"})
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
@@ -146,7 +144,7 @@ class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, Up
 class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     The Magic View that make people pay their beer and burgers.
-    (Most of the magic happens in the dark world of Javascript see consos.js)
+    (Most of the magic happens in the dark world of Javascript see `note_kfet/static/js/consos.js`)
     """
     model = Transaction
     template_name = "note/conso_form.html"
@@ -168,21 +166,25 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self, **kwargs):
+        """
+        restrict to the transaction history the user can see.
+        """
         return Transaction.objects.filter(
             PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
         ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
-        """
-        Add some context variables in template such as page title
-        """
         context = super().get_context_data(**kwargs)
+
         categories = TemplateCategory.objects.order_by('name').all()
+        # for each category, find which transaction templates the user can see.
         for category in categories:
             category.templates_filtered = category.templates.filter(
                 PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
             ).filter(display=True).order_by('name').all()
+
         context['categories'] = [cat for cat in categories if cat.templates_filtered]
+        # some transactiontemplate are put forward to find them easily
         context['highlighted'] = TransactionTemplate.objects.filter(highlighted=True).filter(
             PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
         ).order_by('name').all()

@@ -6,7 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% load i18n static django_tables2 perms %}
 
 {% block content %}
-
+{# bandeau transfert/crédit/débit/activité #}
     <div class="row">
         <div class="col-xl-12">
             <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
@@ -34,8 +34,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
     </div>
-
     <div class="row">
+    {#  Preview note profile (picture, username and balance) #}
         <div class="col-md-3" id="note_infos_div">
             <div class="card border-success shadow mb-4">
                 <a id="profile_pic_link" href="#"><img src="/media/pic/default.png"
@@ -45,7 +45,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-
+    {# list of emitters #}
         <div class="col-md-3" id="emitters_div">
             <div class="card border-success shadow mb-4">
                 <div class="card-header">
@@ -66,7 +66,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-
+{# list of receiver #}
         <div class="col-md-3" id="dests_div">
             <div class="card border-info shadow mb-4">
                 <div class="card-header">
@@ -83,7 +83,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-
+{# Information on transaction (amount, reason, name,...) #}
         <div class="col-md-3" id="external_div">
             <div class="card border-warning shadow mb-4">
                 <div class="card-header">
@@ -108,7 +108,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                             <p id="reason-required" class="invalid-feedback"></p>
                         </div>
                     </div>
-
+                    {# in case of special transaction add identity information #}
                     <div class="d-none" id="special_transaction_div">
                         <div class="form-row">
                             <div class="col-md-12">
@@ -149,7 +149,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
             </div>
         </div>
     </div>
-
+{# transaction history #}
     <div class="card shadow mb-4" id="history">
         <div class="card-header">
             <p class="card-text font-weight-bold">
