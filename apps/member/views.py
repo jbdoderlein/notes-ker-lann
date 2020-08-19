@@ -29,7 +29,7 @@ from permission.models import Role
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import UserForm, ProfileForm, ImageForm, ClubForm, MembershipForm,\
-    CustomAuthenticationForm, MembershipRolesForm,
+    CustomAuthenticationForm, MembershipRolesForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable, ClubManagerTable
 

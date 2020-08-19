@@ -174,7 +174,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             raise PermissionDenied(_("This activity is closed."))
         return super().dispatch(request, *args, **kwargs)
 
-    def get_invited_guest(self,activity):
+    def get_invited_guest(self, activity):
         """
         Retrieves all Guests to the activity
         """
@@ -200,7 +200,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             guest_qs = guest_qs.none()
         return guest_qs
 
-    def get_invited_note(self,activity):
+    def get_invited_note(self, activity):
         """
         Retrieves all Note that can attend the activity,
         they need to have an up-to-date membership in the attendees_club.
