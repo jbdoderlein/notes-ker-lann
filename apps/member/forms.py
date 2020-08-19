@@ -65,6 +65,18 @@ class ProfileForm(forms.ModelForm):
         exclude = ('user', 'email_confirmed', 'registration_valid', )
 
 
+class ImageForm(forms.Form):
+    """
+    Form used for the js interface for profile picture
+    """
+    image = forms.ImageField(required=False,
+                             label=_('select an image'),
+                             help_text=_('Maximal size: 2MB'))
+    x = forms.FloatField(widget=forms.HiddenInput())
+    y = forms.FloatField(widget=forms.HiddenInput())
+    width = forms.FloatField(widget=forms.HiddenInput())
+    height = forms.FloatField(widget=forms.HiddenInput())
+
 class ClubForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()

@@ -29,7 +29,7 @@ from .tokens import email_validation_token
 
 class UserCreateView(CreateView):
     """
-    Une vue pour inscrire un utilisateur et lui créer un profil
+    A view to create a User and add a Profile
     """
 
     form_class = SignUpForm

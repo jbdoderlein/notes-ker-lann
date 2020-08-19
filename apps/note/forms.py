@@ -10,15 +10,6 @@ from note_kfet.inputs import Autocomplete, AmountInput, DateTimePickerInput
 from .models import TransactionTemplate, NoteClub, Alias
 
 
-class ImageForm(forms.Form):
-    image = forms.ImageField(required=False,
-                             label=_('select an image'),
-                             help_text=_('Maximal size: 2MB'))
-    x = forms.FloatField(widget=forms.HiddenInput())
-    y = forms.FloatField(widget=forms.HiddenInput())
-    width = forms.FloatField(widget=forms.HiddenInput())
-    height = forms.FloatField(widget=forms.HiddenInput())
-
 
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:

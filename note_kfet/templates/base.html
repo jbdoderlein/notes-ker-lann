@@ -22,12 +22,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static "favicon/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
-
-    {# Disable turbolink cache for some pages #}
-    {% if no_cache %}
-        <meta name="turbolinks-cache-control" content="no-cache">
-    {% endif %}
-
     {# Bootstrap CSS #}
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"

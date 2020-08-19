@@ -54,6 +54,15 @@ class ActivityForm(forms.ModelForm):
 
 class GuestForm(forms.ModelForm):
     def clean(self):
+        """
+        Someone can be invited as a Guest to an Activity if:
+        - the activity has not already started.
+        - the activity is validated.
+        - the Guest has not already been invited more than 5 times.
+        - the Guest is already invited.
+        - the inviter already invited 3 peoples.
+        """
+
         cleaned_data = super().clean()
 
         if timezone.now() > timezone.localtime(self.activity.date_start):

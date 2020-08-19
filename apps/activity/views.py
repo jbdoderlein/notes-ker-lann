@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
+
 from note.models import Alias, NoteSpecial, NoteUser
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
@@ -21,6 +22,9 @@ from .tables import ActivityTable, EntryTable, GuestTable
 
 
 class ActivityCreateView(ProtectedCreateView):
+    """
+    View to create a new Activity
+    """
     model = Activity
     form_class = ActivityForm
     extra_context = {"title": _("Create new activity")}
@@ -47,6 +51,9 @@ class ActivityCreateView(ProtectedCreateView):
 
 
 class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+    """
+    Displays all Activities, and classify if they are on-going or upcoming ones.
+    """
     model = Activity
     table_class = ActivityTable
     ordering = ('-date_start',)
@@ -73,6 +80,9 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
 
 
 class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    Shows details about one activity. Add guest to context
+    """
     model = Activity
     context_object_name = "activity"
     extra_context = {"title": _("Activity detail")}
@@ -90,6 +100,9 @@ class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
 
 class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
+    """
+    Updates one Activity
+    """
     model = Activity
     form_class = ActivityForm
     extra_context = {"title": _("Update activity")}
@@ -99,11 +112,15 @@ class ActivityUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
 
 class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
+    """
+    Invite a Guest, The rules to invites someone are defined in `forms:activity.GuestForm`
+    """
     model = Guest
     form_class = GuestForm
     template_name = "activity/activity_invite.html"
 
     def get_sample_object(self):
+        """ Creates a standart Guest binds to the Activity"""
         activity = Activity.objects.get(pk=self.kwargs["pk"])
         return Guest(
             activity=activity,
@@ -134,6 +151,9 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
 
 
 class ActivityEntryView(LoginRequiredMixin, TemplateView):
+    """
+    Manages entry to an activity
+    """
     template_name = "activity/activity_entry.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -154,14 +174,10 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             raise PermissionDenied(_("This activity is closed."))
         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
-            .distinct().get(pk=self.kwargs["pk"])
-        context["activity"] = activity
-
-        matched = []
+    def get_invited_guest(self,activity):
+        """
+        Retrieves all Guests to the activity
+        """
 
         guest_qs = Guest.objects\
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
@@ -182,11 +198,13 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         else:
             pattern = None
             guest_qs = guest_qs.none()
+        return guest_qs
 
-        for guest in guest_qs:
-            guest.type = "Invité"
-            matched.append(guest)
-
+    def get_invited_note(self,activity):
+        """
+        Retrieves all Note that can attend the activity,
+        they need to have an up-to-date membership in the attendees_club.
+        """
         note_qs = Alias.objects.annotate(last_name=F("note__noteuser__user__last_name"),
                                          first_name=F("note__noteuser__user__first_name"),
                                          username=F("note__noteuser__user__username"),
@@ -223,8 +241,25 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
             # In production mode, please use PostgreSQL.
             note_qs = note_qs.distinct()[:20]
+        return note_qs
 
-        for note in note_qs:
+    def get_context_data(self, **kwargs):
+        """
+        Query the list of Guest and Note to the activity and add information to makes entry with JS.
+        """
+        context = super().get_context_data(**kwargs)
+
+        activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+            .distinct().get(pk=self.kwargs["pk"])
+        context["activity"] = activity
+
+        matched=[]
+
+        for guest in get_invited_guest(self,activity):
+            guest.type = "Invité"
+            matched.append(guest)
+
+        for note in get_invited_note(self,activity):
             note.type = "Adhérent"
             note.activity = activity
             matched.append(note)
