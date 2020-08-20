@@ -141,7 +141,10 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         """
         We can't display information of a not registered user.
         """
-        return super().get_queryset().filter(profile__registration_valid=True)
+        qs = super().get_queryset()
+        if self.request.user.is_superuser and self.request.session.get("permission_mask", -1) >= 42:
+            return qs
+        return qs.filter(profile__registration_valid=True)
 
     def get_context_data(self, **kwargs):
         """
