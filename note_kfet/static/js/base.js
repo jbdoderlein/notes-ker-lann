@@ -7,7 +7,7 @@
  * @param value the balance, in cents
  * @returns {string}
  */
-function pretty_money(value) {
+function pretty_money (value) {
     if (value % 100 === 0)
         return (value < 0 ? "- " : "") + Math.floor(Math.abs(value) / 100) + " €";
     else
@@ -21,7 +21,7 @@ function pretty_money(value) {
  * @param alert_type The type of the alert. Choices: info, success, warning, danger
  * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function addMsg(msg, alert_type, timeout = -1) {
+function addMsg (msg, alert_type, timeout = -1) {
     let msgDiv = $("#messages");
     let html = msgDiv.html();
     let id = Math.floor(10000 * Math.random() + 1);
@@ -42,7 +42,7 @@ function addMsg(msg, alert_type, timeout = -1) {
  * @param errs_obj [{error_code:erro_message}]
  * @param timeout The delay (in millis) after that the message is auto-closed. If negative, then it is ignored.
  */
-function errMsg(errs_obj, timeout = -1) {
+function errMsg (errs_obj, timeout = -1) {
     for (const err_msg of Object.values(errs_obj)) {
         addMsg(err_msg, 'danger', timeout);
     }
@@ -51,9 +51,9 @@ function errMsg(errs_obj, timeout = -1) {
 var reloadWithTurbolinks = (function () {
     var scrollPosition;
 
-    function reload() {
+    function reload () {
         scrollPosition = [window.scrollX, window.scrollY];
-        Turbolinks.visit(window.location.toString(), {action: 'replace'})
+        Turbolinks.visit(window.location.toString(), { action: 'replace' })
     }
 
     document.addEventListener('turbolinks:load', function () {
@@ -69,7 +69,7 @@ var reloadWithTurbolinks = (function () {
 /**
  * Reload the balance of the user on the right top corner
  */
-function refreshBalance() {
+function refreshBalance () {
     $("#user_balance").load("/ #user_balance");
 }
 
@@ -78,14 +78,14 @@ function refreshBalance() {
  * @param pattern The pattern that is queried
  * @param fun For each found note with the matched alias `alias`, fun(note, alias) is called.
  */
-function getMatchedNotes(pattern, fun) {
+function getMatchedNotes (pattern, fun) {
     $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", fun);
 }
 
 /**
  * Generate a <li> entry with a given id and text
  */
-function li(id, text, extra_css) {
+function li (id, text, extra_css) {
     return "<li class=\"list-group-item py-1 px-2 d-flex justify-content-between align-items-center text-truncate "
         + (extra_css ? extra_css : "") + "\"" + " id=\"" + id + "\">" + text + "</li>\n";
 }
@@ -94,7 +94,7 @@ function li(id, text, extra_css) {
  * Return style to apply according to the balance of the note and the validation status of the email address
  * @param note The concerned note.
  */
-function displayStyle(note) {
+function displayStyle (note) {
     if (!note)
         return "";
     let balance = note.balance;
@@ -120,7 +120,7 @@ function displayStyle(note) {
  * @param user_note_field
  * @param profile_pic_field
  */
-function displayNote(note, alias, user_note_field = null, profile_pic_field = null) {
+function displayNote (note, alias, user_note_field = null, profile_pic_field = null) {
     if (!note.display_image) {
         note.display_image = '/media/pic/default.png';
     }
@@ -152,7 +152,7 @@ function displayNote(note, alias, user_note_field = null, profile_pic_field = nu
  *                          (useful in consumptions, put null if not used)
  * @returns an anonymous function to be compatible with jQuery events
  */
-function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_note_field = null, profile_pic_field = null) {
+function removeNote (d, note_prefix = "note", notes_display, note_list_id, user_note_field = null, profile_pic_field = null) {
     return (function () {
         let new_notes_display = [];
         let html = "";
@@ -199,8 +199,8 @@ function removeNote(d, note_prefix = "note", notes_display, note_list_id, user_n
  *                    the associated note is not displayed.
  *                    Useful for a consumption if the item is selected before.
  */
-function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_prefix = "alias",
-                          note_prefix = "note", user_note_field = null, profile_pic_field = null, alias_click = null) {
+function autoCompleteNote (field_id, note_list_id, notes, notes_display, alias_prefix = "alias",
+    note_prefix = "note", user_note_field = null, profile_pic_field = null, alias_click = null) {
     let field = $("#" + field_id);
 
     // Configure tooltip
@@ -348,7 +348,7 @@ function autoCompleteNote(field_id, note_list_id, notes, notes_display, alias_pr
 
 
 // When a validate button is clicked, we switch the validation status
-function de_validate(id, validated, resourcetype) {
+function de_validate (id, validated, resourcetype) {
     let validate_obj = $("#validate_" + id);
 
     if (validate_obj.data("pending"))
@@ -391,4 +391,18 @@ function de_validate(id, validated, resourcetype) {
             refreshHistory();
         }
     });
+}
+
+/**
+ * Simple debouncer
+ * @param callback Function to call
+ * @param wait Debounced milliseconds
+ */
+function debounce (callback, wait) {
+    let timeout;
+    return (...args) => {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback.apply(context, args), wait);
+    };
 }

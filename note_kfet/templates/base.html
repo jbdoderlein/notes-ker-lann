@@ -22,13 +22,15 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static "favicon/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
-    {# Bootstrap CSS #}
+
+    {# Bootstrap, Font Awesome and custom CSS #}
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
+    <link rel="stylesheet" href="{% static "css/custom.css" %}">
 
     {# JQuery, Bootstrap and Turbolinks JavaScript #}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -42,137 +44,109 @@ SPDX-License-Identifier: GPL-3.0-or-later
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
             crossorigin="anonymous"></script>
-    <script src="/static/js/base.js"></script>
+    <script src="{% static "js/base.js" %}"></script>
 
     {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
     {% if form.media %}
         {{ form.media }}
     {% endif %}
 
-    <style>
-        .validate:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .tooltip.show {
-           opacity: 1; /* opaque tooltip */
-        }
-        .tooltip-inner {
-            background-color: #fff;
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-            border: 1px solid rgba(0,0,0,.250);
-            color: #000;
-            margin: 0 .5rem .25rem .5rem;
-            padding: 0;
-        }
-        .bs-tooltip-bottom .arrow::before {
-            border-bottom-color: rgba(0,0,0,.250);
-        }
-
-        /* Limit fluid container to a max size */
-        .container-fluid {
-            max-width: 1600px;
-        }
-
-        /* Apply Bootstrap table-responsive to all Django tables */
-        .table-container {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
-
     {% block extracss %}{% endblock %}
 </head>
 <body class="d-flex w-100 h-100 flex-column">
 <main class="mb-auto">
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar shadow-sm">
-        <a class="navbar-brand" href="/">{{ request.site.name }}</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                {% if "note.transactiontemplate"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:consos' %}"><i class="fas fa-coffee"></i> {% trans 'Consumptions' %}</a>
-                    </li>
-                {% endif %}
-                {% if "note.transaction"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i> {% trans 'Transfer' %} </a>
-                    </li>
-                {% endif %}
-                {% if "auth.user"|model_list_length >= 2 %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
-                    </li>
-                {% endif %}
-                {% if "member.club"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
-                    </li>
-                {% endif %}
-                {% if "activity.activity"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
-                    </li>
-                {% endif %}
-                {% if "treasury.invoice"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fas fa-credit-card"></i> {% trans 'Treasury' %}</a>
-                    </li>
-                {% endif %}
-                {% if "wei.weiclub"|not_empty_model_list %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'wei:current_wei_detail' %}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
-                    </li>
-                {% endif %}
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
-                    </li>
-                {% endif %}
-                {% if request.user.is_staff and ""|has_perm:user %}
-                    <li class="nav-item active">
-                        <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
-                    </li>
-                {% endif %}
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if request.user.is_authenticated %}
-                    <li class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                            <span id="user_balance">{{ request.user.username }} ({{ request.user.note.balance | pretty_money }})</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right"
-                             aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{% url 'member:user_detail' pk=request.user.pk %}">
-                                <i class="fas fa-user"></i> Mon compte
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-navbar shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">{{ request.site.name }}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    {% if "note.transactiontemplate"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'note:consos' %}"><i class="fas fa-coffee"></i> {% trans 'Consumptions' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if "note.transaction"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i> {% trans 'Transfer' %} </a>
+                        </li>
+                    {% endif %}
+                    {% if "auth.user"|model_list_length >= 2 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if "member.club"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if "activity.activity"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if "treasury.invoice"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fas fa-credit-card"></i> {% trans 'Treasury' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if "wei.weiclub"|not_empty_model_list %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'wei:current_wei_detail' %}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.is_staff and ""|has_perm:user %}
+                        <li class="nav-item">
+                            <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if request.user.is_authenticated %}
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                                <span id="user_balance">{{ request.user.username }} ({{ request.user.note.balance | pretty_money }})</span>
                             </a>
-                            <a class="dropdown-item" href="{% url 'logout' %}">
-                                <i class="fas fa-sign-out-alt"></i> Se déconnecter
-                            </a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'registration:signup' %}">
-                            <i class="fas fa-user-plus"></i> S'inscrire
-                        </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'login' %}">
-                            <i class="fas fa-sign-in-alt"></i> Se connecter
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
+                            <div class="dropdown-menu dropdown-menu-right"
+                                 aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'member:user_detail' pk=request.user.pk %}">
+                                    <i class="fas fa-user"></i> Mon compte
+                                </a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                {% if request.path != "/registration/signup/" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'registration:signup' %}">
+                                    <i class="fas fa-user-plus"></i> S'inscrire
+                                </a>
+                            </li>
+                        {% endif %}
+                {% if request.path != "/accounts/login/" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">
+                                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="{% block containertype %}container{% endblock %} my-3">
@@ -181,7 +155,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% trans "Your e-mail address is not validated. Please check your mail inbox and click on the validation link." %}
             </div>
         {% endif %}
-        {% block contenttitle %}<h1>{{ title }}</h1>{% endblock %}
+        {% block contenttitle %}<h1 class="text-white">{{ title }}</h1>{% endblock %}
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
             Attention : la Note Kfet 2020 est en phase de beta. Des fonctionnalités pourront être rajoutées d'ici à la version
@@ -196,23 +170,22 @@ SPDX-License-Identifier: GPL-3.0-or-later
         <div id="messages"></div>
         {% block content %}
             <p>Default content...</p>
-        {% endblock content %}
+        {% endblock %}
     </div>
 </main>
-<footer class="bg-light mt-auto py-2">
+<footer class="bg-dark text-white mt-auto py-2">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm">
+            <div class="col-10">
                 <form action="{% url 'set_language' %}" method="post"
                       class="form-inline">
                     <span class="text-muted mr-1">
-                        NoteKfet2020 &mdash;
                         <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
                            class="text-muted">Nous contacter</a> &mdash;
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"
-                            class="custom-select custom-select-sm"
+                            class="form-control form-control-sm language"
                             onchange="this.form.submit()">
                         {% get_current_language as LANGUAGE_CODE %}
                         {% get_available_languages as LANGUAGES %}
@@ -230,8 +203,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     </noscript>
                 </form>
             </div>
-            <div class="col-sm text-right">
-                <a href="#" class="text-muted">Retour en haut</a>
+            <div class="col text-right">
+                <a href="#" data-turbolinks="false" class="text-muted">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -242,7 +217,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
     $(".invalid-feedback").addClass("d-block");
 </script>
 
-{% block extrajavascript %}
-{% endblock extrajavascript %}
+{% block extrajavascript %}{% endblock %}
 </body>
 </html>
