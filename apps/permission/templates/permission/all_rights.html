@@ -19,28 +19,40 @@
                 {% trans "Filter with roles that I have in at least one club" %}
             </label>
         </div>
-    {% endif %}
+        {% endif %}
+        <div class="accordion" id="accordionRoles">
+        {% regroup active_memberships by roles as memberships_per_role %}
+        {% for role in roles %}
+            <div class="card {% if not role.clubs %}no-club{% endif %}">
+              <div class="card-header" id="{{ role|slugify }} ">
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ role|slugify }}" aria-expanded="true" aria-controls="collapse{{ role|slugify }}">
+                    {{ role }} {% if role.weirole %}(<em>Pour le WEI</em>){% endif %} {% if role.for_club %}(<em>Pour le club {{ role.for_club }} uniquement</em>){% endif %}
+                    {% if role.clubs %}
+                      <small><span class="badge badge-success">{% trans "Owned" %} : {{ role.clubs|join:", " }}</span></small>
+                    {% endif %}
+                  </button>
+                </h2>
+              </div>
 
-    <ul>
-    {% regroup active_memberships by roles as memberships_per_role %}
-    {% for role in roles %}
-        <li class="{% if not role.clubs %}no-club{% endif %}">
-            {{ role }} {% if role.weirole %}(<em>Pour le WEI</em>){% endif %} {% if role.for_club %}(<em>Pour le club {{ role.for_club }} uniquement</em>){% endif %}
-            {% if role.clubs %}
-                <div class="alert alert-success">
-                    {% trans "Own this role in the clubs" %} {{ role.clubs|join:", " }}
+              <div id="collapse{{ role|slugify }}" class="collapse" aria-labelledby="{{ role|slugify }}" data-parent="#accordionRoles">
+                <div class="card-body">
+                  {% if role.clubs %}
+                      <div class="alert alert-success">
+                          {% trans "Own this role in the clubs" %} {{ role.clubs|join:", " }}
+                      </div>
+                  {% endif %}
+                  <ul>
+                  {% for permission in role.permissions.all %}
+                      <li data-toggle="tooltip" title="{% trans "Mask:" %} {{ permission.mask }}, {% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.get_type_display }} {{ permission.model }}{% if permission.permanent %}, {% trans "permanent" %}{% endif %})</li>
+                  {% empty %}
+                      <em>{% trans "No associated permission" %}</em>
+                  {% endfor %}
+                  </ul>
                 </div>
-            {% endif %}
-            <ul>
-            {% for permission in role.permissions.all %}
-                <li data-toggle="tooltip" title="{% trans "Mask:" %} {{ permission.mask }}, {% trans "Query:" %} {{ permission.query }}">{{ permission }} ({{ permission.get_type_display }} {{ permission.model }}{% if permission.permanent %}, {% trans "permanent" %}{% endif %})</li>
-            {% empty %}
-                <em>{% trans "No associated permission" %}</em>
-            {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>
+              </div>
+            </div>
+        {% endfor %}
 {% endblock %}
 
 {% block extrajavascript %}
