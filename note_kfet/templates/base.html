@@ -22,7 +22,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static "favicon/browserconfig.xml" %}">
     <meta name="theme-color" content="#ffffff">
-    {# Bootstrap CSS #}
+
+    {# Bootstrap, Font Awesome and custom CSS #}
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -128,16 +129,20 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         </div>
                     </li>
                 {% else %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'registration:signup' %}">
-                            <i class="fas fa-user-plus"></i> S'inscrire
-                        </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'login' %}">
-                            <i class="fas fa-sign-in-alt"></i> Se connecter
-                        </a>
-                    </li>
+		    {% if request.path != "/registration/signup/" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registration:signup' %}">
+                                <i class="fas fa-user-plus"></i> S'inscrire
+                            </a>
+                        </li>
+                    {% endif %}
+		    {% if request.path != "/accounts/login/" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i> Se connecter
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </div>
