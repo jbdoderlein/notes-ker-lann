@@ -22,10 +22,12 @@ function reset(refresh=true) {
     event.originalEvent = {charCode: 97};
     source_field.trigger(event);
     source_field.removeClass('is-invalid');
+    source_field.attr("data-original-title", "").tooltip("hide");
     let dest_field = $("#dest_note");
     dest_field.val("");
     dest_field.trigger(event);
     dest_field.removeClass('is-invalid');
+    dest_field.attr("data-original-title", "").tooltip("hide");
     let amount_field = $("#amount");
     amount_field.val("");
     amount_field.removeClass('is-invalid');
