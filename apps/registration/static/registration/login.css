@@ -12,3 +12,7 @@ Font-Awesome attribution is already done inside SVG files
     background: #fff right 1rem top 50% / 5% no-repeat url('fa-lock.svg');
     padding-right: 3rem;
 }
+
+#login-form select {
+    -moz-appearance: none;
+}
