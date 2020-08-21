@@ -36,43 +36,40 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 {% block extrajavascript %}
 <script type="text/javascript">
-    $(document).ready(function () {
-        let old_pattern = null;
-        let searchbar_obj = $("#searchbar");
-        var timer_on = false;
-        var timer;
+    let pattern = '';
 
-        function reloadTable() {
-            let pattern = searchbar_obj.val();
+    function reloadTable() {
+        pattern = $("#searchbar").val();
 
-            if (pattern === old_pattern || pattern === "")
-                return;
+        if (pattern.length > 2)
+            $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init_table);
+    }
 
-            $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
-        }
-
-        searchbar_obj.keyup(function () {
-            if (timer_on)
-                clearTimeout(timer);
-            timer_on = true;
-            setTimeout(reloadTable, 0);
+    function init_table() {
+        // On row click, go to object
+        $(".table-row").click(function () {
+            window.document.location = $(this).data("href");
         });
 
-        function init() {
-            $(".table-row").click(function () {
-                window.document.location = $(this).data("href");
-                timer_on = false;
+        // Highlight searched terms
+        $("tr").each(function () {
+            $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function () {
+                $(this).html($(this).text().replace(new RegExp(pattern, 'i'), "<mark>$&</mark>"));
             });
+        });
+    }
 
-            // Highlight searched terms
-            $("tr").each(function () {
-                $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function () {
-                    $(this).html($(this).text().replace(new RegExp(searchbar_obj.val(), 'i'), "<mark>$&</mark>"));
-                });
-            });
-        }
+    $(document).ready(function () {
+        // Recover last search from url
+        let searchParams = new URLSearchParams(window.location.search)
+        if (searchParams.has('search'))
+            pattern = searchParams.get('search');
 
-        init();
+        // On search, refresh table
+        $("#searchbar").keyup(debounce(reloadTable, 300));
+
+        // First init
+        init_table();
     });
 </script>
 {% endblock %}
