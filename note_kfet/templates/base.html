@@ -29,6 +29,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
+    <link rel="stylesheet" href="{% static "css/custom.css" %}">
 
     {# JQuery, Bootstrap and Turbolinks JavaScript #}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -42,52 +43,18 @@ SPDX-License-Identifier: GPL-3.0-or-later
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
             crossorigin="anonymous"></script>
-    <script src="/static/js/base.js"></script>
+    <script src="{% static "js/base.js" %}"></script>
 
     {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
     {% if form.media %}
         {{ form.media }}
     {% endif %}
 
-    <style>
-        .validate:hover {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .tooltip.show {
-           opacity: 1; /* opaque tooltip */
-        }
-        .tooltip-inner {
-            background-color: #fff;
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-            border: 1px solid rgba(0,0,0,.250);
-            color: #000;
-            margin: 0 .5rem .25rem .5rem;
-            padding: 0;
-        }
-        .bs-tooltip-bottom .arrow::before {
-            border-bottom-color: rgba(0,0,0,.250);
-        }
-
-        /* Limit fluid container to a max size */
-        .container-fluid {
-            max-width: 1600px;
-        }
-
-        /* Apply Bootstrap table-responsive to all Django tables */
-        .table-container {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
-
     {% block extracss %}{% endblock %}
 </head>
 <body class="d-flex w-100 h-100 flex-column">
 <main class="mb-auto">
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-navbar shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-navbar shadow-sm">
         <a class="navbar-brand" href="/">{{ request.site.name }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarNavDropdown"
@@ -199,7 +166,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {% endblock content %}
     </div>
 </main>
-<footer class="bg-light mt-auto py-2">
+<footer class="bg-dark text-white mt-auto py-2">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm">
@@ -212,7 +179,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"
-                            class="custom-select custom-select-sm"
+                            class="form-control form-control-sm language"
                             onchange="this.form.submit()">
                         {% get_current_language as LANGUAGE_CODE %}
                         {% get_available_languages as LANGUAGES %}
