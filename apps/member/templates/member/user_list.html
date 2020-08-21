@@ -1,36 +1,42 @@
 {% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load render_table from django_tables2 %}
-{% load crispy_forms_tags %}
-{% load i18n %}
-{% load perms %}
+{% load i18n crispy_forms_tags perms %}
+{% block contenttitle %}{% endblock %}
 
 {% block content %}
-    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section ...">
+{% if "member.change_profile_registration_valid"|has_perm:user %}
+<a class="btn btn-block btn-secondary mb-3" href="{% url 'registration:future_user_list' %}">
+    <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
+</a>
+{% endif %}
 
-    <hr>
-
-    <div id="user_table">
-        {% if table.data %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section...">
+    </div>
+    <div class="card-body">
+        <div id="user_table">
+            {% if table.data %}
             {% render_table table %}
-        {% else %}
+            {% else %}
             <div class="alert alert-warning">
                 {% trans "There is no user with this pattern." %}
             </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-
-    <hr>
-
-    {% if "member.change_profile_registration_valid"|has_perm:user %}
-        <a class="btn btn-block btn-secondary" href="{% url 'registration:future_user_list' %}">
-            <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
-        </a>
-    {% endif %}
+</div>
 {% endblock %}
 
 {% block extrajavascript %}
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         let old_pattern = null;
         let searchbar_obj = $("#searchbar");
         var timer_on = false;
@@ -45,7 +51,7 @@
             $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init);
         }
 
-        searchbar_obj.keyup(function() {
+        searchbar_obj.keyup(function () {
             if (timer_on)
                 clearTimeout(timer);
             timer_on = true;
@@ -53,13 +59,14 @@
         });
 
         function init() {
-            $(".table-row").click(function() {
+            $(".table-row").click(function () {
                 window.document.location = $(this).data("href");
                 timer_on = false;
             });
 
-            $("tr").each(function() {
-                $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function() {
+            // Highlight searched terms
+            $("tr").each(function () {
+                $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function () {
                     $(this).html($(this).text().replace(new RegExp(searchbar_obj.val(), 'i'), "<mark>$&</mark>"));
                 });
             });
