@@ -321,6 +321,7 @@ class SogeCredit(models.Model):
             last_name=self.user.last_name,
             first_name=self.user.first_name,
             bank="Société générale",
+            created_at=self.transactions.order_by("-created_at").first().created_at,
         )
         self.save()
 
