@@ -170,17 +170,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
         <div id="messages"></div>
         {% block content %}
             <p>Default content...</p>
-        {% endblock content %}
+        {% endblock %}
     </div>
 </main>
 <footer class="bg-dark text-white mt-auto py-2">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm">
+            <div class="col-10">
                 <form action="{% url 'set_language' %}" method="post"
                       class="form-inline">
                     <span class="text-muted mr-1">
-                        NoteKfet2020 &mdash;
                         <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
                            class="text-muted">Nous contacter</a> &mdash;
                     </span>
@@ -204,8 +203,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     </noscript>
                 </form>
             </div>
-            <div class="col-sm text-right">
-                <a href="#" data-turbolinks="false" class="text-muted">Retour en haut</a>
+            <div class="col text-right">
+                <a href="#" data-turbolinks="false" class="text-muted">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -216,7 +217,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
     $(".invalid-feedback").addClass("d-block");
 </script>
 
-{% block extrajavascript %}
-{% endblock extrajavascript %}
+{% block extrajavascript %}{% endblock %}
 </body>
 </html>

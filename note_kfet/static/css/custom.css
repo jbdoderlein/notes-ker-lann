@@ -40,6 +40,7 @@ select.language {
     height: calc(1.5em + .5rem);
     color: #6c757d;
     -moz-appearance: none;
+    width: auto;
 }
 
 /* Last BDE colors */
