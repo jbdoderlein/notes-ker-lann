@@ -39,6 +39,7 @@ select.language {
     border: none;
     height: calc(1.5em + .5rem);
     color: #6c757d;
+    -moz-appearance: none;
 }
 
 /* Last BDE colors */
@@ -47,7 +48,6 @@ select.language {
 }
 html {
     scrollbar-color: rgba(121, 121, 123, 1) rgba(35, 35, 39, 1);
-
 }
 body {
     background-color: rgba(64, 64, 64, 1);

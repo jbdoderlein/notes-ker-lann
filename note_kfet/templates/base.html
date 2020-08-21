@@ -65,47 +65,47 @@ SPDX-License-Identifier: GPL-3.0-or-later
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 {% if "note.transactiontemplate"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'note:consos' %}"><i class="fas fa-coffee"></i> {% trans 'Consumptions' %}</a>
                     </li>
                 {% endif %}
                 {% if "note.transaction"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'note:transfer' %}"><i class="fas fa-exchange-alt"></i> {% trans 'Transfer' %} </a>
                     </li>
                 {% endif %}
                 {% if "auth.user"|model_list_length >= 2 %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'member:user_list' %}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
                     </li>
                 {% endif %}
                 {% if "member.club"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'member:club_list' %}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
                     </li>
                 {% endif %}
                 {% if "activity.activity"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'activity:activity_list' %}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
                     </li>
                 {% endif %}
                 {% if "treasury.invoice"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'treasury:invoice_list' %}"><i class="fas fa-credit-card"></i> {% trans 'Treasury' %}</a>
                     </li>
                 {% endif %}
                 {% if "wei.weiclub"|not_empty_model_list %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'wei:current_wei_detail' %}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
                     </li>
                 {% endif %}
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'permission:rights' %}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
                     </li>
                 {% endif %}
                 {% if request.user.is_staff and ""|has_perm:user %}
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
                     </li>
                 {% endif %}

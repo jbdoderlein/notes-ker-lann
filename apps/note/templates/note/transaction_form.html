@@ -35,9 +35,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
         </div>
     </div>
     <div class="row">
-    {#  Preview note profile (picture, username and balance) #}
+        {#  Preview note profile (picture, username and balance) #}
         <div class="col-md-3" id="note_infos_div">
-            <div class="card border-success shadow mb-4">
+            <div class="card bg-light border-success shadow mb-4">
                 <a id="profile_pic_link" href="#"><img src="/media/pic/default.png"
                         id="profile_pic" alt="" class="img-fluid rounded mx-auto d-block"></a>
                 <div class="card-body text-center">
@@ -45,9 +45,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-    {# list of emitters #}
+
+        {# list of emitters #}
         <div class="col-md-3" id="emitters_div">
-            <div class="card border-success shadow mb-4">
+            <div class="card bg-light border-success shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
                         {% trans "Select emitters" %}
@@ -66,9 +67,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-{# list of receiver #}
+
+        {# list of receiver #}
         <div class="col-md-3" id="dests_div">
-            <div class="card border-info shadow mb-4">
+            <div class="card bg-light border-info shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold" id="dest_title">
                         {% trans "Select receivers" %}
@@ -83,9 +85,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 </div>
             </div>
         </div>
-{# Information on transaction (amount, reason, name,...) #}
+
+        {# Information on transaction (amount, reason, name,...) #}
         <div class="col-md-3" id="external_div">
-            <div class="card border-warning shadow mb-4">
+            <div class="card bg-light border-warning shadow mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
                         {% trans "Action" %}
