@@ -41,6 +41,7 @@ select.language {
     color: #6c757d;
     -moz-appearance: none;
     width: auto;
+    cursor: pointer;
 }
 
 /* Last BDE colors */
