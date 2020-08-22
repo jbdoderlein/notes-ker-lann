@@ -1,10 +1,25 @@
 {% extends "member/club_detail.html" %}
-{% load i18n static pretty_money django_tables2 crispy_forms_tags %}
+{% load static django_tables2 i18n %}
 
 {% block profile_content %}
-{% include "member/alias_update.html" %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {% trans "Note aliases" %}
+    </h3>
+    <div class="card-body text-center">
+        <div class="input-group">
+            <input id="alias_input" type="text" class="form-control">
+            <div class="input-group-append">
+                <button id="alias_submit" class="btn btn-success" onclick="create_alias({{ object.note.pk }})">
+                    {% trans "Add" %}
+                </button>
+            </div>
+        </div>
+    </div>
+    {% render_table aliases %}
+</div>
 {% endblock %}
 
 {% block extrajavascript %}
-<script src="/static/js/alias.js"></script>
+<script src="{% static "member/js/alias.js" %}"></script>
 {% endblock%}
