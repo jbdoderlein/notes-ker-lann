@@ -1,32 +1,32 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
+{% load static i18n pretty_money %}
 {% load render_table from django_tables2 %}
-{% load pretty_money %}
+
+{# Use a fluid-width container #}
+{% block containertype %}container-fluid{% endblock %}
 
 {% block content %}
-    <div class="row mt-4">
-        <div class="col-xl-4">
-            {% block profile_info %}
-            {% endblock %}
-        </div>
-        <div class="col-xl-8">
-            {% block profile_content %}
-            {% endblock %}
-        </div>
+<div class="row mt-4">
+    <div class="col-xl-4">
+        {% block profile_info %}
+        {% endblock %}
     </div>
+    <div class="col-xl-8">
+        {% block profile_content %}
+        {% endblock %}
+    </div>
+</div>
 
-    {% block extra_content %}
-    {% endblock %}
+{% block extra_content %}{% endblock %}
 {% endblock %}
 
 {% block extrajavascript %}
-    <script>
-        {% if object %}
-            function refreshHistory() {
-                $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
-                $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
-            }
-        {% endif %}
-    </script>
+<script>
+    {% if object %}
+    function refreshHistory() {
+        $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
+    }
+    {% endif %}
+</script>
 {% endblock %}

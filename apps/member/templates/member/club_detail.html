@@ -1,8 +1,5 @@
 {% extends "member/noteowner_detail.html" %}
 
-{# Use a fluid-width container #}
-{% block containertype %}container-fluid{% endblock %}
-
 {% block profile_info %}
 {% include "member/club_info.html" %}
 {% endblock %}
@@ -12,10 +9,10 @@
 {% endblock %}
 
 {% block extrajavascript %}
-    <script>
-        function refreshHistory() {
-            $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
-            $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
-        }
-    </script>
+<script>
+    function refreshHistory() {
+        $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
+    }
+</script>
 {% endblock %}
