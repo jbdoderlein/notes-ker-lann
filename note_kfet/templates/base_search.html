@@ -31,13 +31,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 {% block extrajavascript %}
 <script type="text/javascript">
-    function reloadTable() {
-        pattern = $("#searchbar").val();
-
-        if (pattern.length > 2)
-            $("#dynamic-table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #dynamic-table", init_table);
-    }
-
     function init_table() {
         // On row click, go to object
         $(".table-row").click(function () {
