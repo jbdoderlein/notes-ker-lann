@@ -1,10 +1,8 @@
-{% extends "base.html" %}
+{% extends "base_search.html" %}
 {% comment %}
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
-{% load render_table from django_tables2 %}
-{% load i18n crispy_forms_tags perms %}
-{% block contenttitle %}{% endblock %}
+{% load i18n perms %}
 
 {% block content %}
 {% if "member.change_profile_registration_valid"|has_perm:user %}
@@ -13,63 +11,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 </a>
 {% endif %}
 
-<div class="card bg-light">
-    <h3 class="card-header text-center">
-        {{ title }}
-    </h3>
-    <div class="card-body">
-        <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/section...">
-    </div>
-    <div class="card-body">
-        <div id="user_table">
-            {% if table.data %}
-            {% render_table table %}
-            {% else %}
-            <div class="alert alert-warning">
-                {% trans "There is no user with this pattern." %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block extrajavascript %}
-<script type="text/javascript">
-    let pattern = '';
-
-    function reloadTable() {
-        pattern = $("#searchbar").val();
-
-        if (pattern.length > 2)
-            $("#user_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #user_table", init_table);
-    }
-
-    function init_table() {
-        // On row click, go to object
-        $(".table-row").click(function () {
-            window.document.location = $(this).data("href");
-        });
-
-        // Highlight searched terms
-        $("tr").each(function () {
-            $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function () {
-                $(this).html($(this).text().replace(new RegExp(pattern, 'i'), "<mark>$&</mark>"));
-            });
-        });
-    }
-
-    $(document).ready(function () {
-        // Recover last search from url
-        let searchParams = new URLSearchParams(window.location.search)
-        if (searchParams.has('search'))
-            pattern = searchParams.get('search');
-
-        // On search, refresh table
-        $("#searchbar").keyup(debounce(reloadTable, 300));
-
-        // First init
-        init_table();
-    });
-</script>
+{# Search panel #}
+{{ block.super }}
 {% endblock %}

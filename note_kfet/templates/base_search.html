@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load render_table from django_tables2 %}
+{% load i18n perms %}
+{% block contenttitle %}{% endblock %}
+
+{% block content %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        <input id="searchbar" type="text" class="form-control"
+            placeholder="{% trans "Search by attribute such as name…" %}">
+    </div>
+    <div id="dynamic-table">
+        {% if table.data %}
+        {% render_table table %}
+        {% else %}
+        <div class="card-body">
+            <div class="alert alert-warning">
+                {% trans "There is no results." %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+    function reloadTable() {
+        pattern = $("#searchbar").val();
+
+        if (pattern.length > 2)
+            $("#dynamic-table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #dynamic-table", init_table);
+    }
+
+    function init_table() {
+        // On row click, go to object
+        $(".table-row").click(function () {
+            window.document.location = $(this).data("href");
+        });
+
+        // Highlight searched terms
+        const pattern = $("#searchbar").val();
+        if (pattern.length > 2) {
+            $("tr").each(function () {
+                $(this).find("td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5)").each(function () {
+                    $(this).html($(this).text().replace(new RegExp(pattern, 'i'), "<mark>$&</mark>"));
+                });
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        let pattern = '';
+
+        // Recover last search from url
+        let searchParams = new URLSearchParams(window.location.search)
+        if (searchParams.has('search')) {
+            pattern = searchParams.get('search');
+        }
+
+        // On search, refresh table
+        $("#searchbar").keyup(debounce(function () {
+            // Get new pattern
+            pattern = $("#searchbar").val();
+
+            // Set URL
+            searchParams.set('search', pattern);
+            history.pushState({}, null, "?" + searchParams.toString());
+
+            // If long enough, update table
+            if (pattern.length > 2) {
+                $("#dynamic-table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #dynamic-table", init_table);
+            }
+        }, 300));
+
+        // First init
+        init_table();
+    });
+</script>
+{% endblock %}

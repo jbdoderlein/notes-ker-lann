@@ -1,59 +1,16 @@
-{% extends "base.html" %}
-{% load render_table from django_tables2 %}
-{% load i18n %}
+{% extends "base_search.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms %}
 
 {% block content %}
-<div class="row justify-content-center mb-4">
-    <div class="col-md-10 text-center">
-        <input class="form-control mx-auto w-25" type="text" id="search_field"/>
-        <hr>
-        {% if can_add_club %}
-            <a class="btn btn-primary text-center my-4" href="{% url 'member:club_create' %}" data-turbolinks="false">{% trans "Create club" %}</a>
-        {% endif %}
-    </div>
-</div>
-<div class="row justify-content-center">   
-    <div class="col-md-10">
-        <div class="card card-border shadow">
-            <div class="card-header text-center">
-                <h5> {% trans "Club listing" %}</h5>
-            </div>
-            <div class="card-body px-0 py-0" id="club_table">
-                {% render_table table %}
-            </div>
-        </div>
-    </div>
-</div>
+{% if can_add_club %}
+<a class="btn btn-block btn-success mb-3" href="{% url 'member:club_create' %}" data-turbolinks="false">
+    {% trans "Create club" %}
+</a>
+{% endif %}
 
-{% endblock %}
-{% block extrajavascript %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        let old_pattern = null;
-        let searchbar_obj = $("#search_field");
-        var timer_on = false;
-        var timer;
-
-        function reloadTable() {
-            let pattern = searchbar_obj.val();
-            $("#club_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #club_table", init);
-        }
-
-        searchbar_obj.keyup(function() {
-            if (timer_on)
-                clearTimeout(timer);
-            timer_on = true;
-            setTimeout(reloadTable, 0);
-        });
-
-        function init() {
-            $(".table-row").click(function() {
-                window.document.location = $(this).data("href");
-                timer_on = false;
-            });
-        }
-
-        init();
-    });
-</script>
+{# Search panel #}
+{{ block.super }}
 {% endblock %}
