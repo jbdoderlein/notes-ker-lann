@@ -6,15 +6,15 @@
     <h3 class="card-header text-center">
         {% trans "Note aliases" %}
     </h3>
-    <div class="card-body text-center">
-        <div class="input-group">
-            <input id="alias_input" type="text" class="form-control">
+    <div class="card-body">
+        <form class="input-group" method="POST" id="form_alias">
+            {% csrf_token %}
+            <input type="hidden" name="note" value="{{ object.note.pk }}">
+            <input type="text" name="name" class="form-control">
             <div class="input-group-append">
-                <button id="alias_submit" class="btn btn-success" onclick="create_alias({{ object.note.pk }})">
-                    {% trans "Add" %}
-                </button>
+                <input type="submit" class="btn btn-success" value="{% trans "Add" %}">
             </div>
-        </div>
+        </form>
     </div>
     {% render_table aliases %}
 </div>
