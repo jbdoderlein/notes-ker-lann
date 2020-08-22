@@ -15,4 +15,5 @@ Font-Awesome attribution is already done inside SVG files
 
 #login-form select {
     -moz-appearance: none;
+    cursor: pointer;
 }
