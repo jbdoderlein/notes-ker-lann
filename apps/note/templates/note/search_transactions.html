@@ -22,7 +22,8 @@
     {% crispy form %}
 {% endblock %}
 
-{% block extra_content %}
+{% block content %}
+    {{ block.super }}
     <div id="table">
         {% render_table table %}
     </div>
