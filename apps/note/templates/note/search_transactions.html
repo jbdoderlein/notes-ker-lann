@@ -1,4 +1,4 @@
-{% extends "member/noteowner_detail.html" %}
+{% extends "member/base.html" %}
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 
@@ -22,7 +22,8 @@
     {% crispy form %}
 {% endblock %}
 
-{% block extra_content %}
+{% block content %}
+    {{ block.super }}
     <div id="table">
         {% render_table table %}
     </div>

@@ -3,14 +3,22 @@
 {% comment %}
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
+{% block contenttitle %}{% endblock %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    {{ profile_form|crispy }}
-    <button class="btn btn-primary" type="submit">
-        {% trans "Save Changes" %}
-    </button>
-</form>
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            {{ profile_form | crispy }}
+            <button class="btn btn-primary" type="submit">
+                {% trans "Save Changes" %}
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}

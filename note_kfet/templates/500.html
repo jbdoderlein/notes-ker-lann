@@ -1,8 +1,23 @@
 {% extends "base.html" %}
-
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load i18n %}
+{% block contenttitle %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Server error" %}</h1>
-    {% blocktrans %}Sorry, an error occurred when processing your request. An email has been sent to webmasters with the detail of the error, and this will be fixed soon. You can now drink a beer.{% endblocktrans %}
+<div class="card text-white bg-secondary">
+    <h3 class="card-header text-center">
+        {% trans "Server error" %}
+    </h3>
+    <div class="card-body">
+        <p>
+            {% blocktrans trimmed %}
+            Sorry, an error occurred when processing your request.
+            An email has been sent to webmasters with the detail of the error,
+            and this will be fixed soon. You can now drink a beer.
+            {% endblocktrans %}
+        </p>
+    </div>
+</div>
 {% endblock %}

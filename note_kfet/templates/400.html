@@ -1,8 +1,23 @@
 {% extends "base.html" %}
-
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load i18n %}
+{% block contenttitle %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Bad request" %}</h1>
-    {% blocktrans %}Sorry, your request was bad. Don't know what could be wrong. An email has been sent to webmasters with the details of the error. You can now drink a coke.{% endblocktrans %}
+<div class="card text-white bg-secondary">
+    <h3 class="card-header text-center">
+        {% trans "Bad request" %}
+    </h3>
+    <div class="card-body">
+        <p>
+            {% blocktrans trimmed %}
+            Sorry, your request was bad. Don't know what could be wrong.
+            An email has been sent to webmasters with the details of the error.
+            You can now drink a coke.
+            {% endblocktrans %}
+        </p>
+    </div>
+</div>
 {% endblock %}

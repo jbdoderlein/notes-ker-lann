@@ -1,18 +1,10 @@
-{% extends "member/noteowner_detail.html" %}
-
-{% block profile_info %}
-{% include "member/profile_info.html" %}
-{% endblock %}
-
-{% block profile_content %}
-{% include "member/profile_tables.html" %}
-{% endblock %}
+{% extends "member/base.html" %}
 
 {% block extrajavascript %}
-    <script>
-        function refreshHistory() {
-            $("#history_list").load("{% url 'member:user_detail' pk=user_object.pk %} #history_list");
-            $("#profile_infos").load("{% url 'member:user_detail' pk=user_object.pk %} #profile_infos");
-        }
-    </script>
+<script>
+    function refreshHistory() {
+        $("#history_list").load("{% url 'member:user_detail' pk=user_object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:user_detail' pk=user_object.pk %} #profile_infos");
+    }
+</script>
 {% endblock %}

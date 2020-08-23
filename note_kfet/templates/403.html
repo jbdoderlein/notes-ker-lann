@@ -1,13 +1,20 @@
 {% extends "base.html" %}
-
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load i18n %}
+{% block contenttitle %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Permission denied" %}</h1>
-    {% blocktrans %}You don't have the right to perform this request.{% endblocktrans %}
-    {% if exception %}
-        <div>
-            {% trans "Exception message:" %} {{ exception }}
-        </div>
-    {% endif %}
+<div class="card text-white bg-secondary">
+    <h3 class="card-header text-center">
+        {% trans "Permission denied" %}
+    </h3>
+    <div class="card-body">
+        <p>{% blocktrans %}You don't have the right to perform this request.{% endblocktrans %}</p>
+        {% if exception %}
+        <p>{% trans "Exception message:" %} {{ exception }}</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
