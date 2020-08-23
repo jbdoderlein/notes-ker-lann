@@ -1,9 +1,9 @@
 {% load i18n pretty_money perms %}
 
-<div class="card bg-light shadow">
-    <div class="card-header text-center">
-        <h4>{% trans "Account #" %}{{ user_object.pk }}</h4>
-    </div>
+<div class="card bg-light">
+    <h4 class="card-header text-center">
+        {% trans "Account #" %}{{ user_object.pk }}
+    </h4>
     <div class="card-top text-center">
         <a href="{% url 'member:user_update_pic' user_object.pk  %}">
             <img src="{{ user_object.note.display_image.url }}" class="img-thumbnail mt-2">
@@ -52,7 +52,6 @@
         {% for alias in user_object.note.alias_set.all %}
         <span class="badge badge-secondary">{{ alias }}</span>
         {% endfor %}
-
     </div>
     <div class="card-footer">
         <a class="btn btn-sm btn-secondary" href="{% url 'member:user_update_profile' user_object.pk %}">
@@ -66,5 +65,7 @@
 </div>
 
 {% if user_object.pk == user_object.pk %}
-<a class="small float-right text-decoration-none" href="{% url 'member:auth_token' %}">{% trans 'Manage auth token' %}</a>
+<a class="small float-right text-decoration-none" href="{% url 'member:auth_token' %}">
+    {% trans 'Manage auth token' %}
+</a>
 {% endif %}
