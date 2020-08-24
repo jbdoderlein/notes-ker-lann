@@ -222,7 +222,7 @@ class Alias(models.Model):
     normalized_name = models.CharField(
         max_length=255,
         unique=True,
-        default='',
+        blank=False,
         editable=False,
     )
     note = models.ForeignKey(
@@ -257,6 +257,8 @@ class Alias(models.Model):
         if len(normalized_name) >= 255:
             raise ValidationError(_('Alias is too long.'),
                                   code='alias_too_long')
+        if not normalized_name:
+            raise ValidationError(_('This alias contains only complex character. Please use a more simple alias.'))
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
