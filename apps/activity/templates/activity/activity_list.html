@@ -8,11 +8,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 {% block content %}
 {% if started_activities %}
-<div class="card bg-info mb-3">
+<div class="card bg-secondary text-white mb-3">
     <h3 class="card-header text-center">
         {% trans "Current activity" %}
     </h3>
-    <div class="card-body">
+    <div class="card-body text-dark">
         {% for activity in started_activities %}
         {% include "activity/includes/activity_info.html" %}
         {% endfor %}

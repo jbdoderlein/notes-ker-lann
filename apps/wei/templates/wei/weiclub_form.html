@@ -1,17 +1,21 @@
 {% extends "wei/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-{% block profile_info %}
-    {% if club %}
-        {% include "wei/weiclub_info.html" %}
-    {% endif %}
-{% endblock %}
-
 {% block profile_content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-primary" type="submit">{% trans "Submit" %}</button>
-    </form>
+<div class="card bg-light mb-3">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary" type="submit">{% trans "Submit" %}</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
