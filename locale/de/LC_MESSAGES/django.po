@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-24 12:20+0200\n"
+"POT-Creation-Date: 2020-08-25 16:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,8 +52,9 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
 #: apps/activity/models.py:27 apps/activity/models.py:62
-#: apps/member/models.py:198 apps/member/templates/member/club_info.html:14
-#: apps/member/templates/member/profile_info.html:14
+#: apps/member/models.py:198
+#: apps/member/templates/member/includes/club_info.html:4
+#: apps/member/templates/member/includes/profile_info.html:4
 #: apps/note/models/notes.py:212 apps/note/models/transactions.py:26
 #: apps/note/models/transactions.py:46 apps/note/models/transactions.py:299
 #: apps/permission/models.py:329
@@ -186,7 +187,7 @@ msgid "last name"
 msgstr ""
 
 #: apps/activity/models.py:230
-#: apps/member/templates/member/profile_info.html:14
+#: apps/member/templates/member/includes/profile_info.html:4
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/wei/templates/wei/weimembership_form.html:18
 msgid "first name"
@@ -270,7 +271,7 @@ msgstr ""
 
 #: apps/activity/templates/activity/activity_form.html:9
 #: apps/activity/templates/activity/activity_invite.html:8
-#: apps/member/templates/member/add_members.html:31
+#: apps/member/templates/member/add_members.html:32
 #: apps/member/templates/member/club_form.html:17
 #: apps/note/templates/note/transactiontemplate_form.html:15
 #: apps/treasury/forms.py:93 apps/treasury/forms.py:147
@@ -430,12 +431,12 @@ msgid "changelogs"
 msgstr ""
 
 #: apps/member/admin.py:52 apps/member/models.py:225
-#: apps/member/templates/member/club_info.html:44
+#: apps/member/templates/member/includes/club_info.html:34
 msgid "membership fee (paid students)"
 msgstr ""
 
 #: apps/member/admin.py:53 apps/member/models.py:230
-#: apps/member/templates/member/club_info.html:47
+#: apps/member/templates/member/includes/club_info.html:37
 msgid "membership fee (unpaid students)"
 msgstr ""
 
@@ -517,13 +518,15 @@ msgstr ""
 msgid "Roles"
 msgstr ""
 
-#: apps/member/models.py:38 apps/member/templates/member/profile_info.html:35
+#: apps/member/models.py:38
+#: apps/member/templates/member/includes/profile_info.html:32
 #: apps/registration/templates/registration/future_profile_detail.html:40
 #: apps/wei/templates/wei/weimembership_form.html:48
 msgid "phone number"
 msgstr ""
 
-#: apps/member/models.py:45 apps/member/templates/member/profile_info.html:29
+#: apps/member/models.py:45
+#: apps/member/templates/member/includes/profile_info.html:26
 #: apps/registration/templates/registration/future_profile_detail.html:34
 #: apps/wei/templates/wei/weimembership_form.html:42
 msgid "section"
@@ -609,13 +612,15 @@ msgstr ""
 msgid "Year of entry to the school (None if not ENS student)"
 msgstr ""
 
-#: apps/member/models.py:83 apps/member/templates/member/profile_info.html:39
+#: apps/member/models.py:83
+#: apps/member/templates/member/includes/profile_info.html:36
 #: apps/registration/templates/registration/future_profile_detail.html:37
 #: apps/wei/templates/wei/weimembership_form.html:45
 msgid "address"
 msgstr ""
 
-#: apps/member/models.py:90 apps/member/templates/member/profile_info.html:46
+#: apps/member/models.py:90
+#: apps/member/templates/member/includes/profile_info.html:43
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:51
 msgid "paid"
@@ -679,8 +684,9 @@ msgstr ""
 msgid "Activate your Note Kfet account"
 msgstr ""
 
-#: apps/member/models.py:203 apps/member/templates/member/club_info.html:60
-#: apps/member/templates/member/profile_info.html:32
+#: apps/member/models.py:203
+#: apps/member/templates/member/includes/club_info.html:54
+#: apps/member/templates/member/includes/profile_info.html:29
 #: apps/registration/templates/registration/future_profile_detail.html:22
 #: apps/wei/templates/wei/weiclub_info.html:54
 #: apps/wei/templates/wei/weimembership_form.html:24
@@ -699,7 +705,8 @@ msgstr ""
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
 
-#: apps/member/models.py:236 apps/member/templates/member/club_info.html:36
+#: apps/member/models.py:236
+#: apps/member/templates/member/includes/club_info.html:26
 msgid "membership duration"
 msgstr ""
 
@@ -707,7 +714,8 @@ msgstr ""
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr ""
 
-#: apps/member/models.py:244 apps/member/templates/member/club_info.html:26
+#: apps/member/models.py:244
+#: apps/member/templates/member/includes/club_info.html:16
 msgid "membership start"
 msgstr ""
 
@@ -715,7 +723,8 @@ msgstr ""
 msgid "Date from which the members can renew their membership."
 msgstr ""
 
-#: apps/member/models.py:251 apps/member/templates/member/club_info.html:31
+#: apps/member/models.py:251
+#: apps/member/templates/member/includes/club_info.html:21
 msgid "membership end"
 msgstr ""
 
@@ -766,11 +775,11 @@ msgstr ""
 msgid "memberships"
 msgstr ""
 
-#: apps/member/tables.py:118
+#: apps/member/tables.py:121
 msgid "Renew"
 msgstr ""
 
-#: apps/member/templates/member/add_members.html:15
+#: apps/member/templates/member/add_members.html:16
 #, python-format
 msgid ""
 "The user is not a member of the club·s %(clubs)s. An additional fee of "
@@ -778,71 +787,58 @@ msgid ""
 "these club·s."
 msgstr ""
 
-#: apps/member/templates/member/add_members.html:20
+#: apps/member/templates/member/add_members.html:21
 #, python-format
 msgid ""
 "This club has parents %(clubs)s. An additional fee of %(pretty_fee)s will be "
 "charged to adhere automatically to this/these club·s."
 msgstr ""
 
-#: apps/member/templates/member/autocomplete_model.html:11
-msgid "Reset"
+#: apps/member/templates/member/base.html:18
+#: apps/registration/templates/registration/future_profile_detail.html:12
+msgid "Account #"
 msgstr ""
 
-#: apps/member/templates/member/club_alias.html:7
-#: apps/member/templates/member/profile_alias.html:7 apps/member/views.py:214
+#: apps/member/templates/member/base.html:45
+#: apps/member/templates/member/base.html:59 apps/member/views.py:59
+#: apps/registration/templates/registration/future_profile_detail.html:48
+#: apps/wei/templates/wei/weimembership_form.html:121
+msgid "Update Profile"
+msgstr ""
+
+#: apps/member/templates/member/base.html:49
+#: apps/member/templates/member/base.html:64
+msgid "View Profile"
+msgstr ""
+
+#: apps/member/templates/member/base.html:54
+msgid "Add member"
+msgstr ""
+
+#: apps/member/templates/member/club_alias.html:10
+#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:214
 #: apps/member/views.py:418
 msgid "Note aliases"
 msgstr ""
 
-#: apps/member/templates/member/club_alias.html:15
-#: apps/member/templates/member/profile_alias.html:15
+#: apps/member/templates/member/club_alias.html:18
+#: apps/member/templates/member/profile_alias.html:18
 #: apps/treasury/tables.py:99
 msgid "Add"
 msgstr ""
 
-#: apps/member/templates/member/club_info.html:19
-msgid "Club Parent"
+#: apps/member/templates/member/club_detail.html:13
+msgid "Club managers"
 msgstr ""
 
-#: apps/member/templates/member/club_info.html:37
-msgid "days"
+#: apps/member/templates/member/club_detail.html:26
+msgid "Club members"
 msgstr ""
 
-#: apps/member/templates/member/club_info.html:41
-#: apps/wei/templates/wei/weiclub_info.html:27
-msgid "membership fee"
-msgstr ""
-
-#: apps/member/templates/member/club_info.html:53
-#: apps/member/templates/member/profile_info.html:43
-#: apps/treasury/templates/treasury/sogecredit_detail.html:18
-#: apps/wei/templates/wei/weiclub_info.html:45
-msgid "balance"
-msgstr ""
-
-#: apps/member/templates/member/club_info.html:57
-#: apps/member/templates/member/profile_info.html:51
-#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:50
-msgid "aliases"
-msgstr ""
-
-#: apps/member/templates/member/club_info.html:68
-msgid "Add member"
-msgstr ""
-
-#: apps/member/templates/member/club_info.html:72 apps/note/tables.py:167
-#: apps/note/templates/note/conso_form.html:132 apps/wei/tables.py:47
-#: apps/wei/tables.py:48 apps/wei/templates/wei/bus_tables.html:15
-#: apps/wei/templates/wei/busteam_tables.html:15
-#: apps/wei/templates/wei/busteam_tables.html:33
-#: apps/wei/templates/wei/weiclub_info.html:70
-msgid "Edit"
-msgstr ""
-
-#: apps/member/templates/member/club_info.html:76
-#: apps/member/templates/member/profile_info.html:62
-msgid "View Profile"
+#: apps/member/templates/member/club_detail.html:40
+#: apps/member/templates/member/profile_detail.html:32
+#: apps/wei/templates/wei/weiclub_tables.html:58
+msgid "Transaction history"
 msgstr ""
 
 #: apps/member/templates/member/club_list.html:10
@@ -853,83 +849,90 @@ msgstr ""
 msgid "Display only active memberships"
 msgstr ""
 
-#: apps/member/templates/member/club_members.html:21
+#: apps/member/templates/member/club_members.html:20
 msgid "Filter roles:"
 msgstr ""
 
-#: apps/member/templates/member/club_members.html:37
+#: apps/member/templates/member/club_members.html:33
 #: apps/wei/templates/wei/weimembership_list.html:18
 msgid "There is no membership found with this pattern."
 msgstr ""
 
-#: apps/member/templates/member/club_tables.html:9
-msgid "Club managers"
+#: apps/member/templates/member/includes/club_info.html:9
+msgid "Club Parent"
 msgstr ""
 
-#: apps/member/templates/member/club_tables.html:22
-msgid "Club members"
+#: apps/member/templates/member/includes/club_info.html:27
+msgid "days"
 msgstr ""
 
-#: apps/member/templates/member/club_tables.html:35
-#: apps/member/templates/member/profile_tables.html:26
-#: apps/wei/templates/wei/weiclub_tables.html:58
-msgid "Transaction history"
+#: apps/member/templates/member/includes/club_info.html:31
+#: apps/wei/templates/wei/weiclub_info.html:27
+msgid "membership fee"
 msgstr ""
 
-#: apps/member/templates/member/manage_auth_tokens.html:16
-msgid "Token"
+#: apps/member/templates/member/includes/club_info.html:43
+#: apps/member/templates/member/includes/profile_info.html:40
+#: apps/treasury/templates/treasury/sogecredit_detail.html:18
+#: apps/wei/templates/wei/weiclub_info.html:45
+msgid "balance"
 msgstr ""
 
-#: apps/member/templates/member/manage_auth_tokens.html:23
-msgid "Created"
+#: apps/member/templates/member/includes/club_info.html:47
+#: apps/member/templates/member/includes/profile_info.html:19
+#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:50
+msgid "aliases"
 msgstr ""
 
-#: apps/member/templates/member/manage_auth_tokens.html:31
-msgid "Regenerate token"
+#: apps/member/templates/member/includes/club_info.html:50
+#: apps/member/templates/member/includes/profile_info.html:22
+msgid "Edit aliases"
 msgstr ""
 
-#: apps/member/templates/member/profile_info.html:5
-#: apps/registration/templates/registration/future_profile_detail.html:12
-msgid "Account #"
-msgstr ""
-
-#: apps/member/templates/member/profile_info.html:17
+#: apps/member/templates/member/includes/profile_info.html:7
 #: apps/registration/templates/registration/future_profile_detail.html:19
 #: apps/wei/templates/wei/weimembership_form.html:21
 msgid "username"
 msgstr ""
 
-#: apps/member/templates/member/profile_info.html:21
+#: apps/member/templates/member/includes/profile_info.html:11
 msgid "password"
 msgstr ""
 
-#: apps/member/templates/member/profile_info.html:24
+#: apps/member/templates/member/includes/profile_info.html:14
 msgid "Change password"
 msgstr ""
 
-#: apps/member/templates/member/profile_info.html:58 apps/member/views.py:59
-#: apps/registration/templates/registration/future_profile_detail.html:48
-#: apps/wei/templates/wei/weimembership_form.html:121
-msgid "Update Profile"
-msgstr ""
-
-#: apps/member/templates/member/profile_info.html:69 apps/member/views.py:286
+#: apps/member/templates/member/includes/profile_info.html:50
+#: apps/member/views.py:286
 msgid "Manage auth token"
 msgstr ""
 
-#: apps/member/templates/member/profile_tables.html:7
+#: apps/member/templates/member/manage_auth_tokens.html:19
+msgid "Token"
+msgstr ""
+
+#: apps/member/templates/member/manage_auth_tokens.html:26
+msgid "Created"
+msgstr ""
+
+#: apps/member/templates/member/manage_auth_tokens.html:34
+msgid "Regenerate token"
+msgstr ""
+
+#: apps/member/templates/member/profile_detail.html:11
 #: apps/registration/templates/registration/future_profile_detail.html:28
 #: apps/wei/templates/wei/weimembership_form.html:30
 msgid "This user doesn't have confirmed his/her e-mail address."
 msgstr ""
 
-#: apps/member/templates/member/profile_tables.html:8
+#: apps/member/templates/member/profile_detail.html:13
 #: apps/registration/templates/registration/future_profile_detail.html:29
 #: apps/wei/templates/wei/weimembership_form.html:31
 msgid "Click here to resend a validation link."
 msgstr ""
 
-#: apps/member/templates/member/profile_tables.html:15
+#: apps/member/templates/member/profile_detail.html:21
 msgid "View my memberships"
 msgstr ""
 
@@ -1290,6 +1293,15 @@ msgstr ""
 #: apps/wei/tables.py:76 apps/wei/tables.py:103
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
+msgstr ""
+
+#: apps/note/tables.py:167 apps/note/templates/note/conso_form.html:132
+#: apps/wei/tables.py:47 apps/wei/tables.py:48
+#: apps/wei/templates/wei/bus_tables.html:15
+#: apps/wei/templates/wei/busteam_tables.html:15
+#: apps/wei/templates/wei/busteam_tables.html:33
+#: apps/wei/templates/wei/weiclub_info.html:70
+msgid "Edit"
 msgstr ""
 
 #: apps/note/templates/note/conso_form.html:33
@@ -2686,6 +2698,10 @@ msgid ""
 "Sorry, an error occurred when processing your request. An email has been "
 "sent to webmasters with the detail of the error, and this will be fixed "
 "soon. You can now drink a beer."
+msgstr ""
+
+#: note_kfet/templates/autocomplete_model.html:11
+msgid "Reset"
 msgstr ""
 
 #: note_kfet/templates/base.html:13

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-24 12:20+0200\n"
+"POT-Creation-Date: 2020-08-25 16:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,8 +53,9 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 
 #: apps/activity/models.py:27 apps/activity/models.py:62
-#: apps/member/models.py:198 apps/member/templates/member/club_info.html:14
-#: apps/member/templates/member/profile_info.html:14
+#: apps/member/models.py:198
+#: apps/member/templates/member/includes/club_info.html:4
+#: apps/member/templates/member/includes/profile_info.html:4
 #: apps/note/models/notes.py:212 apps/note/models/transactions.py:26
 #: apps/note/models/transactions.py:46 apps/note/models/transactions.py:299
 #: apps/permission/models.py:329
@@ -187,7 +188,7 @@ msgid "last name"
 msgstr "nom de famille"
 
 #: apps/activity/models.py:230
-#: apps/member/templates/member/profile_info.html:14
+#: apps/member/templates/member/includes/profile_info.html:4
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/wei/templates/wei/weimembership_form.html:18
 msgid "first name"
@@ -271,7 +272,7 @@ msgstr "Retour à la page de l'activité"
 
 #: apps/activity/templates/activity/activity_form.html:9
 #: apps/activity/templates/activity/activity_invite.html:8
-#: apps/member/templates/member/add_members.html:31
+#: apps/member/templates/member/add_members.html:32
 #: apps/member/templates/member/club_form.html:17
 #: apps/note/templates/note/transactiontemplate_form.html:15
 #: apps/treasury/forms.py:93 apps/treasury/forms.py:147
@@ -433,12 +434,12 @@ msgid "changelogs"
 msgstr "journaux de modifications"
 
 #: apps/member/admin.py:52 apps/member/models.py:225
-#: apps/member/templates/member/club_info.html:44
+#: apps/member/templates/member/includes/club_info.html:34
 msgid "membership fee (paid students)"
 msgstr "cotisation pour adhérer (normalien élève)"
 
 #: apps/member/admin.py:53 apps/member/models.py:230
-#: apps/member/templates/member/club_info.html:47
+#: apps/member/templates/member/includes/club_info.html:37
 msgid "membership fee (unpaid students)"
 msgstr "cotisation pour adhérer (normalien étudiant)"
 
@@ -520,13 +521,15 @@ msgstr "Utilisateur"
 msgid "Roles"
 msgstr "Rôles"
 
-#: apps/member/models.py:38 apps/member/templates/member/profile_info.html:35
+#: apps/member/models.py:38
+#: apps/member/templates/member/includes/profile_info.html:32
 #: apps/registration/templates/registration/future_profile_detail.html:40
 #: apps/wei/templates/wei/weimembership_form.html:48
 msgid "phone number"
 msgstr "numéro de téléphone"
 
-#: apps/member/models.py:45 apps/member/templates/member/profile_info.html:29
+#: apps/member/models.py:45
+#: apps/member/templates/member/includes/profile_info.html:26
 #: apps/registration/templates/registration/future_profile_detail.html:34
 #: apps/wei/templates/wei/weimembership_form.html:42
 msgid "section"
@@ -612,13 +615,15 @@ msgstr "promotion"
 msgid "Year of entry to the school (None if not ENS student)"
 msgstr "Année d'entrée dans l'école (None si non-étudiant·e de l'ENS)"
 
-#: apps/member/models.py:83 apps/member/templates/member/profile_info.html:39
+#: apps/member/models.py:83
+#: apps/member/templates/member/includes/profile_info.html:36
 #: apps/registration/templates/registration/future_profile_detail.html:37
 #: apps/wei/templates/wei/weimembership_form.html:45
 msgid "address"
 msgstr "adresse"
 
-#: apps/member/models.py:90 apps/member/templates/member/profile_info.html:46
+#: apps/member/models.py:90
+#: apps/member/templates/member/includes/profile_info.html:43
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:51
 msgid "paid"
@@ -688,8 +693,9 @@ msgstr "profil utilisateur"
 msgid "Activate your Note Kfet account"
 msgstr "Activez votre compte Note Kfet"
 
-#: apps/member/models.py:203 apps/member/templates/member/club_info.html:60
-#: apps/member/templates/member/profile_info.html:32
+#: apps/member/models.py:203
+#: apps/member/templates/member/includes/club_info.html:54
+#: apps/member/templates/member/includes/profile_info.html:29
 #: apps/registration/templates/registration/future_profile_detail.html:22
 #: apps/wei/templates/wei/weiclub_info.html:54
 #: apps/wei/templates/wei/weimembership_form.html:24
@@ -708,7 +714,8 @@ msgstr "nécessite des adhésions"
 msgid "Uncheck if this club don't require memberships."
 msgstr "Décochez si ce club n'utilise pas d'adhésions."
 
-#: apps/member/models.py:236 apps/member/templates/member/club_info.html:36
+#: apps/member/models.py:236
+#: apps/member/templates/member/includes/club_info.html:26
 msgid "membership duration"
 msgstr "durée de l'adhésion"
 
@@ -716,7 +723,8 @@ msgstr "durée de l'adhésion"
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr "La durée maximale (en jours) d'une adhésion (NULL = infinie)."
 
-#: apps/member/models.py:244 apps/member/templates/member/club_info.html:26
+#: apps/member/models.py:244
+#: apps/member/templates/member/includes/club_info.html:16
 msgid "membership start"
 msgstr "début de l'adhésion"
 
@@ -725,7 +733,8 @@ msgid "Date from which the members can renew their membership."
 msgstr ""
 "Date à partir de laquelle les adhérents peuvent renouveler leur adhésion."
 
-#: apps/member/models.py:251 apps/member/templates/member/club_info.html:31
+#: apps/member/models.py:251
+#: apps/member/templates/member/includes/club_info.html:21
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
@@ -778,11 +787,11 @@ msgstr "adhésion"
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/tables.py:118
+#: apps/member/tables.py:121
 msgid "Renew"
 msgstr "Renouveler"
 
-#: apps/member/templates/member/add_members.html:15
+#: apps/member/templates/member/add_members.html:16
 #, python-format
 msgid ""
 "The user is not a member of the club·s %(clubs)s. An additional fee of "
@@ -793,7 +802,7 @@ msgstr ""
 "montant supplémentaire de%(pretty_fee)s sera débitée afin de renouveler "
 "automatiquement l'adhésion dans ce·s club·s."
 
-#: apps/member/templates/member/add_members.html:20
+#: apps/member/templates/member/add_members.html:21
 #, python-format
 msgid ""
 "This club has parents %(clubs)s. An additional fee of %(pretty_fee)s will be "
@@ -802,65 +811,52 @@ msgstr ""
 "Ce club a pour parent·s %(clubs)s. Un coût supplémentaire de %(pretty_fee)s "
 "peut être ajouté pour adhérer automatiquement à ce·s club·s."
 
-#: apps/member/templates/member/autocomplete_model.html:11
-msgid "Reset"
-msgstr "Réinitialiser"
+#: apps/member/templates/member/base.html:18
+#: apps/registration/templates/registration/future_profile_detail.html:12
+msgid "Account #"
+msgstr "Compte n°"
 
-#: apps/member/templates/member/club_alias.html:7
-#: apps/member/templates/member/profile_alias.html:7 apps/member/views.py:214
+#: apps/member/templates/member/base.html:45
+#: apps/member/templates/member/base.html:59 apps/member/views.py:59
+#: apps/registration/templates/registration/future_profile_detail.html:48
+#: apps/wei/templates/wei/weimembership_form.html:121
+msgid "Update Profile"
+msgstr "Modifier le profil"
+
+#: apps/member/templates/member/base.html:49
+#: apps/member/templates/member/base.html:64
+msgid "View Profile"
+msgstr "Voir le profil"
+
+#: apps/member/templates/member/base.html:54
+msgid "Add member"
+msgstr "Ajouter un membre"
+
+#: apps/member/templates/member/club_alias.html:10
+#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:214
 #: apps/member/views.py:418
 msgid "Note aliases"
 msgstr "Alias de la note"
 
-#: apps/member/templates/member/club_alias.html:15
-#: apps/member/templates/member/profile_alias.html:15
+#: apps/member/templates/member/club_alias.html:18
+#: apps/member/templates/member/profile_alias.html:18
 #: apps/treasury/tables.py:99
 msgid "Add"
 msgstr "Ajouter"
 
-#: apps/member/templates/member/club_info.html:19
-msgid "Club Parent"
-msgstr "Club parent"
+#: apps/member/templates/member/club_detail.html:13
+msgid "Club managers"
+msgstr "Bureau du club"
 
-#: apps/member/templates/member/club_info.html:37
-msgid "days"
-msgstr "jours"
+#: apps/member/templates/member/club_detail.html:26
+msgid "Club members"
+msgstr "Membres du club"
 
-#: apps/member/templates/member/club_info.html:41
-#: apps/wei/templates/wei/weiclub_info.html:27
-msgid "membership fee"
-msgstr "cotisation pour adhérer"
-
-#: apps/member/templates/member/club_info.html:53
-#: apps/member/templates/member/profile_info.html:43
-#: apps/treasury/templates/treasury/sogecredit_detail.html:18
-#: apps/wei/templates/wei/weiclub_info.html:45
-msgid "balance"
-msgstr "solde du compte"
-
-#: apps/member/templates/member/club_info.html:57
-#: apps/member/templates/member/profile_info.html:51
-#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:50
-msgid "aliases"
-msgstr "alias"
-
-#: apps/member/templates/member/club_info.html:68
-msgid "Add member"
-msgstr "Ajouter un membre"
-
-#: apps/member/templates/member/club_info.html:72 apps/note/tables.py:167
-#: apps/note/templates/note/conso_form.html:132 apps/wei/tables.py:47
-#: apps/wei/tables.py:48 apps/wei/templates/wei/bus_tables.html:15
-#: apps/wei/templates/wei/busteam_tables.html:15
-#: apps/wei/templates/wei/busteam_tables.html:33
-#: apps/wei/templates/wei/weiclub_info.html:70
-msgid "Edit"
-msgstr "Éditer"
-
-#: apps/member/templates/member/club_info.html:76
-#: apps/member/templates/member/profile_info.html:62
-msgid "View Profile"
-msgstr "Voir le profil"
+#: apps/member/templates/member/club_detail.html:40
+#: apps/member/templates/member/profile_detail.html:32
+#: apps/wei/templates/wei/weiclub_tables.html:58
+msgid "Transaction history"
+msgstr "Historique des transactions"
 
 #: apps/member/templates/member/club_list.html:10
 msgid "Create club"
@@ -870,83 +866,90 @@ msgstr "Créer un club"
 msgid "Display only active memberships"
 msgstr "N'afficher que les adhésions encore valides"
 
-#: apps/member/templates/member/club_members.html:21
+#: apps/member/templates/member/club_members.html:20
 msgid "Filter roles:"
 msgstr "Filtrer par rôle :"
 
-#: apps/member/templates/member/club_members.html:37
+#: apps/member/templates/member/club_members.html:33
 #: apps/wei/templates/wei/weimembership_list.html:18
 msgid "There is no membership found with this pattern."
 msgstr "Il n'y a pas d'adhésion trouvée avec cette entrée."
 
-#: apps/member/templates/member/club_tables.html:9
-msgid "Club managers"
-msgstr "Bureau du club"
+#: apps/member/templates/member/includes/club_info.html:9
+msgid "Club Parent"
+msgstr "Club parent"
 
-#: apps/member/templates/member/club_tables.html:22
-msgid "Club members"
-msgstr "Membres du club"
+#: apps/member/templates/member/includes/club_info.html:27
+msgid "days"
+msgstr "jours"
 
-#: apps/member/templates/member/club_tables.html:35
-#: apps/member/templates/member/profile_tables.html:26
-#: apps/wei/templates/wei/weiclub_tables.html:58
-msgid "Transaction history"
-msgstr "Historique des transactions"
+#: apps/member/templates/member/includes/club_info.html:31
+#: apps/wei/templates/wei/weiclub_info.html:27
+msgid "membership fee"
+msgstr "cotisation pour adhérer"
 
-#: apps/member/templates/member/manage_auth_tokens.html:16
-msgid "Token"
-msgstr "Jeton"
+#: apps/member/templates/member/includes/club_info.html:43
+#: apps/member/templates/member/includes/profile_info.html:40
+#: apps/treasury/templates/treasury/sogecredit_detail.html:18
+#: apps/wei/templates/wei/weiclub_info.html:45
+msgid "balance"
+msgstr "solde du compte"
 
-#: apps/member/templates/member/manage_auth_tokens.html:23
-msgid "Created"
-msgstr "Créé le"
+#: apps/member/templates/member/includes/club_info.html:47
+#: apps/member/templates/member/includes/profile_info.html:19
+#: apps/note/models/notes.py:235 apps/wei/templates/wei/weiclub_info.html:50
+msgid "aliases"
+msgstr "alias"
 
-#: apps/member/templates/member/manage_auth_tokens.html:31
-msgid "Regenerate token"
-msgstr "Regénérer le jeton"
+#: apps/member/templates/member/includes/club_info.html:50
+#: apps/member/templates/member/includes/profile_info.html:22
+msgid "Edit aliases"
+msgstr "Éditer les alias"
 
-#: apps/member/templates/member/profile_info.html:5
-#: apps/registration/templates/registration/future_profile_detail.html:12
-msgid "Account #"
-msgstr "Compte n°"
-
-#: apps/member/templates/member/profile_info.html:17
+#: apps/member/templates/member/includes/profile_info.html:7
 #: apps/registration/templates/registration/future_profile_detail.html:19
 #: apps/wei/templates/wei/weimembership_form.html:21
 msgid "username"
 msgstr "pseudo"
 
-#: apps/member/templates/member/profile_info.html:21
+#: apps/member/templates/member/includes/profile_info.html:11
 msgid "password"
 msgstr "mot de passe"
 
-#: apps/member/templates/member/profile_info.html:24
+#: apps/member/templates/member/includes/profile_info.html:14
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: apps/member/templates/member/profile_info.html:58 apps/member/views.py:59
-#: apps/registration/templates/registration/future_profile_detail.html:48
-#: apps/wei/templates/wei/weimembership_form.html:121
-msgid "Update Profile"
-msgstr "Modifier le profil"
-
-#: apps/member/templates/member/profile_info.html:69 apps/member/views.py:286
+#: apps/member/templates/member/includes/profile_info.html:50
+#: apps/member/views.py:286
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: apps/member/templates/member/profile_tables.html:7
+#: apps/member/templates/member/manage_auth_tokens.html:19
+msgid "Token"
+msgstr "Jeton"
+
+#: apps/member/templates/member/manage_auth_tokens.html:26
+msgid "Created"
+msgstr "Créé le"
+
+#: apps/member/templates/member/manage_auth_tokens.html:34
+msgid "Regenerate token"
+msgstr "Regénérer le jeton"
+
+#: apps/member/templates/member/profile_detail.html:11
 #: apps/registration/templates/registration/future_profile_detail.html:28
 #: apps/wei/templates/wei/weimembership_form.html:30
 msgid "This user doesn't have confirmed his/her e-mail address."
 msgstr "Cet utilisateur n'a pas encore confirmé son adresse e-mail."
 
-#: apps/member/templates/member/profile_tables.html:8
+#: apps/member/templates/member/profile_detail.html:13
 #: apps/registration/templates/registration/future_profile_detail.html:29
 #: apps/wei/templates/wei/weimembership_form.html:31
 msgid "Click here to resend a validation link."
 msgstr "Cliquez ici pour renvoyer un lien de validation."
 
-#: apps/member/templates/member/profile_tables.html:15
+#: apps/member/templates/member/profile_detail.html:21
 msgid "View my memberships"
 msgstr "Voir mes adhésions"
 
@@ -1162,7 +1165,9 @@ msgstr "L'alias est trop long."
 #: apps/note/models/notes.py:261
 msgid ""
 "This alias contains only complex character. Please use a more simple alias."
-msgstr "Cet alias ne contient que des caractères complexes. Merci d'utiliser un alias plus simple."
+msgstr ""
+"Cet alias ne contient que des caractères complexes. Merci d'utiliser un "
+"alias plus simple."
 
 #: apps/note/models/notes.py:265
 msgid "An alias with a similar name already exists: {} "
@@ -1320,6 +1325,15 @@ msgstr "Pas de motif spécifié"
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:32
 msgid "Delete"
 msgstr "Supprimer"
+
+#: apps/note/tables.py:167 apps/note/templates/note/conso_form.html:132
+#: apps/wei/tables.py:47 apps/wei/tables.py:48
+#: apps/wei/templates/wei/bus_tables.html:15
+#: apps/wei/templates/wei/busteam_tables.html:15
+#: apps/wei/templates/wei/busteam_tables.html:33
+#: apps/wei/templates/wei/weiclub_info.html:70
+msgid "Edit"
+msgstr "Éditer"
 
 #: apps/note/templates/note/conso_form.html:33
 msgid "Consum"
@@ -2799,6 +2813,10 @@ msgstr ""
 "erreur, qui sera corrigée rapidement. Vous pouvez désormais aller boire une "
 "bière."
 
+#: note_kfet/templates/autocomplete_model.html:11
+msgid "Reset"
+msgstr "Réinitialiser"
+
 #: note_kfet/templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
@@ -2967,15 +2985,3 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
-
-#~ msgid "Add alias"
-#~ msgstr "Ajouter un alias"
-
-#~ msgid "Club listing"
-#~ msgstr "Liste des clubs"
-
-#~ msgid "There is no user with this pattern."
-#~ msgstr "Il n'y a pas d'utilisateur trouvé avec cette entrée."
-
-#~ msgid "There is no pending user with this pattern."
-#~ msgstr "Il n'y a pas d'inscription en attente avec cette entrée."
