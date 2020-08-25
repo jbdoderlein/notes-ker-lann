@@ -21,7 +21,7 @@ class AmountInput(NumberInput):
 
 
 class Autocomplete(TextInput):
-    template_name = "member/autocomplete_model.html"
+    template_name = "autocomplete_model.html"
 
     def __init__(self, model, resetable=False, attrs=None):
         super().__init__(attrs)

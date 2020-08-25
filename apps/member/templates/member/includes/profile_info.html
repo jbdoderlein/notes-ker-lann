@@ -1,0 +1,52 @@
+{% load i18n pretty_money perms %}
+
+<dl class="row">
+    <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+    <dd class="col-xl-6">{{ user_object.last_name }} {{ user_object.first_name }}</dd>
+
+    <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+    <dd class="col-xl-6">{{ user_object.username }}</dd>
+
+    {% if user_object.pk == user.pk %}
+    <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
+    <dd class="col-xl-6">
+        <a class="small" href="{% url 'password_change' %}">
+            {% trans 'Change password' %}
+        </a>
+    </dd>
+    {% endif %}
+
+    <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
+    <dd class="col-xl-6">
+        <a class="small" href="{% url 'member:user_alias' user_object.pk %}">
+            {% trans 'Edit aliases' %} ({{ user_object.note.alias_set.all|length }})
+        </a>
+    </dd>
+
+    <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+    <dd class="col-xl-6">{{ user_object.profile.section }}</dd>
+
+    <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
+    <dd class="col-xl-6"><a href="mailto:{{ user_object.email }}">{{ user_object.email }}</a></dd>
+
+    <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
+    <dd class="col-xl-6"><a href="tel:{{ user_object.profile.phone_number }}">{{ user_object.profile.phone_number }}</a>
+    </dd>
+
+    <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+    <dd class="col-xl-6">{{ user_object.profile.address }}</dd>
+
+    {% if "note.view_note"|has_perm:user_object.note %}
+    <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+    <dd class="col-xl-6">{{ user_object.note.balance | pretty_money }}</dd>
+
+    <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
+    <dd class="col-xl-6">{{ user_object.profile.paid|yesno }}</dd>
+    {% endif %}
+</dl>
+
+{% if user_object.pk == user_object.pk %}
+<a class="small float-right text-decoration-none" href="{% url 'member:auth_token' %}">
+    {% trans 'Manage auth token' %}
+</a>
+{% endif %}

@@ -2,6 +2,7 @@
 {% comment %}
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
+{% load i18n perms %}
 {% block contenttitle %}{% endblock %}
 
 {# Use a fluid-width container #}
@@ -11,24 +12,74 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <div class="row mt-4">
     <div class="col-xl-4">
         {% block profile_info %}
-        {% include "member/profile_info.html" %}
-        {% endblock %}
+        <div class="card bg-light">
+            <h4 class="card-header text-center">
+                {% if user_object %}
+                {% trans "Account #" %}{{ user_object.pk }}
+                {% elif club %}
+                Club {{ club.name }}
+                {% endif %}
+            </h4>
+            <div class="text-center">
+                {% if user_object %}
+                <a href="{% url 'member:user_update_pic' user_object.pk  %}">
+                    <img src="{{ user_object.note.display_image.url }}" class="img-thumbnail mt-2">
+                </a>
+                {% elif club %}
+                <a href="{% url 'member:club_update_pic' club.pk  %}">
+                    <img src="{{ club.note.display_image.url }}" class="img-thumbnail mt-2">
+                </a>
+                {% endif %}
+            </div>
+            <div class="card-body" id="profile_infos">
+                {% if user_object %}
+                {% include "member/includes/profile_info.html" %}
+                {% elif club %}
+                {% include "member/includes/club_info.html" %}
+                {% endif %}
+                {% endblock %}
+            </div>
+            <div class="card-footer">
+                {% if user_object %}
+                <a class="btn btn-sm btn-secondary" href="{% url 'member:user_update_profile' user_object.pk %}">
+                    <i class="fa fa-edit"></i> {% trans 'Update Profile' %}
+                </a>
+                {% url 'member:user_detail' user_object.pk as user_profile_url %}
+                {% if request.path_info != user_profile_url %}
+                <a class="btn btn-sm btn-primary" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
+                {% endif %}
+                {% elif club and not club.weiclub %}
+                {% if can_add_members %}
+                <a class="btn btn-sm btn-success" href="{% url 'member:club_add_member' club_pk=club.pk %}"
+                    data-turbolinks="false"> {% trans "Add member" %}</a>
+                {% endif %}
+                {% if ".change_"|has_perm:club %}
+                <a class="btn btn-sm btn-secondary" href="{% url 'member:club_update' pk=club.pk %}"
+                    data-turbolinks="false">
+                    <i class="fa fa-edit"></i> {% trans 'Update Profile' %}
+                </a>
+                {% endif %}
+                {% url 'member:club_detail' club.pk as club_detail_url %}
+                {% if request.path_info != club_detail_url %}
+                <a class="btn btn-sm btn-primary" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
     </div>
     <div class="col-xl-8">
-        {% block profile_content %}
-        {% include "member/profile_tables.html" %}
-        {% endblock %}
+        {% block profile_content %}{% endblock %}
     </div>
 </div>
 {% endblock %}
 
 {% block extrajavascript %}
+{% if object %}
 <script>
-    {% if object %}
     function refreshHistory() {
         $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
         $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
     }
-    {% endif %}
 </script>
+{% endif %}
 {% endblock %}
