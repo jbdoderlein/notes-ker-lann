@@ -273,7 +273,7 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
 
 class ProfilePictureUpdateView(PictureUpdateView):
     model = User
-    template_name = 'member/profile_picture_update.html'
+    template_name = 'member/picture_update.html'
     context_object_name = 'user_object'
 
 
@@ -452,7 +452,7 @@ class ClubPictureUpdateView(PictureUpdateView):
     Update the profile picture of a club.
     """
     model = Club
-    template_name = 'member/club_picture_update.html'
+    template_name = 'member/picture_update.html'
     context_object_name = 'club'
 
     def get_success_url(self):

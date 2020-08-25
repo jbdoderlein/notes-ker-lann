@@ -4,10 +4,6 @@
 {% load i18n %}
 {% load pretty_money %}
 
-{% block profile_info %}
-{% include "member/club_info.html" %}
-{% endblock %}
-
 {% block profile_content %}
     {% if additional_fee_renewal %}
         <div class="alert alert-warning">

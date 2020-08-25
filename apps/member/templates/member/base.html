@@ -11,24 +11,39 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <div class="row mt-4">
     <div class="col-xl-4">
         {% block profile_info %}
-        {% include "member/profile_info.html" %}
+            {% if user_object %}
+                {% include "member/includes/profile_info.html"  %}
+            {% elif club %}
+                {% include "member/includes/club_info.html" %}
+            {% elif note.club.weiclub %}
+                {% with club=note.club.weiclub %}
+                {% include "wei/weiclub_info.html" %}
+                {% endwith %}
+            {% elif note.club %}
+                {% with club=note.club %}
+                {% include "member/includes/club_info.html" %}
+                {% endwith %}
+            {% elif note.user %}
+                {% with user_object=note.user %}
+                {% include "member/includes/profile_info.html"  %}
+                {% endwith %}
+            {% endif %}
         {% endblock %}
     </div>
     <div class="col-xl-8">
         {% block profile_content %}
-        {% include "member/profile_tables.html" %}
         {% endblock %}
     </div>
 </div>
 {% endblock %}
 
 {% block extrajavascript %}
+{% if object %}
 <script>
-    {% if object %}
     function refreshHistory() {
         $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
         $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
     }
-    {% endif %}
 </script>
+{% endif %}
 {% endblock %}
