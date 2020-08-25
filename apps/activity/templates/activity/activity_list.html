@@ -1,41 +1,50 @@
 {% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load render_table from django_tables2 %}
-{% load i18n crispy_forms_tags%}
-{% block content %}
-    {% if started_activities %}
-        <h2>{% trans "Current activity" %}</h2>
-        {% for activity in started_activities %}
-            {% include "activity/activity_info.html" %}
-            <hr>
-        {% endfor %}
-    {% endif %}
+{% load i18n %}
+{% block contenttitle %}{% endblock %}
 
-    <h2>{% trans "Upcoming activities" %}</h2>
+{% block content %}
+{% if started_activities %}
+<div class="card bg-info mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Current activity" %}
+    </h3>
+    <div class="card-body">
+        {% for activity in started_activities %}
+        {% include "activity/includes/activity_info.html" %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card bg-light mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Upcoming activities" %}
+    </h3>
     {% if upcoming.data %}
-        {% render_table upcoming %}
+    {% render_table upcoming %}
     {% else %}
+    <div class="card-body">
         <div class="alert alert-warning">
             {% trans "There is no planned activity." %}
         </div>
+    </div>
     {% endif %}
+    <div class="card-footer">
+        <a class="btn btn-sm btn-success" href="{% url 'activity:activity_create' %}" data-turbolinks="false">
+            <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+            {% trans 'New activity' %}
+        </a>
+    </div>
+</div>
 
-    <a class="btn btn-primary" href="{% url 'activity:activity_create' %}" data-turbolinks="false">{% trans 'New activity' %}</a>
-
-    <hr>
-
-    <h2>{% trans "All activities" %}</h2>
-
+<div class="card bg-light mb-3">
+    <h3 class="card-header text-center">
+        {% trans "All activities" %}
+    </h3>
     {% render_table table %}
-{% endblock %}
-
-{% block extrajavascript %}
-<script type="text/javascript">
-
-$(document).ready(function($) {
-    $(".table-row").click(function() {
-        window.document.location = $(this).data("href");
-    });
-});
-
-</script>
+</div>
 {% endblock %}

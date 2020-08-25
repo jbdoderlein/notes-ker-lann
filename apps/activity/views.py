@@ -117,7 +117,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     model = Guest
     form_class = GuestForm
-    template_name = "activity/activity_invite.html"
+    template_name = "activity/activity_form.html"
 
     def get_sample_object(self):
         """ Creates a standart Guest binds to the Activity"""
