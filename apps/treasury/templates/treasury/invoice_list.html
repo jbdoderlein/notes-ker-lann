@@ -1,26 +1,35 @@
 {% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load render_table from django_tables2 %}
 {% load i18n %}
-{% block content %}
+{% block contenttitle %}{% endblock %}
 
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
-                <a href="#" class="btn btn-sm btn-outline-primary active">
-                    {% trans "Invoice" %}s
-                </a>
-                <a href="{% url "treasury:remittance_list" %}" class="btn btn-sm btn-outline-primary">
-                    {% trans "Remittance" %}s
-                </a>
-                <a href="{% url "treasury:soge_credits" %}" class="btn btn-sm btn-outline-primary">
-                    {% trans "Société générale credits" %}
-                </a>
-            </div>
+{% block content %}
+<div class="row">
+    <div class="col-xl-12">
+        <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+            <a href="#" class="btn btn-sm btn-outline-primary active">
+                {% trans "Invoice" %}s
+            </a>
+            <a href="{% url "treasury:remittance_list" %}" class="btn btn-sm btn-outline-primary">
+                {% trans "Remittance" %}s
+            </a>
+            <a href="{% url "treasury:soge_credits" %}" class="btn btn-sm btn-outline-primary">
+                {% trans "Société générale credits" %}
+            </a>
         </div>
     </div>
+</div>
 
-{% render_table table %}
-
-<a class="btn btn-primary" href="{% url 'treasury:invoice_create' %}">{% trans "New invoice" %}</a>
-
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    {% render_table table %}
+    <div class="card-footer">
+        <a class="btn btn-sm btn-success" href="{% url 'treasury:invoice_create' %}">{% trans "New invoice" %}</a>
+    </div>
+</div>
 {% endblock %}

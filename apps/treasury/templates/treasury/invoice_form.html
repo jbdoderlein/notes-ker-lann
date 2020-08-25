@@ -1,44 +1,55 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% block content %}
-    <p><a class="btn btn-default" href="{% url 'treasury:invoice_list' %}">{% trans "Invoices list" %}</a></p>
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n crispy_forms_tags %}
+{% block contenttitle %}{% endblock %}
 
-    {% if object.pk and not object.locked %}
+{% block content %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        {% if object.pk and not object.locked %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
-                Warning: the LaTeX template is saved with this object. Updating the invoice implies regenerate it.
-                Be careful if you manipulate old invoices.
+            Warning: the LaTeX template is saved with this object. Updating the invoice implies regenerate it.
+            Be careful if you manipulate old invoices.
             {% endblocktrans %}
         </div>
-    {% elif object.locked %}
+        {% elif object.locked %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
-                This invoice is locked and can no longer be edited.
+            This invoice is locked and can no longer be edited.
             {% endblocktrans %}
         </div>
-    {% endif %}
+        {% endif %}
+    </div>
 
     <form method="post" action="">
         {% csrf_token %}
+
         {# Render the invoice form #}
-        {% crispy form %}
+        <div class="card-body">
+            {% crispy form %}
+        </div>
+
         {# The next part concerns the product formset #}
         {# Generate some hidden fields that manage the number of products, and make easier the parsing #}
         {{ formset.management_form }}
         <table class="table table-condensed table-striped">
             {# Fill initial data #}
             {% for form in formset %}
-                {% if forloop.first %}
-                    <thead>
-                    <tr>
-                        <th>{{ form.designation.label }}<span class="asteriskField">*</span></th>
-                        <th>{{ form.quantity.label }}<span class="asteriskField">*</span></th>
-                        <th>{{ form.amount.label }}<span class="asteriskField">*</span></th>
-                    </tr>
-                    </thead>
-                    <tbody id="form_body">
+            {% if forloop.first %}
+            <thead>
+                <tr>
+                    <th>{{ form.designation.label }}<span class="asteriskField">*</span></th>
+                    <th>{{ form.quantity.label }}<span class="asteriskField">*</span></th>
+                    <th>{{ form.amount.label }}<span class="asteriskField">*</span></th>
+                </tr>
+            </thead>
+            <tbody id="form_body">
                 {% endif %}
                 <tr class="row-formset">
                     <td>{{ form.designation }}</td>
@@ -48,27 +59,28 @@
                     {{ form.invoice }}
                     {{ form.id }}
                 </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
 
         {# Display buttons to add and remove products #}
-        {% if not object.locked %}
+        <div class="card-body">
+            {% if not object.locked %}
             <div class="btn-group btn-block" role="group">
-                <button type="button" id="add_more" class="btn btn-primary">{% trans "Add product" %}</button>
+                <button type="button" id="add_more" class="btn btn-success">{% trans "Add product" %}</button>
                 <button type="button" id="remove_one" class="btn btn-danger">{% trans "Remove product" %}</button>
             </div>
-        {% endif %}
+            {% endif %}
 
-        <div class="btn-block">
             <button type="submit" class="btn btn-block btn-primary">{% trans "Submit" %}</button>
         </div>
     </form>
+</div>
 
-    <div id="empty_form" style="display: none;">
-        {# Hidden div that store an empty product form, to be copied into new forms #}
-        <table class='no_error'>
-            <tbody id="for_real">
+{# Hidden div that store an empty product form, to be copied into new forms #}
+<div id="empty_form" style="display: none;">
+    <table class='no_error'>
+        <tbody id="for_real">
             <tr class="row-formset">
                 <td>{{ formset.empty_form.designation }}</td>
                 <td>{{ formset.empty_form.quantity }} </td>
@@ -76,32 +88,32 @@
                 {{ formset.empty_form.invoice }}
                 {{ formset.empty_form.id }}
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 {% block extrajavascript %}
-    <script>
-        {# Script that handles add and remove lines #}
-        IDS = {};
+<script>
+    /* script that handles add and remove lines */
+    IDS = {};
 
-        $("#id_products-TOTAL_FORMS").val($(".row-formset").length - 1);
+    $("#id_products-TOTAL_FORMS").val($(".row-formset").length - 1);
 
-        $('#add_more').click(function () {
-            let form_idx = $('#id_products-TOTAL_FORMS').val();
-            $('#form_body').append($('#for_real').html().replace(/__prefix__/g, form_idx));
-            $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-            $('#id_products-' + parseInt(form_idx) + '-id').val(IDS[parseInt(form_idx)]);
-        });
+    $('#add_more').click(function () {
+        let form_idx = $('#id_products-TOTAL_FORMS').val();
+        $('#form_body').append($('#for_real').html().replace(/__prefix__/g, form_idx));
+        $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        $('#id_products-' + parseInt(form_idx) + '-id').val(IDS[parseInt(form_idx)]);
+    });
 
-        $('#remove_one').click(function () {
-            let form_idx = $('#id_products-TOTAL_FORMS').val();
-            if (form_idx > 0) {
-                IDS[parseInt(form_idx) - 1] = $('#id_products-' + (parseInt(form_idx) - 1) + '-id').val();
-                $('#form_body tr:last-child').remove();
-                $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) - 1);
-            }
-        });
-    </script>
+    $('#remove_one').click(function () {
+        let form_idx = $('#id_products-TOTAL_FORMS').val();
+        if (form_idx > 0) {
+            IDS[parseInt(form_idx) - 1] = $('#id_products-' + (parseInt(form_idx) - 1) + '-id').val();
+            $('#form_body tr:last-child').remove();
+            $('#id_products-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+        }
+    });
+</script>
 {% endblock %}

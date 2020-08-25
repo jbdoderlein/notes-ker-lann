@@ -1,9 +1,17 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
-{% load crispy_forms_tags pretty_money %}
-{% load render_table from django_tables2 %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load crispy_forms_tags %}
+{% block contenttitle %}{% endblock %}
+
 {% block content %}
-    <p><a class="btn btn-default" href="{% url 'treasury:remittance_list' %}">{% trans "Remittances list" %}</a></p>
-    {% crispy form %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        {% crispy form %}
+    </div>
+</div>
 {% endblock %}
