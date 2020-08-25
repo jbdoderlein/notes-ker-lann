@@ -96,26 +96,30 @@ class MembershipTable(tables.Table):
         t = pretty_money(value)
 
         # If it is required and if the user has the right, the renew button is displayed.
-        if record.club.membership_start is not None:
-            if record.date_start < record.club.membership_start:  # If the renew is available
-                if not Membership.objects.filter(
-                        club=record.club,
-                        user=record.user,
-                        date_start__gte=record.club.membership_start,
-                        date_end__lte=record.club.membership_end,
-                ).exists():  # If the renew is not yet performed
-                    empty_membership = Membership(
-                        club=record.club,
-                        user=record.user,
-                        date_start=date.today(),
-                        date_end=date.today(),
-                        fee=0,
+        if record.club.membership_start is not None \
+                and record.date_start < record.club.membership_start:
+            if not Membership.objects.filter(
+                    club=record.club,
+                    user=record.user,
+                    date_start__gte=record.club.membership_start,
+                    date_end__lte=record.club.membership_end,
+            ).exists():  # If the renew is not yet performed
+                empty_membership = Membership(
+                    club=record.club,
+                    user=record.user,
+                    date_start=date.today(),
+                    date_end=date.today(),
+                    fee=0,
+                )
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "member:add_membership", empty_membership):  # If the user has right
+                    renew_url = reverse_lazy('member:club_renew_membership',
+                                             kwargs={"pk": record.pk})
+                    t = format_html(
+                        t + ' <a class="btn btn-sm btn-warning" title="{text}"'
+                        ' href="{renew_url}"><i class="fa fa-repeat"></i></a>',
+                        renew_url=renew_url, text=_("Renew")
                     )
-                    if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                    "member:add_membership", empty_membership):  # If the user has right
-                        t = format_html(t + ' <a class="btn btn-warning" href="{url}">{text}</a>',
-                                        url=reverse_lazy('member:club_renew_membership',
-                                                         kwargs={"pk": record.pk}), text=_("Renew"))
         return t
 
     def render_roles(self, record):

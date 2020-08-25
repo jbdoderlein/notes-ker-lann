@@ -26,7 +26,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 <div class="card bg-light">
     <div class="card-header position-relative" id="historyListHeading">
-        <a class="stretched-link font-weight-bold text-decoration-none" {% if "note.view_note"|has_perm:user_object.note %}
+        <a class="stretched-link font-weight-bold text-decoration-none"
+            {% if "note.view_note"|has_perm:user_object.note %}
             href="{% url 'note:transactions' pk=user_object.note.pk %}" {% endif %}>
             <i class="fa fa-euro"></i> {% trans "Transaction history" %}
         </a>
