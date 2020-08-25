@@ -1,22 +1,23 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms %}
 {% load render_table from django_tables2 %}
-{% load pretty_money %}
-{% load perms %}
 
 {% block content %}
+{% include "activity/includes/activity_info.html" %}
 
-    {% include "activity/activity_info.html" %}
-
-    {% if guests.data %}
-        <hr>
-        <h2>{% trans "Guests list" %}</h2>
-        <div id="guests_table">
-            {% render_table guests %}
-        </div>
-    {% endif %}
-
+{% if guests.data %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Guests list" %}
+    </h3>
+    <div id="guests_table">
+        {% render_table guests %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block extrajavascript %}

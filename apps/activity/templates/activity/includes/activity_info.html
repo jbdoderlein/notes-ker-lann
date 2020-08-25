@@ -1,10 +1,10 @@
-{% load i18n %}
-{% load perms %}
-{% load pretty_money %}
-
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms pretty_money %}
 {% url 'activity:activity_detail' activity.pk as activity_detail_url %}
 
-<div id="activity_info" class="card bg-light shadow">
+<div id="activity_info" class="card bg-light shadow mb-3">
     <div class="card-header text-center">
         <h4>
             {% if request.path_info != activity_detail_url %}
