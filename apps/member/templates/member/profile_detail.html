@@ -1,4 +1,7 @@
 {% extends "member/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 {% load render_table from django_tables2 %}
 {% load i18n perms %}
 
@@ -12,7 +15,7 @@
 </div>
 {% endif %}
 
-<div class="card">
+<div class="card bg-light mb-3">
     <div class="card-header position-relative" id="clubListHeading">
         <a class="font-weight-bold">
             <i class="fa fa-users"></i> {% trans "View my memberships" %}
@@ -21,11 +24,9 @@
     {% render_table club_list %}
 </div>
 
-<hr>
-
-<div class="card">
+<div class="card bg-light">
     <div class="card-header position-relative" id="historyListHeading">
-        <a class="stretched-link font-weight-bold" {% if "note.view_note"|has_perm:user_object.note %}
+        <a class="stretched-link font-weight-bold text-decoration-none" {% if "note.view_note"|has_perm:user_object.note %}
             href="{% url 'note:transactions' pk=user_object.note.pk %}" {% endif %}>
             <i class="fa fa-euro"></i> {% trans "Transaction history" %}
         </a>
