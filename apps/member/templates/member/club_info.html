@@ -54,8 +54,12 @@
             <dd class="col-xl-6">{{ club.note.balance | pretty_money }}</dd>
             {% endif %}
 
-            <dt class="col-xl-6"><a href="{% url 'member:club_alias' club.pk %}">{% trans 'aliases'|capfirst %}</a></dt>
-            <dd class="col-xl-6 text-truncate">{{ club.note.alias_set.all|join:", " }}</dd>
+            <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
+            <dd class="col-xl-6">
+                <a class="small" href="{% url 'member:club_alias' club.pk %}">
+                    {% trans 'Edit my aliases' %} ({{ club.note.alias_set.all|length }})
+                </a>
+            </dd>
 
             <dt class="col-xl-4">{% trans 'email'|capfirst %}</dt>
             <dd class="col-xl-8"><a href="mailto:{{ club.email }}">{{ club.email }}</a></dd>

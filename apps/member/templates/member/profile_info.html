@@ -26,6 +26,13 @@
             </dd>
             {% endif %}
 
+            <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
+            <dd class="col-xl-6">
+                <a class="small" href="{% url 'member:user_alias' user_object.pk %}">
+                    {% trans 'Edit my aliases' %} ({{ user_object.note.alias_set.all|length }})
+                </a>
+            </dd>
+
             <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
             <dd class="col-xl-6">{{ user_object.profile.section }}</dd>
 
@@ -47,11 +54,6 @@
             <dd class="col-xl-6">{{ user_object.profile.paid|yesno }}</dd>
             {% endif %}
         </dl>
-
-        <h4><a href="{% url 'member:user_alias' user_object.pk %}">{% trans 'aliases'|capfirst %}</a></h4>
-        {% for alias in user_object.note.alias_set.all %}
-        <span class="badge badge-secondary">{{ alias }}</span>
-        {% endfor %}
     </div>
     <div class="card-footer">
         <a class="btn btn-sm btn-secondary" href="{% url 'member:user_update_profile' user_object.pk %}">
