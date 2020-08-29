@@ -139,6 +139,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
         form = super().get_form(form_class)
         form.activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
             .get(pk=self.kwargs["pk"])
+        form.fields["inviter"].initial = self.request.user.note
         return form
 
     def form_valid(self, form):
@@ -196,7 +197,6 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                 | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))
             )
         else:
-            pattern = None
             guest_qs = guest_qs.none()
         return guest_qs
 
@@ -224,7 +224,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         # Filter with permission backend
         note_qs = note_qs.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
 
-        if pattern:
+        if "search" in self.request.GET and self.request.GET["search"]:
+            pattern = self.request.GET["search"]
             note_qs = note_qs.filter(
                 Q(note__noteuser__user__first_name__regex=pattern)
                 | Q(note__noteuser__user__last_name__regex=pattern)
@@ -234,7 +235,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         else:
             note_qs = note_qs.none()
 
-        if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql_psycopg2':
+        if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql':
             note_qs = note_qs.distinct('note__pk')[:20]
         else:
             # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
@@ -253,13 +254,13 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .distinct().get(pk=self.kwargs["pk"])
         context["activity"] = activity
 
-        matched=[]
+        matched = []
 
-        for guest in get_invited_guest(self,activity):
+        for guest in self.get_invited_guest(activity):
             guest.type = "Invité"
             matched.append(guest)
 
-        for note in get_invited_note(self,activity):
+        for note in self.get_invited_note(activity):
             note.type = "Adhérent"
             note.activity = activity
             matched.append(note)

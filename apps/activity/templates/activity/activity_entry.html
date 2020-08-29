@@ -130,19 +130,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         $.post("/api/note/transaction/transaction/", {
                             "csrfmiddlewaretoken": CSRF_TOKEN,
                             "quantity": 1,
-                            "amount": {
-                                {
-                                    activity.activity_type.guest_entry_fee
-                                }
-                            },
+                            "amount": {{ activity.activity_type.guest_entry_fee }},
                             "reason": "Crédit " + credit_name +
                                 " (invitation {{ activity.name }})",
                             "valid": true,
-                            "polymorphic_ctype": {
-                                {
-                                    notespecial_ctype
-                                }
-                            },
+                            "polymorphic_ctype": {{ notespecial_ctype }},
                             "resourcetype": "SpecialTransaction",
                             "source": credit_id,
                             "destination": target.attr('data-inviter'),
