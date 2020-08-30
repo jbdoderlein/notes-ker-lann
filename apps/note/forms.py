@@ -10,7 +10,6 @@ from note_kfet.inputs import Autocomplete, AmountInput, DateTimePickerInput
 from .models import TransactionTemplate, NoteClub, Alias
 
 
-
 class TransactionTemplateForm(forms.ModelForm):
     class Meta:
         model = TransactionTemplate

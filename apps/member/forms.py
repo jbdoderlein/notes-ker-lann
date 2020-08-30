@@ -77,6 +77,7 @@ class ImageForm(forms.Form):
     width = forms.FloatField(widget=forms.HiddenInput())
     height = forms.FloatField(widget=forms.HiddenInput())
 
+
 class ClubForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()

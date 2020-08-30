@@ -3,8 +3,8 @@
 
 import io
 from datetime import timedelta, date
-from PIL import Image
 
+from PIL import Image
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +18,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
-
 from rest_framework.authtoken.models import Token
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction, SpecialTransaction
@@ -576,11 +575,11 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         Create membership, check that all is good, make transactions
         """
         # Get the club that is concerned by the membership
-        if "club_pk" in self.kwargs: # get from url of new membership
+        if "club_pk" in self.kwargs:  # get from url of new membership
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
                 .get(pk=self.kwargs["club_pk"])
             user = form.instance.user
-        else: # get from url for renewal
+        else:  # get from url for renewal
             old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
             club = old_membership.club
             user = old_membership.user
@@ -589,7 +588,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         # Get form data
         credit_type = form.cleaned_data["credit_type"]
-            # but with this way users can customize their section as they want.
+        # but with this way users can customize their section as they want.
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]

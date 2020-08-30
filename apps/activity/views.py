@@ -11,7 +11,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
-
 from note.models import Alias, NoteSpecial, NoteUser
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView

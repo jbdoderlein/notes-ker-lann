@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from activity.models import Activity
 from member.models import Club, Membership
 from note.models import NoteUser
@@ -68,12 +69,12 @@ class TestPermissionDenied(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_add_member_club(self):
-        club = Club.objects.create()
+        club = Club.objects.create(name=get_random_string(127))
         response = self.client.get(reverse("member:club_add_member", kwargs=dict(club_pk=club.pk)))
         self.assertEqual(response.status_code, 403)
 
     def test_renew_membership(self):
-        club = Club.objects.create()
+        club = Club.objects.create(name=get_random_string(127))
         membership = Membership.objects.create(user=self.user, club=club)
         response = self.client.get(reverse("member:club_renew_membership", kwargs=dict(pk=membership.pk)))
         self.assertEqual(response.status_code, 403)
