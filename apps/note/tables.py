@@ -97,7 +97,7 @@ class HistoryTable(tables.Table):
         """
         When the validation status is hovered, an input field is displayed to let the user specify an invalidity reason
         """
-        has_perm = PermissionBackend\
+        has_perm = PermissionBackend \
             .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record)
 
         val = "✔" if value else "✖"
@@ -135,8 +135,16 @@ class AliasTable(tables.Table):
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
-                                       attrs={'td': {'class': 'col-sm-1'}},
-                                       verbose_name=_("Delete"),)
+                                       attrs=
+                                       {'td':
+                                            {'class':
+                                                 lambda record: 'col-sm-1'
+                                                                + (' d-none' if not PermissionBackend
+                                                                   .check_perm(get_current_authenticated_user(),
+                                                                               "note.delete_alias", record) else '')
+                                             }
+                                        },
+                                       verbose_name=_("Delete"), )
 
 
 class ButtonTable(tables.Table):
@@ -170,7 +178,7 @@ class ButtonTable(tables.Table):
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
                                        attrs={'td': {'class': 'col-sm-1'}},
-                                       verbose_name=_("Delete"),)
+                                       verbose_name=_("Delete"), )
 
     def render_amount(self, value):
         return pretty_money(value)
