@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from datetime import timedelta
+from random import shuffle
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
@@ -10,11 +11,23 @@ from django.utils.translation import gettext_lazy as _
 from member.models import Club
 from note.models import Note, NoteUser
 from note_kfet.inputs import Autocomplete, DateTimePickerInput
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 
 from .models import Activity, Guest
 
 
 class ActivityForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # By default, the Kfet club is attended
+        self.fields["attendees_club"].initial = Club.objects.get(name="Kfet")
+        self.fields["attendees_club"].widget.attrs["placeholder"] = "Kfet"
+        clubs = list(Club.objects.filter(PermissionBackend
+                                         .filter_queryset(get_current_authenticated_user(), Club, "view")).all())
+        shuffle(clubs)
+        self.fields["organizer"].widget.attrs["placeholder"] = ", ".join(club.name for club in clubs[:4]) + ", ..."
+
     def clean_date_end(self):
         date_end = self.cleaned_data["date_end"]
         date_start = self.cleaned_data["date_start"]

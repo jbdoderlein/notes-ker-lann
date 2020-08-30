@@ -17,7 +17,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <div class="card-body" id="profile_infos">
         <dl class="row">
             <dt class="col-xl-6">{% trans 'description'|capfirst %}</dt>
-            <dd class="col-xl-6"> {{ activity.description }}</dd>
+            <dd class="col-xl-6"> {{ activity.description|linebreaks }}</dd>
 
             <dt class="col-xl-6">{% trans 'type'|capfirst %}</dt>
             <dd class="col-xl-6"> {{ activity.activity_type }}</dd>

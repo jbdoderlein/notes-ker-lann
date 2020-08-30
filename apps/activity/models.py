@@ -72,6 +72,7 @@ class Activity(models.Model):
         max_length=255,
         blank=True,
         default="",
+        help_text=_("Place where the activity is organized, eg. Kfet."),
     )
 
     activity_type = models.ForeignKey(
@@ -92,6 +93,7 @@ class Activity(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('organizer'),
+        help_text=_("Club that organizes the activity. The entry fees will go to this club."),
     )
 
     attendees_club = models.ForeignKey(
@@ -99,6 +101,7 @@ class Activity(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('attendees club'),
+        help_text=_("Club that is authorized to join the activity. Mostly the Kfet club."),
     )
 
     date_start = models.DateTimeField(
