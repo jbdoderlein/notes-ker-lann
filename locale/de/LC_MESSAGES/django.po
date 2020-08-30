@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-30 16:07+0200\n"
+"POT-Creation-Date: 2020-08-30 23:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,27 +23,27 @@ msgstr ""
 msgid "activity"
 msgstr ""
 
-#: apps/activity/forms.py:28 apps/activity/models.py:127
+#: apps/activity/forms.py:22 apps/activity/models.py:127
 msgid "The end date must be after the start date."
 msgstr ""
 
-#: apps/activity/forms.py:69 apps/activity/models.py:254
+#: apps/activity/forms.py:63 apps/activity/models.py:254
 msgid "You can't invite someone once the activity is started."
 msgstr ""
 
-#: apps/activity/forms.py:72 apps/activity/models.py:257
+#: apps/activity/forms.py:66 apps/activity/models.py:257
 msgid "This activity is not validated yet."
 msgstr ""
 
-#: apps/activity/forms.py:82 apps/activity/models.py:265
+#: apps/activity/forms.py:76 apps/activity/models.py:265
 msgid "This person has been already invited 5 times this year."
 msgstr ""
 
-#: apps/activity/forms.py:86 apps/activity/models.py:269
+#: apps/activity/forms.py:80 apps/activity/models.py:269
 msgid "This person is already invited."
 msgstr ""
 
-#: apps/activity/forms.py:90 apps/activity/models.py:273
+#: apps/activity/forms.py:84 apps/activity/models.py:273
 msgid "You can't invite more than 3 people to this activity."
 msgstr ""
 
@@ -170,7 +170,7 @@ msgstr ""
 msgid "Already entered on "
 msgstr ""
 
-#: apps/activity/models.py:187 apps/activity/tables.py:54
+#: apps/activity/models.py:187 apps/activity/tables.py:59
 msgid "{:%Y-%m-%d %H:%M:%S}"
 msgstr ""
 
@@ -205,36 +205,44 @@ msgstr ""
 msgid "Invitation"
 msgstr ""
 
-#: apps/activity/tables.py:54
+#: apps/activity/tables.py:25
+msgid "The activity is currently open."
+msgstr ""
+
+#: apps/activity/tables.py:26
+msgid "The validation of the activity is pending."
+msgstr ""
+
+#: apps/activity/tables.py:59
 msgid "Entered on "
 msgstr ""
 
-#: apps/activity/tables.py:55
+#: apps/activity/tables.py:60
 msgid "remove"
 msgstr ""
 
-#: apps/activity/tables.py:79 apps/note/forms.py:66 apps/treasury/models.py:186
+#: apps/activity/tables.py:84 apps/note/forms.py:66 apps/treasury/models.py:186
 msgid "Type"
 msgstr ""
 
-#: apps/activity/tables.py:81 apps/member/forms.py:131
+#: apps/activity/tables.py:86 apps/member/forms.py:131
 #: apps/registration/forms.py:81 apps/treasury/forms.py:135
 #: apps/wei/forms/registration.py:96
 msgid "Last name"
 msgstr ""
 
-#: apps/activity/tables.py:83 apps/member/forms.py:136
+#: apps/activity/tables.py:88 apps/member/forms.py:136
 #: apps/note/templates/note/transaction_form.html:135
 #: apps/registration/forms.py:86 apps/treasury/forms.py:137
 #: apps/wei/forms/registration.py:101
 msgid "First name"
 msgstr ""
 
-#: apps/activity/tables.py:85 apps/note/models/notes.py:69
+#: apps/activity/tables.py:90 apps/note/models/notes.py:69
 msgid "Note"
 msgstr ""
 
-#: apps/activity/tables.py:87 apps/member/tables.py:46
+#: apps/activity/tables.py:92 apps/member/tables.py:46
 msgid "Balance"
 msgstr ""
 
@@ -323,7 +331,7 @@ msgid "validate"
 msgstr ""
 
 #: apps/activity/templates/activity/includes/activity_info.html:71
-#: apps/logs/models.py:62 apps/note/tables.py:165
+#: apps/logs/models.py:62 apps/note/tables.py:173
 msgid "edit"
 msgstr ""
 
@@ -399,7 +407,7 @@ msgstr ""
 msgid "create"
 msgstr ""
 
-#: apps/logs/models.py:63 apps/note/tables.py:137 apps/note/tables.py:171
+#: apps/logs/models.py:63 apps/note/tables.py:137 apps/note/tables.py:179
 #: apps/permission/models.py:127 apps/treasury/tables.py:38
 #: apps/wei/tables.py:75
 msgid "delete"
@@ -749,7 +757,7 @@ msgstr ""
 msgid "The role {role} does not apply to the club {club}."
 msgstr ""
 
-#: apps/member/models.py:385 apps/member/views.py:637
+#: apps/member/models.py:385 apps/member/views.py:652
 msgid "User is already a member of the club"
 msgstr ""
 
@@ -811,13 +819,13 @@ msgid "Add member"
 msgstr ""
 
 #: apps/member/templates/member/club_alias.html:10
-#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:213
-#: apps/member/views.py:417
+#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:216
+#: apps/member/views.py:426
 msgid "Note aliases"
 msgstr ""
 
-#: apps/member/templates/member/club_alias.html:18
-#: apps/member/templates/member/profile_alias.html:18
+#: apps/member/templates/member/club_alias.html:20
+#: apps/member/templates/member/profile_alias.html:19
 #: apps/treasury/tables.py:99
 msgid "Add"
 msgstr ""
@@ -899,7 +907,7 @@ msgid "Change password"
 msgstr ""
 
 #: apps/member/templates/member/includes/profile_info.html:50
-#: apps/member/views.py:285
+#: apps/member/views.py:294
 msgid "Manage auth token"
 msgstr ""
 
@@ -951,55 +959,55 @@ msgstr ""
 msgid "Search user"
 msgstr ""
 
-#: apps/member/views.py:227
+#: apps/member/views.py:236
 msgid "Update note picture"
 msgstr ""
 
-#: apps/member/views.py:313
+#: apps/member/views.py:322
 msgid "Create new club"
 msgstr ""
 
-#: apps/member/views.py:331
+#: apps/member/views.py:340
 msgid "Search club"
 msgstr ""
 
-#: apps/member/views.py:364
+#: apps/member/views.py:373
 msgid "Club detail"
 msgstr ""
 
-#: apps/member/views.py:434
+#: apps/member/views.py:449
 msgid "Update club"
 msgstr ""
 
-#: apps/member/views.py:468
+#: apps/member/views.py:483
 msgid "Add new member to the club"
 msgstr ""
 
-#: apps/member/views.py:628 apps/wei/views.py:922
+#: apps/member/views.py:643 apps/wei/views.py:922
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
 msgstr ""
 
-#: apps/member/views.py:641
+#: apps/member/views.py:656
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:646
+#: apps/member/views.py:661
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr ""
 
-#: apps/member/views.py:662 apps/member/views.py:664 apps/member/views.py:666
+#: apps/member/views.py:677 apps/member/views.py:679 apps/member/views.py:681
 #: apps/registration/views.py:292 apps/registration/views.py:294
 #: apps/registration/views.py:296 apps/wei/views.py:927 apps/wei/views.py:931
 msgid "This field is required."
 msgstr ""
 
-#: apps/member/views.py:750
+#: apps/member/views.py:765
 msgid "Manage roles of an user in the club"
 msgstr ""
 
-#: apps/member/views.py:775
+#: apps/member/views.py:790
 msgid "Members of the club"
 msgstr ""
 
@@ -1282,7 +1290,7 @@ msgstr ""
 msgid "No reason specified"
 msgstr ""
 
-#: apps/note/tables.py:139 apps/note/tables.py:173 apps/treasury/tables.py:39
+#: apps/note/tables.py:147 apps/note/tables.py:181 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:28
 #: apps/treasury/templates/treasury/sogecredit_detail.html:60
 #: apps/wei/tables.py:76 apps/wei/tables.py:103
@@ -1290,7 +1298,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: apps/note/tables.py:167 apps/note/templates/note/conso_form.html:132
+#: apps/note/tables.py:175 apps/note/templates/note/conso_form.html:132
 #: apps/wei/tables.py:47 apps/wei/tables.py:48
 #: apps/wei/templates/wei/base.html:90
 #: apps/wei/templates/wei/bus_detail.html:17
@@ -1524,7 +1532,7 @@ msgid ""
 "of model {app_label}.{model_name}."
 msgstr ""
 
-#: apps/permission/signals.py:73 apps/permission/views.py:83
+#: apps/permission/signals.py:73 apps/permission/views.py:88
 #, python-brace-format
 msgid ""
 "You don't have the permission to add an instance of model {app_label}."
@@ -1570,25 +1578,25 @@ msgstr ""
 msgid "No associated permission"
 msgstr ""
 
-#: apps/permission/views.py:54
-#, python-brace-format
-msgid ""
-"You don't have the permission to create an instance of the model \"{model}\" "
-"with these parameters. Please correct your data and retry."
-msgstr ""
-
-#: apps/permission/views.py:95
+#: apps/permission/views.py:55
 #, python-brace-format
 msgid ""
 "You don't have the permission to update this instance of the model "
 "\"{model}\" with these parameters. Please correct your data and retry."
 msgstr ""
 
-#: apps/permission/views.py:103 note_kfet/templates/base.html:106
+#: apps/permission/views.py:59
+#, python-brace-format
+msgid ""
+"You don't have the permission to create an instance of the model \"{model}\" "
+"with these parameters. Please correct your data and retry."
+msgstr ""
+
+#: apps/permission/views.py:95 note_kfet/templates/base.html:106
 msgid "Rights"
 msgstr ""
 
-#: apps/permission/views.py:108
+#: apps/permission/views.py:100
 msgid "All rights"
 msgstr ""
 

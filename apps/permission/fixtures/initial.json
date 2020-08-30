@@ -2488,6 +2488,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 160,
+		"fields": {
+			"model": [
+				"activity",
+				"guest"
+			],
+			"query": "{\"inviter\": [\"user\", \"note\"], \"entry\": null}",
+			"type": "delete",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer ses propres invitations non validées à une activité"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2553,7 +2569,8 @@
 				156,
 				157,
 				158,
-				159
+				159,
+				160
 			]
 		}
 	},

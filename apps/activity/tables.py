@@ -20,6 +20,11 @@ class ActivityTable(tables.Table):
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
+        row_attrs = {
+            'class': lambda record: 'bg-success' if record.open else ('' if record.valid else 'bg-warning'),
+            'title': lambda record: _("The activity is currently open.") if record.open else
+            ('' if record.valid else _("The validation of the activity is pending.")),
+        }
         model = Activity
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('name', 'activity_type', 'organizer', 'attendees_club', 'date_start', 'date_end', )
@@ -33,17 +38,12 @@ class GuestTable(tables.Table):
 
     entry = tables.Column(
         empty_values=(),
-        attrs={
-            "td": {
-                "class": lambda record: "" if record.has_entry else "validate btn btn-danger",
-                "onclick": lambda record: "" if record.has_entry else "remove_guest(" + str(record.pk) + ")"
-            }
-        }
+        verbose_name=_("Remove"),
     )
 
     class Meta:
         attrs = {
-            'class': 'table table-condensed table-striped table-hover'
+            'class': 'table table-condensed table-striped'
         }
         model = Guest
         template_name = 'django_tables2/bootstrap4.html'
@@ -52,7 +52,8 @@ class GuestTable(tables.Table):
     def render_entry(self, record):
         if record.has_entry:
             return str(_("Entered on ") + str(_("{:%Y-%m-%d %H:%M:%S}").format(record.entry.time, )))
-        return _("remove").capitalize()
+        return format_html('<button id="{id}" class="btn btn-danger btn-sm" onclick="remove_guest(this.id)"> '
+                           '{delete_trans}</button>'.format(id=record.id, delete_trans=_("remove").capitalize()))
 
 
 def get_row_class(record):
