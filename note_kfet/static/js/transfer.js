@@ -169,9 +169,6 @@ $(document).ready(function() {
     type_transfer.removeAttr('checked');
     $("#type_credit").removeAttr('checked');
     $("#type_debit").removeAttr('checked');
-    $("label[for='type_transfer']").attr('class', 'btn btn-sm btn-outline-primary');
-    $("label[for='type_credit']").attr('class', 'btn btn-sm btn-outline-primary');
-    $("label[for='type_debit']").attr('class', 'btn btn-sm btn-outline-primary');
 
     if (location.hash)
         $("#type_" + location.hash.substr(1)).click();

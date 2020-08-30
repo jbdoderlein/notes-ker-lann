@@ -8,7 +8,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% block content %}
 <div class="row">
     <div class="col-xl-12">
-        <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+        <div class="btn-group btn-group-toggle bg-light" style="width: 100%" data-toggle="buttons">
             <a href="{% url "note:transfer" %}#transfer" class="btn btn-sm btn-outline-primary">
                 {% trans "Transfer" %}
             </a>
@@ -27,6 +27,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
     </div>
 </div>
 
+<hr>
+
 <a href="{% url "activity:activity_detail" pk=activity.pk %}">
     <button class="btn btn-light">{% trans "Return to activity page" %}</button>
 </a>
@@ -35,7 +37,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 <hr>
 
-<div id="entry_table">
+<div class="card" id="entry_table">
     <h2 class="text-center">{{ entries.count }}
         {% if entries.count >= 2 %}{% trans "entries" %}{% else %}{% trans "entry" %}{% endif %}</h2>
     {% render_table table %}
