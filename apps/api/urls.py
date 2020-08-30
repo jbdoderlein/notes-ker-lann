@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -8,15 +9,8 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import routers, serializers
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from activity.api.urls import register_activity_urls
 from api.viewsets import ReadProtectedModelViewSet
-from member.api.urls import register_members_urls
-from note.api.urls import register_note_urls
 from note.models import Alias
-from treasury.api.urls import register_treasury_urls
-from logs.api.urls import register_logs_urls
-from permission.api.urls import register_permission_urls
-from wei.api.urls import register_wei_urls
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -112,13 +106,34 @@ class ContentTypeViewSet(ReadOnlyModelViewSet):
 router = routers.DefaultRouter()
 router.register('models', ContentTypeViewSet)
 router.register('user', UserViewSet)
-register_members_urls(router, 'members')
-register_activity_urls(router, 'activity')
-register_note_urls(router, 'note')
-register_treasury_urls(router, 'treasury')
-register_permission_urls(router, 'permission')
-register_logs_urls(router, 'logs')
-register_wei_urls(router, 'wei')
+
+if "member" in settings.INSTALLED_APPS:
+    from member.api.urls import register_members_urls
+    register_members_urls(router, 'members')
+
+if "member" in settings.INSTALLED_APPS:
+    from activity.api.urls import register_activity_urls
+    register_activity_urls(router, 'activity')
+
+if "note" in settings.INSTALLED_APPS:
+    from note.api.urls import register_note_urls
+    register_note_urls(router, 'note')
+
+if "treasury" in settings.INSTALLED_APPS:
+    from treasury.api.urls import register_treasury_urls
+    register_treasury_urls(router, 'treasury')
+
+if "permission" in settings.INSTALLED_APPS:
+    from permission.api.urls import register_permission_urls
+    register_permission_urls(router, 'permission')
+
+if "logs" in settings.INSTALLED_APPS:
+    from logs.api.urls import register_logs_urls
+    register_logs_urls(router, 'logs')
+
+if "wei" in settings.INSTALLED_APPS:
+    from wei.api.urls import register_wei_urls
+    register_wei_urls(router, 'wei')
 
 app_name = 'api'
 
