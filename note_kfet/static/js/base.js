@@ -213,6 +213,13 @@ function autoCompleteNote (field_id, note_list_id, notes, notes_display, alias_p
         fallbackPlacement: 'clockwise'
     });
 
+    // When the user clicks elsewhere, we hide the tooltip
+    $(document).click(function(e) {
+        if (!e.target.id.startsWith(alias_prefix)) {
+            field.tooltip("hide");
+        }
+    });
+
     let old_pattern = null;
 
     // Clear search on click
