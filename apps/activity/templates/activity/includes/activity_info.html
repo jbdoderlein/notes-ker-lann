@@ -28,7 +28,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <dt class="col-xl-6">{% trans 'end date'|capfirst %}</dt>
             <dd class="col-xl-6">{{ activity.date_end }}</dd>
 
-            {% if ".view_"|has_perm:activity.creater %}
+            {% if "activity.change_activity_valid"|has_perm:activity %}
                 <dt class="col-xl-6">{% trans 'creater'|capfirst %}</dt>
                 <dd class="col-xl-6"><a href="{% url "member:user_detail" pk=activity.creater.pk %}">{{ activity.creater }}</a></dd>
             {% endif %}
