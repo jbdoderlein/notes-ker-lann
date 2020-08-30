@@ -23,10 +23,6 @@ msgstr ""
 msgid "activity"
 msgstr ""
 
-#: apps/activity/forms.py:21
-msgid "You can't create a past activity."
-msgstr ""
-
 #: apps/activity/forms.py:28 apps/activity/models.py:127
 msgid "The end date must be after the start date."
 msgstr ""

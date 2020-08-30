@@ -15,12 +15,6 @@ from .models import Activity, Guest
 
 
 class ActivityForm(forms.ModelForm):
-    def clean_date_start(self):
-        date_start = self.cleaned_data["date_start"]
-        if not self.instance.pk and date_start < timezone.now():
-            self.add_error("date_start", _("You can't create a past activity."))
-        return date_start
-
     def clean_date_end(self):
         date_end = self.cleaned_data["date_end"]
         date_start = self.cleaned_data["date_start"]
