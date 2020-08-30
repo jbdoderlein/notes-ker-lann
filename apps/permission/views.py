@@ -43,6 +43,24 @@ class ProtectQuerysetMixin:
 
         return form
 
+    def form_valid(self, form):
+        """
+        Submit the form, if the page is a FormView.
+        If a PermissionDenied exception is raised, catch the error and display it at the top of the form.
+        """
+        try:
+            return super().form_valid(form)
+        except PermissionDenied:
+            if isinstance(self, UpdateView):
+                form.add_error(None, _("You don't have the permission to update this instance of the model \"{model}\""
+                                       " with these parameters. Please correct your data and retry.")
+                               .format(model=self.model._meta.verbose_name))
+            else:
+                form.add_error(None, _("You don't have the permission to create an instance of the model \"{model}\""
+                                       " with these parameters. Please correct your data and retry.")
+                               .format(model=self.model._meta.verbose_name))
+            return self.form_invalid(form)
+
 
 class ProtectedCreateView(LoginRequiredMixin, CreateView):
     """

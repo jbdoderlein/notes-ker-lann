@@ -20,7 +20,7 @@ from .models import Activity, Entry, Guest
 from .tables import ActivityTable, EntryTable, GuestTable
 
 
-class ActivityCreateView(ProtectedCreateView):
+class ActivityCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     View to create a new Activity
     """
