@@ -79,7 +79,7 @@ function refreshBalance () {
  * @param fun For each found note with the matched alias `alias`, fun(note, alias) is called.
  */
 function getMatchedNotes (pattern, fun) {
-    $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club&ordering=normalized_name", fun);
+    $.getJSON("/api/note/alias/?format=json&alias=" + pattern + "&search=user|club", fun);
 }
 
 /**
@@ -261,9 +261,7 @@ function autoCompleteNote (field_id, note_list_id, notes, notes_display, alias_p
             return;
         }
 
-        $.getJSON("/api/note/consumer/?format=json&alias="
-            + pattern
-            + "&search=user|club&ordering=normalized_name",
+        $.getJSON("/api/note/consumer/?format=json&alias=" + pattern + "&search=user|club",
             function (consumers) {
                 // The response arrived too late, we stop the request
                 if (pattern !== $("#" + field_id).val())

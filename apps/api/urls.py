@@ -4,14 +4,15 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import routers, serializers
-from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from activity.api.urls import register_activity_urls
 from api.viewsets import ReadProtectedModelViewSet
 from member.api.urls import register_members_urls
 from note.api.urls import register_note_urls
+from note.models import Alias
 from treasury.api.urls import register_treasury_urls
 from logs.api.urls import register_logs_urls
 from permission.api.urls import register_permission_urls
@@ -52,9 +53,47 @@ class UserViewSet(ReadProtectedModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active', ]
-    search_fields = ['$username', '$first_name', '$last_name', '$note__alias__name', '$note__alias__normalized_name', ]
+
+    def get_queryset(self):
+        queryset = super().get_queryset().order_by("username")
+
+        if "search" in self.request.GET:
+            pattern = self.request.GET["search"]
+
+            # We match first a user by its username, then if an alias is matched without normalization
+            # And finally if the normalized pattern matches a normalized alias.
+            queryset = queryset.filter(
+                username__iregex="^" + pattern
+            ).union(
+                queryset.filter(
+                    Q(note__alias__name__iregex="^" + pattern)
+                    & ~Q(username__iregex="^" + pattern)
+                ), all=True).union(
+                queryset.filter(
+                    Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                    & ~Q(username__iregex="^" + pattern)
+                ),
+                all=True).union(
+                queryset.filter(
+                    Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                    & ~Q(username__iregex="^" + pattern)
+                ),
+                all=True).union(
+                queryset.filter(
+                    (Q(last_name__iregex="^" + pattern) | Q(first_name__iregex="^" + pattern))
+                    & ~Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                    & ~Q(username__iregex="^" + pattern)
+                ),
+                all=True)
+
+        return queryset
 
 
 # This ViewSet is the only one that is accessible from all authenticated users!

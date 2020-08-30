@@ -180,9 +180,9 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         """
         Filter the user list with the given pattern.
         """
-        qs = super().get_queryset().distinct("pk").annotate(alias=F("note__alias__name"))\
+        qs = super().get_queryset().distinct("username").annotate(alias=F("note__alias__name"))\
             .annotate(normalized_alias=F("note__alias__normalized_name"))\
-            .filter(profile__registration_valid=True)
+            .filter(profile__registration_valid=True).order_by("username")
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
@@ -190,13 +190,16 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
                 return qs.none()
 
             qs = qs.filter(
-                Q(first_name__iregex=pattern)
-                | Q(last_name__iregex=pattern)
-                | Q(profile__section__iregex=pattern)
-                | Q(username__iregex=pattern)
-                | Q(alias__iregex=pattern)
-                | Q(normalized_alias__iregex=Alias.normalize(pattern))
-            )
+                username__iregex="^" + pattern
+            ).union(
+                qs.filter(
+                    (Q(alias__iregex="^" + pattern)
+                     | Q(normalized_alias__iregex="^" + Alias.normalize(pattern))
+                     | Q(last_name__iregex="^" + pattern)
+                     | Q(first_name__iregex="^" + pattern)
+                     | Q(email__istartswith=pattern))
+                    & ~Q(username__iregex="^" + pattern)
+                ), all=True)
         else:
             qs = qs.none()
 

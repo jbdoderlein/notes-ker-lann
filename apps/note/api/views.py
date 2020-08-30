@@ -40,9 +40,19 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(alias__name__regex="^" + alias)
-            | Q(alias__normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(alias__normalized_name__regex="^" + alias.lower()))
+            name__iregex="^" + alias
+        ).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + alias.lower())
+                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True)
 
         return queryset.distinct()
 
@@ -85,9 +95,19 @@ class AliasViewSet(ReadProtectedModelViewSet):
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(name__regex="^" + alias)
-            | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower()))
+            name__iregex="^" + alias
+        ).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + alias.lower())
+                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True)
 
         return queryset
 
@@ -108,13 +128,25 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
+        queryset = queryset.order_by('name').prefetch_related('note')
+        # We match first an alias if it is matched without normalization,
+        # then if the normalized pattern matches a normalized alias.
         queryset = queryset.filter(
-            Q(name__regex="^" + alias)
-            | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower()))\
-            .order_by('name').prefetch_related('note')
+            name__iregex="^" + alias
+        ).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + alias.lower())
+                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True)
 
-        return queryset
+        return queryset.distinct()
 
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):
