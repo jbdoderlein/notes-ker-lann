@@ -2,7 +2,7 @@
 {% load getenv %}
 {% load i18n %}
 
-Bonjour {{ note.user.first_name }} {{ note.user.last_name }},
+Bonjour {{ note }},
 
 Ce mail t'a été envoyé parce que le solde de ta Note Kfet
 {{ note }} est négatif !

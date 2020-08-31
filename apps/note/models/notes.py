@@ -173,6 +173,21 @@ class NoteClub(Note):
     def pretty(self):
         return _("Note of %(club)s club") % {'club': str(self.club)}
 
+    def save(self, *args, **kwargs):
+        if self.pk and self.balance < 0:
+            old_note = NoteClub.objects.get(pk=self.pk)
+            if old_note.balance >= 0:
+                # Passage en négatif
+                self.last_negative = timezone.now()
+                self.send_mail_negative_balance()
+        super().save(*args, **kwargs)
+
+    def send_mail_negative_balance(self):
+        plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
+        html = render_to_string("note/mails/negative_balance.html", dict(note=self))
+        self.user.email_user("[Note Kfet] Passage en négatif (club {})"
+                             .format(self.club.name), plain_text, html_message=html)
+
 
 class NoteSpecial(Note):
     """

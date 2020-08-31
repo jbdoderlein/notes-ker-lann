@@ -22,10 +22,17 @@
 <tbody>
     {% for note in notes %}
         <tr>
-            <td>{{ note.user.last_name }}</td>
-            <td>{{ note.user.first_name }}</td>
-            <td>{{ note.user.username }}</td>
-            <td>{{ note.user.email }}</td>
+            {% if note.user %}
+                <td>{{ note.user.last_name }}</td>
+                <td>{{ note.user.first_name }}</td>
+                <td>{{ note.user.username }}</td>
+                <td>{{ note.user.email }}</td>
+            {% else %}
+                <td></td>
+                <td></td>
+                <td>{{ note.club.name }}</td>
+                <td>{{ note.club.email }}</td>
+            {% endif %}
             <td>{{ note.balance|pretty_money }}</td>
             <td>{{ note.last_negative_duration }}</td>
         </tr>

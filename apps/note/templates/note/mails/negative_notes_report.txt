@@ -4,7 +4,7 @@
          Nom         |   Prénom   |     Pseudo      |               Email               |  Solde   |   Durée
 ---------------------+------------+-----------------+-----------------------------------+----------+-----------
 {% for note in notes %}
-{{ note.user.last_name }} | {{ note.user.first_name }} | {{ note.user.username }} | {{ note.user.email }} | {{ note.balance|pretty_money }} | {{ note.last_negative_duration }}
+{% if note.user %}{{ note.user.last_name }} | {{ note.user.first_name }} | {{ note.user.username }} | {{ note.user.email }} | {{ note.balance|pretty_money }} | {{ note.last_negative_duration }}{% else %}                     |            | {{ note.club.name }} | {{ note.club.email }} | {{ note.balance|pretty_money }} | {{ note.last_negative_duration }}{% endif %}
 {% endfor %}
 
 --
