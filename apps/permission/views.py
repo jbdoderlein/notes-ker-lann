@@ -119,9 +119,11 @@ class RightsView(TemplateView):
                                                       | Q(name="Adhérent Kfet")
                                                       | Q(name="Membre de club")
                                                       | Q(name="Bureau de club"))
-                                                    & Q(weirole__isnull=True)))).order_by("club", "user__last_name")\
+                                                    & Q(weirole__isnull=True))))\
+                .order_by("club__name", "user__last_name")\
                 .distinct().all()
             context["special_memberships_table"] = RightsTable(special_memberships, prefix="clubs-")
-            context["superusers"] = SuperuserTable(User.objects.filter(is_superuser=True).all(), prefix="superusers-")
+            context["superusers"] = SuperuserTable(User.objects.filter(is_superuser=True).order_by("last_name").all(),
+                                                   prefix="superusers-")
 
         return context
