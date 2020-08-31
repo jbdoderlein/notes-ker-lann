@@ -104,10 +104,17 @@ $(document).ready(function() {
         $("#source_note").removeClass('is-invalid');
         $("#dest_note").removeClass('is-invalid');
         $("#special_transaction_div").addClass('d-none');
-        source.attr('disabled', false);
+        source.removeClass('d-none');
         $("#source_note_list").removeClass('d-none');
-        dest.attr('disabled', false);
+        $("#credit_type").addClass('d-none');
+        dest.removeClass('d-none');
         $("#dest_note_list").removeClass('d-none');
+        $("#debit_type").addClass('d-none');
+
+        $("#source_note_label").text(select_emitters_label);
+        $("#dest_note_label").text(select_receveirs_label);
+
+        location.hash = "transfer";
     });
 
     $("#type_credit").click(function() {
@@ -120,17 +127,23 @@ $(document).ready(function() {
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").addClass('d-none');
         $("#dest_note_list").removeClass('d-none');
-        source.attr('disabled', true);
-        source.val($("#credit_type option:selected").text());
+        source.addClass('d-none');
         source.tooltip('hide');
-        dest.attr('disabled', false);
+        $("#credit_type").removeClass('d-none');
+        dest.removeClass('d-none');
         dest.val('');
         dest.tooltip('hide');
+        $("#debit_type").addClass('d-none');
+
+        $("#source_note_label").text(transfer_type_label);
+        $("#dest_note_label").text(select_receveir_label);
 
         if (dests_notes_display.length > 1) {
             $("#dest_note_list").html('');
             dests_notes_display.length = 0;
         }
+
+        location.hash = "credit";
     });
 
     $("#type_debit").click(function() {
@@ -143,17 +156,23 @@ $(document).ready(function() {
         $("#special_transaction_div").removeClass('d-none');
         $("#source_note_list").removeClass('d-none');
         $("#dest_note_list").addClass('d-none');
-        source.attr('disabled', false);
+        source.removeClass('d-none');
         source.val('');
         source.tooltip('hide');
-        dest.attr('disabled', true);
-        dest.val($("#credit_type option:selected").text());
+        $("#credit_type").addClass('d-none');
+        dest.addClass('d-none');
         dest.tooltip('hide');
+        $("#debit_type").removeClass('d-none');
+
+        $("#source_note_label").text(select_emitter_label);
+        $("#dest_note_label").text(transfer_type_label);
 
         if (sources_notes_display.length > 1) {
             $("#source_note_list").html('');
             sources_notes_display.length = 0;
         }
+
+        location.hash = "debit";
     });
 
         $("#credit_type").change(function() {
@@ -174,7 +193,6 @@ $(document).ready(function() {
         $("#type_" + location.hash.substr(1)).click();
     else
         type_transfer.click();
-    location.hash = "";
 
     $("#source_me").click(function() {
         if (LOCK)
@@ -364,12 +382,13 @@ $("#btn_transfer").click(function() {
             });
         });
     } else if ($("#type_credit").is(':checked') || $("#type_debit").is(':checked')) {
-        let special_note = $("#credit_type").val();
+        let special_note;
         let user_note;
         let alias;
         let given_reason = reason;
         let source_id, dest_id;
         if ($("#type_credit").is(':checked')) {
+            special_note = $("#credit_type").val();
             user_note = dests_notes_display[0].note;
             alias = dests_notes_display[0].name;
             source_id = special_note;
@@ -379,6 +398,7 @@ $("#btn_transfer").click(function() {
                 reason += " (" + given_reason + ")";
         }
         else {
+            special_note = $("#debit_type").val();
             user_note = sources_notes_display[0].note;
             alias = sources_notes_display[0].name;
             source_id = user_note.id;

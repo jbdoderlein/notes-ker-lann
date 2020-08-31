@@ -16,6 +16,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <a href="{% url "note:transfer" %}#credit" class="btn btn-sm btn-outline-primary">
                 {% trans "Credit" %}
             </a>
+            <a href="{% url "note:transfer" %}#debit" class="btn btn-sm btn-outline-primary">
+                {% trans "Debit" %}
+            </a>
             {% endif %}
             {% for a in activities_open %}
             <a href="{% url "activity:activity_entry" pk=a.pk %}"

@@ -173,14 +173,16 @@ class TransactionSerializer(serializers.ModelSerializer):
     The djangorestframework plugin will analyse the model `Transaction` and parse all fields in the API.
     """
     def validate_source(self, value):
-        if value.is_active:
+        if not value.is_active:
             raise ValidationError(_("The transaction can't be saved since the source note "
                                     "or the destination note is not active."))
+        return value
 
     def validate_destination(self, value):
-        if value.is_active:
+        if not value.is_active:
             raise ValidationError(_("The transaction can't be saved since the source note "
                                     "or the destination note is not active."))
+        return value
 
     class Meta:
         model = Transaction
