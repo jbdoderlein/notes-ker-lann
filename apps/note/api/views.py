@@ -18,7 +18,7 @@ from ..models.notes import Note, Alias
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
-class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
+class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
@@ -36,25 +36,16 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            name__iregex="^" + alias
-        ).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + alias.lower())
-                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True)
+            Q(alias__name__iregex="^" + alias)
+            | Q(alias__normalized_name__iregex="^" + Alias.normalize(alias))
+            | Q(alias__normalized_name__iregex="^" + alias.lower())
+        )
 
-        return queryset.distinct()
+        return queryset
 
 
 class AliasViewSet(ReadProtectedModelViewSet):

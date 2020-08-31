@@ -12,7 +12,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <div class="row mt-4">
     <div class="col-xl-4">
         {% block profile_info %}
-        <div class="card bg-light">
+        <div class="card bg-light" id="card-infos">
             <h4 class="card-header text-center">
                 {% if user_object %}
                 {% trans "Account #" %}{{ user_object.pk }}
@@ -31,6 +31,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 </a>
                 {% endif %}
             </div>
+            {% if note.inactivity_reason %}
+                <div class="alert alert-danger polymorphic-add-choice">
+                    {{ note.get_inactivity_reason_display }}
+                </div>
+            {% endif %}
             <div class="card-body" id="profile_infos">
                 {% if user_object %}
                 {% include "member/includes/profile_info.html" %}
@@ -50,11 +55,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% elif club and not club.weiclub %}
                 {% if can_add_members %}
                 <a class="btn btn-sm btn-success" href="{% url 'member:club_add_member' club_pk=club.pk %}"
-                    data-turbolinks="false"> {% trans "Add member" %}</a>
+                   data-turbolinks="false"> {% trans "Add member" %}</a>
                 {% endif %}
                 {% if ".change_"|has_perm:club %}
                 <a class="btn btn-sm btn-secondary" href="{% url 'member:club_update' pk=club.pk %}"
-                    data-turbolinks="false">
+                   data-turbolinks="false">
                     <i class="fa fa-edit"></i> {% trans 'Update Profile' %}
                 </a>
                 {% endif %}
@@ -63,6 +68,15 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <a class="btn btn-sm btn-primary" href="{{ club_detail_url }}">{% trans 'View Profile' %}</a>
                 {% endif %}
                 {% endif %}
+                {% if can_lock_note %}
+                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#lock-note-modal">
+                    <i class="fas fa-ban"></i> {% trans 'Lock note' %}
+                </button>
+                {% elif can_unlock_note %}
+                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#unlock-note-modal">
+                    <i class="fas fa-check-circle"></i> {% trans 'Unlock note' %}
+                </button>
+                {% endif %}
             </div>
         </div>
         {% endblock %}
@@ -70,16 +84,102 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <div class="col-xl-8">
         {% block profile_content %}{% endblock %}
     </div>
+
+    {# Popup to confirm the action of locking the note. Managed by a button #}
+    <div class="modal fade" id="lock-note-modal" tabindex="-1" role="dialog" aria-labelledby="lockNote"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lockNote">{% trans "Lock note" %}</h5>
+                    <button type="button" class="close btn-modal" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% blocktrans trimmed %}
+                        Are you sure you want to lock this note? This will prevent any transaction that would be performed,
+                        until the note is unlocked.
+                    {% endblocktrans %}
+                    {% if can_force_lock %}
+                    {% blocktrans trimmed %}
+                        If you use the force mode, the user won't be able to unlock the note by itself.
+                    {% endblocktrans %}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">{% trans "Close" %}</button>
+                    {% if can_force_lock %}
+                    <button type="button" class="btn btn-danger btn-modal" onclick="lock_note(true, 'forced')">{% trans "Force mode" %}</button>
+                    {% endif %}
+                    <button type="button" class="btn btn-warning btn-modal" onclick="lock_note(true, 'manual')">{% trans "Lock note" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Popup to confirm the action of unlocking the note. Managed by a button #}
+    <div class="modal fade" id="unlock-note-modal" tabindex="-1" role="dialog" aria-labelledby="unlockNote"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="unlockNote">{% trans "Unlock note" %}</h5>
+                    <button type="button" class="close btn-modal" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% blocktrans trimmed %}
+                        Are you sure you want to unlock this note? Transactions will be re-enabled.
+                    {% endblocktrans %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">{% trans "Close" %}</button>
+                    <button type="button" class="btn btn-success btn-modal" onclick="lock_note(false, null)">{% trans "Unlock note" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extrajavascript %}
-{% if object %}
 <script>
     function refreshHistory() {
-        $("#history_list").load("{% url 'member:user_detail' pk=object.pk %} #history_list");
-        $("#profile_infos").load("{% url 'member:user_detail' pk=object.pk %} #profile_infos");
+        {% if user_object %}
+        $("#history_list").load("{% url 'member:user_detail' pk=user_object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:user_detail' pk=user_object.pk %} #profile_infos");
+        {% else %}
+        $("#history_list").load("{% url 'member:club_detail' pk=club.pk %} #history_list");
+        $("#profile_infos").load("{% url 'member:club_detail' pk=club.pk %} #profile_infos");
+        {% endif %}
+    }
+
+    function lock_note(locked, mode) {
+        $("button.btn-modal").attr("disabled", "disabled");
+        $.ajax({
+            url: "/api/note/note/{{ note.pk }}/",
+            type: "PATCH",
+            dataType: "json",
+            headers: {
+                "X-CSRFTOKEN": CSRF_TOKEN
+            },
+            data: {
+                is_active: !locked,
+                inactivity_reason: mode,
+                resourcetype: "{% if user_object %}NoteUser{% else %}NoteClub{% endif %}"
+            }
+        }).done(function () {
+            $("#card-infos").load("#card-infos #card-infos", function () {
+                $(".modal").modal("hide");
+                $("button.btn-modal").removeAttr("disabled");
+            });
+        }).fail(function(xhr, textStatus, error) {
+            $(".modal").modal("hide");
+            $("button.btn-modal").removeAttr("disabled");
+            errMsg(xhr.responseJSON);
+        });
     }
 </script>
-{% endif %}
 {% endblock %}

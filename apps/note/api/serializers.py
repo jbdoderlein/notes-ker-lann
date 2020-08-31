@@ -1,7 +1,9 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_polymorphic.serializers import PolymorphicSerializer
 from member.api.serializers import MembershipSerializer
 from member.models import Membership
@@ -23,7 +25,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = '__all__'
-        read_only_fields = [f.name for f in model._meta.get_fields()]  # Notes are read-only protected
+        read_only_fields = ('balance', 'last_negative', 'created_at', )  # Note balances are read-only protected
 
 
 class NoteClubSerializer(serializers.ModelSerializer):
@@ -36,7 +38,7 @@ class NoteClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteClub
         fields = '__all__'
-        read_only_fields = ('note', 'club', )
+        read_only_fields = ('note', 'club', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -52,7 +54,7 @@ class NoteSpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteSpecial
         fields = '__all__'
-        read_only_fields = ('note', )
+        read_only_fields = ('note', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -68,7 +70,7 @@ class NoteUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteUser
         fields = '__all__'
-        read_only_fields = ('note', 'user', )
+        read_only_fields = ('note', 'user', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -170,13 +172,22 @@ class TransactionSerializer(serializers.ModelSerializer):
     REST API Serializer for Transactions.
     The djangorestframework plugin will analyse the model `Transaction` and parse all fields in the API.
     """
+    def validate_source(self, value):
+        if value.is_active:
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
+
+    def validate_destination(self, value):
+        if value.is_active:
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
 
     class Meta:
         model = Transaction
         fields = '__all__'
 
 
-class RecurrentTransactionSerializer(serializers.ModelSerializer):
+class RecurrentTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Transactions.
     The djangorestframework plugin will analyse the model `RecurrentTransaction` and parse all fields in the API.
@@ -187,7 +198,7 @@ class RecurrentTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MembershipTransactionSerializer(serializers.ModelSerializer):
+class MembershipTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Membership transactions.
     The djangorestframework plugin will analyse the model `MembershipTransaction` and parse all fields in the API.
@@ -198,7 +209,7 @@ class MembershipTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SpecialTransactionSerializer(serializers.ModelSerializer):
+class SpecialTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Special transactions.
     The djangorestframework plugin will analyse the model `SpecialTransaction` and parse all fields in the API.

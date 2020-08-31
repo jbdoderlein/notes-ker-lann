@@ -221,10 +221,8 @@ class Transaction(PolymorphicModel):
         diff_source, diff_dest = self.validate()
 
         if not self.source.is_active or not self.destination.is_active:
-            if 'force_insert' not in kwargs or not kwargs['force_insert']:
-                if 'force_update' not in kwargs or not kwargs['force_update']:
-                    raise ValidationError(_("The transaction can't be saved since the source note "
-                                            "or the destination note is not active."))
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
 
         # If the aliases are not entered, we assume that the used alias is the name of the note
         if not self.source_alias:

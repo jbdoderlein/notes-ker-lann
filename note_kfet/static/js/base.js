@@ -107,7 +107,7 @@ function displayStyle (note) {
         css += " text-warning";
     else if (!note.email_confirmed)
         css += " text-white bg-primary";
-    else if (note.membership && note.membership.date_end < new Date().toISOString())
+    else if (!note.is_active || (note.membership && note.membership.date_end < new Date().toISOString()))
         css += "text-white bg-info";
     return css;
 }

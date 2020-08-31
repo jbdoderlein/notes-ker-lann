@@ -55,17 +55,19 @@ class HistoryTable(tables.Table):
                 "id": lambda record: "validate_" + str(record.id),
                 "class": lambda record:
                 str(record.valid).lower()
-                + (' validate' if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                               "note.change_transaction_invalidity_reason",
-                                                               record) else ''),
+                + (' validate' if record.source.is_active and record.destination.is_active and PermissionBackend
+                   .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record)
+                   else ''),
                 "data-toggle": "tooltip",
                 "title": lambda record: (_("Click to invalidate") if record.valid else _("Click to validate"))
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "note.change_transaction_invalidity_reason", record) else None,
+                                                "note.change_transaction_invalidity_reason", record)
+                and record.source.is_active and record.destination.is_active else None,
                 "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower()
                                           + ', "' + str(record.__class__.__name__) + '")'
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "note.change_transaction_invalidity_reason", record) else None,
+                                                "note.change_transaction_invalidity_reason", record)
+                and record.source.is_active and record.destination.is_active else None,
                 "onmouseover": lambda record: '$("#invalidity_reason_'
                                               + str(record.id) + '").show();$("#invalidity_reason_'
                                               + str(record.id) + '").focus();',
@@ -108,7 +110,7 @@ class HistoryTable(tables.Table):
         val += "<input type='text' class='form-control' id='invalidity_reason_" + str(record.id) \
                + "' value='" + (html.escape(record.invalidity_reason)
                                 if record.invalidity_reason else ("" if value else str(_("No reason specified")))) \
-               + "'" + ("" if value and has_perm else " disabled") \
+               + "'" + ("" if value and record.source.is_active and record.destination.is_active else " disabled") \
                + " placeholder='" + html.escape(_("invalidity reason").capitalize()) + "'" \
                + " style='position: absolute; width: 15em; margin-left: -15.5em; margin-top: -2em; display: none;'>"
         return format_html(val)
@@ -135,16 +137,10 @@ class AliasTable(tables.Table):
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
-                                       attrs=
-                                       {'td':
-                                            {'class':
-                                                 lambda record: 'col-sm-1'
-                                                                + (' d-none' if not PermissionBackend
-                                                                   .check_perm(get_current_authenticated_user(),
-                                                                               "note.delete_alias", record) else '')
-                                             }
-                                        },
-                                       verbose_name=_("Delete"), )
+                                       attrs={'td': {'class': lambda record: 'col-sm-1' + (
+                                           ' d-none' if not PermissionBackend.check_perm(
+                                               get_current_authenticated_user(), "note.delete_alias",
+                                               record) else '')}}, verbose_name=_("Delete"), )
 
 
 class ButtonTable(tables.Table):

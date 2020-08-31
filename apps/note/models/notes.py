@@ -25,24 +25,20 @@ class Note(PolymorphicModel):
     A Note can be searched find throught an :model:`note.Alias`
 
     """
+
     balance = models.BigIntegerField(
         verbose_name=_('account balance'),
         help_text=_('in centimes, money credited for this instance'),
         default=0,
     )
+
     last_negative = models.DateTimeField(
         verbose_name=_('last negative date'),
         help_text=_('last time the balance was negative'),
         null=True,
         blank=True,
     )
-    is_active = models.BooleanField(
-        _('active'),
-        default=True,
-        help_text=_(
-            'Designates whether this note should be treated as active. '
-            'Unselect this instead of deleting notes.'),
-    )
+
     display_image = models.ImageField(
         verbose_name=_('display image'),
         max_length=255,
@@ -51,9 +47,29 @@ class Note(PolymorphicModel):
         upload_to='pic/',
         default='pic/default.png'
     )
+
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
         default=timezone.now,
+    )
+
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this note should be treated as active. '
+            'Unselect this instead of deleting notes.'),
+    )
+
+    inactivity_reason = models.CharField(
+        max_length=255,
+        choices=[
+            ('manual', _("The user blocked his/her note manually, eg. when he/she left the school for holidays. "
+                         "It can be reactivated at any time.")),
+            ('forced', _("The note is blocked by the the BDE and can't be manually reactivated.")),
+        ],
+        null=True,
+        default=None,
     )
 
     class Meta:
@@ -141,9 +157,13 @@ class NoteUser(Note):
             old_note = NoteUser.objects.get(pk=self.pk)
             if old_note.balance >= 0:
                 # Passage en négatif
+                super().save(*args, **kwargs)
                 self.last_negative = timezone.now()
+                self._force_save = True
+                self.save(*args, **kwargs)
                 self.send_mail_negative_balance()
-        super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
     def send_mail_negative_balance(self):
         plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
@@ -178,7 +198,10 @@ class NoteClub(Note):
             old_note = NoteClub.objects.get(pk=self.pk)
             if old_note.balance >= 0:
                 # Passage en négatif
+                super().save(*args, **kwargs)
                 self.last_negative = timezone.now()
+                self._force_save = True
+                self.save(*args, **kwargs)
                 self.send_mail_negative_balance()
         super().save(*args, **kwargs)
 

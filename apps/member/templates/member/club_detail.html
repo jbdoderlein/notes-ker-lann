@@ -46,12 +46,3 @@ SPDX-License-Identifier: GPL-3.0-or-later
 </div>
 {% endif %}
 {% endblock %}
-
-{% block extrajavascript %}
-<script>
-    function refreshHistory() {
-        $("#history_list").load("{% url 'member:club_detail' pk=object.pk %} #history_list");
-        $("#profile_infos").load("{% url 'member:club_detail' pk=object.pk %} #profile_infos");
-    }
-</script>
-{% endblock %}

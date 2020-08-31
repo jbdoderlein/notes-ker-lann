@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.db import transaction
 from django.db.models import Q, F
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -151,6 +152,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         """
         context = super().get_context_data(**kwargs)
         user = context['user_object']
+        context["note"] = user.note
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))\
             .order_by("-created_at")\
@@ -164,6 +166,28 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         membership_table = MembershipTable(data=club_list, prefix='membership-')
         membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
         context['club_list'] = membership_table
+
+        # Check permissions to see if the authenticated user can lock/unlock the note
+        with transaction.atomic():
+            modified_note = NoteUser.objects.get(pk=user.note.pk)
+            modified_note.is_active = True
+            modified_note.inactivity_reason = 'manual'
+            context["can_lock_note"] = user.note.is_active and PermissionBackend\
+                                           .check_perm(self.request.user, "note.change_noteuser_is_active",
+                                                       modified_note)
+            old_note = NoteUser.objects.select_for_update().get(pk=user.note.pk)
+            modified_note.inactivity_reason = 'forced'
+            modified_note._force_save = True
+            modified_note.save()
+            context["can_force_lock"] = user.note.is_active and PermissionBackend\
+                .check_perm(self.request.user, "note.change_note_is_active", modified_note)
+            old_note._force_save = True
+            old_note.save()
+            modified_note.refresh_from_db()
+            modified_note.is_active = True
+            context["can_unlock_note"] = not user.note.is_active and PermissionBackend\
+                .check_perm(self.request.user, "note.change_note_is_active", modified_note)
+
         return context
 
 
@@ -203,7 +227,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         else:
             qs = qs.none()
 
-        return qs[:20]
+        return qs
 
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):

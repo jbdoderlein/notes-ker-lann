@@ -2504,6 +2504,70 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 161,
+		"fields": {
+			"model": [
+				"note",
+				"noteuser"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "is_active",
+			"permanent": true,
+			"description": "(Dé)bloquer sa propre note manuellement"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 162,
+		"fields": {
+			"model": [
+				"note",
+				"noteuser"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "inactivity_reason",
+			"permanent": true,
+			"description": "(Dé)bloquer sa propre note et indiquer que cela a été fait manuellement"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 163,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "is_active",
+			"permanent": false,
+			"description": "(Dé)bloquer n'importe quelle note, y compris en mode forcé"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 164,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "inactivity_reason",
+			"permanent": false,
+			"description": "(Dé)bloquer sa propre note et modifier la raison"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2525,7 +2589,9 @@
 				22,
 				48,
 				52,
-				126
+				126,
+				161,
+				162
 			]
 		}
 	},
@@ -2695,7 +2761,9 @@
 				146,
 				147,
 				150,
-				151
+				151,
+				163,
+				164
 			]
 		}
 	},
@@ -2859,7 +2927,12 @@
 				156,
 				157,
 				158,
-				159
+				159,
+				160,
+				161,
+				162,
+				163,
+				164
 			]
 		}
 	},
