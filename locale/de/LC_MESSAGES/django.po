@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 20:32+0200\n"
+"POT-Creation-Date: 2020-08-31 21:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -885,6 +885,7 @@ msgid "Add"
 msgstr ""
 
 #: apps/member/templates/member/club_detail.html:13
+#: apps/permission/templates/permission/all_rights.html:30
 msgid "Club managers"
 msgstr ""
 
@@ -1566,7 +1567,7 @@ msgid ""
 msgstr ""
 
 #: apps/permission/models.py:183
-#: apps/permission/templates/permission/all_rights.html:63
+#: apps/permission/templates/permission/all_rights.html:87
 msgid "permanent"
 msgstr ""
 
@@ -1597,7 +1598,7 @@ msgid ""
 "of model {app_label}.{model_name}."
 msgstr ""
 
-#: apps/permission/signals.py:73 apps/permission/views.py:88
+#: apps/permission/signals.py:73 apps/permission/views.py:89
 #, python-brace-format
 msgid ""
 "You don't have the permission to add an instance of model {app_label}."
@@ -1615,53 +1616,57 @@ msgstr ""
 msgid "Users that have surnormal rights"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:21
+#: apps/permission/templates/permission/all_rights.html:19
+msgid "Superusers"
+msgstr ""
+
+#: apps/permission/templates/permission/all_rights.html:43
 msgid "Roles description"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:28
+#: apps/permission/templates/permission/all_rights.html:50
 msgid "Filter with roles that I have in at least one club"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:44
+#: apps/permission/templates/permission/all_rights.html:67
 msgid "Owned"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:54
+#: apps/permission/templates/permission/all_rights.html:78
 msgid "Own this role in the clubs"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:60
+#: apps/permission/templates/permission/all_rights.html:84
 msgid "Mask:"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:60
+#: apps/permission/templates/permission/all_rights.html:84
 msgid "Query:"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:65
+#: apps/permission/templates/permission/all_rights.html:90
 msgid "No associated permission"
 msgstr ""
 
-#: apps/permission/views.py:55
+#: apps/permission/views.py:56
 #, python-brace-format
 msgid ""
 "You don't have the permission to update this instance of the model "
 "\"{model}\" with these parameters. Please correct your data and retry."
 msgstr ""
 
-#: apps/permission/views.py:59
+#: apps/permission/views.py:60
 #, python-brace-format
 msgid ""
 "You don't have the permission to create an instance of the model \"{model}\" "
 "with these parameters. Please correct your data and retry."
 msgstr ""
 
-#: apps/permission/views.py:95 note_kfet/templates/base.html:106
+#: apps/permission/views.py:96 note_kfet/templates/base.html:106
 msgid "Rights"
 msgstr ""
 
-#: apps/permission/views.py:100
+#: apps/permission/views.py:101
 msgid "All rights"
 msgstr ""
 

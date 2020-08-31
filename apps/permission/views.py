@@ -4,6 +4,7 @@
 from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
@@ -13,7 +14,7 @@ from member.models import Membership
 
 from .backends import PermissionBackend
 from .models import Role
-from .tables import RightsTable
+from .tables import RightsTable, SuperuserTable
 
 
 class ProtectQuerysetMixin:
@@ -114,12 +115,13 @@ class RightsView(TemplateView):
             special_memberships = Membership.objects.filter(
                 date_start__lte=date.today(),
                 date_end__gte=date.today(),
-            ).filter(roles__in=Role.objects.filter(~(Q(name="Adhérent BDE")
-                                                     | Q(name="Adhérent Kfet")
-                                                     | Q(name="Membre de club")
-                                                     | Q(name="Adhérent WEI")
-                                                     | Q(name="1A")))).order_by("club", "user__last_name")\
+            ).filter(roles__in=Role.objects.filter((~(Q(name="Adhérent BDE")
+                                                      | Q(name="Adhérent Kfet")
+                                                      | Q(name="Membre de club")
+                                                      | Q(name="Bureau de club"))
+                                                    & Q(weirole__isnull=True)))).order_by("club", "user__last_name")\
                 .distinct().all()
-            context["special_memberships_table"] = RightsTable(special_memberships)
+            context["special_memberships_table"] = RightsTable(special_memberships, prefix="clubs-")
+            context["superusers"] = SuperuserTable(User.objects.filter(is_superuser=True).all(), prefix="superusers-")
 
         return context

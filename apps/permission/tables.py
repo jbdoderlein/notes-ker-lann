@@ -2,8 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import django_tables2 as tables
+from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
+from django_tables2 import A
+
 from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
@@ -48,3 +52,18 @@ class RightsTable(tables.Table):
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user.last_name', 'user.first_name', 'user', 'club', 'roles', )
         model = Membership
+
+
+class SuperuserTable(tables.Table):
+    username = tables.LinkColumn(
+        "member:user_detail",
+        args=[A("pk")],
+    )
+
+    class Meta:
+        model = User
+        fields = ('last_name', 'first_name', 'username', )
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover',
+            'style': 'table-layout: fixed;'
+        }
