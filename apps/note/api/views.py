@@ -82,23 +82,24 @@ class AliasViewSet(ReadProtectedModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
 
-        alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(
-            name__iregex="^" + alias
-        ).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + alias.lower())
-                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True)
+        alias = self.request.query_params.get("alias", None)
+        if alias:
+            queryset = queryset.filter(
+                name__iregex="^" + alias
+            ).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + alias.lower())
+                    & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True)
 
         return queryset
 
