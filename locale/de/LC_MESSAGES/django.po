@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 21:07+0200\n"
+"POT-Creation-Date: 2020-08-31 21:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -885,7 +885,7 @@ msgid "Add"
 msgstr ""
 
 #: apps/member/templates/member/club_detail.html:13
-#: apps/permission/templates/permission/all_rights.html:30
+#: apps/permission/templates/permission/all_rights.html:33
 msgid "Club managers"
 msgstr ""
 
@@ -1567,7 +1567,7 @@ msgid ""
 msgstr ""
 
 #: apps/permission/models.py:183
-#: apps/permission/templates/permission/all_rights.html:87
+#: apps/permission/templates/permission/all_rights.html:90
 msgid "permanent"
 msgstr ""
 
@@ -1616,35 +1616,39 @@ msgstr ""
 msgid "Users that have surnormal rights"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:19
+#: apps/permission/templates/permission/all_rights.html:17
+msgid "Superusers have all rights on everything, to manage the website."
+msgstr ""
+
+#: apps/permission/templates/permission/all_rights.html:22
 msgid "Superusers"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:43
+#: apps/permission/templates/permission/all_rights.html:46
 msgid "Roles description"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:50
+#: apps/permission/templates/permission/all_rights.html:53
 msgid "Filter with roles that I have in at least one club"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:67
+#: apps/permission/templates/permission/all_rights.html:70
 msgid "Owned"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:78
+#: apps/permission/templates/permission/all_rights.html:81
 msgid "Own this role in the clubs"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:84
+#: apps/permission/templates/permission/all_rights.html:87
 msgid "Mask:"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:84
+#: apps/permission/templates/permission/all_rights.html:87
 msgid "Query:"
 msgstr ""
 
-#: apps/permission/templates/permission/all_rights.html:90
+#: apps/permission/templates/permission/all_rights.html:93
 msgid "No associated permission"
 msgstr ""
 

@@ -3,11 +3,10 @@
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
-
 from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
@@ -37,7 +36,11 @@ class RightsTable(tables.Table):
 
     def render_roles(self, record):
         # If the user has the right to manage the roles, display the link to manage them
-        roles = record.roles.all()
+        roles = record.roles.filter((~(Q(name="Adhérent BDE")
+                                     | Q(name="Adhérent Kfet")
+                                     | Q(name="Membre de club")
+                                     | Q(name="Bureau de club"))
+                                     & Q(weirole__isnull=True))).all()
         s = ", ".join(str(role) for role in roles)
         if PermissionBackend.check_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
             s = format_html("<a href='" + str(reverse_lazy("member:club_manage_roles", kwargs={"pk": record.pk}))

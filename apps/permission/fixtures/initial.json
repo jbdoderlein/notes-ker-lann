@@ -2432,9 +2432,9 @@
 				"activity"
 			],
 			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
-			"type": "organizer",
+			"type": "change",
 			"mask": 1,
-			"field": "name",
+			"field": "organizer",
 			"permanent": false,
 			"description": "Modifier l'organisateur d'une activité non validée dont on est l'auteur"
 		}
@@ -2950,8 +2950,6 @@
 				55,
 				57,
 				52,
-				53,
-				54,
 				23,
 				24,
 				25,

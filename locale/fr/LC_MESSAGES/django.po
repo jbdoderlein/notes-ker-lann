@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 21:07+0200\n"
+"POT-Creation-Date: 2020-08-31 21:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -910,7 +910,7 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: apps/member/templates/member/club_detail.html:13
-#: apps/permission/templates/permission/all_rights.html:30
+#: apps/permission/templates/permission/all_rights.html:33
 msgid "Club managers"
 msgstr "Bureau du club"
 
@@ -1612,7 +1612,7 @@ msgstr ""
 "l'utilisateur est expirée."
 
 #: apps/permission/models.py:183
-#: apps/permission/templates/permission/all_rights.html:87
+#: apps/permission/templates/permission/all_rights.html:90
 msgid "permanent"
 msgstr "permanent"
 
@@ -1669,35 +1669,39 @@ msgstr ""
 msgid "Users that have surnormal rights"
 msgstr "Liste des utilisateurs ayant des droits surnormaux"
 
-#: apps/permission/templates/permission/all_rights.html:19
+#: apps/permission/templates/permission/all_rights.html:17
+msgid "Superusers have all rights on everything, to manage the website."
+msgstr "Les super-utilisateurs ont tous les droits sur tout, afin de gérer le site."
+
+#: apps/permission/templates/permission/all_rights.html:22
 msgid "Superusers"
 msgstr "Super-utilisateurs"
 
-#: apps/permission/templates/permission/all_rights.html:43
+#: apps/permission/templates/permission/all_rights.html:46
 msgid "Roles description"
 msgstr "Description de tous les rôles"
 
-#: apps/permission/templates/permission/all_rights.html:50
+#: apps/permission/templates/permission/all_rights.html:53
 msgid "Filter with roles that I have in at least one club"
 msgstr "Filtrer les rôles que je possède dans au moins un club"
 
-#: apps/permission/templates/permission/all_rights.html:67
+#: apps/permission/templates/permission/all_rights.html:70
 msgid "Owned"
 msgstr "Possédé"
 
-#: apps/permission/templates/permission/all_rights.html:78
+#: apps/permission/templates/permission/all_rights.html:81
 msgid "Own this role in the clubs"
 msgstr "Possède ce rôle dans les clubs"
 
-#: apps/permission/templates/permission/all_rights.html:84
+#: apps/permission/templates/permission/all_rights.html:87
 msgid "Mask:"
 msgstr "Masque :"
 
-#: apps/permission/templates/permission/all_rights.html:84
+#: apps/permission/templates/permission/all_rights.html:87
 msgid "Query:"
 msgstr "Requête :"
 
-#: apps/permission/templates/permission/all_rights.html:90
+#: apps/permission/templates/permission/all_rights.html:93
 msgid "No associated permission"
 msgstr "Pas de permission associée"
 
