@@ -4,7 +4,6 @@
 import html
 
 import django_tables2 as tables
-from django.db.models import F
 from django.utils.html import format_html
 from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
@@ -75,12 +74,6 @@ class HistoryTable(tables.Table):
             }
         }
     )
-
-    def order_total(self, queryset, is_descending):
-        # needed for rendering
-        queryset = queryset.annotate(total=F('amount') * F('quantity')) \
-            .order_by(('-' if is_descending else '') + 'total')
-        return queryset, True
 
     def render_amount(self, value):
         return pretty_money(value)
