@@ -15,6 +15,7 @@
     color: #000;
     margin: 0 .5rem .25rem .5rem;
     padding: 0;
+    width: 200px;
 }
 
 .bs-tooltip-bottom .arrow::before {
