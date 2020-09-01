@@ -6,41 +6,44 @@ stages:
 py37-django22:
   stage: test
   image: debian:buster-backports
-  before_script: >
-    apt-get update &&
-    apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
-    python3-django-extensions python3-django-filters python3-django-polymorphic
-    python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-    python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-    gettext libjs-bootstrap4 fonts-font-awesome tox &&
-    rm -rf /var/lib/apt/lists/*
- script: tox -e py37-django22
+  before_script:
+    - >
+        apt-get update &&
+        apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
+        gettext libjs-bootstrap4 fonts-font-awesome tox &&
+        rm -rf /var/lib/apt/lists/*
+  script: tox -e py37-django22
 
 # Ubuntu 20.04
 py38-django22:
   stage: test
   image: ubuntu:20.04
-  before_script: >
-    apt-get update &&
-    apt-get install -y python3-django python3-django-crispy-forms
-    python3-django-extensions python3-django-filters python3-django-polymorphic
-    python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-    python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-    gettext libjs-bootstrap4 fonts-font-awesome tox &&
-    rm -rf /var/lib/apt/lists/*
- script: tox -e py38-django22
+  before_script:
+    - >
+        apt-get update &&
+        apt-get install -y python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
+        gettext libjs-bootstrap4 fonts-font-awesome tox &&
+        rm -rf /var/lib/apt/lists/*
+  script: tox -e py38-django22
 
 linters:
   stage: quality-assurance
   image: debian:buster-backports
-  before_script: >
-    apt-get update &&
-    apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
-    python3-django-extensions python3-django-filters python3-django-polymorphic
-    python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-    python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-    gettext libjs-bootstrap4 fonts-font-awesome tox &&
-    rm -rf /var/lib/apt/lists/*
+  before_script:
+    - >
+        apt-get update &&
+        apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
+        gettext libjs-bootstrap4 fonts-font-awesome tox &&
+        rm -rf /var/lib/apt/lists/*
   script: tox -e linters
 
   # Be nice to new contributors, but please use `tox`
