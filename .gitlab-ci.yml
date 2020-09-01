@@ -11,7 +11,7 @@ docker:
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$CI_BUILD_TOKEN\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest --destination $CI_REGISTRY_IMAGE:debian
   only:
     - master
     - beta
@@ -19,16 +19,9 @@ docker:
 # Debian Buster
 py37-django22:
   stage: test
-  image: debian:buster-backports
+  image: $CI_REGISTRY_IMAGE:debian
   before_script:
-    - >
-        apt-get update &&
-        apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
-        python3-django-extensions python3-django-filters python3-django-polymorphic
-        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-        gettext libjs-bootstrap4 fonts-font-awesome tox &&
-        rm -rf /var/lib/apt/lists/*
+    - apt-get update && apt-get install -y tox
   script: tox -e py37-django22
 
 # Ubuntu 20.04
@@ -50,16 +43,9 @@ py38-django22:
 
 linters:
   stage: quality-assurance
-  image: debian:buster-backports
+  image: $CI_REGISTRY_IMAGE:debian
   before_script:
-    - >
-        apt-get update &&
-        apt-get install -t buster-backports -y python3-django python3-django-crispy-forms
-        python3-django-extensions python3-django-filters python3-django-polymorphic
-        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-        gettext libjs-bootstrap4 fonts-font-awesome tox &&
-        rm -rf /var/lib/apt/lists/*
+    - apt-get update && apt-get install -y tox
   script: tox -e linters
 
   # Be nice to new contributors, but please use `tox`
