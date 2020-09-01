@@ -1,4 +1,11 @@
 ---
+- name: Install NGINX
+  apt:
+    name: nginx
+  register: pkg_result
+  retries: 3
+  until: pkg_result is succeeded
+
 - name: Copy conf of Nginx
   template:
     src: "nginx_note.conf"

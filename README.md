@@ -41,7 +41,7 @@ Sinon vous pouvez suivre les étapes ici.
 3.  **Création d'un environment de travail Python décorrélé du système.**
 
     ```bash
-    $ python3 -m venv env
+    $ python3 -m venv env --system-site-packages
     $ source env/bin/activate
     (env)$ pip3 install -r requirements.txt
     (env)$ deactivate  # sortir de l'environnement
