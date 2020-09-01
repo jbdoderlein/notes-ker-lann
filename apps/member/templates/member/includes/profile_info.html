@@ -10,7 +10,8 @@
     {% if user_object.pk == user.pk %}
     <dt class="col-xl-6">{% trans 'password'|capfirst %}</dt>
     <dd class="col-xl-6">
-        <a class="small" href="{% url 'password_change' %}">
+        <a class="badge badge-secondary" href="{% url 'password_change' %}">
+            <i class="fa fa-lock"></i>
             {% trans 'Change password' %}
         </a>
     </dd>
@@ -18,8 +19,9 @@
 
     <dt class="col-xl-6">{% trans 'aliases'|capfirst %}</dt>
     <dd class="col-xl-6">
-        <a class="small" href="{% url 'member:user_alias' user_object.pk %}">
-            {% trans 'Edit aliases' %} ({{ user_object.note.alias_set.all|length }})
+        <a class="badge badge-secondary" href="{% url 'member:user_alias' user_object.pk %}">
+            <i class="fa fa-edit"></i>
+            {% trans 'Manage aliases' %} ({{ user_object.note.alias_set.all|length }})
         </a>
     </dd>
 
