@@ -1,6 +1,17 @@
 stages:
+  - build_docker_image
   - test
   - quality-assurance
+
+docker:
+  stage: build_docker_image
+  script:
+    - docker login -u $CI_REGISTRY_USERNAME -p $CI_BUILD_TOKEN
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+  only:
+    - master
+    - beta
 
 # Debian Buster
 py37-django22:
