@@ -6,11 +6,11 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Passage en négatif (compte n°{{ note.user.pk }})</title>
+    <title>Passage en négatif (compte n°{{ note.pk }})</title>
 </head>
 <body>
 <p>
-    Bonjour {{ note }},
+    Bonjour {% if note.user %}{{ note.user }}{% else %}{{ note.club.name }}{% endif %},
 </p>
 
 <p>
@@ -28,7 +28,7 @@
 
 <p>
     Si tu ne comprends pas ton solde, tu peux consulter ton historique
-    sur <a href="https://{{ "NOTE_URL"|getenv }}{% url "member:user_detail" pk=note.user.pk %}">ton compte</a>.
+    sur <a href="https://{{ "NOTE_URL"|getenv }}{% if note.user %}{% url "member:user_detail" pk=note.user.pk %}{% else %}{% url "member:club_detail" pk=note.club.pk %}{% endif %}">ton compte</a>.
 </p>
 
 <p>
