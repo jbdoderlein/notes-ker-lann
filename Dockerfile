@@ -1,19 +1,25 @@
-FROM python:3-alpine
+FROM debian:buster
 
+# Force the stdout and stderr streams to be unbuffered
 ENV PYTHONUNBUFFERED 1
 
-# Install LaTeX requirements
-RUN apk add --no-cache gettext texlive texmf-dist-latexextra texmf-dist-fontsextra nginx gcc libc-dev libffi-dev postgresql-dev libxml2-dev libxslt-dev jpeg-dev
+# Install APT requirements
+RUN apt-get update && \
+    apt-get install -y nginx python3 python3-pip python3-dev \
+    uwsgi uwsgi-plugin-python3 python3-venv git acl gettext \
+    libjs-bootstrap4 fonts-font-awesome \
+    texlive-latex-extra texlive-fonts-extra texlive-lang-french && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apk add --no-cache bash
-
-RUN mkdir /code
-WORKDIR /code
+# Instal PyPI requirements
 COPY requirements /code/requirements
-RUN pip install gunicorn ptpython --no-cache-dir
 RUN pip install -r requirements/base.txt -r requirements/cas.txt -r requirements/production.txt --no-cache-dir
 
+# Copy code
+WORKDIR /code
 COPY . /code/
+
+#RUN pip install gunicorn ptpython --no-cache-dir
 
 # Configure nginx
 RUN mkdir /run/nginx
