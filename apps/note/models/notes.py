@@ -95,22 +95,16 @@ class Note(PolymorphicModel):
         """
         Save note with it's alias (called in polymorphic children)
         """
-        aliases = Alias.objects.filter(name=str(self))
-        if aliases.exists():
-            # Alias exists, so check if it is linked to this note
-            if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'),
-                                      code="same_alias")
+        # Check that we can save the alias
+        self.clean()
 
-            # Save note
-            super().save(*args, **kwargs)
-        else:
-            # Alias does not exist yet, so check if it can exist
+        super().save(*args, **kwargs)
+
+        if not Alias.objects.filter(name=str(self)).exists():
             a = Alias(name=str(self))
             a.clean()
 
-            # Save note and alias
-            super().save(*args, **kwargs)
+            # Save alias
             a.note = self
             a.save(force_insert=True)
 
@@ -155,9 +149,9 @@ class NoteUser(Note):
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteUser.objects.get(pk=self.pk)
+            super().save(*args, **kwargs)
             if old_note.balance >= 0:
                 # Passage en négatif
-                super().save(*args, **kwargs)
                 self.last_negative = timezone.now()
                 self._force_save = True
                 self.save(*args, **kwargs)
@@ -196,6 +190,7 @@ class NoteClub(Note):
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteClub.objects.get(pk=self.pk)
+            super().save(*args, **kwargs)
             if old_note.balance >= 0:
                 # Passage en négatif
                 super().save(*args, **kwargs)
@@ -203,7 +198,8 @@ class NoteClub(Note):
                 self._force_save = True
                 self.save(*args, **kwargs)
                 self.send_mail_negative_balance()
-        super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
     def send_mail_negative_balance(self):
         plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
@@ -308,7 +304,7 @@ class Alias(models.Model):
         self.normalized_name = normalized_name
 
     def save(self, *args, **kwargs):
-        self.normalized_name = self.normalize(self.name)
+        self.clean()
         super().save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):

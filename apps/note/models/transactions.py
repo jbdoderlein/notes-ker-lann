@@ -273,10 +273,15 @@ class RecurrentTransaction(Transaction):
         on_delete=models.PROTECT,
     )
 
-    category = models.ForeignKey(
-        TemplateCategory,
-        on_delete=models.PROTECT,
-    )
+    def clean(self):
+        if self.template.destination != self.destination:
+            raise ValidationError(
+                _("The destination of this transaction must equal to the destination of the template."))
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
     @property
     def type(self):
@@ -323,6 +328,10 @@ class SpecialTransaction(Transaction):
         if self.is_credit() == self.is_debit():
             raise(ValidationError(_("A special transaction is only possible between a"
                                     " Note associated to a payment method and a User or a Club")))
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Special transaction")

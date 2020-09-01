@@ -226,7 +226,6 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
             "source": source.id,
             "source_alias": source_alias,
             "destination": dest,
-            "category": category,
             "template": template
         })
         .done(function () {
@@ -259,7 +258,6 @@ function consume(source, source_alias, dest, quantity, amount, reason, type, cat
                 "source": source,
                 "source_alias": source_alias,
                 "destination": dest,
-                "category": category,
                 "template": template
             }).done(function() {
                 reset();
