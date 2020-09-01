@@ -30,8 +30,8 @@
     group: www-data
 
 - name: Setup cron jobs
-  file:
-    src: ../note.cron
+  template:
+    src: note.cron.j2
     dest: /etc/cron.d/note
     owner: root
     group: root
