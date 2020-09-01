@@ -24,24 +24,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <meta name="theme-color" content="#ffffff">
 
     {# Bootstrap, Font Awesome and custom CSS #}
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
+    <link rel="stylesheet" href="{% static "bootstrap4/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}">
     <link rel="stylesheet" href="{% static "css/custom.css" %}">
 
     {# JQuery, Bootstrap and Turbolinks JavaScript #}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+    <script src="{% static "jquery/jquery.min.js" %}"></script>
+    <script src="{% static "popper.js/umd/popper.min.js" %}"></script>
+    <script src="{% static "bootstrap4/js/bootstrap.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
             crossorigin="anonymous"></script>
     <script src="{% static "js/base.js" %}"></script>
@@ -69,54 +59,54 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     {% if "note.transactiontemplate"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'note:consos' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-coffee"></i> {% trans 'Consumptions' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-coffee"></i> {% trans 'Consumptions' %}</a>
                         </li>
                     {% endif %}
                     {% if "note.transaction"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'note:transfer' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-exchange-alt"></i> {% trans 'Transfer' %} </a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-exchange"></i> {% trans 'Transfer' %} </a>
                         </li>
                     {% endif %}
                     {% if "auth.user"|model_list_length >= 2 %}
                         <li class="nav-item">
                             {% url 'member:user_list' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-user"></i> {% trans 'Users' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-user"></i> {% trans 'Users' %}</a>
                         </li>
                     {% endif %}
                     {% if "member.club"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'member:club_list' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-users"></i> {% trans 'Clubs' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-users"></i> {% trans 'Clubs' %}</a>
                         </li>
                     {% endif %}
                     {% if "activity.activity"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'activity:activity_list' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-calendar"></i> {% trans 'Activities' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-calendar"></i> {% trans 'Activities' %}</a>
                         </li>
                     {% endif %}
                     {% if "treasury.invoice"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'treasury:invoice_list' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-credit-card"></i> {% trans 'Treasury' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-credit-card"></i> {% trans 'Treasury' %}</a>
                         </li>
                     {% endif %}
                     {% if "wei.weiclub"|not_empty_model_list %}
                         <li class="nav-item">
                             {% url 'wei:current_wei_detail' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-bus"></i> {% trans 'WEI' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-bus"></i> {% trans 'WEI' %}</a>
                         </li>
                     {% endif %}
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             {% url 'permission:rights' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fas fa-balance-scale"></i> {% trans 'Rights' %}</a>
+                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-balance-scale"></i> {% trans 'Rights' %}</a>
                         </li>
                     {% endif %}
                     {% if request.user.is_staff and ""|has_perm:user %}
                         <li class="nav-item">
-                            <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-user-cog"></i> {% trans 'Admin' %}</a>
+                            <a data-turbolinks="false" class="nav-link" href="{% url 'admin:index' %}"><i class="fa fa-cogs"></i> {% trans 'Admin' %}</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -124,16 +114,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     {% if request.user.is_authenticated %}
                         <li class="dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user"></i>
+                                <i class="fa fa-user"></i>
                                 <span id="user_balance">{{ request.user.username }} ({{ request.user.note.balance | pretty_money }})</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right"
                                  aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{% url 'member:user_detail' pk=request.user.pk %}">
-                                    <i class="fas fa-user"></i> Mon compte
+                                    <i class="fa fa-user"></i> Mon compte
                                 </a>
                                 <a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                                    <i class="fa fa-sign-out"></i> Se déconnecter
                                 </a>
                             </div>
                         </li>
@@ -141,14 +131,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if request.path != "/registration/signup/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'registration:signup' %}">
-                                    <i class="fas fa-user-plus"></i> S'inscrire
+                                    <i class="fa fa-user-plus"></i> S'inscrire
                                 </a>
                             </li>
                         {% endif %}
                 {% if request.path != "/accounts/login/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">
-                                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                                    <i class="fa fa-sign-in"></i> Se connecter
                                 </a>
                             </li>
                         {% endif %}

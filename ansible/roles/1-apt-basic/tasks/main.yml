@@ -13,6 +13,8 @@
       - git
       - acl
       - gettext
+      - libjs-bootstrap4
+      - fonts-font-awesome
       - texlive-latex-extra
       - texlive-fonts-extra
       - texlive-lang-french

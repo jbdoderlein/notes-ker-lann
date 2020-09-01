@@ -164,8 +164,10 @@ LANGUAGES = [
 STATIC_URL = '/static/'
 
 # Add some custom statics from /note_kfet/static
+# Because we are using Debian, also include /usr/share/javascript
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'note_kfet/static'),
+    '/usr/share/javascript',
 ]
 
 # Collect statics to /static/

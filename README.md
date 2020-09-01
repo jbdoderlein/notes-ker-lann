@@ -14,21 +14,25 @@ Sinon vous pouvez suivre les étapes ici.
 ### Installation avec Debian/Ubuntu
 
 1.  **Installation des dépendances APT.**
+    On tire les dépendances le plus possible à partir des dépôts de Debian.
+    On a besoin d'un environnement LaTeX pour générer les factures.
 
     ```bash
-    $ sudo apt install nginx python3 python3-pip python3-dev uwsgi uwsgi-plugin-python3 python3-venv git acl
-    ```
-
-    La génération des factures de l'application trésorerie nécessite une installation de LaTeX suffisante,
-
-    ```bash
-    $ sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-french
+    $ sudo apt update
+    $ sudo apt install -t buster-backports -y python3-django python3-django-crispy-forms \
+        python3-django-extensions python3-django-filters python3-django-polymorphic \
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil \
+        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
+        uwsgi uwsgi-plugin-python3 \
+        texlive-latex-extra texlive-fonts-extra texlive-lang-french \
+        gettext libjs-bootstrap4 fonts-font-awesome \
+        nginx python3-venv git acl
     ```
 
 2.  **Clonage du dépot** dans `/var/www/note_kfet`,
 
     ```bash
-    $ mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
+    $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
     $ sudo chmod g+rwx .
     $ sudo -u www-data git clone git@gitlab.crans.org:bde/nk20.git .
@@ -39,8 +43,7 @@ Sinon vous pouvez suivre les étapes ici.
     ```bash
     $ python3 -m venv env
     $ source env/bin/activate
-    (env)$ pip3 install -r requirements/base.txt
-    (env)$ pip3 install -r requirements/prod.txt  # uniquement en prod, nécessite une base postgres
+    (env)$ pip3 install -r requirements.txt
     (env)$ deactivate  # sortir de l'environnement
     ```
 
@@ -144,30 +147,44 @@ Sinon vous pouvez suivre les étapes ici.
 
 Il est possible de travailler sur une instance Docker.
 
-1.  Cloner le dépôt là où vous voulez :
+Pour construire l'image Docker `nk20`,
 
-        $ git clone git@gitlab.crans.org:bde/nk20.git
+```
+git clone https://gitlab.crans.org/bde/nk20/ && cd nk20
+docker build . -t nk20
+```
 
-2.  Copiez le fichier `.env_example` à la racine du projet vers le fichier `.env`,
-    et  mettez à jour vos variables d'environnement
+Ensuite pour lancer la note Kfet en tant que vous (option `-u`),
+l'exposer sur son port 80 (option `-p`) et monter le code en écriture (option `-v`),
 
-3.  Dans le fichier `docker_compose.yml`, qu'on suppose déjà configuré,
-    ajouter les lignes suivantes, en les adaptant à la configuration voulue :
+```
+docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/note_kfet/" -p 80:8080 nk20
+```
 
-         nk20:
-           build: /chemin/vers/nk20
-           volumes:
-             - /chemin/vers/nk20:/code/
-           env_file: /chemin/vers/nk20/.env
-           restart: always
-           labels:
-             - traefik.domain=ndd.example.com
-             - traefik.frontend.rule=Host:ndd.example.com
-             - traefik.port=8000
+Si vous souhaitez lancer une commande spéciale, vous pouvez l'ajouter à la fin, par exemple,
 
-4.  Enjoy :
+```
+docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/note_kfet/" -p 80:8080 nk20 python3 ./manage.py createsuperuser
+```
 
-        $ docker-compose up -d nk20
+#### Avec Docker Compose
+
+On vous conseilles de faire un fichier d'environnement `.env` en prenant exemple sur `.env_example`.
+
+Pour par exemple utiliser le Docker de la note Kfet avec Traefik pour réaliser le HTTPS,
+
+```YAML
+nk20:
+  build: /chemin/vers/le/code/nk20
+  volumes:
+    - /chemin/vers/le/code/nk20:/var/www/note_kfet/
+  env_file: /chemin/vers/le/code/nk20/.env
+  restart: always
+  labels:
+    - traefik.domain=ndd.example.com
+    - traefik.frontend.rule=Host:ndd.example.com
+    - traefik.port=8080
+```
 
 ### Lancer un serveur de développement
 
@@ -183,7 +200,7 @@ un serveur de développement par exemple sur son ordinateur.
 
          $ python3 -m venv venv
          $ source venv/bin/activate
-         (env)$ pip install -r requirements/base.txt
+         (env)$ pip install -r requirements.txt
 
 3.  Copier le fichier `.env_example` vers `.env` à la racine du projet et mettre à jour
     ce qu'il faut

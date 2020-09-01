@@ -7,7 +7,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% block content %}
 {% if "member.change_profile_registration_valid"|has_perm:user %}
 <a class="btn btn-block btn-secondary mb-3" href="{% url 'registration:future_user_list' %}">
-    <i class="fas fa-user-plus"></i> {% trans "Registrations" %}
+    <i class="fa fa-user-plus"></i> {% trans "Registrations" %}
 </a>
 {% endif %}
 
