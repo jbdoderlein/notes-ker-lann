@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -124,9 +125,9 @@ class ConsumerSerializer(serializers.ModelSerializer):
         Display information about the associated note
         """
         # If the user has no right to see the note, then we only display the note identifier
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note):
-            return NotePolymorphicSerializer().to_representation(obj.note)
-        return dict(id=obj.note.id, name=str(obj.note))
+        return NotePolymorphicSerializer().to_representation(obj.note)\
+            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note)\
+            else dict(id=obj.note.id, name=str(obj.note))
 
     def get_email_confirmed(self, obj):
         if isinstance(obj.note, NoteUser):
@@ -231,12 +232,10 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
         SpecialTransaction: SpecialTransactionSerializer,
     }
 
-    try:
+    if "activity" in settings.INSTALLED_APPS:
         from activity.models import GuestTransaction
         from activity.api.serializers import GuestTransactionSerializer
         model_serializer_mapping[GuestTransaction] = GuestTransactionSerializer
-    except ImportError:  # Activity app is not loaded
-        pass
 
     def validate(self, attrs):
         resource_type = attrs.pop(self.resource_type_field_name)

@@ -206,10 +206,7 @@ class TransactionSearchView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView
         context["form"] = form
 
         form.full_clean()
-        if form.is_valid():
-            data = form.cleaned_data
-        else:
-            data = {}
+        data = form.cleaned_data if form.is_valid() else {}
 
         transactions = Transaction.objects.annotate(total_amount=F("quantity") * F("amount")).filter(
             PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\

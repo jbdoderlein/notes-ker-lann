@@ -45,7 +45,7 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
             | Q(alias__normalized_name__iregex="^" + alias.lower())
         )
 
-        return queryset
+        return queryset.order_by("id")
 
 
 class AliasViewSet(ReadProtectedModelViewSet):
@@ -72,7 +72,6 @@ class AliasViewSet(ReadProtectedModelViewSet):
         try:
             self.perform_destroy(instance)
         except ValidationError as e:
-            print(e)
             return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -101,7 +100,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
                 ),
                 all=True)
 
-        return queryset
+        return queryset.order_by("name")
 
 
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
@@ -120,7 +119,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.order_by('name').prefetch_related('note')
+        queryset = queryset.prefetch_related('note')
         # We match first an alias if it is matched without normalization,
         # then if the normalized pattern matches a normalized alias.
         queryset = queryset.filter(
@@ -138,7 +137,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
             ),
             all=True)
 
-        return queryset.distinct()
+        return queryset.order_by('name').distinct()
 
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):
@@ -147,7 +146,7 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/category/
     """
-    queryset = TemplateCategory.objects.all()
+    queryset = TemplateCategory.objects.order_by("name").all()
     serializer_class = TemplateCategorySerializer
     filter_backends = [SearchFilter]
     search_fields = ['$name', ]
@@ -159,7 +158,7 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/template/
     """
-    queryset = TransactionTemplate.objects.all()
+    queryset = TransactionTemplate.objects.order_by("name").all()
     serializer_class = TransactionTemplateSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'display', 'category', ]
@@ -172,7 +171,7 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Transaction` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/transaction/
     """
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$reason', ]
