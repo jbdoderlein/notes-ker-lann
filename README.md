@@ -13,6 +13,8 @@ Sinon vous pouvez suivre les étapes ici.
 
 ### Installation avec Debian/Ubuntu
 
+0. **Activer Debian Backports.** En effet Django 2.2 LTS n'est que disponible dans les backports.
+
 1.  **Installation des dépendances APT.**
     On tire les dépendances le plus possible à partir des dépôts de Debian.
     On a besoin d'un environnement LaTeX pour générer les factures.
