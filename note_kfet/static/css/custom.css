@@ -47,6 +47,17 @@ select.language {
     cursor: pointer;
 }
 
+/* Remove horizontal padding on mark */
+.mark,
+mark {
+    padding: .2em 0;
+}
+
+/* Make navbar more readable */
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, .75);
+}
+
 /* Last BDE colors */
 .bg-primary {
     background-color: rgb(0, 119, 139) !important;
