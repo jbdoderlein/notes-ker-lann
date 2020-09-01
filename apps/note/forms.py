@@ -1,9 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+from datetime import datetime
 
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.forms import CheckboxSelectMultiple
+from django.utils.timezone import  make_aware
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DateTimePickerInput
 
@@ -93,16 +95,16 @@ class SearchTransactionForm(forms.Form):
         widget=AmountInput(),
     )
 
-    created_after = forms.Field(
+    created_after = forms.DateTimeField(
         label=_("Created after"),
-        initial="2000-01-01 00:00",
+        initial=make_aware(datetime(year=2000, month=1, day=1, hour=0, minute=0)),
         required=False,
         widget=DateTimePickerInput(),
     )
 
-    created_before = forms.Field(
+    created_before = forms.DateTimeField(
         label=_("Created before"),
-        initial="2042-12-31 21:42",
+        initial=make_aware(datetime(year=2042, month=12, day=31, hour=21, minute=42)),
         required=False,
         widget=DateTimePickerInput(),
     )
