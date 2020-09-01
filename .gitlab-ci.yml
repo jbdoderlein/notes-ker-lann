@@ -15,6 +15,9 @@ docker:
   only:
     - master
     - beta
+  cache:
+    key: one-key-to-rule-them-all
+    paths: /cache/
 
 # Debian Buster
 py37-django22:
