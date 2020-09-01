@@ -15,6 +15,10 @@ Sinon vous pouvez suivre les étapes ici.
 
 0. **Activer Debian Backports.** En effet Django 2.2 LTS n'est que disponible dans les backports.
 
+    ```bash
+    $ echo "deb http://deb.debian.org/debian buster-backports main" | sudo tee /etc/apt/sources.list.d/deb_debian_org_debian.list
+    ```
+
 1.  **Installation des dépendances APT.**
     On tire les dépendances le plus possible à partir des dépôts de Debian.
     On a besoin d'un environnement LaTeX pour générer les factures.
@@ -36,15 +40,15 @@ Sinon vous pouvez suivre les étapes ici.
     ```bash
     $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
-    $ sudo chmod g+rwxs .
-    $ sudo -u www-data git clone git@gitlab.crans.org:bde/nk20.git .
+    $ sudo chmod g+rwx .
+    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
 
     ```bash
     $ python3 -m venv env --system-site-packages
-    $ source env/bin/activate
+    $ source env/bin/activate  # entrer dans l'environnement
     (env)$ pip3 install -r requirements.txt
     (env)$ deactivate  # sortir de l'environnement
     ```
@@ -73,8 +77,7 @@ Sinon vous pouvez suivre les étapes ici.
 
 5.  **Base de données.** En production on utilise PostgreSQL. 
 
-        $ sudo apt-get install postgresql postgresql-contrib libpq-dev
-        (env)$ pip3 install psycopg2
+        $ sudo apt-get install postgresql postgresql-contrib
 
     La config de la base de donnée se fait comme suit:
 
