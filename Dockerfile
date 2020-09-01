@@ -1,19 +1,22 @@
-FROM debian:buster
+FROM debian:buster-backports
 
 # Force the stdout and stderr streams to be unbuffered
 ENV PYTHONUNBUFFERED 1
 
-# Install APT requirements
+# Install Django, external apps, LaTeX and dependencies
+# Outside Docker, you may also need git, acl, python3-venv, uwsgi, uwsgi-plugin-python3, nginx
 RUN apt-get update && \
-    apt-get install -y nginx python3 python3-pip python3-dev \
-    uwsgi uwsgi-plugin-python3 python3-venv git acl gettext \
-    libjs-bootstrap4 fonts-font-awesome \
-    texlive-latex-extra texlive-fonts-extra texlive-lang-french && \
+    apt-get install -t buster-backports -y python3-django python3-django-crispy-forms \
+    python3-django-extensions python3-django-filters python3-django-polymorphic \
+    python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil \
+    python3-babel python3-lockfile python3-pip \
+    texlive-latex-extra texlive-fonts-extra texlive-lang-french \
+    gettext libjs-bootstrap4 fonts-font-awesome && \
     rm -rf /var/lib/apt/lists/*
 
 # Instal PyPI requirements
-COPY requirements /code/requirements
-RUN pip install -r requirements/base.txt -r requirements/cas.txt -r requirements/production.txt --no-cache-dir
+COPY requirements.txt /code/
+RUN pip3 install -r /code/requirements.txt --no-cache-dir
 
 # Copy code
 WORKDIR /code
