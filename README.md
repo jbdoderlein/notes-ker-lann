@@ -14,21 +14,25 @@ Sinon vous pouvez suivre les étapes ici.
 ### Installation avec Debian/Ubuntu
 
 1.  **Installation des dépendances APT.**
+    On tire les dépendances le plus possible à partir des dépôts de Debian.
+    On a besoin d'un environnement LaTeX pour générer les factures.
 
     ```bash
-    $ sudo apt install nginx python3 python3-pip python3-dev uwsgi uwsgi-plugin-python3 python3-venv git acl
-    ```
-
-    La génération des factures de l'application trésorerie nécessite une installation de LaTeX suffisante,
-
-    ```bash
-    $ sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-french
+    $ sudo apt update
+    $ sudo apt install -t buster-backports -y python3-django python3-django-crispy-forms \
+        python3-django-extensions python3-django-filters python3-django-polymorphic \
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil \
+        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
+        uwsgi uwsgi-plugin-python3 \
+        texlive-latex-extra texlive-fonts-extra texlive-lang-french \
+        gettext libjs-bootstrap4 fonts-font-awesome \
+        nginx python3-venv git acl
     ```
 
 2.  **Clonage du dépot** dans `/var/www/note_kfet`,
 
     ```bash
-    $ mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
+    $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
     $ sudo chmod g+rwx .
     $ sudo -u www-data git clone git@gitlab.crans.org:bde/nk20.git .
@@ -39,8 +43,7 @@ Sinon vous pouvez suivre les étapes ici.
     ```bash
     $ python3 -m venv env
     $ source env/bin/activate
-    (env)$ pip3 install -r requirements/base.txt
-    (env)$ pip3 install -r requirements/prod.txt  # uniquement en prod, nécessite une base postgres
+    (env)$ pip3 install -r requirements.txt
     (env)$ deactivate  # sortir de l'environnement
     ```
 
@@ -197,7 +200,7 @@ un serveur de développement par exemple sur son ordinateur.
 
          $ python3 -m venv venv
          $ source venv/bin/activate
-         (env)$ pip install -r requirements/base.txt
+         (env)$ pip install -r requirements.txt
 
 3.  Copier le fichier `.env_example` vers `.env` à la racine du projet et mettre à jour
     ce qu'il faut
