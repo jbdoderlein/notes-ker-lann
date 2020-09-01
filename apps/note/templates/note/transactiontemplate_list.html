@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-{% load pretty_money %}
-{% load i18n %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load pretty_money i18n %}
 {% load render_table from django_tables2 %}
+
 {% block content %}
 <h1 class="text-white">{{ title }}</h1>
 <div class="row justify-content-center mb-4">

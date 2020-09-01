@@ -1,4 +1,7 @@
 {% load i18n %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
 
 <input type="hidden" name="{{ widget.name }}" {% if widget.attrs.model_pk %}value="{{ widget.attrs.model_pk }}"{% endif %} id="{{ widget.attrs.id }}_pk">
 <input type="text"
