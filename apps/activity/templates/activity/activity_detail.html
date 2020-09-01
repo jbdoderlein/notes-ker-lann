@@ -6,6 +6,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% load render_table from django_tables2 %}
 
 {% block content %}
+<h1 class="text-white">{{ title }}</h1>
 {% include "activity/includes/activity_info.html" %}
 
 {% if guests.data %}

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-
-{% load static %}
-{% load i18n %}
-{% load crispy_forms_tags %}
-{% load pretty_money %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load static i18n crispy_forms_tags pretty_money %}
 
 {% block content %}
+<h1 class="text-white">{{ title }}</h1>
     <p>
         <a class="btn btn-default" href="{% url 'note:template_list' %}">{% trans "Buttons list" %}</a>
     </p>
