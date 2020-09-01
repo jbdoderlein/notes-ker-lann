@@ -33,7 +33,7 @@ class ActivityTable(tables.Table):
 class GuestTable(tables.Table):
     inviter = tables.LinkColumn(
         'member:user_detail',
-        args=[A('inviter.user.pk'), ],
+        args=[A('inviter__user__pk'), ],
     )
 
     entry = tables.Column(

@@ -38,7 +38,7 @@ class WEIRegistrationTable(tables.Table):
     """
     user = tables.LinkColumn(
         'member:user_detail',
-        args=[A('user.pk')],
+        args=[A('user__pk')],
     )
 
     edit = tables.LinkColumn(
@@ -108,7 +108,7 @@ class WEIRegistrationTable(tables.Table):
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.first_name', 'user.last_name', 'first_year',)
+        fields = ('user', 'user__first_name', 'user__last_name', 'first_year',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -119,7 +119,7 @@ class WEIRegistrationTable(tables.Table):
 class WEIMembershipTable(tables.Table):
     user = tables.LinkColumn(
         'wei:wei_update_registration',
-        args=[A('registration.pk')],
+        args=[A('registration__pk')],
     )
 
     year = tables.Column(
@@ -129,12 +129,12 @@ class WEIMembershipTable(tables.Table):
 
     bus = tables.LinkColumn(
         'wei:manage_bus',
-        args=[A('bus.pk')],
+        args=[A('bus__pk')],
     )
 
     team = tables.LinkColumn(
         'wei:manage_bus_team',
-        args=[A('team.pk')],
+        args=[A('team__pk')],
     )
 
     def render_year(self, record):
@@ -146,7 +146,7 @@ class WEIMembershipTable(tables.Table):
         }
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.last_name', 'user.first_name', 'registration.gender', 'user.profile.department',
+        fields = ('user', 'user__last_name', 'user__first_name', 'registration__gender', 'user__profile__department',
                   'year', 'bus', 'team', )
         row_attrs = {
             'class': 'table-row',

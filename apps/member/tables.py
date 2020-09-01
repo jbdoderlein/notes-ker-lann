@@ -41,9 +41,9 @@ class UserTable(tables.Table):
     """
     alias = tables.Column()
 
-    section = tables.Column(accessor='profile.section')
+    section = tables.Column(accessor='profile__section')
 
-    balance = tables.Column(accessor='note.balance', verbose_name=_("Balance"))
+    balance = tables.Column(accessor='note__balance', verbose_name=_("Balance"))
 
     def render_balance(self, record, value):
         return pretty_money(value)\

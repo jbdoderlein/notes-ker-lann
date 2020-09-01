@@ -95,7 +95,7 @@ class SpecialTransactionTable(tables.Table):
     # Display add and remove buttons. Use the `exclude` field to select what is needed.
     remittance_add = tables.LinkColumn("treasury:link_transaction",
                                        verbose_name=_("Remittance"),
-                                       args=[A("specialtransactionproxy.pk")],
+                                       args=[A("specialtransactionproxy__pk")],
                                        text=_("Add"),
                                        attrs={
                                            'a': {'class': 'btn btn-primary'}
@@ -103,7 +103,7 @@ class SpecialTransactionTable(tables.Table):
 
     remittance_remove = tables.LinkColumn("treasury:unlink_transaction",
                                           verbose_name=_("Remittance"),
-                                          args=[A("specialtransactionproxy.pk")],
+                                          args=[A("specialtransactionproxy__pk")],
                                           text=_("Remove"),
                                           attrs={
                                               'a': {'class': 'btn btn-primary btn-danger'}
