@@ -5,10 +5,13 @@ stages:
 
 docker:
   stage: build_docker_image
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - docker login -u $CI_REGISTRY_USERNAME -p $CI_BUILD_TOKEN
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"registry.hub.docker.com\":{\"username\":\"$CI_REGISTRY_USERNAME\",\"password\":\"$CI_BUILD_TOKEN\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
   only:
     - master
     - beta
