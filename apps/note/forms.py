@@ -5,7 +5,7 @@ from datetime import datetime
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.forms import CheckboxSelectMultiple
-from django.utils.timezone import  make_aware
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import Autocomplete, AmountInput, DateTimePickerInput
 

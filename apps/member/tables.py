@@ -165,5 +165,5 @@ class ClubManagerTable(tables.Table):
             'style': 'table-layout: fixed;'
         }
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.first_name', 'user.last_name', 'roles', )
+        fields = ('user', 'user__first_name', 'user__last_name', 'roles', )
         model = Membership

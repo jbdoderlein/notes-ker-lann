@@ -53,7 +53,7 @@ class RightsTable(tables.Table):
             'style': 'table-layout: fixed;'
         }
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user__last_name', 'user.first_name', 'user', 'club', 'roles', )
+        fields = ('user__last_name', 'user__first_name', 'user', 'club', 'roles', )
         model = Membership
 
 
