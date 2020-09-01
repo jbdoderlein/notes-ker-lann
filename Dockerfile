@@ -15,12 +15,12 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Instal PyPI requirements
-COPY requirements.txt /code/
-RUN pip3 install -r /code/requirements.txt --no-cache-dir
+COPY requirements.txt /var/www/note_kfet/
+RUN pip3 install -r /var/www/note_kfet/requirements.txt --no-cache-dir
 
 # Copy code
-WORKDIR /code
-COPY . /code/
+WORKDIR /var/www/note_kfet
+COPY . /var/www/note_kfet/
 
 EXPOSE 8080
-ENTRYPOINT ["/code/entrypoint.sh"]
+ENTRYPOINT ["/var/www/note_kfet/entrypoint.sh"]
