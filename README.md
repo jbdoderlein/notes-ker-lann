@@ -36,7 +36,7 @@ Sinon vous pouvez suivre les étapes ici.
     ```bash
     $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
-    $ sudo chmod g+rwx .
+    $ sudo chmod g+rwxs .
     $ sudo -u www-data git clone git@gitlab.crans.org:bde/nk20.git .
     ```
 
@@ -183,9 +183,8 @@ nk20:
   env_file: /chemin/vers/le/code/nk20/.env
   restart: always
   labels:
-    - traefik.domain=ndd.example.com
-    - traefik.frontend.rule=Host:ndd.example.com
-    - traefik.port=8080
+    - "traefik.http.routers.nk20.rule=Host(`ndd.example.com`)"
+    - "traefik.http.services.nk20.loadbalancer.server.port=8080"
 ```
 
 ### Lancer un serveur de développement
