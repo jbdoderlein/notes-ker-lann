@@ -11,14 +11,22 @@ else
   sed -i -e "s/REPLACEME/La Note Kfet \\\\ud83c\\\\udf7b/g" /code/note_kfet/fixtures/cas.json
 fi
 
-python manage.py compilemessages
-python manage.py makemigrations
-python manage.py migrate
+# Set up Django project
+python3 manage.py collectstatic --noinput
+python3 manage.py compilemessages
+python3 manage.py makemigrations
+python3 manage.py migrate
 
-nginx
-
-if [ "$DJANGO_APP_STAGE" = "prod" ]; then
-    gunicorn -b 0.0.0.0:8000 --workers=2 --threads=4 --worker-class=gthread note_kfet.wsgi --access-logfile '-' --error-logfile '-';
+if [ "$1" ]; then
+    # Command passed
+    echo "Running $@..."
+    $@
 else
-    python manage.py runserver 0.0.0.0:8000;
+    # Launch server
+    if [ "$DJANGO_APP_STAGE" = "prod" ]; then
+        # FIXME: serve static files
+        uwsgi --http 0.0.0.0:8080 --master --module note_kfet.wsgi --processes 4
+    else
+        python3 manage.py runserver 0.0.0.0:8080;
+    fi
 fi
