@@ -23,7 +23,9 @@ docker:
 # Debian Buster
 py37-django22:
   stage: test
-  image: $CI_REGISTRY_IMAGE:debian
+  image:
+    name: $CI_REGISTRY_IMAGE:debian
+    entrypoint: [""]
   before_script:
     - apt-get update && apt-get install -y tox
   script: tox -e py37-django22
@@ -47,7 +49,9 @@ py38-django22:
 
 linters:
   stage: quality-assurance
-  image: $CI_REGISTRY_IMAGE:debian
+  image:
+    name: $CI_REGISTRY_IMAGE:debian
+    entrypoint: [""]
   before_script:
     - apt-get update && apt-get install -y tox
   script: tox -e linters
