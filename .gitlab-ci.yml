@@ -1,33 +1,21 @@
 stages:
-  - build_docker_image
   - test
   - quality-assurance
-
-docker:
-  stage: build_docker_image
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$CI_BUILD_TOKEN\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --cache=true --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest --destination $CI_REGISTRY_IMAGE:debian
-  only:
-    - master
-    - beta
-  cache:
-    key: one-key-to-rule-them-all
-    paths:
-      - /cache/
 
 # Debian Buster
 py37-django22:
   stage: test
-  image:
-    name: $CI_REGISTRY_IMAGE:debian
-    entrypoint: [""]
+  image: debian:buster-backports
   before_script:
-    - apt-get update && apt-get install -y tox
+    - >
+        apt-get update &&
+        apt-get install --no-install-recommends -t buster-backports -y
+        python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers
+        python3-bs4 python3-setuptools tox
+        texlive-latex-extra texlive-lang-french lmodern texlive-fonts-recommended
   script: tox -e py37-django22
 
 # Ubuntu 20.04
@@ -39,21 +27,28 @@ py38-django22:
     - ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo Europe/Paris > /etc/timezone
     - >
         apt-get update &&
-        apt-get install -y python3-django python3-django-crispy-forms
+        apt-get install --no-install-recommends -t buster-backports -y
+        python3-django python3-django-crispy-forms
         python3-django-extensions python3-django-filters python3-django-polymorphic
         python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-        python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3
-        gettext libjs-bootstrap4 fonts-font-awesome tox &&
-        rm -rf /var/lib/apt/lists/*
+        python3-babel python3-lockfile python3-pip python3-phonenumbers
+        python3-bs4 python3-setuptools tox
+        texlive-latex-extra texlive-lang-french lmodern texlive-fonts-recommended
   script: tox -e py38-django22
 
 linters:
   stage: quality-assurance
-  image:
-    name: $CI_REGISTRY_IMAGE:debian
-    entrypoint: [""]
+  image: debian:buster-backports
   before_script:
-    - apt-get update && apt-get install -y tox
+    - >
+        apt-get update &&
+        apt-get install --no-install-recommends -t buster-backports -y
+        python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers
+        python3-bs4 python3-setuptools tox
+        texlive-latex-extra texlive-lang-french lmodern texlive-fonts-recommended
   script: tox -e linters
 
   # Be nice to new contributors, but please use `tox`
