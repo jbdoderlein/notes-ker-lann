@@ -29,6 +29,7 @@ class HistoryTable(tables.Table):
     source = tables.Column(
         attrs={
             "td": {
+                "class": "text-nowrap",
                 "data-toggle": "tooltip",
                 "title": lambda record: _("used alias").capitalize() + " : " + record.source_alias,
             }
@@ -38,15 +39,46 @@ class HistoryTable(tables.Table):
     destination = tables.Column(
         attrs={
             "td": {
+                "class": "text-nowrap",
                 "data-toggle": "tooltip",
                 "title": lambda record: _("used alias").capitalize() + " : " + record.destination_alias,
             }
         }
     )
 
+    created_at = tables.DateColumn(
+        attrs={
+            "td": {
+                "class": "text-nowrap",
+            },
+        }
+    )
+
+    amount = tables.Column(
+        attrs={
+            "td": {
+                "class": "text-nowrap",
+            },
+        }
+    )
+
+    reason = tables.Column(
+        attrs={
+            "td": {
+                "class": "text-break",
+            },
+        }
+    )
+
     type = tables.Column()
 
-    total = tables.Column()  # will use Transaction.total() !!
+    total = tables.Column(  # will use Transaction.total() !!
+        attrs={
+            "td": {
+                "class": "text-nowrap",
+            },
+        }
+    )
 
     valid = tables.Column(
         attrs={
