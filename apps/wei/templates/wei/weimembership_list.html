@@ -1,0 +1,51 @@
+{% extends "wei/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block profile_content %}
+    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/bus/équipe ...">
+    <hr>
+
+    <div id="memberships_table">
+        {% if table.data %}
+            {% render_table table %}
+        {% else %}
+            <div class="alert alert-warning">
+                {% trans "There is no membership found with this pattern." %}
+            </div>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'wei:wei_registrations' pk=club.pk %}">
+        <button class="btn btn-block btn-info">{% trans "View unvalidated registrations..." %}</button>
+    </a>
+
+    <hr>
+
+    <a href="{% url 'wei:wei_memberships_pdf' wei_pk=club.pk %}" data-turbolinks="false">
+        <button class="btn btn-block btn-danger"><i class="fa fa-file-pdf-o"></i> {% trans "View as PDF" %}</button>
+    </a>
+{% endblock %}
+
+{% block extrajavascript %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        let old_pattern = null;
+        let searchbar_obj = $("#searchbar");
+
+        function reloadTable() {
+            let pattern = searchbar_obj.val();
+
+            if (pattern === old_pattern)
+                return;
+
+            $("#memberships_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #memberships_table");
+        }
+
+        searchbar_obj.keyup(reloadTable);
+    });
+</script>
+{% endblock %}

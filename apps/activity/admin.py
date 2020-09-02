@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.contrib import admin
-
 from note_kfet.admin import admin_site
-from .models import Activity, ActivityType, Guest, Entry
+
+from .forms import GuestForm
+from .models import Activity, ActivityType, Entry, Guest
 
 
 @admin.register(Activity, site=admin_site)
@@ -35,6 +36,7 @@ class GuestAdmin(admin.ModelAdmin):
     Admin customisation for Guest
     """
     list_display = ('last_name', 'first_name', 'activity', 'inviter')
+    form = GuestForm
 
 
 @admin.register(Entry, site=admin_site)

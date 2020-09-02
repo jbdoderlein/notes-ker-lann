@@ -1,0 +1,203 @@
+{% extends "wei/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n crispy_forms_tags pretty_money perms %}
+
+{% block profile_content %}
+    <div class="card bg-light shadow">
+        <div class="card-header text-center">
+            <h4>{% trans "Review registration" %}</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+                <dd class="col-xl-6">{{ registration.user.last_name }} {{ registration.user.first_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.username }}</dd>
+
+                <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
+                <dd class="col-xl-6"><a href="mailto:{{ registration.user.email }}">{{ registration.user.email }}</a></dd>
+
+                {% if not registration.user.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:registration.user.profile %}
+                    <dd class="col-xl-12">
+                        <div class="alert alert-warning">
+                            {% trans "This user doesn't have confirmed his/her e-mail address." %}
+                            <a href="{% url "registration:email_validation_resend" pk=registration.user.pk %}">{% trans "Click here to resend a validation link." %}</a>
+                        </div>
+                    </dd>
+                {% endif %}
+
+                <dt class="col-xl-6">{% trans 'department'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.department }}</dd>
+
+                <dt class="col-xl-6">{% trans 'ENS year'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.ens_year }}</dd>
+
+                <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.section }}</dd>
+
+                <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.address }}</dd>
+
+                <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.phone_number }}</dd>
+
+                <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.user.profile.paid|yesno }}</dd>
+
+                <hr>
+
+                <dt class="col-xl-6">{% trans 'first year'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.first_year|yesno }}</dd>
+
+                <dt class="col-xl-6">{% trans 'gender'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.gender }}</dd>
+
+                <dt class="col-xl-6">{% trans 'clothing cut'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.clothing_cut }}</dd>
+
+                <dt class="col-xl-6">{% trans 'clothing size'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.clothing_size }}</dd>
+
+                <dt class="col-xl-6">{% trans 'birth date'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.birth_date }}</dd>
+
+                <dt class="col-xl-6">{% trans 'health issues'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.health_issues }}</dd>
+
+                <dt class="col-xl-6">{% trans 'emergency contact name'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.emergency_contact_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'emergency contact phone'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ registration.emergency_contact_phone }}</dd>
+
+                <dt class="col-xl-6">{% trans 'Payment from Société générale' %}</dt>
+                <dd class="col-xl-6">{{ registration.soge_credit|yesno }}</dd>
+
+                {% if registration.first_year %}
+                    <dt class="col-xl-6">{% trans 'Suggested bus from the survey:' %}</dt>
+                    {% if registration.information.valid or True %}
+                        <dd class="col-xl-6">{{ suggested_bus }}</dd>
+
+                        <div class="card-header text-center col-xl-12">
+                            <h5>{% trans 'Raw survey information' %}</h5>
+                        </div>
+
+                        {% with information=registration.information %}
+                        {% for key, value in information.items %}
+                            <dt class="col-xl-6">{{ key }}</dt>
+                            <dd class="col-xl-6">{{ value }}</dd>
+                        {% endfor %}
+                        {% endwith %}
+                    {% else %}
+                        <dd class="col-xl-6"><em>{% trans "The algorithm didn't run." %}</em></dd>
+                    {% endif %}
+                {% else %}
+                    <dt class="col-xl-6">{% trans 'caution check given'|capfirst %}</dt>
+                    <dd class="col-xl-6">{{ registration.caution_check|yesno }}</dd>
+
+                    {% with information=registration.information %}
+                        <dt class="col-xl-6">{% trans 'preferred bus'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_bus_name|join:', ' }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'preferred team'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_team_name|join:', ' }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'preferred roles'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ information.preferred_roles_name|join:', ' }}</dd>
+                    {% endwith %}
+                {% endif %}
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <a class="btn btn-primary btn-sm" href="{% url 'wei:wei_update_registration' registration.pk %}" data-turbolinks="false">{% trans 'Update registration' %}</a>
+            {% if "auth.change_user"|has_perm:registration.user %}
+                <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' registration.user.pk %}">{% trans 'Update Profile' %}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="card bg-light shadow">
+        <form method="post">
+            <div class="card-header text-center" >
+                <h4> {% trans "Validate registration" %}</h4>
+            </div>
+            {% if registration.is_validated %}
+                <div class="alert alert-warning">
+                    {% trans "The registration is already validated and can't be unvalidated." %}
+                    {% trans "The user joined the bus" %} {{ registration.membership.bus }}
+                    {% if registration.membership.team %}{% trans "in the team" %} {{ registration.membership.team }},
+                    {% else %}{% trans "in no team (staff)" %},{% endif %} {% trans "with the following roles:" %} {{ registration.membership.roles.all|join:", " }}
+                </div>
+            {% else %}
+                {% if registration.soge_credit %}
+                    <div class="alert alert-warning">
+                        {% blocktrans trimmed %}
+                            The WEI will be paid by Société générale. The membership will be created even if the bank didn't pay the BDE yet.
+                            The membership transaction will be created but will be invalid. You will have to validate it once the bank
+                            validated the creation of the account, or to change the payment method.
+                        {% endblocktrans %}
+                    </div>
+                {% else %}
+                    {% if registration.user.note.balance < fee %}
+                        <div class="alert alert-danger">
+                            {% with pretty_fee=fee|pretty_money %}
+                            {% blocktrans trimmed with balance=registration.user.note.balance|pretty_money %}
+                                The note don't have enough money ({{ balance }}, {{ pretty_fee }} required).
+                                The registration may fail if you don't credit the note now.
+                            {% endblocktrans %}
+                            {% endwith %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            {% blocktrans trimmed with pretty_fee=fee|pretty_money %}
+                                The note has enough money ({{ pretty_fee }} required), the registration is possible.
+                            {% endblocktrans %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if not registration.caution_check and not registration.first_year %}
+                    <div class="alert alert-danger">
+                        {% trans "The user didn't give her/his caution check." %}
+                    </div>
+                {% endif %}
+
+                {% if not kfet_member %}
+                    <div class="alert alert-warning">
+                        {% url 'registration:future_user_detail' pk=registration.user.pk as future_user_detail %}
+                    {% url 'member:club_detail' pk=club.parent_club.parent_club.pk as club_detail %}
+                        {% blocktrans trimmed %}
+                            This user is not a member of the Kfet club for the coming year. The membership will be
+                            processed automatically, the WEI registration includes the membership fee.
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
+
+                <div class="card-body" id="profile_infos">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        function autocompleted(obj, prefix) {
+            console.log(prefix);
+            if (prefix === "id_bus") {
+                console.log(obj);
+                $("#id_team").attr('api_url', '/api/wei/team/?bus=' + obj.id);
+            }
+        }
+    </script>
+{% endblock %}

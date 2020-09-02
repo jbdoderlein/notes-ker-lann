@@ -1,0 +1,16 @@
+{% extends "base_search.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms %}
+
+{% block content %}
+{% if "member.change_profile_registration_valid"|has_perm:user %}
+<a class="btn btn-block btn-secondary mb-3" href="{% url 'registration:future_user_list' %}">
+    <i class="fa fa-user-plus"></i> {% trans "Registrations" %}
+</a>
+{% endif %}
+
+{# Search panel #}
+{{ block.super }}
+{% endblock %}

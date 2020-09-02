@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-2.0-or-later
+{% endcomment %}
+{% load i18n static django_tables2 perms %}
+
+{% block content %}
+<h1 class="text-white">{{ title }}</h1>
+
+{# bandeau transfert/crédit/débit/activité #}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                <label for="type_transfer" class="btn btn-sm btn-outline-primary active">
+                    <input type="radio" name="transaction_type" id="type_transfer">
+                    {% trans "Transfer" %}
+                </label>
+                {% if "note.notespecial"|not_empty_model_list %}
+                    <label for="type_credit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_credit">
+                        {% trans "Credit" %}
+                    </label>
+                    <label for="type_debit" class="btn btn-sm btn-outline-primary">
+                        <input type="radio" name="transaction_type" id="type_debit">
+                        {% trans "Debit" %}
+                    </label>
+                {% endif %}
+                {% for activity in activities_open %}
+                    <a href="{% url "activity:activity_entry" pk=activity.pk %}" class="btn btn-sm btn-outline-primary">
+                        {% trans "Entries" %} {{ activity.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        {#  Preview note profile (picture, username and balance) #}
+        <div class="col-md-3" id="note_infos_div">
+            <div class="card bg-light border-success shadow mb-4">
+                <a id="profile_pic_link" href="#"><img src="/media/pic/default.png"
+                        id="profile_pic" alt="" class="img-fluid rounded mx-auto"></a>
+                <div class="card-body text-center">
+                    <span id="user_note"></span>
+                </div>
+            </div>
+        </div>
+
+        {# list of emitters #}
+        <div class="col-md-3" id="emitters_div">
+            <div class="card bg-light border-success shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        <label for="source_note" id="source_note_label">{% trans "Select emitters" %}</label>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <select id="credit_type" class="custom-select d-none">
+                        {% for special_type in special_types %}
+                            <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="form-control mx-auto" type="text" id="source_note" placeholder="{% trans "Name or alias..." %}" />
+                    <div id="source_me_div">
+                        <hr>
+                        <span class="form-control mx-auto btn btn-secondary" id="source_me">
+                            {% trans "I am the emitter" %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# list of receiver #}
+        <div class="col-md-3" id="dests_div">
+            <div class="card bg-light border-info shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold" id="dest_title">
+                        <label for="dest_note" id="dest_note_label">{% trans "Select receivers" %}</label>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="dest_note_list">
+                </ul>
+                <div class="card-body">
+                    <select id="debit_type" class="custom-select d-none">
+                        {% for special_type in special_types %}
+                            <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="form-control mx-auto" type="text" id="dest_note" placeholder="{% trans "Name or alias..." %}" />
+                    <ul class="list-group list-group-flush" id="dest_alias_matched">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {# Information on transaction (amount, reason, name,...) #}
+        <div class="col-md-3" id="external_div">
+            <div class="card bg-light border-warning shadow mb-4">
+                <div class="card-header">
+                    <p class="card-text font-weight-bold">
+                        {% trans "Action" %}
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush" id="source_note_list">
+                </ul>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="amount">{% trans "Amount" %} :</label>
+                            {% include "note/amount_input.html" with widget=amount_widget %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <label for="reason">{% trans "Reason" %} :</label>
+                            <input class="form-control mx-auto" type="text" id="reason" />
+                            <p id="reason-required" class="invalid-feedback"></p>
+                        </div>
+                    </div>
+                    {# in case of special transaction add identity information #}
+                    <div class="d-none" id="special_transaction_div">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="last_name">{% trans "Name" %} :</label>
+                                <input type="text" id="last_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="first_name">{% trans "First name" %} :</label>
+                                <input type="text" id="first_name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="bank">{% trans "Bank" %} :</label>
+                                <input type="text" id="bank" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <button id="btn_transfer" class="form-control btn btn-primary">{% trans 'Transfer' %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{# transaction history #}
+    <div class="card shadow mb-4" id="history">
+        <div class="card-header">
+            <p class="card-text font-weight-bold">
+                {% trans "Recent transactions history" %}
+            </p>
+        </div>
+        {% render_table table %}
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        TRANSFER_POLYMORPHIC_CTYPE = {{ polymorphic_ctype }};
+        SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
+        user_id = {{ user.note.pk }};
+        username = "{{ user.username|escapejs }}";
+
+        select_emitter_label = "{% trans "Select emitter" %}";
+        select_emitters_label = "{% trans "Select emitters" %}";
+        select_receveir_label = "{% trans "Select receiver" %}";
+        select_receveirs_label = "{% trans "Select receivers" %}";
+        transfer_type_label = "{% trans "Transfer type" %}";
+    </script>
+    <script src="/static/js/transfer.js"></script>
+{% endblock %}

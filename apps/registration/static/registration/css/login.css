@@ -1,0 +1,19 @@
+/*
+Add icons to login form 
+Font-Awesome attribution is already done inside SVG files
+*/
+
+#login-form input[type="text"] {
+    background: #fff right 1rem top 50% / 5% no-repeat url('../img/fa-user.svg');
+    padding-right: 3rem;
+}
+
+#login-form input[type="password"] {
+    background: #fff right 1rem top 50% / 5% no-repeat url('../img/fa-lock.svg');
+    padding-right: 3rem;
+}
+
+#login-form select {
+    -moz-appearance: none;
+    cursor: pointer;
+}

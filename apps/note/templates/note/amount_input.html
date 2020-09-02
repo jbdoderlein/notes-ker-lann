@@ -1,0 +1,18 @@
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+
+{# Select amount to transfert in € #}
+<div class="input-group">
+    <input class="form-control mx-auto d-block" type="number" {% if not widget.attrs.negative %}min="0"{% endif %} step="0.01"
+           {% if widget.value != None and widget.value != "" %}value="{{ widget.value }}"{% endif %}
+           name="{{ widget.name }}"
+           {# Other attributes are loaded  #}
+           {% for name, value in widget.attrs.items %}
+                {% ifnotequal value False %}{{ name }}{% ifnotequal value True %}="{{ value|stringformat:'s' }}"{% endifnotequal %}{% endifnotequal %}
+            {% endfor %}>
+    <div class="input-group-append">
+        <span class="input-group-text">€</span>
+    </div>
+    <p id="amount-required" class="invalid-feedback"></p>
+</div>

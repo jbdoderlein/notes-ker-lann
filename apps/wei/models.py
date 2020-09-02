@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 from member.models import Club, Membership
 from note.models import MembershipTransaction
 from permission.models import Role
@@ -223,24 +224,9 @@ class WEIRegistration(models.Model):
         verbose_name=_("emergency contact name"),
     )
 
-    emergency_contact_phone = models.CharField(
+    emergency_contact_phone = PhoneNumberField(
         max_length=32,
         verbose_name=_("emergency contact phone"),
-    )
-
-    ml_events_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
-    )
-
-    ml_sport_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
-    )
-
-    ml_art_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
     )
 
     first_year = models.BooleanField(

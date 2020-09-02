@@ -1,0 +1,16 @@
+{% extends "base_search.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms %}
+
+{% block content %}
+{% if can_add_club %}
+<a class="btn btn-block btn-success mb-3" href="{% url 'member:club_create' %}" data-turbolinks="false">
+    {% trans "Create club" %}
+</a>
+{% endif %}
+
+{# Search panel #}
+{{ block.super }}
+{% endblock %}

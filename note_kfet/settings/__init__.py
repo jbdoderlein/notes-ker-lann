@@ -3,8 +3,7 @@
 
 from django.utils.translation import gettext_lazy as _
 import re
-
-from .base import *
+import os
 
 
 def read_env():
@@ -30,12 +29,15 @@ def read_env():
             os.environ.setdefault(key, val)
 
 
+# Try to load environment variables from project .env
 read_env()
 
-app_stage = os.environ.get('DJANGO_APP_STAGE', 'dev')
-if app_stage == 'prod':
-    from .production import *
-else:
+# Load base settings
+from .base import *
+
+# If in dev mode, then override some settings
+app_stage = os.getenv('DJANGO_APP_STAGE', 'dev')
+if app_stage == 'dev':
     from .development import *
 
 try:

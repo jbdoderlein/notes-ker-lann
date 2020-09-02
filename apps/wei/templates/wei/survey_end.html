@@ -1,0 +1,19 @@
+{% extends "wei/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block profile_content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h4>{% trans "Survey WEI" %}</h4>
+        </div>
+        <div class="card-body">
+            <p>
+                {% trans "The survey is now ended. Your answers have been saved." %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

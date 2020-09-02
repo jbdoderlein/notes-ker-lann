@@ -5,30 +5,18 @@
 # Development Settings #
 ########################
 # For local dev on your machine:
-#  - Enabled by default
-#  - use sqlite as a db engine , Debug is True.
+#  - debug by default
+#  - use sqlite as a db engine by default
 #  - standalone mail server
-#  - and more ...
-
+#  - and more...
 
 import os
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-from . import *
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-if os.getenv("DJANGO_DEV_STORE_METHOD", "sqllite") == "postgresql":
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('DJANGO_DB_NAME', 'note_db'),
-            'USER': os.environ.get('DJANGO_DB_USER', 'note'),
-            'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'CHANGE_ME_IN_ENV_SETTINGS'),
-            'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),
-            'PORT': os.environ.get('DJANGO_DB_PORT', ''),  # Use default port
-        }
-    }
-else:
+if os.getenv("DJANGO_DEV_STORE_METHOD", "sqlite") != "postgresql":
+    # Use an SQLite database
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -39,15 +27,14 @@ else:
 # Break it, fix it!
 DEBUG = True
 
-# Mandatory !
+# Allow access from all hostnames
 ALLOWED_HOSTS = ['*']
 
-# Emails
+# Drop emails to server console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 SERVER_EMAIL = 'notekfet@localhost'
 
-# Security settings
+# Disable some security settings
 SECURE_CONTENT_TYPE_NOSNIFF = False
 SECURE_BROWSER_XSS_FILTER = False
 SESSION_COOKIE_SECURE = False
@@ -55,7 +42,3 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
 SESSION_COOKIE_AGE = 60 * 60 * 3
-
-STATIC_ROOT = ''  # not needed in development settings
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')]

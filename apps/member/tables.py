@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import datetime
+
+from datetime import date
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
@@ -38,19 +39,22 @@ class UserTable(tables.Table):
     """
     List all users.
     """
-    section = tables.Column(accessor='profile.section')
+    alias = tables.Column()
 
-    balance = tables.Column(accessor='note.balance', verbose_name=_("Balance"))
+    section = tables.Column(accessor='profile__section')
 
-    def render_balance(self, value):
-        return pretty_money(value)
+    balance = tables.Column(accessor='note__balance', verbose_name=_("Balance"))
+
+    def render_balance(self, record, value):
+        return pretty_money(value)\
+            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", record.note) else "—"
 
     class Meta:
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('last_name', 'first_name', 'username', 'email')
+        fields = ('last_name', 'first_name', 'username', 'alias', 'email')
         model = User
         row_attrs = {
             'class': 'table-row',
@@ -92,26 +96,30 @@ class MembershipTable(tables.Table):
         t = pretty_money(value)
 
         # If it is required and if the user has the right, the renew button is displayed.
-        if record.club.membership_start is not None:
-            if record.date_start < record.club.membership_start:  # If the renew is available
-                if not Membership.objects.filter(
-                        club=record.club,
-                        user=record.user,
-                        date_start__gte=record.club.membership_start,
-                        date_end__lte=record.club.membership_end,
-                ).exists():  # If the renew is not yet performed
-                    empty_membership = Membership(
-                        club=record.club,
-                        user=record.user,
-                        date_start=datetime.now().date(),
-                        date_end=datetime.now().date(),
-                        fee=0,
+        if record.club.membership_start is not None \
+                and record.date_start < record.club.membership_start:
+            if not Membership.objects.filter(
+                    club=record.club,
+                    user=record.user,
+                    date_start__gte=record.club.membership_start,
+                    date_end__lte=record.club.membership_end,
+            ).exists():  # If the renew is not yet performed
+                empty_membership = Membership(
+                    club=record.club,
+                    user=record.user,
+                    date_start=date.today(),
+                    date_end=date.today(),
+                    fee=0,
+                )
+                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                                                "member:add_membership", empty_membership):  # If the user has right
+                    renew_url = reverse_lazy('member:club_renew_membership',
+                                             kwargs={"pk": record.pk})
+                    t = format_html(
+                        t + ' <a class="btn btn-sm btn-warning" title="{text}"'
+                        ' href="{renew_url}"><i class="fa fa-repeat"></i></a>',
+                        renew_url=renew_url, text=_("Renew")
                     )
-                    if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                    "member:add_membership", empty_membership):  # If the user has right
-                        t = format_html(t + ' <a class="btn btn-warning" href="{url}">{text}</a>',
-                                        url=reverse_lazy('member:club_renew_membership',
-                                                         kwargs={"pk": record.pk}), text=_("Renew"))
         return t
 
     def render_roles(self, record):
@@ -125,7 +133,7 @@ class MembershipTable(tables.Table):
 
     class Meta:
         attrs = {
-            'class': 'table table-condensed table-striped table-hover',
+            'class': 'table table-condensed table-striped',
             'style': 'table-layout: fixed;'
         }
         template_name = 'django_tables2/bootstrap4.html'
@@ -157,5 +165,5 @@ class ClubManagerTable(tables.Table):
             'style': 'table-layout: fixed;'
         }
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.first_name', 'user.last_name', 'roles', )
+        fields = ('user', 'user__first_name', 'user__last_name', 'roles', )
         model = Membership

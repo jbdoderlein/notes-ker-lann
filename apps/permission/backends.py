@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from datetime import date
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -43,7 +45,7 @@ class PermissionBackend(ModelBackend):
             for role in membership.roles.all():
                 for perm in role.permissions.filter(type=t, mask__rank__lte=get_current_session().get("permission_mask", -1)).all():
                     if not perm.permanent:
-                        if membership.date_start > timezone.now().date() or membership.date_end < timezone.now().date():
+                        if membership.date_start > date.today() or membership.date_end < date.today():
                             continue
                     perm.membership = membership
                     perms.append(perm)
@@ -80,7 +82,7 @@ class PermissionBackend(ModelBackend):
                 F=F,
                 Q=Q,
                 now=timezone.now(),
-                today=timezone.now().date(),
+                today=date.today(),
             )
             yield permission
 

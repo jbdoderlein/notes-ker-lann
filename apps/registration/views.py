@@ -29,7 +29,7 @@ from .tokens import email_validation_token
 
 class UserCreateView(CreateView):
     """
-    Une vue pour inscrire un utilisateur et lui créer un profil
+    A view to create a User and add a Profile
     """
 
     form_class = SignUpForm
@@ -39,8 +39,10 @@ class UserCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.second_form()
+        context["profile_form"] = self.second_form(self.request.POST if self.request.POST else None)
         del context["profile_form"].fields["section"]
+        del context["profile_form"].fields["report_frequency"]
+        del context["profile_form"].fields["last_report"]
 
         return context
 
@@ -179,8 +181,6 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
                 | Q(profile__section__iregex=pattern)
                 | Q(username__iregex="^" + pattern)
             )
-        else:
-            qs = qs.none()
 
         return qs[:20]
 

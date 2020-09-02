@@ -25,9 +25,7 @@ class WEISurveyInformation:
         If the algorithm ran, return the prefered bus according to the survey.
         In the other case, return None.
         """
-        if not self.valid:
-            return None
-        return Bus.objects.get(pk=self.selected_bus_pk)
+        return Bus.objects.get(pk=self.selected_bus_pk) if self.valid else None
 
     def save(self, registration) -> None:
         """
@@ -44,6 +42,13 @@ class WEIBusInformation:
     def __init__(self, bus: Bus):
         self.__dict__.update(bus.information)
         self.bus = bus
+        self.save()
+
+    def save(self):
+        d = self.__dict__.copy()
+        d.pop("bus")
+        self.bus.information = d
+        self.bus.save()
 
 
 class WEISurveyAlgorithm:

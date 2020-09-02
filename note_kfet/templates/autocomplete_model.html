@@ -1,0 +1,17 @@
+{% load i18n %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+
+<input type="hidden" name="{{ widget.name }}" {% if widget.attrs.model_pk %}value="{{ widget.attrs.model_pk }}"{% endif %} id="{{ widget.attrs.id }}_pk">
+<input type="text"
+   {% if widget.value != None and widget.value != "" %}value="{{ widget.value }}"{% endif %}
+   name="{{ widget.name }}_name" autocomplete="off"
+    {% for name, value in widget.attrs.items %}
+        {% ifnotequal value False %}{{ name }}{% ifnotequal value True %}="{{ value|stringformat:'s' }}"{% endifnotequal %}{% endifnotequal %}
+    {% endfor %}>
+    {% if widget.resetable %}
+        <a id="{{ widget.attrs.id }}_reset" class="btn btn-light autocomplete-reset{% if not widget.value %} d-none{% endif %}">{% trans "Reset" %}</a>
+    {% endif %}
+<ul class="list-group list-group-flush" id="{{ widget.attrs.id }}_list">
+</ul>

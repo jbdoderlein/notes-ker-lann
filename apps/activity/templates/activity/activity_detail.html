@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n perms %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<h1 class="text-white">{{ title }}</h1>
+{% include "activity/includes/activity_info.html" %}
+
+{% if guests.data %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Guests list" %}
+    </h3>
+    <div id="guests_table">
+        {% render_table guests %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extrajavascript %}
+<script>
+    function remove_guest(guest_id) {
+        $.ajax({
+         url:"/api/activity/guest/" + guest_id + "/",
+         method:"DELETE",
+         headers: {"X-CSRFTOKEN": CSRF_TOKEN}
+     })
+      .done(function() {
+          addMsg('Invité supprimé','success');
+          $("#guests_table").load(location.pathname + " #guests_table");
+      })
+      .fail(function(xhr, textStatus, error) {
+          errMsg(xhr.responseJSON);
+      });
+    }
+
+    $("#open_activity").click(function() {
+        $.ajax({
+            url: "/api/activity/activity/{{ activity.pk }}/",
+            type: "PATCH",
+            dataType: "json",
+            headers: {
+                "X-CSRFTOKEN": CSRF_TOKEN
+            },
+            data: {
+                open: {{ activity.open|yesno:'false,true' }}
+            }
+        }).done(function () {
+            reloadWithTurbolinks();
+        }).fail(function (xhr) {
+            errMsg(xhr.responseJSON);
+        });
+    });
+
+    $("#validate_activity").click(function () {
+        $.ajax({
+            url: "/api/activity/activity/{{ activity.pk }}/",
+            type: "PATCH",
+            dataType: "json",
+            headers: {
+                "X-CSRFTOKEN": CSRF_TOKEN
+            },
+            data: {
+                valid: {{ activity.valid|yesno:'false,true' }}
+            }
+        }).done(function () {
+            reloadWithTurbolinks();
+        }).fail(function (xhr) {
+            errMsg(xhr.responseJSON);
+        });
+    });
+</script>
+{% endblock %}

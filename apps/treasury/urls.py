@@ -3,9 +3,9 @@
 
 from django.urls import path
 
-from .views import InvoiceCreateView, InvoiceListView, InvoiceUpdateView, InvoiceRenderView, RemittanceListView,\
-    RemittanceCreateView, RemittanceUpdateView, LinkTransactionToRemittanceView, UnlinkTransactionToRemittanceView,\
-    SogeCreditListView, SogeCreditManageView
+from .views import InvoiceCreateView, InvoiceListView, InvoiceUpdateView, InvoiceDeleteView, InvoiceRenderView,\
+    RemittanceListView, RemittanceCreateView, RemittanceUpdateView, LinkTransactionToRemittanceView,\
+    UnlinkTransactionToRemittanceView, SogeCreditListView, SogeCreditManageView
 
 app_name = 'treasury'
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('invoice/', InvoiceListView.as_view(), name='invoice_list'),
     path('invoice/create/', InvoiceCreateView.as_view(), name='invoice_create'),
     path('invoice/<int:pk>/', InvoiceUpdateView.as_view(), name='invoice_update'),
+    path('invoice/<int:pk>/delete/', InvoiceDeleteView.as_view(), name='invoice_delete'),
     path('invoice/render/<int:pk>/', InvoiceRenderView.as_view(), name='invoice_render'),
 
     # Remittance app paths

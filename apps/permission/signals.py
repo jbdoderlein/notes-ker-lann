@@ -70,7 +70,7 @@ def pre_save_object(sender, instance, **kwargs):
 
         if not has_perm:
             raise PermissionDenied(
-                _("You don't have the permission to add this instance of model {app_label}.{model_name}.")
+                _("You don't have the permission to add an instance of model {app_label}.{model_name}.")
                 .format(app_label=app_label, model_name=model_name, ))
 
 

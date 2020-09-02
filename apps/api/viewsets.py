@@ -4,7 +4,7 @@
 from django.contrib.contenttypes.models import ContentType
 from permission.backends import PermissionBackend
 from rest_framework import viewsets
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_session
 
 
 class ReadProtectedModelViewSet(viewsets.ModelViewSet):
@@ -17,8 +17,9 @@ class ReadProtectedModelViewSet(viewsets.ModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        user = get_current_authenticated_user()
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
 class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -31,5 +32,6 @@ class ReadOnlyProtectedModelViewSet(viewsets.ReadOnlyModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        user = get_current_authenticated_user()
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()

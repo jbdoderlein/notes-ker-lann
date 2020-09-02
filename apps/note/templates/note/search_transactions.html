@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{# Use a fluid-width container #}
+{% block containertype %}container-fluid{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-xl-4">
+        <div class="card bg-light mb-3">
+            <h3 class="card-header text-center">
+                {{ title }}
+            </h3>
+            <div class="card-body">
+                {% crispy form %}
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8">
+        <div class="card bg-light">
+            <div id="table">
+                {% render_table table %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajavascript %}
+<script>
+    function refreshHistory() {
+        $("#history_list").load("{% url 'note:transactions' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'note:transactions' pk=object.pk %} #profile_infos");
+    }
+
+    function refreshFilters() {
+        let filters = "";
+        filters += "source=" + $("#id_source_pk").val();
+        filters += "&destination=" + $("#id_destination_pk").val();
+        filters += $("input[name='type']:checked").map(function () {
+            return "&type=" + $(this).val();
+        }).toArray().join("");
+        filters += "&reason=" + $("#id_reason").val();
+        filters += "&valid=" + ($("#id_valid").is(":checked") ? "1" : "");
+        filters += "&amount_gte=" + $("#id_amount_gte").val();
+        filters += "&amount_lte=" + $("#id_amount_lte").val();
+        filters += "&created_after=" + $("#id_created_after").val();
+        filters += "&created_before=" + $("#id_created_before").val();
+        console.log(filters.replace(" ", "%20"));
+        $("#table").load(location.pathname + "?" + filters.replaceAll(" ", "%20") + " #table");
+    }
+
+    function autocompleted() {
+        refreshFilters();
+    }
+
+    $(document).ready(function () {
+        $("input").change(refreshFilters);
+        $("input").keyup(refreshFilters);
+    });
+</script>
+{% endblock %}

@@ -9,9 +9,9 @@ class FutureUserTable(tables.Table):
     """
     Display the list of pre-registered users
     """
-    phone_number = tables.Column(accessor='profile.phone_number')
+    phone_number = tables.Column(accessor='profile__phone_number')
 
-    section = tables.Column(accessor='profile.section')
+    section = tables.Column(accessor='profile__section')
 
     class Meta:
         attrs = {

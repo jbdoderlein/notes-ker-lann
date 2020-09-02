@@ -1,13 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import datetime
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from note_kfet.inputs import DatePickerInput, AmountInput
+from note_kfet.inputs import AmountInput
 
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy
 
@@ -17,18 +15,25 @@ class InvoiceForm(forms.ModelForm):
     Create and generate invoices.
     """
 
-    # Django forms don't support date fields. We have to add it manually
-    date = forms.DateField(
-        initial=datetime.date.today,
-        widget=DatePickerInput()
-    )
+    def clean(self):
+        if self.instance and self.instance.locked:
+            for field_name in self.fields:
+                self.cleaned_data[field_name] = getattr(self.instance, field_name)
+            self.errors.clear()
+            return self.cleaned_data
+        return super().clean()
 
-    def clean_date(self):
-        self.instance.date = self.data.get("date")
+    def save(self, commit=True):
+        """
+        If the invoice is locked, don't save it
+        """
+        if not self.instance.locked:
+            super().save(commit)
+        return self.instance
 
     class Meta:
         model = Invoice
-        exclude = ('bde', )
+        exclude = ('bde', 'date', 'tex', )
 
 
 class ProductForm(forms.ModelForm):
@@ -36,7 +41,11 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
         widgets = {
-            "amount": AmountInput()
+            "amount": AmountInput(
+                attrs={
+                    "negative": True,
+                }
+            )
         }
 
 
@@ -115,6 +124,12 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
     """
     Attach a special transaction to a remittance.
     """
+    remittance = forms.ModelChoiceField(
+        queryset=Remittance.objects.none(),
+        label=_("Remittance"),
+        empty_label=_("No attached remittance"),
+        required=False,
+    )
 
     # Since we use a proxy model for special transactions, we add manually the fields related to the transaction
     last_name = forms.CharField(label=_("Last name"))
@@ -123,7 +138,7 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
 
     bank = forms.Field(label=_("Bank"))
 
-    amount = forms.IntegerField(label=_("Amount"), min_value=0)
+    amount = forms.IntegerField(label=_("Amount"), min_value=0, widget=AmountInput(), disabled=True, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -133,33 +148,19 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
 
         self.fields["remittance"].queryset = Remittance.objects.filter(closed=False)
 
-    def clean_last_name(self):
-        """
-        Replace the first name in the information of the transaction.
-        """
-        self.instance.transaction.last_name = self.data.get("last_name")
-        self.instance.transaction.clean()
+    def clean(self):
+        cleaned_data = super().clean()
+        self.instance.transaction.last_name = cleaned_data["last_name"]
+        self.instance.transaction.first_name = cleaned_data["first_name"]
+        self.instance.transaction.bank = cleaned_data["bank"]
+        return cleaned_data
 
-    def clean_first_name(self):
+    def save(self, commit=True):
         """
-        Replace the last name in the information of the transaction.
+        Save the transaction and the remittance.
         """
-        self.instance.transaction.first_name = self.data.get("first_name")
-        self.instance.transaction.clean()
-
-    def clean_bank(self):
-        """
-        Replace the bank in the information of the transaction.
-        """
-        self.instance.transaction.bank = self.data.get("bank")
-        self.instance.transaction.clean()
-
-    def clean_amount(self):
-        """
-        Replace the amount of the transaction.
-        """
-        self.instance.transaction.amount = self.data.get("amount")
-        self.instance.transaction.clean()
+        self.instance.transaction.save()
+        return super().save(commit)
 
     class Meta:
         model = SpecialTransactionProxy

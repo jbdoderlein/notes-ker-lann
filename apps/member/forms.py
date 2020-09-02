@@ -4,6 +4,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.forms import CheckboxSelectMultiple
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from note.models import NoteSpecial, Alias
 from note_kfet.inputs import Autocomplete, AmountInput, DatePickerInput
@@ -36,6 +38,20 @@ class ProfileForm(forms.ModelForm):
     """
     A form for the extras field provided by the :model:`member.Profile` model.
     """
+    report_frequency = forms.IntegerField(required=False, initial=0, label=_("Report frequency"))
+
+    last_report = forms.DateTimeField(required=False, disabled=True, label=_("Last report date"))
+
+    def clean_promotion(self):
+        promotion = self.cleaned_data["promotion"]
+        if promotion > timezone.now().year:
+            self.add_error("promotion", _("You can't register to the note if you come from the future."))
+        return promotion
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['address'].widget.attrs.update({"placeholder": "4 avenue des Sciences, 91190 GIF-SUR-YVETTE"})
+        self.fields['promotion'].widget.attrs.update({"max": timezone.now().year})
 
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data
@@ -47,6 +63,19 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         exclude = ('user', 'email_confirmed', 'registration_valid', )
+
+
+class ImageForm(forms.Form):
+    """
+    Form used for the js interface for profile picture
+    """
+    image = forms.ImageField(required=False,
+                             label=_('select an image'),
+                             help_text=_('Maximal size: 2MB'))
+    x = forms.FloatField(widget=forms.HiddenInput())
+    y = forms.FloatField(widget=forms.HiddenInput())
+    width = forms.FloatField(widget=forms.HiddenInput())
+    height = forms.FloatField(widget=forms.HiddenInput())
 
 
 class ClubForm(forms.ModelForm):
@@ -151,6 +180,7 @@ class MembershipRolesForm(forms.ModelForm):
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.filter(weirole=None).all(),
         label=_("Roles"),
+        widget=CheckboxSelectMultiple(),
     )
 
     class Meta:

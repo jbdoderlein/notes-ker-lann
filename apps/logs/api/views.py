@@ -19,5 +19,5 @@ class ChangelogViewSet(ReadOnlyProtectedModelViewSet):
     serializer_class = ChangelogSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['model', 'action', "instance_pk", 'user', 'ip', ]
-    ordering_fields = ['timestamp', ]
-    ordering = ['-timestamp', ]
+    ordering_fields = ['timestamp', 'id', ]
+    ordering = ['-id', ]

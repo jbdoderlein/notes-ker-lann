@@ -1,10 +1,15 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from datetime import date
+
 import django_tables2 as tables
 from django.urls import reverse_lazy
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
+from note_kfet.middlewares import get_current_authenticated_user
+from permission.backends import PermissionBackend
 
 from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership
 
@@ -33,7 +38,7 @@ class WEIRegistrationTable(tables.Table):
     """
     user = tables.LinkColumn(
         'member:user_detail',
-        args=[A('user.pk')],
+        args=[A('user__pk')],
     )
 
     edit = tables.LinkColumn(
@@ -43,7 +48,8 @@ class WEIRegistrationTable(tables.Table):
         text=_("Edit"),
         attrs={
             'a': {
-                'class': 'btn btn-warning'
+                'class': 'btn btn-warning',
+                'data-turbolinks': 'false',
             }
         }
     )
@@ -53,8 +59,12 @@ class WEIRegistrationTable(tables.Table):
         verbose_name=_("Validate"),
         text=_("Validate"),
         attrs={
+            'th': {
+                'id': 'validate-membership-header'
+            },
             'a': {
-                'class': 'btn btn-success'
+                'class': 'btn btn-success',
+                'data-type': 'validate-membership'
             }
         }
     )
@@ -65,11 +75,32 @@ class WEIRegistrationTable(tables.Table):
         verbose_name=_("delete"),
         text=_("Delete"),
         attrs={
+            'th': {
+                'id': 'delete-membership-header'
+            },
             'a': {
-                'class': 'btn btn-danger'
+                'class': 'btn btn-danger',
+                'data-type': 'delete-membership'
             }
         },
     )
+
+    def render_validate(self, record):
+        hasperm = PermissionBackend.check_perm(
+            get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
+                club=record.wei,
+                user=record.user,
+                date_start=date.today(),
+                date_end=date.today(),
+                fee=0,
+                registration=record,
+            )
+        )
+        return _("Validate") if hasperm else format_html("<span class='no-perm'></span>")
+
+    def render_delete(self, record):
+        hasperm = PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record)
+        return _("Delete") if hasperm else format_html("<span class='no-perm'></span>")
 
     class Meta:
         attrs = {
@@ -77,7 +108,7 @@ class WEIRegistrationTable(tables.Table):
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.first_name', 'user.last_name', 'first_year',)
+        fields = ('user', 'user__first_name', 'user__last_name', 'first_year',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -88,7 +119,7 @@ class WEIRegistrationTable(tables.Table):
 class WEIMembershipTable(tables.Table):
     user = tables.LinkColumn(
         'wei:wei_update_registration',
-        args=[A('registration.pk')],
+        args=[A('registration__pk')],
     )
 
     year = tables.Column(
@@ -98,12 +129,12 @@ class WEIMembershipTable(tables.Table):
 
     bus = tables.LinkColumn(
         'wei:manage_bus',
-        args=[A('bus.pk')],
+        args=[A('bus__pk')],
     )
 
     team = tables.LinkColumn(
         'wei:manage_bus_team',
-        args=[A('team.pk')],
+        args=[A('team__pk')],
     )
 
     def render_year(self, record):
@@ -115,7 +146,7 @@ class WEIMembershipTable(tables.Table):
         }
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user.last_name', 'user.first_name', 'registration.gender', 'user.profile.department',
+        fields = ('user', 'user__last_name', 'user__first_name', 'registration__gender', 'user__profile__department',
                   'year', 'bus', 'team', )
         row_attrs = {
             'class': 'table-row',

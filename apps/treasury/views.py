@@ -8,35 +8,43 @@ from tempfile import mkdtemp
 
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.db.models import Q
 from django.forms import Form
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, DeleteView
 from django_tables2 import SingleTableView
 from note.models import SpecialTransaction, NoteSpecial, Alias
 from note_kfet.settings.base import BASE_DIR
 from permission.backends import PermissionBackend
-from permission.views import ProtectQuerysetMixin
+from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
 
 
-class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Invoice
     """
     model = Invoice
     form_class = InvoiceForm
     extra_context = {"title": _("Create new invoice")}
+
+    def get_sample_object(self):
+        return Invoice(
+            id=0,
+            object="",
+            description="",
+            name="",
+            address="",
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -49,7 +57,6 @@ class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         form_set = ProductFormSet(instance=form.instance)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
-        context['no_cache'] = True
 
         return context
 
@@ -73,13 +80,29 @@ class InvoiceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
         return reverse_lazy('treasury:invoice_list')
 
 
-class InvoiceListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
+class InvoiceListView(LoginRequiredMixin, SingleTableView):
     """
     List existing Invoices
     """
     model = Invoice
     table_class = InvoiceTable
     extra_context = {"title": _("Invoices list")}
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        sample_invoice = Invoice(
+            id=0,
+            object="",
+            description="",
+            name="",
+            address="",
+        )
+        if not PermissionBackend.check_perm(self.request.user, "treasury.add_invoice", sample_invoice):
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
@@ -97,13 +120,17 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.helper = FormHelper()
         # Remove form tag on the generation of the form in the template (already present on the template)
         form.helper.form_tag = False
-        # Fill the intial value for the date field, with the initial date of the model instance
-        form.fields['date'].initial = form.instance.date
         # The formset handles the set of the products
-        form_set = ProductFormSet(instance=form.instance)
+        form_set = ProductFormSet(instance=self.object)
         context['formset'] = form_set
         context['helper'] = ProductFormSetHelper()
-        context['no_cache'] = True
+
+        if self.object.locked:
+            for field_name in form.fields:
+                form.fields[field_name].disabled = True
+            for f in form_set.forms:
+                for field_name in f.fields:
+                    f.fields[field_name].disabled = True
 
         return context
 
@@ -131,6 +158,17 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         return reverse_lazy('treasury:invoice_list')
 
 
+class InvoiceDeleteView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
+    """
+    Delete a non-validated WEI registration
+    """
+    model = Invoice
+    extra_context = {"title": _("Delete invoice")}
+
+    def get_success_url(self):
+        return reverse_lazy('treasury:invoice_list')
+
+
 class InvoiceRenderView(LoginRequiredMixin, View):
     """
     Render Invoice as a generated PDF with the given information and a LaTeX template
@@ -139,24 +177,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
         invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request.user, Invoice, "view")).get(pk=pk)
-        products = Product.objects.filter(invoice=invoice).all()
-
-        # Informations of the BDE. Should be updated when the school will move.
-        invoice.place = "Cachan"
-        invoice.my_name = "BDE ENS Cachan"
-        invoice.my_address_street = "61 avenue du Président Wilson"
-        invoice.my_city = "94230 Cachan"
-        invoice.bank_code = 30003
-        invoice.desk_code = 3894
-        invoice.account_number = 37280662
-        invoice.rib_key = 14
-        invoice.bic = "SOGEFRPP"
-
-        # Replace line breaks with the LaTeX equivalent
-        invoice.description = invoice.description.replace("\r", "").replace("\n", "\\\\ ")
-        invoice.address = invoice.address.replace("\r", "").replace("\n", "\\\\ ")
-        # Fill the template with the information
-        tex = render_to_string("treasury/invoice_sample.tex", dict(obj=invoice, products=products))
+        tex = invoice.tex
 
         try:
             os.mkdir(BASE_DIR + "/tmp")
@@ -196,13 +217,19 @@ class InvoiceRenderView(LoginRequiredMixin, View):
         return response
 
 
-class RemittanceCreateView(ProtectQuerysetMixin, LoginRequiredMixin, CreateView):
+class RemittanceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
     """
     Create Remittance
     """
     model = Remittance
     form_class = RemittanceForm
     extra_context = {"title": _("Create a new remittance")}
+
+    def get_sample_object(self):
+        return Remittance(
+            remittance_type_id=1,
+            comment="",
+        )
 
     def get_success_url(self):
         return reverse_lazy('treasury:remittance_list')
@@ -225,6 +252,19 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
     template_name = "treasury/remittance_list.html"
     extra_context = {"title": _("Remittances list")}
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        sample_remittance = Remittance(
+            remittance_type_id=1,
+            comment="",
+        )
+        if not PermissionBackend.check_perm(self.request.user, "treasury.add_remittance", sample_remittance):
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -238,7 +278,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
 
         closed_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).reverse().all(),
+                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
             prefix="closed-remittances-",
         )
         closed_remittances.paginate(page=self.request.GET.get("closed-remittances-page", 1), per_page=10)
@@ -281,8 +321,6 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["table"] = RemittanceTable(data=Remittance.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
         data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
             PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
         context["special_transactions"] = SpecialTransactionTable(
@@ -344,6 +382,15 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
     table_class = SogeCreditTable
     extra_context = {"title": _("List of credits from the Société générale")}
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check that the user is authenticated
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        if not self.get_queryset().exists():
+            raise PermissionDenied(_("You are not able to see the treasury interface."))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self, **kwargs):
         """
         Filter the table with the given parameter.
@@ -353,18 +400,13 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
         qs = super().get_queryset()
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
-
-            if not pattern:
-                return qs.none()
-
-            qs = qs.filter(
-                Q(user__first_name__iregex=pattern)
-                | Q(user__last_name__iregex=pattern)
-                | Q(user__note__alias__name__iregex="^" + pattern)
-                | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-            )
-        else:
-            qs = qs.none()
+            if pattern:
+                qs = qs.filter(
+                    Q(user__first_name__iregex=pattern)
+                    | Q(user__last_name__iregex=pattern)
+                    | Q(user__note__alias__name__iregex="^" + pattern)
+                    | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                )
 
         if "valid" in self.request.GET:
             q = Q(credit_transaction=None)

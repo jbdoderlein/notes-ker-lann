@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n crispy_forms_tags %}
+{% block title %}{% trans "Sign up" %}{% endblock %}
+
+{% block content %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {% trans "Sign up" %}
+    </h3>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+            If you already signed up, your registration is taken into account. The BDE must validate
+            your account before your can log in. You have to go to the Kfet and pay the registration fee. You must also
+            validate your email address by following the link you received.
+            {% endblocktrans %}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {{ profile_form|crispy }}
+            <button class="btn btn-success" type="submit">
+                {% trans "Sign up" %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {{ title }}
+    </h3>
+    <div class="card-body">
+        {% crispy form %}
+    </div>
+</div>
+{% endblock %}

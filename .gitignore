@@ -39,7 +39,9 @@ secrets.py
 .env
 map.json
 *.log
-media/
+backups/
+/static/
+/media/
 
 # Virtualenv
 env/

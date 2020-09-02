@@ -119,10 +119,6 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
     list_display = ('created_at', 'poly_source', 'poly_destination',
                     'quantity', 'amount', 'valid')
     list_filter = ('valid',)
-    readonly_fields = (
-        'source',
-        'destination',
-    )
 
     def poly_source(self, obj):
         """
@@ -145,10 +141,7 @@ class TransactionAdmin(PolymorphicParentModelAdmin):
         Only valid can be edited after creation
         Else the amount of money would not be transferred
         """
-        if obj:  # user is editing an existing object
-            return 'created_at', 'source', 'destination', 'quantity', \
-                   'amount'
-        return []
+        return 'created_at', 'source', 'destination', 'quantity', 'amount' if obj else ()
 
 
 @admin.register(MembershipTransaction, site=admin_site)
@@ -157,6 +150,13 @@ class MembershipTransactionAdmin(PolymorphicChildModelAdmin):
     Admin customisation for MembershipTransaction
     """
 
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Only valid can be edited after creation
+        Else the amount of money would not be transferred
+        """
+        return ('created_at', 'source', 'destination', 'quantity', 'amount') if obj else ()
+
 
 @admin.register(RecurrentTransaction, site=admin_site)
 class RecurrentTransactionAdmin(PolymorphicChildModelAdmin):
@@ -164,12 +164,26 @@ class RecurrentTransactionAdmin(PolymorphicChildModelAdmin):
     Admin customisation for RecurrentTransaction
     """
 
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Only valid can be edited after creation
+        Else the amount of money would not be transferred
+        """
+        return ('created_at', 'source', 'destination', 'quantity', 'amount') if obj else ()
+
 
 @admin.register(SpecialTransaction, site=admin_site)
 class SpecialTransactionAdmin(PolymorphicChildModelAdmin):
     """
     Admin customisation for SpecialTransaction
     """
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Only valid can be edited after creation
+        Else the amount of money would not be transferred
+        """
+        return ('created_at', 'source', 'destination', 'quantity', 'amount') if obj else ()
 
 
 @admin.register(TransactionTemplate, site=admin_site)

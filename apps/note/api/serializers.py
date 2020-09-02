@@ -1,10 +1,16 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_polymorphic.serializers import PolymorphicSerializer
+from member.api.serializers import MembershipSerializer
+from member.models import Membership
 from note_kfet.middlewares import get_current_authenticated_user
 from permission.backends import PermissionBackend
+from rest_framework.utils import model_meta
 
 from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
@@ -20,7 +26,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = '__all__'
-        read_only_fields = [f.name for f in model._meta.get_fields()]  # Notes are read-only protected
+        read_only_fields = ('balance', 'last_negative', 'created_at', )  # Note balances are read-only protected
 
 
 class NoteClubSerializer(serializers.ModelSerializer):
@@ -33,7 +39,7 @@ class NoteClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteClub
         fields = '__all__'
-        read_only_fields = ('note', 'club', )
+        read_only_fields = ('note', 'club', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -49,7 +55,7 @@ class NoteSpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteSpecial
         fields = '__all__'
-        read_only_fields = ('note', )
+        read_only_fields = ('note', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -65,7 +71,7 @@ class NoteUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteUser
         fields = '__all__'
-        read_only_fields = ('note', 'user', )
+        read_only_fields = ('note', 'user', 'balance', 'last_negative', 'created_at', )
 
     def get_name(self, obj):
         return str(obj)
@@ -108,6 +114,8 @@ class ConsumerSerializer(serializers.ModelSerializer):
 
     email_confirmed = serializers.SerializerMethodField()
 
+    membership = serializers.SerializerMethodField()
+
     class Meta:
         model = Alias
         fields = '__all__'
@@ -117,14 +125,25 @@ class ConsumerSerializer(serializers.ModelSerializer):
         Display information about the associated note
         """
         # If the user has no right to see the note, then we only display the note identifier
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note):
-            return NotePolymorphicSerializer().to_representation(obj.note)
-        return dict(id=obj.note.id, name=str(obj.note))
+        return NotePolymorphicSerializer().to_representation(obj.note)\
+            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note)\
+            else dict(id=obj.note.id, name=str(obj.note))
 
     def get_email_confirmed(self, obj):
         if isinstance(obj.note, NoteUser):
             return obj.note.user.profile.email_confirmed
         return True
+
+    def get_membership(self, obj):
+        if isinstance(obj.note, NoteUser):
+            memberships = Membership.objects.filter(
+                PermissionBackend.filter_queryset(get_current_authenticated_user(), Membership, "view")).filter(
+                user=obj.note.user,
+                club=2,  # Kfet
+            ).order_by("-date_start")
+            if memberships.exists():
+                return MembershipSerializer().to_representation(memberships.first())
+        return None
 
 
 class TemplateCategorySerializer(serializers.ModelSerializer):
@@ -154,13 +173,24 @@ class TransactionSerializer(serializers.ModelSerializer):
     REST API Serializer for Transactions.
     The djangorestframework plugin will analyse the model `Transaction` and parse all fields in the API.
     """
+    def validate_source(self, value):
+        if not value.is_active:
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
+        return value
+
+    def validate_destination(self, value):
+        if not value.is_active:
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
+        return value
 
     class Meta:
         model = Transaction
         fields = '__all__'
 
 
-class RecurrentTransactionSerializer(serializers.ModelSerializer):
+class RecurrentTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Transactions.
     The djangorestframework plugin will analyse the model `RecurrentTransaction` and parse all fields in the API.
@@ -171,7 +201,7 @@ class RecurrentTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class MembershipTransactionSerializer(serializers.ModelSerializer):
+class MembershipTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Membership transactions.
     The djangorestframework plugin will analyse the model `MembershipTransaction` and parse all fields in the API.
@@ -182,7 +212,7 @@ class MembershipTransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SpecialTransactionSerializer(serializers.ModelSerializer):
+class SpecialTransactionSerializer(TransactionSerializer):
     """
     REST API Serializer for Special transactions.
     The djangorestframework plugin will analyse the model `SpecialTransaction` and parse all fields in the API.
@@ -202,12 +232,28 @@ class TransactionPolymorphicSerializer(PolymorphicSerializer):
         SpecialTransaction: SpecialTransactionSerializer,
     }
 
-    try:
+    if "activity" in settings.INSTALLED_APPS:
         from activity.models import GuestTransaction
         from activity.api.serializers import GuestTransactionSerializer
         model_serializer_mapping[GuestTransaction] = GuestTransactionSerializer
-    except ImportError:  # Activity app is not loaded
-        pass
+
+    def validate(self, attrs):
+        resource_type = attrs.pop(self.resource_type_field_name)
+        serializer = self._get_serializer_from_resource_type(resource_type)
+        if self.instance:
+            instance = self.instance
+            info = model_meta.get_field_info(instance)
+            for attr, value in attrs.items():
+                if attr in info.relations and info.relations[attr].to_many:
+                    field = getattr(instance, attr)
+                    field.set(value)
+                else:
+                    setattr(instance, attr, value)
+            instance.validate()
+        else:
+            serializer.Meta.model(**attrs).validate()
+        attrs[self.resource_type_field_name] = resource_type
+        return super().validate(attrs)
 
     class Meta:
         model = Transaction

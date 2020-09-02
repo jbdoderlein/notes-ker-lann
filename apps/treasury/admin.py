@@ -4,7 +4,8 @@
 from django.contrib import admin
 from note_kfet.admin import admin_site
 
-from .models import RemittanceType, Remittance, SogeCredit
+from .forms import ProductForm
+from .models import RemittanceType, Remittance, SogeCredit, Invoice, Product
 
 
 @admin.register(RemittanceType, site=admin_site)
@@ -39,3 +40,20 @@ class SogeCreditAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Don't create a credit manually
         return False
+
+
+class ProductInline(admin.StackedInline):
+    """
+    Inline product in invoice admin
+    """
+    model = Product
+    form = ProductForm
+
+
+@admin.register(Invoice, site=admin_site)
+class InvoiceAdmin(admin.ModelAdmin):
+    """
+    Admin customisation for Invoice
+    """
+    list_display = ('object', 'id', 'bde', 'name', 'date', 'acquitted',)
+    inlines = (ProductInline,)

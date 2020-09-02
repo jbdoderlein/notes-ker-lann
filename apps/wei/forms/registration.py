@@ -4,7 +4,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
+from note.models import NoteSpecial
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
 from ..models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
@@ -37,7 +39,9 @@ class WEIRegistrationForm(forms.ModelForm):
                     'placeholder': 'Nom ...',
                 },
             ),
-            "birth_date": DatePickerInput(),
+            "birth_date": DatePickerInput(options={'defaultDate': '2000-01-01',
+                                                   'minDate': '1900-01-01',
+                                                   'maxDate': '2100-01-01'}),
         }
 
 
@@ -47,6 +51,7 @@ class WEIChooseBusForm(forms.Form):
         label=_("bus"),
         help_text=_("This choice is not definitive. The WEI organizers are free to attribute for you a bus and a team,"
                     + " in particular if you are a free eletron."),
+        widget=CheckboxSelectMultiple(),
     )
 
     team = forms.ModelMultipleChoiceField(
@@ -54,17 +59,53 @@ class WEIChooseBusForm(forms.Form):
         label=_("Team"),
         required=False,
         help_text=_("Leave this field empty if you won't be in a team (staff, bus chief, free electron)"),
+        widget=CheckboxSelectMultiple(),
     )
 
     roles = forms.ModelMultipleChoiceField(
         queryset=WEIRole.objects.filter(~Q(name="1A")),
         label=_("WEI Roles"),
         help_text=_("Select the roles that you are interested in."),
+        initial=WEIRole.objects.filter(name="Adhérent WEI").all(),
+        widget=CheckboxSelectMultiple(),
     )
 
 
 class WEIMembershipForm(forms.ModelForm):
-    roles = forms.ModelMultipleChoiceField(queryset=WEIRole.objects, label=_("WEI Roles"))
+    roles = forms.ModelMultipleChoiceField(
+        queryset=WEIRole.objects,
+        label=_("WEI Roles"),
+        widget=CheckboxSelectMultiple(),
+    )
+
+    credit_type = forms.ModelChoiceField(
+        queryset=NoteSpecial.objects.all(),
+        label=_("Credit type"),
+        empty_label=_("No credit"),
+        required=False,
+    )
+
+    credit_amount = forms.IntegerField(
+        label=_("Credit amount"),
+        widget=AmountInput(),
+        initial=0,
+        required=False,
+    )
+
+    last_name = forms.CharField(
+        label=_("Last name"),
+        required=False,
+    )
+
+    first_name = forms.CharField(
+        label=_("First name"),
+        required=False,
+    )
+
+    bank = forms.CharField(
+        label=_("Bank"),
+        required=False,
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -88,7 +129,8 @@ class WEIMembershipForm(forms.ModelForm):
                 attrs={
                     'api_url': '/api/wei/team/',
                     'placeholder': 'Équipe ...',
-                }
+                },
+                resetable=True,
             ),
         }
 

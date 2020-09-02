@@ -17,6 +17,7 @@ class ProfileInline(admin.StackedInline):
     Inline user profile in user admin
     """
     model = Profile
+    form = ProfileForm
     can_delete = False
 
 
@@ -25,7 +26,6 @@ class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline,)
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
     list_select_related = ('profile',)
-    form = ProfileForm
 
     def get_inline_instances(self, request, obj=None):
         """

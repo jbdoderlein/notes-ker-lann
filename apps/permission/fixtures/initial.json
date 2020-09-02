@@ -61,14 +61,14 @@
 		"fields": {
 			"model": [
 				"note",
-				"noteuser"
+				"note"
 			],
 			"query": "{\"pk\": [\"user\", \"note\", \"pk\"]}",
 			"type": "view",
 			"mask": 1,
 			"field": "",
 			"permanent": true,
-			"description": "Vioir sa propre note d'utilisateur"
+			"description": "Voir sa propre note d'utilisateur"
 		}
 	},
 	{
@@ -287,7 +287,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, [\"OR\", {\"amount__lte\": [\"user\", \"note\", \"balance\"]}, {\"valid\": false}]]",
+			"query": "[\"AND\", {\"source\": [\"user\", \"note\"]}, [\"OR\", {\"source__balance__gte\": {\"F\": [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 1,
 			"field": "",
@@ -319,7 +319,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 2,
 			"field": "",
@@ -335,7 +335,7 @@
 				"note",
 				"recurrenttransaction"
 			],
-			"query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": false}]]",
+			"query": "[\"AND\", {\"destination\": [\"club\", \"note\"]}, [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}}, {\"valid\": false}]]",
 			"type": "add",
 			"mask": 2,
 			"field": "",
@@ -353,7 +353,7 @@
 			],
 			"query": "{\"pk\": [\"club\", \"pk\"]}",
 			"type": "view",
-			"mask": 3,
+			"mask": 1,
 			"field": "",
 			"permanent": false,
 			"description": "Voir les informations d'un club"
@@ -549,22 +549,6 @@
 			"field": "",
 			"permanent": false,
 			"description": "Voir toutes les activités valides"
-		}
-	},
-	{
-		"model": "permission.permission",
-		"pk": 35,
-		"fields": {
-			"model": [
-				"activity",
-				"activity"
-			],
-			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
-			"type": "change",
-			"mask": 1,
-			"field": "",
-			"permanent": false,
-			"description": "Modifier les activités non validées dont on est l'auteur"
 		}
 	},
 	{
@@ -868,7 +852,7 @@
 			"mask": 3,
 			"field": "",
 			"permanent": false,
-			"description": "Modifier n'import quel utilisateur"
+			"description": "Modifier n'importe quel utilisateur"
 		}
 	},
 	{
@@ -1572,7 +1556,7 @@
 			"mask": 1,
 			"field": "emergency_contact_phone",
 			"permanent": false,
-			"description": "Modifier le nom du contact en cas d'urgence de mon inscription WEI"
+			"description": "Modifier le téléphone du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
 	{
@@ -1983,7 +1967,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]]",
 			"type": "change",
 			"mask": 2,
 			"field": "valid",
@@ -2079,9 +2063,9 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"amount__lte\": {\"F\": [\"ADD\", [\"F\", \"source__balance\"], 5000]}}, {\"valid\": true}]]",
+			"query": "[\"AND\", [\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]]",
 			"type": "change",
-			"mask": 1,
+			"mask": 2,
 			"field": "invalidity_reason",
 			"permanent": false,
 			"description": "Modifier la raison d'invalidité d'une transaction de club"
@@ -2207,7 +2191,7 @@
 				"auth",
 				"user"
 			],
-			"query": "{\"memberships__club\": [\"club\"], \"memberships__date__start__lte\": [\"today\"], \"memberships__date__end__gte\": [\"today\"]}",
+			"query": "{\"memberships__club\": [\"club\"], \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
 			"type": "view",
 			"mask": 3,
 			"field": "",
@@ -2221,9 +2205,9 @@
 		"fields": {
 			"model": [
 				"note",
-				"noteclub"
+				"note"
 			],
-			"query": "{\"club\": [\"club\"]}",
+			"query": "{\"noteclub__club\": [\"club\"]}",
 			"type": "view",
 			"mask": 2,
 			"field": "",
@@ -2248,6 +2232,342 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 144,
+		"fields": {
+			"model": [
+				"wei",
+				"weiregistration"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"], \"wei__membership_start__lte\": [\"today\"], \"wei__membership_end__gte\": [\"today\"], \"first_year\": false, \"membership\": null}]",
+			"type": "change",
+			"mask": 1,
+			"field": "information_json",
+			"permanent": false,
+			"description": "Modifier mes préférences en terme de bus et d'équipe si mon inscription n'est pas validée et que je suis en 2A+"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 145,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les notes de club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 146,
+		"fields": {
+			"model": [
+				"member",
+				"membership"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir tous les adhérents du club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 147,
+		"fields": {
+			"model": [
+				"member",
+				"membership"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter un membre à n'importe quel club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 148,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "{\"valid\": false}",
+			"type": "change",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Modifier une activité non validée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 149,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "{\"valid\": false}",
+			"type": "delete",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une activité non validée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 150,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les notes"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 151,
+		"fields": {
+			"model": [
+				"treasury",
+				"invoice"
+			],
+			"query": "{}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une facture"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 152,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "name",
+			"permanent": false,
+			"description": "Modifier le nom d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 153,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "description",
+			"permanent": false,
+			"description": "Modifier la description d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 154,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "location",
+			"permanent": false,
+			"description": "Modifier le lieu d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 155,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "activity_type",
+			"permanent": false,
+			"description": "Modifier le type d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 156,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "organizer",
+			"permanent": false,
+			"description": "Modifier l'organisateur d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 157,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "attendees_club",
+			"permanent": false,
+			"description": "Modifier le club attendu d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 158,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "date_start",
+			"permanent": false,
+			"description": "Modifier la date de début d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 159,
+		"fields": {
+			"model": [
+				"activity",
+				"activity"
+			],
+			"query": "[\"AND\", {\"valid\": false}, {\"creater\": [\"user\"]}]",
+			"type": "change",
+			"mask": 1,
+			"field": "date_end",
+			"permanent": false,
+			"description": "Modifier la date de fin d'une activité non validée dont on est l'auteur"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 160,
+		"fields": {
+			"model": [
+				"activity",
+				"guest"
+			],
+			"query": "{\"inviter\": [\"user\", \"note\"], \"entry\": null}",
+			"type": "delete",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer ses propres invitations non validées à une activité"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 161,
+		"fields": {
+			"model": [
+				"note",
+				"noteuser"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "is_active",
+			"permanent": true,
+			"description": "(Dé)bloquer sa propre note manuellement"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 162,
+		"fields": {
+			"model": [
+				"note",
+				"noteuser"
+			],
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"type": "change",
+			"mask": 1,
+			"field": "inactivity_reason",
+			"permanent": true,
+			"description": "(Dé)bloquer sa propre note et indiquer que cela a été fait manuellement"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 163,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "is_active",
+			"permanent": false,
+			"description": "(Dé)bloquer n'importe quelle note, y compris en mode forcé"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 164,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "inactivity_reason",
+			"permanent": false,
+			"description": "(Dé)bloquer sa propre note et modifier la raison"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2266,9 +2586,12 @@
 				11,
 				12,
 				13,
+				22,
 				48,
 				52,
-				126
+				126,
+				161,
+				162
 			]
 		}
 	},
@@ -2279,20 +2602,21 @@
 			"for_club": 2,
 			"name": "Adh\u00e9rent Kfet",
 			"permissions": [
-				34,
-				35,
-				36,
 				6,
-				39,
-				40,
-				70,
 				14,
 				15,
 				16,
 				17,
+				22,
+				34,
+				36,
+				39,
+				40,
+				70,
 				78,
 				79,
 				83,
+				87,
 				90,
 				93,
 				95,
@@ -2300,7 +2624,19 @@
 				99,
 				101,
 				108,
-				109
+				109,
+				129,
+				131,
+				144,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160
 			]
 		}
 	},
@@ -2310,7 +2646,9 @@
 		"fields": {
 			"for_club": null,
 			"name": "Membre de club",
-			"permissions": []
+			"permissions": [
+				22
+			]
 		}
 	},
 	{
@@ -2320,11 +2658,10 @@
 			"for_club": null,
 			"name": "Bureau de club",
 			"permissions": [
-				22,
 				47,
 				49,
 				50,
-				140
+				141
 			]
 		}
 	},
@@ -2420,7 +2757,13 @@
 				137,
 				138,
 				139,
-				143
+				143,
+				146,
+				147,
+				150,
+				151,
+				163,
+				164
 			]
 		}
 	},
@@ -2464,7 +2807,6 @@
 				32,
 				33,
 				34,
-				35,
 				36,
 				37,
 				38,
@@ -2569,7 +2911,28 @@
 				140,
 				141,
 				142,
-				143
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
+				163,
+				164
 			]
 		}
 	},
@@ -2587,8 +2950,6 @@
 				55,
 				57,
 				52,
-				53,
-				54,
 				23,
 				24,
 				25,
@@ -2616,7 +2977,9 @@
 				43,
 				44,
 				45,
-				46
+				46,
+				148,
+				149
 			]
 		}
 	},
@@ -2627,6 +2990,7 @@
 			"for_club": null,
 			"name": "GC WEI",
 			"permissions": [
+				22,
 				76,
 				85,
 				86,
@@ -2660,6 +3024,7 @@
 			"for_club": null,
 			"name": "Chef de bus",
 			"permissions": [
+				22,
 				84,
 				117,
 				118,
@@ -2677,6 +3042,7 @@
 			"for_club": null,
 			"name": "Chef d'\u00e9quipe",
 			"permissions": [
+				22,
 				84,
 				116,
 				123,
@@ -2692,6 +3058,7 @@
 			"for_club": null,
 			"name": "\u00c9lectron libre",
 			"permissions": [
+				22,
 				84
 			]
 		}
@@ -2703,6 +3070,7 @@
 			"for_club": null,
 			"name": "\u00c9lectron libre (avec perm)",
 			"permissions": [
+				22,
 				84
 			]
 		}
@@ -2736,6 +3104,31 @@
 				114,
 				128,
 				130
+			]
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 19,
+		"fields": {
+			"for_club": 1,
+			"name": "Secrétaire BDE",
+			"permissions": [
+				54,
+				55,
+				56,
+				57,
+				58,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				145,
+				146,
+				147,
+				150
 			]
 		}
 	},

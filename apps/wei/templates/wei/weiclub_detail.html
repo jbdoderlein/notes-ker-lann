@@ -1,0 +1,118 @@
+{% extends "wei/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load render_table from django_tables2 %}
+{% load i18n perms %}
+
+{% block profile_content %}
+<div class="card bg-white mb-3">
+    <div class="card-header text-center">
+        <h4>Week-End d'Intégration</h4>
+    </div>
+    <div class="card-body">
+        <p class="lead font-italic">
+            Le WEI (Week-End d’Intégration), ou 3 jours d’immersion dans les profondeurs du
+            monde post-préparatoire.
+        </p>
+        <p>
+            Que serait une école sans son week-end d’intégration ? Quelques semaines après la
+            rentrée, on embarque tous et toutes à bord de bus à thèmes pour quelques jours
+            inoubliables dans une destination inconnue. L’objectif de ce week-end : permettre aux
+            nouvel·les arrivant·es de se lâcher après 2 ans de dur labeur (voire 3 pour les plus
+            chanceux), de découvrir l’ambiance familiale de l’ENS ainsi que de nouer des liens avec
+            ceux·elles qu’ils côtoieront par la suite. Dose de chants et de fun garantie !
+        </p>
+    </div>
+    {% if club.is_current_wei %}
+    <div class="card-footer text-center">
+        {% if not my_registration %}
+        {% if not not_first_year %}
+        <a class="btn btn-success" href="{% url "wei:wei_register_1A_myself" wei_pk=club.pk %}" data-turbolinks="false">
+            {% trans "Register to the WEI! – 1A" %}
+        </a>
+        {% endif %}
+        <a class="btn btn-success" href="{% url "wei:wei_register_2A_myself" wei_pk=club.pk %}" data-turbolinks="false">
+            {% trans "Register to the WEI! – 2A+" %}</a>
+        {% else %}
+        <a class="btn btn-warning" href="{% url "wei:wei_update_registration" pk=my_registration.pk %}"
+            data-turbolinks="false">
+            {% trans "Update my registration" %}
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% if buses.data %}
+<div class="card bg-white mb-3">
+    <div class="card-header position-relative" id="clubListHeading">
+        <span class="font-weight-bold">
+            <i class="fa fa-bus"></i> {% trans "Buses" %}
+        </span>
+    </div>
+    {% render_table buses %}
+</div>
+{% endif %}
+
+{% if member_list.data %}
+<div class="card bg-white mb-3">
+    <div class="card-header position-relative" id="clubListHeading">
+        <a class="stretched-link font-weight-bold text-decoration-none"
+            href="{% url "wei:wei_memberships" pk=club.pk %}">
+            <i class="fa fa-users"></i> {% trans "Members of the WEI" %}
+        </a>
+    </div>
+    {% render_table member_list %}
+</div>
+{% endif %}
+
+{% if history_list.data %}
+<div class="card bg-white mb-3">
+    <div class="card-header position-relative" id="historyListHeading">
+        <a class="stretched-link font-weight-bold text-decoration-none" {% if "note.view_note"|has_perm:club.note %}
+            href="{% url 'note:transactions' pk=club.note.pk %}" {% endif %}>
+            <i class="fa fa-euro"></i> {% trans "Transaction history" %}
+        </a>
+    </div>
+    <div id="history_list">
+        {% render_table history_list %}
+    </div>
+</div>
+{% endif %}
+
+{% if pre_registrations.data %}
+<div class="card bg-white mb-3">
+    <div class="card-header position-relative" id="historyListHeading">
+        <a class="stretched-link font-weight-bold text-decoration-none"
+            href="{% url 'wei:wei_registrations' pk=club.pk %}">
+            <i class="fa fa-user-plus"></i> {% trans "Unvalidated registrations" %}
+        </a>
+    </div>
+    <div id="history_list">
+        {% render_table pre_registrations %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extrajavascript %}
+<script>
+    function refreshHistory() {
+        $("#history_list").load("{% url 'wei:wei_detail' pk=object.pk %} #history_list");
+        $("#profile_infos").load("{% url 'wei:wei_detail' pk=object.pk %} #profile_infos");
+    }
+
+    $(document).ready(function () {
+        $(".no-perm").parent().addClass("d-none");
+        if ($("a[data-type='validate-membership']:not(.d-none)").length === 0) {
+            $("a[data-type='validate-membership']").parent().addClass("d-none");
+            $("#validate-membership-header").addClass("d-none");
+        }
+        if ($("a[data-type='delete-membership']:not(.d-none)").length === 0) {
+            $("a[data-type='delete-membership']").parent().addClass("d-none");
+            $("#delete-membership-header").addClass("d-none");
+        }
+    });
+</script>
+{% endblock %}

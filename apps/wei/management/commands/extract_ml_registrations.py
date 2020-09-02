@@ -21,6 +21,13 @@ class Command(BaseCommand):
                             help='Select the year of the concerned WEI. Default: last year')
 
     def handle(self, *args, **options):
+        ###########################################################
+        #                         WARNING                         #
+        ###########################################################
+        #
+        # This code is obsolete.
+        # TODO: Improve the mailing list extraction system, and link it automatically with Mailman.
+
         if options["type"] == "members":
             for membership in Membership.objects.filter(
                 club__name="BDE",

@@ -7,4 +7,7 @@ OPTIONAL_APPS = [
 #    'debug_toolbar'
 ]
 
-ADMINS = [('Note Kfet', 'notekfet@example.com')]
+# When a server error occured, send an email to these addresses
+ADMINS = (
+    ('Note Kfet', 'notekfet@example.com'),
+)

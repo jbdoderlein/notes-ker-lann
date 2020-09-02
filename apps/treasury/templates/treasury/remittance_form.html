@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n %}
+{% load crispy_forms_tags pretty_money %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Remittance #" %}{{ object.pk }}
+    </h3>
+    <div class="card-body">
+        {% if object.pk %}
+        <div id="div_id_type">
+            <label for="id_count" class="col-form-label">{% trans "Count" %}</label>
+            <input type="text" name="count" value="{{ object.count }}" class="textinput textInput form-control"
+                id="id_count" disabled>
+        </div>
+
+        <div id="div_id_type">
+            <label for="id_amount" class="col-form-label">{% trans "Amount" %}</label>
+            <input class="textinput textInput form-control" type="text" value="{{ object.amount|pretty_money }}"
+                id="id_amount" disabled>
+        </div>
+        {% endif %}
+
+        {% crispy form %}
+    </div>
+</div>
+
+<div class="card bg-white mb-3">
+    <h3 class="card-header text-center">
+        {% trans "Linked transactions" %}
+    </h3>
+    {% if special_transactions.data %}
+    {% render_table special_transactions %}
+    {% else %}
+    <div class="card-body">
+        <div class="alert alert-warning">
+            {% trans "There is no transaction linked with this remittance." %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

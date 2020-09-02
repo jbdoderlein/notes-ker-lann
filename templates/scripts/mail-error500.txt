@@ -1,7 +1,0 @@
-Une erreur est survenue dans la Note Kfet. Les détails sont ci-dessous.
-
-Cordialement,
-
-L'équipe de la Note Kfet.
-
-{{ error }}

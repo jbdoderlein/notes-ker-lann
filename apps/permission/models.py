@@ -4,12 +4,14 @@
 import functools
 import json
 import operator
-from time import sleep
+from copy import copy
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.core.mail import mail_admins
+from django.db import models, transaction
 from django.db.models import F, Q, Model
+from django.forms import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
 
@@ -38,36 +40,31 @@ class InstancedPermission:
             if permission_type == self.type:
                 self.update_query()
 
-                # Don't increase indexes, if the primary key is an AutoField
-                if not hasattr(obj, "pk") or not obj.pk:
-                    obj.pk = 0
-                    oldpk = None
-                else:
-                    oldpk = obj.pk
-                # Ensure previous models are deleted
-                count = 0
-                while count < 1000:
-                    if self.model.model_class().objects.filter(pk=obj.pk).exists():
-                        # If the object exists, that means that one permission is currently checked.
-                        # We wait before the other permission, at most 1 second.
-                        sleep(1)
-                        continue
-                    break
-                for o in self.model.model_class().objects.filter(pk=obj.pk).all():
-                    o._force_delete = True
-                    Model.delete(o)
-                # Force insertion, no data verification, no trigger
-                obj._force_save = True
-                Model.save(obj, force_insert=True)
-                # We don't want log anything
-                obj._no_log = True
-                ret = self.model.model_class().objects.filter(self.query & Q(pk=obj.pk)).exists()
-                # Delete testing object
-                obj._force_delete = True
-                Model.delete(obj)
+                obj = copy(obj)
+                obj.pk = 0
+                with transaction.atomic():
+                    for o in self.model.model_class().objects.filter(pk=0).all():
+                        o._force_delete = True
+                        Model.delete(o)
+                        # An object with pk 0 wouldn't deleted. That's not normal, we alert admins.
+                        msg = "Lors de la vérification d'une permission d'ajout, un objet de clé primaire nulle était "\
+                              "encore présent.\n"\
+                              "Type de permission : " + self.type + "\n"\
+                              "Modèle : " + str(self.model) + "\n"\
+                              "Objet trouvé : " + str(model_to_dict(o)) + "\n\n"\
+                              "--\nLe BDE"
+                        mail_admins("[Note Kfet] Un objet a été supprimé de force", msg)
 
-                # If the primary key was specified, we restore it
-                obj.pk = oldpk
+                    # Force insertion, no data verification, no trigger
+                    obj._force_save = True
+                    # We don't want log anything
+                    obj._no_log = True
+                    Model.save(obj, force_insert=True)
+                    ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
+                    # Delete testing object
+                    obj._force_delete = True
+                    Model.delete(obj)
+
                 return ret
 
         if permission_type == self.type:

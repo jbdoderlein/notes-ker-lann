@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-2.0-or-later
+{% endcomment %}
+{% load i18n crispy_forms_tags static %}
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "registration/css/login.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="card bg-light mx-auto" style="max-width: 30rem;">
+    <h3 class="card-header text-center">
+        {% trans "Log in" %}
+    </h3>
+    <div class="card-body">
+        {% if user.is_authenticated %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed with username=request.user.username %}
+            You are authenticated as {{ username }}, but are not authorized to
+            access this page. Would you like to login to a different account,
+            or with a higher permission mask?
+            {% endblocktrans %}
+        </div>
+        {% endif %}
+
+        {% if request.resolver_match.view_name == 'admin:login' %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+            You must be logged with a staff account with the higher mask to access Django Admin.
+            {% endblocktrans %}
+        </div>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+            {{ form | crispy }}
+            <input type="submit" value="{% trans 'Log in' %}" class="btn btn-primary btn-block btn-lg">
+            <a href="{% url 'password_reset' %}"
+                class="badge badge-light">{% trans 'Forgotten your password or username?' %}</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

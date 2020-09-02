@@ -1,21 +1,47 @@
 ---
-- name: Install basic APT packages
+- name: Add buster-backports to apt sources
+  apt_repository:
+    repo: deb http://{{ mirror }}/debian buster-backports main
+    state: present
+
+- name: Install note_kfet APT dependencies
   apt:
     update_cache: true
+    default_release: buster-backports
     name:
-      - nginx
-      - python3
-      - python3-pip
-      - python3-dev
-      - uwsgi
-      - uwsgi-plugin-python3
-      - python3-venv
-      - git
-      - acl
+      # Common tools
       - gettext
-      - texlive-latex-extra
+      - git
+      - ipython3
+
+      # Front-end dependencies
+      - fonts-font-awesome
+      - libjs-bootstrap4
+
+      # Python dependencies
+      - python3-babel
+      - python3-django
+      - python3-django-cas-server
+      - python3-django-crispy-forms
+      - python3-django-extensions
+      - python3-django-filters
+      - python3-django-polymorphic
+      - python3-djangorestframework
+      - python3-lockfile
+      - python3-phonenumbers
+      - python3-pil
+      - python3-pip
+      - python3-psycopg2
+      - python3-venv
+
+      # LaTeX (PDF generation)
       - texlive-fonts-extra
       - texlive-lang-french
+      - texlive-latex-extra
+
+      # WSGI server
+      - uwsgi
+      - uwsgi-plugin-python3
   register: pkg_result
   retries: 3
   until: pkg_result is succeeded

@@ -1,0 +1,30 @@
+{% extends "member/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load static django_tables2 i18n %}
+
+{% block profile_content %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {% trans "Note aliases" %}
+    </h3>
+    <div class="card-body">
+        {% if can_create %}
+            <form class="input-group" method="POST" id="form_alias">
+                {% csrf_token %}
+                <input type="hidden" name="note" value="{{ object.note.pk }}">
+                <input type="text" name="name" class="form-control">
+                <div class="input-group-append">
+                    <input type="submit" class="btn btn-success" value="{% trans "Add" %}">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    {% render_table aliases %}
+</div>
+{% endblock %}
+
+{% block extrajavascript %}
+<script src="{% static "member/js/alias.js" %}"></script>
+{% endblock%}

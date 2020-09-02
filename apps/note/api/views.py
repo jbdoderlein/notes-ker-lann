@@ -9,6 +9,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
+from note_kfet.middlewares import get_current_session
+from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
@@ -16,7 +18,7 @@ from ..models.notes import Note, Alias
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
-class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
+class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
@@ -34,15 +36,16 @@ class NotePolymorphicViewSet(ReadOnlyProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
-            Q(alias__name__regex="^" + alias)
-            | Q(alias__normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(alias__normalized_name__regex="^" + alias.lower()))
+            Q(alias__name__iregex="^" + alias)
+            | Q(alias__normalized_name__iregex="^" + Alias.normalize(alias))
+            | Q(alias__normalized_name__iregex="^" + alias.lower())
+        )
 
-        return queryset.distinct()
+        return queryset.order_by("id")
 
 
 class AliasViewSet(ReadProtectedModelViewSet):
@@ -69,7 +72,6 @@ class AliasViewSet(ReadProtectedModelViewSet):
         try:
             self.perform_destroy(instance)
         except ValidationError as e:
-            print(e)
             return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -79,15 +81,26 @@ class AliasViewSet(ReadProtectedModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
 
-        alias = self.request.query_params.get("alias", ".*")
-        queryset = queryset.filter(
-            Q(name__regex="^" + alias)
-            | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower()))
+        alias = self.request.query_params.get("alias", None)
+        if alias:
+            queryset = queryset.filter(
+                name__iregex="^" + alias
+            ).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + alias.lower())
+                    & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True)
 
-        return queryset
+        return queryset.order_by("name")
 
 
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
@@ -106,13 +119,25 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = super().get_queryset()
 
         alias = self.request.query_params.get("alias", ".*")
+        queryset = queryset.prefetch_related('note')
+        # We match first an alias if it is matched without normalization,
+        # then if the normalized pattern matches a normalized alias.
         queryset = queryset.filter(
-            Q(name__regex="^" + alias)
-            | Q(normalized_name__regex="^" + Alias.normalize(alias))
-            | Q(normalized_name__regex="^" + alias.lower()))\
-            .order_by('name').prefetch_related('note')
+            name__iregex="^" + alias
+        ).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True).union(
+            queryset.filter(
+                Q(normalized_name__iregex="^" + alias.lower())
+                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                & ~Q(name__iregex="^" + alias)
+            ),
+            all=True)
 
-        return queryset
+        return queryset.order_by('name').distinct()
 
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):
@@ -121,7 +146,7 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/category/
     """
-    queryset = TemplateCategory.objects.all()
+    queryset = TemplateCategory.objects.order_by("name").all()
     serializer_class = TemplateCategorySerializer
     filter_backends = [SearchFilter]
     search_fields = ['$name', ]
@@ -133,7 +158,7 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/template/
     """
-    queryset = TransactionTemplate.objects.all()
+    queryset = TransactionTemplate.objects.order_by("name").all()
     serializer_class = TransactionTemplateSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     filterset_fields = ['name', 'amount', 'display', 'category', ]
@@ -146,7 +171,13 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Transaction` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/transaction/
     """
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$reason', ]
+
+    def get_queryset(self):
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))\
+            .order_by("created_at", "id")

@@ -1,14 +1,17 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from datetime import timedelta, datetime
 
+from datetime import timedelta
+from threading import Thread
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
 from note.models import NoteUser, Transaction
+from rest_framework.exceptions import ValidationError
 
 
 class ActivityType(models.Model):
@@ -24,11 +27,21 @@ class ActivityType(models.Model):
         verbose_name=_('name'),
         max_length=255,
     )
+
+    manage_entries = models.BooleanField(
+        verbose_name=_('manage entries'),
+        help_text=_('Enable the support of entries for this activity.'),
+        default=False,
+    )
+
     can_invite = models.BooleanField(
         verbose_name=_('can invite'),
+        default=False,
     )
+
     guest_entry_fee = models.PositiveIntegerField(
         verbose_name=_('guest entry fee'),
+        default=0,
     )
 
     class Meta:
@@ -54,6 +67,14 @@ class Activity(models.Model):
         verbose_name=_('description'),
     )
 
+    location = models.CharField(
+        verbose_name=_('location'),
+        max_length=255,
+        blank=True,
+        default="",
+        help_text=_("Place where the activity is organized, eg. Kfet."),
+    )
+
     activity_type = models.ForeignKey(
         ActivityType,
         on_delete=models.PROTECT,
@@ -72,6 +93,7 @@ class Activity(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('organizer'),
+        help_text=_("Club that organizes the activity. The entry fees will go to this club."),
     )
 
     attendees_club = models.ForeignKey(
@@ -79,6 +101,7 @@ class Activity(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('attendees club'),
+        help_text=_("Club that is authorized to join the activity. Mostly the Kfet club."),
     )
 
     date_start = models.DateTimeField(
@@ -99,12 +122,29 @@ class Activity(models.Model):
         verbose_name=_('open'),
     )
 
+    def save(self, *args, **kwargs):
+        """
+        Update the activity wiki page each time the activity is updated (validation, change description, ...)
+        """
+        if self.date_end < self.date_start:
+            raise ValidationError(_("The end date must be after the start date."))
+
+        ret = super().save(*args, **kwargs)
+        if settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
+            def refresh_activities():
+                from scripts.management.commands.refresh_activities import Command as RefreshActivitiesCommand
+                RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name)
+                RefreshActivitiesCommand.refresh_raw_wiki_page("Modification de l'activité " + self.name)
+            Thread(daemon=True, target=refresh_activities).start()
+        return ret
+
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = _("activity")
         verbose_name_plural = _("activities")
+        unique_together = ("name", "date_start", "date_end",)
 
 
 class Entry(models.Model):
@@ -213,18 +253,18 @@ class Guest(models.Model):
         one_year = timedelta(days=365)
 
         if not force_insert:
-            if self.activity.date_start > datetime.now():
+            if timezone.now() > timezone.localtime(self.activity.date_start):
                 raise ValidationError(_("You can't invite someone once the activity is started."))
 
             if not self.activity.valid:
                 raise ValidationError(_("This activity is not validated yet."))
 
             qs = Guest.objects.filter(
-                first_name=self.first_name,
-                last_name=self.last_name,
+                first_name__iexact=self.first_name,
+                last_name__iexact=self.last_name,
                 activity__date_start__gte=self.activity.date_start - one_year,
             )
-            if len(qs) >= 5:
+            if qs.filter(entry__isnull=False).count() >= 5:
                 raise ValidationError(_("This person has been already invited 5 times this year."))
 
             qs = qs.filter(activity=self.activity)
@@ -232,7 +272,7 @@ class Guest(models.Model):
                 raise ValidationError(_("This person is already invited."))
 
             qs = Guest.objects.filter(inviter=self.inviter, activity=self.activity)
-            if len(qs) >= 3:
+            if qs.count() >= 3:
                 raise ValidationError(_("You can't invite more than 3 people to this activity."))
 
         return super().save(force_insert, force_update, using, update_fields)

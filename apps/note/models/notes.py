@@ -4,9 +4,12 @@
 import unicodedata
 
 from django.conf import settings
+from django.conf.global_settings import DEFAULT_FROM_EMAIL
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
@@ -24,24 +27,20 @@ class Note(PolymorphicModel):
     A Note can be searched find throught an :model:`note.Alias`
 
     """
-    balance = models.IntegerField(
+
+    balance = models.BigIntegerField(
         verbose_name=_('account balance'),
         help_text=_('in centimes, money credited for this instance'),
         default=0,
     )
+
     last_negative = models.DateTimeField(
         verbose_name=_('last negative date'),
         help_text=_('last time the balance was negative'),
         null=True,
         blank=True,
     )
-    is_active = models.BooleanField(
-        _('active'),
-        default=True,
-        help_text=_(
-            'Designates whether this note should be treated as active. '
-            'Unselect this instead of deleting notes.'),
-    )
+
     display_image = models.ImageField(
         verbose_name=_('display image'),
         max_length=255,
@@ -50,9 +49,29 @@ class Note(PolymorphicModel):
         upload_to='pic/',
         default='pic/default.png'
     )
+
     created_at = models.DateTimeField(
         verbose_name=_('created at'),
         default=timezone.now,
+    )
+
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this note should be treated as active. '
+            'Unselect this instead of deleting notes.'),
+    )
+
+    inactivity_reason = models.CharField(
+        max_length=255,
+        choices=[
+            ('manual', _("The user blocked his/her note manually, eg. when he/she left the school for holidays. "
+                         "It can be reactivated at any time.")),
+            ('forced', _("The note is blocked by the the BDE and can't be manually reactivated.")),
+        ],
+        null=True,
+        default=None,
     )
 
     class Meta:
@@ -67,26 +86,27 @@ class Note(PolymorphicModel):
 
     pretty.short_description = _('Note')
 
+    @property
+    def last_negative_duration(self):
+        if self.balance >= 0 or self.last_negative is None:
+            return None
+        delta = timezone.now() - self.last_negative
+        return "{:d} jours".format(delta.days)
+
     def save(self, *args, **kwargs):
         """
         Save note with it's alias (called in polymorphic children)
         """
-        aliases = Alias.objects.filter(name=str(self))
-        if aliases.exists():
-            # Alias exists, so check if it is linked to this note
-            if aliases.first().note != self:
-                raise ValidationError(_('This alias is already taken.'),
-                                      code="same_alias")
+        # Check that we can save the alias
+        self.clean()
 
-            # Save note
-            super().save(*args, **kwargs)
-        else:
-            # Alias does not exist yet, so check if it can exist
+        super().save(*args, **kwargs)
+
+        if not Alias.objects.filter(name=str(self)).exists():
             a = Alias(name=str(self))
             a.clean()
 
-            # Save note and alias
-            super().save(*args, **kwargs)
+            # Save alias
             a.note = self
             a.save(force_insert=True)
 
@@ -128,6 +148,25 @@ class NoteUser(Note):
     def pretty(self):
         return _("%(user)s's note") % {'user': str(self.user)}
 
+    def save(self, *args, **kwargs):
+        if self.pk and self.balance < 0:
+            old_note = NoteUser.objects.get(pk=self.pk)
+            super().save(*args, **kwargs)
+            if old_note.balance >= 0:
+                # Passage en négatif
+                self.last_negative = timezone.now()
+                self._force_save = True
+                self.save(*args, **kwargs)
+                self.send_mail_negative_balance()
+        else:
+            super().save(*args, **kwargs)
+
+    def send_mail_negative_balance(self):
+        plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
+        html = render_to_string("note/mails/negative_balance.html", dict(note=self))
+        self.user.email_user("[Note Kfet] Passage en négatif (compte n°{:d})"
+                             .format(self.user.pk), plain_text, html_message=html)
+
 
 class NoteClub(Note):
     """
@@ -149,6 +188,25 @@ class NoteClub(Note):
 
     def pretty(self):
         return _("Note of %(club)s club") % {'club': str(self.club)}
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.balance < 0:
+            old_note = NoteClub.objects.get(pk=self.pk)
+            super().save(*args, **kwargs)
+            if old_note.balance >= 0:
+                # Passage en négatif
+                self.last_negative = timezone.now()
+                self._force_save = True
+                self.save(*args, **kwargs)
+                self.send_mail_negative_balance()
+        else:
+            super().save(*args, **kwargs)
+
+    def send_mail_negative_balance(self):
+        plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
+        html = render_to_string("note/mails/negative_balance.html", dict(note=self))
+        send_mail("[Note Kfet] Passage en négatif (club {})".format(self.club.name), plain_text, DEFAULT_FROM_EMAIL,
+                  [self.club.email], html_message=html)
 
 
 class NoteSpecial(Note):
@@ -199,7 +257,7 @@ class Alias(models.Model):
     normalized_name = models.CharField(
         max_length=255,
         unique=True,
-        default='',
+        blank=False,
         editable=False,
     )
     note = models.ForeignKey(
@@ -221,18 +279,21 @@ class Alias(models.Model):
     @staticmethod
     def normalize(string):
         """
-        Normalizes a string: removes most diacritics and does casefolding
+        Normalizes a string: removes most diacritics, does casefolding and ignore non-ASCII characters
         """
         return ''.join(
-            char for char in unicodedata.normalize('NFKD', string.casefold())
+            char for char in unicodedata.normalize('NFKD', string.casefold().replace('æ', 'ae').replace('œ', 'oe'))
             if all(not unicodedata.category(char).startswith(cat)
-                   for cat in {'M', 'P', 'Z', 'C'})).casefold()
+                   for cat in {'M', 'Pc', 'Pe', 'Pf', 'Pi', 'Po', 'Ps', 'Z', 'C'}))\
+            .casefold().encode('ascii', 'ignore').decode('ascii')
 
     def clean(self):
         normalized_name = self.normalize(self.name)
         if len(normalized_name) >= 255:
             raise ValidationError(_('Alias is too long.'),
                                   code='alias_too_long')
+        if not normalized_name:
+            raise ValidationError(_('This alias contains only complex character. Please use a more simple alias.'))
         try:
             sim_alias = Alias.objects.get(normalized_name=normalized_name)
             if self != sim_alias:
@@ -244,7 +305,7 @@ class Alias(models.Model):
         self.normalized_name = normalized_name
 
     def save(self, *args, **kwargs):
-        self.normalized_name = self.normalize(self.name)
+        self.clean()
         super().save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):

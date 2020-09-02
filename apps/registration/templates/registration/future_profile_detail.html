@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load i18n crispy_forms_tags perms %}
+
+{% block content %}
+    <div class="row mt-4">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-light shadow">
+                <div class="card-header text-center" >
+                    <h4> {% trans "Account #" %}  {{ object.pk }}</h4>
+                </div>
+                <div class="card-body" id="profile_infos">
+                    <dl class="row">
+                        <dt class="col-xl-6">{% trans 'name'|capfirst %}, {% trans 'first name' %}</dt>
+                        <dd class="col-xl-6">{{ object.last_name }} {{ object.first_name }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'username'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ object.username }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'email'|capfirst %}</dt>
+                        <dd class="col-xl-6"><a href="mailto:{{ object.email }}">{{ object.email }}</a></dd>
+
+                        {% if not object.profile.email_confirmed and "member.change_profile_email_confirmed"|has_perm:object.profile %}
+                            <dd class="col-xl-12">
+                                <div class="alert alert-warning">
+                                    {% trans "This user doesn't have confirmed his/her e-mail address." %}
+                                    <a href="{% url "registration:email_validation_resend" pk=object.pk %}">{% trans "Click here to resend a validation link." %}</a>
+                                </div>
+                            </dd>
+                        {% endif %}
+
+                        <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ object.profile.section }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ object.profile.address }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'phone number'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ object.profile.phone_number }}</dd>
+
+                        <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
+                        <dd class="col-xl-6">{{ object.profile.paid|yesno }}</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary btn-sm" href="{% url 'member:user_update_profile' object.pk %}">{% trans 'Update Profile' %}</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'registration:future_user_invalidate' object.pk %}">{% trans 'Delete registration' %}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card bg-light shadow">
+                <form method="post">
+                    <div class="card-header text-center" >
+                        <h4> {% trans "Validate account" %}</h4>
+                    </div>
+                    <div class="card-body" id="profile_infos">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-success btn-sm">{% trans 'Validate registration' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        soge_field = $("#id_soge");
+
+        function fillFields() {
+            let checked = soge_field.is(':checked');
+            if (!checked) {
+                $("input").attr('disabled', false);
+                $("select").attr('disabled', false);
+                return;
+            }
+
+            let credit_type = $("#id_credit_type");
+            credit_type.attr('disabled', true);
+            credit_type.val(4);
+
+            let credit_amount = $("#id_credit_amount");
+            credit_amount.attr('disabled', true);
+            credit_amount.val('{{ total_fee }}');
+
+            let bank = $("#id_bank");
+            bank.attr('disabled', true);
+            bank.val('Société générale');
+
+            let join_BDE = $("#id_join_BDE");
+            join_BDE.attr('disabled', true);
+            join_BDE.attr('checked', 'checked');
+
+            let join_Kfet = $("#id_join_Kfet");
+            join_Kfet.attr('disabled', true);
+            join_Kfet.attr('checked', 'checked');
+        }
+
+        soge_field.change(fillFields);
+
+        {% if object.profile.soge %}
+            soge_field.attr('checked', true);
+            fillFields();
+        {% endif %}
+    </script>
+{% endblock %}

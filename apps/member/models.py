@@ -8,11 +8,15 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.template import loader
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+from permission.models import Role
 from registration.tokens import email_validation_token
 from note.models import MembershipTransaction
 
@@ -30,7 +34,7 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
     )
 
-    phone_number = models.CharField(
+    phone_number = PhoneNumberField(
         verbose_name=_('phone number'),
         max_length=50,
         blank=True,
@@ -68,7 +72,7 @@ class Profile(models.Model):
         ]
     )
 
-    promotion = models.PositiveIntegerField(
+    promotion = models.PositiveSmallIntegerField(
         null=True,
         default=datetime.date.today().year,
         verbose_name=_("promotion"),
@@ -86,6 +90,39 @@ class Profile(models.Model):
         verbose_name=_("paid"),
         help_text=_("Tells if the user receive a salary."),
         default=False,
+    )
+
+    ml_events_registration = models.CharField(
+        blank=True,
+        null=True,
+        default=None,
+        max_length=2,
+        choices=[
+            (None, _("No")),
+            ('fr', _("Yes (receive them in french)")),
+            ('en', _("Yes (receive them in english)")),
+        ],
+        verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
+    )
+
+    ml_sport_registration = models.BooleanField(
+        default=False,
+        verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
+    )
+
+    ml_art_registration = models.BooleanField(
+        default=False,
+        verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
+    )
+
+    report_frequency = models.PositiveSmallIntegerField(
+        verbose_name=_("report frequency (in days)"),
+        default=0,
+    )
+
+    last_report = models.DateTimeField(
+        verbose_name=_("last report date"),
+        default=timezone.now,
     )
 
     email_confirmed = models.BooleanField(
@@ -128,18 +165,28 @@ class Profile(models.Model):
         indexes = [models.Index(fields=['user'])]
 
     def get_absolute_url(self):
-        return reverse('user_detail', args=(self.pk,))
+        return reverse('member:user_detail', args=(self.user_id,))
+
+    def __str__(self):
+        return str(self.user)
 
     def send_email_validation_link(self):
-        subject = _("Activate your Note Kfet account")
-        message = loader.render_to_string('registration/mails/email_validation_email.html',
+        subject = "[Note Kfet] " + str(_("Activate your Note Kfet account"))
+        message = loader.render_to_string('registration/mails/email_validation_email.txt',
                                           {
                                               'user': self.user,
                                               'domain': os.getenv("NOTE_URL", "note.example.com"),
                                               'token': email_validation_token.make_token(self.user),
                                               'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                                           })
-        self.user.email_user(subject, message)
+        html = loader.render_to_string('registration/mails/email_validation_email.html',
+                                       {
+                                           'user': self.user,
+                                           'domain': os.getenv("NOTE_URL", "note.example.com"),
+                                           'token': email_validation_token.make_token(self.user),
+                                           'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
+                                       })
+        self.user.email_user(subject, message, html_message=html)
 
 
 class Club(models.Model):
@@ -195,17 +242,14 @@ class Club(models.Model):
         blank=True,
         null=True,
         verbose_name=_('membership start'),
-        help_text=_('How long after January 1st the members can renew '
-                    'their membership.'),
+        help_text=_('Date from which the members can renew their membership.'),
     )
 
     membership_end = models.DateField(
         blank=True,
         null=True,
         verbose_name=_('membership end'),
-        help_text=_('How long the membership can last after January 1st '
-                    'of the next year after members can renew their '
-                    'membership.'),
+        help_text=_('Maximal date of a membership, after which members must renew it.'),
     )
 
     def update_membership_dates(self):
@@ -294,13 +338,33 @@ class Membership(models.Model):
         else:
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
 
+    def renew(self):
+        if Membership.objects.filter(
+                user=self.user,
+                club=self.club,
+                date_start__gte=self.club.membership_start,
+        ).exists():
+            # Membership is already renewed
+            return
+        new_membership = Membership(
+            user=self.user,
+            club=self.club,
+            date_start=max(self.date_end + datetime.timedelta(days=1), self.club.membership_start),
+        )
+        if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
+            new_membership._force_renew_parent = True
+        if hasattr(self, '_soge') and self._soge:
+            new_membership._soge = True
+        if hasattr(self, '_force_save') and self._force_save:
+            new_membership._force_save = True
+        new_membership.save()
+        new_membership.roles.set(self.roles.all())
+        new_membership.save()
+
     def save(self, *args, **kwargs):
         """
         Calculate fee and end date before saving the membership and creating the transaction if needed.
         """
-        if self.club.parent_club is not None:
-            if not Membership.objects.filter(user=self.user, club=self.club.parent_club).exists():
-                raise ValidationError(_('User is not a member of the parent club') + ' ' + self.club.parent_club.name)
 
         if self.pk:
             for role in self.roles.all():
@@ -319,6 +383,55 @@ class Membership(models.Model):
                     date_end__gte=self.date_start,
             ).exists():
                 raise ValidationError(_('User is already a member of the club'))
+
+            if self.club.parent_club is not None and not self.pk:
+                # Check that the user is already a member of the parent club if the membership is created
+                if not Membership.objects.filter(
+                    user=self.user,
+                    club=self.club.parent_club,
+                    date_start__gte=self.club.parent_club.membership_start,
+                ).exists():
+                    if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
+                        parent_membership = Membership.objects.filter(
+                            user=self.user,
+                            club=self.club.parent_club,
+                        ).order_by("-date_start")
+                        if parent_membership.exists():
+                            # Renew the previous membership of the parent club
+                            parent_membership = parent_membership.first()
+                            parent_membership._force_renew_parent = True
+                            if hasattr(self, '_soge'):
+                                parent_membership._soge = True
+                            if hasattr(self, '_force_save'):
+                                parent_membership._force_save = True
+                            parent_membership.renew()
+                        else:
+                            # Create a new membership in the parent club
+                            parent_membership = Membership(
+                                user=self.user,
+                                club=self.club.parent_club,
+                                date_start=self.date_start,
+                            )
+                            parent_membership._force_renew_parent = True
+                            if hasattr(self, '_soge'):
+                                parent_membership._soge = True
+                            if hasattr(self, '_force_save'):
+                                parent_membership._force_save = True
+                            parent_membership.save()
+                            parent_membership.refresh_from_db()
+
+                            if self.club.parent_club.name == "BDE":
+                                parent_membership.roles.set(
+                                    Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
+                            elif self.club.parent_club.name == "Kfet":
+                                parent_membership.roles.set(
+                                    Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
+                            else:
+                                parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
+                            parent_membership.save()
+                    else:
+                        raise ValidationError(_('User is not a member of the parent club')
+                                              + ' ' + self.club.parent_club.name)
 
             if self.user.profile.paid:
                 self.fee = self.club.membership_fee_paid
@@ -353,8 +466,9 @@ class Membership(models.Model):
                 reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
-            print(hasattr(self, '_soge'))
-            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS:
+            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS\
+                    and (self.club.name == "BDE" or self.club.name == "Kfet"
+                         or ("wei" in settings.INSTALLED_APPS and hasattr(self.club, "weiclub") and self.club.weiclub)):
                 # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
                 # to treasurers.
                 transaction.valid = False

@@ -1,7 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -57,7 +58,6 @@ class TransactionTemplate(models.Model):
 
     amount = models.PositiveIntegerField(
         verbose_name=_('amount'),
-        help_text=_('in centimes'),
     )
     category = models.ForeignKey(
         TemplateCategory,
@@ -164,16 +164,65 @@ class Transaction(PolymorphicModel):
             models.Index(fields=['destination']),
         ]
 
+    def validate(self):
+        previous_source_balance = self.source.balance
+        previous_dest_balance = self.destination.balance
+
+        source_balance = self.source.balance
+        dest_balance = self.destination.balance
+
+        created = self.pk is None
+        to_transfer = self.amount * self.quantity
+        if not created:
+            # Revert old transaction
+            old_transaction = Transaction.objects.get(pk=self.pk)
+            # Check that nothing important changed
+            for field_name in ["source_id", "destination_id", "quantity", "amount"]:
+                if getattr(self, field_name) != getattr(old_transaction, field_name):
+                    raise ValidationError(_("You can't update the {field} on a Transaction. "
+                                            "Please invalidate it and create one other.").format(field=field_name))
+
+            if old_transaction.valid == self.valid:
+                # Don't change anything
+                return 0, 0
+            if old_transaction.valid:
+                source_balance += to_transfer
+                dest_balance -= to_transfer
+
+        if self.valid:
+            source_balance -= to_transfer
+            dest_balance += to_transfer
+
+            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
+            # previously invalid
+            self.invalidity_reason = None
+
+        if source_balance > 9223372036854775807 or source_balance < -9223372036854775808\
+                or dest_balance > 9223372036854775807 or dest_balance < -9223372036854775808:
+            raise ValidationError(_("The note balances must be between - 92 233 720 368 547 758.08 € "
+                                    "and 92 233 720 368 547 758.07 €."))
+
+        return source_balance - previous_source_balance, dest_balance - previous_dest_balance
+
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         When saving, also transfer money between two notes
         """
+        if self.source.pk == self.destination.pk:
+            # When source == destination, no money is transferred and no transaction is created
+            return
+
+        # We refresh the notes with the "select for update" tag to avoid concurrency issues
+        self.source = Note.objects.filter(pk=self.source_id).select_for_update().get()
+        self.destination = Note.objects.filter(pk=self.destination_id).select_for_update().get()
+
+        # Check that the amounts stay between big integer bounds
+        diff_source, diff_dest = self.validate()
 
         if not self.source.is_active or not self.destination.is_active:
-            if 'force_insert' not in kwargs or not kwargs['force_insert']:
-                if 'force_update' not in kwargs or not kwargs['force_update']:
-                    raise ValidationError(_("The transaction can't be saved since the source note "
-                                            "or the destination note is not active."))
+            raise ValidationError(_("The transaction can't be saved since the source note "
+                                    "or the destination note is not active."))
 
         # If the aliases are not entered, we assume that the used alias is the name of the note
         if not self.source_alias:
@@ -182,34 +231,14 @@ class Transaction(PolymorphicModel):
         if not self.destination_alias:
             self.destination_alias = str(self.destination)
 
-        if self.source.pk == self.destination.pk:
-            # When source == destination, no money is transferred
-            super().save(*args, **kwargs)
-            return
-
-        created = self.pk is None
-        to_transfer = self.amount * self.quantity
-        if not created:
-            # Revert old transaction
-            old_transaction = Transaction.objects.get(pk=self.pk)
-            if old_transaction.valid:
-                self.source.balance += to_transfer
-                self.destination.balance -= to_transfer
-
-        if self.valid:
-            self.source.balance -= to_transfer
-            self.destination.balance += to_transfer
-
-            # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
-            # previously invalid
-            self.invalidity_reason = None
-
         # We save first the transaction, in case of the user has no right to transfer money
         super().save(*args, **kwargs)
 
         # Save notes
+        self.source.balance += diff_source
         self.source._force_save = True
         self.source.save()
+        self.destination.balance += diff_dest
         self.destination._force_save = True
         self.destination.save()
 
@@ -243,14 +272,24 @@ class RecurrentTransaction(Transaction):
         TransactionTemplate,
         on_delete=models.PROTECT,
     )
-    category = models.ForeignKey(
-        TemplateCategory,
-        on_delete=models.PROTECT,
-    )
+
+    def clean(self):
+        if self.template.destination != self.destination:
+            raise ValidationError(
+                _("The destination of this transaction must equal to the destination of the template."))
+        return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
     @property
     def type(self):
         return _('Template')
+
+    class Meta:
+        verbose_name = _("recurrent transaction")
+        verbose_name_plural = _("recurrent transactions")
 
 
 class SpecialTransaction(Transaction):
@@ -289,6 +328,14 @@ class SpecialTransaction(Transaction):
         if self.is_credit() == self.is_debit():
             raise(ValidationError(_("A special transaction is only possible between a"
                                     " Note associated to a payment method and a User or a Club")))
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("Special transaction")
+        verbose_name_plural = _("Special transactions")
 
 
 class MembershipTransaction(Transaction):

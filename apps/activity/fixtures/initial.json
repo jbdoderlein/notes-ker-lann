@@ -1,20 +1,32 @@
 [
-  {
-    "model": "activity.activitytype",
-    "pk": 1,
-    "fields": {
-      "name": "Pot",
-      "can_invite": true,
-      "guest_entry_fee": 500
+    {
+        "model": "activity.activitytype",
+        "pk": 1,
+        "fields": {
+            "name": "Pot",
+            "manage_entries": true,
+            "can_invite": true,
+            "guest_entry_fee": 500
+        }
+    },
+    {
+        "model": "activity.activitytype",
+        "pk": 2,
+        "fields": {
+            "name": "Soir\u00e9e de club",
+            "manage_entries": false,
+            "can_invite": false,
+            "guest_entry_fee": 0
+        }
+    },
+    {
+        "model": "activity.activitytype",
+        "pk": 3,
+        "fields": {
+            "name": "Autre",
+            "manage_entries": false,
+            "can_invite": false,
+            "guest_entry_fee": 0
+        }
     }
-  },
-  {
-    "model": "activity.activitytype",
-    "pk": 2,
-    "fields": {
-      "name": "Soir\u00e9e de club",
-      "can_invite": false,
-      "guest_entry_fee": 0
-    }
-  }
 ]
