@@ -6,8 +6,8 @@
 
 ## Table des matières
 
-  - [Installation d'une instance de développement](#installation-d-une-instance-de-developpement)
-  - [Installation d'une instance de production](#installation-d-une-instance-de-production)
+  - [Installation d'une instance de développement](#installation-dune-instance-de-développement)
+  - [Installation d'une instance de production](#installation-dune-instance-de-production)
 
 ## Installation d'une instance de développement
 
