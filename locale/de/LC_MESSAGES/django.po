@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-02 23:17+0200\n"
-"PO-Revision-Date: 2020-09-02 23:26+0200\n"
+"PO-Revision-Date: 2020-09-03 00:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -525,7 +525,7 @@ msgstr "Kein Kredit"
 
 #: apps/member/forms.py:120
 msgid "You can credit the note of the user."
-msgstr ""
+msgstr "Sie dûrfen diese Note kreditieren."
 
 #: apps/member/forms.py:124 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
@@ -738,6 +738,8 @@ msgstr "erfordern Mitgliedschaft"
 #: apps/member/models.py:220
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
+"Deaktivieren Sie diese Option, wenn für diesen Club keine Mitgliedschaft "
+"erforderlich ist."
 
 #: apps/member/models.py:236
 #: apps/member/templates/member/includes/club_info.html:26
@@ -765,6 +767,7 @@ msgstr "Mitgliedschaftenddatum"
 #: apps/member/models.py:252
 msgid "Maximal date of a membership, after which members must renew it."
 msgstr ""
+"Maximales Datum einer Mitgliedschaft, nach dem Mitglieder es erneuern müssen."
 
 #: apps/member/models.py:284 apps/member/models.py:309
 #: apps/note/models/notes.py:179
@@ -1279,11 +1282,11 @@ msgstr "Transaktionkategorien"
 
 #: apps/note/models/transactions.py:49
 msgid "A template with this name already exist"
-msgstr ""
+msgstr "Eine Vorlage mit diesem Namen ist bereits vorhanden"
 
 #: apps/note/models/transactions.py:72
 msgid "display"
-msgstr ""
+msgstr "Schauen"
 
 #: apps/note/models/transactions.py:77
 msgid "highlighted"
@@ -1291,37 +1294,37 @@ msgstr ""
 
 #: apps/note/models/transactions.py:87
 msgid "transaction template"
-msgstr ""
+msgstr "Transaktionsvorlage"
 
 #: apps/note/models/transactions.py:88
 msgid "transaction templates"
-msgstr ""
+msgstr "Transaktionsvorlagen"
 
 #: apps/note/models/transactions.py:112 apps/note/models/transactions.py:125
 #: apps/note/tables.py:33 apps/note/tables.py:42
 msgid "used alias"
-msgstr ""
+msgstr "benutzte Aliasen"
 
 #: apps/note/models/transactions.py:133
 msgid "quantity"
-msgstr ""
+msgstr "Anzahl"
 
 #: apps/note/models/transactions.py:141
 msgid "reason"
-msgstr ""
+msgstr "Grund"
 
 #: apps/note/models/transactions.py:151 apps/note/tables.py:107
 msgid "invalidity reason"
-msgstr ""
+msgstr "Ungültigkeit Grund"
 
 #: apps/note/models/transactions.py:159
 msgid "transaction"
-msgstr ""
+msgstr "Transaktion"
 
 #: apps/note/models/transactions.py:160
 #: apps/treasury/templates/treasury/sogecredit_detail.html:22
 msgid "transactions"
-msgstr ""
+msgstr "Transaktionen"
 
 #: apps/note/models/transactions.py:182
 #, python-brace-format
@@ -1329,72 +1332,79 @@ msgid ""
 "You can't update the {field} on a Transaction. Please invalidate it and "
 "create one other."
 msgstr ""
+"Sie können das {field} einer Transaktion nicht aktualisieren. Bitte machen "
+"Sie es ungültig und erstellen Sie eine andere."
 
 #: apps/note/models/transactions.py:202
 msgid ""
 "The note balances must be between - 92 233 720 368 547 758.08 € and 92 233 "
 "720 368 547 758.07 €."
 msgstr ""
+"Die Notenguthaben müssen zwischen - 92 233 720 368 547 758,08 € und 92 233 "
+"720 368 547 758,07 € liegen."
 
 #: apps/note/models/transactions.py:279
 msgid ""
 "The destination of this transaction must equal to the destination of the "
 "template."
 msgstr ""
+"Der Empfänger dieser Transaktion muss dem Empfänger der Vorlage entsprechen."
 
 #: apps/note/models/transactions.py:288
 msgid "Template"
-msgstr ""
+msgstr "Vorlage"
 
 #: apps/note/models/transactions.py:291
 msgid "recurrent transaction"
-msgstr ""
+msgstr "wiederkehrende Transaktion"
 
 #: apps/note/models/transactions.py:292
 msgid "recurrent transactions"
-msgstr ""
+msgstr "wiederkehrende Transaktionen"
 
 #: apps/note/models/transactions.py:307
 msgid "first_name"
-msgstr ""
+msgstr "Vorname"
 
 #: apps/note/models/transactions.py:312
 msgid "bank"
-msgstr ""
+msgstr "Bank"
 
 #: apps/note/models/transactions.py:329
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
 msgstr ""
+"Eine Sondertransaktion ist nur zwischen einer Note, die einer "
+"Zahlungsmethode zugeordnet ist, und einem User oder einem Club möglich"
 
 #: apps/note/models/transactions.py:337
 msgid "Special transaction"
-msgstr ""
+msgstr "Sondertransaktion"
 
 #: apps/note/models/transactions.py:338
 msgid "Special transactions"
-msgstr ""
+msgstr "Sondertranskationen"
 
 #: apps/note/models/transactions.py:354 apps/note/models/transactions.py:359
 msgid "membership transaction"
-msgstr ""
+msgstr "Mitgliedschafttransaktion"
 
 #: apps/note/models/transactions.py:355 apps/treasury/models.py:273
 msgid "membership transactions"
-msgstr ""
+msgstr "Mitgliedschaftttransaktionen"
 
 #: apps/note/tables.py:61
 msgid "Click to invalidate"
-msgstr ""
+msgstr "Klicken Sie zum Ungültigmachen"
 
 #: apps/note/tables.py:61
 msgid "Click to validate"
-msgstr ""
+msgstr "Klicken Sie zum gültigmachen"
 
 #: apps/note/tables.py:105
 msgid "No reason specified"
-msgstr ""
+msgstr "Kein Grund gegeben"
 
 #: apps/note/tables.py:136 apps/note/tables.py:170 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
@@ -1402,7 +1412,7 @@ msgstr ""
 #: apps/wei/tables.py:76 apps/wei/tables.py:103
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: apps/note/tables.py:164 apps/note/templates/note/conso_form.html:132
 #: apps/wei/tables.py:47 apps/wei/tables.py:48
@@ -1411,42 +1421,42 @@ msgstr ""
 #: apps/wei/templates/wei/busteam_detail.html:20
 #: apps/wei/templates/wei/busteam_detail.html:40
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: apps/note/templates/note/conso_form.html:32
 msgid "Consum"
-msgstr ""
+msgstr "konsumieren"
 
 #: apps/note/templates/note/conso_form.html:43
 #: apps/note/templates/note/transaction_form.html:65
 #: apps/note/templates/note/transaction_form.html:92
 msgid "Name or alias..."
-msgstr ""
+msgstr "Name oder Alias"
 
 #: apps/note/templates/note/conso_form.html:52
 msgid "Select consumptions"
-msgstr ""
+msgstr "Verbrauchswerte auswählen"
 
 #: apps/note/templates/note/conso_form.html:61
 msgid "Consume!"
-msgstr ""
+msgstr "Konsumieren!"
 
 #: apps/note/templates/note/conso_form.html:73
 msgid "Highlighted buttons"
-msgstr ""
+msgstr "Hervorgehobene Tasten"
 
 #: apps/note/templates/note/conso_form.html:138
 msgid "Single consumptions"
-msgstr ""
+msgstr "Solo Modus"
 
 #: apps/note/templates/note/conso_form.html:143
 msgid "Double consumptions"
-msgstr ""
+msgstr "Doppelte Modus"
 
 #: apps/note/templates/note/conso_form.html:154
 #: apps/note/templates/note/transaction_form.html:159
 msgid "Recent transactions history"
-msgstr ""
+msgstr " Verlauf der letzten Transaktionen"
 
 #: apps/note/templates/note/mails/negative_balance.html:43
 #: apps/note/templates/note/mails/negative_balance.txt:25
@@ -1456,109 +1466,109 @@ msgstr ""
 #: apps/registration/templates/registration/mails/email_validation_email.html:40
 #: apps/registration/templates/registration/mails/email_validation_email.txt:16
 msgid "Mail generated by the Note Kfet on the"
-msgstr ""
+msgstr " Mail generiert vom Note Kfet auf dem"
 
 #: apps/note/templates/note/transaction_form.html:54
 #: apps/note/templates/note/transaction_form.html:174
 msgid "Select emitters"
-msgstr ""
+msgstr "Sender auswählen"
 
 #: apps/note/templates/note/transaction_form.html:69
 msgid "I am the emitter"
-msgstr ""
+msgstr "Ich bin der Sender"
 
 #: apps/note/templates/note/transaction_form.html:81
 #: apps/note/templates/note/transaction_form.html:176
 msgid "Select receivers"
-msgstr ""
+msgstr "Empfänger auswählen"
 
 #: apps/note/templates/note/transaction_form.html:104
 msgid "Action"
-msgstr ""
+msgstr "Aktion"
 
 #: apps/note/templates/note/transaction_form.html:112
 #: apps/treasury/forms.py:141 apps/treasury/tables.py:67
 #: apps/treasury/tables.py:135
 #: apps/treasury/templates/treasury/remittance_form.html:23
 msgid "Amount"
-msgstr ""
+msgstr "Anzahl"
 
 #: apps/note/templates/note/transaction_form.html:128
 #: apps/treasury/models.py:51
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: apps/note/templates/note/transaction_form.html:173
 msgid "Select emitter"
-msgstr ""
+msgstr "Sender auswählen"
 
 #: apps/note/templates/note/transaction_form.html:175
 msgid "Select receiver"
-msgstr ""
+msgstr "Empfänger auswählen"
 
 #: apps/note/templates/note/transaction_form.html:177
 msgid "Transfer type"
-msgstr ""
+msgstr "Überweisungtype"
 
 #: apps/note/templates/note/transactiontemplate_form.html:8
 msgid "Buttons list"
-msgstr ""
+msgstr "Tastenliste"
 
 #: apps/note/templates/note/transactiontemplate_form.html:24
 msgid "Price history"
-msgstr ""
+msgstr "Verlaufene Preisen"
 
 #: apps/note/templates/note/transactiontemplate_form.html:27
 msgid "Obsolete since"
-msgstr ""
+msgstr "veraltet seit"
 
 #: apps/note/templates/note/transactiontemplate_form.html:27
 msgid "Current price"
-msgstr ""
+msgstr "Aktueller Preis"
 
 #: apps/note/templates/note/transactiontemplate_list.html:13
 msgid "Name of the button..."
-msgstr ""
+msgstr "Name dessen Tatsen"
 
 #: apps/note/templates/note/transactiontemplate_list.html:15
 msgid "New button"
-msgstr ""
+msgstr "Neue Tatsen"
 
 #: apps/note/templates/note/transactiontemplate_list.html:22
 msgid "buttons listing "
-msgstr ""
+msgstr "Tatsenliste"
 
 #: apps/note/templates/note/transactiontemplate_list.html:73
 msgid "button successfully deleted "
-msgstr ""
+msgstr "Taste erfolgreich gelöscht"
 
 #: apps/note/templates/note/transactiontemplate_list.html:77
 msgid "Unable to delete button "
-msgstr ""
+msgstr "Tatse kann nicht gelöscht werden"
 
 #: apps/note/views.py:36
 msgid "Transfer money"
-msgstr ""
+msgstr "Geld überweisen"
 
 #: apps/note/views.py:74
 msgid "Create new button"
-msgstr ""
+msgstr "Neue Tatse berstellen"
 
 #: apps/note/views.py:83
 msgid "Search button"
-msgstr ""
+msgstr "Tatsen finden"
 
 #: apps/note/views.py:111
 msgid "Update button"
-msgstr ""
+msgstr "Tatse bearbeiten"
 
 #: apps/note/views.py:151 note_kfet/templates/base.html:62
 msgid "Consumptions"
-msgstr ""
+msgstr "Verbräuche"
 
 #: apps/note/views.py:165
 msgid "You can't see any button."
-msgstr ""
+msgstr "Sie können keine Taste sehen."
 
 #: apps/note/views.py:200
 msgid "Search transactions"
@@ -2775,15 +2785,15 @@ msgstr ""
 
 #: note_kfet/settings/base.py:155
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 #: note_kfet/settings/base.py:156
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: note_kfet/settings/base.py:157
 msgid "French"
-msgstr ""
+msgstr "Französich"
 
 #: note_kfet/templates/400.html:10
 msgid "Bad request"
