@@ -125,7 +125,7 @@ class TestMemberships(TestCase):
 
         old_pic = self.club.note.display_image
 
-        with open("media/pic/default.png", "rb") as f:
+        with open("apps/member/static/member/img/default_picture.png", "rb") as f:
             image = SimpleUploadedFile("image.png", f.read(), "image/png")
             response = self.client.post(reverse("member:club_update_pic", args=(self.club.pk,)), dict(
                 image=image,
@@ -349,7 +349,7 @@ class TestMemberships(TestCase):
 
         old_pic = self.user.note.display_image
 
-        with open("media/pic/default.png", "rb") as f:
+        with open("apps/member/static/member/img/default_picture.png", "rb") as f:
             image = SimpleUploadedFile("image.png", f.read(), "image/png")
             response = self.client.post(reverse("member:user_update_pic", args=(self.user.pk,)), dict(
                 image=image,
