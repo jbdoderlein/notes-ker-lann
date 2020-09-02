@@ -6,8 +6,6 @@
 
 \usepackage[margin=1.5cm]{geometry}
 \usepackage{lmodern}
-\usepackage{ltablex}
-\usepackage{tabularx}
 
 \begin{document}
 \begin{center}
@@ -25,7 +23,7 @@
 
 \begin{center}
 \footnotesize
-\begin{tabularx}{\textwidth}{ccccccccc}
+\begin{tabular}{ccccccccc}
 \textbf{Nom} & \textbf{Prénom} & \textbf{Date de naissance} & \textbf{Genre} & \textbf{Section}
  & \textbf{Bus} & \textbf{Équipe} & \textbf{Rôles} \\
 {% for membership in memberships %}
@@ -33,7 +31,7 @@
 & {{ membership.registration.get_gender_display|safe }} & {{ membership.user.profile.section_generated|safe }} & {{ membership.bus.name|safe }}
 & {% if membership.team %}{{ membership.team.name|safe }}{% else %}--{% endif %} & {{ membership.roles.first|safe }} \\
 {% endfor %}
-\end{tabularx}
+\end{tabular}
 \end{center}
 
 \footnotesize

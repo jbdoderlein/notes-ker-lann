@@ -25,12 +25,14 @@ Sinon vous pouvez suivre les étapes ici.
 
     ```bash
     $ sudo apt update
-    $ sudo apt install -t buster-backports -y python3-django python3-django-crispy-forms \
+    $ sudo apt install --no-install-recommends -t buster-backports -y \
+        python3-django python3-django-crispy-forms \
         python3-django-extensions python3-django-filters python3-django-polymorphic \
         python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil \
         python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
+        python3-bs4 python3-setuptools \
         uwsgi uwsgi-plugin-python3 \
-        texlive-latex-extra texlive-fonts-extra texlive-lang-french \
+        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
         gettext libjs-bootstrap4 fonts-font-awesome \
         nginx python3-venv git acl
     ```

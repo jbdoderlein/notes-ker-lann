@@ -12,7 +12,7 @@ RUN apt-get update && \
     python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
     python3-bs4 python3-setuptools \
     uwsgi uwsgi-plugin-python3 \
-    texlive-latex-extra texlive-lang-french lmodern texlive-fonts-recommended \
+    texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
     gettext libjs-bootstrap4 fonts-font-awesome && \
     rm -rf /var/lib/apt/lists/*
 
