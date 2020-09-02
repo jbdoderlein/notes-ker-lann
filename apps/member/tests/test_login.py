@@ -1,8 +1,10 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.urls import reverse
+
 from note.models import TransactionTemplate, TemplateCategory
 
 """
@@ -31,7 +33,20 @@ class TemplateLoggedInTests(TestCase):
         sess.save()
 
     def test_login_page(self):
-        response = self.client.get('/accounts/login/')
+        response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+
+        self.client.logout()
+
+        response = self.client.post('/accounts/login/', data=dict(
+            username="admin",
+            password="adminadmin",
+            permission_mask=3,
+        ))
+        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, 302, 200)
+
+    def test_logout(self):
+        response = self.client.get(reverse("logout"))
         self.assertEqual(response.status_code, 200)
 
     def test_admin_index(self):
@@ -42,21 +57,3 @@ class TemplateLoggedInTests(TestCase):
         response = self.client.get('/accounts/password_reset/')
         self.assertEqual(response.status_code, 200)
 
-    def test_logout_page(self):
-        response = self.client.get('/accounts/logout/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_transfer_page(self):
-        response = self.client.get('/note/transfer/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_consos_page(self):
-        # Create one button and ensure that it is visible
-        cat = TemplateCategory.objects.create()
-        TransactionTemplate.objects.create(
-            destination_id=5,
-            category=cat,
-            amount=0,
-        )
-        response = self.client.get('/note/consos/')
-        self.assertEqual(response.status_code, 200)

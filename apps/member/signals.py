@@ -6,11 +6,7 @@ def save_user_profile(instance, created, raw, **_kwargs):
     """
     Hook to create and save a profile when an user is updated if it is not registered with the signup form
     """
-    if raw:
-        # When provisionning data, do not try to autocreate
-        return
-
-    if created and instance.is_active:
+    if not raw and created and instance.is_active:
         from .models import Profile
         Profile.objects.get_or_create(user=instance)
         if instance.is_superuser:

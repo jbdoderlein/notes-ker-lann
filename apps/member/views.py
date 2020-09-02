@@ -97,8 +97,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         note = NoteUser.objects.filter(
             alias__normalized_name=Alias.normalize(new_username))
         if note.exists() and note.get().user != self.object:
-            form.add_error('username',
-                           _("An alias with a similar name already exists."))
+            form.add_error('username', _("An alias with a similar name already exists."))
             return super().form_invalid(form)
         # Check if the username is one of user's aliases.
         alias = Alias.objects.filter(name=new_username)
@@ -142,9 +141,8 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         We can't display information of a not registered user.
         """
         qs = super().get_queryset()
-        if self.request.user.is_superuser and self.request.session.get("permission_mask", -1) >= 42:
-            return qs
-        return qs.filter(profile__registration_valid=True)
+        return qs if self.request.user.is_superuser and self.request.session.get("permission_mask", -1) >= 42\
+            else qs.filter(profile__registration_valid=True)
 
     def get_context_data(self, **kwargs):
         """
@@ -204,14 +202,16 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         """
         Filter the user list with the given pattern.
         """
-        qs = super().get_queryset().distinct("username").annotate(alias=F("note__alias__name"))\
+        qs = super().get_queryset().annotate(alias=F("note__alias__name"))\
             .annotate(normalized_alias=F("note__alias__normalized_name"))\
-            .filter(profile__registration_valid=True).order_by("username")
-        if "search" in self.request.GET:
-            pattern = self.request.GET["search"]
+            .filter(profile__registration_valid=True)
 
-            if not pattern:
-                return qs.none()
+        # Sqlite doesn't support order by in subqueries
+        qs = qs.order_by("username").distinct("username")\
+            if settings.DATABASES[qs.db]["ENGINE"] == 'django.db.backends.postgresql' else qs.distinct()
+
+        if "search" in self.request.GET and self.request.GET["search"]:
+            pattern = self.request.GET["search"]
 
             qs = qs.filter(
                 username__iregex="^" + pattern
@@ -270,12 +270,7 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         self.object = self.get_object()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            print('is_invalid')
-            print(form)
-            return self.form_invalid(form)
+        return self.form_valid(form) if form.is_valid() else self.form_invalid(form)
 
     def form_valid(self, form):
         image_field = form.cleaned_data['image']
@@ -320,8 +315,7 @@ class ManageAuthTokens(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if 'regenerate' in request.GET and Token.objects.filter(user=request.user).exists():
             Token.objects.get(user=self.request.user).delete()
-            return redirect(reverse_lazy('member:auth_token') + "?show",
-                            permanent=True)
+            return redirect(reverse_lazy('member:auth_token') + "?show")
 
         return super().get(request, *args, **kwargs)
 
@@ -351,8 +345,9 @@ class ClubCreateView(ProtectQuerysetMixin, ProtectedCreateView):
             email="",
         )
 
-    def form_valid(self, form):
-        return super().form_valid(form)
+    def get_success_url(self):
+        self.object.refresh_from_db()
+        return reverse_lazy("member:club_detail", kwargs={"pk": self.object.pk})
 
 
 class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
@@ -655,7 +650,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                 fee += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
             c = c.parent_club
 
-        if user.note.balance + credit_amount < fee and not Membership.objects.filter(
+        if not soge and user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
                 date_start__lte=date.today(),
@@ -683,7 +678,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         if club.membership_end and form.instance.date_start > club.membership_end:
             form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
+                           .format(form.instance.club.membership_end))
             return super().form_invalid(form)
 
         # Now, all is fine, the membership can be created.
@@ -719,46 +714,38 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             transaction._force_save = True
             transaction.save()
 
+        # Parent club memberships are automatically renewed / created.
+        # For example, a Kfet membership creates a BDE membership if it does not exist.
         form.instance._force_renew_parent = True
 
         ret = super().form_valid(form)
 
-        if club.name == "BDE":
-            member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all()
-        elif club.name == "Kfet":
-            member_role = Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all()
-        else:
-            member_role = Role.objects.filter(name="Membre de club").all()
+        member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all() \
+            if club.name == "BDE" else Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all() \
+            if club.name == "Kfet"else Role.objects.filter(name="Membre de club").all()
         form.instance.roles.set(member_role)
         form.instance._force_save = True
         form.instance.save()
 
         # If Société générale pays, then we assume that this is the BDE membership, and we auto-renew the
         # Kfet membership.
-        if soge:
-            # If not already done, create BDE and Kfet memberships
-            bde = Club.objects.get(name="BDE")
+        if soge and club.name == "BDE":
             kfet = Club.objects.get(name="Kfet")
+            fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
 
-            soge_clubs = [bde, kfet]
-            for club in soge_clubs:
-                fee = club.membership_fee_paid if user.profile.paid else club.membership_fee_unpaid
+            # Get current membership, to get the end date
+            old_membership = Membership.objects.filter(
+                club=kfet,
+                user=user,
+            ).order_by("-date_start")
 
-                # Get current membership, to get the end date
-                old_membership = Membership.objects.filter(
-                    club=club,
-                    user=user,
-                ).order_by("-date_start")
-
-                if old_membership.filter(date_start__gte=club.membership_start).exists():
-                    # Membership is already renewed
-                    continue
-
+            if not old_membership.filter(date_start__gte=kfet.membership_start).exists():
+                # If the membership is not already renewed
                 membership = Membership(
-                    club=club,
+                    club=kfet,
                     user=user,
                     fee=fee,
-                    date_start=max(old_membership.first().date_end + timedelta(days=1), club.membership_start)
+                    date_start=max(old_membership.first().date_end + timedelta(days=1), kfet.membership_start)
                     if old_membership.exists() else form.instance.date_start,
                 )
                 membership._force_save = True
@@ -767,10 +754,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                 membership.refresh_from_db()
                 if old_membership.exists():
                     membership.roles.set(old_membership.get().roles.all())
-                elif c.name == "BDE":
-                    membership.roles.set(Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
-                elif c.name == "Kfet":
-                    membership.roles.set(Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
+                membership.roles.set(Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
                 membership.save()
 
         return ret
@@ -830,9 +814,7 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
             qs = qs.filter(date_start__lte=timezone.now().today(), date_end__gte=timezone.now().today())
 
         if "roles" in self.request.GET:
-            if not self.request.GET["roles"]:
-                return qs.none()
-            roles_str = self.request.GET["roles"].replace(' ', '').split(',')
+            roles_str = self.request.GET["roles"].replace(' ', '').split(',') if self.request.GET["roles"] else ['0']
             roles_int = map(int, roles_str)
             qs = qs.filter(roles__in=roles_int)
 
