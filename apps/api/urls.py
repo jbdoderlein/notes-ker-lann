@@ -51,7 +51,10 @@ class UserViewSet(ReadProtectedModelViewSet):
     filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active', ]
 
     def get_queryset(self):
-        queryset = super().get_queryset().order_by("username")
+        queryset = super().get_queryset()
+        # Sqlite doesn't support ORDER BY in subqueries
+        queryset = queryset.order_by("username") \
+            if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
@@ -86,6 +89,9 @@ class UserViewSet(ReadProtectedModelViewSet):
                     & ~Q(username__iregex="^" + pattern)
                 ),
                 all=True)
+
+        queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
+            else queryset.order_by("username")
 
         return queryset
 

@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.conf import settings
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
@@ -117,6 +117,9 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         """
 
         queryset = super().get_queryset()
+        # Sqlite doesn't support ORDER BY in subqueries
+        queryset = queryset.order_by("username") \
+            if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.prefetch_related('note')
@@ -137,7 +140,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
             ),
             all=True)
 
-        return queryset.order_by('name').distinct()
+        return queryset.distinct()
 
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):
