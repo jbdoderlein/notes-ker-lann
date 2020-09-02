@@ -158,7 +158,7 @@ function reset() {
     $("#consos_list").html("");
     $("#note").val("");
     $("#note").attr("data-original-title", "").tooltip("hide");
-    $("#profile_pic").attr("src", "/media/pic/default.png");
+    $("#profile_pic").attr("src", "/static/member/img/default_picture.png");
     $("#profile_pic_link").attr("href", "#");
     refreshHistory();
     refreshBalance();

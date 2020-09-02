@@ -40,7 +40,7 @@ function reset(refresh=true) {
     $("#first_name").val("");
     $("#bank").val("");
     $("#user_note").val("");
-    $("#profile_pic").attr("src", "/media/pic/default.png");
+    $("#profile_pic").attr("src", "/static/member/img/default_picture.png");
     $("#profile_pic_link").attr("href", "#");
     if (refresh) {
         refreshBalance();

@@ -122,7 +122,7 @@ function displayStyle (note) {
  */
 function displayNote (note, alias, user_note_field = null, profile_pic_field = null) {
     if (!note.display_image) {
-        note.display_image = '/media/pic/default.png';
+        note.display_image = '/static/member/img/default_picture.png';
     }
     let img = note.display_image;
     if (alias !== note.name && note.name)
