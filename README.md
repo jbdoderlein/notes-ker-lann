@@ -4,16 +4,82 @@
 [![pipeline status](https://gitlab.crans.org/bde/nk20/badges/master/pipeline.svg)](https://gitlab.crans.org/bde/nk20/commits/master)
 [![coverage report](https://gitlab.crans.org/bde/nk20/badges/master/coverage.svg)](https://gitlab.crans.org/bde/nk20/commits/master)
 
-## Installation sur un serveur
+## Table des matières
 
-On supposera pour la suite que vous utilisez une installation de Debian Buster ou Ubuntu 20.04 fraîche ou bien configuré.
+  - [Installation d'une instance de développement](#installation-d-une-instance-de-developpement)
+  - [Installation d'une instance de production](#installation-d-une-instance-de-production)
+
+## Installation d'une instance de développement
+
+L'instance de développement installe la majorité des dépendances dans un environnement Python isolé.
+Bien que cela permette de créer une instance sur toutes les distributions,
+**cela veut dire que vos dépendances ne seront pas mises à jour automatiquement.**
+
+1.  **Installation des dépendances de la distribution.**
+    Il y a quelques dépendances qui ne sont pas trouvable dans PyPI.
+    On donne ci-dessous l'exemple pour une distribution basée sur Debian, mais vous pouvez facilement adapter pour ArchLinux ou autre.
+
+    ```bash
+    $ sudo apt update
+    $ sudo apt install --no-install-recommends -y \
+        ipython3 python3-setuptools python3-venv python3-dev \
+        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
+        gettext libjs-bootstrap4 fonts-font-awesome git
+    ```
+
+2.  **Clonage du dépot** là où vous voulez :
+
+    ```bash
+    $ git clone git@gitlab.crans.org:bde/nk20.git && cd nk20
+    ```
+
+3.  **Création d'un environment de travail Python décorrélé du système.**
+    On n'utilise pas `--system-site-packages` ici pour ne pas avoir des clashs de versions de modules avec le système.
+
+    ```bash
+    $ python3 -m venv env
+    $ source env/bin/activate  # entrer dans l'environnement
+    (env)$ pip3 install -r requirements.txt
+    (env)$ deactivate  # sortir de l'environnement
+    ```
+
+4.  **Variable d'environnement.**
+    Copier le fichier `.env_example` vers `.env` à la racine du projet et mettre à jour
+    ce qu'il faut.
+
+5.  **Migrations et chargement des données initiales.**
+    Pour initialiser la base de données avec de quoi travailler.
+
+    ```bash
+    (env)$ ./manage.py collectstatic --noinput
+    (env)$ ./manage.py compilemessages
+    (env)$ ./manage.py makemigrations
+    (env)$ ./manage.py migrate
+    (env)$ ./manage.py loaddata initial
+    (env)$ ./manage.py createsuperuser  # Création d'un utilisateur initial
+    ```
+
+6.  Enjoy :
+
+    ```bash
+    (env)$ ./manage.py runserver 0.0.0.0:8000
+    ```
+
+En mettant `0.0.0.0:8000` après `runserver`, vous rendez votre instance Django
+accessible depuis l'ensemble de votre réseau, pratique pour tester le rendu
+de la note sur un téléphone !
+
+## Installation d'une instance de production
+
+**En production on souhaite absolument utiliser les modules Python packagées dans le gestionnaire de paquet.**
+Cela permet de mettre à jour facilement les dépendances critiques telles que Django.
+
+L'installation d'une instance de production néccessite **une installation de Debian Buster ou d'Ubuntu 20.04**.
 
 Pour aller vite vous pouvez lancer le Playbook Ansible fournit dans ce dépôt en l'adaptant.
-Sinon vous pouvez suivre les étapes ici.
+Sinon vous pouvez suivre les étapes décrites ci-dessous.
 
-### Installation avec Debian/Ubuntu
-
-0. **Activer Debian Backports.** En effet Django 2.2 LTS n'est que disponible dans les backports.
+0.  Sous Debian Buster, **activer Debian Backports.** En effet Django 2.2 LTS n'est que disponible dans les backports.
 
     ```bash
     $ echo "deb http://deb.debian.org/debian buster-backports main" | sudo tee /etc/apt/sources.list.d/deb_debian_org_debian.list
@@ -191,43 +257,6 @@ nk20:
     - "traefik.http.routers.nk20.rule=Host(`ndd.example.com`)"
     - "traefik.http.services.nk20.loadbalancer.server.port=8080"
 ```
-
-### Lancer un serveur de développement
-
-Avec `./manage.py runserver` il est très rapide de mettre en place
-un serveur de développement par exemple sur son ordinateur.
-
-1.  Cloner le dépôt là où vous voulez :
-
-        $ git clone git@gitlab.crans.org:bde/nk20.git && cd nk20
-
-2.  Créer un environnement Python isolé
-    pour ne pas interférer avec les versions de paquets systèmes :
-
-         $ python3 -m venv venv
-         $ source venv/bin/activate
-         (env)$ pip install -r requirements.txt
-
-3.  Copier le fichier `.env_example` vers `.env` à la racine du projet et mettre à jour
-    ce qu'il faut
-
-4.  Migrations et chargement des données initiales :
-
-        (env)$ ./manage.py makemigrations
-        (env)$ ./manage.py migrate
-        (env)$ ./manage.py loaddata initial
-
-5.  Créer un super-utilisateur :
-
-        (env)$ ./manage.py createsuperuser
-
-6.  Enjoy :
-
-        (env)$ ./manage.py runserver 0.0.0.0:8000
-
-En mettant `0.0.0.0:8000` après `runserver`, vous rendez votre instance Django
-accessible depuis l'ensemble de votre réseau, pratique pour tester le rendu
-de la note sur un téléphone !
 
 ## Documentation
 
