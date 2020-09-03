@@ -16,7 +16,7 @@ from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club
-from note.models import SpecialTransaction
+from note.models import SpecialTransaction, Alias
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.models import Role
@@ -101,7 +101,7 @@ class UserValidateView(TemplateView):
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
-        return self.render_to_response(self.get_context_data())
+        return self.render_to_response(self.get_context_data(), status=200 if self.validlink else 400)
 
     def get_user(self, uidb64):
         """
@@ -169,11 +169,8 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         :return:
         """
         qs = super().get_queryset().distinct().filter(profile__registration_valid=False)
-        if "search" in self.request.GET:
+        if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
-
-            if not pattern:
-                return qs.none()
 
             qs = qs.filter(
                 Q(first_name__iregex=pattern)
@@ -205,10 +202,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         self.object = self.get_object()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return self.form_valid(form) if form.is_valid() else self.form_invalid(form)
 
     def get_queryset(self, **kwargs):
         """
@@ -238,6 +232,10 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
     def form_valid(self, form):
         user = self.get_object()
+
+        if Alias.objects.filter(normalized_name=Alias.normalize(user.username)).exists():
+            form.add_error(None, _("An alias with a similar name already exists."))
+            return self.form_invalid(form)
 
         # Get form data
         soge = form.cleaned_data["soge"]
@@ -275,9 +273,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
         if credit_type is None:
             credit_amount = 0
-
-        if join_Kfet and not join_BDE:
-            form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
 
         if fee > credit_amount and not soge:
             # Check if the user credits enough money
