@@ -46,7 +46,7 @@ class HistoryTable(tables.Table):
         }
     )
 
-    created_at = tables.DateColumn(
+    created_at = tables.DateTimeColumn(format='Y-m-d H:i:s',
         attrs={
             "td": {
                 "class": "text-nowrap",
