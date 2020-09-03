@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-02 23:17+0200\n"
-"PO-Revision-Date: 2020-09-03 11:40+0200\n"
+"PO-Revision-Date: 2020-09-03 23:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -1528,7 +1528,7 @@ msgstr "Aktueller Preis"
 
 #: apps/note/templates/note/transactiontemplate_list.html:13
 msgid "Name of the button..."
-msgstr "Name dessen Tatse"
+msgstr "Name dessen Tatse."
 
 #: apps/note/templates/note/transactiontemplate_list.html:15
 msgid "New button"
@@ -1660,7 +1660,7 @@ msgid ""
 "of model {app_label}.{model_name}."
 msgstr ""
 "Sie haben nicht die Berechtigung, das Feld {field} in dieser Instanz von "
-"Modell {app_Label} zu ändern. {model_name}"
+"Modell {app_label} zu ändern. {model_name}"
 
 #: apps/permission/signals.py:73 apps/permission/views.py:89
 #, python-brace-format
@@ -1758,7 +1758,7 @@ msgstr "Diese email adresse ist schon benutzt."
 
 #: apps/registration/forms.py:49
 msgid "Register to the WEI"
-msgstr "zu WEI anmelden"
+msgstr "Zu WEI anmelden"
 
 #: apps/registration/forms.py:51
 msgid ""
@@ -1881,7 +1881,7 @@ msgstr "Danke"
 #: apps/registration/templates/registration/mails/email_validation_email.html:39
 #: apps/registration/templates/registration/mails/email_validation_email.txt:15
 msgid "The Note Kfet team."
-msgstr "Die NoteKfet Team"
+msgstr "Die NoteKfet Team."
 
 #: apps/registration/views.py:38
 msgid "Register new user"
@@ -1909,7 +1909,7 @@ msgstr "E-Mail-Validierungslink erneut senden"
 
 #: apps/registration/views.py:163
 msgid "Pre-registered users list"
-msgstr "Vorregistrierte Userliste,"
+msgstr "Vorregistrierte Userliste"
 
 #: apps/registration/views.py:190
 msgid "Unregistered users"
@@ -1941,15 +1941,15 @@ msgstr "Ungültige Vorregistrierung"
 
 #: apps/treasury/apps.py:12 note_kfet/templates/base.html:92
 msgid "Treasury"
-msgstr ""
+msgstr "Quaestor"
 
 #: apps/treasury/forms.py:104
 msgid "Remittance is already closed."
-msgstr ""
+msgstr "Überweisung ist bereits geschlossen."
 
 #: apps/treasury/forms.py:109
 msgid "You can't change the type of the remittance."
-msgstr ""
+msgstr "Sie können die Art der Überweisung nicht ändern."
 
 #: apps/treasury/forms.py:129 apps/treasury/models.py:252
 #: apps/treasury/tables.py:97 apps/treasury/tables.py:105
@@ -1957,15 +1957,15 @@ msgstr ""
 #: apps/treasury/templates/treasury/remittance_list.html:16
 #: apps/treasury/templates/treasury/sogecredit_list.html:16
 msgid "Remittance"
-msgstr ""
+msgstr "Überweisung"
 
 #: apps/treasury/forms.py:130
 msgid "No attached remittance"
-msgstr ""
+msgstr "Keine beigefügte Überweisung"
 
 #: apps/treasury/models.py:23
 msgid "Invoice identifier"
-msgstr ""
+msgstr "Rechnungskennung"
 
 #: apps/treasury/models.py:37
 msgid "BDE"
@@ -1989,11 +1989,11 @@ msgstr "Datum"
 
 #: apps/treasury/models.py:64
 msgid "Acquitted"
-msgstr "bezahlt"
+msgstr "Bezahlt"
 
 #: apps/treasury/models.py:69
 msgid "Locked"
-msgstr "gesperrt"
+msgstr "Gesperrt"
 
 #: apps/treasury/models.py:70
 msgid "An invoice can't be edited when it is locked."
@@ -2177,7 +2177,7 @@ msgstr "Transaktionen"
 
 #: apps/treasury/templates/treasury/remittance_form.html:42
 msgid "There is no transaction linked with this remittance."
-msgstr "Mit dieser Überweisung ist keine Transaktion verbunden"
+msgstr "Mit dieser Überweisung ist keine Transaktion verbunden."
 
 #: apps/treasury/templates/treasury/remittance_list.html:27
 msgid "Opened remittances"
@@ -2185,7 +2185,7 @@ msgstr "Geöffnete Überweisungen"
 
 #: apps/treasury/templates/treasury/remittance_list.html:34
 msgid "There is no opened remittance."
-msgstr "Es gibt keine offene Überweisung"
+msgstr "Es gibt keine offene Überweisung."
 
 #: apps/treasury/templates/treasury/remittance_list.html:39
 msgid "New remittance"
@@ -2197,165 +2197,185 @@ msgstr "Transfer ohne Überweisungen"
 
 #: apps/treasury/templates/treasury/remittance_list.html:52
 msgid "There is no transaction without any linked remittance."
-msgstr "Mit dieser Überweisung ist keine Transaktion verbunden"
+msgstr "Mit dieser Überweisung ist keine Transaktion verbunden."
 
 #: apps/treasury/templates/treasury/remittance_list.html:60
 msgid "Transfers with opened remittances"
-msgstr ""
+msgstr "Transfer mit geöffneten Überweisungen"
 
 #: apps/treasury/templates/treasury/remittance_list.html:67
 msgid "There is no transaction with an opened linked remittance."
 msgstr ""
+"Es gibt keine Transaktion mit einer geöffneten verknüpften Überweisung."
 
 #: apps/treasury/templates/treasury/remittance_list.html:75
 msgid "Closed remittances"
-msgstr ""
+msgstr "Geschlossene Überweisungen"
 
 #: apps/treasury/templates/treasury/remittance_list.html:82
 msgid "There is no closed remittance yet."
-msgstr ""
+msgstr "Es gibt noch keine geschlossene Überweisung."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:29
 msgid "total amount"
-msgstr ""
+msgstr "Totalanzahlt"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:35
 msgid ""
 "Warning: Validating this credit implies that all membership transactions "
 "will be validated."
 msgstr ""
+"Achtung: Die Validierung dieses Guthabens bedeutet, dass alle "
+"Mitgliedschaftstransaktionen validiert werden."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:36
 msgid ""
 "If you delete this credit, there all membership transactions will be also "
 "validated, but no credit will be operated."
 msgstr ""
+"Wenn Sie dieses Kredit löschen, werden dort auch alle "
+"Mitgliedschaftstransaktionen validiert, es wird jedoch kein Kredit betrieben."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:37
 msgid ""
 "If this credit is validated, then the user won't be able to ask for a credit "
 "from the Société générale."
 msgstr ""
+"Wenn dieses Kredit validiert ist, kann der Benutzer bei der Société générale "
+"kein Guthaben anfordern."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:38
 msgid "If you think there is an error, please contact the \"respos info\"."
 msgstr ""
+"Wenn Sie glauben, dass ein Fehler vorliegt, wenden Sie sich bitte an die "
+"\"respos info\"."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:44
 msgid "This credit is already validated."
-msgstr ""
+msgstr "Dieser Kredit ist bereits validiert."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:49
 msgid ""
 "Warning: if you don't validate this credit, the note of the user doesn't "
 "have enough money to pay its memberships."
 msgstr ""
+"Achtung: Wenn Sie diese Kredit nicht bestätigen, die Note von dem Benutzer "
+"nicht genug Geld hat, um seine Mitgliedschaft zu zahlen."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:50
 msgid "Please ask the user to credit its note before deleting this credit."
 msgstr ""
+"Bitte bitten Sie den Benutzer, seine Note gutzuschreiben, bevor Sie diese "
+"Kredit löschen."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:57
 #: apps/wei/tables.py:59 apps/wei/tables.py:60 apps/wei/tables.py:99
 msgid "Validate"
-msgstr ""
+msgstr "Validieren"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
 msgid "Return to credit list"
-msgstr ""
+msgstr "Zurück zur Kreditlist"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:34
 msgid "Filter with unvalidated credits only"
-msgstr ""
+msgstr "Filtern Sie nur mit nicht validierten Kredits"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:44
 msgid "There is no matched user that have asked for a Société générale credit."
 msgstr ""
+"Es gibt keinen übereinstimmenden User, der eine Kredit für die Société "
+"générale beantragt hat."
 
 #: apps/treasury/views.py:38
 msgid "Create new invoice"
-msgstr ""
+msgstr "Neue Rechnung"
 
 #: apps/treasury/views.py:89
 msgid "Invoices list"
-msgstr ""
+msgstr "Rechnunglist"
 
 #: apps/treasury/views.py:104 apps/treasury/views.py:265
 #: apps/treasury/views.py:391
 msgid "You are not able to see the treasury interface."
-msgstr ""
+msgstr "Sie können die Quaestor-App nicht sehen."
 
 #: apps/treasury/views.py:114
 msgid "Update an invoice"
-msgstr ""
+msgstr "Rechnung bearbeiten"
 
 #: apps/treasury/views.py:226
 msgid "Create a new remittance"
-msgstr ""
+msgstr "Neue Überweisung"
 
 #: apps/treasury/views.py:253
 msgid "Remittances list"
-msgstr ""
+msgstr "Überweisungliste"
 
 #: apps/treasury/views.py:316
 msgid "Update a remittance"
-msgstr ""
+msgstr "Überweisung bearbeiten"
 
 #: apps/treasury/views.py:339
 msgid "Attach a transaction to a remittance"
-msgstr ""
+msgstr "Fügen Sie einer Überweisung eine Transaktion hinzu"
 
 #: apps/treasury/views.py:383
 msgid "List of credits from the Société générale"
-msgstr ""
+msgstr "Kreditliste von Société générale"
 
 #: apps/treasury/views.py:426
 msgid "Manage credits from the Société générale"
-msgstr ""
+msgstr "Krediten von der Société générale handeln"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
 #: note_kfet/templates/base.html:98
 msgid "WEI"
-msgstr ""
+msgstr "WEI"
 
 #: apps/wei/forms/registration.py:51 apps/wei/models.py:113
 #: apps/wei/models.py:283
 msgid "bus"
-msgstr ""
+msgstr "Bus"
 
 #: apps/wei/forms/registration.py:52
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
 msgstr ""
+"Diese Wahl ist nicht endgültig. Den WEI-Organisatoren steht es frei, Ihnen "
+"einen Bus und ein Team zuzuweisen, insbesondere wenn Sie ein freies Elektron "
+"sind."
 
 #: apps/wei/forms/registration.py:59
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 #: apps/wei/forms/registration.py:61
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
 msgstr ""
+"Lassen Sie dieses Feld leer, wenn Sie nicht in einem Team sind (Mitarbeiter, "
+"Buschef, freies Elektron)"
 
 #: apps/wei/forms/registration.py:67 apps/wei/forms/registration.py:77
 #: apps/wei/models.py:148
 msgid "WEI Roles"
-msgstr ""
+msgstr "WEI Rollen"
 
 #: apps/wei/forms/registration.py:68
 msgid "Select the roles that you are interested in."
-msgstr ""
+msgstr "Wählen Sie die Rollen aus, an denen Sie interessiert sind."
 
 #: apps/wei/forms/registration.py:113
 msgid "This team doesn't belong to the given bus."
-msgstr ""
+msgstr "Dieses Team gehört nicht zum angegebenen Bus."
 
 #: apps/wei/forms/surveys/wei2020.py:29
 msgid "Choose a word:"
-msgstr ""
+msgstr "Wählen Sie ein Wort:"
 
 #: apps/wei/models.py:24 apps/wei/templates/wei/base.html:36
 msgid "year"
@@ -2371,11 +2391,11 @@ msgstr "Abschlussdatum"
 
 #: apps/wei/models.py:77
 msgid "survey information"
-msgstr ""
+msgstr "Umfrage Infos"
 
 #: apps/wei/models.py:78
 msgid "Information about the survey for new members, encoded in JSON"
-msgstr ""
+msgstr "Informationen zur Umfrage für neue Mitglieder, codiert in JSON"
 
 #: apps/wei/models.py:100
 msgid "Bus"
@@ -2411,7 +2431,7 @@ msgstr "Kredit von der Société générale"
 
 #: apps/wei/models.py:177
 msgid "Caution check given"
-msgstr ""
+msgstr "Caution check given"
 
 #: apps/wei/models.py:181 apps/wei/templates/wei/weimembership_form.html:64
 msgid "birth date"
@@ -2427,7 +2447,7 @@ msgstr "Weiblich"
 
 #: apps/wei/models.py:189
 msgid "Non binary"
-msgstr "nicht binär"
+msgstr "Nicht binär"
 
 #: apps/wei/models.py:191 apps/wei/templates/wei/weimembership_form.html:55
 msgid "gender"
@@ -2520,7 +2540,7 @@ msgstr "WEI Preis (bezahlte Studenten)"
 
 #: apps/wei/templates/wei/base.html:47 apps/wei/templates/wei/base.html:54
 msgid "The BDE membership is included in the WEI registration."
-msgstr "Die BDE-Mitgliedschaft ist in der WEI-Registrierung enthalten"
+msgstr "Die BDE-Mitgliedschaft ist in der WEI-Registrierung enthalten."
 
 #: apps/wei/templates/wei/base.html:51
 msgid "WEI fee (unpaid students)"
@@ -2574,7 +2594,7 @@ msgstr "Weiter"
 
 #: apps/wei/templates/wei/survey_closed.html:15
 msgid "The inscription for this WEI are now closed."
-msgstr " Die Inschrift für diese WEI ist nun geschlossen."
+msgstr "Die Inschrift für diese WEI ist nun geschlossen."
 
 #: apps/wei/templates/wei/survey_closed.html:19
 msgid "Return to WEI detail"
@@ -2602,7 +2622,7 @@ msgstr "Mitglied der WEI"
 
 #: apps/wei/templates/wei/weiclub_detail.html:89
 msgid "Unvalidated registrations"
-msgstr "unvalidierte Registrierungen"
+msgstr "Unvalidierte Registrierungen"
 
 #: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:76
 msgid "Create WEI"
@@ -2614,68 +2634,70 @@ msgstr "WEI List"
 
 #: apps/wei/templates/wei/weimembership_form.html:10
 msgid "Review registration"
-msgstr ""
+msgstr "Registrierung schauen"
 
 #: apps/wei/templates/wei/weimembership_form.html:35
 msgid "ENS year"
-msgstr ""
+msgstr "ENS Jahr"
 
 #: apps/wei/templates/wei/weimembership_form.html:76
 msgid "Payment from Société générale"
-msgstr ""
+msgstr "Kredit von der Société générale"
 
 #: apps/wei/templates/wei/weimembership_form.html:80
 msgid "Suggested bus from the survey:"
-msgstr ""
+msgstr "Vorgeschlagener Bus aus der Umfrage:"
 
 #: apps/wei/templates/wei/weimembership_form.html:85
 msgid "Raw survey information"
-msgstr ""
+msgstr "Rohe Umfrageinformationen"
 
 #: apps/wei/templates/wei/weimembership_form.html:95
 msgid "The algorithm didn't run."
-msgstr ""
+msgstr "Der Algorithmus wurde nicht ausgeführt."
 
 #: apps/wei/templates/wei/weimembership_form.html:98
 msgid "caution check given"
-msgstr ""
+msgstr "Vorsichtsprüfung gegeben"
 
 #: apps/wei/templates/wei/weimembership_form.html:102
 msgid "preferred bus"
-msgstr ""
+msgstr "bevorzugter Bus"
 
 #: apps/wei/templates/wei/weimembership_form.html:105
 msgid "preferred team"
-msgstr ""
+msgstr "bevorzugtes Team"
 
 #: apps/wei/templates/wei/weimembership_form.html:108
 msgid "preferred roles"
-msgstr ""
+msgstr "bevorzugte Rollen"
 
 #: apps/wei/templates/wei/weimembership_form.html:115
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:30
 msgid "Update registration"
-msgstr ""
+msgstr "Registrierung aktualisieren"
 
 #: apps/wei/templates/wei/weimembership_form.html:131
 msgid "The registration is already validated and can't be unvalidated."
 msgstr ""
+"Die Registrierung ist bereits validiert und kann nicht ungültig gemacht "
+"werden."
 
 #: apps/wei/templates/wei/weimembership_form.html:132
 msgid "The user joined the bus"
-msgstr ""
+msgstr "Der Benutzer ist dem Bus beigetreten"
 
 #: apps/wei/templates/wei/weimembership_form.html:133
 msgid "in the team"
-msgstr ""
+msgstr "In der Team"
 
 #: apps/wei/templates/wei/weimembership_form.html:134
 msgid "in no team (staff)"
-msgstr ""
+msgstr "In keinem Team (staff)"
 
 #: apps/wei/templates/wei/weimembership_form.html:134
 msgid "with the following roles:"
-msgstr ""
+msgstr "mit den folgenden Rollen:"
 
 #: apps/wei/templates/wei/weimembership_form.html:139
 msgid ""
@@ -2684,6 +2706,11 @@ msgid ""
 "created but will be invalid. You will have to validate it once the bank "
 "validated the creation of the account, or to change the payment method."
 msgstr ""
+"Das WEI wird von der Société générale bezahlt. Die Mitgliedschaft wird auch "
+"dann erstellt, wenn die Bank die BDE noch nicht bezahlt hat. Die "
+"Mitgliedschaftstransaktion wird erstellt, ist jedoch ungültig. Sie müssen es "
+"validieren, sobald die Bank die Erstellung des Kontos validiert hat, oder "
+"die Zahlungsmethode ändern."
 
 #: apps/wei/templates/wei/weimembership_form.html:149
 #, python-format
@@ -2691,6 +2718,8 @@ msgid ""
 "The note don't have enough money (%(balance)s, %(pretty_fee)s required). The "
 "registration may fail if you don't credit the note now."
 msgstr ""
+"Die Note hat nicht genug Geld (%(balance)s,%(pretty_fee)s erforderlich). Die "
+"Registrierung kann fehlschlagen, wenn Sie die Note jetzt nicht gutschreiben."
 
 #: apps/wei/templates/wei/weimembership_form.html:157
 #, python-format
@@ -2698,10 +2727,12 @@ msgid ""
 "The note has enough money (%(pretty_fee)s required), the registration is "
 "possible."
 msgstr ""
+"Die Note hat genug Geld (%(pretty_fee)s erforderlich), die Registrierung ist "
+"möglich."
 
 #: apps/wei/templates/wei/weimembership_form.html:166
 msgid "The user didn't give her/his caution check."
-msgstr ""
+msgstr "Der User hat nicht sein Vorsichtsprüfung gegeben."
 
 #: apps/wei/templates/wei/weimembership_form.html:174
 msgid ""
@@ -2709,14 +2740,18 @@ msgid ""
 "membership will be processed automatically, the WEI registration includes "
 "the membership fee."
 msgstr ""
+"Dieser Benutzer ist für das kommende Jahr kein Mitglied des Kfet-Clubs. Die "
+"Mitgliedschaft wird automatisch bearbeitet, die WEI-Registrierung beinhaltet "
+"den Mitgliedsbeitrag."
 
 #: apps/wei/templates/wei/weimembership_list.html:23
 msgid "View unvalidated registrations..."
-msgstr ""
+msgstr "Nicht validierte Registrierungen anzeigen ..."
 
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:16
 msgid "This registration is already validated and can't be deleted."
 msgstr ""
+"Diese Registrierung ist bereits validiert und kann nicht gelöscht werden."
 
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:23
 #, python-format
@@ -2724,14 +2759,16 @@ msgid ""
 "Are you sure you want to delete the registration of %(user)s for the WEI "
 "%(wei_name)s? This action can't be undone."
 msgstr ""
+"Möchten Sie die Registrierung von %(user)s für die WEI %(wei_name)s wirklich "
+"löschen? Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: apps/wei/templates/wei/weiregistration_list.html:17
 msgid "There is no pre-registration found with this pattern."
-msgstr ""
+msgstr "Bei diesem Muster wurde keine Vorregistrierung gefunden."
 
 #: apps/wei/templates/wei/weiregistration_list.html:23
 msgid "View validated memberships..."
-msgstr ""
+msgstr "Validierte Mitgliedschaften anzeigen ..."
 
 #: apps/wei/views.py:55
 msgid "Search WEI"
@@ -2787,45 +2824,47 @@ msgstr "WEI Team bearbeiten"
 
 #: apps/wei/views.py:482
 msgid "Register first year student to the WEI"
-msgstr ""
+msgstr "Registrieren Sie den Erstsemester beim WEI"
 
 #: apps/wei/views.py:527 apps/wei/views.py:607
 msgid "This user is already registered to this WEI."
-msgstr ""
+msgstr "Dieser Benutzer ist bereits bei dieser WEI registriert."
 
 #: apps/wei/views.py:532
 msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
 msgstr ""
+"Dieser Benutzer kann nicht in seinem ersten Jahr sein, da er bereits an "
+"einer WEI teilgenommen hat."
 
 #: apps/wei/views.py:549
 msgid "Register old student to the WEI"
-msgstr ""
+msgstr "Registrieren Sie einen alten Studenten beim WEI"
 
 #: apps/wei/views.py:592 apps/wei/views.py:680
 msgid "You already opened an account in the Société générale."
-msgstr ""
+msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
 
 #: apps/wei/views.py:637
 msgid "Update WEI Registration"
-msgstr ""
+msgstr "WEI Registrierung aktualisieren"
 
 #: apps/wei/views.py:739
 msgid "Delete WEI registration"
-msgstr ""
+msgstr "WEI Registrierung löschen"
 
 #: apps/wei/views.py:750
 msgid "You don't have the right to delete this WEI registration."
-msgstr ""
+msgstr "Sie haben nicht das Recht, diese WEI-Registrierung zu löschen."
 
 #: apps/wei/views.py:769
 msgid "Validate WEI registration"
-msgstr ""
+msgstr "Überprüfen Sie die WEI-Registrierung"
 
 #: apps/wei/views.py:916
 msgid "This user didn't give her/his caution check."
-msgstr ""
+msgstr "Dieser User hat seine / ihre Vorsicht nicht überprüft."
 
 #: note_kfet/settings/base.py:155
 msgid "German"
@@ -2841,7 +2880,7 @@ msgstr "Französich"
 
 #: note_kfet/templates/400.html:10
 msgid "Bad request"
-msgstr ""
+msgstr "Ungültige Anfrage"
 
 #: note_kfet/templates/400.html:14
 msgid ""
@@ -2849,32 +2888,37 @@ msgid ""
 "been sent to webmasters with the details of the error. You can now drink a "
 "coke."
 msgstr ""
+"Entschuldigung, Ihre Anfrage war ungültig. Ich weiß nicht, was falsch sein "
+"könnte. An Webmaster wurde eine E-Mail mit den Details des Fehlers gesendet. "
+"Sie können jetzt eine Cola trinken."
 
 #: note_kfet/templates/403.html:10
 msgid "Permission denied"
-msgstr ""
+msgstr "Zugang verweigert"
 
 #: note_kfet/templates/403.html:13
 msgid "You don't have the right to perform this request."
-msgstr ""
+msgstr "Sie haben nicht das Recht, diese Anfrage auszuführen."
 
 #: note_kfet/templates/403.html:15 note_kfet/templates/404.html:19
 msgid "Exception message:"
-msgstr ""
+msgstr "Ausnahmemeldung:"
 
 #: note_kfet/templates/404.html:10
 msgid "Page not found"
-msgstr ""
+msgstr "Seite nicht gefunden"
 
 #: note_kfet/templates/404.html:14
 #, python-format
 msgid ""
 "The requested path <code>%(request_path)s</code> was not found on the server."
 msgstr ""
+"Der angeforderte Pfad <code>%(request_path) s </ code> wurde auf dem Server "
+"nicht gefunden."
 
 #: note_kfet/templates/500.html:10
 msgid "Server error"
-msgstr ""
+msgstr "Serverfehler"
 
 #: note_kfet/templates/500.html:14
 msgid ""
@@ -2882,14 +2926,17 @@ msgid ""
 "sent to webmasters with the detail of the error, and this will be fixed "
 "soon. You can now drink a beer."
 msgstr ""
+"Bei der Bearbeitung Ihrer Anfrage ist leider ein Fehler aufgetreten. Es "
+"wurde eine E-Mail mit den Details des Fehlers an die Webmaster gesendet, die "
+"in Kürze behoben wird. Sie können jetzt ein Bier trinken."
 
 #: note_kfet/templates/autocomplete_model.html:14
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: note_kfet/templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
-msgstr ""
+msgstr "Die BDE ENS-Paris-Saclay Note."
 
 #: note_kfet/templates/base.html:74
 msgid "Users"
@@ -2908,14 +2955,16 @@ msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
 msgstr ""
+"Ihre E-Mail-Adresse ist nicht validiert. Bitte überprüfen Sie Ihren "
+"Posteingang und klicken Sie auf den Validierungslink."
 
 #: note_kfet/templates/base_search.html:15
 msgid "Search by attribute such as name…"
-msgstr ""
+msgstr "Suche nach Attributen wie Name…"
 
 #: note_kfet/templates/base_search.html:23
 msgid "There is no results."
-msgstr ""
+msgstr "Es gibt keine Ergebnisse."
 
 #: note_kfet/templates/cas_server/base.html:7
 msgid "Central Authentication Service"
@@ -2928,21 +2977,25 @@ msgid ""
 "%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
 "upgrading."
 msgstr ""
+"Eine neue Version der Anwendung ist verfügbar. Diese Instanz führt "
+"%(VERSION) s aus und die letzte Version ist %(LAST_VERSION) s. Bitte erwägen "
+"Sie ein Upgrade."
 
 #: note_kfet/templates/registration/logged_out.html:13
 msgid "Thanks for spending some quality time with the Web site today."
 msgstr ""
+"Vielen Dank, dass Sie heute einige Zeit mit dieser Website verbracht haben."
 
 #: note_kfet/templates/registration/logged_out.html:14
 msgid "Log in again"
-msgstr ""
+msgstr "Nochmal anmelden"
 
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
 #: note_kfet/templates/registration/password_reset_complete.html:15
 msgid "Log in"
-msgstr ""
+msgstr "Anmelden"
 
 #: note_kfet/templates/registration/login.html:20
 #, python-format
@@ -2951,75 +3004,95 @@ msgid ""
 "page. Would you like to login to a different account, or with a higher "
 "permission mask?"
 msgstr ""
+"Sie sind als %(username)s authentifiziert, aber nicht berechtigt, auf diese "
+"Seite zuzugreifen. Möchten Sie sich bei einem anderen Konto oder mit einer "
+"Maske mit höherer Berechtigung anmelden?"
 
 #: note_kfet/templates/registration/login.html:30
 msgid ""
 "You must be logged with a staff account with the higher mask to access "
 "Django Admin."
 msgstr ""
+"Sie müssen mit einem staffkonto mit der höheren Maske angemeldet sein, um "
+"auf Django Admin zugreifen zu können."
 
 #: note_kfet/templates/registration/login.html:40
 msgid "Forgotten your password or username?"
-msgstr ""
+msgstr "Passwort oder Username vergessen?"
 
 #: note_kfet/templates/registration/password_change_done.html:13
 msgid "Your password was changed."
-msgstr ""
+msgstr "Ihr Passwort wurde geändert."
 
 #: note_kfet/templates/registration/password_change_form.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr ""
+"Bitte geben Sie aus Sicherheitsgründen Ihr altes Passwort ein und geben Sie "
+"dann Ihr neues Passwort zweimal ein, damit wir überprüfen können, ob Sie es "
+"richtig eingegeben haben."
 
 #: note_kfet/templates/registration/password_change_form.html:16
 #: note_kfet/templates/registration/password_reset_confirm.html:17
 msgid "Change my password"
-msgstr ""
+msgstr "Mein Passwort ändern"
 
 #: note_kfet/templates/registration/password_reset_complete.html:13
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Ihr Passwort wurde festgelegt. Sie können sich jetzt anmelden."
 
 #: note_kfet/templates/registration/password_reset_confirm.html:14
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
+"Bitte geben Sie Ihr neues Passwort zweimal ein, damit wir überprüfen können, "
+"ob Sie es richtig eingegeben haben."
 
 #: note_kfet/templates/registration/password_reset_confirm.html:21
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
+"Der Link zum Zurücksetzen des Passworts war ungültig, möglicherweise weil er "
+"bereits verwendet wurde. Bitte fordern Sie ein neues Passwort änderung."
 
 #: note_kfet/templates/registration/password_reset_done.html:13
 msgid ""
 "We've emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
+"Wir haben Ihnen Anweisungen zum Festlegen Ihres Passworts per E-Mail "
+"gesendet, falls ein Konto mit der von Ihnen eingegebenen E-Mail-Adresse "
+"vorhanden ist. Sie sollten sie in Kürze erhalten."
 
 #: note_kfet/templates/registration/password_reset_done.html:14
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Wenn Sie keine E-Mail erhalten, stellen Sie sicher, dass Sie die Adresse "
+"eingegeben haben, unter der Sie sich registriert haben, und überprüfen Sie "
+"Ihren Spam-Ordner."
 
 #: note_kfet/templates/registration/password_reset_form.html:13
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
 msgstr ""
+"Passwort vergessen? Geben Sie unten Ihre E-Mail-Adresse ein, und wir senden "
+"Ihnen Anweisungen zum Festlegen einer neuen E-Mail."
 
 #: note_kfet/templates/registration/password_reset_form.html:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Mein Passwort zurücksetzen"
 
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:27
 msgid "Sign up"
-msgstr ""
+msgstr "Registrieren"
 
 #: note_kfet/templates/registration/signup.html:15
 msgid ""
@@ -3028,3 +3101,8 @@ msgid ""
 "Kfet and pay the registration fee. You must also validate your email address "
 "by following the link you received."
 msgstr ""
+"Wenn Sie sich bereits registriert haben, wird Ihre Registrierung "
+"berücksichtigt. Die BDE muss Ihr Konto validieren, bevor Sie sich anmelden "
+"können. Sie müssen zum Kfet gehen und die Registrierungbeitrag bezahlen. Sie "
+"müssen Ihre E-Mail-Adresse auch überprüfen, indem Sie dem Link folgen, den "
+"Sie erhalten haben."
