@@ -27,7 +27,7 @@ $(document).ready(function() {
     });
 
     // Switching in double consumptions mode should update the layout
-    $("#double_conso").click(function() {
+    $("#double_conso").change(function() {
         $("#consos_list_div").removeClass('d-none');
         $("#user_select_div").attr('class', 'col-xl-4');
         $("#infos_div").attr('class', 'col-sm-5 col-xl-6');
@@ -47,7 +47,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#single_conso").click(function() {
+    $("#single_conso").change(function() {
         $("#consos_list_div").addClass('d-none');
         $("#user_select_div").attr('class', 'col-xl-7');
         $("#infos_div").attr('class', 'col-sm-5 col-md-4');
