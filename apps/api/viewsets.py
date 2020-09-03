@@ -6,11 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth.models import User
-
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
-
 from permission.backends import PermissionBackend
-
 from note_kfet.middlewares import get_current_session
 from note.models import Alias
 
@@ -47,7 +44,6 @@ class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
         return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
-
 class UserViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
@@ -67,7 +63,7 @@ class UserViewSet(ReadProtectedModelViewSet):
 
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
-            
+
             # We match first a user by its username, then if an alias is matched without normalization
             # And finally if the normalized pattern matches a normalized alias.
             queryset = queryset.filter(
