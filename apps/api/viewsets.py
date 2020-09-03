@@ -64,28 +64,36 @@ class UserViewSet(ReadProtectedModelViewSet):
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
 
-            # We match first a user by its username, then if an alias is matched without normalization
-            # And finally if the normalized pattern matches a normalized alias.
+            # Filter with different rules
+            # We use union-all to keep each filter rule sorted in result
             queryset = queryset.filter(
-                           username__iregex="^" + pattern).union(
-                       queryset.filter(
-                           Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           Q(note__alias__normalized_name__iregex="^" + pattern.lower())
-                           & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           (Q(last_name__iregex="^" + pattern) | Q(first_name__iregex="^" + pattern))
-                           & ~Q(note__alias__normalized_name__iregex="^" + pattern.lower())
-                           & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True)
+                # Match without normalization
+                note__alias__name__iregex="^" + pattern
+            ).union(
+                queryset.filter(
+                    # Match with normalization
+                    Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            ).union(
+                queryset.filter(
+                    # Match on lower pattern
+                    Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            ).union(
+                queryset.filter(
+                    # Match on firstname or lastname
+                    (Q(last_name__iregex="^" + pattern) | Q(first_name__iregex="^" + pattern))
+                    & ~Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            )
 
         queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
             else queryset.order_by("username")
