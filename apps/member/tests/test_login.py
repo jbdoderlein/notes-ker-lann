@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from note.models import TransactionTemplate, TemplateCategory
-
 """
 Test that login page still works
 """
@@ -56,4 +54,3 @@ class TemplateLoggedInTests(TestCase):
     def test_accounts_password_reset(self):
         response = self.client.get('/accounts/password_reset/')
         self.assertEqual(response.status_code, 200)
-

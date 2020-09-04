@@ -5,14 +5,12 @@ import hashlib
 import os
 from datetime import date, timedelta
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Q
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-
 from member.models import Club, Membership, Profile
 from note.models import Alias, NoteSpecial
 from permission.models import Role
