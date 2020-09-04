@@ -2568,6 +2568,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 165,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 1,
+			"field": "password",
+			"permanent": true,
+			"description": "Changer son mot de passe"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2591,7 +2607,8 @@
 				52,
 				126,
 				161,
-				162
+				162,
+				165
 			]
 		}
 	},
@@ -2932,7 +2949,8 @@
 				161,
 				162,
 				163,
-				164
+				164,
+				165
 			]
 		}
 	},
