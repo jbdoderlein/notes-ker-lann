@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 from hashlib import md5
+from random import randint
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +11,7 @@ from django.db.models import F, Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, TemplateView, UpdateView
@@ -309,7 +311,6 @@ NAME:Kfet Calendar
 CALSCALE:GREGORIAN
 BEGIN:VTIMEZONE
 TZID:Europe/Berlin
-TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Berlin
 X-LIC-LOCATION:Europe/Berlin
 BEGIN:DAYLIGHT
 TZOFFSETFROM:+0100
@@ -330,12 +331,12 @@ END:VTIMEZONE
         for activity in Activity.objects.filter(valid=True).order_by("-date_start").all():
             ics += f"""BEGIN:VEVENT
 DTSTAMP:{"{:%Y%m%dT%H%M%S}".format(activity.date_start)}Z
-UID:{activity.id}
+UID:{md5((activity.name + "$" + str(activity.id) + str(activity.date_start)).encode("UTF-8")).hexdigest()}
 SUMMARY;CHARSET=UTF-8:{self.multilines(activity.name, 75, 22)}
 DTSTART;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_start)}
 DTEND;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_end)}
 LOCATION:{self.multilines(activity.location, 75, 9) if activity.location else "Kfet"}
-DESCRIPTION;CHARSET=UTF-8:{self.multilines(activity.description, 75, 26)}
+DESCRIPTION;CHARSET=UTF-8:""" + self.multilines(activity.description.replace("\n", "\\n"), 75, 26) + """
  -- {activity.organizer.name}
 END:VEVENT
 """
