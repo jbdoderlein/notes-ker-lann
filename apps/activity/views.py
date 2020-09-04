@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from hashlib import md5
-from random import randint
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,7 +11,6 @@ from django.db.models import F, Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, TemplateView, UpdateView
@@ -195,10 +194,10 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             if pattern[0] != "^":
                 pattern = "^" + pattern
             guest_qs = guest_qs.filter(
-                Q(first_name__regex=pattern)
-                | Q(last_name__regex=pattern)
-                | Q(inviter__alias__name__regex=pattern)
-                | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))
+                Q(first_name__iregex=pattern)
+                | Q(last_name__iregex=pattern)
+                | Q(inviter__alias__name__iregex=pattern)
+                | Q(inviter__alias__normalized_name__iregex=Alias.normalize(pattern))
             )
         else:
             guest_qs = guest_qs.none()
@@ -231,21 +230,19 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
             note_qs = note_qs.filter(
-                Q(note__noteuser__user__first_name__regex=pattern)
-                | Q(note__noteuser__user__last_name__regex=pattern)
-                | Q(name__regex=pattern)
-                | Q(normalized_name__regex=Alias.normalize(pattern))
+                Q(note__noteuser__user__first_name__iregex=pattern)
+                | Q(note__noteuser__user__last_name__iregex=pattern)
+                | Q(name__iregex=pattern)
+                | Q(normalized_name__iregex=Alias.normalize(pattern))
             )
         else:
             note_qs = note_qs.none()
 
-        if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql':
-            note_qs = note_qs.distinct('note__pk')[:20]
-        else:
-            # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
-            # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
-            # In production mode, please use PostgreSQL.
-            note_qs = note_qs.distinct()[:20]
+        # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
+        # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
+        # In production mode, please use PostgreSQL.
+        note_qs = note_qs.distinct('note__pk')[:20]\
+            if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql' else note_qs.distinct()[:20]
         return note_qs
 
     def get_context_data(self, **kwargs):
