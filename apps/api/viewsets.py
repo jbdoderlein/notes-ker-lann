@@ -26,7 +26,7 @@ class ReadProtectedModelViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         get_current_session().setdefault("permission_mask", 42)
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
+        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
 class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
@@ -41,7 +41,7 @@ class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         user = self.request.user
         get_current_session().setdefault("permission_mask", 42)
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
+        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
 class UserViewSet(ReadProtectedModelViewSet):
