@@ -2607,7 +2607,7 @@
 				"note",
 				"transaction"
 			],
-			"query": "[\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}], [\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]",
+			"query": "[\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]",
 			"type": "change",
 			"mask": 2,
 			"field": "valid",

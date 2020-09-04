@@ -50,10 +50,7 @@ def save_object(sender, instance, **kwargs):
     in order to store each modification made
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED:
-        return
-
-    if hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_log"):
         return
 
     # noinspection PyProtectedMember
