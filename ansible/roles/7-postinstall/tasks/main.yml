@@ -22,3 +22,9 @@
   args:
     chdir: /var/www/note_kfet
   become_user: postgres
+
+- name: Collect static files
+  command: /var/www/note_kfet/env/bin/python manage.py collectstatic --noinput
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data

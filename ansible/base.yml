@@ -1,18 +1,20 @@
 #!/usr/bin/env ansible-playbook
 ---
 
-- hosts: bde-nk20-beta.adh.crans.org
+- hosts: bde-note.adh.crans.org
   vars_prompt:
     - name: DB_PASSWORD
       prompt: "Password of the database"
       private: yes
   vars:
     mirror: deb.debian.org
+    note:
+      server_name: bde-note.adh.crans.org
   roles:
     - 1-apt-basic
     - 2-nk20
     - 3-pip
-    - 4-nginx
-    - 5-certbot
+    - 4-certbot
+    - 5-nginx
     - 6-psql
     - 7-postinstall
