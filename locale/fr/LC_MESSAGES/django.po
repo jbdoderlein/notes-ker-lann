@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 23:17+0200\n"
+"POT-Creation-Date: 2020-09-04 07:44+0200\n"
 "PO-Revision-Date: 2020-09-02 23:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -49,7 +49,7 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 
 #: apps/activity/models.py:27 apps/activity/models.py:62
-#: apps/member/models.py:198
+#: apps/member/models.py:200
 #: apps/member/templates/member/includes/club_info.html:4
 #: apps/member/templates/member/includes/profile_info.html:4
 #: apps/note/models/notes.py:247 apps/note/models/transactions.py:26
@@ -110,7 +110,7 @@ msgstr "Lieu où l'activité est organisée, par exemple la Kfet."
 msgid "type"
 msgstr "type"
 
-#: apps/activity/models.py:88 apps/logs/models.py:22 apps/member/models.py:303
+#: apps/activity/models.py:88 apps/logs/models.py:22 apps/member/models.py:305
 #: apps/note/models/notes.py:138 apps/treasury/models.py:267
 #: apps/treasury/templates/treasury/sogecredit_detail.html:14
 #: apps/wei/models.py:160 apps/wei/templates/wei/survey.html:15
@@ -273,7 +273,7 @@ msgstr "Liste des invités"
 #: apps/note/models/transactions.py:259
 #: apps/note/templates/note/transaction_form.html:16
 #: apps/note/templates/note/transaction_form.html:148
-#: note_kfet/templates/base.html:68
+#: note_kfet/templates/base.html:69
 msgid "Transfer"
 msgstr "Virement"
 
@@ -356,7 +356,7 @@ msgid "validate"
 msgstr "valider"
 
 #: apps/activity/templates/activity/includes/activity_info.html:71
-#: apps/logs/models.py:62 apps/note/tables.py:162
+#: apps/logs/models.py:62 apps/note/tables.py:194
 msgid "edit"
 msgstr "modifier"
 
@@ -368,7 +368,7 @@ msgstr "Inviter"
 msgid "Create new activity"
 msgstr "Créer une nouvelle activité"
 
-#: apps/activity/views.py:59 note_kfet/templates/base.html:86
+#: apps/activity/views.py:59 note_kfet/templates/base.html:87
 msgid "Activities"
 msgstr "Activités"
 
@@ -434,7 +434,7 @@ msgstr "ouvelles données"
 msgid "create"
 msgstr "créer"
 
-#: apps/logs/models.py:63 apps/note/tables.py:132 apps/note/tables.py:168
+#: apps/logs/models.py:63 apps/note/tables.py:164 apps/note/tables.py:200
 #: apps/permission/models.py:127 apps/treasury/tables.py:38
 #: apps/wei/tables.py:75
 msgid "delete"
@@ -460,21 +460,21 @@ msgstr "journal de modification"
 msgid "changelogs"
 msgstr "journaux de modifications"
 
-#: apps/member/admin.py:52 apps/member/models.py:225
+#: apps/member/admin.py:50 apps/member/models.py:227
 #: apps/member/templates/member/includes/club_info.html:34
 msgid "membership fee (paid students)"
 msgstr "cotisation pour adhérer (normalien élève)"
 
-#: apps/member/admin.py:53 apps/member/models.py:230
+#: apps/member/admin.py:51 apps/member/models.py:232
 #: apps/member/templates/member/includes/club_info.html:37
 msgid "membership fee (unpaid students)"
 msgstr "cotisation pour adhérer (normalien étudiant)"
 
-#: apps/member/admin.py:67 apps/member/models.py:314
+#: apps/member/admin.py:65 apps/member/models.py:316
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/admin.py:68 apps/member/models.py:328
+#: apps/member/admin.py:66 apps/member/models.py:330
 msgid "fee"
 msgstr "cotisation"
 
@@ -502,8 +502,8 @@ msgstr "choisissez une image"
 msgid "Maximal size: 2MB"
 msgstr "Taille maximale : 2 Mo"
 
-#: apps/member/forms.py:87 apps/member/views.py:101
-#: apps/registration/forms.py:33
+#: apps/member/forms.py:87 apps/member/views.py:100
+#: apps/registration/forms.py:33 apps/registration/views.py:237
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
@@ -720,7 +720,7 @@ msgstr "profil utilisateur"
 msgid "Activate your Note Kfet account"
 msgstr "Activez votre compte Note Kfet"
 
-#: apps/member/models.py:203
+#: apps/member/models.py:205
 #: apps/member/templates/member/includes/club_info.html:55
 #: apps/member/templates/member/includes/profile_info.html:31
 #: apps/registration/templates/registration/future_profile_detail.html:22
@@ -729,88 +729,88 @@ msgstr "Activez votre compte Note Kfet"
 msgid "email"
 msgstr "courriel"
 
-#: apps/member/models.py:210
+#: apps/member/models.py:212
 msgid "parent club"
 msgstr "club parent"
 
-#: apps/member/models.py:219
+#: apps/member/models.py:221
 msgid "require memberships"
 msgstr "nécessite des adhésions"
 
-#: apps/member/models.py:220
+#: apps/member/models.py:222
 msgid "Uncheck if this club don't require memberships."
 msgstr "Décochez si ce club n'utilise pas d'adhésions."
 
-#: apps/member/models.py:236
+#: apps/member/models.py:238
 #: apps/member/templates/member/includes/club_info.html:26
 msgid "membership duration"
 msgstr "durée de l'adhésion"
 
-#: apps/member/models.py:237
+#: apps/member/models.py:239
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr "La durée maximale (en jours) d'une adhésion (NULL = infinie)."
 
-#: apps/member/models.py:244
+#: apps/member/models.py:246
 #: apps/member/templates/member/includes/club_info.html:16
 msgid "membership start"
 msgstr "début de l'adhésion"
 
-#: apps/member/models.py:245
+#: apps/member/models.py:247
 msgid "Date from which the members can renew their membership."
 msgstr ""
 "Date à partir de laquelle les adhérents peuvent renouveler leur adhésion."
 
-#: apps/member/models.py:251
+#: apps/member/models.py:253
 #: apps/member/templates/member/includes/club_info.html:21
 msgid "membership end"
 msgstr "fin de l'adhésion"
 
-#: apps/member/models.py:252
+#: apps/member/models.py:254
 msgid "Maximal date of a membership, after which members must renew it."
 msgstr ""
 "Date maximale d'une fin d'adhésion, après laquelle les adhérents doivent la "
 "renouveler."
 
-#: apps/member/models.py:284 apps/member/models.py:309
+#: apps/member/models.py:286 apps/member/models.py:311
 #: apps/note/models/notes.py:179
 msgid "club"
 msgstr "club"
 
-#: apps/member/models.py:285
+#: apps/member/models.py:287
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:319
+#: apps/member/models.py:321
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:323
+#: apps/member/models.py:325
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:374
+#: apps/member/models.py:375
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:385 apps/member/views.py:676
+#: apps/member/models.py:384 apps/member/views.py:669
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:433
+#: apps/member/models.py:432
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:486
+#: apps/member/models.py:480
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:489
+#: apps/member/models.py:483 apps/note/models/transactions.py:359
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:490
+#: apps/member/models.py:484
 msgid "memberships"
 msgstr "adhésions"
 
@@ -904,8 +904,8 @@ msgstr ""
 "à nouveau possible."
 
 #: apps/member/templates/member/club_alias.html:10
-#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:240
-#: apps/member/views.py:450
+#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:238
+#: apps/member/views.py:443
 msgid "Note aliases"
 msgstr "Alias de la note"
 
@@ -1036,43 +1036,43 @@ msgstr "Inscriptions"
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:138
+#: apps/member/views.py:137
 msgid "Profile detail"
 msgstr "Détails de l'utilisateur"
 
-#: apps/member/views.py:201
+#: apps/member/views.py:197
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:260
+#: apps/member/views.py:258
 msgid "Update note picture"
 msgstr "Modifier la photo de la note"
 
-#: apps/member/views.py:318
+#: apps/member/views.py:311
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: apps/member/views.py:346
+#: apps/member/views.py:338
 msgid "Create new club"
 msgstr "Créer un nouveau club"
 
-#: apps/member/views.py:364
+#: apps/member/views.py:357
 msgid "Search club"
 msgstr "Chercher un club"
 
-#: apps/member/views.py:397
+#: apps/member/views.py:390
 msgid "Club detail"
 msgstr "Détails du club"
 
-#: apps/member/views.py:473
+#: apps/member/views.py:466
 msgid "Update club"
 msgstr "Modifier le club"
 
-#: apps/member/views.py:507
+#: apps/member/views.py:500
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:667 apps/wei/views.py:922
+#: apps/member/views.py:660 apps/wei/views.py:922
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1080,25 +1080,25 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:680
+#: apps/member/views.py:673
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:685
+#: apps/member/views.py:678
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:701 apps/member/views.py:703 apps/member/views.py:705
-#: apps/registration/views.py:292 apps/registration/views.py:294
-#: apps/registration/views.py:296 apps/wei/views.py:927 apps/wei/views.py:931
+#: apps/member/views.py:694 apps/member/views.py:696 apps/member/views.py:698
+#: apps/registration/views.py:287 apps/registration/views.py:289
+#: apps/registration/views.py:291 apps/wei/views.py:927 apps/wei/views.py:931
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
-#: apps/member/views.py:789
+#: apps/member/views.py:771
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
 
-#: apps/member/views.py:814
+#: apps/member/views.py:796
 msgid "Members of the club"
 msgstr "Membres du club"
 
@@ -1304,7 +1304,7 @@ msgid "transaction templates"
 msgstr "modèles de transaction"
 
 #: apps/note/models/transactions.py:112 apps/note/models/transactions.py:125
-#: apps/note/tables.py:33 apps/note/tables.py:42
+#: apps/note/tables.py:34 apps/note/tables.py:44
 msgid "used alias"
 msgstr "alias utilisé"
 
@@ -1316,7 +1316,7 @@ msgstr "quantité"
 msgid "reason"
 msgstr "raison"
 
-#: apps/note/models/transactions.py:151 apps/note/tables.py:107
+#: apps/note/models/transactions.py:151 apps/note/tables.py:139
 msgid "invalidity reason"
 msgstr "motif d'invalidité"
 
@@ -1391,7 +1391,7 @@ msgstr "Transaction de crédit/retrait"
 msgid "Special transactions"
 msgstr "Transactions de crédit/retrait"
 
-#: apps/note/models/transactions.py:354 apps/note/models/transactions.py:359
+#: apps/note/models/transactions.py:354
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
@@ -1399,19 +1399,19 @@ msgstr "transaction d'adhésion"
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
-#: apps/note/tables.py:61
+#: apps/note/tables.py:93
 msgid "Click to invalidate"
 msgstr "Cliquez pour dévalider"
 
-#: apps/note/tables.py:61
+#: apps/note/tables.py:93
 msgid "Click to validate"
 msgstr "Cliquez pour valider"
 
-#: apps/note/tables.py:105
+#: apps/note/tables.py:137
 msgid "No reason specified"
 msgstr "Pas de motif spécifié"
 
-#: apps/note/tables.py:136 apps/note/tables.py:170 apps/treasury/tables.py:39
+#: apps/note/tables.py:168 apps/note/tables.py:202 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:59
 #: apps/wei/tables.py:76 apps/wei/tables.py:103
@@ -1419,7 +1419,7 @@ msgstr "Pas de motif spécifié"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: apps/note/tables.py:164 apps/note/templates/note/conso_form.html:132
+#: apps/note/tables.py:196 apps/note/templates/note/conso_form.html:132
 #: apps/wei/tables.py:47 apps/wei/tables.py:48
 #: apps/wei/templates/wei/base.html:89
 #: apps/wei/templates/wei/bus_detail.html:20
@@ -1567,7 +1567,7 @@ msgstr "Chercher un bouton"
 msgid "Update button"
 msgstr "Modifier le bouton"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:62
+#: apps/note/views.py:151 note_kfet/templates/base.html:63
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -1746,7 +1746,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle « {model} » "
 "avec ces paramètres. Merci de les corriger et de réessayer."
 
-#: apps/permission/views.py:96 note_kfet/templates/base.html:104
+#: apps/permission/views.py:96 note_kfet/templates/base.html:105
 msgid "Rights"
 msgstr "Droits"
 
@@ -1915,34 +1915,30 @@ msgstr "Renvoyer le lien de validation"
 msgid "Pre-registered users list"
 msgstr "Liste des utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:190
+#: apps/registration/views.py:187
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:203
+#: apps/registration/views.py:200
 msgid "Registration detail"
 msgstr "Détails de l'inscription"
 
-#: apps/registration/views.py:258
+#: apps/registration/views.py:256
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
 #: apps/registration/views.py:280
-msgid "You must join BDE club before joining Kfet club."
-msgstr "Vous devez adhérer au club BDE avant d'adhérer au club Kfet."
-
-#: apps/registration/views.py:285
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:360
+#: apps/registration/views.py:355
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:92
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:93
 msgid "Treasury"
 msgstr "Trésorerie"
 
@@ -2331,7 +2327,7 @@ msgstr "Gérer les crédits de la Société générale"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
-#: note_kfet/templates/base.html:98
+#: note_kfet/templates/base.html:99
 msgid "WEI"
 msgstr "WEI"
 
@@ -2939,19 +2935,19 @@ msgstr "Réinitialiser"
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: note_kfet/templates/base.html:74
+#: note_kfet/templates/base.html:75
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: note_kfet/templates/base.html:80
+#: note_kfet/templates/base.html:81
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:109
+#: note_kfet/templates/base.html:110
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:153
+#: note_kfet/templates/base.html:154
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3106,914 +3102,3 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
-
-#~ msgid "Enter a valid color."
-#~ msgstr "Entrer une couleur valide."
-
-#~ msgid "i18n text"
-#~ msgstr "i18n text"
-
-#~ msgid "i18n legend"
-#~ msgstr "i18n legend"
-
-#~ msgid "Enter a valid value."
-#~ msgstr "Entrer une valeur correcte."
-
-#~ msgid "Messages"
-#~ msgstr "Messages"
-
-#~ msgid "Site Maps"
-#~ msgstr "Plan du site"
-
-#~ msgid "Static Files"
-#~ msgstr "Fichiers statiques"
-
-#~ msgid "Syndication"
-#~ msgstr "Invitation"
-
-#~ msgid "That page number is not an integer"
-#~ msgstr "Ce numéro de page n'est pas entier"
-
-#~ msgid "That page number is less than 1"
-#~ msgstr "Ce numéro de page est inférieur à 1"
-
-#~ msgid "That page contains no results"
-#~ msgstr "Il n'y a pas de résultat"
-
-#~ msgid "Enter a valid URL."
-#~ msgstr "Entrer une URL valide."
-
-#~ msgid "Enter a valid integer."
-#~ msgstr "Entrer un entier valid."
-
-#~ msgid "Enter a valid email address."
-#~ msgstr "Entrer une adresse mail valide."
-
-#~ msgid ""
-#~ "Enter a valid 'slug' consisting of letters, numbers, underscores or "
-#~ "hyphens."
-#~ msgstr ""
-#~ "Entrer un 'slug' valide, constitué de lettres, chiffres, tirets ou tirets "
-#~ "bas."
-
-#~ msgid ""
-#~ "Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, "
-#~ "or hyphens."
-#~ msgstr ""
-#~ "Entrer un 'slug' valide, constitué de caractère unicode, chiffres, tirets "
-#~ "ou underscores."
-
-#~ msgid "Enter a valid IPv4 address."
-#~ msgstr "Entrer une adresse IPv4 valide."
-
-#~ msgid "Enter a valid IPv6 address."
-#~ msgstr "Entrer une adresse IPv6 valide."
-
-#~ msgid "Enter a valid IPv4 or IPv6 address."
-#~ msgstr "Entrer une adresse IPv4 ou IPv6 valide."
-
-#~ msgid "Enter only digits separated by commas."
-#~ msgstr "Entrer seulement des chiffres séparés par des virgules."
-
-#~ msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-#~ msgstr ""
-#~ "Vérifier que cette valeur est %(limit_value)s (actuellement "
-#~ "%(show_value)s)."
-
-#~ msgid "Ensure this value is less than or equal to %(limit_value)s."
-#~ msgstr "Vérifier que cette valeur est plus petite que %(limit_value)s."
-
-#~ msgid "Ensure this value is greater than or equal to %(limit_value)s."
-#~ msgstr "Vérifier  que cette valeur est plus grande que %(limit_value)s."
-
-#~ msgid ""
-#~ "Ensure this value has at least %(limit_value)d character (it has "
-#~ "%(show_value)d)."
-#~ msgid_plural ""
-#~ "Ensure this value has at least %(limit_value)d characters (it has "
-#~ "%(show_value)d)."
-#~ msgstr[0] ""
-#~ "Vérifier  que cette valeur a au moins %(limit_value)d caractère "
-#~ "(actuellement %(show_value)d)."
-#~ msgstr[1] ""
-#~ "Assurer vous que cette valeur a au moins %(limit_value)d caractères "
-#~ "(actuellement %(show_value)d)."
-
-#~ msgid ""
-#~ "Ensure this value has at most %(limit_value)d character (it has "
-#~ "%(show_value)d)."
-#~ msgid_plural ""
-#~ "Ensure this value has at most %(limit_value)d characters (it has "
-#~ "%(show_value)d)."
-#~ msgstr[0] ""
-#~ "Vérifier  que cette valeur a au plus %(limit_value)d caractère "
-#~ "(actuellement %(show_value)d)."
-#~ msgstr[1] ""
-#~ "Assurer vous que cette valeur a au plus %(limit_value)d caractères "
-#~ "(actuellement %(show_value)d)."
-
-#~ msgid "Enter a number."
-#~ msgstr "Numéro de téléphone."
-
-#~ msgid "Ensure that there are no more than %(max)s digit in total."
-#~ msgid_plural "Ensure that there are no more than %(max)s digits in total."
-#~ msgstr[0] "Vérifier qu'il n'y a pas plus de %(max)s chiffre au total."
-#~ msgstr[1] "Vérifier qu'il n'y a pas plus de %(max)s chiffres au total."
-
-#~ msgid "Ensure that there are no more than %(max)s decimal place."
-#~ msgid_plural "Ensure that there are no more than %(max)s decimal places."
-#~ msgstr[0] "Vérifier qu'il y n'as pas plus de %(max)s chiffre décimal."
-#~ msgstr[1] "Vérifier qu'il y n'as pas plus de %(max)s chiffres décimaux."
-
-#~ msgid ""
-#~ "Ensure that there are no more than %(max)s digit before the decimal point."
-#~ msgid_plural ""
-#~ "Ensure that there are no more than %(max)s digits before the decimal "
-#~ "point."
-#~ msgstr[0] ""
-#~ "Vérifier qu'il y n'as pas plus d'%(max)s chiffre avant la virgule."
-#~ msgstr[1] ""
-#~ "Vérifier qu'il y n'as pas plus de %(max)s chiffres avant la virgule."
-
-#~ msgid ""
-#~ "File extension '%(extension)s' is not allowed. Allowed extensions are: "
-#~ "'%(allowed_extensions)s'."
-#~ msgstr ""
-#~ "Les fichiers d'extension '%(extension)s' ne sont pas autorisé. Les "
-#~ "extension autorisées sont: \"%(allowed_extensions)s'."
-
-#~ msgid "Null characters are not allowed."
-#~ msgstr "Les caractères nuls ne sont pas autorisés."
-
-#~ msgid "and"
-#~ msgstr "et"
-
-#~ msgid "%(model_name)s with this %(field_labels)s already exists."
-#~ msgstr "Un %(model_name)s avec ce %(field_labels)s existe déjà."
-
-#~ msgid "Value %(value)r is not a valid choice."
-#~ msgstr "Le choix %(value)r n'est pas possible."
-
-#~ msgid "This field cannot be null."
-#~ msgstr "Ce champ est requis."
-
-#~ msgid "This field cannot be blank."
-#~ msgstr "Ce champ est requis."
-
-#~ msgid "%(model_name)s with this %(field_label)s already exists."
-#~ msgstr "Un %(model_name)s avec ce %(field_label)s existe déjà."
-
-#~ msgid ""
-#~ "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-#~ msgstr ""
-#~ "%(field_label)s doit être unique pour %(date_field_label)s "
-#~ "%(lookup_type)s."
-
-#~ msgid "Field of type: %(field_type)s"
-#~ msgstr "Champ du type %(field_type)s"
-
-#~ msgid "Integer"
-#~ msgstr "Nombre entier"
-
-#~ msgid "'%(value)s' value must be an integer."
-#~ msgstr "'%(value)s' doit être un nombre entier."
-
-#~ msgid "Big (8 byte) integer"
-#~ msgstr "Gros nombre entier (8 octets)"
-
-#~ msgid "'%(value)s' value must be either True or False."
-#~ msgstr "'%(value)s' doit être Vrai ou Faux."
-
-#~ msgid "'%(value)s' value must be either True, False, or None."
-#~ msgstr "'%(value)s' doit être Vrai, Faux, ou None."
-
-#~ msgid "Boolean (Either True or False)"
-#~ msgstr "Booléen (Vrai ou Faux)"
-
-#~ msgid "String (up to %(max_length)s)"
-#~ msgstr "Chaîne de caractère (maximum %(max_length)s caractères)"
-
-#~ msgid "Comma-separated integers"
-#~ msgstr "Liste d'entier séparer par des virgules"
-
-#~ msgid ""
-#~ "'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
-#~ "format."
-#~ msgstr "'%(value)s n'est pas formaté correctement (AAAA-MM-JJ)."
-
-#~ msgid ""
-#~ "'%(value)s' value has the correct format (YYYY-MM-DD) but it is an "
-#~ "invalid date."
-#~ msgstr ""
-#~ "'%(value)s possède le format date requis (AAAA-MM-JJ) mais n'est pas une "
-#~ "date valide."
-
-#~ msgid "Date (without time)"
-#~ msgstr "Date (sans horaire)"
-
-#~ msgid ""
-#~ "'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:"
-#~ "ss[.uuuuuu]][TZ] format."
-#~ msgstr ""
-#~ "'%(value)s' n'est pas formatée correctement (AAAA-MM-JJ HH:MM[:ss[."
-#~ "uuuuuu]][TZ])."
-
-#~ msgid ""
-#~ "'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-#~ "[TZ]) but it is an invalid date/time."
-#~ msgstr ""
-#~ "'%(value)s' est formaté correctement, mais n'est pas une date/horaire "
-#~ "valide."
-
-#~ msgid "Date (with time)"
-#~ msgstr "Date (avec horaire)"
-
-#~ msgid "'%(value)s' value must be a decimal number."
-#~ msgstr "'%(value)s doit être un nombre décimal."
-
-#~ msgid "Decimal number"
-#~ msgstr "Nombre décimal"
-
-#~ msgid ""
-#~ "'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
-#~ "uuuuuu] format."
-#~ msgstr ""
-#~ "'%(value)s' n'est pas formatée correctement (AAAA-MM-JJ HH:MM[:ss[."
-#~ "uuuuuu]][TZ])."
-
-#~ msgid "Duration"
-#~ msgstr "Durée"
-
-#~ msgid "Email address"
-#~ msgstr "Courriel"
-
-#~ msgid "File path"
-#~ msgstr "Chemin du fichier"
-
-#~ msgid "'%(value)s' value must be a float."
-#~ msgstr "'%(value)s doit être un nombre décimal."
-
-#~ msgid "Floating point number"
-#~ msgstr "Nombre décimal"
-
-#~ msgid "IPv4 address"
-#~ msgstr "Adresse IPv4"
-
-#~ msgid "IP address"
-#~ msgstr "Adresse IP"
-
-#~ msgid "'%(value)s' value must be either None, True or False."
-#~ msgstr "'%(value)s' doit être Vrai, Faux, ou None."
-
-#~ msgid "Boolean (Either True, False or None)"
-#~ msgstr "Booléen (Vrai ou Faux)"
-
-#~ msgid "Positive integer"
-#~ msgstr "Nombre entier positif"
-
-#~ msgid "Positive small integer"
-#~ msgstr "Nombre entier positif petit"
-
-#~ msgid "Slug (up to %(max_length)s)"
-#~ msgstr "Slug (maximum %(max_length)s caractères)"
-
-#~ msgid "Small integer"
-#~ msgstr "Petit entier"
-
-#~ msgid "Text"
-#~ msgstr "Texte"
-
-#~ msgid ""
-#~ "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[."
-#~ "uuuuuu]] format."
-#~ msgstr "'%(value)s' n'est pas formatée correctement (HH:MM[:ss[.uuuuuu]])."
-
-#~ msgid ""
-#~ "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is "
-#~ "an invalid time."
-#~ msgstr ""
-#~ "'%(value)s' est formaté correctement, mais n'est pas un horaire valide."
-
-#~ msgid "Time"
-#~ msgstr "Temps"
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgid "Raw binary data"
-#~ msgstr "Donnée binaire brute"
-
-#~ msgid "'%(value)s' is not a valid UUID."
-#~ msgstr "'%(value)s' n'est pas un UUID valide."
-
-#~ msgid "Universally unique identifier"
-#~ msgstr "Identifiant unique universel"
-
-#~ msgid "File"
-#~ msgstr "Fichier"
-
-#~ msgid "Image"
-#~ msgstr "Image"
-
-#~ msgid "%(model)s instance with %(field)s %(value)r does not exist."
-#~ msgstr ""
-#~ "l'objet %(model)s  avec les champs %(field)s %(value)r n'existe pas."
-
-#~ msgid "Foreign Key (type determined by related field)"
-#~ msgstr "Relations plusieurs-à-un (type déterminé par le champ relié)"
-
-#~ msgid "One-to-one relationship"
-#~ msgstr "Relation un-à-un"
-
-#~ msgid "%(from)s-%(to)s relationship"
-#~ msgstr "Relation %(from)s-%(to)s"
-
-#~ msgid "%(from)s-%(to)s relationships"
-#~ msgstr "Relations %(from)s-%(to)s"
-
-#~ msgid "Many-to-many relationship"
-#~ msgstr "Relation plusieurs-à-plusieurs"
-
-#~ msgid ":?.!"
-#~ msgstr ":?.!"
-
-#~ msgid "Enter a whole number."
-#~ msgstr "Entrer un  numéro complet."
-
-#~ msgid "Enter a valid date."
-#~ msgstr "Entrer une date valide."
-
-#~ msgid "Enter a valid time."
-#~ msgstr "Entrer un horaire valide."
-
-#~ msgid "Enter a valid date/time."
-#~ msgstr "Entrer une date et un horaire valide."
-
-#~ msgid "Enter a valid duration."
-#~ msgstr "Entrer une durée valide."
-
-#~ msgid "The number of days must be between {min_days} and {max_days}."
-#~ msgstr ""
-#~ "Le nombre de jours doit être compris entre {min_days} et {max_days}."
-
-#~ msgid "No file was submitted. Check the encoding type on the form."
-#~ msgstr "Aucun fichier n'as été ajouté. Vérifier l'encodage du formulaire."
-
-#~ msgid "No file was submitted."
-#~ msgstr "Aucun fichier n'as été ajouté."
-
-#~ msgid "The submitted file is empty."
-#~ msgstr "Le fichier ajouté est vide."
-
-#~ msgid ""
-#~ "Ensure this filename has at most %(max)d character (it has %(length)d)."
-#~ msgid_plural ""
-#~ "Ensure this filename has at most %(max)d characters (it has %(length)d)."
-#~ msgstr[0] ""
-#~ "Vérifier que le nom du fichier a au plus %(max)d caractère (actuellement "
-#~ "%(length)d)."
-#~ msgstr[1] ""
-#~ "Vérifier que le nom du fichier a au plus %(max)d caractères (actuellement "
-#~ "%(length)d)."
-
-#~ msgid "Please either submit a file or check the clear checkbox, not both."
-#~ msgstr "Veuillez ajouter un fichier ou cocher la case envoi vide."
-
-#~ msgid ""
-#~ "Upload a valid image. The file you uploaded was either not an image or a "
-#~ "corrupted image."
-#~ msgstr "Veuillez choisir une image valide."
-
-#~ msgid ""
-#~ "Select a valid choice. %(value)s is not one of the available choices."
-#~ msgstr "Faites un choix valide. %(value)s n'est pas autorisé."
-
-#~ msgid "Enter a list of values."
-#~ msgstr "Entrer une liste de valeurs."
-
-#~ msgid "Enter a complete value."
-#~ msgstr "Entrer une valeur complète."
-
-#~ msgid "Enter a valid UUID."
-#~ msgstr "Entrer un UUID valid."
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid "(Hidden field %(name)s) %(error)s"
-#~ msgstr "(Champ caché %(name)s) %(error)s"
-
-#~ msgid "ManagementForm data is missing or has been tampered with"
-#~ msgstr "Les données ManagementForm sont manquantes ou falsifiées"
-
-#~ msgid "Please submit %d or fewer forms."
-#~ msgid_plural "Please submit %d or fewer forms."
-#~ msgstr[0] "Veuillez remplir %d formulaire ou moins."
-#~ msgstr[1] "Veuillez remplir %d formulaires ou moins."
-
-#~ msgid "Please submit %d or more forms."
-#~ msgid_plural "Please submit %d or more forms."
-#~ msgstr[0] "Veuillez remplir %d formulaire ou plus."
-#~ msgstr[1] "Veuillez remplir %d formulaires ou plus."
-
-#~ msgid "Order"
-#~ msgstr "Ordre"
-
-#~ msgid "Please correct the duplicate data for %(field)s."
-#~ msgstr "Veuillez corriger les données dupliquées pour %(field)s."
-
-#~ msgid ""
-#~ "Please correct the duplicate data for %(field)s, which must be unique."
-#~ msgstr "Veuillez rendre uniques les valeurs des champs %(field)s."
-
-#~ msgid ""
-#~ "Please correct the duplicate data for %(field_name)s which must be unique "
-#~ "for the %(lookup)s in %(date_field)s."
-#~ msgstr ""
-#~ "Veuillez rendre unique les valeurs des champs %(field_name)s pour les "
-#~ "%(lookup)s dans %(date_field)s."
-
-#~ msgid "Please correct the duplicate values below."
-#~ msgstr "Veuillez rendre uniques les valeurs ci-dessous."
-
-#~ msgid "The inline value did not match the parent instance."
-#~ msgstr "La valeur renseignée ne correspond pas à l'objet parent."
-
-#~ msgid ""
-#~ "Select a valid choice. That choice is not one of the available choices."
-#~ msgstr "Faites un choix possible."
-
-#~ msgid "\"%(pk)s\" is not a valid value."
-#~ msgstr "\"%(pk)s\" n'est pas une valeur autorisée."
-
-#~ msgid ""
-#~ "%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; "
-#~ "it may be ambiguous or it may not exist."
-#~ msgstr ""
-#~ "%(datetime)s n'a pas pu être interprété dans la zone "
-#~ "%(current_timezone)s, La valeur est ambigüe ou impossible."
-
-#~ msgid "Clear"
-#~ msgstr "Vider"
-
-#~ msgid "Currently"
-#~ msgstr "Activité en cours"
-
-#~ msgid "Change"
-#~ msgstr "Modifier"
-
-#~ msgid "Unknown"
-#~ msgstr "Inconnu"
-
-#~ msgid "yes,no,maybe"
-#~ msgstr "oui, non, peut-être"
-
-#~ msgid "%(size)d byte"
-#~ msgid_plural "%(size)d bytes"
-#~ msgstr[0] "%(size)d octet"
-#~ msgstr[1] "%(size)d octets"
-
-#~ msgid "%s KB"
-#~ msgstr "%s Ko"
-
-#~ msgid "%s MB"
-#~ msgstr "%s Mo"
-
-#~ msgid "%s GB"
-#~ msgstr "%s Go"
-
-#~ msgid "%s TB"
-#~ msgstr "%s To"
-
-#~ msgid "%s PB"
-#~ msgstr "%s Po"
-
-#~ msgid "p.m."
-#~ msgstr "p.m."
-
-#~ msgid "a.m."
-#~ msgstr "a.m."
-
-#~ msgid "PM"
-#~ msgstr "PM"
-
-#~ msgid "AM"
-#~ msgstr "AM"
-
-#~ msgid "midnight"
-#~ msgstr "minuit"
-
-#~ msgid "noon"
-#~ msgstr "midi"
-
-#~ msgid "Monday"
-#~ msgstr "Lundi"
-
-#~ msgid "Tuesday"
-#~ msgstr "Mardi"
-
-#~ msgid "Wednesday"
-#~ msgstr "Mercredi"
-
-#~ msgid "Thursday"
-#~ msgstr "Jeudi"
-
-#~ msgid "Friday"
-#~ msgstr "Vendredi"
-
-#~ msgid "Saturday"
-#~ msgstr "Samedi"
-
-#~ msgid "Sunday"
-#~ msgstr "Dimanche"
-
-#~ msgid "Mon"
-#~ msgstr "Lun"
-
-#~ msgid "Tue"
-#~ msgstr "Mar"
-
-#~ msgid "Wed"
-#~ msgstr "Mer"
-
-#~ msgid "Thu"
-#~ msgstr "Jeu"
-
-#~ msgid "Fri"
-#~ msgstr "Ven"
-
-#~ msgid "Sat"
-#~ msgstr "Sam"
-
-#~ msgid "Sun"
-#~ msgstr "Dim"
-
-#~ msgid "January"
-#~ msgstr "Janvier"
-
-#~ msgid "February"
-#~ msgstr "Février"
-
-#~ msgid "March"
-#~ msgstr "Mars"
-
-#~ msgid "April"
-#~ msgstr "Avril"
-
-#~ msgid "May"
-#~ msgstr "Mai"
-
-#~ msgid "June"
-#~ msgstr "Juin"
-
-#~ msgid "July"
-#~ msgstr "Juillet"
-
-#~ msgid "August"
-#~ msgstr "Août"
-
-#~ msgid "September"
-#~ msgstr "Septembre"
-
-#~ msgid "October"
-#~ msgstr "Octobre"
-
-#~ msgid "November"
-#~ msgstr "Novembre"
-
-#~ msgid "December"
-#~ msgstr "Décembre"
-
-#~ msgid "jan"
-#~ msgstr "jan"
-
-#~ msgid "feb"
-#~ msgstr "fev"
-
-#~ msgid "mar"
-#~ msgstr "mar"
-
-#~ msgid "apr"
-#~ msgstr "avr"
-
-#~ msgid "may"
-#~ msgstr "mai"
-
-#~ msgid "jun"
-#~ msgstr "jun"
-
-#~ msgid "jul"
-#~ msgstr "jui"
-
-#~ msgid "aug"
-#~ msgstr "aou"
-
-#~ msgid "sep"
-#~ msgstr "sep"
-
-#~ msgid "oct"
-#~ msgstr "oct"
-
-#~ msgid "nov"
-#~ msgstr "nov"
-
-#~ msgid "dec"
-#~ msgstr "dec"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Jan."
-#~ msgstr "[abbrev. month] Jan."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Feb."
-#~ msgstr "[abbrev. month] Fév."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "March"
-#~ msgstr "[abbrev. month] Mars"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "April"
-#~ msgstr "[abbrev. month] Avril"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "May"
-#~ msgstr "[abbrev. month] Mai"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "June"
-#~ msgstr "[abbrev. month] Juin"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "July"
-#~ msgstr "[abbrev. month] Jui"
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Aug."
-#~ msgstr "[abbrev. month] Août."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Sept."
-#~ msgstr "[abbrev. month] Sep."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Oct."
-#~ msgstr "[abbrev. month] Oct."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Nov."
-#~ msgstr "[abbrev. month] Nov."
-
-#~ msgctxt "abbrev. month"
-#~ msgid "Dec."
-#~ msgstr "[abbrev. month] Dec."
-
-#~ msgctxt "alt. month"
-#~ msgid "January"
-#~ msgstr "[alt. month] Janvier"
-
-#~ msgctxt "alt. month"
-#~ msgid "February"
-#~ msgstr "[alt. month] Février"
-
-#~ msgctxt "alt. month"
-#~ msgid "March"
-#~ msgstr "[alt. month] Mars"
-
-#~ msgctxt "alt. month"
-#~ msgid "April"
-#~ msgstr "[alt. month] Avril"
-
-#~ msgctxt "alt. month"
-#~ msgid "May"
-#~ msgstr "[alt. month] Mai"
-
-#~ msgctxt "alt. month"
-#~ msgid "June"
-#~ msgstr "[alt. month] Juin"
-
-#~ msgctxt "alt. month"
-#~ msgid "July"
-#~ msgstr "[alt. month] Juillet"
-
-#~ msgctxt "alt. month"
-#~ msgid "August"
-#~ msgstr "[alt. month] Août"
-
-#~ msgctxt "alt. month"
-#~ msgid "September"
-#~ msgstr "[alt. month] Septembre"
-
-#~ msgctxt "alt. month"
-#~ msgid "October"
-#~ msgstr "[alt. month] Octobre"
-
-#~ msgctxt "alt. month"
-#~ msgid "November"
-#~ msgstr "[alt. month] Novembre"
-
-#~ msgctxt "alt. month"
-#~ msgid "December"
-#~ msgstr "[alt. month] Décembre"
-
-#~ msgid "This is not a valid IPv6 address."
-#~ msgstr "Adresse IPv6 non valide."
-
-#~ msgctxt "String to return when truncating text"
-#~ msgid "%(truncated_text)s…"
-#~ msgstr "[String to return when truncating text] %(truncated_text)s…"
-
-#~ msgid "or"
-#~ msgstr "ou"
-
-#~ msgid ", "
-#~ msgstr ", "
-
-#~ msgid "%d year"
-#~ msgid_plural "%d years"
-#~ msgstr[0] "%d année"
-#~ msgstr[1] "%d années"
-
-#~ msgid "%d month"
-#~ msgid_plural "%d months"
-#~ msgstr[0] "%d mois"
-#~ msgstr[1] "%d mois"
-
-#~ msgid "%d week"
-#~ msgid_plural "%d weeks"
-#~ msgstr[0] "%d semaine"
-#~ msgstr[1] "%d semaines"
-
-#~ msgid "%d day"
-#~ msgid_plural "%d days"
-#~ msgstr[0] "%d jour"
-#~ msgstr[1] "%d jours"
-
-#~ msgid "%d hour"
-#~ msgid_plural "%d hours"
-#~ msgstr[0] "%d heure"
-#~ msgstr[1] "%d heures"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minute"
-#~ msgstr[1] "%d minutes"
-
-#~ msgid "0 minutes"
-#~ msgstr "0 minutes"
-
-#~ msgid "Forbidden"
-#~ msgstr "Interdit"
-
-#~ msgid "CSRF verification failed. Request aborted."
-#~ msgstr "Echec de la vérification CSRF. Requête interrompue."
-
-#~ msgid ""
-#~ "You are seeing this message because this HTTPS site requires a 'Referer "
-#~ "header' to be sent by your Web browser, but none was sent. This header is "
-#~ "required for security reasons, to ensure that your browser is not being "
-#~ "hijacked by third parties."
-#~ msgstr ""
-#~ "Vous voyez ce message car ce site HTTPS nécessite l'envoi d'un \"en-tête "
-#~ "référent\" par votre navigateur. Cet en-tête est necessaire pour des "
-#~ "raisons de sécurité, pour confirmer que votre navigateur n'est pas "
-#~ "compromis par un tiers."
-
-#~ msgid ""
-#~ "If you have configured your browser to disable 'Referer' headers, please "
-#~ "re-enable them, at least for this site, or for HTTPS connections, or for "
-#~ "'same-origin' requests."
-#~ msgstr ""
-#~ "Si vous avez configurer votre navigateur pour désactiver les \"en-tête "
-#~ "référent\", veuillez les réactiver, au moins pour ce site, ou pour les "
-#~ "requêtes HTTPS, ou les requête de même origine."
-
-#~ msgid ""
-#~ "If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag "
-#~ "or including the 'Referrer-Policy: no-referrer' header, please remove "
-#~ "them. The CSRF protection requires the 'Referer' header to do strict "
-#~ "referer checking. If you're concerned about privacy, use alternatives "
-#~ "like <a rel=\"noreferrer\" ...> for links to third-party sites."
-#~ msgstr ""
-#~ "Si vous utiliser le tag  <meta name=\"referrer\" content=\"no-referrer\"> "
-#~ "ou incluez l'en-tête 'Referrer-Policy: no-referrer', veuillez les "
-#~ "retirer. La protection CSRF nécessite que l'en-tête référent fasse une "
-#~ "vérification stricte. Si vous avez des préoccupations pour votre vie "
-#~ "privée, vous pouvez utiliser des alternatives comme <a rel=\"noreferrer"
-#~ "\" ...> pour les liens vers des sites tiers."
-
-#~ msgid ""
-#~ "You are seeing this message because this site requires a CSRF cookie when "
-#~ "submitting forms. This cookie is required for security reasons, to ensure "
-#~ "that your browser is not being hijacked by third parties."
-#~ msgstr ""
-#~ "Vous voyez ce message car ce site nécessite un cookie CSRF pour l'envoi "
-#~ "de formulaire. Ce cookie est demandé pour des raisons de sécurité, pour "
-#~ "s'assurer que votre navigateur n'est pas compromis par un tiers."
-
-#~ msgid ""
-#~ "If you have configured your browser to disable cookies, please re-enable "
-#~ "them, at least for this site, or for 'same-origin' requests."
-#~ msgstr ""
-#~ "Si vous avez configuré votre navigateur pour désactiver les cookies, "
-#~ "veuillez les réactiver, au moins pour ce site, ou pour les requêtes de "
-#~ "même origine."
-
-#~ msgid "More information is available with DEBUG=True."
-#~ msgstr "Plus d'informations disponible avec DEBUG=True."
-
-#~ msgid "No year specified"
-#~ msgstr "Pas d'année spécifiée"
-
-#~ msgid "Date out of range"
-#~ msgstr "Date impossible"
-
-#~ msgid "No month specified"
-#~ msgstr "Pas de mois spécifié"
-
-#~ msgid "No day specified"
-#~ msgstr "Pas de jours spécifié"
-
-#~ msgid "No week specified"
-#~ msgstr "Pas de semaine spécifiée"
-
-#~ msgid "No %(verbose_name_plural)s available"
-#~ msgstr "%(verbose_name_plural)s non disponible"
-
-#~ msgid ""
-#~ "Future %(verbose_name_plural)s not available because %(class_name)s."
-#~ "allow_future is False."
-#~ msgstr ""
-#~ "Le futur %(verbose_name_plural)s n'est pas possible car %(class_name)s."
-#~ "allow_future = False."
-
-#~ msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
-#~ msgstr "Date '%(datestr)s' au format non valide '%(format)s'."
-
-#~ msgid "No %(verbose_name)s found matching the query"
-#~ msgstr "Aucun %(verbose_name)s trouvé pour cette requête"
-
-#~ msgid "Page is not 'last', nor can it be converted to an int."
-#~ msgstr ""
-#~ "La page spécifié n'est pas la dernière (last) et ne peux pas être "
-#~ "convertie en nombre entier."
-
-#~ msgid "Invalid page (%(page_number)s): %(message)s"
-#~ msgstr "Le numéro de page %(page_number)s est non valide: %(message)s"
-
-#~ msgid "Empty list and '%(class_name)s.allow_empty' is False."
-#~ msgstr "Liste vide et '%(class_name)s.allow_empty = False."
-
-#~ msgid "Directory indexes are not allowed here."
-#~ msgstr "L'index de Dossier n'est pas autorisé ici."
-
-#~ msgid "\"%(path)s\" does not exist"
-#~ msgstr "\"%(path)s\" n'existe pas"
-
-#~ msgid "Index of %(directory)s"
-#~ msgstr "Contenu de %(directory)s"
-
-#~ msgid "Django: the Web framework for perfectionists with deadlines."
-#~ msgstr ""
-#~ "Django: Le cadriciel Web pour les perfectionniste avec des dates limites."
-
-#~ msgid ""
-#~ "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-#~ "target=\"_blank\" rel=\"noopener\">release notes</a> for Django "
-#~ "%(version)s"
-#~ msgstr ""
-#~ "Visiter les  <a href=\"https://docs.djangoproject.com/en/%(version)s/"
-#~ "releases/\" target=\"_blank\" rel=\"noopener\">Notes de versions\" pour "
-#~ "Django %(version)s"
-
-#~ msgid "The install worked successfully! Congratulations!"
-#~ msgstr "L'installation a réussie! Félicitation!"
-
-#~ msgid ""
-#~ "You are seeing this page because <a href=\"https://docs.djangoproject.com/"
-#~ "en/%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-#~ "\">DEBUG=True</a> is in your settings file and you have not configured "
-#~ "any URLs."
-#~ msgstr ""
-#~ "Vous voyez cette page car <a href=\"https://docs.djangoproject.com/en/"
-#~ "%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-#~ "\">DEBUG=True</a> est renseigné dans vos paramètres et vous n'avez pas "
-#~ "configuré d'URLs."
-
-#~ msgid "Django Documentation"
-#~ msgstr "Documentation Django"
-
-#~ msgid "Topics, references, &amp; how-to's"
-#~ msgstr "Sujet, references &amp; how-to"
-
-#~ msgid "Tutorial: A Polling App"
-#~ msgstr "Tutoriel: Une application de sondage"
-
-#~ msgid "Get started with Django"
-#~ msgstr "Débuter avec Django"
-
-#~ msgid "Django Community"
-#~ msgstr "Communauté Django"
-
-#~ msgid "Connect, get help, or contribute"
-#~ msgstr "Prendre contact, obtenir de l'aide ou contribuer"
