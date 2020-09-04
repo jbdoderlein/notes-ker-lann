@@ -117,10 +117,7 @@ def delete_object(sender, instance, **kwargs):
     Each time a model is deleted, an entry in the table `Changelog` is added in the database
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED:
-        return
-
-    if hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_log"):
         return
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
