@@ -40,7 +40,7 @@ function reset(refresh=true) {
     $("#first_name").val("");
     $("#bank").val("");
     $("#user_note").val("");
-    $("#profile_pic").attr("src", "/media/pic/default.png");
+    $("#profile_pic").attr("src", "/static/member/img/default_picture.png");
     $("#profile_pic_link").attr("href", "#");
     if (refresh) {
         refreshBalance();
@@ -96,7 +96,7 @@ $(document).ready(function() {
     let source = $("#source_note");
     let dest = $("#dest_note");
 
-    $("#type_transfer").click(function() {
+    $("#type_transfer").change(function() {
         if (LOCK)
             return;
 
@@ -117,7 +117,7 @@ $(document).ready(function() {
         location.hash = "transfer";
     });
 
-    $("#type_credit").click(function() {
+    $("#type_credit").change(function() {
         if (LOCK)
             return;
 
@@ -146,7 +146,7 @@ $(document).ready(function() {
         location.hash = "credit";
     });
 
-    $("#type_debit").click(function() {
+    $("#type_debit").change(function() {
         if (LOCK)
             return;
 

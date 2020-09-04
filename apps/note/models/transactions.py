@@ -356,4 +356,4 @@ class MembershipTransaction(Transaction):
 
     @property
     def type(self):
-        return _('membership transaction')
+        return _('membership').capitalize()

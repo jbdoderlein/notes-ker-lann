@@ -130,7 +130,7 @@ class Activity(models.Model):
             raise ValidationError(_("The end date must be after the start date."))
 
         ret = super().save(*args, **kwargs)
-        if settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
+        if not settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
             def refresh_activities():
                 from scripts.management.commands.refresh_activities import Command as RefreshActivitiesCommand
                 RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name)

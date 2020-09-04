@@ -85,7 +85,7 @@ class Invoice(models.Model):
 
         old_invoice = Invoice.objects.filter(id=self.id)
         if old_invoice.exists():
-            if old_invoice.get().locked:
+            if old_invoice.get().locked and not self._force_save:
                 raise ValidationError(_("This invoice is locked and can no longer be edited."))
 
         products = self.products.all()
@@ -224,7 +224,7 @@ class Remittance(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # Check if all transactions have the right type.
-        if self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
+        if self.transactions.exists() and self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
             raise ValidationError("All transactions in a remittance must have the same type")
 
         return super().save(force_insert, force_update, using, update_fields)

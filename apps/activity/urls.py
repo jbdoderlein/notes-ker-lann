@@ -14,4 +14,5 @@ urlpatterns = [
     path('<int:pk>/entry/', views.ActivityEntryView.as_view(), name='activity_entry'),
     path('<int:pk>/update/', views.ActivityUpdateView.as_view(), name='activity_update'),
     path('new/', views.ActivityCreateView.as_view(), name='activity_create'),
+    path('calendar.ics', views.CalendarView.as_view(), name='calendar_ics'),
 ]

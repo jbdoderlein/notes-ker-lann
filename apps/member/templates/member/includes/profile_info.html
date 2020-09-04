@@ -48,7 +48,9 @@
 </dl>
 
 {% if user_object.pk == user_object.pk %}
-<a class="small float-right text-decoration-none" href="{% url 'member:auth_token' %}">
-    {% trans 'Manage auth token' %}
-</a>
+    <div class="text-center">
+        <a class="small badge badge-secondary" href="{% url 'member:auth_token' %}">
+            <i class="fa fa-cogs"></i>{% trans 'API token' %}
+        </a>
+    </div>
 {% endif %}
