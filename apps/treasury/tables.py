@@ -34,7 +34,7 @@ class InvoiceTable(tables.Table):
 
     delete = tables.LinkColumn(
         'treasury:invoice_delete',
-        args=[A('pk')],
+        args=[A('id')],
         verbose_name=_("delete"),
         text=_("Delete"),
         attrs={

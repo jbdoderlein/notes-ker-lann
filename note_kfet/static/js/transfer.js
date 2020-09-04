@@ -96,7 +96,7 @@ $(document).ready(function() {
     let source = $("#source_note");
     let dest = $("#dest_note");
 
-    $("#type_transfer").click(function() {
+    $("#type_transfer").change(function() {
         if (LOCK)
             return;
 
@@ -117,7 +117,7 @@ $(document).ready(function() {
         location.hash = "transfer";
     });
 
-    $("#type_credit").click(function() {
+    $("#type_credit").change(function() {
         if (LOCK)
             return;
 
@@ -146,7 +146,7 @@ $(document).ready(function() {
         location.hash = "credit";
     });
 
-    $("#type_debit").click(function() {
+    $("#type_debit").change(function() {
         if (LOCK)
             return;
 

@@ -16,7 +16,7 @@ class InvoiceViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Invoice` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/invoice/
     """
-    queryset = Invoice.objects.all()
+    queryset = Invoice.objects.order_by("id").all()
     serializer_class = InvoiceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['bde', ]
@@ -28,7 +28,7 @@ class ProductViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Product` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/product/
     """
-    queryset = Product.objects.all()
+    queryset = Product.objects.order_by("invoice_id", "id").all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter]
     search_fields = ['$designation', ]
@@ -40,7 +40,7 @@ class RemittanceTypeViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `RemittanceType` objects, serialize it to JSON with the given serializer
     then render it on /api/treasury/remittance_type/
     """
-    queryset = RemittanceType.objects
+    queryset = RemittanceType.objects.order_by("id")
     serializer_class = RemittanceTypeSerializer
 
 
@@ -50,7 +50,7 @@ class RemittanceViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Remittance` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/remittance/
     """
-    queryset = Remittance.objects
+    queryset = Remittance.objects.order_by("id")
     serializer_class = RemittanceSerializer
 
 
@@ -60,5 +60,5 @@ class SogeCreditViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `SogeCredit` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/soge_credit/
     """
-    queryset = SogeCredit.objects
+    queryset = SogeCredit.objects.order_by("id")
     serializer_class = SogeCreditSerializer

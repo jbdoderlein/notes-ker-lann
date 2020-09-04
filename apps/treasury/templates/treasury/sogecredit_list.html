@@ -8,7 +8,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% block content %}
 <div class="row">
     <div class="col-xl-12">
-        <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0" data-toggle="buttons">
+        <div class="btn-group btn-group-toggle" style="width: 100%; padding: 0 0 2em 0">
             <a href="{% url "treasury:invoice_list" %}" class="btn btn-sm btn-outline-primary">
                 {% trans "Invoice" %}s
             </a>
@@ -58,9 +58,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
         function reloadTable() {
             let pattern = searchbar_obj.val();
-
-            if (pattern === old_pattern || pattern === "")
-                return;
 
             $("#credits_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + (
                 invalid_only_obj.is(':checked') ? "&valid=false" : "") + " #credits_table");

@@ -60,6 +60,11 @@ class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        del form.fields["locked"]
+        return form
+
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -134,6 +139,11 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        del form.fields["id"]
+        return form
+
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -164,6 +174,11 @@ class InvoiceDeleteView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
     """
     model = Invoice
     extra_context = {"title": _("Delete invoice")}
+
+    def delete(self, request, *args, **kwargs):
+        if self.get_object().locked:
+            raise PermissionDenied(_("This invoice is locked and can't be deleted."))
+        return super().delete(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse_lazy('treasury:invoice_list')
@@ -387,7 +402,7 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
         if not request.user.is_authenticated:
             return self.handle_no_permission()
 
-        if not self.get_queryset().exists():
+        if not super().get_queryset().exists():
             raise PermissionDenied(_("You are not able to see the treasury interface."))
         return super().dispatch(request, *args, **kwargs)
 
