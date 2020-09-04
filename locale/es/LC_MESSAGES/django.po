@@ -3,49 +3,49 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-04 18:23+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2020-09-04 20:11+0200\n"
+"PO-Revision-Date: 2020-09-04 20:38+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:145
 #: apps/activity/models.py:161
 msgid "activity"
-msgstr ""
+msgstr "actividad"
 
 #: apps/activity/forms.py:35 apps/activity/models.py:130
 msgid "The end date must be after the start date."
-msgstr ""
+msgstr "La fecha final tiene que ser después de la fecha de inicio."
 
 #: apps/activity/forms.py:76 apps/activity/models.py:257
 msgid "You can't invite someone once the activity is started."
-msgstr ""
+msgstr "No se puede invitar a alguien una vez que arrancó la actividad."
 
 #: apps/activity/forms.py:79 apps/activity/models.py:260
 msgid "This activity is not validated yet."
-msgstr ""
+msgstr "Esta actividad no fue validada por ahora."
 
 #: apps/activity/forms.py:89 apps/activity/models.py:268
 msgid "This person has been already invited 5 times this year."
-msgstr ""
+msgstr "Esta persona ya fue invitada 5 veces este año."
 
 #: apps/activity/forms.py:93 apps/activity/models.py:272
 msgid "This person is already invited."
-msgstr ""
+msgstr "Esta persona ya esta invitada."
 
 #: apps/activity/forms.py:97 apps/activity/models.py:276
 msgid "You can't invite more than 3 people to this activity."
-msgstr ""
+msgstr "Usted no puede invitar más de 3 persona a esta actividad."
 
 #: apps/activity/models.py:27 apps/activity/models.py:62
 #: apps/member/models.py:198
@@ -63,101 +63,103 @@ msgstr ""
 
 #: apps/activity/models.py:32
 msgid "manage entries"
-msgstr ""
+msgstr "gestionar las entradas"
 
 #: apps/activity/models.py:33
 msgid "Enable the support of entries for this activity."
-msgstr ""
+msgstr "Activar el soporte de las entradas por esta actividad."
 
 #: apps/activity/models.py:38
 #: apps/activity/templates/activity/includes/activity_info.html:42
 msgid "can invite"
-msgstr ""
+msgstr "puede invitar"
 
 #: apps/activity/models.py:43
 #: apps/activity/templates/activity/includes/activity_info.html:46
 msgid "guest entry fee"
-msgstr ""
+msgstr "pago de entrada invitado"
 
 #: apps/activity/models.py:48
 msgid "activity type"
-msgstr ""
+msgstr "tipo de actividad"
 
 #: apps/activity/models.py:49
 msgid "activity types"
-msgstr ""
+msgstr "tipos de actividad"
 
 #: apps/activity/models.py:67
 #: apps/activity/templates/activity/includes/activity_info.html:19
 #: apps/note/models/transactions.py:81 apps/permission/models.py:110
 #: apps/permission/models.py:189 apps/wei/models.py:72 apps/wei/models.py:129
 msgid "description"
-msgstr ""
+msgstr "descripción"
 
 #: apps/activity/models.py:71
 msgid "location"
-msgstr ""
+msgstr "ubicación"
 
 #: apps/activity/models.py:75
 msgid "Place where the activity is organized, eg. Kfet."
-msgstr ""
+msgstr "Lugar donde se organiza la actividad, por ejemplo la Kfet."
 
 #: apps/activity/models.py:82
 #: apps/activity/templates/activity/includes/activity_info.html:22
 #: apps/note/models/notes.py:223 apps/note/models/transactions.py:66
 #: apps/permission/models.py:164
 msgid "type"
-msgstr ""
+msgstr "tipo"
 
 #: apps/activity/models.py:88 apps/logs/models.py:22 apps/member/models.py:303
 #: apps/note/models/notes.py:138 apps/treasury/models.py:267
 #: apps/treasury/templates/treasury/sogecredit_detail.html:14
 #: apps/wei/models.py:160 apps/wei/templates/wei/survey.html:15
 msgid "user"
-msgstr ""
+msgstr "usuario"
 
 #: apps/activity/models.py:95
 #: apps/activity/templates/activity/includes/activity_info.html:36
 msgid "organizer"
-msgstr ""
+msgstr "organizador"
 
 #: apps/activity/models.py:96
 msgid "Club that organizes the activity. The entry fees will go to this club."
 msgstr ""
+"El club que organiza la actividad. Los pagos de entrada serán datos a este "
+"club."
 
 #: apps/activity/models.py:103
 #: apps/activity/templates/activity/includes/activity_info.html:39
 msgid "attendees club"
-msgstr ""
+msgstr "club esperado"
 
 #: apps/activity/models.py:104
 msgid "Club that is authorized to join the activity. Mostly the Kfet club."
-msgstr ""
+msgstr "Club permitido unirse a la actividad. Generalmente el club Kfet."
 
 #: apps/activity/models.py:108
 #: apps/activity/templates/activity/includes/activity_info.html:25
 msgid "start date"
-msgstr ""
+msgstr "fecha de inicio"
 
 #: apps/activity/models.py:112
 #: apps/activity/templates/activity/includes/activity_info.html:28
 msgid "end date"
-msgstr ""
+msgstr "fecha de fin"
 
 #: apps/activity/models.py:117
 #: apps/activity/templates/activity/includes/activity_info.html:50
 #: apps/note/models/transactions.py:146
 msgid "valid"
-msgstr ""
+msgstr "válido"
 
 #: apps/activity/models.py:122
 #: apps/activity/templates/activity/includes/activity_info.html:65
 msgid "open"
-msgstr ""
+msgstr "abierto"
 
 #: apps/activity/models.py:146
 msgid "activities"
-msgstr ""
+msgstr "actividades"
 
 #: apps/activity/models.py:166
 msgid "entry time"
@@ -166,105 +168,105 @@ msgstr ""
 #: apps/activity/models.py:172 apps/note/apps.py:14
 #: apps/note/models/notes.py:78
 msgid "note"
-msgstr ""
+msgstr "note"
 
 #: apps/activity/models.py:183
 #: apps/activity/templates/activity/activity_entry.html:46
 msgid "entry"
-msgstr ""
+msgstr "entrada"
 
 #: apps/activity/models.py:184
 #: apps/activity/templates/activity/activity_entry.html:46
 msgid "entries"
-msgstr ""
+msgstr "entradas"
 
 #: apps/activity/models.py:190
 msgid "Already entered on "
-msgstr ""
+msgstr "Entrado ya el "
 
 #: apps/activity/models.py:190 apps/activity/tables.py:54
 msgid "{:%Y-%m-%d %H:%M:%S}"
-msgstr ""
+msgstr "{:%d/%m/%Y %H:%M:%S}"
 
 #: apps/activity/models.py:198
 msgid "The balance is negative."
-msgstr ""
+msgstr "El saldo es negativo."
 
 #: apps/activity/models.py:228
 msgid "last name"
-msgstr ""
+msgstr "apellido"
 
 #: apps/activity/models.py:233
 #: apps/member/templates/member/includes/profile_info.html:4
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/wei/templates/wei/weimembership_form.html:14
 msgid "first name"
-msgstr ""
+msgstr "nombre"
 
 #: apps/activity/models.py:240
 msgid "inviter"
-msgstr ""
+msgstr "huésped"
 
 #: apps/activity/models.py:284
 msgid "guest"
-msgstr ""
+msgstr "invitado"
 
 #: apps/activity/models.py:285
 msgid "guests"
-msgstr ""
+msgstr "invitados"
 
 #: apps/activity/models.py:297
 msgid "Invitation"
-msgstr ""
+msgstr "Invitación"
 
 #: apps/activity/tables.py:25
 msgid "The activity is currently open."
-msgstr ""
+msgstr "La actividad esta actualmente abierta."
 
 #: apps/activity/tables.py:26
 msgid "The validation of the activity is pending."
-msgstr ""
+msgstr "La validación de esta actividad es pendiente."
 
 #: apps/activity/tables.py:41 apps/treasury/tables.py:107
 msgid "Remove"
-msgstr ""
+msgstr "Quitar"
 
 #: apps/activity/tables.py:54
 msgid "Entered on "
-msgstr ""
+msgstr "Entrado el "
 
 #: apps/activity/tables.py:56
 msgid "remove"
-msgstr ""
+msgstr "quitar"
 
 #: apps/activity/tables.py:80 apps/note/forms.py:68 apps/treasury/models.py:186
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: apps/activity/tables.py:82 apps/member/forms.py:131
 #: apps/registration/forms.py:81 apps/treasury/forms.py:135
 #: apps/wei/forms/registration.py:96
 msgid "Last name"
-msgstr ""
+msgstr "Apellido"
 
 #: apps/activity/tables.py:84 apps/member/forms.py:136
 #: apps/note/templates/note/transaction_form.html:134
 #: apps/registration/forms.py:86 apps/treasury/forms.py:137
 #: apps/wei/forms/registration.py:101
 msgid "First name"
-msgstr ""
+msgstr "Nombre"
 
 #: apps/activity/tables.py:86 apps/note/models/notes.py:87
 msgid "Note"
-msgstr ""
+msgstr "Note"
 
 #: apps/activity/tables.py:88 apps/member/tables.py:46
 msgid "Balance"
-msgstr ""
+msgstr "Saldo de la cuenta"
 
 #: apps/activity/templates/activity/activity_detail.html:15
 msgid "Guests list"
-msgstr ""
+msgstr "Lista de los invitados"
 
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:259
@@ -272,28 +274,28 @@ msgstr ""
 #: apps/note/templates/note/transaction_form.html:148
 #: note_kfet/templates/base.html:68
 msgid "Transfer"
-msgstr ""
+msgstr "Transferencia"
 
 #: apps/activity/templates/activity/activity_entry.html:18
 #: apps/note/models/transactions.py:318
 #: apps/note/templates/note/transaction_form.html:21
 msgid "Credit"
-msgstr ""
+msgstr "Crédito"
 
 #: apps/activity/templates/activity/activity_entry.html:21
 #: apps/note/models/transactions.py:318
 #: apps/note/templates/note/transaction_form.html:25
 msgid "Debit"
-msgstr ""
+msgstr "Débito"
 
 #: apps/activity/templates/activity/activity_entry.html:27
 #: apps/note/templates/note/transaction_form.html:30
 msgid "Entries"
-msgstr ""
+msgstr "Entradas"
 
 #: apps/activity/templates/activity/activity_entry.html:37
 msgid "Return to activity page"
-msgstr ""
+msgstr "Regresar a la página de la actividad"
 
 #: apps/activity/templates/activity/activity_form.html:16
 #: apps/member/templates/member/add_members.html:32
@@ -306,366 +308,368 @@ msgstr ""
 #: apps/wei/templates/wei/weiclub_form.html:17
 #: apps/wei/templates/wei/weiregistration_form.html:18
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: apps/activity/templates/activity/activity_list.html:12
 msgid "Current activity"
-msgstr ""
+msgstr "Actividad actual"
 
 #: apps/activity/templates/activity/activity_list.html:24
 msgid "Upcoming activities"
-msgstr ""
+msgstr "Próximas actividades"
 
 #: apps/activity/templates/activity/activity_list.html:31
 msgid "There is no planned activity."
-msgstr ""
+msgstr "No hay actividad planeada."
 
 #: apps/activity/templates/activity/activity_list.html:38
 msgid "New activity"
-msgstr ""
+msgstr "Nueva actividad"
 
 #: apps/activity/templates/activity/activity_list.html:45
 msgid "All activities"
-msgstr ""
+msgstr "Todas las actividades"
 
 #: apps/activity/templates/activity/includes/activity_info.html:32
 msgid "creater"
-msgstr ""
+msgstr "creador"
 
 #: apps/activity/templates/activity/includes/activity_info.html:53
 msgid "opened"
-msgstr ""
+msgstr "abierto"
 
 #: apps/activity/templates/activity/includes/activity_info.html:60
 msgid "Entry page"
-msgstr ""
+msgstr "Página de las entradas"
 
 #: apps/activity/templates/activity/includes/activity_info.html:65
 msgid "close"
-msgstr ""
+msgstr "cerrado"
 
 #: apps/activity/templates/activity/includes/activity_info.html:68
 msgid "invalidate"
-msgstr ""
+msgstr "invalidar"
 
 #: apps/activity/templates/activity/includes/activity_info.html:68
 msgid "validate"
-msgstr ""
+msgstr "validar"
 
 #: apps/activity/templates/activity/includes/activity_info.html:71
 #: apps/logs/models.py:62 apps/note/tables.py:162
 msgid "edit"
-msgstr ""
+msgstr "modificar"
 
 #: apps/activity/templates/activity/includes/activity_info.html:74
 msgid "Invite"
-msgstr ""
+msgstr "Invitar"
 
 #: apps/activity/views.py:29
 msgid "Create new activity"
-msgstr ""
+msgstr "Crear una nueva actividad"
 
 #: apps/activity/views.py:59 note_kfet/templates/base.html:86
 msgid "Activities"
-msgstr ""
+msgstr "Actividades"
 
 #: apps/activity/views.py:87
 msgid "Activity detail"
-msgstr ""
+msgstr "Detalles de la actividad"
 
 #: apps/activity/views.py:107
 msgid "Update activity"
-msgstr ""
+msgstr "Modificar la actividad"
 
 #: apps/activity/views.py:134
 msgid "Invite guest to the activity \"{}\""
-msgstr ""
+msgstr "Invitar alguien para la actividad \"{}\""
 
 #: apps/activity/views.py:168
 msgid "You are not allowed to display the entry interface for this activity."
 msgstr ""
+"Usted no tiene derecho a mostrar la interfaz de las entradas para esta "
+"actividad."
 
 #: apps/activity/views.py:171
 msgid "This activity does not support activity entries."
-msgstr ""
+msgstr "Esta actividad no necesita entradas."
 
 #: apps/activity/views.py:174
 msgid "This activity is closed."
-msgstr ""
+msgstr "Esta actividad esta cerrada."
 
 #: apps/activity/views.py:272
 msgid "Entry for activity \"{}\""
-msgstr ""
+msgstr "Entradas para la actividad \"{}\""
 
 #: apps/api/apps.py:10
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: apps/logs/apps.py:11
 msgid "Logs"
-msgstr ""
+msgstr "Logs"
 
 #: apps/logs/models.py:28
 msgid "IP Address"
-msgstr ""
+msgstr "Dirección IP"
 
 #: apps/logs/models.py:36 apps/permission/models.py:134
 msgid "model"
-msgstr ""
+msgstr "modelo"
 
 #: apps/logs/models.py:43
 msgid "identifier"
-msgstr ""
+msgstr "nombre de usuario"
 
 #: apps/logs/models.py:48
 msgid "previous data"
-msgstr ""
+msgstr "datos anteriores"
 
 #: apps/logs/models.py:53
 msgid "new data"
-msgstr ""
+msgstr "nuevos datos"
 
 #: apps/logs/models.py:61
 msgid "create"
-msgstr ""
+msgstr "crear"
 
 #: apps/logs/models.py:63 apps/note/tables.py:132 apps/note/tables.py:168
 #: apps/permission/models.py:127 apps/treasury/tables.py:38
 #: apps/wei/tables.py:75
 msgid "delete"
-msgstr ""
+msgstr "suprimir"
 
 #: apps/logs/models.py:66
 msgid "action"
-msgstr ""
+msgstr "acción"
 
 #: apps/logs/models.py:74
 msgid "timestamp"
-msgstr ""
+msgstr "fecha"
 
 #: apps/logs/models.py:78
 msgid "Logs cannot be destroyed."
-msgstr ""
+msgstr "No se puede suprimir los logs."
 
 #: apps/logs/models.py:81
 msgid "changelog"
-msgstr ""
+msgstr "diario de cambio"
 
 #: apps/logs/models.py:82
 msgid "changelogs"
-msgstr ""
+msgstr "diario de cambios"
 
 #: apps/member/admin.py:52 apps/member/models.py:225
 #: apps/member/templates/member/includes/club_info.html:34
 msgid "membership fee (paid students)"
-msgstr ""
+msgstr "pago de afiliación (estudiantes pagados)"
 
 #: apps/member/admin.py:53 apps/member/models.py:230
 #: apps/member/templates/member/includes/club_info.html:37
 msgid "membership fee (unpaid students)"
-msgstr ""
+msgstr "pago de afiliación (estudiantes no pagados)"
 
 #: apps/member/admin.py:67 apps/member/models.py:314
 msgid "roles"
-msgstr ""
+msgstr "papel"
 
 #: apps/member/admin.py:68 apps/member/models.py:328
 msgid "fee"
-msgstr ""
+msgstr "pago"
 
 #: apps/member/apps.py:14 apps/wei/tables.py:181 apps/wei/tables.py:212
 msgid "member"
-msgstr ""
+msgstr "miembro"
 
 #: apps/member/forms.py:41
 msgid "Report frequency"
-msgstr ""
+msgstr "Frecuencia de los informes (en días)"
 
 #: apps/member/forms.py:43
 msgid "Last report date"
-msgstr ""
+msgstr "Fecha del último informe"
 
 #: apps/member/forms.py:48
 msgid "You can't register to the note if you come from the future."
-msgstr ""
+msgstr "Usted no puede registrar si viene del futuro."
 
 #: apps/member/forms.py:73
 msgid "select an image"
-msgstr ""
+msgstr "elegir una imagen"
 
 #: apps/member/forms.py:74
 msgid "Maximal size: 2MB"
-msgstr ""
+msgstr "Tamaño máximo : 2Mo"
 
 #: apps/member/forms.py:87 apps/member/views.py:101
 #: apps/registration/forms.py:33
 msgid "An alias with a similar name already exists."
-msgstr ""
+msgstr "Un alias similar ya existe."
 
 #: apps/member/forms.py:110 apps/registration/forms.py:61
 msgid "Inscription paid by Société Générale"
-msgstr ""
+msgstr "Registración pagadas por Société Générale"
 
-#: apps/member/forms.py:112 apps/registration/forms.py:63
+#: apps/member/forms.py:112
 msgid "Check this case is the Société Générale paid the inscription."
-msgstr ""
+msgstr "Marcar esta casilla si Société Générale pagó la registración."
 
 #: apps/member/forms.py:117 apps/registration/forms.py:68
 #: apps/wei/forms/registration.py:83
 msgid "Credit type"
-msgstr ""
+msgstr "Tipo de crédito"
 
 #: apps/member/forms.py:118 apps/registration/forms.py:69
 #: apps/wei/forms/registration.py:84
 msgid "No credit"
-msgstr ""
+msgstr "No crédito"
 
 #: apps/member/forms.py:120
 msgid "You can credit the note of the user."
-msgstr ""
+msgstr "Usted puede acreditar la note del usuario."
 
 #: apps/member/forms.py:124 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
 msgid "Credit amount"
-msgstr ""
+msgstr "Valor del crédito"
 
 #: apps/member/forms.py:141 apps/note/templates/note/transaction_form.html:140
 #: apps/registration/forms.py:91 apps/treasury/forms.py:139
 #: apps/wei/forms/registration.py:106
 msgid "Bank"
-msgstr ""
+msgstr "Banco"
 
 #: apps/member/forms.py:168
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: apps/member/forms.py:182
 msgid "Roles"
-msgstr ""
+msgstr "Papeles"
 
 #: apps/member/models.py:38
 #: apps/member/templates/member/includes/profile_info.html:34
 #: apps/registration/templates/registration/future_profile_detail.html:40
 #: apps/wei/templates/wei/weimembership_form.html:44
 msgid "phone number"
-msgstr ""
+msgstr "número de teléfono"
 
 #: apps/member/models.py:45
 #: apps/member/templates/member/includes/profile_info.html:28
 #: apps/registration/templates/registration/future_profile_detail.html:34
 #: apps/wei/templates/wei/weimembership_form.html:38
 msgid "section"
-msgstr ""
+msgstr "sección"
 
 #: apps/member/models.py:46
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
-msgstr ""
+msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
 #: apps/member/models.py:54 apps/wei/templates/wei/weimembership_form.html:32
 msgid "department"
-msgstr ""
+msgstr "departamento"
 
 #: apps/member/models.py:56
 msgid "Informatics (A0)"
-msgstr ""
+msgstr "Informática (A0)"
 
 #: apps/member/models.py:57
 msgid "Mathematics (A1)"
-msgstr ""
+msgstr "Matemáticas (A1)"
 
 #: apps/member/models.py:58
 msgid "Physics (A2)"
-msgstr ""
+msgstr "Física (A2)"
 
 #: apps/member/models.py:59
 msgid "Applied physics (A'2)"
-msgstr ""
+msgstr "Física aplicada (A'2)"
 
 #: apps/member/models.py:60
 msgid "Chemistry (A''2)"
-msgstr ""
+msgstr "Química (A''2)"
 
 #: apps/member/models.py:61
 msgid "Biology (A3)"
-msgstr ""
+msgstr "Biología (A3)"
 
 #: apps/member/models.py:62
 msgid "SAPHIRE (B1234)"
-msgstr ""
+msgstr "SAPHIRE (B1234)"
 
 #: apps/member/models.py:63
 msgid "Mechanics (B1)"
-msgstr ""
+msgstr "Mecánica (B1)"
 
 #: apps/member/models.py:64
 msgid "Civil engineering (B2)"
-msgstr ""
+msgstr "Ingeniería civil (B2)"
 
 #: apps/member/models.py:65
 msgid "Mechanical engineering (B3)"
-msgstr ""
+msgstr "Ingeniería mecánica (B3)"
 
 #: apps/member/models.py:66
 msgid "EEA (B4)"
-msgstr ""
+msgstr "EEA (B4)"
 
 #: apps/member/models.py:67
 msgid "Design (C)"
-msgstr ""
+msgstr "Design (C)"
 
 #: apps/member/models.py:68
 msgid "Economy-management (D2)"
-msgstr ""
+msgstr "Economía-gestión (D2)"
 
 #: apps/member/models.py:69
 msgid "Social sciences (D3)"
-msgstr ""
+msgstr "Ciencias sociales (D3)"
 
 #: apps/member/models.py:70
 msgid "English (E)"
-msgstr ""
+msgstr "Inglés (E)"
 
 #: apps/member/models.py:71
 msgid "External (EXT)"
-msgstr ""
+msgstr "Extern@ (EXT)"
 
 #: apps/member/models.py:78
 msgid "promotion"
-msgstr ""
+msgstr "promoción"
 
 #: apps/member/models.py:79
 msgid "Year of entry to the school (None if not ENS student)"
-msgstr ""
+msgstr "Año de ingreso en la escuela (None si no un alumn@ ENS)"
 
 #: apps/member/models.py:83
 #: apps/member/templates/member/includes/profile_info.html:38
 #: apps/registration/templates/registration/future_profile_detail.html:37
 #: apps/wei/templates/wei/weimembership_form.html:41
 msgid "address"
-msgstr ""
+msgstr "dirección"
 
 #: apps/member/models.py:90
 #: apps/member/templates/member/includes/profile_info.html:45
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:47
 msgid "paid"
-msgstr ""
+msgstr "pagado"
 
 #: apps/member/models.py:91
 msgid "Tells if the user receive a salary."
-msgstr ""
+msgstr "Indica si el usuario percibe un salario."
 
 #: apps/member/models.py:101 apps/treasury/tables.py:146
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: apps/member/models.py:102
 msgid "Yes (receive them in french)"
-msgstr ""
+msgstr "Si (recibirles en francés)"
 
 #: apps/member/models.py:103
 msgid "Yes (receive them in english)"
-msgstr ""
+msgstr "Si (recibirles en inglés)"
 
 #: apps/member/models.py:105
 msgid ""
@@ -1711,6 +1715,12 @@ msgid ""
 "Check this case if you want to register to the WEI. If you hesitate, you "
 "will be able to register later, after validating your account in the Kfet."
 msgstr ""
+
+#: apps/registration/forms.py:63
+#, fuzzy
+#| msgid "Check this case is the Société Générale paid the inscription."
+msgid "Check this case if the Société Générale paid the inscription."
+msgstr "Marcar esta casilla"
 
 #: apps/registration/forms.py:96
 msgid "Join BDE Club"
