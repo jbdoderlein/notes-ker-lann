@@ -38,8 +38,8 @@ function afterKonami () {
 
 // Register custom event
 document.addEventListener('keydown', (e) => {
-  cursor = (e.keyCode == KONAMI_CODE[cursor]) ? cursor + 1 : 0
-  if (cursor == KONAMI_CODE.length) {
+  cursor = (e.keyCode === KONAMI_CODE[cursor]) ? cursor + 1 : 0
+  if (cursor === KONAMI_CODE.length) {
     afterKonami()
   }
 })
