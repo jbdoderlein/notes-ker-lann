@@ -9,7 +9,7 @@
   vars:
     mirror: deb.debian.org
     note:
-      server_name: bde-note.adh.crans.org
+      server_name: note.crans.org
   roles:
     - 1-apt-basic
     - 2-nk20
