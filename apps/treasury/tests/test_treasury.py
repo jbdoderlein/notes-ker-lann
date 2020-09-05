@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.test import TestCase
 from django.urls import reverse
-
 from member.models import Membership, Club
 from note.models import SpecialTransaction, NoteSpecial, Transaction
 from treasury.models import Invoice, Product, Remittance, RemittanceType, SogeCredit

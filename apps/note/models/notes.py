@@ -102,7 +102,7 @@ class Note(PolymorphicModel):
 
         super().save(*args, **kwargs)
 
-        if not Alias.objects.filter(name=str(self)).exists():
+        if not Alias.objects.filter(normalized_name=Alias.normalize(str(self))).exists():
             a = Alias(name=str(self))
             a.clean()
 
