@@ -1110,7 +1110,9 @@ class MemberListRenderView(LoginRequiredMixin, View):
                 ).wait()
 
             if error:
-                raise IOError("An error attempted while generating a WEI list (code=" + str(error) + ")")
+                with open("{}/wei-list.log".format(tmp_dir), "r") as f:
+                    log = f.read()
+                raise IOError("An error attempted while generating a WEI list (code=" + str(error) + ")\n\n" + log)
 
             # Display the generated pdf as a HTTP Response
             with open("{}/wei-list.pdf".format(tmp_dir), 'rb') as f:

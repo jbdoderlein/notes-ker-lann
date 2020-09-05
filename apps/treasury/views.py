@@ -217,7 +217,9 @@ class InvoiceRenderView(LoginRequiredMixin, View):
                 ).wait()
 
                 if error:
-                    raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")")
+                    with open("{}/invoice-{:d}.log".format(tmp_dir, pk), "r") as f:
+                        log = f.read()
+                    raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")\n\n" + log)
 
             # Display the generated pdf as a HTTP Response
             pdf = open("{}/invoice-{}.pdf".format(tmp_dir, pk), 'rb').read()
