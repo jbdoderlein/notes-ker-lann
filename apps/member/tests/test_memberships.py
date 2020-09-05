@@ -197,7 +197,7 @@ class TestMemberships(TestCase):
             # Create a new membership
             response = self.client.post(reverse("member:club_add_member", args=(club.pk,)), data=dict(
                 user=user.pk,
-                date_start="{:%Y-%m-%d}".format(timezone.now().date()),
+                date_start="{:%Y-%m-%d}".format(date.today()),
                 soge=False,
                 credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
                 credit_amount=4200,
@@ -236,7 +236,7 @@ class TestMemberships(TestCase):
             # Renew membership
             response = self.client.post(reverse("member:club_renew_membership", args=(membership.pk,)), data=dict(
                 user=user.pk,
-                date_start="{:%Y-%m-%d}".format(timezone.now().date()),
+                date_start="{:%Y-%m-%d}".format(date.today()),
                 soge=bde_parent,
                 credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
                 credit_amount=14242,
@@ -265,7 +265,7 @@ class TestMemberships(TestCase):
 
         response = self.client.post(reverse("member:club_add_member", args=(bde.pk,)), data=dict(
             user=user.pk,
-            date_start="{:%Y-%m-%d}".format(timezone.now().date()),
+            date_start="{:%Y-%m-%d}".format(date.today()),
             soge=True,
             credit_type=NoteSpecial.objects.get(special_type="Virement bancaire").id,
             credit_amount=(bde.membership_fee_paid + kfet.membership_fee_paid) / 100,

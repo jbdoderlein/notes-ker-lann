@@ -14,7 +14,6 @@ fi
 # Set up Django project
 python3 manage.py collectstatic --noinput
 python3 manage.py compilemessages
-python3 manage.py makemigrations
 python3 manage.py migrate
 
 if [ "$1" ]; then

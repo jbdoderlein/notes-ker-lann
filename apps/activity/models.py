@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
 from datetime import timedelta
 from threading import Thread
 
@@ -133,9 +134,13 @@ class Activity(models.Model):
         if not settings.DEBUG and self.pk and "scripts" in settings.INSTALLED_APPS:
             def refresh_activities():
                 from scripts.management.commands.refresh_activities import Command as RefreshActivitiesCommand
-                RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name)
-                RefreshActivitiesCommand.refresh_raw_wiki_page("Modification de l'activité " + self.name)
-            Thread(daemon=True, target=refresh_activities).start()
+                # Consider that we can update the wiki iff the WIKI_PASSWORD env var is not empty
+                RefreshActivitiesCommand.refresh_human_readable_wiki_page("Modification de l'activité " + self.name,
+                                                                          False, os.getenv("WIKI_PASSWORD"))
+                RefreshActivitiesCommand.refresh_raw_wiki_page("Modification de l'activité " + self.name,
+                                                               False, os.getenv("WIKI_PASSWORD"))
+            Thread(daemon=True, target=refresh_activities).start()\
+                if settings.DATABASES["default"]["ENGINE"] == 'django.db.backends.postgresql' else refresh_activities()
         return ret
 
     def __str__(self):

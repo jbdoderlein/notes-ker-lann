@@ -195,7 +195,6 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
         DJANGO_SECRET_KEY=CHANGE_ME
         DJANGO_SETTINGS_MODULE="note_kfet.settings
         NOTE_URL=localhost # URL où accéder à la note
-        DOMAIN=localhost # note.example.com
         CONTACT_EMAIL=tresorerie.bde@localhost
         # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
         NOTE_MAIL=notekfet@localhost
@@ -211,7 +210,6 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
 
         $ source /env/bin/activate
         (env)$ ./manage.py check # pas de bêtise qui traine
-        (env)$ ./manage.py makemigrations
         (env)$ ./manage.py migrate
 
 7.  *Enjoy \o/*
