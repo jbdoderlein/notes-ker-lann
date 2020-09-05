@@ -2,6 +2,10 @@ stages:
   - test
   - quality-assurance
 
+# Also fetch submodules
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # Debian Buster
 py37-django22:
   stage: test
