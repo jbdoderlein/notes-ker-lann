@@ -109,6 +109,9 @@ class Invoice(models.Model):
         verbose_name = _("invoice")
         verbose_name_plural = _("invoices")
 
+    def __str__(self):
+        return _("Invoice #{id}").format(id=self.id)
+
 
 class Product(models.Model):
     """
@@ -150,6 +153,9 @@ class Product(models.Model):
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("products")
+
+    def __str__(self):
+        return f"{self.designation} ({self.invoice})"
 
 
 class RemittanceType(models.Model):
@@ -256,6 +262,9 @@ class SpecialTransactionProxy(models.Model):
         verbose_name = _("special transaction proxy")
         verbose_name_plural = _("special transaction proxies")
 
+    def __str__(self):
+        return str(self.transaction)
+
 
 class SogeCredit(models.Model):
     """
@@ -354,3 +363,6 @@ class SogeCredit(models.Model):
     class Meta:
         verbose_name = _("Credit from the Société générale")
         verbose_name_plural = _("Credits from the Société générale")
+
+    def __str__(self):
+        return _("Soge credit for {user}").format(user=str(self.user))
