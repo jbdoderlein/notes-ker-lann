@@ -30,7 +30,7 @@ Bien que cela permette de créer une instance sur toutes les distributions,
 2.  **Clonage du dépot** là où vous voulez :
 
     ```bash
-    $ git clone git@gitlab.crans.org:bde/nk20.git && cd nk20
+    $ git clone git@gitlab.crans.org:bde/nk20.git --recursive && cd nk20
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -109,7 +109,7 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
     $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
     $ sudo chmod g+rwx .
-    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git
+    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git --recursive
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -221,7 +221,7 @@ Il est possible de travailler sur une instance Docker.
 Pour construire l'image Docker `nk20`,
 
 ```
-git clone https://gitlab.crans.org/bde/nk20/ && cd nk20
+git clone https://gitlab.crans.org/bde/nk20/ --recursive && cd nk20
 docker build . -t nk20
 ```
 
