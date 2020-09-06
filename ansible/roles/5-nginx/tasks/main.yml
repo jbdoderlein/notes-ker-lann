@@ -1,0 +1,44 @@
+---
+- name: Install NGINX
+  apt:
+    name: nginx
+  register: pkg_result
+  retries: 3
+  until: pkg_result is succeeded
+
+- name: Copy conf of Nginx
+  template:
+    src: "nginx_note.conf"
+    dest: /etc/nginx/sites-available/nginx_note.conf
+    mode: 0644
+    owner: www-data
+    group: www-data
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/nginx_note.conf
+    dest: /etc/nginx/sites-enabled/nginx_note.conf
+    owner: www-data
+    group: www-data
+    state: link
+
+- name: Disable default Nginx site
+  file:
+    dest: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy conf of UWSGI
+  file:
+    src: /var/www/note_kfet/uwsgi_note.ini
+    dest: /etc/uwsgi/apps-enabled/uwsgi_note.ini
+    state: link
+
+- name: Reload Nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: Restart UWSGI
+  systemd:
+    name: uwsgi
+    state: restarted
