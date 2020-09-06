@@ -183,10 +183,7 @@ $(document).ready(function () {
 
   if (location.hash) { $('#type_' + location.hash.substr(1)).click() } else { type_transfer.click() }
 
-  $('#source_me').click(function (event) {
-    // Prevent TurboLinks
-    event.preventDefault();
-
+  $('#source_me').click(function () {
     if (LOCK) { return }
 
     // Shortcut to set the current user as the only emitter
