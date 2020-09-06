@@ -1,7 +1,11 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import io
+
+from PIL import Image
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import CheckboxSelectMultiple
@@ -76,6 +80,38 @@ class ImageForm(forms.Form):
     y = forms.FloatField(widget=forms.HiddenInput())
     width = forms.FloatField(widget=forms.HiddenInput())
     height = forms.FloatField(widget=forms.HiddenInput())
+
+    def clean(self):
+        """Load image and crop"""
+        cleaned_data = super().clean()
+
+        # Image size is limited by Django DATA_UPLOAD_MAX_MEMORY_SIZE
+        image = cleaned_data.get('image')
+        if image:
+            # Let Pillow detect and load image
+            try:
+                im = Image.open(image)
+            except OSError:
+                # Rare case in which Django consider the upload file as an image
+                # but Pil is unable to load it
+                raise forms.ValidationError(_('This image cannot be loaded.'))
+
+            # Crop image
+            x = cleaned_data.get('x', 0)
+            y = cleaned_data.get('y', 0)
+            w = cleaned_data.get('width', 200)
+            h = cleaned_data.get('height', 200)
+            im = im.crop((x, y, x + w, y + h))
+            im = im.resize(
+                (settings.PIC_WIDTH, settings.PIC_RATIO * settings.PIC_WIDTH),
+                Image.ANTIALIAS,
+            )
+
+            # Save
+            image.file = io.BytesIO()
+            im.save(image.file, "PNG")
+
+        return cleaned_data
 
 
 class ClubForm(forms.ModelForm):
