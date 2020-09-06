@@ -55,12 +55,18 @@ SPDX-License-Identifier: GPL-3.0-or-later
     /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
     $("#id_image").change(function (e) {
       if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          $("#modal-image").attr("src", e.target.result);
-          $("#modalCrop").modal("show");
+        // Check the image size
+        if (this.files[0].size > 2*1024*1024) {
+          alert("Ce fichier est trop volumineux.")
+	} else {
+          // Read the selected image file
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#modal-image").attr("src", e.target.result);
+            $("#modalCrop").modal("show");
+          }
+          reader.readAsDataURL(this.files[0]);
         }
-        reader.readAsDataURL(this.files[0]);
       }
     });
 
