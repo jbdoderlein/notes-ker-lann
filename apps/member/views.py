@@ -1,10 +1,8 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import io
 from datetime import timedelta, date
 
-from PIL import Image
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -263,6 +261,7 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
         return context
 
     def get_success_url(self):
+        """Redirect to profile page after upload"""
         return reverse_lazy('member:user_detail', kwargs={'pk': self.object.id})
 
     def post(self, request, *args, **kwargs):
@@ -271,26 +270,9 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
         return self.form_valid(form) if form.is_valid() else self.form_invalid(form)
 
     def form_valid(self, form):
+        """Save image to note"""
         image_field = form.cleaned_data['image']
-        x = form.cleaned_data['x']
-        y = form.cleaned_data['y']
-        w = form.cleaned_data['width']
-        h = form.cleaned_data['height']
-        # image crop and resize
-        image_file = io.BytesIO(image_field.read())
-        # ext = image_field.name.split('.')[-1].lower()
-        # TODO: support GIF format
-        image = Image.open(image_file)
-        image = image.crop((x, y, x + w, y + h))
-        image_clean = image.resize((settings.PIC_WIDTH,
-                                    settings.PIC_RATIO * settings.PIC_WIDTH),
-                                   Image.ANTIALIAS)
-        image_file = io.BytesIO()
-        image_clean.save(image_file, "PNG")
-        image_field.file = image_file
-        # renaming
-        filename = "{}_pic.png".format(self.object.note.pk)
-        image_field.name = filename
+        image_field.name = "{}_pic.png".format(self.object.note.pk)
         self.object.note.display_image = image_field
         self.object.note.save()
         return super().form_valid(form)

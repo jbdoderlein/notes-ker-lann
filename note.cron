@@ -1,17 +1,17 @@
-# Attention, il faut *copier* ce fichier dans /etc/cron.d, owner root:root et droits 644
+# {{ ansible_managed }}
 # Les cronjobs dont a besoin la Note Kfet
 
 # m  h   dom mon dow     user   command
 # Envoyer les mails en attente
- *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail
- *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py retry_deferred
- 00  0     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py purge_mail_log 7
+ *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail -c 1
+ *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py retry_deferred -c 1
+ 00  0     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py purge_mail_log 7 -c 1
 # Faire une sauvegarde de la base de données
  00  2     *   *   *     root   cd /var/www/note_kfet && apps/scripts/shell/backup_db
 # Vérifier la cohérence de la base et mailer en cas de problème
  00  4     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py check_consistency --sum-all --check-all --mail
 # Mettre à jour le wiki (modification sans (dé)validation, activités passées)
-#30  5     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py refresh_activities --raw --comment refresh --wiki
+ 30  5     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py refresh_activities --raw --human --comment refresh --wiki
 # Spammer les gens en négatif
  00  5     *   *   2     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --spam
 # Envoyer le rapport mensuel aux trésoriers et respos info

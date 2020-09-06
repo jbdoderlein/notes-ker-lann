@@ -11,7 +11,7 @@
   git:
     repo: https://gitlab.crans.org/bde/nk20.git
     dest: /var/www/note_kfet
-    version: master
+    version: "{{ note.git_branch }}"
     force: true
 
 - name: Use default env vars (should be updated!)
@@ -30,6 +30,7 @@
     group: www-data
 
 - name: Setup cron jobs
+  when: "note.cron_enabled"
   template:
     src: note.cron.j2
     dest: /etc/cron.d/note
