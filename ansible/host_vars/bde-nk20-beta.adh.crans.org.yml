@@ -2,4 +2,4 @@
 note:
   server_name: note-beta.crans.org
   git_branch: beta
-  cron_enabled: true
+  cron_enabled: false

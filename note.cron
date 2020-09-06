@@ -1,4 +1,4 @@
-{{ ansible_managed }}
+# {{ ansible_managed }}
 # Les cronjobs dont a besoin la Note Kfet
 
 # m  h   dom mon dow     user   command

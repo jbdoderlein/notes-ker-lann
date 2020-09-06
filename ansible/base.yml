@@ -4,7 +4,7 @@
 - hosts: server
   vars_prompt:
     - name: DB_PASSWORD
-      prompt: "Password of the database (leave it blank if this is a reinstallation)"
+      prompt: "Password of the database (leave it blank to skip database init)"
       private: yes
   vars:
     mirror: deb.debian.org
