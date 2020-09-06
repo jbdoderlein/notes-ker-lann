@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
 
-- hosts: server
+- hosts: all
   vars_prompt:
     - name: DB_PASSWORD
       prompt: "Password of the database (leave it blank to skip database init)"

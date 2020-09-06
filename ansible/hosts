@@ -1,6 +1,8 @@
-[server]
+[dev]
 bde3-virt.adh.crans.org
 bde-nk20-beta.adh.crans.org
+
+[prod]
 bde-note.adh.crans.org
 
 [all:vars]
