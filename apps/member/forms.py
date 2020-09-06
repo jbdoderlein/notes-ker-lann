@@ -117,8 +117,8 @@ class ImageForm(forms.Form):
                 frames.append(frame)
 
             # Save
-            om = frames.pop(0) # Get first frame
-            om.info = im.info # Copy metadata
+            om = frames.pop(0)  # Get first frame
+            om.info = im.info  # Copy metadata
             image.file = io.BytesIO()
             if len(frames) > 1:
                 # Save as GIF
