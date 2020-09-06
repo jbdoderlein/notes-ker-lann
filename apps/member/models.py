@@ -341,6 +341,9 @@ class Membership(models.Model):
             return self.date_start.toordinal() <= datetime.datetime.now().toordinal()
 
     def renew(self):
+        """
+        If the current membership comes to expiration, create a new membership that starts immediately after this one.
+        """
         if not Membership.objects.filter(
                 user=self.user,
                 club=self.club,
@@ -361,6 +364,48 @@ class Membership(models.Model):
             new_membership.save()
             new_membership.roles.set(self.roles.all())
             new_membership.save()
+
+    def renew_parent(self):
+        """
+        Ensure that the parent membership is renewed, and renew/create it if needed.
+        """
+        parent_membership = Membership.objects.filter(
+            user=self.user,
+            club=self.club.parent_club,
+        ).order_by("-date_start")
+        if parent_membership.exists():
+            # Renew the previous membership of the parent club
+            parent_membership = parent_membership.first()
+            parent_membership._force_renew_parent = True
+            if hasattr(self, '_soge'):
+                parent_membership._soge = True
+            if hasattr(self, '_force_save'):
+                parent_membership._force_save = True
+            parent_membership.renew()
+        else:
+            # Create a new membership in the parent club
+            parent_membership = Membership(
+                user=self.user,
+                club=self.club.parent_club,
+                date_start=self.date_start,
+            )
+            parent_membership._force_renew_parent = True
+            if hasattr(self, '_soge'):
+                parent_membership._soge = True
+            if hasattr(self, '_force_save'):
+                parent_membership._force_save = True
+            parent_membership.save()
+            parent_membership.refresh_from_db()
+
+            if self.club.parent_club.name == "BDE":
+                parent_membership.roles.set(
+                    Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
+            elif self.club.parent_club.name == "Kfet":
+                parent_membership.roles.set(
+                    Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
+            else:
+                parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
+            parent_membership.save()
 
     def save(self, *args, **kwargs):
         """
@@ -391,43 +436,7 @@ class Membership(models.Model):
                     date_start__gte=self.club.parent_club.membership_start,
                 ).exists():
                     if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
-                        parent_membership = Membership.objects.filter(
-                            user=self.user,
-                            club=self.club.parent_club,
-                        ).order_by("-date_start")
-                        if parent_membership.exists():
-                            # Renew the previous membership of the parent club
-                            parent_membership = parent_membership.first()
-                            parent_membership._force_renew_parent = True
-                            if hasattr(self, '_soge'):
-                                parent_membership._soge = True
-                            if hasattr(self, '_force_save'):
-                                parent_membership._force_save = True
-                            parent_membership.renew()
-                        else:
-                            # Create a new membership in the parent club
-                            parent_membership = Membership(
-                                user=self.user,
-                                club=self.club.parent_club,
-                                date_start=self.date_start,
-                            )
-                            parent_membership._force_renew_parent = True
-                            if hasattr(self, '_soge'):
-                                parent_membership._soge = True
-                            if hasattr(self, '_force_save'):
-                                parent_membership._force_save = True
-                            parent_membership.save()
-                            parent_membership.refresh_from_db()
-
-                            if self.club.parent_club.name == "BDE":
-                                parent_membership.roles.set(
-                                    Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
-                            elif self.club.parent_club.name == "Kfet":
-                                parent_membership.roles.set(
-                                    Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
-                            else:
-                                parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
-                            parent_membership.save()
+                        self.renew_parent()
                     else:
                         raise ValidationError(_('User is not a member of the parent club')
                                               + ' ' + self.club.parent_club.name)
