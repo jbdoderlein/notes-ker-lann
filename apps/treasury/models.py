@@ -25,14 +25,14 @@ class Invoice(models.Model):
 
     bde = models.CharField(
         max_length=32,
-        default='Saperlistpopette.png',
+        default='Saperlistpopette',
         choices=(
-            ('Saperlistpopette.png', 'Saper[list]popette'),
-            ('Finalist.png', 'Fina[list]'),
-            ('Listorique.png', '[List]orique'),
-            ('Satellist.png', 'Satel[list]'),
-            ('Monopolist.png', 'Monopo[list]'),
-            ('Kataclist.png', 'Katac[list]'),
+            ('Saperlistpopette', 'Saper[list]popette'),
+            ('Finalist', 'Fina[list]'),
+            ('Listorique', '[List]orique'),
+            ('Satellist', 'Satel[list]'),
+            ('Monopolist', 'Monopo[list]'),
+            ('Kataclist', 'Katac[list]'),
         ),
         verbose_name=_("BDE"),
     )
