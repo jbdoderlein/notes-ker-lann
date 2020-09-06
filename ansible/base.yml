@@ -1,15 +1,13 @@
 #!/usr/bin/env ansible-playbook
 ---
 
-- hosts: bde-note.adh.crans.org
+- hosts: server
   vars_prompt:
     - name: DB_PASSWORD
-      prompt: "Password of the database"
+      prompt: "Password of the database (leave it blank if this is a reinstallation)"
       private: yes
   vars:
     mirror: deb.debian.org
-    note:
-      server_name: note.crans.org
   roles:
     - 1-apt-basic
     - 2-nk20
