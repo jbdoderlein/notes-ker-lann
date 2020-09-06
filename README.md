@@ -23,8 +23,7 @@ Bien que cela permette de créer une instance sur toutes les distributions,
     $ sudo apt update
     $ sudo apt install --no-install-recommends -y \
         ipython3 python3-setuptools python3-venv python3-dev \
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
-        gettext libjs-bootstrap4 fonts-font-awesome git
+        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome git
     ```
 
 2.  **Clonage du dépot** là où vous voulez :
@@ -98,8 +97,7 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
         python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
         python3-bs4 python3-setuptools \
         uwsgi uwsgi-plugin-python3 \
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
-        gettext libjs-bootstrap4 fonts-font-awesome \
+        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome \
         nginx python3-venv git acl
     ```
 
