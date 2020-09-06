@@ -242,14 +242,6 @@ class Transaction(PolymorphicModel):
         self.destination._force_save = True
         self.destination.save()
 
-    def delete(self, **kwargs):
-        """
-        Whenever we want to delete a transaction (caution with this), we ensure the transaction is invalid first.
-        """
-        self.valid = False
-        self.save(**kwargs)
-        super().delete(**kwargs)
-
     @property
     def total(self):
         return self.amount * self.quantity

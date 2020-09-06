@@ -24,3 +24,11 @@ def save_club_note(instance, raw, **_kwargs):
     from .models import NoteClub
     NoteClub.objects.get_or_create(club=instance)
     instance.note.save()
+
+
+def delete_transaction(instance, **_kwargs):
+    """
+    Whenever we want to delete a transaction (caution with this), we ensure the transaction is invalid first.
+    """
+    instance.valid = False
+    instance.save()
