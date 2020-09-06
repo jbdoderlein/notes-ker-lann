@@ -38,7 +38,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <script src="{% static "js/base.js" %}"></script>
     <script src="{% static "js/konami.js" %}"></script>
 
-    {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
+    {# If extra ressources are needed for a form, load here #}
     {% if form.media %}
         {{ form.media }}
     {% endif %}
@@ -122,10 +122,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <div class="dropdown-menu dropdown-menu-right"
                                  aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{% url 'member:user_detail' pk=request.user.pk %}">
-                                    <i class="fa fa-user"></i> Mon compte
+                                    <i class="fa fa-user"></i> {% trans "My account" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fa fa-sign-out"></i> Se déconnecter
+                                    <i class="fa fa-sign-out"></i> {% trans "Log out" %}
                                 </a>
                             </div>
                         </li>
@@ -133,14 +133,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if request.path != "/registration/signup/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'registration:signup' %}">
-                                    <i class="fa fa-user-plus"></i> S'inscrire
+                                    <i class="fa fa-user-plus"></i> {% trans "Sign up" %}
                                 </a>
                             </li>
                         {% endif %}
                 {% if request.path != "/accounts/login/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">
-                                    <i class="fa fa-sign-in"></i> Se connecter
+                                    <i class="fa fa-sign-in"></i> {% trans "Log in" %}
                                 </a>
                             </li>
                         {% endif %}
@@ -169,7 +169,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                       class="form-inline">
                     <span class="text-muted mr-1">
                         <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
-                           class="text-muted">Nous contacter</a> &mdash;
+                           class="text-muted">{% trans "Contact us" %}</a> &mdash;
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"

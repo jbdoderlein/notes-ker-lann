@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-06 12:32+0200\n"
+"POT-Creation-Date: 2020-09-06 20:16+0200\n"
 "PO-Revision-Date: 2020-09-03 23:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -53,7 +53,7 @@ msgstr "Sie dürfen höchstens 3 Leute  zu dieser Veranstaltung einladen."
 #: apps/member/templates/member/includes/club_info.html:4
 #: apps/member/templates/member/includes/profile_info.html:4
 #: apps/note/models/notes.py:253 apps/note/models/transactions.py:26
-#: apps/note/models/transactions.py:46 apps/note/models/transactions.py:303
+#: apps/note/models/transactions.py:46 apps/note/models/transactions.py:302
 #: apps/permission/models.py:329
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/wei/models.py:66 apps/wei/models.py:118
@@ -244,13 +244,13 @@ msgstr "entfernen"
 msgid "Type"
 msgstr "Type"
 
-#: apps/activity/tables.py:82 apps/member/forms.py:167
+#: apps/activity/tables.py:82 apps/member/forms.py:183
 #: apps/registration/forms.py:81 apps/treasury/forms.py:129
 #: apps/wei/forms/registration.py:96
 msgid "Last name"
 msgstr "Nachname"
 
-#: apps/activity/tables.py:84 apps/member/forms.py:172
+#: apps/activity/tables.py:84 apps/member/forms.py:188
 #: apps/note/templates/note/transaction_form.html:134
 #: apps/registration/forms.py:86 apps/treasury/forms.py:131
 #: apps/wei/forms/registration.py:101
@@ -270,21 +270,21 @@ msgid "Guests list"
 msgstr "Gastliste"
 
 #: apps/activity/templates/activity/activity_entry.html:14
-#: apps/note/models/transactions.py:260
+#: apps/note/models/transactions.py:259
 #: apps/note/templates/note/transaction_form.html:16
 #: apps/note/templates/note/transaction_form.html:148
-#: note_kfet/templates/base.html:69
+#: note_kfet/templates/base.html:70
 msgid "Transfer"
 msgstr "Überweisen"
 
 #: apps/activity/templates/activity/activity_entry.html:18
-#: apps/note/models/transactions.py:319
+#: apps/note/models/transactions.py:318
 #: apps/note/templates/note/transaction_form.html:21
 msgid "Credit"
 msgstr "Kredit"
 
 #: apps/activity/templates/activity/activity_entry.html:21
-#: apps/note/models/transactions.py:319
+#: apps/note/models/transactions.py:318
 #: apps/note/templates/note/transaction_form.html:25
 msgid "Debit"
 msgstr "Soll"
@@ -368,7 +368,7 @@ msgstr "Einladen"
 msgid "Create new activity"
 msgstr "Neue Veranstaltung schaffen"
 
-#: apps/activity/views.py:63 note_kfet/templates/base.html:87
+#: apps/activity/views.py:63 note_kfet/templates/base.html:88
 msgid "Activities"
 msgstr "Veranstaltungen"
 
@@ -480,6 +480,10 @@ msgstr "Preis"
 msgid "member"
 msgstr "Mitglied"
 
+#: apps/member/forms.py:23
+msgid "Permission mask"
+msgstr "Berechtigungsmaske"
+
 #: apps/member/forms.py:45
 msgid "Report frequency"
 msgstr "Bericht Frequenz"
@@ -500,53 +504,53 @@ msgstr "Wählen sie ein Bild aus"
 msgid "Maximal size: 2MB"
 msgstr "Maximal Größe: 2MB"
 
-#: apps/member/forms.py:97
+#: apps/member/forms.py:103
 msgid "This image cannot be loaded."
 msgstr "Dieses Bild kann nicht geladen werden."
 
-#: apps/member/forms.py:123 apps/member/views.py:98
+#: apps/member/forms.py:139 apps/member/views.py:98
 #: apps/registration/forms.py:33 apps/registration/views.py:237
 msgid "An alias with a similar name already exists."
 msgstr "Ein ähnliches Alias ist schon benutzt."
 
-#: apps/member/forms.py:146 apps/registration/forms.py:61
+#: apps/member/forms.py:162 apps/registration/forms.py:61
 msgid "Inscription paid by Société Générale"
 msgstr "Mitgliedschaft von der Société Générale bezahlt"
 
-#: apps/member/forms.py:148 apps/registration/forms.py:63
+#: apps/member/forms.py:164 apps/registration/forms.py:63
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr "Die Société Générale die Mitgliedschaft bezahlt."
 
-#: apps/member/forms.py:153 apps/registration/forms.py:68
+#: apps/member/forms.py:169 apps/registration/forms.py:68
 #: apps/wei/forms/registration.py:83
 msgid "Credit type"
 msgstr "Kredittype"
 
-#: apps/member/forms.py:154 apps/registration/forms.py:69
+#: apps/member/forms.py:170 apps/registration/forms.py:69
 #: apps/wei/forms/registration.py:84
 msgid "No credit"
 msgstr "Kein Kredit"
 
-#: apps/member/forms.py:156
+#: apps/member/forms.py:172
 msgid "You can credit the note of the user."
 msgstr "Sie dûrfen diese Note kreditieren."
 
-#: apps/member/forms.py:160 apps/registration/forms.py:74
+#: apps/member/forms.py:176 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
 msgid "Credit amount"
 msgstr "Kreditanzahl"
 
-#: apps/member/forms.py:177 apps/note/templates/note/transaction_form.html:140
+#: apps/member/forms.py:193 apps/note/templates/note/transaction_form.html:140
 #: apps/registration/forms.py:91 apps/treasury/forms.py:133
 #: apps/wei/forms/registration.py:106
 msgid "Bank"
 msgstr "Bank"
 
-#: apps/member/forms.py:204
+#: apps/member/forms.py:220
 msgid "User"
 msgstr "User"
 
-#: apps/member/forms.py:218
+#: apps/member/forms.py:234
 msgid "Roles"
 msgstr "Rollen"
 
@@ -790,29 +794,29 @@ msgstr "Mitgliedschaft fängt an"
 msgid "membership ends on"
 msgstr "Mitgliedschaft endet am"
 
-#: apps/member/models.py:375
+#: apps/member/models.py:420
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Die Rolle {role} ist nicht erlaubt für das Club {club}."
 
-#: apps/member/models.py:384 apps/member/views.py:651
+#: apps/member/models.py:429 apps/member/views.py:628
 msgid "User is already a member of the club"
 msgstr "User ist schon ein Mitglied dieser club"
 
-#: apps/member/models.py:432
+#: apps/member/models.py:441
 msgid "User is not a member of the parent club"
 msgstr "User ist noch nicht Mitglied des Urclubs"
 
-#: apps/member/models.py:480
+#: apps/member/models.py:489
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Mitgliedschaft von {user} für das Club {club}"
 
-#: apps/member/models.py:483 apps/note/models/transactions.py:360
+#: apps/member/models.py:492 apps/note/models/transactions.py:359
 msgid "membership"
 msgstr "Mitgliedschaft"
 
-#: apps/member/models.py:484
+#: apps/member/models.py:493
 msgid "memberships"
 msgstr "Mitgliedschaften"
 
@@ -907,7 +911,7 @@ msgstr ""
 
 #: apps/member/templates/member/club_alias.html:10
 #: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:236
-#: apps/member/views.py:425
+#: apps/member/views.py:433
 msgid "Note aliases"
 msgstr "Note Aliases"
 
@@ -1058,31 +1062,31 @@ msgstr "User finden"
 msgid "Update note picture"
 msgstr "Notebild ändern"
 
-#: apps/member/views.py:293
+#: apps/member/views.py:301
 msgid "Manage auth token"
 msgstr "Auth token bearbeiten"
 
-#: apps/member/views.py:320
+#: apps/member/views.py:328
 msgid "Create new club"
 msgstr "Neue Club"
 
-#: apps/member/views.py:339
+#: apps/member/views.py:347
 msgid "Search club"
 msgstr "Club finden"
 
-#: apps/member/views.py:372
+#: apps/member/views.py:380
 msgid "Club detail"
 msgstr "Club Details"
 
-#: apps/member/views.py:448
+#: apps/member/views.py:456
 msgid "Update club"
 msgstr "Club bearbeiten"
 
-#: apps/member/views.py:482
+#: apps/member/views.py:490
 msgid "Add new member to the club"
 msgstr "Neue Mitglieder"
 
-#: apps/member/views.py:642 apps/wei/views.py:922
+#: apps/member/views.py:619 apps/wei/views.py:922
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1090,25 +1094,25 @@ msgstr ""
 "Diese User hat nicht genug Geld um Mitglied zu werden, und darf nich im Rot "
 "sein."
 
-#: apps/member/views.py:655
+#: apps/member/views.py:632
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "Die Mitgliedschaft muss nach {:%m-%d-Y} anfängen."
 
-#: apps/member/views.py:660
+#: apps/member/views.py:637
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "Die Mitgliedschaft muss vor {:%m-%d-Y} anfängen."
 
-#: apps/member/views.py:676 apps/member/views.py:678 apps/member/views.py:680
+#: apps/member/views.py:644 apps/member/views.py:646 apps/member/views.py:648
 #: apps/registration/views.py:287 apps/registration/views.py:289
 #: apps/registration/views.py:291 apps/wei/views.py:927 apps/wei/views.py:931
 msgid "This field is required."
 msgstr "Dies ist ein Pflichtfeld."
 
-#: apps/member/views.py:753
+#: apps/member/views.py:783
 msgid "Manage roles of an user in the club"
 msgstr "Rollen in diesen Club bearbeiten"
 
-#: apps/member/views.py:778
+#: apps/member/views.py:808
 msgid "Members of the club"
 msgstr "Mitlglieder dieses Club"
 
@@ -1355,34 +1359,34 @@ msgstr ""
 "Die Notenguthaben müssen zwischen - 92 233 720 368 547 758,08 € und 92 233 "
 "720 368 547 758,07 € liegen."
 
-#: apps/note/models/transactions.py:280
+#: apps/note/models/transactions.py:279
 msgid ""
 "The destination of this transaction must equal to the destination of the "
 "template."
 msgstr ""
 "Der Empfänger dieser Transaktion muss dem Empfänger der Vorlage entsprechen."
 
-#: apps/note/models/transactions.py:289
+#: apps/note/models/transactions.py:288
 msgid "Template"
 msgstr "Vorlage"
 
-#: apps/note/models/transactions.py:292
+#: apps/note/models/transactions.py:291
 msgid "recurrent transaction"
 msgstr "wiederkehrende Transaktion"
 
-#: apps/note/models/transactions.py:293
+#: apps/note/models/transactions.py:292
 msgid "recurrent transactions"
 msgstr "wiederkehrende Transaktionen"
 
-#: apps/note/models/transactions.py:308
+#: apps/note/models/transactions.py:307
 msgid "first_name"
 msgstr "Vorname"
 
-#: apps/note/models/transactions.py:313
+#: apps/note/models/transactions.py:312
 msgid "bank"
 msgstr "Bank"
 
-#: apps/note/models/transactions.py:330
+#: apps/note/models/transactions.py:329
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
@@ -1390,19 +1394,19 @@ msgstr ""
 "Eine Sondertransaktion ist nur zwischen einer Note, die einer "
 "Zahlungsmethode zugeordnet ist, und einem User oder einem Club möglich"
 
-#: apps/note/models/transactions.py:338
+#: apps/note/models/transactions.py:337
 msgid "Special transaction"
 msgstr "Sondertransaktion"
 
-#: apps/note/models/transactions.py:339
+#: apps/note/models/transactions.py:338
 msgid "Special transactions"
 msgstr "Sondertranskationen"
 
-#: apps/note/models/transactions.py:355
+#: apps/note/models/transactions.py:354
 msgid "membership transaction"
 msgstr "Mitgliedschafttransaktion"
 
-#: apps/note/models/transactions.py:356 apps/treasury/models.py:273
+#: apps/note/models/transactions.py:355 apps/treasury/models.py:273
 msgid "membership transactions"
 msgstr "Mitgliedschaftttransaktionen"
 
@@ -1574,7 +1578,7 @@ msgstr "Tatsen finden"
 msgid "Update button"
 msgstr "Tatse bearbeiten"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:63
+#: apps/note/views.py:151 note_kfet/templates/base.html:64
 msgid "Consumptions"
 msgstr "Verbräuche"
 
@@ -1752,7 +1756,7 @@ msgstr ""
 "diesen Parametern zu erstellen. Bitte korrigieren Sie Ihre Daten und "
 "versuchen Sie es erneut."
 
-#: apps/permission/views.py:96 note_kfet/templates/base.html:105
+#: apps/permission/views.py:96 note_kfet/templates/base.html:106
 msgid "Rights"
 msgstr "Rechten"
 
@@ -1946,7 +1950,7 @@ msgstr ""
 msgid "Invalidate pre-registration"
 msgstr "Ungültige Vorregistrierung"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:93
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:94
 msgid "Treasury"
 msgstr "Quaestor"
 
@@ -2338,7 +2342,7 @@ msgstr "Krediten von der Société générale handeln"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
-#: note_kfet/templates/base.html:99
+#: note_kfet/templates/base.html:100
 msgid "WEI"
 msgstr "WEI"
 
@@ -2942,29 +2946,56 @@ msgstr ""
 msgid "Reset"
 msgstr "Reset"
 
-#: note_kfet/templates/base.html:13
+#: note_kfet/templates/base.html:14
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "Die BDE ENS-Paris-Saclay Note."
 
-#: note_kfet/templates/base.html:75
+#: note_kfet/templates/base.html:76
 msgid "Users"
 msgstr "Users"
 
-#: note_kfet/templates/base.html:81
+#: note_kfet/templates/base.html:82
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:110
+#: note_kfet/templates/base.html:111
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:154
+#: note_kfet/templates/base.html:125
+msgid "My account"
+msgstr "Mein Konto"
+
+#: note_kfet/templates/base.html:128
+msgid "Log out"
+msgstr "AAbmelden"
+
+#: note_kfet/templates/base.html:136
+#: note_kfet/templates/registration/signup.html:6
+#: note_kfet/templates/registration/signup.html:11
+#: note_kfet/templates/registration/signup.html:27
+msgid "Sign up"
+msgstr "Registrieren"
+
+#: note_kfet/templates/base.html:143
+#: note_kfet/templates/registration/login.html:6
+#: note_kfet/templates/registration/login.html:15
+#: note_kfet/templates/registration/login.html:38
+#: note_kfet/templates/registration/password_reset_complete.html:15
+msgid "Log in"
+msgstr "Anmelden"
+
+#: note_kfet/templates/base.html:155
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
 msgstr ""
 "Ihre E-Mail-Adresse ist nicht validiert. Bitte überprüfen Sie Ihren "
 "Posteingang und klicken Sie auf den Validierungslink."
+
+#: note_kfet/templates/base.html:172
+msgid "Contact us"
+msgstr "Kontakt"
 
 #: note_kfet/templates/base_search.html:15
 msgid "Search by attribute such as name…"
@@ -2997,13 +3028,6 @@ msgstr ""
 #: note_kfet/templates/registration/logged_out.html:14
 msgid "Log in again"
 msgstr "Nochmal anmelden"
-
-#: note_kfet/templates/registration/login.html:6
-#: note_kfet/templates/registration/login.html:15
-#: note_kfet/templates/registration/login.html:38
-#: note_kfet/templates/registration/password_reset_complete.html:15
-msgid "Log in"
-msgstr "Anmelden"
 
 #: note_kfet/templates/registration/login.html:20
 #, python-format
@@ -3095,12 +3119,6 @@ msgstr ""
 #: note_kfet/templates/registration/password_reset_form.html:18
 msgid "Reset my password"
 msgstr "Mein Passwort zurücksetzen"
-
-#: note_kfet/templates/registration/signup.html:6
-#: note_kfet/templates/registration/signup.html:11
-#: note_kfet/templates/registration/signup.html:27
-msgid "Sign up"
-msgstr "Registrieren"
 
 #: note_kfet/templates/registration/signup.html:15
 msgid ""

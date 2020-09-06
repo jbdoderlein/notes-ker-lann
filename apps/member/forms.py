@@ -20,7 +20,7 @@ from .models import Profile, Club, Membership
 
 class CustomAuthenticationForm(AuthenticationForm):
     permission_mask = forms.ModelChoiceField(
-        label="Masque de permissions",
+        label=_("Permission mask"),
         queryset=PermissionMask.objects.order_by("rank"),
         empty_label=None,
     )
