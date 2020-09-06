@@ -2968,7 +2968,7 @@ msgstr "Mein Konto"
 
 #: note_kfet/templates/base.html:128
 msgid "Log out"
-msgstr "AAbmelden"
+msgstr "Abmelden"
 
 #: note_kfet/templates/base.html:136
 #: note_kfet/templates/registration/signup.html:6
