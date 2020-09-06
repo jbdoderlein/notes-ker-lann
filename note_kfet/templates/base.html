@@ -3,7 +3,8 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en" }}" class="position-relative h-100">
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} class="position-relative h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
