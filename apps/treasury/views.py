@@ -209,7 +209,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             # The file has to be rendered twice
             for ignored in range(2):
                 error = subprocess.Popen(
-                    ["pdflatex", "invoice-{}.tex".format(pk)],
+                    ["xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
                     stdin=open(os.devnull, "r"),
                     stderr=open(os.devnull, "wb"),

@@ -584,6 +584,64 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return context
 
+    def perform_verifications(self, form, user, club, fee):
+        """
+        Make some additional verifications to check that the membership can be created.
+        :return: True if the form is clean, False if there is an error.
+        """
+        error = False
+
+        # Retrieve form data
+        credit_type = form.cleaned_data["credit_type"]
+        credit_amount = form.cleaned_data["credit_amount"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+        soge = form.cleaned_data["soge"] and not user.profile.soge and (club.name == "BDE" or club.name == "Kfet")
+
+        if not soge and user.note.balance + credit_amount < fee and not Membership.objects.filter(
+                club__name="Kfet",
+                user=user,
+                date_start__lte=date.today(),
+                date_end__gte=date.today(),
+        ).exists():
+            # Users without a valid Kfet membership can't have a negative balance.
+            # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
+            form.add_error('user',
+                           _("This user don't have enough money to join this club, and can't have a negative balance."))
+            error = True
+
+        if Membership.objects.filter(
+                user=form.instance.user,
+                club=club,
+                date_start__lte=form.instance.date_start,
+                date_end__gte=form.instance.date_start,
+        ).exists():
+            form.add_error('user', _('User is already a member of the club'))
+            error = True
+
+        if club.membership_start and form.instance.date_start < club.membership_start:
+            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_start))
+            error = True
+
+        if club.membership_end and form.instance.date_start > club.membership_end:
+            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
+                           .format(form.instance.club.membership_end))
+            error = True
+
+        if credit_amount:
+            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
+                if not last_name:
+                    form.add_error('last_name', _("This field is required."))
+                if not first_name:
+                    form.add_error('first_name', _("This field is required."))
+                if not bank and credit_type.special_type == "Chèque":
+                    form.add_error('bank', _("This field is required."))
+                return self.form_invalid(form)
+
+        return not error
+
     def form_valid(self, form):
         """
         Create membership, check that all is good, make transactions
@@ -630,36 +688,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                 fee += c.membership_fee_paid if user.profile.paid else c.membership_fee_unpaid
             c = c.parent_club
 
-        if not soge and user.note.balance + credit_amount < fee and not Membership.objects.filter(
-                club__name="Kfet",
-                user=user,
-                date_start__lte=date.today(),
-                date_end__gte=date.today(),
-        ).exists():
-            # Users without a valid Kfet membership can't have a negative balance.
-            # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
-            form.add_error('user',
-                           _("This user don't have enough money to join this club, and can't have a negative balance."))
-            return super().form_invalid(form)
-
-        if Membership.objects.filter(
-                user=form.instance.user,
-                club=club,
-                date_start__lte=form.instance.date_start,
-                date_end__gte=form.instance.date_start,
-        ).exists():
-            form.add_error('user', _('User is already a member of the club'))
-            return super().form_invalid(form)
-
-        if club.membership_start and form.instance.date_start < club.membership_start:
-            form.add_error('user', _("The membership must start after {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_start))
-            return super().form_invalid(form)
-
-        if club.membership_end and form.instance.date_start > club.membership_end:
-            form.add_error('user', _("The membership must begin before {:%m-%d-%Y}.")
-                           .format(form.instance.club.membership_end))
-            return super().form_invalid(form)
+        # Make some verifications about the form, and if there is an error, then assume that the form is invalid
+        if not self.perform_verifications(form, user, club, fee):
+            return self.form_invalid(form)
 
         # Now, all is fine, the membership can be created.
 
@@ -671,15 +702,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         # Credit note before the membership is created.
         if credit_amount > 0:
-            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
-                if not last_name:
-                    form.add_error('last_name', _("This field is required."))
-                if not first_name:
-                    form.add_error('first_name', _("This field is required."))
-                if not bank and credit_type.special_type == "Chèque":
-                    form.add_error('bank', _("This field is required."))
-                return self.form_invalid(form)
-
             transaction = SpecialTransaction(
                 source=credit_type,
                 destination=user.note,

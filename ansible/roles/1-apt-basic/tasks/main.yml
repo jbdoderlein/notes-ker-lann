@@ -38,10 +38,7 @@
       - python3-venv
 
       # LaTeX (PDF generation)
-      - texlive-fonts-recommended
-      - texlive-lang-french
-      - texlive-latex-base
-      - texlive-latex-recommended
+      - texlive-xetex
 
       # WSGI server
       - uwsgi

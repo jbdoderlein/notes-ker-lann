@@ -1,15 +1,11 @@
-\documentclass[landscape,10pt]{article}
+\documentclass[a4paper,landscape,10pt]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-
+\usepackage{fontspec}
 \usepackage[margin=1.5cm]{geometry}
-\usepackage{lmodern}
 
 \begin{document}
 \begin{center}
-\huge{Liste des inscrits \og {{ wei.name }} \fg{}}
+\huge{Liste des inscrits « {{ wei.name }} »}
 
 {% if bus %}
 \LARGE{Bus {{ bus.name|safe }}}

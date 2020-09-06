@@ -23,14 +23,13 @@ Bien que cela permette de créer une instance sur toutes les distributions,
     $ sudo apt update
     $ sudo apt install --no-install-recommends -y \
         ipython3 python3-setuptools python3-venv python3-dev \
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
-        gettext libjs-bootstrap4 fonts-font-awesome git
+        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome git
     ```
 
 2.  **Clonage du dépot** là où vous voulez :
 
     ```bash
-    $ git clone git@gitlab.crans.org:bde/nk20.git && cd nk20
+    $ git clone git@gitlab.crans.org:bde/nk20.git --recursive && cd nk20
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -98,8 +97,7 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
         python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
         python3-bs4 python3-setuptools \
         uwsgi uwsgi-plugin-python3 \
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended \
-        gettext libjs-bootstrap4 fonts-font-awesome \
+        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome \
         nginx python3-venv git acl
     ```
 
@@ -109,7 +107,7 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
     $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
     $ sudo chown www-data:www-data .
     $ sudo chmod g+rwx .
-    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git
+    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git --recursive
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -221,7 +219,7 @@ Il est possible de travailler sur une instance Docker.
 Pour construire l'image Docker `nk20`,
 
 ```
-git clone https://gitlab.crans.org/bde/nk20/ && cd nk20
+git clone https://gitlab.crans.org/bde/nk20/ --recursive && cd nk20
 docker build . -t nk20
 ```
 

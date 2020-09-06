@@ -1,6 +1,5 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-from unittest import skip
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -143,7 +142,6 @@ class TestInvoices(TestCase):
         self.assertRedirects(response, reverse("treasury:invoice_list"), 302, 200)
         self.assertFalse(Invoice.objects.filter(pk=self.invoice.id).exists())
 
-    @skip("LaTeX is buggy in the CI")
     def test_invoice_render_pdf(self):
         """
         Generate the PDF file of an invoice.
