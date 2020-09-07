@@ -1103,7 +1103,7 @@
 				"treasury",
 				"sogecredit"
 			],
-			"query": "{\"credit_transaction\": null}",
+			"query": "{}",
 			"type": "add",
 			"mask": 1,
 			"field": "",
@@ -2648,6 +2648,38 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 170,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__is_active\": true}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter n'importe quel alias à une note non bloquée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 171,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__is_active\": true}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer n'importe quel alias à une note non bloquée"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2850,7 +2882,9 @@
 				150,
 				151,
 				163,
-				164
+				164,
+				170,
+				171
 			]
 		}
 	},
@@ -3024,7 +3058,9 @@
 				166,
 				167,
 				168,
-				169
+				169,
+				170,
+				171
 			]
 		}
 	},
@@ -3050,10 +3086,13 @@
 				29,
 				30,
 				31,
+				70,
 				143,
 				166,
 				167,
-				168
+				168,
+				170,
+				171
 			]
 		}
 	},
