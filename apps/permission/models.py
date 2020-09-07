@@ -57,8 +57,8 @@ class InstancedPermission:
 
                     # Force insertion, no data verification, no trigger
                     obj._force_save = True
-                    # We don't want log anything
-                    obj._no_log = True
+                    # We don't want to trigger any signal (log, ...)
+                    obj.no_signal = True
                     Model.save(obj, force_insert=True)
                     ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
                     # Delete testing object

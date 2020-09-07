@@ -50,7 +50,7 @@ def save_object(sender, instance, **kwargs):
     in order to store each modification made
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_signal"):
         return
 
     # noinspection PyProtectedMember
@@ -117,7 +117,7 @@ def delete_object(sender, instance, **kwargs):
     Each time a model is deleted, an entry in the table `Changelog` is added in the database
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_signal"):
         return
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
