@@ -364,7 +364,7 @@ class TestValidateRegistration(TestCase):
         self.assertTrue(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
         self.assertTrue(SogeCredit.objects.filter(user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
-            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 2)
+            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
         self.assertFalse(Transaction.objects.filter(valid=True).exists())
 
         response = self.client.get(self.user.profile.get_absolute_url())

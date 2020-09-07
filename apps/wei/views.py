@@ -1103,7 +1103,7 @@ class MemberListRenderView(LoginRequiredMixin, View):
 
             with open(os.devnull, "wb") as devnull:
                 error = subprocess.Popen(
-                    ["xelatex", "-interaction=nonstopmode", "{}/wei-list.tex".format(tmp_dir)],
+                    ["/usr/bin/xelatex", "-interaction=nonstopmode", "{}/wei-list.tex".format(tmp_dir)],
                     cwd=tmp_dir,
                     stderr=devnull,
                     stdout=devnull,

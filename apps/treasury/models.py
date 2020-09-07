@@ -109,6 +109,9 @@ class Invoice(models.Model):
         verbose_name = _("invoice")
         verbose_name_plural = _("invoices")
 
+    def __str__(self):
+        return _("Invoice #{id}").format(id=self.id)
+
 
 class Product(models.Model):
     """
@@ -150,6 +153,9 @@ class Product(models.Model):
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("products")
+
+    def __str__(self):
+        return f"{self.designation} ({self.invoice})"
 
 
 class RemittanceType(models.Model):
@@ -256,6 +262,9 @@ class SpecialTransactionProxy(models.Model):
         verbose_name = _("special transaction proxy")
         verbose_name_plural = _("special transaction proxies")
 
+    def __str__(self):
+        return str(self.transaction)
+
 
 class SogeCredit(models.Model):
     """
@@ -282,11 +291,11 @@ class SogeCredit(models.Model):
 
     @property
     def valid(self):
-        return self.credit_transaction is not None
+        return self.credit_transaction.valid
 
     @property
     def amount(self):
-        return sum(transaction.total for transaction in self.transactions.all())
+        return sum(transaction.total for transaction in self.transactions.all()) + 8000
 
     def invalidate(self):
         """
@@ -295,11 +304,7 @@ class SogeCredit(models.Model):
         """
         if self.valid:
             self.credit_transaction.valid = False
-            self.credit_transaction._force_save = True
             self.credit_transaction.save()
-            self.credit_transaction._force_delete = True
-            self.credit_transaction.delete()
-        self.credit_transaction = None
         for transaction in self.transactions.all():
             transaction.valid = False
             transaction._force_save = True
@@ -312,17 +317,10 @@ class SogeCredit(models.Model):
 
         # First invalidate all transaction and delete the credit if already did (and force mode)
         self.invalidate()
-        self.credit_transaction = SpecialTransaction.objects.create(
-            source=NoteSpecial.objects.get(special_type="Virement bancaire"),
-            destination=self.user.note,
-            quantity=1,
-            amount=self.amount,
-            reason="Crédit société générale",
-            last_name=self.user.last_name,
-            first_name=self.user.first_name,
-            bank="Société générale",
-            created_at=self.transactions.order_by("-created_at").first().created_at,
-        )
+        # Refresh credit amount
+        self.save()
+        self.credit_transaction.valid = True
+        self.credit_transaction.save()
         self.save()
 
         for transaction in self.transactions.all():
@@ -330,6 +328,25 @@ class SogeCredit(models.Model):
             transaction._force_save = True
             transaction.created_at = timezone.now()
             transaction.save()
+
+    def save(self, *args, **kwargs):
+        if not self.credit_transaction:
+            self.credit_transaction = SpecialTransaction.objects.create(
+                source=NoteSpecial.objects.get(special_type="Virement bancaire"),
+                destination=self.user.note,
+                quantity=1,
+                amount=0,
+                reason="Crédit société générale",
+                last_name=self.user.last_name,
+                first_name=self.user.first_name,
+                bank="Société générale",
+                valid=False,
+            )
+        elif not self.valid:
+            self.credit_transaction.amount = self.amount
+            self.credit_transaction._force_save = True
+            self.credit_transaction.save()
+        super().save(*args, **kwargs)
 
     def delete(self, **kwargs):
         """
@@ -349,8 +366,14 @@ class SogeCredit(models.Model):
             transaction.valid = True
             transaction.created_at = timezone.now()
             transaction.save()
+        self.credit_transaction.valid = False
+        self.credit_transaction.reason += " (invalide)"
+        self.credit_transaction.save()
         super().delete(**kwargs)
 
     class Meta:
         verbose_name = _("Credit from the Société générale")
         verbose_name_plural = _("Credits from the Société générale")
+
+    def __str__(self):
+        return _("Soge credit for {user}").format(user=str(self.user))

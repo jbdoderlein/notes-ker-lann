@@ -138,7 +138,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         """
         We can't display information of a not registered user.
         """
-        return super().get_queryset().filter(profile__registration_valid=True)
+        return super().get_queryset(**kwargs).filter(profile__registration_valid=True)
 
     def get_context_data(self, **kwargs):
         """
@@ -271,9 +271,17 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
 
     def form_valid(self, form):
         """Save image to note"""
-        image_field = form.cleaned_data['image']
-        image_field.name = "{}_pic.png".format(self.object.note.pk)
-        self.object.note.display_image = image_field
+        image = form.cleaned_data['image']
+
+        # Rename as a PNG or GIF
+        extension = image.name.split(".")[-1]
+        if extension == "gif":
+            image.name = "{}_pic.gif".format(self.object.note.pk)
+        else:
+            image.name = "{}_pic.png".format(self.object.note.pk)
+
+        # Save
+        self.object.note.display_image = image
         self.object.note.save()
         return super().form_valid(form)
 

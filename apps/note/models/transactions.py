@@ -90,6 +90,9 @@ class TransactionTemplate(models.Model):
     def get_absolute_url(self):
         return reverse('note:template_update', args=(self.pk,))
 
+    def __str__(self):
+        return self.name
+
 
 class Transaction(PolymorphicModel):
     """
@@ -150,8 +153,7 @@ class Transaction(PolymorphicModel):
     invalidity_reason = models.CharField(
         verbose_name=_('invalidity reason'),
         max_length=255,
-        default=None,
-        null=True,
+        default='',
         blank=True,
     )
 
@@ -173,7 +175,7 @@ class Transaction(PolymorphicModel):
 
         created = self.pk is None
         to_transfer = self.amount * self.quantity
-        if not created:
+        if not created and not self.valid and not hasattr(self, "_force_save"):
             # Revert old transaction
             old_transaction = Transaction.objects.get(pk=self.pk)
             # Check that nothing important changed
@@ -195,7 +197,7 @@ class Transaction(PolymorphicModel):
 
             # When a transaction is declared valid, we ensure that the invalidity reason is null, if it was
             # previously invalid
-            self.invalidity_reason = None
+            self.invalidity_reason = ""
 
         if source_balance > 9223372036854775807 or source_balance < -9223372036854775808\
                 or dest_balance > 9223372036854775807 or dest_balance < -9223372036854775808:
@@ -241,14 +243,6 @@ class Transaction(PolymorphicModel):
         self.destination.balance += diff_dest
         self.destination._force_save = True
         self.destination.save()
-
-    def delete(self, **kwargs):
-        """
-        Whenever we want to delete a transaction (caution with this), we ensure the transaction is invalid first.
-        """
-        self.valid = False
-        self.save(**kwargs)
-        super().delete(**kwargs)
 
     @property
     def total(self):

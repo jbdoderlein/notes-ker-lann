@@ -3,7 +3,7 @@
 
 import io
 
-from PIL import Image
+from PIL import Image, ImageSequence
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,7 +20,7 @@ from .models import Profile, Club, Membership
 
 class CustomAuthenticationForm(AuthenticationForm):
     permission_mask = forms.ModelChoiceField(
-        label="Masque de permissions",
+        label=_("Permission mask"),
         queryset=PermissionMask.objects.order_by("rank"),
         empty_label=None,
     )
@@ -82,13 +82,19 @@ class ImageForm(forms.Form):
     height = forms.FloatField(widget=forms.HiddenInput())
 
     def clean(self):
-        """Load image and crop"""
+        """
+        Load image and crop
+
+        In the future, when Pillow will support APNG we will be able to
+        simplify this code to save only PNG/APNG.
+        """
         cleaned_data = super().clean()
 
         # Image size is limited by Django DATA_UPLOAD_MAX_MEMORY_SIZE
         image = cleaned_data.get('image')
         if image:
             # Let Pillow detect and load image
+            # If it is an animation, then there will be multiple frames
             try:
                 im = Image.open(image)
             except OSError:
@@ -96,20 +102,30 @@ class ImageForm(forms.Form):
                 # but Pil is unable to load it
                 raise forms.ValidationError(_('This image cannot be loaded.'))
 
-            # Crop image
+            # Crop each frame
             x = cleaned_data.get('x', 0)
             y = cleaned_data.get('y', 0)
             w = cleaned_data.get('width', 200)
             h = cleaned_data.get('height', 200)
-            im = im.crop((x, y, x + w, y + h))
-            im = im.resize(
-                (settings.PIC_WIDTH, settings.PIC_RATIO * settings.PIC_WIDTH),
-                Image.ANTIALIAS,
-            )
+            frames = []
+            for frame in ImageSequence.Iterator(im):
+                frame = frame.crop((x, y, x + w, y + h))
+                frame = frame.resize(
+                    (settings.PIC_WIDTH, settings.PIC_RATIO * settings.PIC_WIDTH),
+                    Image.ANTIALIAS,
+                )
+                frames.append(frame)
 
             # Save
+            om = frames.pop(0)  # Get first frame
+            om.info = im.info  # Copy metadata
             image.file = io.BytesIO()
-            im.save(image.file, "PNG")
+            if len(frames) > 1:
+                # Save as GIF
+                om.save(image.file, "GIF", save_all=True, append_images=list(frames), loop=0)
+            else:
+                # Save as PNG
+                om.save(image.file, "PNG")
 
         return cleaned_data
 

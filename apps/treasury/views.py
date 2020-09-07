@@ -209,7 +209,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             # The file has to be rendered twice
             for ignored in range(2):
                 error = subprocess.Popen(
-                    ["xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
+                    ["/usr/bin/xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
                     stdin=open(os.devnull, "r"),
                     stderr=open(os.devnull, "wb"),
@@ -425,11 +425,8 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
                     | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
                 )
 
-        if "valid" in self.request.GET:
-            q = Q(credit_transaction=None)
-            if not self.request.GET["valid"]:
-                q = ~q
-            qs = qs.filter(q)
+        if "valid" not in self.request.GET or not self.request.GET["valid"]:
+            qs = qs.filter(credit_transaction__valid=False)
 
         return qs[:20]
 

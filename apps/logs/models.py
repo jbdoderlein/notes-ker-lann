@@ -44,12 +44,14 @@ class Changelog(models.Model):
     )
 
     previous = models.TextField(
-        null=True,
+        blank=True,
+        default="",
         verbose_name=_('previous data'),
     )
 
     data = models.TextField(
-        null=True,
+        blank=True,
+        default="",
         verbose_name=_('new data'),
     )
 
@@ -80,3 +82,7 @@ class Changelog(models.Model):
     class Meta:
         verbose_name = _("changelog")
         verbose_name_plural = _("changelogs")
+
+    def __str__(self):
+        return _("Changelog of type \"{action}\" for model {model} at {timestamp}").format(
+            action=self.get_action_display(), model=str(self.model), timestamp=str(self.timestamp))

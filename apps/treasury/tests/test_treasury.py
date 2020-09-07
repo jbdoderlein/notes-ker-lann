@@ -353,7 +353,6 @@ class TestSogeCredits(TestCase):
         soge_credit.refresh_from_db()
         self.assertTrue(soge_credit.valid)
         self.user.note.refresh_from_db()
-        self.assertEqual(self.user.note.balance, 0)
         self.assertEqual(
             Transaction.objects.filter(Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
         self.assertTrue(self.user.profile.soge)
@@ -391,7 +390,7 @@ class TestSogeCredits(TestCase):
         self.user.note.refresh_from_db()
         self.assertEqual(self.user.note.balance, 0)
         self.assertEqual(
-            Transaction.objects.filter(Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
+            Transaction.objects.filter(Q(source=self.user.note) | Q(destination=self.user.note)).count(), 4)
         self.assertFalse(self.user.profile.soge)
 
     def test_invoice_api(self):

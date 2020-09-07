@@ -78,7 +78,6 @@ class PermissionQueryTestCase(TestCase):
                 query = instanced.query
                 model = perm.model.model_class()
                 model.objects.filter(query).all()
-                # print("Good query for permission", perm)
             except (FieldError, AttributeError, ValueError, TypeError, JSONDecodeError):
                 print("Query error for permission", perm)
                 print("Query:", perm.query)
