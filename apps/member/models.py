@@ -46,7 +46,7 @@ class Profile(models.Model):
         help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
         max_length=255,
         blank=True,
-        null=True,
+        default="",
     )
 
     department = models.CharField(
@@ -83,7 +83,7 @@ class Profile(models.Model):
         verbose_name=_('address'),
         max_length=255,
         blank=True,
-        null=True,
+        default="",
     )
 
     paid = models.BooleanField(
@@ -94,11 +94,10 @@ class Profile(models.Model):
 
     ml_events_registration = models.CharField(
         blank=True,
-        null=True,
-        default=None,
+        default='',
         max_length=2,
         choices=[
-            (None, _("No")),
+            ('', _("No")),
             ('fr', _("Yes (receive them in french)")),
             ('en', _("Yes (receive them in english)")),
         ],

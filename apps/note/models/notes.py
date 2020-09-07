@@ -70,8 +70,8 @@ class Note(PolymorphicModel):
                          "It can be reactivated at any time.")),
             ('forced', _("The note is blocked by the the BDE and can't be manually reactivated.")),
         ],
-        null=True,
-        default=None,
+        blank=True,
+        default="",
     )
 
     class Meta:

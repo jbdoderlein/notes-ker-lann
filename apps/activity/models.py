@@ -188,6 +188,12 @@ class Entry(models.Model):
         verbose_name = _("entry")
         verbose_name_plural = _("entries")
 
+    def __str__(self):
+        return _("Entry for {guest}, invited by {note} to the activity {activity}").format(
+            guest=str(self.guest), note=str(self.note), activity=str(self.activity)) if self.guest \
+            else _("Entry for {note} to the activity {activity}").format(
+            guest=str(self.guest), note=str(self.note), activity=str(self.activity))
+
     def save(self, *args, **kwargs):
 
         qs = Entry.objects.filter(~Q(pk=self.pk), activity=self.activity, note=self.note, guest=self.guest)

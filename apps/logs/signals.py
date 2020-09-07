@@ -99,7 +99,7 @@ def save_object(sender, instance, **kwargs):
             model = instance.__class__
             fields = changed_fields
 
-    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else None
+    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else ""
     instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
 
     Changelog.objects.create(user=user,
@@ -149,6 +149,6 @@ def delete_object(sender, instance, **kwargs):
                              model=ContentType.objects.get_for_model(instance),
                              instance_pk=instance.pk,
                              previous=instance_json,
-                             data=None,
+                             data="",
                              action="delete"
                              ).save()
