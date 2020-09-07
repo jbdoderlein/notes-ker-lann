@@ -175,7 +175,7 @@ class Transaction(PolymorphicModel):
 
         created = self.pk is None
         to_transfer = self.amount * self.quantity
-        if not created:
+        if not created and not self.valid and not hasattr(self, "_force_save"):
             # Revert old transaction
             old_transaction = Transaction.objects.get(pk=self.pk)
             # Check that nothing important changed
