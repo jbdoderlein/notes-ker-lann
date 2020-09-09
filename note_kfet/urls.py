@@ -36,8 +36,9 @@ urlpatterns = [
     path('coffee/', include('django_htcpcp_tea.urls')),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# During development, serve media files
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if "cas_server" in settings.INSTALLED_APPS:
