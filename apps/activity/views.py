@@ -1,14 +1,18 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from hashlib import md5
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.db.models import F, Q
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.generic import DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
 from note.models import Alias, NoteSpecial, NoteUser
@@ -190,10 +194,10 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             if pattern[0] != "^":
                 pattern = "^" + pattern
             guest_qs = guest_qs.filter(
-                Q(first_name__regex=pattern)
-                | Q(last_name__regex=pattern)
-                | Q(inviter__alias__name__regex=pattern)
-                | Q(inviter__alias__normalized_name__regex=Alias.normalize(pattern))
+                Q(first_name__iregex=pattern)
+                | Q(last_name__iregex=pattern)
+                | Q(inviter__alias__name__iregex=pattern)
+                | Q(inviter__alias__normalized_name__iregex=Alias.normalize(pattern))
             )
         else:
             guest_qs = guest_qs.none()
@@ -226,21 +230,19 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
             note_qs = note_qs.filter(
-                Q(note__noteuser__user__first_name__regex=pattern)
-                | Q(note__noteuser__user__last_name__regex=pattern)
-                | Q(name__regex=pattern)
-                | Q(normalized_name__regex=Alias.normalize(pattern))
+                Q(note__noteuser__user__first_name__iregex=pattern)
+                | Q(note__noteuser__user__last_name__iregex=pattern)
+                | Q(name__iregex=pattern)
+                | Q(normalized_name__iregex=Alias.normalize(pattern))
             )
         else:
             note_qs = note_qs.none()
 
-        if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql':
-            note_qs = note_qs.distinct('note__pk')[:20]
-        else:
-            # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
-            # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
-            # In production mode, please use PostgreSQL.
-            note_qs = note_qs.distinct()[:20]
+        # SQLite doesn't support distinct fields. For compatibility reason (in dev mode), the note list will only
+        # have distinct aliases rather than distinct notes with a SQLite DB, but it can fill the result page.
+        # In production mode, please use PostgreSQL.
+        note_qs = note_qs.distinct('note__pk')[:20]\
+            if settings.DATABASES[note_qs.db]["ENGINE"] == 'django.db.backends.postgresql' else note_qs.distinct()[:20]
         return note_qs
 
     def get_context_data(self, **kwargs):
@@ -281,3 +283,60 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
                                                                       Entry(activity=a, note=self.request.user.note,))]
 
         return context
+
+
+class CalendarView(View):
+    """
+    Render an ICS calendar with all valid activities.
+    """
+
+    def multilines(self, string, maxlength, offset=0):
+        newstring = string[:maxlength - offset]
+        string = string[maxlength - offset:]
+        while string:
+            newstring += "\r\n "
+            newstring += string[:maxlength - 1]
+            string = string[maxlength - 1:]
+        return newstring
+
+    def get(self, request, *args, **kwargs):
+        ics = """BEGIN:VCALENDAR
+VERSION: 2.0
+PRODID:Note Kfet 2020
+X-WR-CALNAME:Kfet Calendar
+NAME:Kfet Calendar
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+"""
+        for activity in Activity.objects.filter(valid=True).order_by("-date_start").all():
+            ics += f"""BEGIN:VEVENT
+DTSTAMP:{"{:%Y%m%dT%H%M%S}".format(activity.date_start)}Z
+UID:{md5((activity.name + "$" + str(activity.id) + str(activity.date_start)).encode("UTF-8")).hexdigest()}
+SUMMARY;CHARSET=UTF-8:{self.multilines(activity.name, 75, 22)}
+DTSTART;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_start)}
+DTEND;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_end)}
+LOCATION:{self.multilines(activity.location, 75, 9) if activity.location else "Kfet"}
+DESCRIPTION;CHARSET=UTF-8:""" + self.multilines(activity.description.replace("\n", "\\n"), 75, 26) + """
+ -- {activity.organizer.name}
+END:VEVENT
+"""
+        ics += "END:VCALENDAR"
+        ics = ics.replace("\r", "").replace("\n", "\r\n")
+        return HttpResponse(ics, content_type="text/calendar; charset=UTF-8")

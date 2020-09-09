@@ -50,10 +50,7 @@ def save_object(sender, instance, **kwargs):
     in order to store each modification made
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED:
-        return
-
-    if hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_signal"):
         return
 
     # noinspection PyProtectedMember
@@ -102,7 +99,7 @@ def save_object(sender, instance, **kwargs):
             model = instance.__class__
             fields = changed_fields
 
-    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else None
+    previous_json = JSONRenderer().render(CustomSerializer(previous).data).decode("UTF-8") if previous else ""
     instance_json = JSONRenderer().render(CustomSerializer(instance).data).decode("UTF-8")
 
     Changelog.objects.create(user=user,
@@ -120,10 +117,7 @@ def delete_object(sender, instance, **kwargs):
     Each time a model is deleted, an entry in the table `Changelog` is added in the database
     """
     # noinspection PyProtectedMember
-    if instance._meta.label_lower in EXCLUDED:
-        return
-
-    if hasattr(instance, "_no_log"):
+    if instance._meta.label_lower in EXCLUDED or hasattr(instance, "_no_signal"):
         return
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
@@ -155,6 +149,6 @@ def delete_object(sender, instance, **kwargs):
                              model=ContentType.objects.get_for_model(instance),
                              instance_pk=instance.pk,
                              previous=instance_json,
-                             data=None,
+                             data="",
                              action="delete"
                              ).save()

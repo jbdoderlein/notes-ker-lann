@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from datetime import date
+from json.decoder import JSONDecodeError
 
 from django.contrib.auth.models import User
 from django.core.exceptions import FieldError
@@ -56,29 +57,28 @@ class PermissionQueryTestCase(TestCase):
         We use a random user with a random WEIClub (to use permissions for the WEI) in a random team in a random bus.
         """
         for perm in Permission.objects.all():
-            instanced = perm.about(
-                user=User.objects.get(),
-                club=WEIClub.objects.get(),
-                membership=Membership.objects.get(),
-                User=User,
-                Club=Club,
-                Membership=Membership,
-                Note=Note,
-                NoteUser=NoteUser,
-                NoteClub=NoteClub,
-                NoteSpecial=NoteSpecial,
-                F=F,
-                Q=Q,
-                now=timezone.now(),
-                today=date.today(),
-            )
             try:
+                instanced = perm.about(
+                    user=User.objects.get(),
+                    club=WEIClub.objects.get(),
+                    membership=Membership.objects.get(),
+                    User=User,
+                    Club=Club,
+                    Membership=Membership,
+                    Note=Note,
+                    NoteUser=NoteUser,
+                    NoteClub=NoteClub,
+                    NoteSpecial=NoteSpecial,
+                    F=F,
+                    Q=Q,
+                    now=timezone.now(),
+                    today=date.today(),
+                )
                 instanced.update_query()
                 query = instanced.query
                 model = perm.model.model_class()
                 model.objects.filter(query).all()
-                # print("Good query for permission", perm)
-            except (FieldError, AttributeError, ValueError, TypeError):
+            except (FieldError, AttributeError, ValueError, TypeError, JSONDecodeError):
                 print("Query error for permission", perm)
                 print("Query:", perm.query)
                 if instanced.query:

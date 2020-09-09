@@ -31,9 +31,7 @@ class CustomUserAdmin(UserAdmin):
         """
         When creating a new user don't show profile one the first step
         """
-        if not obj:
-            return list()
-        return super().get_inline_instances(request, obj)
+        return super().get_inline_instances(request, obj) if obj else []
 
 
 @admin.register(Club, site=admin_site)

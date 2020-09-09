@@ -690,7 +690,7 @@ class TestWEIRegistration(TestCase):
         """
         with open("/dev/null", "wb") as devnull:
             return subprocess.call(
-                ["which", "pdflatex"],
+                ["/usr/bin/which", "xelatex"],
                 stdout=devnull,
                 stderr=devnull,
             ) == 0

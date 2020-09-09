@@ -3,7 +3,8 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en" }}" class="position-relative h-100">
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} class="position-relative h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,8 +36,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"
             crossorigin="anonymous"></script>
     <script src="{% static "js/base.js" %}"></script>
+    <script src="{% static "js/konami.js" %}"></script>
 
-    {# Si un formulaire requiert des données supplémentaires (notamment JS), les données sont chargées #}
+    {# If extra ressources are needed for a form, load here #}
     {% if form.media %}
         {{ form.media }}
     {% endif %}
@@ -45,7 +47,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 </head>
 <body class="d-flex w-100 h-100 flex-column">
 <main class="mb-auto">
-    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-navbar shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-navbar shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">{{ request.site.name }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -120,10 +122,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <div class="dropdown-menu dropdown-menu-right"
                                  aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="{% url 'member:user_detail' pk=request.user.pk %}">
-                                    <i class="fa fa-user"></i> Mon compte
+                                    <i class="fa fa-user"></i> {% trans "My account" %}
                                 </a>
                                 <a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fa fa-sign-out"></i> Se déconnecter
+                                    <i class="fa fa-sign-out"></i> {% trans "Log out" %}
                                 </a>
                             </div>
                         </li>
@@ -131,14 +133,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if request.path != "/registration/signup/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'registration:signup' %}">
-                                    <i class="fa fa-user-plus"></i> S'inscrire
+                                    <i class="fa fa-user-plus"></i> {% trans "Sign up" %}
                                 </a>
                             </li>
                         {% endif %}
                 {% if request.path != "/accounts/login/" %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">
-                                    <i class="fa fa-sign-in"></i> Se connecter
+                                    <i class="fa fa-sign-in"></i> {% trans "Log in" %}
                                 </a>
                             </li>
                         {% endif %}
@@ -153,17 +155,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% trans "Your e-mail address is not validated. Please check your mail inbox and click on the validation link." %}
             </div>
         {% endif %}
-        <div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
-            Attention : la Note Kfet 2020 est en phase de beta. Des fonctionnalités pourront être rajoutées d'ici à la version
-            finale, et des bugs peuvent survenir. Pour tout problème, merci d'envoyer un mail à l'adresse
-            <a href="mailto:&#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;">
-                &#110;&#111;&#116;&#101;&#107;&#102;&#101;&#116;&#50;&#48;&#50;&#48;&commat;&#108;&#105;&#115;&#116;&#115;&period;&#99;&#114;&#97;&#110;&#115;&period;&#111;&#114;&#103;</a>,
-            ou bien levez une issue sur le dépôt <a href="https://gitlab.crans.org/bde/nk20/-/issues">Gitlab</a>,
-            ou encore posez un commentaire sur le <a href="https://pad.crans.org/p/todoNK20">pad</a>.<br><br>
-
-            Certaines données ont été anonymisées afin de limiter les fuites de données, et peuvent ne pas correspondre avec vos données réelles.
-        </div>
         <div id="messages"></div>
         {% block content %}
             <p>Default content...</p>
@@ -178,7 +169,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                       class="form-inline">
                     <span class="text-muted mr-1">
                         <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
-                           class="text-muted">Nous contacter</a> &mdash;
+                           class="text-muted">{% trans "Contact us" %}</a> &mdash;
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"

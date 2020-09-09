@@ -16,11 +16,12 @@ from django.views.generic.edit import FormMixin
 from django_tables2 import SingleTableView
 from member.forms import ProfileForm
 from member.models import Membership, Club
-from note.models import SpecialTransaction
+from note.models import SpecialTransaction, Alias
 from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin
+from treasury.models import SogeCredit
 
 from .forms import SignUpForm, ValidationForm
 from .tables import FutureUserTable
@@ -101,7 +102,7 @@ class UserValidateView(TemplateView):
             user.profile.email_confirmed = True
             user.save()
             user.profile.save()
-        return self.render_to_response(self.get_context_data())
+        return self.render_to_response(self.get_context_data(), status=200 if self.validlink else 400)
 
     def get_user(self, uidb64):
         """
@@ -169,11 +170,8 @@ class FutureUserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
         :return:
         """
         qs = super().get_queryset().distinct().filter(profile__registration_valid=False)
-        if "search" in self.request.GET:
+        if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
-
-            if not pattern:
-                return qs.none()
 
             qs = qs.filter(
                 Q(first_name__iregex=pattern)
@@ -205,10 +203,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         self.object = self.get_object()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return self.form_valid(form) if form.is_valid() else self.form_invalid(form)
 
     def get_queryset(self, **kwargs):
         """
@@ -225,6 +220,9 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
         kfet = Club.objects.get(name="Kfet")
         fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+        # In 2020, for COVID-19 reasons, the BDE offered 80 € to each new member that opens a Sogé account,
+        # since there is no WEI.
+        fee += 8000
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
         return ctx
@@ -238,6 +236,10 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
     def form_valid(self, form):
         user = self.get_object()
+
+        if Alias.objects.filter(normalized_name=Alias.normalize(user.username)).exists():
+            form.add_error(None, _("An alias with a similar name already exists."))
+            return self.form_invalid(form)
 
         # Get form data
         soge = form.cleaned_data["soge"]
@@ -275,9 +277,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
         if credit_type is None:
             credit_amount = 0
-
-        if join_Kfet and not join_BDE:
-            form.add_error('join_Kfet', _("You must join BDE club before joining Kfet club."))
 
         if fee > credit_amount and not soge:
             # Check if the user credits enough money
@@ -346,6 +345,11 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             membership.refresh_from_db()
             membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
             membership.save()
+
+        if soge:
+            soge_credit = SogeCredit.objects.get(user=user)
+            # Update the credit transaction amount
+            soge_credit.save()
 
         return ret
 

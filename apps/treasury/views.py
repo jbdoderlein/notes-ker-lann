@@ -60,6 +60,11 @@ class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        del form.fields["locked"]
+        return form
+
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -134,6 +139,11 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        del form.fields["id"]
+        return form
+
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -165,6 +175,11 @@ class InvoiceDeleteView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
     model = Invoice
     extra_context = {"title": _("Delete invoice")}
 
+    def delete(self, request, *args, **kwargs):
+        if self.get_object().locked:
+            raise PermissionDenied(_("This invoice is locked and can't be deleted."))
+        return super().delete(request, *args, **kwargs)
+
     def get_success_url(self):
         return reverse_lazy('treasury:invoice_list')
 
@@ -194,7 +209,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             # The file has to be rendered twice
             for ignored in range(2):
                 error = subprocess.Popen(
-                    ["pdflatex", "invoice-{}.tex".format(pk)],
+                    ["/usr/bin/xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
                     stdin=open(os.devnull, "r"),
                     stderr=open(os.devnull, "wb"),
@@ -202,7 +217,9 @@ class InvoiceRenderView(LoginRequiredMixin, View):
                 ).wait()
 
                 if error:
-                    raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")")
+                    with open("{}/invoice-{:d}.log".format(tmp_dir, pk), "r") as f:
+                        log = f.read()
+                    raise IOError("An error attempted while generating a invoice (code=" + str(error) + ")\n\n" + log)
 
             # Display the generated pdf as a HTTP Response
             pdf = open("{}/invoice-{}.pdf".format(tmp_dir, pk), 'rb').read()
@@ -387,7 +404,7 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
         if not request.user.is_authenticated:
             return self.handle_no_permission()
 
-        if not self.get_queryset().exists():
+        if not super().get_queryset().exists():
             raise PermissionDenied(_("You are not able to see the treasury interface."))
         return super().dispatch(request, *args, **kwargs)
 
@@ -408,11 +425,8 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
                     | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
                 )
 
-        if "valid" in self.request.GET:
-            q = Q(credit_transaction=None)
-            if not self.request.GET["valid"]:
-                q = ~q
-            qs = qs.filter(q)
+        if "valid" not in self.request.GET or not self.request.GET["valid"]:
+            qs = qs.filter(credit_transaction__valid=False)
 
         return qs[:20]
 

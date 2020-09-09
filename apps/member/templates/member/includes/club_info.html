@@ -48,7 +48,7 @@
     <dd class="col-xl-6">
         <a class="badge badge-secondary" href="{% url 'member:club_alias' club.pk %}">
             <i class="fa fa-edit"></i>
-            {% trans 'Manage aliases' %} ({{ user_object.note.alias_set.all|length }})
+            {% trans 'Manage aliases' %} ({{ club.note.alias_set.all|length }})
         </a>
     </dd>
 

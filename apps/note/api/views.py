@@ -118,7 +118,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
 
         queryset = super().get_queryset()
         # Sqlite doesn't support ORDER BY in subqueries
-        queryset = queryset.order_by("username") \
+        queryset = queryset.order_by("name") \
             if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
         alias = self.request.query_params.get("alias", ".*")
@@ -139,6 +139,9 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
                 & ~Q(name__iregex="^" + alias)
             ),
             all=True)
+
+        queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
+            else queryset.order_by("name")
 
         return queryset.distinct()
 

@@ -3,7 +3,7 @@
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.utils.translation import gettext_lazy as _
 
 from . import signals
@@ -24,4 +24,9 @@ class NoteConfig(AppConfig):
         post_save.connect(
             signals.save_club_note,
             sender='member.Club',
+        )
+
+        pre_delete.connect(
+            signals.delete_transaction,
+            sender='note.transaction',
         )

@@ -16,20 +16,14 @@ class InvoiceForm(forms.ModelForm):
     """
 
     def clean(self):
+        # If the invoice is locked, it can't be updated.
         if self.instance and self.instance.locked:
             for field_name in self.fields:
                 self.cleaned_data[field_name] = getattr(self.instance, field_name)
             self.errors.clear()
+            self.add_error(None, _('This invoice is locked and can no longer be edited.'))
             return self.cleaned_data
         return super().clean()
-
-    def save(self, commit=True):
-        """
-        If the invoice is locked, don't save it
-        """
-        if not self.instance.locked:
-            super().save(commit)
-        return self.instance
 
     class Meta:
         model = Invoice

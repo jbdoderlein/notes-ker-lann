@@ -17,3 +17,7 @@ Font-Awesome attribution is already done inside SVG files
     -moz-appearance: none;
     cursor: pointer;
 }
+
+#login-form .asteriskField {
+    display: none;
+}

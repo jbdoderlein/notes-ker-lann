@@ -10,17 +10,15 @@
   retries: 3
   until: pkg_result is succeeded
 
-- name: Install Psycopg2
-  pip:
-    name: psycopg2-binary
-
 - name: Create role note
+  when: "DB_PASSWORD|bool"    # If the password is not defined, skip the installation
   postgresql_user:
     name: note
     password: "{{ DB_PASSWORD }}"
   become_user: postgres
 
 - name: Create NK20 database
+  when: "DB_PASSWORD|bool"
   postgresql_db:
     name: note_db
     owner: note

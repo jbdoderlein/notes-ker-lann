@@ -6,11 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth.models import User
-
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
-
 from permission.backends import PermissionBackend
-
 from note_kfet.middlewares import get_current_session
 from note.models import Alias
 
@@ -29,7 +26,7 @@ class ReadProtectedModelViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         get_current_session().setdefault("permission_mask", 42)
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
+        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
 class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
@@ -44,8 +41,7 @@ class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         user = self.request.user
         get_current_session().setdefault("permission_mask", 42)
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
-
+        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
 
 
 class UserViewSet(ReadProtectedModelViewSet):
@@ -67,29 +63,37 @@ class UserViewSet(ReadProtectedModelViewSet):
 
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
-            
-            # We match first a user by its username, then if an alias is matched without normalization
-            # And finally if the normalized pattern matches a normalized alias.
+
+            # Filter with different rules
+            # We use union-all to keep each filter rule sorted in result
             queryset = queryset.filter(
-                           username__iregex="^" + pattern).union(
-                       queryset.filter(
-                           Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           Q(note__alias__normalized_name__iregex="^" + pattern.lower())
-                           & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True).union(
-                       queryset.filter(
-                           (Q(last_name__iregex="^" + pattern) | Q(first_name__iregex="^" + pattern))
-                           & ~Q(note__alias__normalized_name__iregex="^" + pattern.lower())
-                           & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                           & ~Q(note__alias__name__iregex="^" + pattern)
-                           & ~Q(username__iregex="^" + pattern)), all=True)
+                # Match without normalization
+                note__alias__name__iregex="^" + pattern
+            ).union(
+                queryset.filter(
+                    # Match with normalization
+                    Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            ).union(
+                queryset.filter(
+                    # Match on lower pattern
+                    Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            ).union(
+                queryset.filter(
+                    # Match on firstname or lastname
+                    (Q(last_name__iregex="^" + pattern) | Q(first_name__iregex="^" + pattern))
+                    & ~Q(note__alias__normalized_name__iregex="^" + pattern.lower())
+                    & ~Q(note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
+                    & ~Q(note__alias__name__iregex="^" + pattern)
+                ),
+                all=True,
+            )
 
         queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
             else queryset.order_by("username")
