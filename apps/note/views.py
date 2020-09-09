@@ -144,7 +144,7 @@ class TransactionTemplateUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, Up
 class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
     """
     The Magic View that make people pay their beer and burgers.
-    (Most of the magic happens in the dark world of Javascript see `note_kfet/static/js/consos.js`)
+    (Most of the magic happens in the dark world of Javascript see `static/note/js/consos.js`)
     """
     model = Transaction
     template_name = "note/conso_form.html"
