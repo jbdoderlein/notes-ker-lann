@@ -22,6 +22,11 @@
     border-bottom-color: rgba(0, 0, 0, .250);
 }
 
+/* Fixed width picture column */
+.picture-col {
+    max-width: 202px;
+}
+
 /* Limit fluid container to a max size */
 .container-fluid {
     max-width: 1600px;
