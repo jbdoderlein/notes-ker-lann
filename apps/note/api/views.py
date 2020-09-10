@@ -123,24 +123,26 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         queryset = queryset.order_by("name") \
             if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
-        alias = self.request.query_params.get("alias", ".*")
+        alias = self.request.query_params.get("alias", None)
         queryset = queryset.prefetch_related('note')
-        # We match first an alias if it is matched without normalization,
-        # then if the normalized pattern matches a normalized alias.
-        queryset = queryset.filter(
-            name__iregex="^" + alias
-        ).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + alias.lower())
-                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True)
+
+        if alias:
+            # We match first an alias if it is matched without normalization,
+            # then if the normalized pattern matches a normalized alias.
+            queryset = queryset.filter(
+                name__iregex="^" + alias
+            ).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + alias.lower())
+                    & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True)
 
         queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
             else queryset.order_by("name")
