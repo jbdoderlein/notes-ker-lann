@@ -108,8 +108,9 @@ class AliasViewSet(ReadProtectedModelViewSet):
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
     queryset = Alias.objects.all()
     serializer_class = ConsumerSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    filterset_fields = ['note']
     ordering_fields = ['name', 'normalized_name']
 
     def get_queryset(self):
@@ -118,7 +119,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
         # Sqlite doesn't support ORDER BY in subqueries
         queryset = queryset.order_by("name") \
             if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
