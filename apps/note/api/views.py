@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.conf import settings
 from django.db.models import Q
 from django.core.exceptions import ValidationError
@@ -56,8 +57,9 @@ class AliasViewSet(ReadProtectedModelViewSet):
     """
     queryset = Alias.objects.all()
     serializer_class = AliasSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    filterset_fields = ['note']
     ordering_fields = ['name', 'normalized_name']
 
     def get_serializer_class(self):
@@ -179,8 +181,11 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     """
     queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ["source", "source_alias", "destination", "destination_alias", "quantity",
+                        "polymorphic_ctype", "amount", "created_at", ]
     search_fields = ['$reason', ]
+    ordering_fields = ['created_at', 'amount']
 
     def get_queryset(self):
         user = self.request.user
