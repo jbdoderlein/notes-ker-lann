@@ -16,7 +16,7 @@ class StrongDjangoObjectPermissions(DjangoObjectPermissions):
 
     # The queryset is filtered, and permissions are more powerful than a simple check than just "can view this model"
     perms_map = {
-        'GET': [],      # ['%(app_label)s.view_%(model_name)s'],
+        'GET': ['%(app_label)s.view_%(model_name)s'],
         'OPTIONS': [],
         'HEAD': [],
         'POST': ['%(app_label)s.add_%(model_name)s'],
