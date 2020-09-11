@@ -3,6 +3,7 @@
 
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -170,19 +171,20 @@ class Transaction(PolymorphicModel):
         previous_source_balance = self.source.balance
         previous_dest_balance = self.destination.balance
 
-        source_balance = self.source.balance
-        dest_balance = self.destination.balance
+        source_balance = previous_source_balance
+        dest_balance = previous_dest_balance
 
         created = self.pk is None
-        to_transfer = self.amount * self.quantity
-        if not created and not self.valid and not hasattr(self, "_force_save"):
+        to_transfer = self.total
+        if not created and not self.valid:
             # Revert old transaction
             old_transaction = Transaction.objects.get(pk=self.pk)
             # Check that nothing important changed
-            for field_name in ["source_id", "destination_id", "quantity", "amount"]:
-                if getattr(self, field_name) != getattr(old_transaction, field_name):
-                    raise ValidationError(_("You can't update the {field} on a Transaction. "
-                                            "Please invalidate it and create one other.").format(field=field_name))
+            if not hasattr(self, "_force_save"):
+                for field_name in ["source_id", "destination_id", "quantity", "amount"]:
+                    if getattr(self, field_name) != getattr(old_transaction, field_name):
+                        raise ValidationError(_("You can't update the {field} on a Transaction. "
+                                                "Please invalidate it and create one other.").format(field=field_name))
 
             if old_transaction.valid == self.valid:
                 # Don't change anything
@@ -237,12 +239,8 @@ class Transaction(PolymorphicModel):
         super().save(*args, **kwargs)
 
         # Save notes
-        self.source.balance += diff_source
-        self.source._force_save = True
-        self.source.save()
-        self.destination.balance += diff_dest
-        self.destination._force_save = True
-        self.destination.save()
+        Note.objects.filter(pk=self.source_id).update(balance=F("balance") + diff_source)
+        Note.objects.filter(pk=self.destination_id).update(balance=F("balance") + diff_dest)
 
     @property
     def total(self):
@@ -273,6 +271,7 @@ class RecurrentTransaction(Transaction):
                 _("The destination of this transaction must equal to the destination of the template."))
         return super().clean()
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         return super().save(*args, **kwargs)
@@ -323,6 +322,7 @@ class SpecialTransaction(Transaction):
             raise(ValidationError(_("A special transaction is only possible between a"
                                     " Note associated to a payment method and a User or a Club")))
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)

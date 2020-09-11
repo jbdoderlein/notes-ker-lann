@@ -4,6 +4,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from note_kfet.inputs import AmountInput
 
@@ -149,6 +150,7 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
         self.instance.transaction.bank = cleaned_data["bank"]
         return cleaned_data
 
+    @transaction.atomic
     def save(self, commit=True):
         """
         Save the transaction and the remittance.

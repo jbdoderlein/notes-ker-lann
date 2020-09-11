@@ -38,6 +38,7 @@ class CustomLoginView(LoginView):
     """
     form_class = CustomAuthenticationForm
 
+    @transaction.atomic
     def form_valid(self, form):
         logout(self.request)
         _set_current_user_and_ip(form.get_user(), self.request.session, None)
@@ -76,6 +77,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         Check if ProfileForm is correct
@@ -269,6 +271,7 @@ class PictureUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, Det
         self.object = self.get_object()
         return self.form_valid(form) if form.is_valid() else self.form_invalid(form)
 
+    @transaction.atomic
     def form_valid(self, form):
         """Save image to note"""
         image = form.cleaned_data['image']
@@ -650,6 +653,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return not error
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         Create membership, check that all is good, make transactions

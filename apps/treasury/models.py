@@ -5,7 +5,7 @@ from datetime import date
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -76,6 +76,7 @@ class Invoice(models.Model):
         verbose_name=_("tex source"),
     )
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         When an invoice is generated, we store the tex source.
@@ -228,6 +229,7 @@ class Remittance(models.Model):
         """
         return sum(transaction.total for transaction in self.transactions.all())
 
+    @transaction.atomic
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # Check if all transactions have the right type.
         if self.transactions.exists() and self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
@@ -329,6 +331,7 @@ class SogeCredit(models.Model):
             transaction.created_at = timezone.now()
             transaction.save()
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if not self.credit_transaction:
             self.credit_transaction = SpecialTransaction.objects.create(

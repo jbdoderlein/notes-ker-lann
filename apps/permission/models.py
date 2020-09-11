@@ -199,6 +199,7 @@ class Permission(models.Model):
         if self.field and self.type not in {'view', 'change'}:
             raise ValidationError(_("Specifying field applies only to view and change permission types."))
 
+    @transaction.atomic
     def save(self, **kwargs):
         self.full_clean()
         super().save()
