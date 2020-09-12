@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-04 20:11+0200\n"
-"PO-Revision-Date: 2020-09-12 20:17+0200\n"
+"PO-Revision-Date: 2020-09-12 22:54+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -2221,456 +2221,475 @@ msgid ""
 "Warning: Validating this credit implies that all membership transactions "
 "will be validated."
 msgstr ""
+"Cuidado : Validar este crédito implica que las transacciones de afiliación "
+"serán validadas."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:36
 msgid ""
 "If you delete this credit, there all membership transactions will be also "
 "validated, but no credit will be operated."
 msgstr ""
+"Si suprime este crédito, todas las transacciones de afiliación serán "
+"validadas, pero ningún crédito tendrá lugar."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:37
 msgid ""
 "If this credit is validated, then the user won't be able to ask for a credit "
 "from the Société générale."
 msgstr ""
+"Si este crédito es validado, pues el usuario no podrá pedir más crédito de "
+"la Société Générale."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:38
 msgid "If you think there is an error, please contact the \"respos info\"."
-msgstr ""
+msgstr "Si usted cree que hay un error, por favor contacte un \"respo info\"."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:44
 msgid "This credit is already validated."
-msgstr ""
+msgstr "Este crédito ya fue validado."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:49
 msgid ""
 "Warning: if you don't validate this credit, the note of the user doesn't "
 "have enough money to pay its memberships."
 msgstr ""
+"Cuidado : si no valida este crédito, la note del usuario no tiene suficiente "
+"dinero para pagar sus afiliaciones."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:50
 msgid "Please ask the user to credit its note before deleting this credit."
 msgstr ""
+"Por favor pide al usuario acreditar su note antes de suprimir este crédito."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:57
 #: apps/wei/tables.py:59 apps/wei/tables.py:60 apps/wei/tables.py:99
 msgid "Validate"
-msgstr ""
+msgstr "Validar"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
 msgid "Return to credit list"
-msgstr ""
+msgstr "Regresar a la lista de los créditos"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:34
 msgid "Filter with unvalidated credits only"
-msgstr ""
+msgstr "Filtrar con créditos invalidados unicamente"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:44
 msgid "There is no matched user that have asked for a Société générale credit."
 msgstr ""
+"No hay usuario encontrado cual pidió un crédito de la Société Générale."
 
 #: apps/treasury/views.py:38
 msgid "Create new invoice"
-msgstr ""
+msgstr "Crear una nueva factura"
 
 #: apps/treasury/views.py:89
 msgid "Invoices list"
-msgstr ""
+msgstr "Lista de las facturas"
 
 #: apps/treasury/views.py:104 apps/treasury/views.py:265
 #: apps/treasury/views.py:391
 msgid "You are not able to see the treasury interface."
-msgstr ""
+msgstr "Usted no tiene derecho a ver la interfaz de tesorería."
 
 #: apps/treasury/views.py:114
 msgid "Update an invoice"
-msgstr ""
+msgstr "Modificar una factura"
 
 #: apps/treasury/views.py:226
 msgid "Create a new remittance"
-msgstr ""
+msgstr "Crear un nuevo descuento"
 
 #: apps/treasury/views.py:253
 msgid "Remittances list"
-msgstr ""
+msgstr "Lista de los descuentos"
 
 #: apps/treasury/views.py:316
 msgid "Update a remittance"
-msgstr ""
+msgstr "Modificar un descuento"
 
 #: apps/treasury/views.py:339
 msgid "Attach a transaction to a remittance"
-msgstr ""
+msgstr "Unir una transacción con un descuento"
 
 #: apps/treasury/views.py:383
 msgid "List of credits from the Société générale"
-msgstr ""
+msgstr "Lista de los créditos de la Société Générale"
 
 #: apps/treasury/views.py:426
 msgid "Manage credits from the Société générale"
-msgstr ""
+msgstr "Gestionar los créditos de la Société Générale"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
 #: note_kfet/templates/base.html:98
 msgid "WEI"
-msgstr ""
+msgstr "WEI"
 
 #: apps/wei/forms/registration.py:51 apps/wei/models.py:113
 #: apps/wei/models.py:283
 msgid "bus"
-msgstr ""
+msgstr "bus"
 
 #: apps/wei/forms/registration.py:52
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
 msgstr ""
+"Esta elección no es definitiva. Los organizadores del WEI se quedan con el "
+"derecho de imponer su bus y su equipo, en particular para los electrones "
+"libres."
 
 #: apps/wei/forms/registration.py:59
 msgid "Team"
-msgstr ""
+msgstr "Equipo"
 
 #: apps/wei/forms/registration.py:61
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
 msgstr ""
+"Deje este campo vacío si no quiere estar en un equipo (staff, jefe de bus, "
+"electrón libre)"
 
 #: apps/wei/forms/registration.py:67 apps/wei/forms/registration.py:77
 #: apps/wei/models.py:148
 msgid "WEI Roles"
-msgstr ""
+msgstr "Papeles en el WEI"
 
 #: apps/wei/forms/registration.py:68
 msgid "Select the roles that you are interested in."
-msgstr ""
+msgstr "Elegir los papeles que le interesa."
 
 #: apps/wei/forms/registration.py:113
 msgid "This team doesn't belong to the given bus."
-msgstr ""
+msgstr "Este equipo no pertenece al bus dado."
 
 #: apps/wei/forms/surveys/wei2020.py:29
 msgid "Choose a word:"
-msgstr ""
+msgstr "Elegir una palabra :"
 
 #: apps/wei/models.py:24 apps/wei/templates/wei/base.html:36
 msgid "year"
-msgstr ""
+msgstr "año"
 
 #: apps/wei/models.py:28 apps/wei/templates/wei/base.html:30
 msgid "date start"
-msgstr ""
+msgstr "fecha de inicio"
 
 #: apps/wei/models.py:32 apps/wei/templates/wei/base.html:33
 msgid "date end"
-msgstr ""
+msgstr "fecha de fin"
 
 #: apps/wei/models.py:77
 msgid "survey information"
-msgstr ""
+msgstr "informaciones sobre el cuestionario"
 
 #: apps/wei/models.py:78
 msgid "Information about the survey for new members, encoded in JSON"
 msgstr ""
+"Informaciones sobre el cuestionario para los nuevos miembros, registrado en "
+"JSON"
 
 #: apps/wei/models.py:100
 msgid "Bus"
-msgstr ""
+msgstr "Bus"
 
 #: apps/wei/models.py:101 apps/wei/templates/wei/weiclub_detail.html:51
 msgid "Buses"
-msgstr ""
+msgstr "Bus"
 
 #: apps/wei/models.py:122
 msgid "color"
-msgstr ""
+msgstr "color"
 
 #: apps/wei/models.py:123
 msgid "The color of the T-Shirt, stored with its number equivalent"
-msgstr ""
+msgstr "El color de la camiseta, registrado con su número equivalente"
 
 #: apps/wei/models.py:137
 msgid "Bus team"
-msgstr ""
+msgstr "Equipo de bus"
 
 #: apps/wei/models.py:138
 msgid "Bus teams"
-msgstr ""
+msgstr "Equipos de bus"
 
 #: apps/wei/models.py:147
 msgid "WEI Role"
-msgstr ""
+msgstr "Papeles en el WEI"
 
 #: apps/wei/models.py:172
 msgid "Credit from Société générale"
-msgstr ""
+msgstr "Crédito de la Société Générale"
 
 #: apps/wei/models.py:177
 msgid "Caution check given"
-msgstr ""
+msgstr "Cheque de garantía dado"
 
 #: apps/wei/models.py:181 apps/wei/templates/wei/weimembership_form.html:64
 msgid "birth date"
-msgstr ""
+msgstr "fecha de nacimiento"
 
 #: apps/wei/models.py:187 apps/wei/models.py:197
 msgid "Male"
-msgstr ""
+msgstr "Hombre"
 
 #: apps/wei/models.py:188 apps/wei/models.py:198
 msgid "Female"
-msgstr ""
+msgstr "Mujer"
 
 #: apps/wei/models.py:189
 msgid "Non binary"
-msgstr ""
+msgstr "No binari@"
 
 #: apps/wei/models.py:191 apps/wei/templates/wei/weimembership_form.html:55
 msgid "gender"
-msgstr ""
+msgstr "género"
 
 #: apps/wei/models.py:200 apps/wei/templates/wei/weimembership_form.html:58
 msgid "clothing cut"
-msgstr ""
+msgstr "forma de ropa"
 
 #: apps/wei/models.py:213 apps/wei/templates/wei/weimembership_form.html:61
 msgid "clothing size"
-msgstr ""
+msgstr "medida de ropa"
 
 #: apps/wei/models.py:219 apps/wei/templates/wei/weimembership_form.html:67
 msgid "health issues"
-msgstr ""
+msgstr "problemas de salud"
 
 #: apps/wei/models.py:224 apps/wei/templates/wei/weimembership_form.html:70
 msgid "emergency contact name"
-msgstr ""
+msgstr "nombre del contacto de emergencia"
 
 #: apps/wei/models.py:229 apps/wei/templates/wei/weimembership_form.html:73
 msgid "emergency contact phone"
-msgstr ""
+msgstr "teléfono del contacto de emergencia"
 
 #: apps/wei/models.py:234 apps/wei/templates/wei/weimembership_form.html:52
 msgid "first year"
-msgstr ""
+msgstr "primer año"
 
 #: apps/wei/models.py:235
 msgid "Tells if the user is new in the school."
-msgstr ""
+msgstr "Indica si el usuario es nuevo en la escuela."
 
 #: apps/wei/models.py:240
 msgid "registration information"
-msgstr ""
+msgstr "informaciones sobre la afiliación"
 
 #: apps/wei/models.py:241
 msgid ""
 "Information about the registration (buses for old members, survey fot the "
 "new members), encoded in JSON"
 msgstr ""
+"Informaciones sobre la afiliacion (bus para miembros ancianos, cuestionario "
+"para los nuevos miembros), registrado en JSON"
 
 #: apps/wei/models.py:272
 msgid "WEI User"
-msgstr ""
+msgstr "Participante WEI"
 
 #: apps/wei/models.py:273
 msgid "WEI Users"
-msgstr ""
+msgstr "Participantes WEI"
 
 #: apps/wei/models.py:293
 msgid "team"
-msgstr ""
+msgstr "equipo"
 
 #: apps/wei/models.py:303
 msgid "WEI registration"
-msgstr ""
+msgstr "Apuntación al WEI"
 
 #: apps/wei/models.py:307
 msgid "WEI membership"
-msgstr ""
+msgstr "Afiliación al WEI"
 
 #: apps/wei/models.py:308
 msgid "WEI memberships"
-msgstr ""
+msgstr "Afiliaciones al WEI"
 
 #: apps/wei/tables.py:127
 msgid "Year"
-msgstr ""
+msgstr "Año"
 
 #: apps/wei/tables.py:165 apps/wei/templates/wei/bus_detail.html:32
 #: apps/wei/templates/wei/busteam_detail.html:50
 msgid "Teams"
-msgstr ""
+msgstr "Equipos"
 
 #: apps/wei/tables.py:174 apps/wei/tables.py:215
 msgid "Members count"
-msgstr ""
+msgstr "Número de miembros"
 
 #: apps/wei/tables.py:181 apps/wei/tables.py:212
 msgid "members"
-msgstr ""
+msgstr "miembros"
 
 #: apps/wei/templates/wei/base.html:44
 msgid "WEI fee (paid students)"
-msgstr ""
+msgstr "Pago de entrada del WEI (estudiantes pagados)"
 
 #: apps/wei/templates/wei/base.html:47 apps/wei/templates/wei/base.html:54
 msgid "The BDE membership is included in the WEI registration."
-msgstr ""
+msgstr "La afiliación al BDE esta incluida en la afiliación WEI."
 
 #: apps/wei/templates/wei/base.html:51
 msgid "WEI fee (unpaid students)"
-msgstr ""
+msgstr "Pago de entrada del WEI (estudiantes no pagados)"
 
 #: apps/wei/templates/wei/base.html:76
 msgid "WEI list"
-msgstr ""
+msgstr "Lista de los WEI"
 
 #: apps/wei/templates/wei/base.html:81 apps/wei/views.py:506
 msgid "Register 1A"
-msgstr ""
+msgstr "Apuntar un 1A"
 
 #: apps/wei/templates/wei/base.html:85 apps/wei/views.py:573
 msgid "Register 2A+"
-msgstr ""
+msgstr "Apuntar un 2A+"
 
 #: apps/wei/templates/wei/base.html:93
 msgid "Add bus"
-msgstr ""
+msgstr "Añadir un bus"
 
 #: apps/wei/templates/wei/base.html:97
 msgid "View WEI"
-msgstr ""
+msgstr "Ver un WEI"
 
 #: apps/wei/templates/wei/bus_detail.html:22
 #: apps/wei/templates/wei/busteam_detail.html:22
 msgid "Add team"
-msgstr ""
+msgstr "Añadir un equipo"
 
 #: apps/wei/templates/wei/bus_detail.html:45
 msgid "Members"
-msgstr ""
+msgstr "Miembros"
 
 #: apps/wei/templates/wei/bus_detail.html:54
 #: apps/wei/templates/wei/busteam_detail.html:60
 #: apps/wei/templates/wei/weimembership_list.html:29
 msgid "View as PDF"
-msgstr ""
+msgstr "Descargar un PDF"
 
 #: apps/wei/templates/wei/survey.html:11
 #: apps/wei/templates/wei/survey_closed.html:11
 #: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:978
 #: apps/wei/views.py:1032 apps/wei/views.py:1042
 msgid "Survey WEI"
-msgstr ""
+msgstr "Cuestionario WEI"
 
 #: apps/wei/templates/wei/survey.html:23
 msgid "Next"
-msgstr ""
+msgstr "Siguiente"
 
 #: apps/wei/templates/wei/survey_closed.html:15
 msgid "The inscription for this WEI are now closed."
-msgstr ""
+msgstr "La inscripción a este WEI esta cerrada por el momento."
 
 #: apps/wei/templates/wei/survey_closed.html:19
 msgid "Return to WEI detail"
-msgstr ""
+msgstr "Regresar a los detalles del WEI"
 
 #: apps/wei/templates/wei/survey_end.html:15
 msgid "The survey is now ended. Your answers have been saved."
-msgstr ""
+msgstr "El cuestionario se acabó. Sus repuestas fueron guardadas."
 
 #: apps/wei/templates/wei/weiclub_detail.html:32
 msgid "Register to the WEI! – 1A"
-msgstr ""
+msgstr "¡ Apuntar al WEI ! – 1A"
 
 #: apps/wei/templates/wei/weiclub_detail.html:36
 msgid "Register to the WEI! – 2A+"
-msgstr ""
+msgstr "¡ Apuntar al WEI ! – 2A+"
 
 #: apps/wei/templates/wei/weiclub_detail.html:40
 msgid "Update my registration"
-msgstr ""
+msgstr "Modificar mi inscripción"
 
 #: apps/wei/templates/wei/weiclub_detail.html:63
 msgid "Members of the WEI"
-msgstr ""
+msgstr "Miembros del WEI"
 
 #: apps/wei/templates/wei/weiclub_detail.html:89
 msgid "Unvalidated registrations"
-msgstr ""
+msgstr "Inscripciones sin validación"
 
 #: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:76
 msgid "Create WEI"
-msgstr ""
+msgstr "Crear un WEI"
 
 #: apps/wei/templates/wei/weiclub_list.html:22
 msgid "WEI listing"
-msgstr ""
+msgstr "Lista de los WEI"
 
 #: apps/wei/templates/wei/weimembership_form.html:10
 msgid "Review registration"
-msgstr ""
+msgstr "Revisar la inscripción"
 
 #: apps/wei/templates/wei/weimembership_form.html:35
 msgid "ENS year"
-msgstr ""
+msgstr "Año en la ENS"
 
 #: apps/wei/templates/wei/weimembership_form.html:76
 msgid "Payment from Société générale"
-msgstr ""
+msgstr "Pago de la Société Générale"
 
 #: apps/wei/templates/wei/weimembership_form.html:80
 msgid "Suggested bus from the survey:"
-msgstr ""
+msgstr "Bus sugerido por el cuestionario :"
 
 #: apps/wei/templates/wei/weimembership_form.html:85
 msgid "Raw survey information"
-msgstr ""
+msgstr "Informaciones crudas del cuestionario"
 
 #: apps/wei/templates/wei/weimembership_form.html:95
 msgid "The algorithm didn't run."
-msgstr ""
+msgstr "El algoritmo no funcionó."
 
 #: apps/wei/templates/wei/weimembership_form.html:98
 msgid "caution check given"
-msgstr ""
+msgstr "cheque de garantía dado"
 
 #: apps/wei/templates/wei/weimembership_form.html:102
 msgid "preferred bus"
-msgstr ""
+msgstr "bus preferido"
 
 #: apps/wei/templates/wei/weimembership_form.html:105
 msgid "preferred team"
-msgstr ""
+msgstr "equipo preferido"
 
 #: apps/wei/templates/wei/weimembership_form.html:108
 msgid "preferred roles"
-msgstr ""
+msgstr "papales preferidos"
 
 #: apps/wei/templates/wei/weimembership_form.html:115
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:30
 msgid "Update registration"
-msgstr ""
+msgstr "Modificar la inscripción"
 
 #: apps/wei/templates/wei/weimembership_form.html:131
 msgid "The registration is already validated and can't be unvalidated."
-msgstr ""
+msgstr "La inscripción ya fue validada y no puede ser invalidada."
 
 #: apps/wei/templates/wei/weimembership_form.html:132
 msgid "The user joined the bus"
-msgstr ""
+msgstr "El usuario se queda con el bus"
 
 #: apps/wei/templates/wei/weimembership_form.html:133
 msgid "in the team"
-msgstr ""
+msgstr "en el equipo"
 
 #: apps/wei/templates/wei/weimembership_form.html:134
 msgid "in no team (staff)"
-msgstr ""
+msgstr "en ningún equipo (staff)"
 
 #: apps/wei/templates/wei/weimembership_form.html:134
 msgid "with the following roles:"
-msgstr ""
+msgstr "con los papeles :"
 
 #: apps/wei/templates/wei/weimembership_form.html:139
 msgid ""
@@ -2679,6 +2698,10 @@ msgid ""
 "created but will be invalid. You will have to validate it once the bank "
 "validated the creation of the account, or to change the payment method."
 msgstr ""
+"El WEI será pagado por la Société Générale. La afiliación será creada aunque "
+"el banco no pago el BDE ya. La transacción de afiliación será creada pero "
+"resultará invalida. Tendrá que validarla una vez que el banco confirmará la "
+"creación de la cuenta, o cambiará el método de pago."
 
 #: apps/wei/templates/wei/weimembership_form.html:149
 #, python-format
@@ -2686,6 +2709,8 @@ msgid ""
 "The note don't have enough money (%(balance)s, %(pretty_fee)s required). The "
 "registration may fail if you don't credit the note now."
 msgstr ""
+"La note no tiene suficiente dinero (%(balance)s, %(pretty_fee)s pedidos). La "
+"afiliación puede fallar si usted no acredita la note ahora."
 
 #: apps/wei/templates/wei/weimembership_form.html:157
 #, python-format
@@ -2693,10 +2718,12 @@ msgid ""
 "The note has enough money (%(pretty_fee)s required), the registration is "
 "possible."
 msgstr ""
+"La note tiene suficiente dinero (%(pretty_fee)s pedidos), la afiliación es "
+"posible."
 
 #: apps/wei/templates/wei/weimembership_form.html:166
 msgid "The user didn't give her/his caution check."
-msgstr ""
+msgstr "El usuario no dio su cheque de garantía."
 
 #: apps/wei/templates/wei/weimembership_form.html:174
 msgid ""
@@ -2704,14 +2731,16 @@ msgid ""
 "membership will be processed automatically, the WEI registration includes "
 "the membership fee."
 msgstr ""
+"Este usuario no es miembro del club Kfet por el año que viene. La afiliación "
+"será hecha automáticamente, la afiliación al WEI incluye el pago de los dos."
 
 #: apps/wei/templates/wei/weimembership_list.html:23
 msgid "View unvalidated registrations..."
-msgstr ""
+msgstr "Ver las inscripciones no validadas..."
 
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:16
 msgid "This registration is already validated and can't be deleted."
-msgstr ""
+msgstr "La inscripción ya fue validada y no puede ser suprimida."
 
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:23
 #, python-format
@@ -2719,10 +2748,12 @@ msgid ""
 "Are you sure you want to delete the registration of %(user)s for the WEI "
 "%(wei_name)s? This action can't be undone."
 msgstr ""
+"¿ Usted está seguro que quiere suprimir la inscripción de %(user)s para el "
+"WEI %(wei_name)s ? Este acto es definitivo."
 
 #: apps/wei/templates/wei/weiregistration_list.html:17
 msgid "There is no pre-registration found with this pattern."
-msgstr ""
+msgstr "No hay pre-inscripción encontrada con esta entrada."
 
 #: apps/wei/templates/wei/weiregistration_list.html:23
 msgid "View validated memberships..."
