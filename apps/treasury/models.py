@@ -295,7 +295,8 @@ class SogeCredit(models.Model):
 
     @property
     def amount(self):
-        return sum(transaction.total for transaction in self.transactions.all()) + 8000
+        return self.credit_transaction.total if self.valid \
+            else sum(transaction.total for transaction in self.transactions.all()) + 8000
 
     def invalidate(self):
         """
