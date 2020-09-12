@@ -2680,6 +2680,70 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 172,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les remises"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 173,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter une remise"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 174,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Modifier une remise"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 175,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une remise"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2884,7 +2948,11 @@
 				163,
 				164,
 				170,
-				171
+				171,
+				172,
+				173,
+				174,
+				175
 			]
 		}
 	},
@@ -3060,7 +3128,11 @@
 				168,
 				169,
 				170,
-				171
+				171,
+				172,
+				173,
+				174,
+				175
 			]
 		}
 	},
