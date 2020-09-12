@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-04 20:11+0200\n"
-"PO-Revision-Date: 2020-09-12 16:34+0200\n"
+"PO-Revision-Date: 2020-09-12 20:17+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -1849,6 +1849,8 @@ msgid ""
 "You recently registered on the Note Kfet. Please click on the link below to "
 "confirm your registration."
 msgstr ""
+"Usted registró recientemente a la Note Kfet. Por favor haga clic en el "
+"enlace más abajo para validar sur afiliación."
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:26
 #: apps/registration/templates/registration/mails/email_validation_email.txt:9
@@ -1856,6 +1858,7 @@ msgid ""
 "This link is only valid for a couple of days, after that you will need to "
 "contact us to validate your email."
 msgstr ""
+"El enlace queda valido solamente unos días, después tendrá que contactarnos."
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:30
 #: apps/registration/templates/registration/mails/email_validation_email.txt:11
@@ -1864,81 +1867,86 @@ msgid ""
 "you can log in. You will need to pay your membership in the Kfet. Note that "
 "the WEI registration includes the Kfet membership."
 msgstr ""
+"Después de esto, tendrá que esperar que alguien validará su cuenta antes que "
+"usted pueda conectarse. Tendrá que pagar su afiliación en la Kfet. La "
+"afiliación al WEI incluye una afiliación a la Kfet."
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:34
 #: apps/registration/templates/registration/mails/email_validation_email.txt:13
 msgid "Thanks"
-msgstr ""
+msgstr "Gracias"
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:39
 #: apps/registration/templates/registration/mails/email_validation_email.txt:15
 msgid "The Note Kfet team."
-msgstr ""
+msgstr "El equipo Note Kfet."
 
 #: apps/registration/views.py:38
 msgid "Register new user"
-msgstr ""
+msgstr "Registrar un nuevo usuario"
 
 #: apps/registration/views.py:82
 msgid "Email validation"
-msgstr ""
+msgstr "Validación del correo electrónico"
 
 #: apps/registration/views.py:84
 msgid "Validate email"
-msgstr ""
+msgstr "Validar el correo electrónico"
 
 #: apps/registration/views.py:126
 msgid "Email validation unsuccessful"
-msgstr ""
+msgstr "La validación del correo electrónico fracasó"
 
 #: apps/registration/views.py:137
 msgid "Email validation email sent"
-msgstr ""
+msgstr "Correo de validación enviado"
 
 #: apps/registration/views.py:145
 msgid "Resend email validation link"
-msgstr ""
+msgstr "Reenviar el enlace de validación"
 
 #: apps/registration/views.py:163
 msgid "Pre-registered users list"
-msgstr ""
+msgstr "Lista de los usuarios con afiliación pendiente"
 
 #: apps/registration/views.py:190
 msgid "Unregistered users"
-msgstr ""
+msgstr "Usuarios con afiliación pendiente"
 
 #: apps/registration/views.py:203
 msgid "Registration detail"
-msgstr ""
+msgstr "Detalles de la afiliación"
 
 #: apps/registration/views.py:258
 msgid "You must join the BDE."
-msgstr ""
+msgstr "Usted tiene que afiliarse al BDE."
 
 #: apps/registration/views.py:280
 msgid "You must join BDE club before joining Kfet club."
-msgstr ""
+msgstr "Tiene que afiliarse al club BDE antes de afiliarse al club Kfet."
 
 #: apps/registration/views.py:285
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
+"El monto dado no es suficiente para las afiliaciones, tiene que ser al menos "
+"{}"
 
 #: apps/registration/views.py:360
 msgid "Invalidate pre-registration"
-msgstr ""
+msgstr "Invalidar la afiliación"
 
 #: apps/treasury/apps.py:12 note_kfet/templates/base.html:92
 msgid "Treasury"
-msgstr ""
+msgstr "Tesorería"
 
 #: apps/treasury/forms.py:104
 msgid "Remittance is already closed."
-msgstr ""
+msgstr "El descuento ya esta cerrado"
 
 #: apps/treasury/forms.py:109
 msgid "You can't change the type of the remittance."
-msgstr ""
+msgstr "No puede cambiar el tipo de descuento"
 
 #: apps/treasury/forms.py:129 apps/treasury/models.py:252
 #: apps/treasury/tables.py:97 apps/treasury/tables.py:105
@@ -1946,260 +1954,267 @@ msgstr ""
 #: apps/treasury/templates/treasury/remittance_list.html:16
 #: apps/treasury/templates/treasury/sogecredit_list.html:16
 msgid "Remittance"
-msgstr ""
+msgstr "Descuento"
 
 #: apps/treasury/forms.py:130
 msgid "No attached remittance"
-msgstr ""
+msgstr "No hay descuento relacionado"
 
 #: apps/treasury/models.py:23
 msgid "Invoice identifier"
-msgstr ""
+msgstr "Numero de factura"
 
 #: apps/treasury/models.py:37
 msgid "BDE"
-msgstr ""
+msgstr "BDE"
 
 #: apps/treasury/models.py:42
 msgid "Object"
-msgstr ""
+msgstr "Asunto"
 
 #: apps/treasury/models.py:46
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: apps/treasury/models.py:55
 msgid "Address"
-msgstr ""
+msgstr "Dirección"
 
 #: apps/treasury/models.py:60 apps/treasury/models.py:180
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: apps/treasury/models.py:64
 msgid "Acquitted"
-msgstr ""
+msgstr "Pagada"
 
 #: apps/treasury/models.py:69
 msgid "Locked"
-msgstr ""
+msgstr "Bloqueada"
 
 #: apps/treasury/models.py:70
 msgid "An invoice can't be edited when it is locked."
-msgstr ""
+msgstr "Une factura no puede ser modificada cuando esta bloqueada."
 
 #: apps/treasury/models.py:76
 msgid "tex source"
-msgstr ""
+msgstr "código fuente TeX"
 
 #: apps/treasury/models.py:89
 #: apps/treasury/templates/treasury/invoice_form.html:22
 msgid "This invoice is locked and can no longer be edited."
-msgstr ""
+msgstr "Esta factura esta bloqueada y no puede ser modificada."
 
 #: apps/treasury/models.py:109 apps/treasury/models.py:122
 msgid "invoice"
-msgstr ""
+msgstr "factura"
 
 #: apps/treasury/models.py:110
 msgid "invoices"
-msgstr ""
+msgstr "facturas"
 
 #: apps/treasury/models.py:127
 msgid "Designation"
-msgstr ""
+msgstr "Designación"
 
 #: apps/treasury/models.py:131
 msgid "Quantity"
-msgstr ""
+msgstr "Cantidad"
 
 #: apps/treasury/models.py:135
 msgid "Unit price"
-msgstr ""
+msgstr "Precio unitario"
 
 #: apps/treasury/models.py:151
 msgid "product"
-msgstr ""
+msgstr "producto"
 
 #: apps/treasury/models.py:152
 msgid "products"
-msgstr ""
+msgstr "productos"
 
 #: apps/treasury/models.py:169
 msgid "remittance type"
-msgstr ""
+msgstr "tipo de descuento"
 
 #: apps/treasury/models.py:170
 msgid "remittance types"
-msgstr ""
+msgstr "tipos de descuentos"
 
 #: apps/treasury/models.py:191
 msgid "Comment"
-msgstr ""
+msgstr "Comentario"
 
 #: apps/treasury/models.py:196
 msgid "Closed"
-msgstr ""
+msgstr "Cerrada"
 
 #: apps/treasury/models.py:200
 msgid "remittance"
-msgstr ""
+msgstr "descuento"
 
 #: apps/treasury/models.py:201
 msgid "remittances"
-msgstr ""
+msgstr "descuentos"
 
 #: apps/treasury/models.py:233
 msgid "Remittance #{:d}: {}"
-msgstr ""
+msgstr "Descuento n°{:d} : {}"
 
 #: apps/treasury/models.py:256
 msgid "special transaction proxy"
-msgstr ""
+msgstr "proxy de transacción especial"
 
 #: apps/treasury/models.py:257
 msgid "special transaction proxies"
-msgstr ""
+msgstr "proxys de transacciones especiales"
 
 #: apps/treasury/models.py:279
 msgid "credit transaction"
-msgstr ""
+msgstr "transacción de crédito"
 
 #: apps/treasury/models.py:343
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
 msgstr ""
+"Este usuario no tiene suficiente dinero en su note para pagar las "
+"afiliaciones. Por favor pídelo acreditar su note antes de invalidar este "
+"crédito."
 
 #: apps/treasury/models.py:355
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
-msgstr ""
+msgstr "Crédito de la Société Générale"
 
 #: apps/treasury/models.py:356
 msgid "Credits from the Société générale"
-msgstr ""
+msgstr "Créditos de la Société Générale"
 
 #: apps/treasury/tables.py:20
 msgid "Invoice #{:d}"
-msgstr ""
+msgstr "Factura n°{:d}"
 
 #: apps/treasury/tables.py:25
 #: apps/treasury/templates/treasury/invoice_list.html:13
 #: apps/treasury/templates/treasury/remittance_list.html:13
 #: apps/treasury/templates/treasury/sogecredit_list.html:13
 msgid "Invoice"
-msgstr ""
+msgstr "Factura"
 
 #: apps/treasury/tables.py:65
 msgid "Transaction count"
-msgstr ""
+msgstr "Cantidad de transacciones"
 
 #: apps/treasury/tables.py:70 apps/treasury/tables.py:72
 msgid "View"
-msgstr ""
+msgstr "Ver"
 
 #: apps/treasury/tables.py:146
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:10
 #: apps/treasury/views.py:166
 msgid "Delete invoice"
-msgstr ""
+msgstr "Suprimir la factura"
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:15
 msgid "This invoice is locked and can't be deleted."
-msgstr ""
+msgstr "Esta factura esta bloqueada y no puede ser suprimida."
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:21
 msgid ""
 "Are you sure you want to delete this invoice? This action can't be undone."
 msgstr ""
+"¿ Usted está seguro de querer suprimir esta factura ? Este acto es "
+"definitivo."
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:28
 msgid "Return to invoices list"
-msgstr ""
+msgstr "Regresar a la lista de las facturas"
 
 #: apps/treasury/templates/treasury/invoice_form.html:15
 msgid ""
 "Warning: the LaTeX template is saved with this object. Updating the invoice "
 "implies regenerate it. Be careful if you manipulate old invoices."
 msgstr ""
+"Cuidado : la plantilla LaTeX es guardada con este objeto. Modificar la "
+"factura supone regenerarla. Tenga cuidado si trata con facturas antiguas."
 
 #: apps/treasury/templates/treasury/invoice_form.html:69
 msgid "Add product"
-msgstr ""
+msgstr "Añadir un producto"
 
 #: apps/treasury/templates/treasury/invoice_form.html:70
 msgid "Remove product"
-msgstr ""
+msgstr "Quitar un producto"
 
 #: apps/treasury/templates/treasury/invoice_list.html:19
 #: apps/treasury/templates/treasury/remittance_list.html:19
 #: apps/treasury/templates/treasury/sogecredit_list.html:19
 msgid "Société générale credits"
-msgstr ""
+msgstr "Créditos de la Société Générale"
 
 #: apps/treasury/templates/treasury/invoice_list.html:31
 msgid "New invoice"
-msgstr ""
+msgstr "Nueva factura"
 
 #: apps/treasury/templates/treasury/remittance_form.html:12
 msgid "Remittance #"
-msgstr ""
+msgstr "Descuento n°"
 
 #: apps/treasury/templates/treasury/remittance_form.html:17
 msgid "Count"
-msgstr ""
+msgstr "Número"
 
 #: apps/treasury/templates/treasury/remittance_form.html:35
 msgid "Linked transactions"
-msgstr ""
+msgstr "Transacciones vinculadas"
 
 #: apps/treasury/templates/treasury/remittance_form.html:42
 msgid "There is no transaction linked with this remittance."
-msgstr ""
+msgstr "No hay transacción vinculada con este descuento."
 
 #: apps/treasury/templates/treasury/remittance_list.html:27
 msgid "Opened remittances"
-msgstr ""
+msgstr "Descuentos abiertos"
 
 #: apps/treasury/templates/treasury/remittance_list.html:34
 msgid "There is no opened remittance."
-msgstr ""
+msgstr "No hay descuento abierto."
 
 #: apps/treasury/templates/treasury/remittance_list.html:39
 msgid "New remittance"
-msgstr ""
+msgstr "Nuevo descuento"
 
 #: apps/treasury/templates/treasury/remittance_list.html:45
 msgid "Transfers without remittances"
-msgstr ""
+msgstr "Transacciones sin descuento"
 
 #: apps/treasury/templates/treasury/remittance_list.html:52
 msgid "There is no transaction without any linked remittance."
-msgstr ""
+msgstr "No hay transacción sin descuento vinculado."
 
 #: apps/treasury/templates/treasury/remittance_list.html:60
 msgid "Transfers with opened remittances"
-msgstr ""
+msgstr "Transacciones con un descuento abierto"
 
 #: apps/treasury/templates/treasury/remittance_list.html:67
 msgid "There is no transaction with an opened linked remittance."
-msgstr ""
+msgstr "No hay transacción con un descuento abierto."
 
 #: apps/treasury/templates/treasury/remittance_list.html:75
 msgid "Closed remittances"
-msgstr ""
+msgstr "Descuentos cerrados"
 
 #: apps/treasury/templates/treasury/remittance_list.html:82
 msgid "There is no closed remittance yet."
-msgstr ""
+msgstr "Por ahora no hay descuentos cerrados."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:29
 msgid "total amount"
-msgstr ""
+msgstr "monto total"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:35
 msgid ""
