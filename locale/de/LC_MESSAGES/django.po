@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 23:17+0200\n"
-"PO-Revision-Date: 2020-09-03 23:47+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-09-04 20:11+0200\n"
+"PO-Revision-Date: 2020-09-12 16:09+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -509,7 +509,7 @@ msgstr "Ein ähnliches Alias ist schon benutzt."
 msgid "Inscription paid by Société Générale"
 msgstr "Mitgliedschaft von der Société Générale bezahlt"
 
-#: apps/member/forms.py:112 apps/registration/forms.py:63
+#: apps/member/forms.py:112
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr "Die Société Générale die Mitgliedschaft bezahlt."
 
@@ -1768,6 +1768,10 @@ msgstr ""
 "Überprüfen Sie diesen Fall, wenn Sie sich beim WEI registrieren möchten. "
 "falls Zweifel, können Sie sich später nach Bestätigung Ihres Kontos im Kfet "
 "registrieren."
+
+#: apps/registration/forms.py:63
+msgid "Check this case if the Société Générale paid the inscription."
+msgstr "Die Société Générale die Mitgliedschaft bezahlt."
 
 #: apps/registration/forms.py:96
 msgid "Join BDE Club"
