@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-04 20:11+0200\n"
-"PO-Revision-Date: 2020-09-13 12:13+0200\n"
+"POT-Creation-Date: 2020-09-13 12:35+0200\n"
+"PO-Revision-Date: 2020-09-13 12:38+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -41,7 +41,7 @@ msgstr "Esta persona ya fue invitada 5 veces este año."
 
 #: apps/activity/forms.py:93 apps/activity/models.py:283
 msgid "This person is already invited."
-msgstr "Esta persona ya esta invitada."
+msgstr "Esta persona ya está invitada."
 
 #: apps/activity/forms.py:97 apps/activity/models.py:287
 msgid "You can't invite more than 3 people to this activity."
@@ -124,7 +124,7 @@ msgstr "organizador"
 #: apps/activity/models.py:97
 msgid "Club that organizes the activity. The entry fees will go to this club."
 msgstr ""
-"El club que organiza la actividad. Los pagos de entrada serán datos a este "
+"El club que organiza la actividad. Los pagos de entrada serán dados a este "
 "club."
 
 #: apps/activity/models.py:104
@@ -231,7 +231,7 @@ msgstr "Invitación"
 
 #: apps/activity/tables.py:25
 msgid "The activity is currently open."
-msgstr "La actividad esta actualmente abierta."
+msgstr "La actividad está actualmente abierta."
 
 #: apps/activity/tables.py:26
 msgid "The validation of the activity is pending."
@@ -534,7 +534,7 @@ msgid "Inscription paid by Société Générale"
 msgstr "Registración pagadas por Société Générale"
 
 #: apps/member/forms.py:164 apps/registration/forms.py:63
-msgid "Check this case is the Société Générale paid the inscription."
+msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Marcar esta casilla si Société Générale pagó la registración."
 
 #: apps/member/forms.py:169 apps/registration/forms.py:68
@@ -1454,6 +1454,11 @@ msgstr "Suprimir"
 msgid "Edit"
 msgstr "Editar"
 
+#: apps/note/templates/note/conso_form.html:22
+#: apps/note/templates/note/transaction_form.html:44
+msgid "Please select a note"
+msgstr "Por favor elige una note"
+
 #: apps/note/templates/note/conso_form.html:32
 msgid "Consum"
 msgstr "Consumir"
@@ -1464,11 +1469,11 @@ msgstr "Consumir"
 msgid "Name or alias..."
 msgstr "Nombre o alias..."
 
-#: apps/note/templates/note/conso_form.html:52
+#: apps/note/templates/note/conso_form.html:53
 msgid "Select consumptions"
 msgstr "Escoger consumiciones"
 
-#: apps/note/templates/note/conso_form.html:61
+#: apps/note/templates/note/conso_form.html:62
 msgid "Consume!"
 msgstr "¡ Consumir !"
 
@@ -1798,10 +1803,6 @@ msgstr ""
 "Marcar esta casilla si usted quiere registrarse  en el WEI. Si duda, podrá "
 "registrarse más tarde, después de validar su cuenta Note Kfet."
 
-#: apps/registration/forms.py:63
-msgid "Check this case if the Société Générale paid the inscription."
-msgstr "Marcar esta casilla si Société Générale pagó la registración."
-
 #: apps/registration/forms.py:96
 msgid "Join BDE Club"
 msgstr "Afiliarse al club BDE"
@@ -1950,11 +1951,7 @@ msgstr "Detalles de la afiliación"
 msgid "You must join the BDE."
 msgstr "Usted tiene que afiliarse al BDE."
 
-#: apps/registration/views.py:280
-msgid "You must join BDE club before joining Kfet club."
-msgstr "Tiene que afiliarse al club BDE antes de afiliarse al club Kfet."
-
-#: apps/registration/views.py:285
+#: apps/registration/views.py:284
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
@@ -2034,7 +2031,7 @@ msgstr "Une factura no puede ser modificada cuando esta bloqueada."
 msgid "tex source"
 msgstr "código fuente TeX"
 
-#: apps/treasury/models.py:109 apps/treasury/models.py:122
+#: apps/treasury/models.py:109 apps/treasury/models.py:125
 msgid "invoice"
 msgstr "factura"
 
@@ -2107,7 +2104,7 @@ msgstr "proxys de transacciones especiales"
 msgid "credit transaction"
 msgstr "transacción de crédito"
 
-#: apps/treasury/models.py:360
+#: apps/treasury/models.py:361
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2116,16 +2113,16 @@ msgstr ""
 "afiliaciones. Por favor pídelo acreditar su note antes de invalidar este "
 "crédito."
 
-#: apps/treasury/models.py:375
+#: apps/treasury/models.py:376
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédito de la Société Générale"
 
-#: apps/treasury/models.py:376
+#: apps/treasury/models.py:377
 msgid "Credits from the Société générale"
 msgstr "Créditos de la Société Générale"
 
-#: apps/treasury/models.py:379
+#: apps/treasury/models.py:380
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédito de la Société Générale para {user}"
@@ -2521,7 +2518,7 @@ msgstr "informaciones sobre la afiliación"
 
 #: apps/wei/models.py:241
 msgid ""
-"Information about the registration (buses for old members, survey fot the "
+"Information about the registration (buses for old members, survey for the "
 "new members), encoded in JSON"
 msgstr ""
 "Informaciones sobre la afiliacion (bus para miembros ancianos, cuestionario "
@@ -2902,6 +2899,10 @@ msgid "English"
 msgstr "Ingles"
 
 #: note_kfet/settings/base.py:157
+msgid "Spanish"
+msgstr "Español"
+
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Francés"
 
@@ -2916,7 +2917,7 @@ msgid ""
 "coke."
 msgstr ""
 "Un error ocurrió con lo que pidió. ¡ Pero ni idea de lo que falló ! Un "
-"correo electrónico fue enviado a los responsables técnicos de la pagina. "
+"correo electrónico fue enviado a los responsables técnicos de la página. "
 "Mientras usted puede relajarse."
 
 #: note_kfet/templates/403.html:10
@@ -2933,7 +2934,7 @@ msgstr "Detalles del error :"
 
 #: note_kfet/templates/404.html:10
 msgid "Page not found"
-msgstr "Pagina no encontrada"
+msgstr "Página no encontrada"
 
 #: note_kfet/templates/404.html:14
 #, python-format
@@ -2953,7 +2954,7 @@ msgid ""
 msgstr ""
 "Lo siento, un error ocurrió mientras procesaba lo que pidió. Un correo "
 "electrónico con los detalles fue enviado a los responsables técnicos de la "
-"pagina. Mientras usted puede relajarse."
+"página. Mientras usted puede relajarse."
 
 #: note_kfet/templates/autocomplete_model.html:14
 msgid "Reset"
@@ -3047,7 +3048,7 @@ msgid ""
 "page. Would you like to login to a different account, or with a higher "
 "permission mask?"
 msgstr ""
-"Está conectado como %(username)s, y no se permite que vea este pagina. "
+"Está conectado como %(username)s, y no se permite que vea este página. "
 "Quiere conectarse con otra cuenta, o con más permisos (antifaz de permisos "
 "más largo) ?"
 
@@ -3139,3 +3140,9 @@ msgstr ""
 "cuenta antes que usted pueda conectarse. Usted tiene que ir en la Kfet para "
 "pagar su afiliación. Tambien tiene que validar su correo electronico con el "
 "enlace que recibió."
+
+#~ msgid "Check this case is the Société Générale paid the inscription."
+#~ msgstr "Marcar esta casilla si Société Générale pagó la registración."
+
+#~ msgid "You must join BDE club before joining Kfet club."
+#~ msgstr "Tiene que afiliarse al club BDE antes de afiliarse al club Kfet."

@@ -161,7 +161,7 @@ class MembershipForm(forms.ModelForm):
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,
-        help_text=_("Check this case is the Société Générale paid the inscription."),
+        help_text=_("Check this case if the Société Générale paid the inscription."),
     )
 
     credit_type = forms.ModelChoiceField(

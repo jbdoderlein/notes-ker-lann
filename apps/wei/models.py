@@ -238,7 +238,7 @@ class WEIRegistration(models.Model):
     information_json = models.TextField(
         default="{}",
         verbose_name=_("registration information"),
-        help_text=_("Information about the registration (buses for old members, survey fot the new members), "
+        help_text=_("Information about the registration (buses for old members, survey for the new members), "
                     "encoded in JSON"),
     )
 
