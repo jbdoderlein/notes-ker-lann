@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-09 14:09+0200\n"
-"PO-Revision-Date: 2020-09-02 23:18+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-09-13 12:35+0200\n"
+"PO-Revision-Date: 2020-09-13 12:36+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -438,7 +438,7 @@ msgstr "données précédentes"
 
 #: apps/logs/models.py:55
 msgid "new data"
-msgstr "ouvelles données"
+msgstr "nouvelles données"
 
 #: apps/logs/models.py:63
 msgid "create"
@@ -535,7 +535,7 @@ msgid "Inscription paid by Société Générale"
 msgstr "Inscription payée par la Société générale"
 
 #: apps/member/forms.py:164 apps/registration/forms.py:63
-msgid "Check this case is the Société Générale paid the inscription."
+msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
 #: apps/member/forms.py:169 apps/registration/forms.py:68
@@ -550,7 +550,7 @@ msgstr "Pas de rechargement"
 
 #: apps/member/forms.py:172
 msgid "You can credit the note of the user."
-msgstr "Vous pouvez créditer la note de l'utisateur avant l'adhésion."
+msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
 #: apps/member/forms.py:176 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
@@ -2111,7 +2111,7 @@ msgstr "proxys de transactions spéciales"
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:360
+#: apps/treasury/models.py:361
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2119,16 +2119,16 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:375
+#: apps/treasury/models.py:376
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:376
+#: apps/treasury/models.py:377
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
-#: apps/treasury/models.py:379
+#: apps/treasury/models.py:380
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédit de la société générale pour l'utilisateur {user}"
@@ -2528,7 +2528,7 @@ msgstr "informations sur l'inscription"
 
 #: apps/wei/models.py:241
 msgid ""
-"Information about the registration (buses for old members, survey fot the "
+"Information about the registration (buses for old members, survey for the "
 "new members), encoded in JSON"
 msgstr ""
 "Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
@@ -2873,7 +2873,7 @@ msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
 msgstr ""
-"Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
+"Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
 #: apps/wei/views.py:549
@@ -2913,6 +2913,10 @@ msgid "English"
 msgstr "Anglais"
 
 #: note_kfet/settings/base.py:157
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Français"
 
@@ -3088,7 +3092,7 @@ msgid ""
 "password twice so we can verify you typed it in correctly."
 msgstr ""
 "Veuillez entrer votre ancien mot de passe pour des raisons de sécurité, puis "
-"renseigné votre nouveau mot de passe à deux reprises, pour être sur de "
+"renseigner votre nouveau mot de passe à deux reprises, pour être sûr de "
 "l'avoir tapé correctement."
 
 #: note_kfet/templates/registration/password_change_form.html:16
@@ -3158,3 +3162,6 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
+
+#~ msgid "Check this case is the Société Générale paid the inscription."
+#~ msgstr "Cochez cette case si la Société Générale a payé l'inscription."

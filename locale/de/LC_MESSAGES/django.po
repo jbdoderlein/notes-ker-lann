@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-09 14:09+0200\n"
-"PO-Revision-Date: 2020-09-03 23:47+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-09-13 12:35+0200\n"
+"PO-Revision-Date: 2020-09-13 12:39+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -533,7 +533,7 @@ msgid "Inscription paid by Société Générale"
 msgstr "Mitgliedschaft von der Société Générale bezahlt"
 
 #: apps/member/forms.py:164 apps/registration/forms.py:63
-msgid "Check this case is the Société Générale paid the inscription."
+msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Die Société Générale die Mitgliedschaft bezahlt."
 
 #: apps/member/forms.py:169 apps/registration/forms.py:68
@@ -2107,7 +2107,7 @@ msgstr "spezielle Transaktion Proxies"
 msgid "credit transaction"
 msgstr "Kredit Transaktion"
 
-#: apps/treasury/models.py:360
+#: apps/treasury/models.py:361
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2115,16 +2115,16 @@ msgstr ""
 "Dieser Benutzer hat nicht genug Geld, um die Mitgliedschaften mit seiner "
 "Note zu bezahlen."
 
-#: apps/treasury/models.py:375
+#: apps/treasury/models.py:376
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Kredit von der Société générale"
 
-#: apps/treasury/models.py:376
+#: apps/treasury/models.py:377
 msgid "Credits from the Société générale"
 msgstr "Krediten von der Société générale"
 
-#: apps/treasury/models.py:379
+#: apps/treasury/models.py:380
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Kredit von der Société générale für {user}"
@@ -2524,7 +2524,7 @@ msgstr "Registrierung Detailen"
 
 #: apps/wei/models.py:241
 msgid ""
-"Information about the registration (buses for old members, survey fot the "
+"Information about the registration (buses for old members, survey for the "
 "new members), encoded in JSON"
 msgstr ""
 "Informationen zur Registrierung (Busse für alte Mitglieder, Umfrage für neue "
@@ -2912,6 +2912,10 @@ msgid "English"
 msgstr "English"
 
 #: note_kfet/settings/base.py:157
+msgid "Spanish"
+msgstr "Spanisch"
+
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Französich"
 
@@ -3157,3 +3161,6 @@ msgstr ""
 "können. Sie müssen zum Kfet gehen und die Registrierungbeitrag bezahlen. Sie "
 "müssen Ihre E-Mail-Adresse auch überprüfen, indem Sie dem Link folgen, den "
 "Sie erhalten haben."
+
+#~ msgid "Check this case is the Société Générale paid the inscription."
+#~ msgstr "Die Société Générale die Mitgliedschaft bezahlt."
