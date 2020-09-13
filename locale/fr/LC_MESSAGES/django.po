@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 23:17+0200\n"
-"PO-Revision-Date: 2020-09-02 23:18+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-09-04 20:11+0200\n"
+"PO-Revision-Date: 2020-09-13 11:51+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -428,7 +428,7 @@ msgstr "données précédentes"
 
 #: apps/logs/models.py:53
 msgid "new data"
-msgstr "ouvelles données"
+msgstr "nouvelles données"
 
 #: apps/logs/models.py:61
 msgid "create"
@@ -511,7 +511,7 @@ msgstr "Un alias avec un nom similaire existe déjà."
 msgid "Inscription paid by Société Générale"
 msgstr "Inscription payée par la Société générale"
 
-#: apps/member/forms.py:112 apps/registration/forms.py:63
+#: apps/member/forms.py:112
 msgid "Check this case is the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
@@ -527,7 +527,7 @@ msgstr "Pas de rechargement"
 
 #: apps/member/forms.py:120
 msgid "You can credit the note of the user."
-msgstr "Vous pouvez créditer la note de l'utisateur avant l'adhésion."
+msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
 #: apps/member/forms.py:124 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
@@ -1775,6 +1775,10 @@ msgstr ""
 "pourrez toujours vous inscrire plus tard, après avoir validé votre compte à "
 "la Kfet."
 
+#: apps/registration/forms.py:63
+msgid "Check this case if the Société Générale paid the inscription."
+msgstr "Cochez cette case si la Société Générale a payé l'inscription."
+
 #: apps/registration/forms.py:96
 msgid "Join BDE Club"
 msgstr "Adhérer au club BDE"
@@ -2835,7 +2839,7 @@ msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
 msgstr ""
-"Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
+"Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
 #: apps/wei/views.py:549
@@ -3030,7 +3034,7 @@ msgid ""
 "password twice so we can verify you typed it in correctly."
 msgstr ""
 "Veuillez entrer votre ancien mot de passe pour des raisons de sécurité, puis "
-"renseigné votre nouveau mot de passe à deux reprises, pour être sur de "
+"renseigner votre nouveau mot de passe à deux reprises, pour être sûr de "
 "l'avoir tapé correctement."
 
 #: note_kfet/templates/registration/password_change_form.html:16
