@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-13 20:01+0200\n"
+"POT-Creation-Date: 2020-09-13 12:35+0200\n"
 "PO-Revision-Date: 2020-09-13 12:36+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
@@ -2913,14 +2913,10 @@ msgid "English"
 msgstr "Anglais"
 
 #: note_kfet/settings/base.py:157
-msgid "Pirate Slang"
-msgstr "Argot pirate"
-
-#: note_kfet/settings/base.py:158
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: note_kfet/settings/base.py:159
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Français"
 
