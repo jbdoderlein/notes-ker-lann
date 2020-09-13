@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-04 20:11+0200\n"
-"PO-Revision-Date: 2020-09-12 22:54+0200\n"
+"PO-Revision-Date: 2020-09-13 11:50+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -59,7 +59,7 @@ msgstr "Usted no puede invitar más de 3 persona a esta actividad."
 #: apps/wei/templates/wei/base.html:26
 #: apps/wei/templates/wei/weimembership_form.html:14
 msgid "name"
-msgstr ""
+msgstr "nombre"
 
 #: apps/activity/models.py:32
 msgid "manage entries"
@@ -163,7 +163,7 @@ msgstr "actividades"
 
 #: apps/activity/models.py:166
 msgid "entry time"
-msgstr ""
+msgstr "hora de entrada"
 
 #: apps/activity/models.py:172 apps/note/apps.py:14
 #: apps/note/models/notes.py:78
@@ -1267,7 +1267,7 @@ msgstr ""
 
 #: apps/note/models/notes.py:300
 msgid "An alias with a similar name already exists: {} "
-msgstr "Un alias parecido ya existe : {}"
+msgstr "Un alias parecido ya existe : {} "
 
 #: apps/note/models/notes.py:313
 msgid "You can't delete your main alias."
@@ -1536,15 +1536,15 @@ msgstr "Nuevo botón"
 
 #: apps/note/templates/note/transactiontemplate_list.html:22
 msgid "buttons listing "
-msgstr "lista de los botones"
+msgstr "lista de los botones "
 
 #: apps/note/templates/note/transactiontemplate_list.html:73
 msgid "button successfully deleted "
-msgstr "botón suprimido con éxito"
+msgstr "botón suprimido con éxito "
 
 #: apps/note/templates/note/transactiontemplate_list.html:77
 msgid "Unable to delete button "
-msgstr "Imposible de suprimir el botón"
+msgstr "Imposible de suprimir el botón "
 
 #: apps/note/views.py:36
 msgid "Transfer money"
@@ -1942,11 +1942,11 @@ msgstr "Tesorería"
 
 #: apps/treasury/forms.py:104
 msgid "Remittance is already closed."
-msgstr "El descuento ya esta cerrado"
+msgstr "El descuento ya esta cerrado."
 
 #: apps/treasury/forms.py:109
 msgid "You can't change the type of the remittance."
-msgstr "No puede cambiar el tipo de descuento"
+msgstr "No puede cambiar el tipo de descuento."
 
 #: apps/treasury/forms.py:129 apps/treasury/models.py:252
 #: apps/treasury/tables.py:97 apps/treasury/tables.py:105
@@ -2757,113 +2757,113 @@ msgstr "No hay pre-inscripción encontrada con esta entrada."
 
 #: apps/wei/templates/wei/weiregistration_list.html:23
 msgid "View validated memberships..."
-msgstr ""
+msgstr "Ver las inscripciones validadas..."
 
 #: apps/wei/views.py:55
 msgid "Search WEI"
-msgstr ""
+msgstr "Buscar un WEI"
 
 #: apps/wei/views.py:105
 msgid "WEI Detail"
-msgstr ""
+msgstr "Detalles del WEI"
 
 #: apps/wei/views.py:200
 msgid "View members of the WEI"
-msgstr ""
+msgstr "Ver los miembros del WEI"
 
 #: apps/wei/views.py:228
 msgid "Find WEI Membership"
-msgstr ""
+msgstr "Buscar una afiliación al WEI"
 
 #: apps/wei/views.py:238
 msgid "View registrations to the WEI"
-msgstr ""
+msgstr "Ver las inscripciones al WEI"
 
 #: apps/wei/views.py:262
 msgid "Find WEI Registration"
-msgstr ""
+msgstr "Buscar una inscripción al WEI"
 
 #: apps/wei/views.py:273
 msgid "Update the WEI"
-msgstr ""
+msgstr "Modificar el WEI"
 
 #: apps/wei/views.py:294
 msgid "Create new bus"
-msgstr ""
+msgstr "Añadir un bus"
 
 #: apps/wei/views.py:332
 msgid "Update bus"
-msgstr ""
+msgstr "Modificar el bus"
 
 #: apps/wei/views.py:362
 msgid "Manage bus"
-msgstr ""
+msgstr "Gestionar el bus"
 
 #: apps/wei/views.py:389
 msgid "Create new team"
-msgstr ""
+msgstr "Añadir un equipo"
 
 #: apps/wei/views.py:429
 msgid "Update team"
-msgstr ""
+msgstr "Modificar el equipo"
 
 #: apps/wei/views.py:460
 msgid "Manage WEI team"
-msgstr ""
+msgstr "Gestionar el equipo"
 
 #: apps/wei/views.py:482
 msgid "Register first year student to the WEI"
-msgstr ""
+msgstr "Registrar un 1A al WEI"
 
 #: apps/wei/views.py:527 apps/wei/views.py:607
 msgid "This user is already registered to this WEI."
-msgstr ""
+msgstr "Este usuario ya afilió a este WEI."
 
 #: apps/wei/views.py:532
 msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
-msgstr ""
+msgstr "Este usuario no puede ser un 1A porque ya participó en un WEI."
 
 #: apps/wei/views.py:549
 msgid "Register old student to the WEI"
-msgstr ""
+msgstr "Registrar un 2A+ al WEI"
 
 #: apps/wei/views.py:592 apps/wei/views.py:680
 msgid "You already opened an account in the Société générale."
-msgstr ""
+msgstr "Usted ya abrió una cuenta a la Société Générale."
 
 #: apps/wei/views.py:637
 msgid "Update WEI Registration"
-msgstr ""
+msgstr "Modificar la inscripción WEI"
 
 #: apps/wei/views.py:739
 msgid "Delete WEI registration"
-msgstr ""
+msgstr "Suprimir la inscripción WEI"
 
 #: apps/wei/views.py:750
 msgid "You don't have the right to delete this WEI registration."
-msgstr ""
+msgstr "Usted no tiene derecho a suprimir esta inscripción WEI."
 
 #: apps/wei/views.py:769
 msgid "Validate WEI registration"
-msgstr ""
+msgstr "Validar la inscripción WEI"
 
 #: apps/wei/views.py:916
 msgid "This user didn't give her/his caution check."
-msgstr ""
+msgstr "Este usuario no dio su cheque de garantía."
 
 #: note_kfet/settings/base.py:155
 msgid "German"
-msgstr ""
+msgstr "Alemán"
 
 #: note_kfet/settings/base.py:156
 msgid "English"
-msgstr ""
+msgstr "Ingles"
 
 #: note_kfet/settings/base.py:157
 msgid "French"
-msgstr ""
+msgstr "Francés"
 
 #: note_kfet/templates/400.html:10
 msgid "Bad request"
@@ -2875,22 +2875,25 @@ msgid ""
 "been sent to webmasters with the details of the error. You can now drink a "
 "coke."
 msgstr ""
+"Un error ocurrió con lo que pidió. ¡ Pero ni idea de lo que falló ! Un "
+"correo electrónico fue enviado a los responsables técnicos de la pagina. "
+"Mientras usted puede relajarse."
 
 #: note_kfet/templates/403.html:10
 msgid "Permission denied"
-msgstr ""
+msgstr "Falta de permiso"
 
 #: note_kfet/templates/403.html:13
 msgid "You don't have the right to perform this request."
-msgstr ""
+msgstr "Usted no tiene los permisos para pedir esto."
 
 #: note_kfet/templates/403.html:15 note_kfet/templates/404.html:19
 msgid "Exception message:"
-msgstr ""
+msgstr "Detalles del error :"
 
 #: note_kfet/templates/404.html:10
 msgid "Page not found"
-msgstr ""
+msgstr "Pagina no encontrada"
 
 #: note_kfet/templates/404.html:14
 #, python-format
@@ -2908,6 +2911,9 @@ msgid ""
 "sent to webmasters with the detail of the error, and this will be fixed "
 "soon. You can now drink a beer."
 msgstr ""
+"Lo siento, un error ocurrió mientras procesaba lo que pidió. Un correo "
+"electrónico con los detalles fue enviado a los responsables técnicos de la "
+"pagina. Mientras usted puede relajarse."
 
 #: note_kfet/templates/autocomplete_model.html:14
 msgid "Reset"
@@ -2915,15 +2921,15 @@ msgstr ""
 
 #: note_kfet/templates/base.html:13
 msgid "The ENS Paris-Saclay BDE note."
-msgstr ""
+msgstr "La note del BDE de la ENS Paris-Saclay."
 
 #: note_kfet/templates/base.html:74
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: note_kfet/templates/base.html:80
 msgid "Clubs"
-msgstr ""
+msgstr "Clubs"
 
 #: note_kfet/templates/base.html:109
 msgid "Admin"
@@ -2934,18 +2940,20 @@ msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
 msgstr ""
+"Su correo electrónico no fue validado. Por favor mire en sus correos y haga "
+"clic en el enlace de validación."
 
 #: note_kfet/templates/base_search.html:15
 msgid "Search by attribute such as name…"
-msgstr ""
+msgstr "Buscar con atributo, como el nombre…"
 
 #: note_kfet/templates/base_search.html:23
 msgid "There is no results."
-msgstr ""
+msgstr "No hay resultado."
 
 #: note_kfet/templates/cas_server/base.html:7
 msgid "Central Authentication Service"
-msgstr ""
+msgstr "Servicio Central de Autentificación"
 
 #: note_kfet/templates/cas_server/base.html:43
 #, python-format
@@ -2954,21 +2962,23 @@ msgid ""
 "%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
 "upgrading."
 msgstr ""
+"Una nueva versión es disponible. Se está usando %(VERSION)s y la ultima "
+"versión está %(LAST_VERSION)s. Piensa en actualizar."
 
 #: note_kfet/templates/registration/logged_out.html:13
 msgid "Thanks for spending some quality time with the Web site today."
-msgstr ""
+msgstr "Gracias por usar la Note Kfet."
 
 #: note_kfet/templates/registration/logged_out.html:14
 msgid "Log in again"
-msgstr ""
+msgstr "Conectarse de nuevo"
 
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
 #: note_kfet/templates/registration/password_reset_complete.html:15
 msgid "Log in"
-msgstr ""
+msgstr "Conectarse"
 
 #: note_kfet/templates/registration/login.html:20
 #, python-format
@@ -2977,75 +2987,92 @@ msgid ""
 "page. Would you like to login to a different account, or with a higher "
 "permission mask?"
 msgstr ""
+"Está conectado como %(username)s, y no se permite que vea este pagina. "
+"Quiere conectarse con otra cuenta, o con más permisos (antifaz de permisos "
+"más largo) ?"
 
 #: note_kfet/templates/registration/login.html:30
 msgid ""
 "You must be logged with a staff account with the higher mask to access "
 "Django Admin."
 msgstr ""
+"Tiene que conectarse con un antifaz de permisos más largo para acceder "
+"Djando Admin."
 
 #: note_kfet/templates/registration/login.html:40
 msgid "Forgotten your password or username?"
-msgstr ""
+msgstr "¿ Contraseña o nombre de usuario olvidado ?"
 
 #: note_kfet/templates/registration/password_change_done.html:13
 msgid "Your password was changed."
-msgstr ""
+msgstr "Su contraseña fue cambiada con éxito."
 
 #: note_kfet/templates/registration/password_change_form.html:14
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr ""
+"Por favor entre su antigua contraseña por seguridad, y su nueva contraseña "
+"dos veces para evitar los errores de tecleo."
 
 #: note_kfet/templates/registration/password_change_form.html:16
 #: note_kfet/templates/registration/password_reset_confirm.html:17
 msgid "Change my password"
-msgstr ""
+msgstr "Cambiar mi contraseña"
 
 #: note_kfet/templates/registration/password_reset_complete.html:13
 msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
+msgstr "Su contraseña fue guardada con éxito. Puede conectarse desde ahora."
 
 #: note_kfet/templates/registration/password_reset_confirm.html:14
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
+"Por favor entra su nueva contraseña dos veces para evitar los errores de "
+"tecleo."
 
 #: note_kfet/templates/registration/password_reset_confirm.html:21
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
+"El enlace para reiniciar su contraseña está invalido, quizás ya fue "
+"utilizado. Por favor pide un nuevo enlace."
 
 #: note_kfet/templates/registration/password_reset_done.html:13
 msgid ""
 "We've emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
+"Le enviamos un correo con el método para reiniciar su contraseña (si una "
+"cuenta existe con el correo dado). Beba recibirle muy pronto."
 
 #: note_kfet/templates/registration/password_reset_done.html:14
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Si no recibe el correo, compruebe que entró el correo que usó para "
+"registrar, y mire en su carpeta spam."
 
 #: note_kfet/templates/registration/password_reset_form.html:13
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
 msgstr ""
+"¿ Contraseña olvidada ? Entre su correo electrónico más abajo, le enviaremos "
+"un correo con el método para reiniciar su contraseña."
 
 #: note_kfet/templates/registration/password_reset_form.html:18
 msgid "Reset my password"
-msgstr ""
+msgstr "Reiniciar mi contraseña"
 
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:27
 msgid "Sign up"
-msgstr ""
+msgstr "Registrar"
 
 #: note_kfet/templates/registration/signup.html:15
 msgid ""
@@ -3054,3 +3081,7 @@ msgid ""
 "Kfet and pay the registration fee. You must also validate your email address "
 "by following the link you received."
 msgstr ""
+"Si ya registró, se procesa su inscripción. El BDE tiene que validar su "
+"cuenta antes que usted pueda conectarse. Usted tiene que ir en la Kfet para "
+"pagar su afiliación. Tambien tiene que validar su correo electronico con el "
+"enlace que recibió."
