@@ -47,6 +47,3 @@ backups/
 env/
 venv/
 db.sqlite3
-
-# Ignore migrations during first phase dev
-migrations/

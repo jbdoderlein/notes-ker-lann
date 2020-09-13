@@ -28,7 +28,7 @@ def pre_save_object(sender, instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_force_save"):
+    if hasattr(instance, "_force_save") or hasattr(instance, "_no_signal"):
         return
 
     user = get_current_authenticated_user()
@@ -82,7 +82,8 @@ def pre_delete_object(instance, **kwargs):
     if instance._meta.label_lower in EXCLUDED:
         return
 
-    if hasattr(instance, "_force_delete") or hasattr(instance, "pk") and instance.pk == 0:
+    if hasattr(instance, "_force_delete") or hasattr(instance, "pk") and instance.pk == 0 \
+            or hasattr(instance, "_no_signal"):
         # Don't check permissions on force-deleted objects
         return
 

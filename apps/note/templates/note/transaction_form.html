@@ -34,21 +34,21 @@ SPDX-License-Identifier: GPL-2.0-or-later
         </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row justify-content-center">
         {#  Preview note profile (picture, username and balance) #}
-        <div class="col-md-3" id="note_infos_div">
-            <div class="card bg-light border-success shadow mb-4">
-                <a id="profile_pic_link" href="#"><img src="/media/pic/default.png"
+        <div class="col-md picture-col" id="note_infos_div">
+            <div class="card bg-light mb-4 text-center">
+                <a id="profile_pic_link" href="#"><img src="{% static "member/img/default_picture.png" %}"
                         id="profile_pic" alt="" class="img-fluid rounded mx-auto"></a>
-                <div class="card-body text-center">
-                    <span id="user_note"></span>
+                <div class="card-body text-center p-2">
+                    <span id="user_note"><i class="small">{% trans "Please select a note" %}</i></span>
                 </div>
             </div>
         </div>
 
         {# list of emitters #}
         <div class="col-md-3" id="emitters_div">
-            <div class="card bg-light border-success shadow mb-4">
+            <div class="card bg-light mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
                         <label for="source_note" id="source_note_label">{% trans "Select emitters" %}</label>
@@ -65,9 +65,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
                     <input class="form-control mx-auto" type="text" id="source_note" placeholder="{% trans "Name or alias..." %}" />
                     <div id="source_me_div">
                         <hr>
-                        <span class="form-control mx-auto btn btn-secondary" id="source_me">
+                        <a class="btn-block btn btn-secondary" href="#" id="source_me" data-turbolinks="false">
                             {% trans "I am the emitter" %}
-                        </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
         {# list of receiver #}
         <div class="col-md-3" id="dests_div">
-            <div class="card bg-light border-info shadow mb-4">
+            <div class="card bg-light mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold" id="dest_title">
                         <label for="dest_note" id="dest_note_label">{% trans "Select receivers" %}</label>
@@ -97,8 +97,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
         </div>
 
         {# Information on transaction (amount, reason, name,...) #}
-        <div class="col-md-3" id="external_div">
-            <div class="card bg-light border-warning shadow mb-4">
+        <div class="col-md" id="external_div">
+            <div class="card bg-light mb-4">
                 <div class="card-header">
                     <p class="card-text font-weight-bold">
                         {% trans "Action" %}
@@ -153,7 +153,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
         </div>
     </div>
 {# transaction history #}
-    <div class="card shadow mb-4" id="history">
+    <div class="card mb-4" id="history">
         <div class="card-header">
             <p class="card-text font-weight-bold">
                 {% trans "Recent transactions history" %}
@@ -176,5 +176,5 @@ SPDX-License-Identifier: GPL-2.0-or-later
         select_receveirs_label = "{% trans "Select receivers" %}";
         transfer_type_label = "{% trans "Transfer type" %}";
     </script>
-    <script src="/static/js/transfer.js"></script>
+    <script src="{% static "note/js/transfer.js" %}"></script>
 {% endblock %}

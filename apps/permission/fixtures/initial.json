@@ -1103,7 +1103,7 @@
 				"treasury",
 				"sogecredit"
 			],
-			"query": "{\"credit_transaction\": null}",
+			"query": "{}",
 			"type": "add",
 			"mask": 1,
 			"field": "",
@@ -2568,6 +2568,182 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 165,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 1,
+			"field": "password",
+			"permanent": true,
+			"description": "Changer son mot de passe"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 166,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}}, {\"valid\": false}]",
+			"type": "add",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Créer une transaction quelconque tant que la source reste au-dessus de -50 €"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 167,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]",
+			"type": "change",
+			"mask": 2,
+			"field": "valid",
+			"permanent": false,
+			"description": "Modifier le statut de validation d'une transaction si c'est possible"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 168,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"OR\", {\"source__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": true}, {\"destination__balance__gte\": {\"F\": [\"SUB\", [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]], 5000]}, \"valid\": false}]",
+			"type": "change",
+			"mask": 2,
+			"field": "invalidity_reason",
+			"permanent": false,
+			"description": "Modifier la raison d'invalidité d'une transaction si c'est possible"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 169,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "{\"club\": [\"club\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "display_image",
+			"permanent": false,
+			"description": "Changer l'image de la note de son club"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 170,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__is_active\": true}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter n'importe quel alias à une note non bloquée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 171,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__is_active\": true}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer n'importe quel alias à une note non bloquée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 172,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les remises"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 173,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "add",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter une remise"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 174,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Modifier une remise"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 175,
+		"fields": {
+			"model": [
+				"treasury",
+				"remittance"
+			],
+			"query": "{}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une remise"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2591,7 +2767,8 @@
 				52,
 				126,
 				161,
-				162
+				162,
+				165
 			]
 		}
 	},
@@ -2661,7 +2838,8 @@
 				47,
 				49,
 				50,
-				141
+				141,
+				169
 			]
 		}
 	},
@@ -2696,8 +2874,14 @@
 				62,
 				127,
 				133,
+				135,
+				136,
 				141,
-				142
+				142,
+				150,
+				166,
+				167,
+				168
 			]
 		}
 	},
@@ -2711,8 +2895,7 @@
 				24,
 				25,
 				26,
-				27,
-				33
+				27
 			]
 		}
 	},
@@ -2763,7 +2946,13 @@
 				150,
 				151,
 				163,
-				164
+				164,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175
 			]
 		}
 	},
@@ -2932,7 +3121,18 @@
 				161,
 				162,
 				163,
-				164
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175
 			]
 		}
 	},
@@ -2944,7 +3144,6 @@
 			"name": "GC Kfet",
 			"permissions": [
 				32,
-				33,
 				56,
 				58,
 				55,
@@ -2959,7 +3158,13 @@
 				29,
 				30,
 				31,
-				143
+				70,
+				143,
+				166,
+				167,
+				168,
+				170,
+				171
 			]
 		}
 	},

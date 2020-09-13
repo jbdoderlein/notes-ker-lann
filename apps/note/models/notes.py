@@ -70,8 +70,8 @@ class Note(PolymorphicModel):
                          "It can be reactivated at any time.")),
             ('forced', _("The note is blocked by the the BDE and can't be manually reactivated.")),
         ],
-        null=True,
-        default=None,
+        blank=True,
+        default="",
     )
 
     class Meta:
@@ -102,13 +102,19 @@ class Note(PolymorphicModel):
 
         super().save(*args, **kwargs)
 
-        if not Alias.objects.filter(name=str(self)).exists():
+        if not Alias.objects.filter(normalized_name=Alias.normalize(str(self))).exists():
             a = Alias(name=str(self))
             a.clean()
 
             # Save alias
             a.note = self
             a.save(force_insert=True)
+        else:
+            # Check if the name of the note changed without changing the normalized form of the alias
+            alias = Alias.objects.get(normalized_name=Alias.normalize(str(self)))
+            if alias.name != str(self):
+                alias.name = str(self)
+                alias.save()
 
     def clean(self, *args, **kwargs):
         """

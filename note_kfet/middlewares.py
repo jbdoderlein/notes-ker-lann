@@ -50,6 +50,20 @@ class SessionMiddleware(object):
 
     def __call__(self, request):
         user = request.user
+
+        # If we authenticate through a token to connect to the API, then we query the good user
+        if 'HTTP_AUTHORIZATION' in request.META and request.path.startswith("/api"):
+            token = request.META.get('HTTP_AUTHORIZATION')
+            if token.startswith("Token "):
+                token = token[6:]
+                from rest_framework.authtoken.models import Token
+                if Token.objects.filter(key=token).exists():
+                    token_obj = Token.objects.get(key=token)
+                    user = token_obj.user
+                    session = request.session
+                    session["permission_mask"] = 42
+                    session.save()
+
         if 'HTTP_X_REAL_IP' in request.META:
             ip = request.META.get('HTTP_X_REAL_IP')
         elif 'HTTP_X_FORWARDED_FOR' in request.META:

@@ -1,0 +1,5 @@
+---
+note:
+  server_name: note-dev.crans.org
+  git_branch: beta
+  cron_enabled: false

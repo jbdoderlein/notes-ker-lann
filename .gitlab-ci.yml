@@ -2,6 +2,10 @@ stages:
   - test
   - quality-assurance
 
+# Also fetch submodules
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # Debian Buster
 py37-django22:
   stage: test
@@ -14,8 +18,7 @@ py37-django22:
         python3-django-extensions python3-django-filters python3-django-polymorphic
         python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
         python3-babel python3-lockfile python3-pip python3-phonenumbers
-        python3-bs4 python3-setuptools tox
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended
+        python3-bs4 python3-setuptools tox texlive-xetex
   script: tox -e py37-django22
 
 # Ubuntu 20.04
@@ -32,23 +35,14 @@ py38-django22:
         python3-django-extensions python3-django-filters python3-django-polymorphic
         python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
         python3-babel python3-lockfile python3-pip python3-phonenumbers
-        python3-bs4 python3-setuptools tox
-        texlive-latex-base texlive-lang-french lmodern texlive-fonts-recommended
+        python3-bs4 python3-setuptools tox texlive-xetex
   script: tox -e py38-django22
 
 linters:
   stage: quality-assurance
   image: debian:buster-backports
   before_script:
-    - >
-        apt-get update &&
-        apt-get install --no-install-recommends -t buster-backports -y
-        python3-django python3-django-crispy-forms
-        python3-django-extensions python3-django-filters python3-django-polymorphic
-        python3-djangorestframework python3-django-cas-server python3-psycopg2 python3-pil
-        python3-babel python3-lockfile python3-pip python3-phonenumbers
-        python3-bs4 python3-setuptools tox
-        texlive-latex-extra texlive-lang-french lmodern texlive-fonts-recommended
+    - apt-get update && apt-get install -y tox
   script: tox -e linters
 
   # Be nice to new contributors, but please use `tox`

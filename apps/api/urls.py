@@ -4,6 +4,7 @@
 from django.conf import settings
 from django.conf.urls import url, include
 from rest_framework import routers
+
 from .viewsets import ContentTypeViewSet, UserViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.

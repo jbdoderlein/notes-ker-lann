@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.forms import HiddenInput
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import UpdateView, TemplateView, CreateView
 from member.models import Membership
@@ -24,9 +25,20 @@ class ProtectQuerysetMixin:
     Display 404 error if the user can't see an object, remove the fields the user can't
     update on an update form (useful if the user can't change only specified fields).
     """
-    def get_queryset(self, **kwargs):
+    def get_queryset(self, filter_permissions=True, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view")).distinct()
+        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view")).distinct()\
+            if filter_permissions else qs
+
+    def get_object(self, queryset=None):
+        try:
+            return super().get_object(queryset)
+        except Http404 as e:
+            try:
+                super().get_object(self.get_queryset(filter_permissions=False))
+                raise PermissionDenied()
+            except Http404:
+                raise e
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
