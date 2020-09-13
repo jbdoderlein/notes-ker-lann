@@ -177,12 +177,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             onchange="this.form.submit()">
                         {% get_current_language as LANGUAGE_CODE %}
                         {% get_available_languages as LANGUAGES %}
-                        {% get_language_info_list for LANGUAGES as languages %}
-                        {% for language in languages %}
-                            <option value="{{ language.code }}"
-                                    {% if language.code == LANGUAGE_CODE %}
+                        {% for lang_code, lang_name in LANGUAGES %}
+                            <option value="{{ lang_code }}"
+                                    {% if lang_code == LANGUAGE_CODE %}
                                     selected{% endif %}>
-                                {{ language.name_local }} ({{ language.code }})
+                                {{ lang_name }} ({{ lang_code }})
                             </option>
                         {% endfor %}
                     </select>
@@ -203,7 +202,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <script>
     CSRF_TOKEN = "{{ csrf_token }}";
     $(".invalid-feedback").addClass("d-block");
-</script>
+<script>
 
 {% block extrajavascript %}{% endblock %}
 </body>
