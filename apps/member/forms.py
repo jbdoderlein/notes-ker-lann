@@ -8,6 +8,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.forms import CheckboxSelectMultiple
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -57,6 +58,7 @@ class ProfileForm(forms.ModelForm):
         self.fields['address'].widget.attrs.update({"placeholder": "4 avenue des Sciences, 91190 GIF-SUR-YVETTE"})
         self.fields['promotion'].widget.attrs.update({"max": timezone.now().year})
 
+    @transaction.atomic
     def save(self, commit=True):
         if not self.instance.section or (("department" in self.changed_data
                                          or "promotion" in self.changed_data) and "section" not in self.changed_data):
@@ -161,7 +163,7 @@ class MembershipForm(forms.ModelForm):
     soge = forms.BooleanField(
         label=_("Inscription paid by Société Générale"),
         required=False,
-        help_text=_("Check this case is the Société Générale paid the inscription."),
+        help_text=_("Check this case if the Société Générale paid the inscription."),
     )
 
     credit_type = forms.ModelChoiceField(

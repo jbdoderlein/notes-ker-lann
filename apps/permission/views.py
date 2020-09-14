@@ -6,6 +6,7 @@ from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Q
 from django.forms import HiddenInput
 from django.http import Http404
@@ -56,6 +57,7 @@ class ProtectQuerysetMixin:
 
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         Submit the form, if the page is a FormView.

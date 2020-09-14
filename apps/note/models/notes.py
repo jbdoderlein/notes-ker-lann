@@ -8,7 +8,7 @@ from django.conf.global_settings import DEFAULT_FROM_EMAIL
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -93,6 +93,7 @@ class Note(PolymorphicModel):
         delta = timezone.now() - self.last_negative
         return "{:d} jours".format(delta.days)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         Save note with it's alias (called in polymorphic children)
@@ -108,12 +109,16 @@ class Note(PolymorphicModel):
 
             # Save alias
             a.note = self
+            # Consider that if the name of the note could be changed, then the alias can be created.
+            # It does not mean that any alias can be created.
+            a._force_save = True
             a.save(force_insert=True)
         else:
             # Check if the name of the note changed without changing the normalized form of the alias
             alias = Alias.objects.get(normalized_name=Alias.normalize(str(self)))
             if alias.name != str(self):
                 alias.name = str(self)
+                alias._force_save = True
                 alias.save()
 
     def clean(self, *args, **kwargs):
@@ -154,6 +159,7 @@ class NoteUser(Note):
     def pretty(self):
         return _("%(user)s's note") % {'user': str(self.user)}
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteUser.objects.get(pk=self.pk)
@@ -195,6 +201,7 @@ class NoteClub(Note):
     def pretty(self):
         return _("Note of %(club)s club") % {'club': str(self.club)}
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteClub.objects.get(pk=self.pk)
@@ -310,6 +317,7 @@ class Alias(models.Model):
             pass
         self.normalized_name = normalized_name
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)

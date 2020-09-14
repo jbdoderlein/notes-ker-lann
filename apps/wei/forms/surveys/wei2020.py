@@ -4,6 +4,7 @@
 from random import choice
 
 from django import forms
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from .base import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, WEIBusInformation
@@ -88,6 +89,7 @@ class WEISurvey2020(WEISurvey):
         """
         form.set_registration(self.registration)
 
+    @transaction.atomic
     def form_valid(self, form):
         word = form.cleaned_data["word"]
         self.information.step += 1

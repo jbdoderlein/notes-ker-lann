@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-07 19:43+0200\n"
-"PO-Revision-Date: 2020-09-02 23:18+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2020-09-13 12:35+0200\n"
+"PO-Revision-Date: 2020-09-13 12:36+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -438,7 +438,7 @@ msgstr "données précédentes"
 
 #: apps/logs/models.py:55
 msgid "new data"
-msgstr "ouvelles données"
+msgstr "nouvelles données"
 
 #: apps/logs/models.py:63
 msgid "create"
@@ -526,7 +526,7 @@ msgid "This image cannot be loaded."
 msgstr "Cette image ne peut pas être chargée."
 
 #: apps/member/forms.py:139 apps/member/views.py:98
-#: apps/registration/forms.py:33 apps/registration/views.py:237
+#: apps/registration/forms.py:33 apps/registration/views.py:241
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
@@ -535,7 +535,7 @@ msgid "Inscription paid by Société Générale"
 msgstr "Inscription payée par la Société générale"
 
 #: apps/member/forms.py:164 apps/registration/forms.py:63
-msgid "Check this case is the Société Générale paid the inscription."
+msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
 #: apps/member/forms.py:169 apps/registration/forms.py:68
@@ -550,7 +550,7 @@ msgstr "Pas de rechargement"
 
 #: apps/member/forms.py:172
 msgid "You can credit the note of the user."
-msgstr "Vous pouvez créditer la note de l'utisateur avant l'adhésion."
+msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
 #: apps/member/forms.py:176 apps/registration/forms.py:74
 #: apps/wei/forms/registration.py:89
@@ -1017,7 +1017,7 @@ msgstr "Changer le mot de passe"
 
 #: apps/member/templates/member/includes/profile_info.html:53
 msgid "API token"
-msgstr "Acces API"
+msgstr "Accès API"
 
 #: apps/member/templates/member/manage_auth_tokens.html:19
 msgid "Token"
@@ -1120,8 +1120,8 @@ msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
 #: apps/member/views.py:644 apps/member/views.py:646 apps/member/views.py:648
-#: apps/registration/views.py:287 apps/registration/views.py:289
-#: apps/registration/views.py:291 apps/wei/views.py:927 apps/wei/views.py:931
+#: apps/registration/views.py:291 apps/registration/views.py:293
+#: apps/registration/views.py:295 apps/wei/views.py:927 apps/wei/views.py:931
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
@@ -1459,6 +1459,11 @@ msgstr "Supprimer"
 msgid "Edit"
 msgstr "Éditer"
 
+#: apps/note/templates/note/conso_form.html:22
+#: apps/note/templates/note/transaction_form.html:44
+msgid "Please select a note"
+msgstr "Sélectionnez une note"
+
 #: apps/note/templates/note/conso_form.html:32
 msgid "Consum"
 msgstr "Consommer"
@@ -1469,11 +1474,11 @@ msgstr "Consommer"
 msgid "Name or alias..."
 msgstr "Pseudo ou alias ..."
 
-#: apps/note/templates/note/conso_form.html:52
+#: apps/note/templates/note/conso_form.html:53
 msgid "Select consumptions"
 msgstr "Sélection des consommations"
 
-#: apps/note/templates/note/conso_form.html:61
+#: apps/note/templates/note/conso_form.html:62
 msgid "Consume!"
 msgstr "Consommer !"
 
@@ -1701,7 +1706,7 @@ msgstr ""
 "Vous n'avez pas la permission de modifier le champ {field} sur l'instance du "
 "modèle {app_label}.{model_name}."
 
-#: apps/permission/signals.py:73 apps/permission/views.py:89
+#: apps/permission/signals.py:73 apps/permission/views.py:101
 #, python-brace-format
 msgid ""
 "You don't have the permission to add an instance of model {app_label}."
@@ -1760,7 +1765,7 @@ msgstr "Requête :"
 msgid "No associated permission"
 msgstr "Pas de permission associée"
 
-#: apps/permission/views.py:56
+#: apps/permission/views.py:68
 #, python-brace-format
 msgid ""
 "You don't have the permission to update this instance of the model "
@@ -1769,7 +1774,7 @@ msgstr ""
 "Vous n'avez pas la permission de modifier cette instance du modèle « {model} "
 "» avec ces paramètres. Merci de les corriger et de réessayer."
 
-#: apps/permission/views.py:60
+#: apps/permission/views.py:72
 #, python-brace-format
 msgid ""
 "You don't have the permission to create an instance of the model \"{model}\" "
@@ -1778,11 +1783,11 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle « {model} » "
 "avec ces paramètres. Merci de les corriger et de réessayer."
 
-#: apps/permission/views.py:96 note_kfet/templates/base.html:106
+#: apps/permission/views.py:108 note_kfet/templates/base.html:106
 msgid "Rights"
 msgstr "Droits"
 
-#: apps/permission/views.py:101
+#: apps/permission/views.py:113
 msgid "All rights"
 msgstr "Tous les droits"
 
@@ -1913,54 +1918,54 @@ msgstr "Merci"
 msgid "The Note Kfet team."
 msgstr "L'équipe de la Note Kfet."
 
-#: apps/registration/views.py:38
+#: apps/registration/views.py:39
 msgid "Register new user"
 msgstr "Enregistrer un nouvel utilisateur"
 
-#: apps/registration/views.py:82
+#: apps/registration/views.py:83
 msgid "Email validation"
 msgstr "Validation de l'adresse mail"
 
-#: apps/registration/views.py:84
+#: apps/registration/views.py:85
 msgid "Validate email"
 msgstr "Valider l'adresse e-mail"
 
-#: apps/registration/views.py:126
+#: apps/registration/views.py:127
 msgid "Email validation unsuccessful"
 msgstr "La validation de l'adresse mail a échoué"
 
-#: apps/registration/views.py:137
+#: apps/registration/views.py:138
 msgid "Email validation email sent"
 msgstr "L'email de vérification de l'adresse email a bien été envoyé"
 
-#: apps/registration/views.py:145
+#: apps/registration/views.py:146
 msgid "Resend email validation link"
 msgstr "Renvoyer le lien de validation"
 
-#: apps/registration/views.py:163
+#: apps/registration/views.py:164
 msgid "Pre-registered users list"
 msgstr "Liste des utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:187
+#: apps/registration/views.py:188
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:200
+#: apps/registration/views.py:201
 msgid "Registration detail"
 msgstr "Détails de l'inscription"
 
-#: apps/registration/views.py:256
+#: apps/registration/views.py:260
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
-#: apps/registration/views.py:280
+#: apps/registration/views.py:284
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:355
+#: apps/registration/views.py:364
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
@@ -2106,7 +2111,7 @@ msgstr "proxys de transactions spéciales"
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:352
+#: apps/treasury/models.py:361
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2114,16 +2119,16 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:364
+#: apps/treasury/models.py:376
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:365
+#: apps/treasury/models.py:377
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
-#: apps/treasury/models.py:368
+#: apps/treasury/models.py:380
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédit de la société générale pour l'utilisateur {user}"
@@ -2358,7 +2363,7 @@ msgstr "Joindre une transaction à une remise"
 msgid "List of credits from the Société générale"
 msgstr "Liste des crédits de la Société générale"
 
-#: apps/treasury/views.py:443
+#: apps/treasury/views.py:440
 msgid "Manage credits from the Société générale"
 msgstr "Gérer les crédits de la Société générale"
 
@@ -2523,7 +2528,7 @@ msgstr "informations sur l'inscription"
 
 #: apps/wei/models.py:241
 msgid ""
-"Information about the registration (buses for old members, survey fot the "
+"Information about the registration (buses for old members, survey for the "
 "new members), encoded in JSON"
 msgstr ""
 "Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
@@ -2868,7 +2873,7 @@ msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
 msgstr ""
-"Cet utilisateur ne peut pas être en première année puisqu'iel a déjà "
+"Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
 #: apps/wei/views.py:549
@@ -2908,6 +2913,10 @@ msgid "English"
 msgstr "Anglais"
 
 #: note_kfet/settings/base.py:157
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: note_kfet/settings/base.py:158
 msgid "French"
 msgstr "Français"
 
@@ -3083,7 +3092,7 @@ msgid ""
 "password twice so we can verify you typed it in correctly."
 msgstr ""
 "Veuillez entrer votre ancien mot de passe pour des raisons de sécurité, puis "
-"renseigné votre nouveau mot de passe à deux reprises, pour être sur de "
+"renseigner votre nouveau mot de passe à deux reprises, pour être sûr de "
 "l'avoir tapé correctement."
 
 #: note_kfet/templates/registration/password_change_form.html:16
@@ -3153,3 +3162,6 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
+
+#~ msgid "Check this case is the Société Générale paid the inscription."
+#~ msgstr "Cochez cette case si la Société Générale a payé l'inscription."

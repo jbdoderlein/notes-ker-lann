@@ -5,7 +5,7 @@ from datetime import date
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -76,6 +76,7 @@ class Invoice(models.Model):
         verbose_name=_("tex source"),
     )
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         When an invoice is generated, we store the tex source.
@@ -228,6 +229,7 @@ class Remittance(models.Model):
         """
         return sum(transaction.total for transaction in self.transactions.all())
 
+    @transaction.atomic
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # Check if all transactions have the right type.
         if self.transactions.exists() and self.transactions.filter(~Q(source=self.remittance_type.note)).exists():
@@ -291,11 +293,12 @@ class SogeCredit(models.Model):
 
     @property
     def valid(self):
-        return self.credit_transaction.valid
+        return self.credit_transaction and self.credit_transaction.valid
 
     @property
     def amount(self):
-        return sum(transaction.total for transaction in self.transactions.all()) + 8000
+        return self.credit_transaction.total if self.valid \
+            else sum(transaction.total for transaction in self.transactions.all()) + 8000
 
     def invalidate(self):
         """
@@ -305,10 +308,10 @@ class SogeCredit(models.Model):
         if self.valid:
             self.credit_transaction.valid = False
             self.credit_transaction.save()
-        for transaction in self.transactions.all():
-            transaction.valid = False
-            transaction._force_save = True
-            transaction.save()
+        for tr in self.transactions.all():
+            tr.valid = False
+            tr._force_save = True
+            tr.save()
 
     def validate(self, force=False):
         if self.valid and not force:
@@ -320,18 +323,20 @@ class SogeCredit(models.Model):
         # Refresh credit amount
         self.save()
         self.credit_transaction.valid = True
+        self.credit_transaction._force_save = True
         self.credit_transaction.save()
         self.save()
 
-        for transaction in self.transactions.all():
-            transaction.valid = True
-            transaction._force_save = True
-            transaction.created_at = timezone.now()
-            transaction.save()
+        for tr in self.transactions.all():
+            tr.valid = True
+            tr._force_save = True
+            tr.created_at = timezone.now()
+            tr.save()
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if not self.credit_transaction:
-            self.credit_transaction = SpecialTransaction.objects.create(
+            credit_transaction = SpecialTransaction(
                 source=NoteSpecial.objects.get(special_type="Virement bancaire"),
                 destination=self.user.note,
                 quantity=1,
@@ -342,6 +347,10 @@ class SogeCredit(models.Model):
                 bank="Société générale",
                 valid=False,
             )
+            credit_transaction._force_save = True
+            credit_transaction.save()
+            credit_transaction.refresh_from_db()
+            self.credit_transaction = credit_transaction
         elif not self.valid:
             self.credit_transaction.amount = self.amount
             self.credit_transaction._force_save = True
@@ -361,11 +370,11 @@ class SogeCredit(models.Model):
                                     "Please ask her/him to credit the note before invalidating this credit."))
 
         self.invalidate()
-        for transaction in self.transactions.all():
-            transaction._force_save = True
-            transaction.valid = True
-            transaction.created_at = timezone.now()
-            transaction.save()
+        for tr in self.transactions.all():
+            tr._force_save = True
+            tr.valid = True
+            tr.created_at = timezone.now()
+            tr.save()
         self.credit_transaction.valid = False
         self.credit_transaction.reason += " (invalide)"
         self.credit_transaction.save()

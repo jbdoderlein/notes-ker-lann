@@ -170,19 +170,21 @@ class Transaction(PolymorphicModel):
         previous_source_balance = self.source.balance
         previous_dest_balance = self.destination.balance
 
-        source_balance = self.source.balance
-        dest_balance = self.destination.balance
+        source_balance = previous_source_balance
+        dest_balance = previous_dest_balance
 
         created = self.pk is None
-        to_transfer = self.amount * self.quantity
-        if not created and not self.valid and not hasattr(self, "_force_save"):
+        to_transfer = self.total
+        if not created:
             # Revert old transaction
-            old_transaction = Transaction.objects.get(pk=self.pk)
+            # We make a select for update to avoid concurrency issues
+            old_transaction = Transaction.objects.select_for_update().get(pk=self.pk)
             # Check that nothing important changed
-            for field_name in ["source_id", "destination_id", "quantity", "amount"]:
-                if getattr(self, field_name) != getattr(old_transaction, field_name):
-                    raise ValidationError(_("You can't update the {field} on a Transaction. "
-                                            "Please invalidate it and create one other.").format(field=field_name))
+            if not hasattr(self, "_force_save"):
+                for field_name in ["source_id", "destination_id", "quantity", "amount"]:
+                    if getattr(self, field_name) != getattr(old_transaction, field_name):
+                        raise ValidationError(_("You can't update the {field} on a Transaction. "
+                                                "Please invalidate it and create one other.").format(field=field_name))
 
             if old_transaction.valid == self.valid:
                 # Don't change anything
@@ -215,10 +217,6 @@ class Transaction(PolymorphicModel):
             # When source == destination, no money is transferred and no transaction is created
             return
 
-        # We refresh the notes with the "select for update" tag to avoid concurrency issues
-        self.source = Note.objects.filter(pk=self.source_id).select_for_update().get()
-        self.destination = Note.objects.filter(pk=self.destination_id).select_for_update().get()
-
         # Check that the amounts stay between big integer bounds
         diff_source, diff_dest = self.validate()
 
@@ -237,9 +235,11 @@ class Transaction(PolymorphicModel):
         super().save(*args, **kwargs)
 
         # Save notes
+        self.source.refresh_from_db()
         self.source.balance += diff_source
         self.source._force_save = True
         self.source.save()
+        self.destination.refresh_from_db()
         self.destination.balance += diff_dest
         self.destination._force_save = True
         self.destination.save()
@@ -273,6 +273,7 @@ class RecurrentTransaction(Transaction):
                 _("The destination of this transaction must equal to the destination of the template."))
         return super().clean()
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         return super().save(*args, **kwargs)
@@ -323,6 +324,7 @@ class SpecialTransaction(Transaction):
             raise(ValidationError(_("A special transaction is only possible between a"
                                     " Note associated to a payment method and a User or a Club")))
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)

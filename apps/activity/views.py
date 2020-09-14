@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import F, Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -44,6 +45,7 @@ class ActivityCreateView(ProtectQuerysetMixin, ProtectedCreateView):
             date_end=timezone.now(),
         )
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.creater = self.request.user
         return super().form_valid(form)
@@ -145,6 +147,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
         form.fields["inviter"].initial = self.request.user.note
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.activity = Activity.objects\
             .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")).get(pk=self.kwargs["pk"])

@@ -1,5 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.conf import settings
 from django.db.models import Q
 from django.core.exceptions import ValidationError
@@ -56,8 +57,9 @@ class AliasViewSet(ReadProtectedModelViewSet):
     """
     queryset = Alias.objects.all()
     serializer_class = AliasSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    filterset_fields = ['note']
     ordering_fields = ['name', 'normalized_name']
 
     def get_serializer_class(self):
@@ -106,8 +108,9 @@ class AliasViewSet(ReadProtectedModelViewSet):
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
     queryset = Alias.objects.all()
     serializer_class = ConsumerSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
+    filterset_fields = ['note']
     ordering_fields = ['name', 'normalized_name']
 
     def get_queryset(self):
@@ -116,29 +119,31 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         :return: The filtered set of requested aliases
         """
 
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().distinct()
         # Sqlite doesn't support ORDER BY in subqueries
         queryset = queryset.order_by("name") \
             if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
-        alias = self.request.query_params.get("alias", ".*")
+        alias = self.request.query_params.get("alias", None)
         queryset = queryset.prefetch_related('note')
-        # We match first an alias if it is matched without normalization,
-        # then if the normalized pattern matches a normalized alias.
-        queryset = queryset.filter(
-            name__iregex="^" + alias
-        ).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True).union(
-            queryset.filter(
-                Q(normalized_name__iregex="^" + alias.lower())
-                & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
-                & ~Q(name__iregex="^" + alias)
-            ),
-            all=True)
+
+        if alias:
+            # We match first an alias if it is matched without normalization,
+            # then if the normalized pattern matches a normalized alias.
+            queryset = queryset.filter(
+                name__iregex="^" + alias
+            ).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True).union(
+                queryset.filter(
+                    Q(normalized_name__iregex="^" + alias.lower())
+                    & ~Q(normalized_name__iregex="^" + Alias.normalize(alias))
+                    & ~Q(name__iregex="^" + alias)
+                ),
+                all=True)
 
         queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
             else queryset.order_by("name")
@@ -179,8 +184,11 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     """
     queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ["source", "source_alias", "destination", "destination_alias", "quantity",
+                        "polymorphic_ctype", "amount", "created_at", ]
     search_fields = ['$reason', ]
+    ordering_fields = ['created_at', 'amount']
 
     def get_queryset(self):
         user = self.request.user
