@@ -307,10 +307,10 @@ class SogeCredit(models.Model):
         if self.valid:
             self.credit_transaction.valid = False
             self.credit_transaction.save()
-        for transaction in self.transactions.all():
-            transaction.valid = False
-            transaction._force_save = True
-            transaction.save()
+        for tr in self.transactions.all():
+            tr.valid = False
+            tr._force_save = True
+            tr.save()
 
     def validate(self, force=False):
         if self.valid and not force:
@@ -325,11 +325,11 @@ class SogeCredit(models.Model):
         self.credit_transaction.save()
         self.save()
 
-        for transaction in self.transactions.all():
-            transaction.valid = True
-            transaction._force_save = True
-            transaction.created_at = timezone.now()
-            transaction.save()
+        for tr in self.transactions.all():
+            tr.valid = True
+            tr._force_save = True
+            tr.created_at = timezone.now()
+            tr.save()
 
     @transaction.atomic
     def save(self, *args, **kwargs):
@@ -364,11 +364,11 @@ class SogeCredit(models.Model):
                                     "Please ask her/him to credit the note before invalidating this credit."))
 
         self.invalidate()
-        for transaction in self.transactions.all():
-            transaction._force_save = True
-            transaction.valid = True
-            transaction.created_at = timezone.now()
-            transaction.save()
+        for tr in self.transactions.all():
+            tr._force_save = True
+            tr.valid = True
+            tr.created_at = timezone.now()
+            tr.save()
         self.credit_transaction.valid = False
         self.credit_transaction.reason += " (invalide)"
         self.credit_transaction.save()

@@ -4,7 +4,6 @@
 from functools import lru_cache
 from time import time
 
-from django.conf import settings
 from django.contrib.sessions.models import Session
 from note_kfet.middlewares import get_current_session
 

@@ -5,7 +5,7 @@ import unicodedata
 
 from django.conf import settings
 from django.conf.global_settings import DEFAULT_FROM_EMAIL
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models, transaction
