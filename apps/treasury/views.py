@@ -9,6 +9,7 @@ from tempfile import mkdtemp
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.db import transaction
 from django.db.models import Q
 from django.forms import Form
 from django.http import HttpResponse
@@ -65,6 +66,7 @@ class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
         del form.fields["locked"]
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -144,6 +146,7 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         del form.fields["id"]
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         ret = super().form_valid(form)
 
@@ -439,6 +442,7 @@ class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormVie
     form_class = Form
     extra_context = {"title": _("Manage credits from the Société générale")}
 
+    @transaction.atomic
     def form_valid(self, form):
         if "validate" in form.data:
             self.get_object().validate(True)

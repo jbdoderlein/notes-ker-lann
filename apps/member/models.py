@@ -7,7 +7,7 @@ import os
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.template import loader
 from django.urls import reverse, reverse_lazy
@@ -271,6 +271,7 @@ class Club(models.Model):
             self._force_save = True
             self.save(force_update=True)
 
+    @transaction.atomic
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.require_memberships:
@@ -406,6 +407,7 @@ class Membership(models.Model):
                 parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
             parent_membership.save()
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         Calculate fee and end date before saving the membership and creating the transaction if needed.

@@ -4,7 +4,6 @@
 from functools import lru_cache
 from time import time
 
-from django.conf import settings
 from django.contrib.sessions.models import Session
 from note_kfet.middlewares import get_current_session
 
@@ -33,9 +32,9 @@ def memoize(f):
         sess_funs = new_sess_funs
 
     def func(*args, **kwargs):
-        if settings.DEBUG:
-            # Don't memoize in DEBUG mode
-            return f(*args, **kwargs)
+        # if settings.DEBUG:
+        #     # Don't memoize in DEBUG mode
+        #     return f(*args, **kwargs)
 
         nonlocal last_collect
 

@@ -10,6 +10,7 @@ from tempfile import mkdtemp
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Q, Count
 from django.db.models.functions.text import Lower
 from django.forms import HiddenInput
@@ -84,6 +85,7 @@ class WEICreateView(ProtectQuerysetMixin, ProtectedCreateView):
             date_end=date.today(),
         )
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.requires_membership = True
         form.instance.parent_club = Club.objects.get(name="Kfet")
@@ -517,6 +519,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         del form.fields["information_json"]
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         form.instance.first_year = True
@@ -597,6 +600,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         form.instance.first_year = False
@@ -688,6 +692,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             del form.fields["information_json"]
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         # If the membership is already validated, then we update the bus and the team (and the roles)
         if form.instance.is_validated:
@@ -866,6 +871,7 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
                 ).all()
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         Create membership, check that all is good, make transactions
@@ -1016,6 +1022,7 @@ class WEISurveyView(LoginRequiredMixin, BaseFormView, DetailView):
         context["club"] = self.object.wei
         return context
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         Update the survey with the data of the form.

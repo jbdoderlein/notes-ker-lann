@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import resolve_url, redirect
 from django.urls import reverse_lazy
@@ -47,6 +48,7 @@ class UserCreateView(CreateView):
 
         return context
 
+    @transaction.atomic
     def form_valid(self, form):
         """
         If the form is valid, then the user is created with is_active set to False
@@ -234,6 +236,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         form.fields["first_name"].initial = user.first_name
         return form
 
+    @transaction.atomic
     def form_valid(self, form):
         user = self.get_object()
 

@@ -7,7 +7,7 @@ from threading import Thread
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -123,6 +123,7 @@ class Activity(models.Model):
         verbose_name=_('open'),
     )
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         Update the activity wiki page each time the activity is updated (validation, change description, ...)
@@ -194,8 +195,8 @@ class Entry(models.Model):
             else _("Entry for {note} to the activity {activity}").format(
             guest=str(self.guest), note=str(self.note), activity=str(self.activity))
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
-
         qs = Entry.objects.filter(~Q(pk=self.pk), activity=self.activity, note=self.note, guest=self.guest)
         if qs.exists():
             raise ValidationError(_("Already entered on ") + _("{:%Y-%m-%d %H:%M:%S}").format(qs.get().time, ))
@@ -260,6 +261,7 @@ class Guest(models.Model):
         except AttributeError:
             return False
 
+    @transaction.atomic
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         one_year = timedelta(days=365)
 

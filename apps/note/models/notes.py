@@ -8,7 +8,7 @@ from django.conf.global_settings import DEFAULT_FROM_EMAIL
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -93,6 +93,7 @@ class Note(PolymorphicModel):
         delta = timezone.now() - self.last_negative
         return "{:d} jours".format(delta.days)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         """
         Save note with it's alias (called in polymorphic children)
@@ -154,6 +155,7 @@ class NoteUser(Note):
     def pretty(self):
         return _("%(user)s's note") % {'user': str(self.user)}
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteUser.objects.get(pk=self.pk)
@@ -195,6 +197,7 @@ class NoteClub(Note):
     def pretty(self):
         return _("Note of %(club)s club") % {'club': str(self.club)}
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.pk and self.balance < 0:
             old_note = NoteClub.objects.get(pk=self.pk)
@@ -310,6 +313,7 @@ class Alias(models.Model):
             pass
         self.normalized_name = normalized_name
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
