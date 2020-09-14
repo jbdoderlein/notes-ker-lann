@@ -176,9 +176,10 @@ class Transaction(PolymorphicModel):
 
         created = self.pk is None
         to_transfer = self.total
-        if not created and not self.valid:
+        if not created:
             # Revert old transaction
-            old_transaction = Transaction.objects.get(pk=self.pk)
+            # We make a select for update to avoid concurrency issues
+            old_transaction = Transaction.objects.select_for_update().get(pk=self.pk)
             # Check that nothing important changed
             if not hasattr(self, "_force_save"):
                 for field_name in ["source_id", "destination_id", "quantity", "amount"]:
@@ -217,10 +218,6 @@ class Transaction(PolymorphicModel):
             # When source == destination, no money is transferred and no transaction is created
             return
 
-        # We refresh the notes with the "select for update" tag to avoid concurrency issues
-        self.source = Note.objects.filter(pk=self.source_id).select_for_update().get()
-        self.destination = Note.objects.filter(pk=self.destination_id).select_for_update().get()
-
         # Check that the amounts stay between big integer bounds
         diff_source, diff_dest = self.validate()
 
@@ -239,8 +236,14 @@ class Transaction(PolymorphicModel):
         super().save(*args, **kwargs)
 
         # Save notes
-        Note.objects.filter(pk=self.source_id).update(balance=F("balance") + diff_source)
-        Note.objects.filter(pk=self.destination_id).update(balance=F("balance") + diff_dest)
+        self.source.refresh_from_db()
+        self.source.balance += diff_source
+        self.source._force_save = True
+        self.source.save()
+        self.destination.refresh_from_db()
+        self.destination.balance += diff_dest
+        self.destination._force_save = True
+        self.destination.save()
 
     @property
     def total(self):
