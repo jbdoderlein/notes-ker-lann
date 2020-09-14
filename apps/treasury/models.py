@@ -293,7 +293,7 @@ class SogeCredit(models.Model):
 
     @property
     def valid(self):
-        return self.credit_transaction.valid
+        return self.credit_transaction and self.credit_transaction.valid
 
     @property
     def amount(self):
@@ -323,6 +323,7 @@ class SogeCredit(models.Model):
         # Refresh credit amount
         self.save()
         self.credit_transaction.valid = True
+        self.credit_transaction._force_save = True
         self.credit_transaction.save()
         self.save()
 
@@ -335,7 +336,7 @@ class SogeCredit(models.Model):
     @transaction.atomic
     def save(self, *args, **kwargs):
         if not self.credit_transaction:
-            self.credit_transaction = SpecialTransaction.objects.create(
+            credit_transaction = SpecialTransaction(
                 source=NoteSpecial.objects.get(special_type="Virement bancaire"),
                 destination=self.user.note,
                 quantity=1,
@@ -346,6 +347,10 @@ class SogeCredit(models.Model):
                 bank="Société générale",
                 valid=False,
             )
+            credit_transaction._force_save = True
+            credit_transaction.save()
+            credit_transaction.refresh_from_db()
+            self.credit_transaction = credit_transaction
         elif not self.valid:
             self.credit_transaction.amount = self.amount
             self.credit_transaction._force_save = True

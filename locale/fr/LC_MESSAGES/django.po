@@ -1017,7 +1017,7 @@ msgstr "Changer le mot de passe"
 
 #: apps/member/templates/member/includes/profile_info.html:53
 msgid "API token"
-msgstr "Acces API"
+msgstr "Accès API"
 
 #: apps/member/templates/member/manage_auth_tokens.html:19
 msgid "Token"

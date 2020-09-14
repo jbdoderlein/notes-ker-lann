@@ -109,12 +109,16 @@ class Note(PolymorphicModel):
 
             # Save alias
             a.note = self
+            # Consider that if the name of the note could be changed, then the alias can be created.
+            # It does not mean that any alias can be created.
+            a._force_save = True
             a.save(force_insert=True)
         else:
             # Check if the name of the note changed without changing the normalized form of the alias
             alias = Alias.objects.get(normalized_name=Alias.normalize(str(self)))
             if alias.name != str(self):
                 alias.name = str(self)
+                alias._force_save = True
                 alias.save()
 
     def clean(self, *args, **kwargs):
