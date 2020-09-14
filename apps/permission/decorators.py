@@ -33,9 +33,9 @@ def memoize(f):
         sess_funs = new_sess_funs
 
     def func(*args, **kwargs):
-        if settings.DEBUG:
-            # Don't memoize in DEBUG mode
-            return f(*args, **kwargs)
+        # if settings.DEBUG:
+        #     # Don't memoize in DEBUG mode
+        #     return f(*args, **kwargs)
 
         nonlocal last_collect
 
