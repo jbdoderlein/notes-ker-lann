@@ -610,6 +610,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         bank = form.cleaned_data["bank"]
         soge = form.cleaned_data["soge"] and not user.profile.soge and (club.name == "BDE" or club.name == "Kfet")
 
+        if not credit_type:
+            credit_amount = 0
+
         if not soge and user.note.balance + credit_amount < fee and not Membership.objects.filter(
                 club__name="Kfet",
                 user=user,
@@ -629,6 +632,16 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                 date_end__gte=form.instance.date_start,
         ).exists():
             form.add_error('user', _('User is already a member of the club'))
+            error = True
+
+        # Must join the parent club before joining this club, except for the Kfet club where it can be at the same time.
+        if club.name != "Kfet" and not Membership.objects.filter(
+                user=form.instance.user,
+                club=club.parent_club,
+                date_start__lte=club.parent_club.membership_start,
+                date_end__gte=club.parent_club.membership_end,
+        ).exists():
+            form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
             error = True
 
         if club.membership_start and form.instance.date_start < club.membership_start:
