@@ -635,7 +635,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             error = True
 
         # Must join the parent club before joining this club, except for the Kfet club where it can be at the same time.
-        if club.name != "Kfet" and not Membership.objects.filter(
+        if club.name != "Kfet" and club.parent_club and not Membership.objects.filter(
                 user=form.instance.user,
                 club=club.parent_club,
                 date_start__lte=club.parent_club.membership_start,
