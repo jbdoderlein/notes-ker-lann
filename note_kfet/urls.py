@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
 from django.views.generic import RedirectView
+from django.views.i18n import JavaScriptCatalog
 
 from member.views import CustomLoginView
 
@@ -34,6 +35,9 @@ urlpatterns = [
 
     # Make coffee
     path('coffee/', include('django_htcpcp_tea.urls')),
+    
+    # Translate js
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
 
 # During development, serve media files
