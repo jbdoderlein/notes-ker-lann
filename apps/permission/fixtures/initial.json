@@ -2776,6 +2776,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 178,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir tous les alias, y compris ceux des non adhérents"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2986,7 +3002,8 @@
 				174,
 				175,
 				176,
-				177
+				177,
+				178
 			]
 		}
 	},
@@ -3168,7 +3185,8 @@
 				174,
 				175,
 				176,
-				177
+				177,
+				178
 			]
 		}
 	},
