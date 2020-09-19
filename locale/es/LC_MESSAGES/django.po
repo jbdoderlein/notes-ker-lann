@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-18 12:33+0200\n"
-"PO-Revision-Date: 2020-09-13 12:38+0200\n"
+"POT-Creation-Date: 2020-09-19 22:00+0200\n"
+"PO-Revision-Date: 2020-09-19 14:56+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -846,23 +846,18 @@ msgid ""
 "%(pretty_fee)s will be charged to renew automatically the membership in this/"
 "these club·s."
 msgstr ""
-"El usuario no esta miembro del/de los club·s parientes %(clubs)s. Un pago "
+"El usuario no está miembro del/de los club·s parientes %(clubs)s. Un pago "
 "adicional de %(pretty_fee)s sera cargado para prorrogar automáticamente la "
 "afiliación a este/os club·s."
 
 #: apps/member/templates/member/add_members.html:22
-#, fuzzy, python-format
-#| msgid ""
-#| "The user is not a member of the club·s %(clubs)s. An additional fee of "
-#| "%(pretty_fee)s will be charged to renew automatically the membership in "
-#| "this/these club·s."
+#, python-format
 msgid ""
 "The user is not a member of the club·s %(clubs)s. Please create the required "
 "memberships, otherwise it will fail."
 msgstr ""
-"El usuario no esta miembro del/de los club·s parientes %(clubs)s. Un pago "
-"adicional de %(pretty_fee)s sera cargado para prorrogar automáticamente la "
-"afiliación a este/os club·s."
+"El usuario no está miembro del/de los club·s parientes %(clubs)s. Por favor "
+"crear la·s afiliación·es requerida·s, si no la afiliación fallará."
 
 #: apps/member/templates/member/add_members.html:29
 #, python-format
@@ -879,6 +874,8 @@ msgid ""
 "This club has parents %(clubs)s. Please make sure that the user is a member "
 "of this or these club·s, otherwise the creation of this membership will fail."
 msgstr ""
+"Este club tiene come pariente %(clubs)s. Por favor compruebe que el usuario "
+"está miembro de este·os club·s, si no la afiliación fallará."
 
 #: apps/member/templates/member/base.html:17
 #: apps/registration/templates/registration/future_profile_detail.html:12
@@ -1529,7 +1526,7 @@ msgstr "Correo electrónico enviado por la Note Kfet el"
 #: apps/note/templates/note/transaction_form.html:54
 #: apps/note/templates/note/transaction_form.html:174
 msgid "Select emitters"
-msgstr "Elegir les remitentes"
+msgstr "Elegir los remitentes"
 
 #: apps/note/templates/note/transaction_form.html:69
 msgid "I am the emitter"

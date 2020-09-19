@@ -159,7 +159,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% endblock %}
 
 {% block extrajavascript %}
-    <script type="text/javascript" src="{% static "note/js/consos.js" %}"></script>
+    <script type="text/javascript" src="{% static "note/js/consos.js" 'javascript-catalog' %}"></script>
     <script type="text/javascript">
         {% for button in highlighted %}
             {% if button.display %}

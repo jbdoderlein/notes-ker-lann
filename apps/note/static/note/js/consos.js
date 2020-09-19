@@ -253,7 +253,7 @@ function consume (source, source_alias, dest, quantity, amount, reason, type, ca
           template: template
         }).done(function () {
         reset()
-        addMsg("La transaction n'a pas pu être validée pour cause de solde insuffisant.", 'danger', 10000)
+        addMsg(gettext("La transaction n'a pas pu être validée pour cause de solde insuffisant."), 'danger', 10000)
       }).fail(function () {
         reset()
         errMsg(e.responseJSON)
