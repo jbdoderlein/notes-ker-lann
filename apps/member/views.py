@@ -166,6 +166,8 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         # Check permissions to see if the authenticated user can lock/unlock the note
         with transaction.atomic():
             modified_note = NoteUser.objects.get(pk=user.note.pk)
+            # Don't log these tests
+            modified_note._no_signal = True
             modified_note.is_active = True
             modified_note.inactivity_reason = 'manual'
             context["can_lock_note"] = user.note.is_active and PermissionBackend\
@@ -178,6 +180,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             context["can_force_lock"] = user.note.is_active and PermissionBackend\
                 .check_perm(self.request.user, "note.change_note_is_active", modified_note)
             old_note._force_save = True
+            old_note._no_signal = True
             old_note.save()
             modified_note.refresh_from_db()
             modified_note.is_active = True

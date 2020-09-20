@@ -62,6 +62,7 @@ class InstancedPermission:
                     Model.save(obj, force_insert=True)
                     ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
                     # Delete testing object
+                    obj._no_signal = True
                     obj._force_delete = True
                     Model.delete(obj)
 
