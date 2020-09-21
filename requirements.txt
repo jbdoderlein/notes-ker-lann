@@ -13,6 +13,6 @@ django-polymorphic~=2.0.3
 djangorestframework~=3.9.0
 django-rest-polymorphic~=0.1.9
 django-tables2~=2.3.1
-python-memcache~=1.59
+python-memcached~=1.59
 phonenumbers~=8.9.10
 Pillow>=5.4.1
