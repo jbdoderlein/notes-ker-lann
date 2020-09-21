@@ -3,7 +3,6 @@
 
 # CAS
 OPTIONAL_APPS = [
-#    'cas_server',
 #    'debug_toolbar'
 ]
 

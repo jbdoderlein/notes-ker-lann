@@ -41,12 +41,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-if "cas_server" in settings.INSTALLED_APPS:
-    urlpatterns += [
-        # Include CAS Server routers
-        path('cas/', include('cas_server.urls', namespace="cas_server")),
-    ]
-
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns = [
