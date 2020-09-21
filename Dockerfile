@@ -9,7 +9,7 @@ RUN apt-get update && \
     python3-django python3-django-crispy-forms \
     python3-django-extensions python3-django-filters python3-django-polymorphic \
     python3-djangorestframework python3-django-oauth-toolkit python3-psycopg2 python3-pil \
-    python3-babel python3-lockfile python3-pip python3-phonenumbers ipython3 \
+    python3-babel python3-lockfile python3-pip python3-phonenumbers python3-memcache ipython3 \
     python3-bs4 python3-setuptools \
     uwsgi uwsgi-plugin-python3 \
     texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome && \

@@ -216,6 +216,16 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', None)
 SERVER_EMAIL = os.getenv("NOTE_MAIL", "notekfet@example.com")
 DEFAULT_FROM_EMAIL = "NoteKfet2020 <" + SERVER_EMAIL + ">"
 
+# Cache
+# https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache
+cache_address = os.getenv("CACHE_ADDRESS", "127.0.0.1:11211")
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': cache_address,
+    }
+}
+
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

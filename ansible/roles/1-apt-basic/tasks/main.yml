@@ -30,6 +30,7 @@
       - python3-django-polymorphic
       - python3-djangorestframework
       - python3-lockfile
+      - python3-memcache
       - python3-phonenumbers
       - python3-pil
       - python3-pip
@@ -39,6 +40,9 @@
 
       # LaTeX (PDF generation)
       - texlive-xetex
+
+      # Cache server
+      - memcached
 
       # WSGI server
       - uwsgi
