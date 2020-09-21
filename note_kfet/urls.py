@@ -32,6 +32,9 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('permission/', include('permission.urls')),
 
+    # OAuth2 provider
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
     # Make coffee
     path('coffee/', include('django_htcpcp_tea.urls')),
 ]

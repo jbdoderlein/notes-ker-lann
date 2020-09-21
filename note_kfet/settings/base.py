@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mailer',
     'phonenumber_field',
     'polymorphic',
+    'oauth2_provider',
 
     # Django contrib
     'django.contrib.admin',
