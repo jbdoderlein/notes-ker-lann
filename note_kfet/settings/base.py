@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'oauth2_provider',
 
     # Django contrib
-    'django.contrib.admin',
+    # We do not import Django Admin directly to disable autodiscover.
+    # Autodiscover does not work with custom admin sites.
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
