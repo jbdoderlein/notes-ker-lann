@@ -12,8 +12,10 @@ from django.db.models import F, Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, TemplateView, UpdateView
 from django_tables2.views import SingleTableView
 from note.models import Alias, NoteSpecial, NoteUser
@@ -288,6 +290,8 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         return context
 
 
+# Cache for 1 hour
+@method_decorator(cache_page(60 * 60), name='dispatch')
 class CalendarView(View):
     """
     Render an ICS calendar with all valid activities.
