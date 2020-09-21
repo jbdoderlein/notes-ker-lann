@@ -1,13 +1,13 @@
 beautifulsoup4~=4.7.1
 Django~=2.2.15
 django-bootstrap-datepicker-plus~=3.0.5
-django-cas-server>=1.2.0
 django-colorfield~=0.3.2
 django-crispy-forms~=1.7.2
 django-extensions~=2.1.4
 django-filter~=2.1.0
 django-htcpcp-tea~=0.3.1
 django-mailer~=2.0.1
+django-oauth-toolkit~=1.1.2
 django-phonenumber-field~=5.0.0
 django-polymorphic~=2.0.3
 djangorestframework~=3.9.0

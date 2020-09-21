@@ -49,13 +49,6 @@ try:
 except ImportError:
     pass
 
-if "cas_server" in INSTALLED_APPS:
-    # CAS Settings
-    CAS_AUTO_CREATE_USER = False
-    CAS_LOGO_URL = "/static/img/Saperlistpopette.png"
-    CAS_FAVICON_URL = "/static/favicon/favicon-32x32.png"
-    CAS_SHOW_POWERED = False
-
 if "logs" in INSTALLED_APPS:
     MIDDLEWARE += ('note_kfet.middlewares.SessionMiddleware',)
 

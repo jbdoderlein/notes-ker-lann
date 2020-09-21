@@ -23,10 +23,10 @@
       - python3-babel
       - python3-bs4
       - python3-django
-      - python3-django-cas-server
       - python3-django-crispy-forms
       - python3-django-extensions
       - python3-django-filters
+      - python3-django-oauth-toolkit
       - python3-django-polymorphic
       - python3-djangorestframework
       - python3-lockfile

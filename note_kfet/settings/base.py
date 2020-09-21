@@ -35,8 +35,10 @@ INSTALLED_APPS = [
     'mailer',
     'phonenumber_field',
     'polymorphic',
+    'oauth2_provider',
 
     # Django contrib
+    # Django Admin will autodiscover our apps for our custom admin site.
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.auth',
