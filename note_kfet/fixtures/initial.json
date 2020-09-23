@@ -3,7 +3,7 @@
         "model": "sites.site",
         "pk": 1,
         "fields": {
-            "domain": "localhost",
+            "domain": "note.crans.org",
             "name": "La Note Kfet \ud83c\udf7b"
         }
     }

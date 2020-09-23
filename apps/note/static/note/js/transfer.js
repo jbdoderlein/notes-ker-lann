@@ -388,7 +388,7 @@ $('#btn_transfer').click(function () {
       alias = sources_notes_display[0].name
       source_id = user_note.id
       dest_id = special_note
-      reason = 'Retrait ' + $('#credit_type option:selected').text().toLowerCase()
+      reason = 'Retrait ' + $('#debit_type option:selected').text().toLowerCase()
       if (given_reason.length > 0) { reason += ' (' + given_reason + ')' }
     }
     $.post('/api/note/transaction/transaction/',

@@ -24,6 +24,14 @@ if os.getenv("DJANGO_DEV_STORE_METHOD", "sqlite") != "postgresql":
         }
     }
 
+# Dummy cache for development
+# https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 # Break it, fix it!
 DEBUG = True
 

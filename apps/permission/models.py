@@ -43,6 +43,7 @@ class InstancedPermission:
                 obj = copy(obj)
                 obj.pk = 0
                 with transaction.atomic():
+                    sid = transaction.savepoint()
                     for o in self.model.model_class().objects.filter(pk=0).all():
                         o._force_delete = True
                         Model.delete(o)
@@ -62,8 +63,10 @@ class InstancedPermission:
                     Model.save(obj, force_insert=True)
                     ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
                     # Delete testing object
+                    obj._no_signal = True
                     obj._force_delete = True
                     Model.delete(obj)
+                    transaction.savepoint_rollback(sid)
 
                 return ret
 

@@ -40,12 +40,11 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-if "cas_server" in settings.INSTALLED_APPS:
-    urlpatterns += [
-        # Include CAS Server routers
-        path('cas/', include('cas_server.urls', namespace="cas_server")),
-    ]
+if "oauth2_provider" in settings.INSTALLED_APPS:
+    # OAuth2 provider
+    urlpatterns.append(
+        path('o/', include('oauth2_provider.urls', namespace='oauth2_provider'))
+    )
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
