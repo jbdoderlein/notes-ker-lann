@@ -395,7 +395,8 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         if PermissionBackend.check_perm(self.request.user, "member.change_club_membership_start", club):
             club.update_membership_dates()
         # managers list
-        managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club")\
+        managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club",
+                                             date_start__lte=date.today(), date_end__gte=date.today())\
             .order_by('user__last_name').all()
         context["managers"] = ClubManagerTable(data=managers, prefix="managers-")
         # transaction history
@@ -641,8 +642,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         if club.name != "Kfet" and club.parent_club and not Membership.objects.filter(
                 user=form.instance.user,
                 club=club.parent_club,
-                date_start__lte=club.parent_club.membership_start,
-                date_end__gte=club.parent_club.membership_end,
+                date_start__gte=club.parent_club.membership_start,
+                date_end__lte=club.parent_club.membership_end,
         ).exists():
             form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
             error = True
