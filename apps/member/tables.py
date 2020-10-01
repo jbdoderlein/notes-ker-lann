@@ -112,7 +112,7 @@ class MembershipTable(tables.Table):
                     fee=0,
                 )
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "member:add_membership", empty_membership):  # If the user has right
+                                                "member.add_membership", empty_membership):  # If the user has right
                     renew_url = reverse_lazy('member:club_renew_membership',
                                              kwargs={"pk": record.pk})
                     t = format_html(
