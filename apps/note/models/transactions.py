@@ -3,6 +3,7 @@
 
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -216,6 +217,9 @@ class Transaction(PolymorphicModel):
         if self.source.pk == self.destination.pk:
             # When source == destination, no money is transferred and no transaction is created
             return
+
+        self.source = Note.objects.select_for_update().get(pk=self.source_id)
+        self.destination = Note.objects.select_for_update().get(pk=self.destination_id)
 
         # Check that the amounts stay between big integer bounds
         diff_source, diff_dest = self.validate()
