@@ -157,7 +157,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
         context['history_list'] = history_table
 
-        club_list = Membership.objects.filter(user=user, date_end__gte=date.today())\
+        club_list = Membership.objects.filter(user=user, date_end__gte=date.today() - timedelta(days=15))\
             .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
         membership_table = MembershipTable(data=club_list, prefix='membership-')
         membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
@@ -409,7 +409,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         # member list
         club_member = Membership.objects.filter(
             club=club,
-            date_end__gte=date.today(),
+            date_end__gte=date.today() - timedelta(days=15),
         ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
 
         membership_table = MembershipTable(data=club_member, prefix="membership-")
@@ -680,6 +680,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
                 .get(pk=self.kwargs["club_pk"])
             user = form.instance.user
+            old_membership = None
         else:  # get from url for renewal
             old_membership = self.get_queryset().get(pk=self.kwargs["pk"])
             club = old_membership.club
@@ -754,6 +755,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all() \
             if club.name == "BDE" else Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all() \
             if club.name == "Kfet"else Role.objects.filter(name="Membre de club").all()
+        # Set the same roles as before
+        if old_membership:
+            member_role = member_role.union(old_membership.roles.all())
         form.instance.roles.set(member_role)
         form.instance._force_save = True
         form.instance.save()
@@ -791,7 +795,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         return ret
 
     def get_success_url(self):
-        return reverse_lazy('member:club_detail', kwargs={'pk': self.object.club.id})
+        return reverse_lazy('member:user_detail', kwargs={'pk': self.object.user.id})
 
 
 class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
