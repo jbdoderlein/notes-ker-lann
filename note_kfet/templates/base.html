@@ -64,7 +64,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-coffee"></i> {% trans 'Consumptions' %}</a>
                         </li>
                     {% endif %}
-                    {% if "note.transaction"|not_empty_model_list %}
+                    {# FIXME Find a better solution to check if a user has the right to see the transfer page #}
+                    {% if "note.alias"|model_list_length >= 2 %}
                         <li class="nav-item">
                             {% url 'note:transfer' as url %}
                             <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-exchange"></i> {% trans 'Transfer' %} </a>

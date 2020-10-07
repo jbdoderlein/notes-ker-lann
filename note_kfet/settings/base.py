@@ -245,7 +245,7 @@ REST_FRAMEWORK = {
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 # After login redirect user to transfer page
-LOGIN_REDIRECT_URL = '/note/transfer/'
+LOGIN_REDIRECT_URL = '/'
 
 # An user session will expired after 3 hours
 SESSION_COOKIE_AGE = 60 * 60 * 3
