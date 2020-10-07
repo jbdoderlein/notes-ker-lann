@@ -115,7 +115,7 @@
 			"type": "view",
 			"mask": 1,
 			"field": "",
-			"permanent": true,
+			"permanent": false,
 			"description": "Voir les aliases des notes des clubs et des adhérents du club Kfet"
 		}
 	},
@@ -2792,6 +2792,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 179,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__noteuser__user\": [\"user\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Voir ses propres alias, pour toujours"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2861,7 +2877,8 @@
 				157,
 				158,
 				159,
-				160
+				160,
+				179
 			]
 		}
 	},
@@ -2965,6 +2982,7 @@
 				31,
 				32,
 				33,
+				51,
 				53,
 				54,
 				55,

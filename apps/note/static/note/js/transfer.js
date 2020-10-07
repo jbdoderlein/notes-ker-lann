@@ -67,7 +67,11 @@ $(document).ready(function () {
 
       last.quantity = 1
 
-      if (!last.note.user) {
+      if (last.note.club) {
+        $('#last_name').val(last.note.name)
+        $('#first_name').val(last.note.name)
+      }
+      else if (!last.note.user) {
         $.getJSON('/api/note/note/' + last.note.id + '/?format=json', function (note) {
           last.note.user = note.user
           $.getJSON('/api/user/' + last.note.user + '/', function (user) {
@@ -246,7 +250,7 @@ $('#btn_transfer').click(function () {
     error = true
   }
 
-  if (!reason_field.val()) {
+  if (!reason_field.val() && $('#type_transfer').is(':checked')) {
     reason_field.addClass('is-invalid')
     $('#reason-required').html('<strong>Ce champ est requis.</strong>')
     error = true

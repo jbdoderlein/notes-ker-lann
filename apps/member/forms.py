@@ -150,6 +150,7 @@ class ClubForm(forms.ModelForm):
             "membership_fee_unpaid": AmountInput(),
             "parent_club": Autocomplete(
                 Club,
+                resetable=True,
                 attrs={
                     'api_url': '/api/members/club/',
                 }

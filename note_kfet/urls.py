@@ -5,15 +5,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
-from django.views.generic import RedirectView
-
 from member.views import CustomLoginView
 
 from .admin import admin_site
+from .views import IndexView
 
 urlpatterns = [
     # Dev so redirect to something random
-    path('', RedirectView.as_view(pattern_name='note:transfer'), name='index'),
+    path('', IndexView.as_view(), name='index'),
 
     # Include project routers
     path('note/', include('note.urls')),

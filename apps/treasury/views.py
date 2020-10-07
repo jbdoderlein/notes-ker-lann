@@ -431,7 +431,7 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
         if "valid" not in self.request.GET or not self.request.GET["valid"]:
             qs = qs.filter(credit_transaction__valid=False)
 
-        return qs[:20]
+        return qs
 
 
 class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormView, DetailView):
