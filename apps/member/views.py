@@ -158,7 +158,11 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context['history_list'] = history_table
 
         club_list = Membership.objects.filter(user=user, date_end__gte=date.today() - timedelta(days=15))\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
+            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))\
+            .order_by("date_start", "club__name")
+        # Display only the most recent membership
+        club_list = club_list.distinct("club")\
+            if settings.DATABASES["default"]["ENGINE"] == 'django.db.backends.postgresql' else club_list
         membership_table = MembershipTable(data=club_list, prefix='membership-')
         membership_table.paginate(per_page=10, page=self.request.GET.get("membership-page", 1))
         context['club_list'] = membership_table
@@ -410,7 +414,11 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club_member = Membership.objects.filter(
             club=club,
             date_end__gte=date.today() - timedelta(days=15),
-        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))
+        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))\
+            .order_by("date_start", "user__username")
+        # Display only the most recent membership
+        club_member = club_member.distinct("user")\
+            if settings.DATABASES["default"]["ENGINE"] == 'django.db.backends.postgresql' else club_member
 
         membership_table = MembershipTable(data=club_member, prefix="membership-")
         membership_table.paginate(per_page=5, page=self.request.GET.get('membership-page', 1))
