@@ -23,6 +23,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             {% csrf_token %}
             {{ form|crispy }}
             {{ profile_form|crispy }}
+            {{ soge_form|crispy }}
             <button class="btn btn-success" type="submit">
                 {% trans "Sign up" %}
             </button>

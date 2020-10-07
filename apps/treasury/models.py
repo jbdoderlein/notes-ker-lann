@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction
+from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction, NoteUser
 
 
 class Invoice(models.Model):
@@ -335,6 +335,11 @@ class SogeCredit(models.Model):
 
     @transaction.atomic
     def save(self, *args, **kwargs):
+        # This is a pre-registered user that declared that a SoGé account was opened.
+        # No note exists yet.
+        if not NoteUser.objects.filter(user=self.user).exists():
+            return super().save(*args, **kwargs)
+
         if not self.credit_transaction:
             credit_transaction = SpecialTransaction(
                 source=NoteSpecial.objects.get(special_type="Virement bancaire"),
