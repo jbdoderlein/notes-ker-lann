@@ -60,7 +60,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             let pattern = searchbar_obj.val();
 
             $("#credits_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + (
-                invalid_only_obj.is(':checked') ? "&valid=false" : "") + " #credits_table");
+                invalid_only_obj.is(':checked') ? "" : "&valid=1") + " #credits_table");
 
             $(".table-row").click(function () {
                 window.document.location = $(this).data("href");
