@@ -250,7 +250,7 @@ $('#btn_transfer').click(function () {
     error = true
   }
 
-  if (!reason_field.val()) {
+  if (!reason_field.val() && $('#type_transfer').is(':checked')) {
     reason_field.addClass('is-invalid')
     $('#reason-required').html('<strong>Ce champ est requis.</strong>')
     error = true
