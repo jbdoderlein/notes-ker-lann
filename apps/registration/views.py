@@ -317,7 +317,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         user.profile.save()
         user.refresh_from_db()
 
-        if not soge and SogeCredit.objects.filter(user=user).exists:
+        if not soge and SogeCredit.objects.filter(user=user).exists():
             # If the user declared that a bank account was opened but in the validation form the SoGé case was
             # unchecked, delete the associated credit
             soge_credit = SogeCredit.objects.get(user=user)
