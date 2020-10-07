@@ -74,7 +74,7 @@ class UserCreateView(CreateView):
         user.profile.send_email_validation_link()
 
         soge_form = DeclareSogeAccountOpenedForm(self.request.POST)
-        if soge_form.data["soge_account"]:
+        if "soge_account" in soge_form.data and soge_form.data["soge_account"]:
             # If the user declares that a bank account got opened, prepare the soge credit to warn treasurers
             soge_credit = SogeCredit(user=user)
             soge_credit._force_save = True
