@@ -235,7 +235,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee += 8000
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
-        ctx["declare_soge_account"] = True
+        ctx["declare_soge_account"] = SogeCredit.objects.filter(user=user).exists()
 
         return ctx
 
