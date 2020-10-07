@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-07 10:23+0200\n"
+"POT-Creation-Date: 2020-10-07 10:55+0200\n"
 "PO-Revision-Date: 2020-09-13 12:36+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
@@ -2004,7 +2004,7 @@ msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:377
+#: apps/registration/views.py:384
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
@@ -2150,7 +2150,7 @@ msgstr "proxys de transactions spéciales"
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:369
+#: apps/treasury/models.py:374
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2158,16 +2158,16 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:384
+#: apps/treasury/models.py:389
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:385
+#: apps/treasury/models.py:390
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
-#: apps/treasury/models.py:388
+#: apps/treasury/models.py:393
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédit de la société générale pour l'utilisateur {user}"
@@ -3055,7 +3055,7 @@ msgstr "Inscription"
 msgid "Log in"
 msgstr "Se connecter"
 
-#: note_kfet/templates/base.html:155
+#: note_kfet/templates/base.html:156
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3063,7 +3063,22 @@ msgstr ""
 "Votre adresse e-mail n'est pas validée. Merci de vérifier votre boîte mail "
 "et de cliquer sur le lien de validation."
 
-#: note_kfet/templates/base.html:172
+#: note_kfet/templates/base.html:161
+msgid ""
+"You declared that you opened a bank account in the Société générale. The "
+"bank did not validate the creation of the account to the BDE, so the "
+"registration bonus of 80 € is not credited and the membership is not paid "
+"yet. This verification procedure may last a few days. Please make sure that "
+"you go to the end of the account creation."
+msgstr ""
+"Vous avez déclaré que vous avez ouvert un compte bancaire à la société "
+"générale. La banque n'a pas encore validé la création du compte auprès du "
+"BDE, le bonus d'inscription de 80 € n'a donc pas encore été créditée et "
+"l'adhésion n'est pas encore payée. Cette procédure de vérification peut "
+"durer quelques jours. Merci de vous assurer de bien aller au bout de vos "
+"démarches."
+
+#: note_kfet/templates/base.html:184
 msgid "Contact us"
 msgstr "Nous contacter"
 
