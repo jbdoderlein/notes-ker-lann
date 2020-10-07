@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-07 10:55+0200\n"
+"POT-Creation-Date: 2020-10-07 11:42+0200\n"
 "PO-Revision-Date: 2020-09-13 12:36+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
@@ -3057,13 +3057,27 @@ msgstr "Se connecter"
 
 #: note_kfet/templates/base.html:156
 msgid ""
+"You are not a BDE member anymore. Please renew your membership if you want "
+"to use the note."
+msgstr ""
+"Vous n'êtes plus adhérent BDE. Merci de réadhérer si vous voulez profiter de "
+"la note."
+
+#: note_kfet/templates/base.html:160
+msgid "You are not a Kfet member, so you can't use your note account."
+msgstr ""
+"Vous n'êtes pas adhérent Kfet, vous ne pouvez par conséquent pas utiliser "
+"votre compte note."
+
+#: note_kfet/templates/base.html:166
+msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
 msgstr ""
 "Votre adresse e-mail n'est pas validée. Merci de vérifier votre boîte mail "
 "et de cliquer sur le lien de validation."
 
-#: note_kfet/templates/base.html:161
+#: note_kfet/templates/base.html:171
 msgid ""
 "You declared that you opened a bank account in the Société générale. The "
 "bank did not validate the creation of the account to the BDE, so the "
@@ -3078,7 +3092,7 @@ msgstr ""
 "durer quelques jours. Merci de vous assurer de bien aller au bout de vos "
 "démarches."
 
-#: note_kfet/templates/base.html:184
+#: note_kfet/templates/base.html:194
 msgid "Contact us"
 msgstr "Nous contacter"
 
