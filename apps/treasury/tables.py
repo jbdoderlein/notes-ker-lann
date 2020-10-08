@@ -147,4 +147,4 @@ class SogeCreditTable(tables.Table):
 
     class Meta:
         model = SogeCredit
-        fields = ('user', 'amount', 'valid', )
+        fields = ('user', 'user__last_name', 'user__first_name', 'amount', 'valid', )
