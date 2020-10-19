@@ -79,6 +79,8 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django_htcpcp_tea.middleware.HTCPCPTeaMiddleware',
+    'note_kfet.middlewares.SessionMiddleware',
+    'note_kfet.middlewares.LoginByIPMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
 ]
 
