@@ -2081,7 +2081,7 @@
 			],
 			"query": "{}",
 			"type": "change",
-			"mask": 1,
+			"mask": 2,
 			"field": "invalidity_reason",
 			"permanent": false,
 			"description": "Modifier la raison d'invalidité d'une transaction"
@@ -3412,6 +3412,26 @@
 				150,
 				176,
 				177
+			]
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 20,
+		"fields": {
+			"for_club": 2,
+			"name": "PC Kfet",
+			"permissions": [
+				6,
+				24,
+				25,
+				26,
+				27,
+				30,
+				150,
+				166,
+				167,
+				168
 			]
 		}
 	},
