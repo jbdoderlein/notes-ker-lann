@@ -31,7 +31,7 @@ def give_note_account_permissions(apps, schema_editor):
         m.save()
     # By default, the note account is only authorized to be logged from localhost.
     note.password = "ipbased$127.0.0.1"
-    note.is_active = False
+    note.is_active = True
     note.save()
     # Ensure that the note of the account is disabled
     note.note.inactivity_reason = 'forced'
