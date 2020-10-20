@@ -49,9 +49,6 @@ try:
 except ImportError:
     pass
 
-if "logs" in INSTALLED_APPS:
-    MIDDLEWARE += ('note_kfet.middlewares.SessionMiddleware',)
-
 if DEBUG:
     PASSWORD_HASHERS += ['member.hashers.DebugSuperuserBackdoor']
     if "debug_toolbar" in INSTALLED_APPS:
