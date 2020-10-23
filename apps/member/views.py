@@ -234,6 +234,13 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
         return qs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pre_registered_users = User.objects.filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))\
+            .filter(profile__registration_valid=False)
+        context["can_manage_registrations"] = pre_registered_users.exists()
+        return context
+
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     """
