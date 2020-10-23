@@ -799,12 +799,12 @@
 				"member",
 				"membership"
 			],
-			"query": "{\"club\": [\"club\"]}",
+			"query": "{}",
 			"type": "change",
 			"mask": 3,
 			"field": "roles",
 			"permanent": false,
-			"description": "Modifier les rôles d'un adhérent d'un club"
+			"description": "Modifier les rôles d'une adhésion"
 		}
 	},
 	{
@@ -3402,7 +3402,6 @@
 				135,
 				136,
 				137,
-				138,
 				139,
 				140,
 				143,
