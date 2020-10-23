@@ -799,12 +799,12 @@
 				"member",
 				"membership"
 			],
-			"query": "{\"club\": [\"club\"]}",
+			"query": "{}",
 			"type": "change",
 			"mask": 3,
 			"field": "roles",
 			"permanent": false,
-			"description": "Modifier les rôles d'un adhérent d'un club"
+			"description": "Modifier les rôles d'une adhésion"
 		}
 	},
 	{
@@ -2808,6 +2808,38 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 180,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{\"profile__registration_valid\": false}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel utilisateur non encore inscrit"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 181,
+		"fields": {
+			"model": [
+				"member",
+				"profile"
+			],
+			"query": "{\"registration_valid\": false}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel profil non encore inscrit"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -3402,7 +3434,6 @@
 				135,
 				136,
 				137,
-				138,
 				139,
 				140,
 				143,
@@ -3423,15 +3454,27 @@
 			"name": "PC Kfet",
 			"permissions": [
 				6,
+				22,
 				24,
 				25,
 				26,
 				27,
 				30,
+				49,
+				50,
+				55,
+				56,
+				57,
+				58,
+				143,
 				150,
 				166,
 				167,
-				168
+				168,
+				176,
+				177,
+				180,
+				181
 			]
 		}
 	},
