@@ -677,11 +677,13 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
                 if not last_name:
                     form.add_error('last_name', _("This field is required."))
+                    error = True
                 if not first_name:
                     form.add_error('first_name', _("This field is required."))
+                    error = True
                 if not bank and credit_type.special_type == "Chèque":
                     form.add_error('bank', _("This field is required."))
-                return self.form_invalid(form)
+                    error = True
 
         return not error
 
