@@ -70,10 +70,11 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.fields['email'].required = True
         form.fields['email'].help_text = _("This address must be valid.")
 
-        context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
-                                                    data=self.request.POST if self.request.POST else None)
-        if not self.object.profile.report_frequency:
-            del context['profile_form'].fields["last_report"]
+        if PermissionBackend.check_perm(self.request.user, "member.change_profile", context['user_object'].profile):
+            context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
+                                                        data=self.request.POST if self.request.POST else None)
+            if not self.object.profile.report_frequency:
+                del context['profile_form'].fields["last_report"]
 
         return context
 
@@ -677,11 +678,13 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
                 if not last_name:
                     form.add_error('last_name', _("This field is required."))
+                    error = True
                 if not first_name:
                     form.add_error('first_name', _("This field is required."))
+                    error = True
                 if not bank and credit_type.special_type == "Chèque":
                     form.add_error('bank', _("This field is required."))
-                return self.form_invalid(form)
+                    error = True
 
         return not error
 
