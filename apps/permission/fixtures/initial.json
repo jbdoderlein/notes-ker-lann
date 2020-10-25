@@ -2840,6 +2840,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 182,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{\"memberships__club__name\": \"BDE\", \"memberships__roles__name\": \"Adhérent BDE\", \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel utilisateur qui est adhérent BDE"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2971,14 +2987,14 @@
 				62,
 				127,
 				133,
-				135,
 				136,
 				141,
 				142,
 				150,
 				166,
 				167,
-				168
+				168,
+				182
 			]
 		}
 	},
@@ -3271,7 +3287,12 @@
 				170,
 				171,
 				176,
-				177
+				177,
+				178,
+				179,
+				180,
+				181,
+				182
 			]
 		}
 	},
@@ -3466,7 +3487,9 @@
 				56,
 				57,
 				58,
+				137,
 				143,
+				147,
 				150,
 				166,
 				167,
@@ -3474,7 +3497,8 @@
 				176,
 				177,
 				180,
-				181
+				181,
+				182
 			]
 		}
 	},
