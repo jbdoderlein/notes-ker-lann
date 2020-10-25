@@ -70,10 +70,11 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.fields['email'].required = True
         form.fields['email'].help_text = _("This address must be valid.")
 
-        context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
-                                                    data=self.request.POST if self.request.POST else None)
-        if not self.object.profile.report_frequency:
-            del context['profile_form'].fields["last_report"]
+        if PermissionBackend.check_perm(self.request.user, "member.change_profile", context['user_object'].profile):
+            context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
+                                                        data=self.request.POST if self.request.POST else None)
+            if not self.object.profile.report_frequency:
+                del context['profile_form'].fields["last_report"]
 
         return context
 

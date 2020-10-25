@@ -51,8 +51,10 @@ class ProtectQuerysetMixin:
         # No worry if the user change the hidden fields: a 403 error will be performed if the user tries to make
         # a custom request.
         # We could also delete the field, but some views might be affected.
+        meta = form.instance._meta
         for key in form.base_fields:
-            if not PermissionBackend.check_perm(self.request.user, "wei.change_weiregistration_" + key, self.object):
+            if not PermissionBackend.check_perm(self.request.user,
+                                                f"{meta.app_label}.change_{meta.model_name}_" + key, self.object):
                 form.fields[key].widget = HiddenInput()
 
         return form
