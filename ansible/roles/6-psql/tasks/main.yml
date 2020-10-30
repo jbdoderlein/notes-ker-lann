@@ -11,14 +11,14 @@
   until: pkg_result is succeeded
 
 - name: Create role note
-  when: "DB_PASSWORD|bool"    # If the password is not defined, skip the installation
+  when: DB_PASSWORD|length > 0 # If the password is not defined, skip the installation
   postgresql_user:
     name: note
     password: "{{ DB_PASSWORD }}"
   become_user: postgres
 
 - name: Create NK20 database
-  when: "DB_PASSWORD|bool"
+  when: DB_PASSWORD|length >0
   postgresql_db:
     name: note_db
     owner: note
