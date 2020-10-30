@@ -1,5 +1,5 @@
 ---
 note:
   server_name: note.crans.org
-  git_branch: master
-  cron_enabled: true
+  git_branch: beta
+  cron_enabled: false
