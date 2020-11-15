@@ -267,10 +267,13 @@ La documentation plus haut niveau sur le développement est disponible sur [le W
 
 ### Regénérer les fichiers de traduction
 
-Pour regénérer les traductions vous pouvez vous placer à la racine du projet et lancer le script `makemessages`. Il faut penser à ignorer les dossiers ne contenant pas notre code, dont le virtualenv.
+Pour regénérer les traductions vous pouvez vous placer à la racine du projet et lancer le script `makemessages`.
+Il faut penser à ignorer les dossiers ne contenant pas notre code, dont le virtualenv.
+De plus, il faut aussi extraire les variables des fichiers JavaScript.
 
 ```bash
 django-admin makemessages -i env
+django-admin makemessages -i env -e js -d djangojs
 ```
 
 Une fois les fichiers édités, vous pouvez compiler les nouvelles traductions avec
