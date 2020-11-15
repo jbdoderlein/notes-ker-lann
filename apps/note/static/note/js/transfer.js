@@ -305,25 +305,25 @@ $('#btn_transfer').click(function () {
             const newBalance = source.note.balance - source.quantity * dest.quantity * amount
             if (newBalance <= -5000) {
               addMsg(interpolate(gettext('Warning, the transaction of %s from the note %s to the note %s succeed, but the emitter note %s is very negative.'),
-                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name]), 'danger', 10000)
+                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, source.name]), 'danger', 10000)
               reset()
               return
             } else if (newBalance < 0) {
               addMsg(interpolate(gettext('Warning, the transaction of %s from the note %s to the note %s succeed, but the emitter note %s is negative.'),
-                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name]), 'danger', 10000)
+                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, source.name]), 'danger', 10000)
               reset()
               return
             }
           }
           addMsg(interpolate(gettext('Transfer of %s from %s to %s succeed!'),
-              [pretty_money((source.quantity * dest.quantity * amount), source.name, dest.name)]), 'success', 10000)
+              [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name]), 'success', 10000)
 
           reset()
         }).fail(function (err) { // do it again but valid = false
           const errObj = JSON.parse(err.responseText)
           if (errObj.non_field_errors) {
             addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
-                [pretty_money(source.quantity * dest.quantity * amount), source.name, + dest.name, errObj.non_field_errors]), 'danger')
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, errObj.non_field_errors]), 'danger')
             LOCK = false
             return
           }
