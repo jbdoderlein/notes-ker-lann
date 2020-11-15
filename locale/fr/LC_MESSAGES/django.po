@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 22:00+0200\n"
+"POT-Creation-Date: 2020-11-15 23:26+0100\n"
 "PO-Revision-Date: 2020-09-13 12:36+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
@@ -279,11 +279,15 @@ msgstr "Solde du compte"
 msgid "Guests list"
 msgstr "Liste des invités"
 
+#: apps/activity/templates/activity/activity_detail.html:33
+msgid "Guest deleted"
+msgstr "Invité supprimé"
+
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:253
 #: apps/note/templates/note/transaction_form.html:16
 #: apps/note/templates/note/transaction_form.html:148
-#: note_kfet/templates/base.html:70
+#: note_kfet/templates/base.html:73
 msgid "Transfer"
 msgstr "Virement"
 
@@ -307,6 +311,16 @@ msgstr "Entrées"
 #: apps/activity/templates/activity/activity_entry.html:37
 msgid "Return to activity page"
 msgstr "Retour à la page de l'activité"
+
+#: apps/activity/templates/activity/activity_entry.html:89
+#: apps/activity/templates/activity/activity_entry.html:124
+msgid "Entry done, but caution: the user is not a Kfet member."
+msgstr ""
+"Entrée effectuée, mais attention : la personne n'est pas un adhérent Kfet."
+
+#: apps/activity/templates/activity/activity_entry.html:127
+msgid "Entry done!"
+msgstr "Entrée effectuée !"
 
 #: apps/activity/templates/activity/activity_form.html:16
 #: apps/member/templates/member/add_members.html:46
@@ -378,7 +392,7 @@ msgstr "Inviter"
 msgid "Create new activity"
 msgstr "Créer une nouvelle activité"
 
-#: apps/activity/views.py:65 note_kfet/templates/base.html:88
+#: apps/activity/views.py:65 note_kfet/templates/base.html:91
 msgid "Activities"
 msgstr "Activités"
 
@@ -1622,7 +1636,7 @@ msgstr "Chercher un bouton"
 msgid "Update button"
 msgstr "Modifier le bouton"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:64
+#: apps/note/views.py:151 note_kfet/templates/base.html:67
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -1801,7 +1815,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle « {model} » "
 "avec ces paramètres. Merci de les corriger et de réessayer."
 
-#: apps/permission/views.py:110 note_kfet/templates/base.html:106
+#: apps/permission/views.py:110 note_kfet/templates/base.html:109
 msgid "Rights"
 msgstr "Droits"
 
@@ -1987,7 +2001,7 @@ msgstr ""
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:94
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:97
 msgid "Treasury"
 msgstr "Trésorerie"
 
@@ -2387,7 +2401,7 @@ msgstr "Gérer les crédits de la Société générale"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
-#: note_kfet/templates/base.html:100
+#: note_kfet/templates/base.html:103
 msgid "WEI"
 msgstr "WEI"
 
@@ -2999,34 +3013,34 @@ msgstr "Réinitialiser"
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: note_kfet/templates/base.html:76
+#: note_kfet/templates/base.html:79
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: note_kfet/templates/base.html:82
+#: note_kfet/templates/base.html:85
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:111
+#: note_kfet/templates/base.html:114
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:125
+#: note_kfet/templates/base.html:128
 msgid "My account"
 msgstr "Mon compte"
 
-#: note_kfet/templates/base.html:128
+#: note_kfet/templates/base.html:131
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: note_kfet/templates/base.html:136
+#: note_kfet/templates/base.html:139
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:27
 msgid "Sign up"
 msgstr "Inscription"
 
-#: note_kfet/templates/base.html:143
+#: note_kfet/templates/base.html:146
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
@@ -3034,7 +3048,7 @@ msgstr "Inscription"
 msgid "Log in"
 msgstr "Se connecter"
 
-#: note_kfet/templates/base.html:155
+#: note_kfet/templates/base.html:158
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3042,7 +3056,7 @@ msgstr ""
 "Votre adresse e-mail n'est pas validée. Merci de vérifier votre boîte mail "
 "et de cliquer sur le lien de validation."
 
-#: note_kfet/templates/base.html:172
+#: note_kfet/templates/base.html:175
 msgid "Contact us"
 msgstr "Nous contacter"
 

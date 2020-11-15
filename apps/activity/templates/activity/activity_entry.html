@@ -86,10 +86,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 }).done(function () {
                     if (target.hasClass("table-info"))
                         addMsg(
-                            "Entrée effectuée, mais attention : la personne n'est plus adhérente Kfet.",
+                            "{% trans "Entry done, but caution: the user is not a Kfet member." %}",
                             "warning", 10000);
                     else
-                        addMsg("Entrée effectuée !", "success", 4000);
+                        addMsg("Entry made!", "success", 4000);
                     reloadTable(true);
                 }).fail(function (xhr) {
                     errMsg(xhr.responseJSON, 4000);
@@ -121,10 +121,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     }).done(function () {
                         if (target.hasClass("table-info"))
                             addMsg(
-                                "Entrée effectuée, mais attention : la personne n'est plus adhérente Kfet.",
+                                "{% trans "Entry done, but caution: the user is not a Kfet member." %}",
                                 "warning", 10000);
                         else
-                            addMsg("Entrée effectuée !", "success", 4000);
+                            addMsg("{% trans "Entry done!" %}", "success", 4000);
                         reloadTable(true);
                     }).fail(function (xhr) {
                         errMsg(xhr.responseJSON, 4000);

@@ -363,8 +363,7 @@ function de_validate (id, validated, resourcetype) {
       const errObj = JSON.parse(err.responseText)
       let error = errObj.detail ? errObj.detail : errObj.non_field_errors
       if (!error) { error = err.responseText }
-      addMsg('Une erreur est survenue lors de la validation/dévalidation ' +
-                'de cette transaction : ' + error, 'danger')
+      addMsg(gettext('An error occured while (in)validating this transaction:') + ' ' + error, 'danger')
 
       refreshBalance()
       // error if this method doesn't exist. Please define it.

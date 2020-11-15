@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 22:00+0200\n"
+"POT-Creation-Date: 2020-11-15 23:26+0100\n"
 "PO-Revision-Date: 2020-09-13 12:39+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
@@ -279,11 +279,17 @@ msgstr "Kontostand"
 msgid "Guests list"
 msgstr "Gastliste"
 
+#: apps/activity/templates/activity/activity_detail.html:33
+#, fuzzy
+#| msgid "Guests list"
+msgid "Guest deleted"
+msgstr "Gastliste"
+
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:253
 #: apps/note/templates/note/transaction_form.html:16
 #: apps/note/templates/note/transaction_form.html:148
-#: note_kfet/templates/base.html:70
+#: note_kfet/templates/base.html:73
 msgid "Transfer"
 msgstr "Überweisen"
 
@@ -307,6 +313,17 @@ msgstr "Eintritte"
 #: apps/activity/templates/activity/activity_entry.html:37
 msgid "Return to activity page"
 msgstr "Zurück zur Veranstaltungseite"
+
+#: apps/activity/templates/activity/activity_entry.html:89
+#: apps/activity/templates/activity/activity_entry.html:124
+msgid "Entry done, but caution: the user is not a Kfet member."
+msgstr ""
+
+#: apps/activity/templates/activity/activity_entry.html:127
+#, fuzzy
+#| msgid "Entry page"
+msgid "Entry done!"
+msgstr "Eintrittseite"
 
 #: apps/activity/templates/activity/activity_form.html:16
 #: apps/member/templates/member/add_members.html:46
@@ -378,7 +395,7 @@ msgstr "Einladen"
 msgid "Create new activity"
 msgstr "Neue Veranstaltung schaffen"
 
-#: apps/activity/views.py:65 note_kfet/templates/base.html:88
+#: apps/activity/views.py:65 note_kfet/templates/base.html:91
 msgid "Activities"
 msgstr "Veranstaltungen"
 
@@ -1620,7 +1637,7 @@ msgstr "Tatsen finden"
 msgid "Update button"
 msgstr "Tatse bearbeiten"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:64
+#: apps/note/views.py:151 note_kfet/templates/base.html:67
 msgid "Consumptions"
 msgstr "Verbräuche"
 
@@ -1798,7 +1815,7 @@ msgstr ""
 "diesen Parametern zu erstellen. Bitte korrigieren Sie Ihre Daten und "
 "versuchen Sie es erneut."
 
-#: apps/permission/views.py:110 note_kfet/templates/base.html:106
+#: apps/permission/views.py:110 note_kfet/templates/base.html:109
 msgid "Rights"
 msgstr "Rechten"
 
@@ -1986,7 +2003,7 @@ msgstr ""
 msgid "Invalidate pre-registration"
 msgstr "Ungültige Vorregistrierung"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:94
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:97
 msgid "Treasury"
 msgstr "Quaestor"
 
@@ -2388,7 +2405,7 @@ msgstr "Krediten von der Société générale handeln"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
-#: note_kfet/templates/base.html:100
+#: note_kfet/templates/base.html:103
 msgid "WEI"
 msgstr "WEI"
 
@@ -3000,34 +3017,34 @@ msgstr "Reset"
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "Die BDE ENS-Paris-Saclay Note."
 
-#: note_kfet/templates/base.html:76
+#: note_kfet/templates/base.html:79
 msgid "Users"
 msgstr "Users"
 
-#: note_kfet/templates/base.html:82
+#: note_kfet/templates/base.html:85
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:111
+#: note_kfet/templates/base.html:114
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:125
+#: note_kfet/templates/base.html:128
 msgid "My account"
 msgstr "Mein Konto"
 
-#: note_kfet/templates/base.html:128
+#: note_kfet/templates/base.html:131
 msgid "Log out"
 msgstr "Abmelden"
 
-#: note_kfet/templates/base.html:136
+#: note_kfet/templates/base.html:139
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:27
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: note_kfet/templates/base.html:143
+#: note_kfet/templates/base.html:146
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
@@ -3035,7 +3052,7 @@ msgstr "Registrieren"
 msgid "Log in"
 msgstr "Anmelden"
 
-#: note_kfet/templates/base.html:155
+#: note_kfet/templates/base.html:158
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3043,7 +3060,7 @@ msgstr ""
 "Ihre E-Mail-Adresse ist nicht validiert. Bitte überprüfen Sie Ihren "
 "Posteingang und klicken Sie auf den Validierungslink."
 
-#: note_kfet/templates/base.html:172
+#: note_kfet/templates/base.html:175
 msgid "Contact us"
 msgstr "Kontakt"
 

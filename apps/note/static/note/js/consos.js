@@ -222,17 +222,14 @@ function consume (source, source_alias, dest, quantity, amount, reason, type, ca
       if (!isNaN(source.balance)) {
         const newBalance = source.balance - quantity * amount
         if (newBalance <= -5000) {
-          addMsg('Attention, La transaction depuis la note ' + source_alias + ' a été réalisée avec ' +
-                        'succès, mais la note émettrice ' + source_alias + ' est en négatif sévère.',
-          'danger', 30000)
+          addMsg(interpolate(gettext('Warning, the transaction from the note %s succeed, ' +
+              'but the emitter note %s is very negative.', [source_alias, source_alias])), 'danger', 30000)
         } else if (newBalance < 0) {
-          addMsg('Attention, La transaction depuis la note ' + source_alias + ' a été réalisée avec ' +
-                        'succès, mais la note émettrice ' + source_alias + ' est en négatif.',
-          'warning', 30000)
+          addMsg(interpolate(gettext('Warning, the transaction from the note %s succeed, ' +
+              'but the emitter note %s is negative.', [source_alias, source_alias])), 'warning', 30000)
         }
         if (source.membership && source.membership.date_end < new Date().toISOString()) {
-          addMsg('Attention : la note émettrice ' + source.name + " n'est plus adhérente.",
-            'danger', 30000)
+          addMsg(interpolate(gettext('Warning, the emitter note %s is no more a BDE member.', [source_alias])), 'danger', 30000)
         }
       }
       reset()
@@ -253,7 +250,7 @@ function consume (source, source_alias, dest, quantity, amount, reason, type, ca
           template: template
         }).done(function () {
         reset()
-        addMsg(gettext("La transaction n'a pas pu être validée pour cause de solde insuffisant."), 'danger', 10000)
+        addMsg(gettext("The transaction couldn't be validated because of insufficient balance."), 'danger', 10000)
       }).fail(function () {
         reset()
         errMsg(e.responseJSON)
