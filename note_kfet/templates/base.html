@@ -38,6 +38,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <script src="{% static "js/base.js" %}"></script>
     <script src="{% static "js/konami.js" %}"></script>
 
+    {# Translation in javascript files #}
+    <script src="{% url "javascript-catalog" %}"></script>
+
     {# If extra ressources are needed for a form, load here #}
     {% if form.media %}
         {{ form.media }}
