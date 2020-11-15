@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf import settings
+from django.contrib.auth import login
 from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.sessions.backends.db import SessionStore
 
 from threading import local
-
-from django.contrib.sessions.backends.db import SessionStore
 
 USER_ATTR_NAME = getattr(settings, 'LOCAL_USER_ATTR_NAME', '_current_user')
 SESSION_ATTR_NAME = getattr(settings, 'LOCAL_SESSION_ATTR_NAME', '_current_session')
@@ -76,6 +76,41 @@ class SessionMiddleware(object):
         _set_current_user_and_ip(None, None, None)
 
         return response
+
+
+class LoginByIPMiddleware(object):
+    """
+    Allow some users to be authenticated based on their IP address.
+    For example, the "note" account should not be used elsewhere than the Kfet computer,
+    and should not have any password.
+    The password that is stored in database should be on the form "ipbased$my.public.ip.address".
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        """
+        If the user is not authenticated, get the used IP address
+        and check if an user is authorized to be automatically logged with this address.
+        If it is the case, the logging is performed with the full rights.
+        """
+        if not request.user.is_authenticated:
+            if 'HTTP_X_REAL_IP' in request.META:
+                ip = request.META.get('HTTP_X_REAL_IP')
+            elif 'HTTP_X_FORWARDED_FOR' in request.META:
+                ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+
+            qs = User.objects.filter(password=f"ipbased${ip}")
+            if qs.exists():
+                login(request, qs.get())
+                session = request.session
+                session["permission_mask"] = 42
+                session.save()
+
+        return self.get_response(request)
 
 
 class TurbolinksMiddleware(object):

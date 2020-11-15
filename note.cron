@@ -20,3 +20,5 @@
  55  6     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_reports
 # Mettre à jour les boutons mis en avant
  00  9     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py refresh_highlighted_buttons
+# Vider les tokens Oauth2
+ 00  6     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py cleartokens

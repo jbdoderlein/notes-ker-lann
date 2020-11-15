@@ -56,6 +56,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     <div class="card-header text-center" >
                         <h4> {% trans "Validate account" %}</h4>
                     </div>
+
+                    {% if declare_soge_account %}
+                        <div class="alert alert-info">
+                        {% trans "The user declared that he/she opened a bank account in the Société générale." %}
+                        </div>
+                    {% endif %}
+
                     <div class="card-body" id="profile_infos">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -104,7 +111,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
         soge_field.change(fillFields);
 
-        {% if object.profile.soge %}
+        {% if declare_soge_account %}
             soge_field.attr('checked', true);
             fillFields();
         {% endif %}

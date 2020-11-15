@@ -41,7 +41,7 @@ class TemplateLoggedInTests(TestCase):
             password="adminadmin",
             permission_mask=3,
         ))
-        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, 302, 200)
+        self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, 302, 302)
 
     def test_logout(self):
         response = self.client.get(reverse("logout"))

@@ -43,7 +43,9 @@ class InstancedPermission:
                 obj = copy(obj)
                 obj.pk = 0
                 with transaction.atomic():
+                    sid = transaction.savepoint()
                     for o in self.model.model_class().objects.filter(pk=0).all():
+                        o._no_signal = True
                         o._force_delete = True
                         Model.delete(o)
                         # An object with pk 0 wouldn't deleted. That's not normal, we alert admins.
@@ -61,9 +63,7 @@ class InstancedPermission:
                     obj._no_signal = True
                     Model.save(obj, force_insert=True)
                     ret = self.model.model_class().objects.filter(self.query & Q(pk=0)).exists()
-                    # Delete testing object
-                    obj._force_delete = True
-                    Model.delete(obj)
+                    transaction.savepoint_rollback(sid)
 
                 return ret
 

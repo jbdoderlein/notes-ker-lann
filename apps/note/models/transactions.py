@@ -217,6 +217,9 @@ class Transaction(PolymorphicModel):
             # When source == destination, no money is transferred and no transaction is created
             return
 
+        self.source = Note.objects.select_for_update().get(pk=self.source_id)
+        self.destination = Note.objects.select_for_update().get(pk=self.destination_id)
+
         # Check that the amounts stay between big integer bounds
         diff_source, diff_dest = self.validate()
 

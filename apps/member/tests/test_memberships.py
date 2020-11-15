@@ -205,7 +205,7 @@ class TestMemberships(TestCase):
                 first_name="Toto",
                 bank="Le matelas",
             ))
-            self.assertRedirects(response, club.get_absolute_url(), 302, 200)
+            self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
 
             self.assertTrue(Membership.objects.filter(user=user, club=club).exists())
 
@@ -244,9 +244,9 @@ class TestMemberships(TestCase):
                 first_name="Toto",
                 bank="Bank",
             ))
-            self.assertRedirects(response, club.get_absolute_url(), 302, 200)
+            self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
 
-            response = self.client.get(user.profile.get_absolute_url())
+            response = self.client.get(club.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
     def test_auto_join_kfet_when_join_bde_with_soge(self):
@@ -273,7 +273,7 @@ class TestMemberships(TestCase):
             first_name="Toto",
             bank="Société générale",
         ))
-        self.assertRedirects(response, bde.get_absolute_url(), 302, 200)
+        self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
 
         self.assertTrue(Membership.objects.filter(user=user, club=bde).exists())
         self.assertTrue(Membership.objects.filter(user=user, club=kfet).exists())

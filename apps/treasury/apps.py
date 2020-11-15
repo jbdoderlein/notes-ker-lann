@@ -28,6 +28,8 @@ class TreasuryConfig(AppConfig):
                     source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                     specialtransactionproxy=None,
             ):
-                SpecialTransactionProxy.objects.create(transaction=transaction, remittance=None)
+                proxy = SpecialTransactionProxy(transaction=transaction, remittance=None)
+                proxy._force_save = True
+                proxy.save()
 
         post_migrate.connect(setup_specialtransactions_proxies, sender=SpecialTransactionProxy)

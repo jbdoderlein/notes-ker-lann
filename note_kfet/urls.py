@@ -5,15 +5,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
-from django.views.generic import RedirectView
-
 from member.views import CustomLoginView
 
 from .admin import admin_site
+from .views import IndexView
 
 urlpatterns = [
     # Dev so redirect to something random
-    path('', RedirectView.as_view(pattern_name='note:transfer'), name='index'),
+    path('', IndexView.as_view(), name='index'),
 
     # Include project routers
     path('note/', include('note.urls')),
@@ -40,12 +39,11 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-if "cas_server" in settings.INSTALLED_APPS:
-    urlpatterns += [
-        # Include CAS Server routers
-        path('cas/', include('cas_server.urls', namespace="cas_server")),
-    ]
+if "oauth2_provider" in settings.INSTALLED_APPS:
+    # OAuth2 provider
+    urlpatterns.append(
+        path('o/', include('oauth2_provider.urls', namespace='oauth2_provider'))
+    )
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar

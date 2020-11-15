@@ -26,6 +26,14 @@ admin_site = StrongAdminSite()
 admin_site.register(Site, SiteAdmin)
 
 # Add external apps model
+if "oauth2_provider" in settings.INSTALLED_APPS:
+    from oauth2_provider.admin import Application, ApplicationAdmin, Grant, \
+        GrantAdmin, AccessToken, AccessTokenAdmin, RefreshToken, RefreshTokenAdmin
+    admin_site.register(Application, ApplicationAdmin)
+    admin_site.register(Grant, GrantAdmin)
+    admin_site.register(AccessToken, AccessTokenAdmin)
+    admin_site.register(RefreshToken, RefreshTokenAdmin)
+
 if "django_htcpcp_tea" in settings.INSTALLED_APPS:
     from django_htcpcp_tea.admin import *
     from django_htcpcp_tea.models import *
@@ -44,9 +52,3 @@ if "rest_framework" in settings.INSTALLED_APPS:
     from rest_framework.authtoken.admin import *
     from rest_framework.authtoken.models import *
     admin_site.register(Token, TokenAdmin)
-
-if "cas_server" in settings.INSTALLED_APPS:
-    from cas_server.admin import *
-    from cas_server.models import *
-    admin_site.register(ServicePattern, ServicePatternAdmin)
-    admin_site.register(FederatedIendityProvider, FederatedIendityProviderAdmin)

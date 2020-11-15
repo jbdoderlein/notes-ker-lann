@@ -67,7 +67,11 @@ $(document).ready(function () {
 
       last.quantity = 1
 
-      if (!last.note.user) {
+      if (last.note.club) {
+        $('#last_name').val(last.note.name)
+        $('#first_name').val(last.note.name)
+      }
+      else if (!last.note.user) {
         $.getJSON('/api/note/note/' + last.note.id + '/?format=json', function (note) {
           last.note.user = note.user
           $.getJSON('/api/user/' + last.note.user + '/', function (user) {
@@ -246,7 +250,7 @@ $('#btn_transfer').click(function () {
     error = true
   }
 
-  if (!reason_field.val()) {
+  if (!reason_field.val() && $('#type_transfer').is(':checked')) {
     reason_field.addClass('is-invalid')
     $('#reason-required').html('<strong>' + gettext('This field is required.') + '</strong>')
     error = true
@@ -377,7 +381,7 @@ $('#btn_transfer').click(function () {
       alias = sources_notes_display[0].name
       source_id = user_note.id
       dest_id = special_note
-      reason = 'Retrait ' + $('#credit_type option:selected').text().toLowerCase()
+      reason = 'Retrait ' + $('#debit_type option:selected').text().toLowerCase()
       if (given_reason.length > 0) { reason += ' (' + given_reason + ')' }
     }
     $.post('/api/note/transaction/transaction/',

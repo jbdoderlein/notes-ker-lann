@@ -115,7 +115,7 @@
 			"type": "view",
 			"mask": 1,
 			"field": "",
-			"permanent": true,
+			"permanent": false,
 			"description": "Voir les aliases des notes des clubs et des adhérents du club Kfet"
 		}
 	},
@@ -799,12 +799,12 @@
 				"member",
 				"membership"
 			],
-			"query": "{\"club\": [\"club\"]}",
+			"query": "{}",
 			"type": "change",
 			"mask": 3,
 			"field": "roles",
 			"permanent": false,
-			"description": "Modifier les rôles d'un adhérent d'un club"
+			"description": "Modifier les rôles d'une adhésion"
 		}
 	},
 	{
@@ -2081,7 +2081,7 @@
 			],
 			"query": "{}",
 			"type": "change",
-			"mask": 1,
+			"mask": 2,
 			"field": "invalidity_reason",
 			"permanent": false,
 			"description": "Modifier la raison d'invalidité d'une transaction"
@@ -2792,6 +2792,86 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 179,
+		"fields": {
+			"model": [
+				"note",
+				"alias"
+			],
+			"query": "{\"note__noteuser__user\": [\"user\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Voir ses propres alias, pour toujours"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 180,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{\"profile__registration_valid\": false}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel utilisateur non encore inscrit"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 181,
+		"fields": {
+			"model": [
+				"member",
+				"profile"
+			],
+			"query": "{\"registration_valid\": false}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel profil non encore inscrit"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 182,
+		"fields": {
+			"model": [
+				"auth",
+				"user"
+			],
+			"query": "{\"memberships__club__name\": \"BDE\", \"memberships__roles__name\": \"Adhérent BDE\", \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
+			"type": "view",
+			"mask": 2,
+			"field": "",
+			"permanent": false,
+			"description": "Voir n'importe quel utilisateur qui est adhérent BDE"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 183,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 1,
+			"field": "display_image",
+			"permanent": false,
+			"description": "Changer l'image de n'importe quelle note"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2861,7 +2941,8 @@
 				157,
 				158,
 				159,
-				160
+				160,
+				179
 			]
 		}
 	},
@@ -2922,14 +3003,14 @@
 				62,
 				127,
 				133,
-				135,
 				136,
 				141,
 				142,
 				150,
 				166,
 				167,
-				168
+				168,
+				182
 			]
 		}
 	},
@@ -2965,6 +3046,7 @@
 				31,
 				32,
 				33,
+				51,
 				53,
 				54,
 				55,
@@ -2988,6 +3070,7 @@
 				137,
 				138,
 				139,
+				140,
 				143,
 				146,
 				147,
@@ -3003,7 +3086,8 @@
 				175,
 				176,
 				177,
-				178
+				178,
+				183
 			]
 		}
 	},
@@ -3186,7 +3270,12 @@
 				175,
 				176,
 				177,
-				178
+				178,
+				179,
+				180,
+				181,
+				182,
+				183
 			]
 		}
 	},
@@ -3220,7 +3309,12 @@
 				170,
 				171,
 				176,
-				177
+				177,
+				178,
+				179,
+				180,
+				181,
+				182
 			]
 		}
 	},
@@ -3383,7 +3477,6 @@
 				135,
 				136,
 				137,
-				138,
 				139,
 				140,
 				143,
@@ -3393,6 +3486,41 @@
 				150,
 				176,
 				177
+			]
+		}
+	},
+	{
+		"model": "permission.role",
+		"pk": 20,
+		"fields": {
+			"for_club": 2,
+			"name": "PC Kfet",
+			"permissions": [
+				6,
+				22,
+				24,
+				25,
+				26,
+				27,
+				30,
+				49,
+				50,
+				55,
+				56,
+				57,
+				58,
+				137,
+				143,
+				147,
+				150,
+				166,
+				167,
+				168,
+				176,
+				177,
+				180,
+				181,
+				182
 			]
 		}
 	},

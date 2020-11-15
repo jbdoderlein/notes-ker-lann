@@ -43,7 +43,23 @@ class UserTable(tables.Table):
 
     section = tables.Column(accessor='profile__section')
 
+    # Override the column to let replace the URL
+    email = tables.EmailColumn(linkify=lambda record: "mailto:{}".format(record.email))
+
     balance = tables.Column(accessor='note__balance', verbose_name=_("Balance"))
+
+    def render_email(self, record, value):
+        # Replace the email by a dash if the user can't see the profile detail
+        # Replace also the URL
+        if not PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_profile", record.profile):
+            value = "—"
+            record.email = value
+        return value
+
+    def render_section(self, record, value):
+        return value \
+            if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_profile", record.profile) \
+            else "—"
 
     def render_balance(self, record, value):
         return pretty_money(value)\
@@ -112,7 +128,7 @@ class MembershipTable(tables.Table):
                     fee=0,
                 )
                 if PermissionBackend.check_perm(get_current_authenticated_user(),
-                                                "member:add_membership", empty_membership):  # If the user has right
+                                                "member.add_membership", empty_membership):  # If the user has right
                     renew_url = reverse_lazy('member:club_renew_membership',
                                              kwargs={"pk": record.pk})
                     t = format_html(

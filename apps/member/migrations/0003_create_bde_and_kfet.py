@@ -7,6 +7,7 @@ def create_bde_and_kfet(apps, schema_editor):
     """
     Club = apps.get_model("member", "club")
     NoteClub = apps.get_model("note", "noteclub")
+    Alias = apps.get_model("note", "alias")
     ContentType = apps.get_model('contenttypes', 'ContentType')
     polymorphic_ctype_id = ContentType.objects.get_for_model(NoteClub).id
 
@@ -43,6 +44,19 @@ def create_bde_and_kfet(apps, schema_editor):
         id=6,
         club_id=2,
         polymorphic_ctype_id=polymorphic_ctype_id,
+    )
+
+    Alias.objects.get_or_create(
+        id=5,
+        note_id=5,
+        name="BDE",
+        normalized_name="bde",
+    )
+    Alias.objects.get_or_create(
+        id=6,
+        note_id=6,
+        name="Kfet",
+        normalized_name="kfet",
     )
 
 
