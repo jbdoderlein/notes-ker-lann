@@ -272,12 +272,13 @@ Il faut penser à ignorer les dossiers ne contenant pas notre code, dont le virt
 De plus, il faut aussi extraire les variables des fichiers JavaScript.
 
 ```bash
-django-admin makemessages -i env
-django-admin makemessages -i env -e js -d djangojs
+python3 manage.py makemessages -i env
+python3 manage.py makemessages -i env -e js -d djangojs
 ```
 
 Une fois les fichiers édités, vous pouvez compiler les nouvelles traductions avec
 
 ```bash
-django-admin compilemessages
+python3 manage.py compilemessages
+python3 manage.py compilejsmessages
 ```
