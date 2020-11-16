@@ -14,7 +14,7 @@ function create_alias (e) {
   }).done(function () {
     // Reload table
     $('#alias_table').load(location.pathname + ' #alias_table')
-    addMsg('Alias ajouté', 'success')
+    addMsg(gettext('Alias successfully added'), 'success')
   }).fail(function (xhr, _textStatus, _error) {
     errMsg(xhr.responseJSON)
   })
@@ -22,7 +22,7 @@ function create_alias (e) {
 
 /**
  * On click of "delete", delete the alias
- * @param Integer button_id Alias id to remove
+ * @param button_id:Integer Alias id to remove
  */
 function delete_button (button_id) {
   $.ajax({
@@ -30,7 +30,7 @@ function delete_button (button_id) {
     method: 'DELETE',
     headers: { 'X-CSRFTOKEN': CSRF_TOKEN }
   }).done(function () {
-    addMsg('Alias supprimé', 'success')
+    addMsg(gettext('Alias successfully deleted'), 'success')
     $('#alias_table').load(location.pathname + ' #alias_table')
   }).fail(function (xhr, _textStatus, _error) {
     errMsg(xhr.responseJSON)

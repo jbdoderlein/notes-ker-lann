@@ -239,20 +239,20 @@ $('#btn_transfer').click(function () {
 
   if (!amount_field.val() || isNaN(amount_field.val()) || amount_field.val() <= 0) {
     amount_field.addClass('is-invalid')
-    $('#amount-required').html('<strong>Ce champ est requis et doit comporter un nombre décimal strictement positif.</strong>')
+    $('#amount-required').html('<strong>' + gettext('This field is required and must contain a decimal positive number.') + '</strong>')
     error = true
   }
 
   const amount = Math.floor(100 * amount_field.val())
   if (amount > 2147483647) {
     amount_field.addClass('is-invalid')
-    $('#amount-required').html('<strong>Le montant ne doit pas excéder 21474836.47 €.</strong>')
+    $('#amount-required').html('<strong>' + gettext('The amount must stay under 21,474,836.47 €.') + '</strong>')
     error = true
   }
 
   if (!reason_field.val() && $('#type_transfer').is(':checked')) {
     reason_field.addClass('is-invalid')
-    $('#reason-required').html('<strong>Ce champ est requis.</strong>')
+    $('#reason-required').html('<strong>' + gettext('This field is required.') + '</strong>')
     error = true
   }
 
@@ -278,9 +278,8 @@ $('#btn_transfer').click(function () {
     [...sources_notes_display].forEach(function (source) {
       [...dests_notes_display].forEach(function (dest) {
         if (source.note.id === dest.note.id) {
-          addMsg('Attention : la transaction de ' + pretty_money(amount) + ' de la note ' + source.name +
-                        ' vers la note ' + dest.name + " n'a pas été faite car il s'agit de la même note au départ" +
-                        " et à l'arrivée.", 'warning', 10000)
+          addMsg(interpolate(gettext('Warning: the transaction of %s from %s to %s was not made because ' +
+              'it is the same source and destination note.'), [pretty_money(amount), source.name, dest.name]), 'warning', 10000)
           LOCK = false
           return
         }
@@ -300,43 +299,35 @@ $('#btn_transfer').click(function () {
             destination_alias: dest.name
           }).done(function () {
           if (source.note.membership && source.note.membership.date_end < new Date().toISOString()) {
-            addMsg('Attention : la note émettrice ' + source.name + " n'est plus adhérente.",
-              'danger', 30000)
+            addMsg(interpolate(gettext('Warning, the emitter note %s is no more a BDE member.'), [source.name]), 'danger', 30000)
           }
           if (dest.note.membership && dest.note.membership.date_end < new Date().toISOString()) {
-            addMsg('Attention : la note destination ' + dest.name + " n'est plus adhérente.",
-              'danger', 30000)
+            addMsg(interpolate(gettext('Warning, the destination note %s is no more a BDE member.'), [source.name]), 'danger', 30000)
           }
 
           if (!isNaN(source.note.balance)) {
             const newBalance = source.note.balance - source.quantity * dest.quantity * amount
             if (newBalance <= -5000) {
-              addMsg('Le transfert de ' +
-                                    pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' +
-                                    source.name + ' vers la note ' + dest.name + ' a été fait avec succès, ' +
-                                    'mais la note émettrice est en négatif sévère.', 'danger', 10000)
+              addMsg(interpolate(gettext('Warning, the transaction of %s from the note %s to the note %s succeed, but the emitter note %s is very negative.'),
+                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, source.name]), 'danger', 10000)
               reset()
               return
             } else if (newBalance < 0) {
-              addMsg('Le transfert de ' +
-                                    pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' +
-                                    source.name + ' vers la note ' + dest.name + ' a été fait avec succès, ' +
-                                    'mais la note émettrice est en négatif.', 'warning', 10000)
+              addMsg(interpolate(gettext('Warning, the transaction of %s from the note %s to the note %s succeed, but the emitter note %s is negative.'),
+                  [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, source.name]), 'danger', 10000)
               reset()
               return
             }
           }
-          addMsg('Le transfert de ' +
-                            pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' + source.name +
-                            ' vers la note ' + dest.name + ' a été fait avec succès !', 'success', 10000)
+          addMsg(interpolate(gettext('Transfer of %s from %s to %s succeed!'),
+              [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name]), 'success', 10000)
 
           reset()
         }).fail(function (err) { // do it again but valid = false
           const errObj = JSON.parse(err.responseText)
           if (errObj.non_field_errors) {
-            addMsg('Le transfert de ' +
-                                pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' + source.name +
-                                ' vers la note ' + dest.name + ' a échoué : ' + errObj.non_field_errors, 'danger')
+            addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, errObj.non_field_errors]), 'danger')
             LOCK = false
             return
           }
@@ -356,17 +347,15 @@ $('#btn_transfer').click(function () {
               destination: dest.note.id,
               destination_alias: dest.name
             }).done(function () {
-            addMsg('Le transfert de ' +
-                                pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' + source.name +
-                                ' vers la note ' + dest.name + ' a échoué : Solde insuffisant', 'danger', 10000)
+            addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, + dest.name, gettext('insufficient funds')]), 'danger', 10000)
             reset()
           }).fail(function (err) {
             const errObj = JSON.parse(err.responseText)
             let error = errObj.detail ? errObj.detail : errObj.non_field_errors
             if (!error) { error = err.responseText }
-            addMsg('Le transfert de ' +
-                                pretty_money(source.quantity * dest.quantity * amount) + ' de la note ' + source.name +
-                                ' vers la note ' + dest.name + ' a échoué : ' + error, 'danger')
+            addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, + dest.name, error]), 'danger')
             LOCK = false
           })
         })
@@ -412,14 +401,14 @@ $('#btn_transfer').click(function () {
         first_name: $('#first_name').val(),
         bank: $('#bank').val()
       }).done(function () {
-      addMsg('Le crédit/retrait a bien été effectué !', 'success', 10000)
-      if (user_note.membership && user_note.membership.date_end < new Date().toISOString()) { addMsg('Attention : la note ' + alias + " n'est plus adhérente.", 'danger', 10000) }
+      addMsg(gettext('Credit/debit succeed!'), 'success', 10000)
+      if (user_note.membership && user_note.membership.date_end < new Date().toISOString()) { addMsg(gettext('Warning, the emitter note %s is no more a BDE member.'), 'danger', 10000) }
       reset()
     }).fail(function (err) {
       const errObj = JSON.parse(err.responseText)
       let error = errObj.detail ? errObj.detail : errObj.non_field_errors
       if (!error) { error = err.responseText }
-      addMsg('Le crédit/retrait a échoué : ' + error, 'danger', 10000)
+      addMsg(interpolate(gettext('Credit/debit failed: %s'), [error]), 'danger', 10000)
       LOCK = false
     })
   }

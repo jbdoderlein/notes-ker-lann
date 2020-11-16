@@ -1,4 +1,10 @@
 ---
+- name: Collect static files
+  command: /var/www/note_kfet/env/bin/python manage.py collectstatic --noinput
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data
+
 - name: Migrate Django database
   command: /var/www/note_kfet/env/bin/python manage.py migrate
   args:
@@ -11,14 +17,14 @@
     chdir: /var/www/note_kfet
   become_user: www-data
 
+- name: Compile JavaScript messages
+  command: /var/www/note_kfet/env/bin/python manage.py compilejsmessages
+  args:
+    chdir: /var/www/note_kfet
+  become_user: www-data
+
 - name: Install initial fixtures
   command: /var/www/note_kfet/env/bin/python manage.py loaddata initial
   args:
     chdir: /var/www/note_kfet
   become_user: postgres
-
-- name: Collect static files
-  command: /var/www/note_kfet/env/bin/python manage.py collectstatic --noinput
-  args:
-    chdir: /var/www/note_kfet
-  become_user: www-data
