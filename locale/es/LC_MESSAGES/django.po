@@ -599,7 +599,7 @@ msgstr "sección"
 
 #: apps/member/models.py:46
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
-msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
+msgstr "i.e. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
 #: apps/member/models.py:54 apps/wei/templates/wei/weimembership_form.html:32
 msgid "department"
@@ -1847,7 +1847,7 @@ msgid ""
 "Check this case if you want to register to the WEI. If you hesitate, you "
 "will be able to register later, after validating your account in the Kfet."
 msgstr ""
-"Marcar esta casilla si usted quiere registrarse  en el WEI. Si duda, podrá "
+"Marcar esta casilla si usted quiere registrarse en el WEI. Si duda, podrá "
 "registrarse más tarde, después de validar su cuenta Note Kfet."
 
 #: apps/registration/forms.py:105
