@@ -2856,6 +2856,22 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 183,
+		"fields": {
+			"model": [
+				"note",
+				"note"
+			],
+			"query": "{}",
+			"type": "change",
+			"mask": 1,
+			"field": "display_image",
+			"permanent": false,
+			"description": "Changer l'image de n'importe quelle note"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -3070,7 +3086,8 @@
 				175,
 				176,
 				177,
-				178
+				178,
+				183
 			]
 		}
 	},
@@ -3253,7 +3270,12 @@
 				175,
 				176,
 				177,
-				178
+				178,
+				179,
+				180,
+				181,
+				182,
+				183
 			]
 		}
 	},

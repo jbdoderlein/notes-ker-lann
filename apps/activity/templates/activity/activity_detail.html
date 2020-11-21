@@ -30,7 +30,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
          headers: {"X-CSRFTOKEN": CSRF_TOKEN}
      })
       .done(function() {
-          addMsg('Invité supprimé','success');
+          addMsg('{% trans "Guest deleted" %}', 'success');
           $("#guests_table").load(location.pathname + " #guests_table");
       })
       .fail(function(xhr, textStatus, error) {

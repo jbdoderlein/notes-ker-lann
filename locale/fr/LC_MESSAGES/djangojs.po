@@ -1,0 +1,134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-15 23:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps/member/static/member/js/alias.js:17
+msgid "Alias successfully added"
+msgstr "Alias ajouté avec succès"
+
+#: apps/member/static/member/js/alias.js:33
+msgid "Alias successfully deleted"
+msgstr "Alias supprimé avec succès"
+
+#: apps/note/static/note/js/consos.js:225
+#, javascript-format
+msgid ""
+"Warning, the transaction from the note %s succeed, but the emitter note %s "
+"is very negative."
+msgstr ""
+"Attention, La transaction depuis la note %s a été réalisée avec succès, mais "
+"la note émettrice %s est en négatif sévère."
+
+#: apps/note/static/note/js/consos.js:228
+#, javascript-format
+msgid ""
+"Warning, the transaction from the note %s succeed, but the emitter note %s "
+"is negative."
+msgstr ""
+"Attention, La transaction depuis la note %s a été réalisée avec succès, mais "
+"la note émettrice %s est en négatif."
+
+#: apps/note/static/note/js/consos.js:232
+#: apps/note/static/note/js/transfer.js:298
+#: apps/note/static/note/js/transfer.js:401
+#, javascript-format
+msgid "Warning, the emitter note %s is no more a BDE member."
+msgstr "Attention, la note émettrice %s n'est plus adhérente."
+
+#: apps/note/static/note/js/consos.js:253
+msgid "The transaction couldn't be validated because of insufficient balance."
+msgstr ""
+"La transaction n'a pas pu être validée pour cause de solde insuffisant."
+
+#: apps/note/static/note/js/transfer.js:238
+msgid "This field is required and must contain a decimal positive number."
+msgstr ""
+"Ce champ est requis et doit comporter un nombre décimal strictement positif."
+
+#: apps/note/static/note/js/transfer.js:245
+msgid "The amount must stay under 21,474,836.47 €."
+msgstr "Le montant ne doit pas excéder 21 474 836.47 €."
+
+#: apps/note/static/note/js/transfer.js:251
+msgid "This field is required."
+msgstr "Ce champ est requis."
+
+#: apps/note/static/note/js/transfer.js:277
+#, javascript-format
+msgid ""
+"Warning: the transaction of %s from %s to %s was not made because it is the "
+"same source and destination note."
+msgstr ""
+"Attention : la transaction de %s de la note %s vers la note %s n'a pas été "
+"faite car il s'agit de la même note au départ et à l'arrivée."
+
+#: apps/note/static/note/js/transfer.js:301
+#, javascript-format
+msgid "Warning, the destination note %s is no more a BDE member."
+msgstr "Attention, la note de destination %s n'est plus adhérente."
+
+#: apps/note/static/note/js/transfer.js:307
+#, javascript-format
+msgid ""
+"Warning, the transaction of %s from the note %s to the note %s succeed, but "
+"the emitter note %s is very negative."
+msgstr ""
+"Attention, La transaction de %s depuis la note %s vers la note %s a été "
+"réalisée avec succès, mais la note émettrice %s est en négatif sévère."
+
+#: apps/note/static/note/js/transfer.js:312
+#, javascript-format
+msgid ""
+"Warning, the transaction of %s from the note %s to the note %s succeed, but "
+"the emitter note %s is negative."
+msgstr ""
+"Attention, La transaction de %s depuis la note %s vers la note %s a été "
+"réalisée avec succès, mais la note émettrice %s est en négatif."
+
+#: apps/note/static/note/js/transfer.js:318
+#, javascript-format
+msgid "Transfer of %s from %s to %s succeed!"
+msgstr ""
+"Le transfert de %s de la note %s vers la note %s a été fait avec succès !"
+
+#: apps/note/static/note/js/transfer.js:325
+#: apps/note/static/note/js/transfer.js:346
+#: apps/note/static/note/js/transfer.js:353
+#, javascript-format
+msgid "Transfer of %s from %s to %s failed: %s"
+msgstr "Le transfert de %s de la note %s vers la note %s a échoué : %s"
+
+#: apps/note/static/note/js/transfer.js:347
+msgid "insufficient funds"
+msgstr "solde insuffisant"
+
+#: apps/note/static/note/js/transfer.js:400
+msgid "Credit/debit succeed!"
+msgstr "Le crédit/retrait a bien été effectué !"
+
+#: apps/note/static/note/js/transfer.js:407
+#, javascript-format
+msgid "Credit/debit failed: %s"
+msgstr "Le crédit/retrait a échoué : %s"
+
+#: note_kfet/static/js/base.js:366
+msgid "An error occured while (in)validating this transaction:"
+msgstr ""
+"Une erreur est survenue lors de la validation/dévalidation de cette "
+"transaction :"

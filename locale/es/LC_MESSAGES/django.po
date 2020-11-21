@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-07 11:42+0200\n"
-"PO-Revision-Date: 2020-09-19 14:56+0200\n"
+"POT-Creation-Date: 2020-11-15 23:26+0100\n"
+"PO-Revision-Date: 2020-11-17 23:47+0100\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -278,11 +278,15 @@ msgstr "Saldo de la cuenta"
 msgid "Guests list"
 msgstr "Lista de los invitados"
 
+#: apps/activity/templates/activity/activity_detail.html:33
+msgid "Guest deleted"
+msgstr "Invitados suprimidos"
+
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:256
 #: apps/note/templates/note/transaction_form.html:16
 #: apps/note/templates/note/transaction_form.html:148
-#: note_kfet/templates/base.html:70
+#: note_kfet/templates/base.html:73
 msgid "Transfer"
 msgstr "Transferencia"
 
@@ -306,6 +310,15 @@ msgstr "Entradas"
 #: apps/activity/templates/activity/activity_entry.html:37
 msgid "Return to activity page"
 msgstr "Regresar a la página de la actividad"
+
+#: apps/activity/templates/activity/activity_entry.html:89
+#: apps/activity/templates/activity/activity_entry.html:124
+msgid "Entry done, but caution: the user is not a Kfet member."
+msgstr "Entrada echa, pero cuidado : el usuario no es un miembro de la Kfet."
+
+#: apps/activity/templates/activity/activity_entry.html:127
+msgid "Entry done!"
+msgstr "Entrada echa !"
 
 #: apps/activity/templates/activity/activity_form.html:16
 #: apps/member/templates/member/add_members.html:46
@@ -377,7 +390,7 @@ msgstr "Invitar"
 msgid "Create new activity"
 msgstr "Crear una nueva actividad"
 
-#: apps/activity/views.py:67 note_kfet/templates/base.html:88
+#: apps/activity/views.py:67 note_kfet/templates/base.html:91
 msgid "Activities"
 msgstr "Actividades"
 
@@ -586,7 +599,7 @@ msgstr "sección"
 
 #: apps/member/models.py:46
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
-msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
+msgstr "i.e. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
 #: apps/member/models.py:54 apps/wei/templates/wei/weimembership_form.html:32
 msgid "department"
@@ -1617,7 +1630,7 @@ msgstr "Buscar un botón"
 msgid "Update button"
 msgstr "Modificar el botón"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:64
+#: apps/note/views.py:151 note_kfet/templates/base.html:67
 msgid "Consumptions"
 msgstr "Consumiciones"
 
@@ -1793,7 +1806,7 @@ msgid ""
 "with these parameters. Please correct your data and retry."
 msgstr ""
 
-#: apps/permission/views.py:110 note_kfet/templates/base.html:106
+#: apps/permission/views.py:110 note_kfet/templates/base.html:109
 msgid "Rights"
 msgstr "Permisos"
 
@@ -1810,18 +1823,20 @@ msgid "This email address is already used."
 msgstr "Este correo electrónico ya esta utilizado."
 
 #: apps/registration/forms.py:49
-#, fuzzy
-#| msgid "You already opened an account in the Société générale."
 msgid ""
 "I declare that I opened a bank account in the Société générale with the BDE "
 "partnership."
-msgstr "Usted ya abrió una cuenta a la Société Générale."
+msgstr ""
+"Declaro que ya abrió una cuenta a la Société Générale en colaboración con el "
+"BDE."
 
 #: apps/registration/forms.py:50
 msgid ""
 "Warning: this engages you to open your bank account. If you finally decides "
 "to don't open your account, you will have to pay the BDE membership."
 msgstr ""
+"Cuidado : esto le obliga abrir su cuenta bancaria. Si cambia de idea y no "
+"abre su cuenta bancaria, tendrá que pagar su afiliación al BDE."
 
 #: apps/registration/forms.py:58
 msgid "Register to the WEI"
@@ -1832,7 +1847,7 @@ msgid ""
 "Check this case if you want to register to the WEI. If you hesitate, you "
 "will be able to register later, after validating your account in the Kfet."
 msgstr ""
-"Marcar esta casilla si usted quiere registrarse  en el WEI. Si duda, podrá "
+"Marcar esta casilla si usted quiere registrarse en el WEI. Si duda, podrá "
 "registrarse más tarde, después de validar su cuenta Note Kfet."
 
 #: apps/registration/forms.py:105
@@ -1892,11 +1907,9 @@ msgid "Validate account"
 msgstr "Validar la cuenta"
 
 #: apps/registration/templates/registration/future_profile_detail.html:62
-#, fuzzy
-#| msgid "You already opened an account in the Société générale."
 msgid ""
 "The user declared that he/she opened a bank account in the Société générale."
-msgstr "Usted ya abrió una cuenta a la Société Générale."
+msgstr "El usuario declara que ya abrió una cuenta a la Société Générale."
 
 #: apps/registration/templates/registration/future_profile_detail.html:71
 #: apps/wei/templates/wei/weimembership_form.html:127
@@ -2001,7 +2014,7 @@ msgstr ""
 msgid "Invalidate pre-registration"
 msgstr "Invalidar la afiliación"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:94
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:97
 msgid "Treasury"
 msgstr "Tesorería"
 
@@ -2398,7 +2411,7 @@ msgstr "Gestionar los créditos de la Société Générale"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
 #: apps/wei/models.py:61 apps/wei/models.py:167
-#: note_kfet/templates/base.html:100
+#: note_kfet/templates/base.html:103
 msgid "WEI"
 msgstr "WEI"
 
@@ -2997,40 +3010,40 @@ msgstr ""
 
 #: note_kfet/templates/autocomplete_model.html:14
 msgid "Reset"
-msgstr ""
+msgstr "Reiniciar"
 
 #: note_kfet/templates/base.html:14
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note del BDE de la ENS Paris-Saclay."
 
-#: note_kfet/templates/base.html:76
+#: note_kfet/templates/base.html:79
 msgid "Users"
 msgstr "Usuarios"
 
-#: note_kfet/templates/base.html:82
+#: note_kfet/templates/base.html:85
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:111
+#: note_kfet/templates/base.html:114
 msgid "Admin"
 msgstr ""
 
-#: note_kfet/templates/base.html:125
+#: note_kfet/templates/base.html:128
 msgid "My account"
 msgstr "Mi cuenta"
 
-#: note_kfet/templates/base.html:128
+#: note_kfet/templates/base.html:131
 msgid "Log out"
 msgstr "Desconectarse"
 
-#: note_kfet/templates/base.html:136
+#: note_kfet/templates/base.html:139
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:28
 msgid "Sign up"
 msgstr "Registrar"
 
-#: note_kfet/templates/base.html:143
+#: note_kfet/templates/base.html:146
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
@@ -3043,10 +3056,12 @@ msgid ""
 "You are not a BDE member anymore. Please renew your membership if you want "
 "to use the note."
 msgstr ""
+"Usted ya no está miembro del BDE. Por favor renueva su afiliación si quiere "
+"usar la note."
 
 #: note_kfet/templates/base.html:160
 msgid "You are not a Kfet member, so you can't use your note account."
-msgstr ""
+msgstr "Usted no es un miembro de la Kfet, no puede usar su cuenta note."
 
 #: note_kfet/templates/base.html:166
 msgid ""
@@ -3064,6 +3079,10 @@ msgid ""
 "yet. This verification procedure may last a few days. Please make sure that "
 "you go to the end of the account creation."
 msgstr ""
+"Usted declaró que abrió una cuenta bancaria a la Société Générale. El banco "
+"no convalidó la cuenta al BDE, así que el bonus de 80€ no fue dado y la "
+"afiliación no está pagada. El proceso de convalidación puede durar unos "
+"días. Por favor comprueba que fue hasta el final de la creación de la cuenta."
 
 #: note_kfet/templates/base.html:194
 msgid "Contact us"
@@ -3188,7 +3207,6 @@ msgstr ""
 #~ msgid "Central Authentication Service"
 #~ msgstr "Servicio Central de Autentificación"
 
-#, python-format
 #~ msgid ""
 #~ "A new version of the application is available. This instance runs "
 #~ "%(VERSION)s and the last version is %(LAST_VERSION)s. Please consider "
