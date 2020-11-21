@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-15 23:26+0100\n"
-"PO-Revision-Date: 2020-09-13 12:39+0200\n"
-"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2020-11-16 20:02+0000\n"
+"Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
+"Language-Team: German <http://translate.ynerant.fr/projects/nk20/nk20/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:151
 #: apps/activity/models.py:167
@@ -46,7 +46,7 @@ msgstr "Diese Person wurde schon eingeladen."
 
 #: apps/activity/forms.py:97 apps/activity/models.py:289
 msgid "You can't invite more than 3 people to this activity."
-msgstr "Sie dürfen höchstens 3 Leute  zu dieser Veranstaltung einladen."
+msgstr "Sie dürfen höchstens 3 Leute zu dieser Veranstaltung einladen."
 
 #: apps/activity/models.py:28 apps/activity/models.py:63
 #: apps/member/models.py:199
@@ -101,7 +101,7 @@ msgstr "Ort"
 
 #: apps/activity/models.py:76
 msgid "Place where the activity is organized, eg. Kfet."
-msgstr "Wo findet die Veranstaltung statt ? (z.B Kfet)"
+msgstr "Wo findet die Veranstaltung statt ? (z.B Kfet)."
 
 #: apps/activity/models.py:83
 #: apps/activity/templates/activity/includes/activity_info.html:22
@@ -376,11 +376,11 @@ msgstr "Schlusss"
 
 #: apps/activity/templates/activity/includes/activity_info.html:68
 msgid "invalidate"
-msgstr "invalidate"
+msgstr ""
 
 #: apps/activity/templates/activity/includes/activity_info.html:68
 msgid "validate"
-msgstr "validate"
+msgstr ""
 
 #: apps/activity/templates/activity/includes/activity_info.html:71
 #: apps/logs/models.py:64 apps/note/tables.py:195
