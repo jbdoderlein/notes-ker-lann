@@ -1,20 +1,14 @@
-.. Note Kfet 2020 documentation master file, created by
-   sphinx-quickstart on Thu Nov 26 00:58:58 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Documentation de la Note Kfet 2020
+==================================
 
-Welcome to Note Kfet 2020's documentation!
-==========================================
+
+Bienvenue sur le Wiki de la NoteKfet2020. Ce wiki est plutot orienté vers un public de développeur, qui souhaitent
+contribuer au développement, mais expliquent également aux plus curieux comment fonctionne la NoteKfet2020 sous le capot.
+
+Des informations complémentaires sont également disponibles sur le `Wiki Crans <https://wiki.crans.org/NoteKfet/NoteKfet2020/>`_.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Développement de la NK20
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   apps/index
