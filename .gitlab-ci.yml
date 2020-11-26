@@ -60,5 +60,5 @@ documentation:
     - make dirhtml
   artifacts:
     paths:
-      - _build
+      - docs/_build
     expire_in: 1 day
