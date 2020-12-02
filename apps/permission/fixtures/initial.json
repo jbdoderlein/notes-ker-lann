@@ -819,7 +819,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier son profil"
 		}
 	},
