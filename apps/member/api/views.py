@@ -53,8 +53,8 @@ class MembershipViewSet(ReadProtectedModelViewSet):
     filterset_fields = ['club__name', 'club__email', 'club__note__alias__name', 'club__note__alias__normalized_name',
                         'user__username', 'user__last_name', 'user__first_name', 'user__email',
                         'user__note__alias__name', 'user__note__alias__normalized_name',
-                        'date_start', 'date_end', 'fee', ]
+                        'date_start', 'date_end', 'fee', 'roles', ]
     ordering_fields = ['id', 'date_start', 'date_end', ]
     search_fields = ['$club__name', '$club__email', '$club__note__alias__name', '$club__note__alias__normalized_name',
                      '$user__username', '$user__last_name', '$user__first_name', '$user__email',
-                     '$user__note__alias__name', '$user__note__alias__normalized_name', ]
+                     '$user__note__alias__name', '$user__note__alias__normalized_name', '$roles__name', ]

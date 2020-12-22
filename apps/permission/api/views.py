@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+
 from api.viewsets import ReadOnlyProtectedModelViewSet
 
 from .serializers import PermissionSerializer, RoleSerializer
@@ -16,8 +18,9 @@ class PermissionViewSet(ReadOnlyProtectedModelViewSet):
     """
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['model', 'type', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['model', 'type', 'query', 'mask', 'field', 'permanent', ]
+    search_fields = ['$model__name', '$query', '$description', ]
 
 
 class RoleViewSet(ReadOnlyProtectedModelViewSet):
@@ -28,5 +31,6 @@ class RoleViewSet(ReadOnlyProtectedModelViewSet):
     """
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['role', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['name', 'permissions', 'for_club', 'membership_set__user', ]
+    SearchFilter = ['$name', '$for_club__name', ]
