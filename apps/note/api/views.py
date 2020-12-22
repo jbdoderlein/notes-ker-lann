@@ -22,15 +22,18 @@ from ..models.transactions import TransactionTemplate, Transaction, TemplateCate
 class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
-    The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
+    The djangorestframework plugin will get all `Note` objects (with polymorhism),
+    serialize it to JSON with the given serializer,
     then render it on /api/note/note/
     """
     queryset = Note.objects.all()
     serializer_class = NotePolymorphicSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['polymorphic_ctype', 'is_active', ]
-    search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model', ]
-    ordering_fields = ['alias__name', 'alias__normalized_name']
+    filterset_fields = ['alias__name', 'polymorphic_ctype', 'is_active', 'balance', 'last_negative', 'created_at', ]
+    search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model',
+                     '$noteuser__user__last_name', '$noteuser__user__first_name', '$noteuser__user__email',
+                     '$noteuser__user__email', '$noteclub__club__email', ]
+    ordering_fields = ['alias__name', 'alias__normalized_name', 'balance', 'created_at', ]
 
     def get_queryset(self):
         """
@@ -59,8 +62,8 @@ class AliasViewSet(ReadProtectedModelViewSet):
     serializer_class = AliasSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note']
-    ordering_fields = ['name', 'normalized_name']
+    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name', ]
 
     def get_serializer_class(self):
         serializer_class = self.serializer_class
@@ -110,8 +113,8 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
     serializer_class = ConsumerSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note']
-    ordering_fields = ['name', 'normalized_name']
+    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name', ]
 
     def get_queryset(self):
         """
@@ -159,8 +162,9 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     """
     queryset = TemplateCategory.objects.order_by("name").all()
     serializer_class = TemplateCategorySerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['$name', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['name', 'templates', 'templates__name']
+    search_fields = ['$name', '$templates__name', ]
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
@@ -171,9 +175,10 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     """
     queryset = TransactionTemplate.objects.order_by("name").all()
     serializer_class = TransactionTemplateSerializer
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['name', 'amount', 'display', 'category', ]
-    search_fields = ['$name', ]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['name', 'amount', 'display', 'category', 'category__name', ]
+    search_fields = ['$name', '$category__name', ]
+    ordering_fields = ['amount', ]
 
 
 class TransactionViewSet(ReadProtectedModelViewSet):
@@ -185,10 +190,14 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ["source", "source_alias", "destination", "destination_alias", "quantity",
-                        "polymorphic_ctype", "amount", "created_at", ]
-    search_fields = ['$reason', ]
-    ordering_fields = ['created_at', 'amount']
+    filterset_fields = ['source', 'source_alias', '$source__alias__name', 'source__alias__normalized_name',
+                        'destination', 'destination_alias', 'destination__alias__name',
+                        'destination__alias__normalized_name', 'quantity', 'polymorphic_ctype', 'amount',
+                        'created_at', 'valid', 'invalidity_reason', ]
+    search_fields = ['$reason', '$source_alias', '$source__alias__name', '$source__alias__normalized_name',
+                     '$destination_alias', '$destination__alias__name', '$destination__alias__normalized_name',
+                     '$invalidity_reason', ]
+    ordering_fields = ['created_at', 'amount', ]
 
     def get_queryset(self):
         user = self.request.user
