@@ -18,8 +18,9 @@ class InvoiceViewSet(ReadProtectedModelViewSet):
     """
     queryset = Invoice.objects.order_by("id").all()
     serializer_class = InvoiceSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['bde', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['bde', 'object', 'description', 'name', 'address', 'date', 'acquitted', 'locked', ]
+    search_fields = ['$object', '$description', '$name', '$address', ]
 
 
 class ProductViewSet(ReadProtectedModelViewSet):
@@ -30,8 +31,9 @@ class ProductViewSet(ReadProtectedModelViewSet):
     """
     queryset = Product.objects.order_by("invoice_id", "id").all()
     serializer_class = ProductSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['$designation', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['invoice', 'designation', 'quantity', 'amount', ]
+    search_fields = ['$designation', '$invoice__object', ]
 
 
 class RemittanceTypeViewSet(ReadProtectedModelViewSet):
@@ -42,6 +44,9 @@ class RemittanceTypeViewSet(ReadProtectedModelViewSet):
     """
     queryset = RemittanceType.objects.order_by("id")
     serializer_class = RemittanceTypeSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['note', ]
+    search_fields = ['$note__special_type', ]
 
 
 class RemittanceViewSet(ReadProtectedModelViewSet):
@@ -52,6 +57,9 @@ class RemittanceViewSet(ReadProtectedModelViewSet):
     """
     queryset = Remittance.objects.order_by("id")
     serializer_class = RemittanceSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['date', 'remittance_type', 'comment', 'closed', 'specialtransactionproxy__transaction', ]
+    search_fields = ['$remittance_type__note__special_type', '$comment', ]
 
 
 class SogeCreditViewSet(ReadProtectedModelViewSet):
@@ -62,3 +70,8 @@ class SogeCreditViewSet(ReadProtectedModelViewSet):
     """
     queryset = SogeCredit.objects.order_by("id")
     serializer_class = SogeCreditSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['user', 'user__last_name', 'user__first_name', 'user__email', 'user__note__alias__name',
+                        'user__note__alias__normalized_name', 'transactions', 'credit_transaction', ]
+    search_fields = ['$user__last_name', '$user__first_name', '$user__email', '$user__note__alias__name',
+                     '$user__note__alias__normalized_name', ]
