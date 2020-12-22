@@ -190,7 +190,7 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     queryset = Transaction.objects.order_by("-created_at").all()
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['source', 'source_alias', '$source__alias__name', 'source__alias__normalized_name',
+    filterset_fields = ['source', 'source_alias', 'source__alias__name', 'source__alias__normalized_name',
                         'destination', 'destination_alias', 'destination__alias__name',
                         'destination__alias__normalized_name', 'quantity', 'polymorphic_ctype', 'amount',
                         'created_at', 'valid', 'invalidity_reason', ]
