@@ -10,12 +10,12 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.fields.files import ImageFieldFile
 from django.test import TestCase
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from member.models import Membership, Club
 from note.models import NoteClub, NoteUser, Alias, Note
 from permission.models import PermissionMask, Permission, Role
 from phonenumbers import PhoneNumber
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .viewsets import ContentTypeViewSet, UserViewSet
 
