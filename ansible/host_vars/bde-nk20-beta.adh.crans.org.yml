@@ -3,4 +3,3 @@ note:
   server_name: note-beta.crans.org
   git_branch: beta
   cron_enabled: false
-  doc_enabled: false
