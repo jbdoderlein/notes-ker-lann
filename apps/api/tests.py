@@ -4,6 +4,7 @@
 import json
 from datetime import datetime
 from urllib.parse import quote_plus
+from warnings import warn
 
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -46,8 +47,8 @@ class TestAPI(TestCase):
         model = viewset.serializer_class.Meta.model
 
         if not model.objects.exists():  # pragma: no cover
-            print(f"Warning: unable to test API filters for the model {model._meta.verbose_name} "
-                  "since there is no instance of it.")
+            warn(f"Warning: unable to test API filters for the model {model._meta.verbose_name} "
+                 "since there is no instance of it.")
             return
 
         if hasattr(viewset, "filter_backends"):
@@ -61,8 +62,8 @@ class TestAPI(TestCase):
 
                     value = self.get_value(obj, field)
                     if value is None:  # pragma: no cover
-                        print(f"Warning: the filter {field} for the model {model._meta.verbose_name} "
-                              "has not been tested.")
+                        warn(f"Warning: the filter {field} for the model {model._meta.verbose_name} "
+                             "has not been tested.")
                         continue
                     resp = self.client.get(url + f"?format=json&{field}={quote_plus(str(value))}")
                     self.assertEqual(resp.status_code, 200, f"The filter {field} for the model "
@@ -90,8 +91,8 @@ class TestAPI(TestCase):
                         field = field[1:]
                     value = self.get_value(obj, field)
                     if value is None:  # pragma: no cover
-                        print(f"Warning: the filter {field} for the model {model._meta.verbose_name} "
-                              "has not been tested.")
+                        warn(f"Warning: the filter {field} for the model {model._meta.verbose_name} "
+                             "has not been tested.")
                         continue
                     resp = self.client.get(url + f"?format=json&search={quote_plus(str(value))}")
                     self.assertEqual(resp.status_code, 200, f"The filter {field} for the model "
