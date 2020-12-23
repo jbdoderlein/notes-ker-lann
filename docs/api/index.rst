@@ -22,28 +22,35 @@ Pages de l'API
 
 Il suffit d'ajouter le préfixe ``/api/`` pour arriver sur ces pages.
 
-* ``models`` (liste des différents modèles enregistrés en base de données)
-* ``user`` (liste des différents utilisateurs enregistrés)
-* ``members/profile`` (liste des différents profils associés à des utilisateurs)
-* ``members/club`` (liste des différents clubs enregistrés)
-* ``members/role`` (liste des différents rôles au sein des clubs existant)
-* ``members/membership`` (liste des adhésions enregistrées)
-* ``activity/activity`` (liste des activités recensées)
-* ``activity/type`` (liste des différents types d'activités : pots, soirées de club, ...)
-* ``activity/guest`` (liste des personnes invitées lors d'une activité)
-* ``activity/entry`` (liste des entrées effectuées lors des activités)
-* ``note/note`` (liste des notes enregistrées)
-* ``note/alias`` (liste des alias enregistrés)
-* ``note/transaction/category`` (liste des différentes catégories de boutons : soft, alcool, ...)
-* ``note/transaction/transaction`` (liste des transactions effectuées)
-* ``note/transaction/template`` (liste des boutons enregistrés)
-* ``treasury/invoice`` (liste des factures générées)
-* ``treasury/product`` (liste des produits associés à des factures)
-* ``treasury/remittance_type`` (liste des types de remises supportés : chèque)
-* ``treasury/remittance`` (liste des différentes remises enregistrées)
-* ``permission/permission`` (liste de toutes les permissions enregistrées)
-* ``permission/roles`` (liste des permissions octroyées pour chacun des rôles)
-* ``logs`` (liste des modifications enregistrées en base de données)
+* `models <basic#type-de-contenu>`_ : liste des différents modèles enregistrés en base de données
+* `user <basic#utilisateur>`_ : liste des différents utilisateurs enregistrés
+* `members/profile <member#profil-utilisateur>`_ : liste des différents profils associés à des utilisateurs
+* `members/club <member#club>`_ : liste des différents clubs enregistrés
+* `members/membership <member#adhesion>`_ : liste des adhésions enregistrées
+* `activity/activity <activity#activite>`_ : liste des activités recensées
+* `activity/type <activity#type-d-activite>`_ : liste des différents types d'activités : pots, soirées de club, ...
+* `activity/guest <activity#invite>`_ : liste des personnes invitées lors d'une activité
+* `activity/entry <activity#entree>`_ : liste des entrées effectuées lors des activités
+* `note/note <note#note>`_ : liste des notes enregistrées
+* `note/alias <note#alias>`_ : liste des alias enregistrés
+* `note/consumer <note#consommateur>`_ : liste des alias enregistrés avec leur note associée
+* `note/transaction/category <note#categorie-de-transaction>`_ : liste des différentes catégories de boutons : soft, alcool, ...
+* `note/transaction/transaction <note#transaction>`_ : liste des transactions effectuées
+* `note/transaction/template <note#modele-de-transaction>`_ : liste des boutons enregistrés
+* `treasury/invoice <treasury#facture>`_ : liste des factures générées
+* `treasury/product <treasury#produit>`_ : liste des produits associés à des factures
+* `treasury/remittance_type <treasury#type-de-remise>`_ : liste des types de remises supportés : chèque
+* `treasury/remittance <treasury#remise>`_ : liste des différentes remises enregistrées
+* `treasury/remittance <treasury#remise>`_ : liste des crédits de la Société générale enregistrés
+* `permission/permission <permission#permission>`_ : liste de toutes les permissions enregistrées
+* `permission/roles <permission#permissions-par-roles>`_ : liste des permissions octroyées pour chacun des rôles
+* `logs <logs#journal-de-modification>`_ : liste des modifications enregistrées en base de données
+* `wei/club <wei#wei>`_ : liste des WEI
+* `wei/bus <wei#bus>`_ : liste des bus de tous les WEI
+* `wei/team <wei#equipe-de-bus>`_ : liste des équipes de tous les WEI
+* `wei/role <wei#role-au-wei>`_ : liste des rôles possibles pour le WEI
+* `wei/registration <wei#participation-au-wei>`_ : liste de toutes les inscriptions à un WEI
+* `wei/membership <wei#adhesion-au-wei>`_ : liste des adhésions compètes à un WEI
 
 Utilisation de l'API
 --------------------
@@ -92,7 +99,19 @@ objets trouvés, au format JSON.
 Certaines pages disposent de filtres, permettant de sélectionner les objets recherchés. Par exemple, il est possible
 de chercher une note d'un certain type matchant avec un certain alias.
 
-Le résultat est déjà par défaut filtré : seuls les éléments que l'utilisateur à le droit de voir sont affichés.
+Trois types de filtres sont implémentés :
+
+* Les filtres Django, permettant d'ajouter ``?key=value`` dans l'URL pour filtrer les objets ayant ``value`` comme
+  valeur pour la clé ``key`` ;
+* Les filtres de recherche, permettant une recherche plus souple notamment par expressions régulières ou contenance,
+  et permet aussi de chercher parmi plusieurs clés à partir d'un champ ``search`` dans l'URL ;
+* Les filtres de tri, qui ne filtrent pas réellement mais changent l'ordre. En ajoutant ``?ordering=key`` dans l'URL,
+  on trie les résultats selon la clé ``key`` dans l'ordre croissant, et ``?ordering=-key`` trie dans l'ordre
+  décroissant.
+
+Les filtres disponibles sont indiqués sur chacune des pages de documentation.
+
+Le résultat est déjà par défaut filtré par droits : seuls les éléments que l'utilisateur à le droit de voir sont affichés.
 Cela est possible grâce à la structure des permissions, générant justement des filtres de requêtes de base de données.
 
 Une requête à l'adresse ``/api/<model>/pk/`` affiche directement les informations du modèle demandé au format JSON.

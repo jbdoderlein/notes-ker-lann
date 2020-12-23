@@ -132,8 +132,8 @@ Filtres de recherche
 * ``name`` (expression régulière)
 * ``note__polymorphic_ctype__model`` (expression régulière)
 
-Alias
------
+Consommateur
+------------
 
 **Chemin :** `/api/note/consumer/ <https://note.crans.org/api/note/consumer/>`_
 
