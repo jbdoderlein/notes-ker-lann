@@ -399,13 +399,38 @@ class TestNoteAPI(TestAPI):
             description="Test template",
         )
 
-    def test_note_api(self):
+    def test_alias_api(self):
         """
-        Load API pages for the note app and test all filters
+        Load Alias API page and test all filters and permissions
         """
         self.check_viewset(AliasViewSet, "/api/note/alias/")
+
+    def test_consumer_api(self):
+        """
+        Load Consumer API page and test all filters and permissions
+        """
         self.check_viewset(ConsumerViewSet, "/api/note/consumer/")
+
+    def test_note_api(self):
+        """
+        Load Note API page and test all filters and permissions
+        """
         self.check_viewset(NotePolymorphicViewSet, "/api/note/note/")
+
+    def test_template_category_api(self):
+        """
+        Load TemplateCategory API page and test all filters and permissions
+        """
         self.check_viewset(TemplateCategoryViewSet, "/api/note/transaction/category/")
+
+    def test_transaction_template_api(self):
+        """
+        Load TemplateTemplate API page and test all filters and permissions
+        """
         self.check_viewset(TransactionTemplateViewSet, "/api/note/transaction/template/")
+
+    def test_transaction_api(self):
+        """
+        Load Transaction API page and test all filters and permissions
+        """
         self.check_viewset(TransactionViewSet, "/api/note/transaction/transaction/")

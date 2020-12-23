@@ -432,10 +432,20 @@ class TestMemberAPI(TestAPI):
         self.membership.roles.add(Role.objects.get(name="Bureau de club"))
         self.membership.save()
 
-    def test_member_api(self):
+    def test_club_api(self):
         """
-        Load API pages for the member app and test all filters
+        Load Club API page and test all filters and permissions
         """
         self.check_viewset(ClubViewSet, "/api/members/club/")
+
+    def test_profile_api(self):
+        """
+        Load Profile API page and test all filters and permissions
+        """
         self.check_viewset(ProfileViewSet, "/api/members/profile/")
+
+    def test_membership_api(self):
+        """
+        Load Membership API page and test all filters and permissions
+        """
         self.check_viewset(MembershipViewSet, "/api/members/membership/")

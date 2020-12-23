@@ -15,7 +15,7 @@ from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
-from ..models.notes import Note, Alias
+from ..models.notes import Note, Alias, NoteUser, NoteClub, NoteSpecial
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
@@ -40,7 +40,12 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = super().get_queryset().distinct()
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        queryset = self.queryset.filter(PermissionBackend.filter_queryset(user, Note, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteUser, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteClub, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteSpecial, "view")).distinct()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(

@@ -210,9 +210,24 @@ class TestActivityAPI(TestAPI):
 
     def test_activity_api(self):
         """
-        Load API pages for the activity app and test all filters
+        Load Activity API page and test all filters and permissions
         """
         self.check_viewset(ActivityViewSet, "/api/activity/activity/")
+
+    def test_activity_type_api(self):
+        """
+        Load ActivityType API page and test all filters and permissions
+        """
         self.check_viewset(ActivityTypeViewSet, "/api/activity/type/")
+
+    def test_entry_api(self):
+        """
+        Load Entry API page and test all filters and permissions
+        """
         self.check_viewset(EntryViewSet, "/api/activity/entry/")
+
+    def test_guest_api(self):
+        """
+        Load Guest API page and test all filters and permissions
+        """
         self.check_viewset(GuestViewSet, "/api/activity/guest/")

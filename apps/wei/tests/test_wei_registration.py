@@ -527,7 +527,7 @@ class TestWEIRegistration(TestCase):
         sess["permission_mask"] = 0
         sess.save()
         response = self.client.get(reverse("wei:wei_update_registration", kwargs=dict(pk=self.registration.pk)))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
         sess["permission_mask"] = 42
         sess.save()
 
@@ -869,13 +869,38 @@ class TestWeiAPI(TestAPI):
         self.membership.roles.add(WEIRole.objects.last())
         self.membership.save()
 
-    def test_wei_api(self):
+    def test_weiclub_api(self):
         """
-        Load API pages for the treasury app and test all filters
+        Load WEI API page and test all filters and permissions
         """
         self.check_viewset(WEIClubViewSet, "/api/wei/club/")
+
+    def test_wei_bus_api(self):
+        """
+        Load Bus API page and test all filters and permissions
+        """
         self.check_viewset(BusViewSet, "/api/wei/bus/")
+
+    def test_wei_team_api(self):
+        """
+        Load BusTeam API page and test all filters and permissions
+        """
         self.check_viewset(BusTeamViewSet, "/api/wei/team/")
+
+    def test_weirole_api(self):
+        """
+        Load WEIRole API page and test all filters and permissions
+        """
         self.check_viewset(WEIRoleViewSet, "/api/wei/role/")
+
+    def test_weiregistration_api(self):
+        """
+        Load WEIRegistration API page and test all filters and permissions
+        """
         self.check_viewset(WEIRegistrationViewSet, "/api/wei/registration/")
+
+    def test_weimembership_api(self):
+        """
+        Load WEIMembership API page and test all filters and permissions
+        """
         self.check_viewset(WEIMembershipViewSet, "/api/wei/membership/")

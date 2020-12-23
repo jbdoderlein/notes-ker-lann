@@ -453,12 +453,32 @@ class TestTreasuryAPI(TestAPI):
         self.kfet_membership._soge = True
         self.kfet_membership.save()
 
-    def test_treasury_api(self):
+    def test_invoice_api(self):
         """
-        Load API pages for the treasury app and test all filters
+        Load Invoice API page and test all filters and permissions
         """
         self.check_viewset(InvoiceViewSet, "/api/treasury/invoice/")
+
+    def test_product_api(self):
+        """
+        Load Product API page and test all filters and permissions
+        """
         self.check_viewset(ProductViewSet, "/api/treasury/product/")
+
+    def test_remittance_api(self):
+        """
+        Load Remittance API page and test all filters and permissions
+        """
         self.check_viewset(RemittanceViewSet, "/api/treasury/remittance/")
+
+    def test_remittance_type_api(self):
+        """
+        Load RemittanceType API page and test all filters and permissions
+        """
         self.check_viewset(RemittanceTypeViewSet, "/api/treasury/remittance_type/")
+
+    def test_sogecredit_api(self):
+        """
+        Load SogeCredit API page and test all filters and permissions
+        """
         self.check_viewset(SogeCreditViewSet, "/api/treasury/soge_credit/")

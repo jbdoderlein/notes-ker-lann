@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+import sys
 from functools import lru_cache
 from time import time
 
@@ -37,6 +37,10 @@ def memoize(f):
         #     return f(*args, **kwargs)
 
         nonlocal last_collect
+
+        if "test" in sys.argv:
+            # In a test environment, don't memoize permissions
+            return f(*args, **kwargs)
 
         if time() - last_collect > 60:
             # Clear cache

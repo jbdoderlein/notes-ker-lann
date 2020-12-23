@@ -2,14 +2,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
-from datetime import datetime
+from datetime import datetime, date
 from urllib.parse import quote_plus
 from warnings import warn
 
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.fields.files import ImageFieldFile
 from django.test import TestCase
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from member.models import Membership, Club
 from note.models import NoteClub, NoteUser, Alias, Note
+from permission.models import PermissionMask, Permission, Role
 from phonenumbers import PhoneNumber
 from rest_framework.filters import SearchFilter
 
@@ -102,6 +106,77 @@ class TestAPI(TestCase):
                     self.assertGreater(content["count"], 0, f"The filter {field} for the model "
                                                             f"{model._meta.verbose_name} does not work. "
                                                             f"Given parameter: {value}")
+
+            self.check_permissions(url, obj)
+
+    def check_permissions(self, url, obj):
+        """
+        Check that permissions are working
+        """
+        # Drop rights
+        self.user.is_superuser = False
+        self.user.save()
+        sess = self.client.session
+        sess["permission_mask"] = 0
+        sess.save()
+
+        # Delete user permissions
+        for m in Membership.objects.filter(user=self.user).all():
+            m.roles.clear()
+            m.save()
+
+        # Create a new role, which will have the checking permission
+        role = Role.objects.get_or_create(name="β-tester")[0]
+        role.permissions.clear()
+        role.save()
+        membership = Membership.objects.get_or_create(user=self.user, club=Club.objects.get(name="BDE"))[0]
+        membership.roles.set([role])
+        membership.save()
+
+        # Ensure that the access to the object is forbidden without permission
+        resp = self.client.get(url + f"{obj.pk}/")
+        self.assertEqual(resp.status_code, 404, f"Mysterious access to {url}{obj.pk}/ for {obj}")
+
+        obj.refresh_from_db()
+
+        # There are problems with polymorphism
+        if isinstance(obj, Note) and hasattr(obj, "note_ptr"):
+            obj = obj.note_ptr
+
+        mask = PermissionMask.objects.get(rank=0)
+
+        for field in obj._meta.fields:
+            # Build permission query
+            value = self.get_value(obj, field.name)
+            if isinstance(value, date) or isinstance(value, datetime):
+                value = value.isoformat()
+            elif isinstance(value, ImageFieldFile):
+                value = value.name
+            query = json.dumps({field.name: value})
+
+            # Create sample permission
+            permission = Permission.objects.get_or_create(
+                model=ContentType.objects.get_for_model(obj._meta.model),
+                query=query,
+                mask=mask,
+                type="view",
+                permanent=False,
+                description=f"Can view {obj._meta.verbose_name}",
+            )[0]
+            role.permissions.set([permission])
+            role.save()
+
+            # Check that the access is possible
+            resp = self.client.get(url + f"{obj.pk}/")
+            self.assertEqual(resp.status_code, 200, f"Permission {permission.query} is not working "
+                                                    f"for the model {obj._meta.verbose_name}")
+
+        # Restore rights
+        self.user.is_superuser = True
+        self.user.save()
+        sess = self.client.session
+        sess["permission_mask"] = 42
+        sess.save()
 
     @staticmethod
     def get_value(obj, key: str):
