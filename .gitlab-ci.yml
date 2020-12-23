@@ -39,6 +39,21 @@ py38-django22:
         python3-bs4 python3-setuptools tox texlive-xetex
   script: tox -e py38-django22
 
+# Debian Bullseye
+py39-django22:
+  stage: test
+  image: debian:bullseye
+  before_script:
+    - >
+        apt-get update &&
+        apt-get install --no-install-recommends -y
+        python3-django python3-django-crispy-forms
+        python3-django-extensions python3-django-filters python3-django-polymorphic
+        python3-djangorestframework python3-django-oauth-toolkit python3-psycopg2 python3-pil
+        python3-babel python3-lockfile python3-pip python3-phonenumbers python3-memcache
+        python3-bs4 python3-setuptools tox texlive-xetex
+  script: tox -e py39-django22
+
 linters:
   stage: quality-assurance
   image: debian:buster-backports
