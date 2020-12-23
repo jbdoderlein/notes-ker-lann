@@ -370,11 +370,8 @@ class TestSogeCredits(TestCase):
         response = self.client.get(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)))
         self.assertEqual(response.status_code, 200)
 
-        try:
-            self.client.post(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)), data=dict(delete=True))
-            raise AssertionError("It is not possible to delete the soge credit until the note is not credited.")
-        except ValidationError:
-            pass
+        self.assertRaises(ValidationError, self.client.post,
+                          reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)), data=dict(delete=True))
 
         SpecialTransaction.objects.create(
             source=NoteSpecial.objects.get(special_type="Carte bancaire"),

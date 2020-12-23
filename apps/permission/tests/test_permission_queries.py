@@ -78,7 +78,7 @@ class PermissionQueryTestCase(TestCase):
                 query = instanced.query
                 model = perm.model.model_class()
                 model.objects.filter(query).all()
-            except (FieldError, AttributeError, ValueError, TypeError, JSONDecodeError):
+            except (FieldError, AttributeError, ValueError, TypeError, JSONDecodeError):  # pragma: no cover
                 print("Query error for permission", perm)
                 print("Query:", perm.query)
                 if instanced.query:
