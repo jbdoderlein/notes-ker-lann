@@ -128,6 +128,7 @@ Tris possible
 Filtres de recherche
 ~~~~~~~~~~~~~~~~~~~~
 
+* ``alias`` (cherche en priorité les alias les plus proches, puis cherche les alias normalisés)
 * ``normalized_name`` (expression régulière)
 * ``name`` (expression régulière)
 * ``note__polymorphic_ctype__model`` (expression régulière)
@@ -156,9 +157,15 @@ Options
       ]
   }
 
+.. note::
+
+   Cette page est en lecture seule. Elle offre l'avantage de fournir directement les informations sur la note associée
+   à l'alias au lieu de l'identifiant uniquement, afin de minimiser les appels à l'API.
+
 Filtres Django
 ~~~~~~~~~~~~~~
 
+* ``alias`` (expression régulière, cherche en priorité les alias les plus proches, puis cherche les alias normalisés)
 * ``note``
 * ``note__noteuser__user``
 * ``note__noteclub__club``

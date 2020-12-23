@@ -111,6 +111,13 @@ Filtres Django
 * ``note__alias__name``
 * ``note__alias__normalized_name``
 
+Filtres de recherche
+~~~~~~~~~~~~~~~~~~~~
+
+* ``note__alias`` (expression régulière, cherche en priorité les alias les plus proches, puis cherche les alias normalisés)
+* ``last_name`` (expression régulière)
+* ``first_name`` (expression régulière)
+
 Type de contenu
 ---------------
 
