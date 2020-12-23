@@ -1,14 +1,19 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from api.tests import TestAPI
+from member.models import Club, Membership
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from django.urls import reverse
-from member.models import Club, Membership
-from note.models import NoteUser, Transaction, TemplateCategory, TransactionTemplate, RecurrentTransaction, \
-    MembershipTransaction, SpecialTransaction, NoteSpecial, Alias
+from django.utils import timezone
 from permission.models import Role
+
+from ..api.views import AliasViewSet, ConsumerViewSet, NotePolymorphicViewSet, TemplateCategoryViewSet,\
+    TransactionTemplateViewSet, TransactionViewSet
+from ..models import NoteUser, Transaction, TemplateCategory, TransactionTemplate, RecurrentTransaction, \
+    MembershipTransaction, SpecialTransaction, NoteSpecial, Alias, Note
 
 
 class TestTransactions(TestCase):
@@ -297,8 +302,8 @@ class TestTransactions(TestCase):
 
     def test_render_search_transactions(self):
         response = self.client.get(reverse("note:transactions", args=(self.user.note.pk,)), data=dict(
-            source=self.second_user.note.alias_set.first().id,
-            destination=self.user.note.alias_set.first().id,
+            source=self.second_user.note.alias.first().id,
+            destination=self.user.note.alias.first().id,
             type=[ContentType.objects.get_for_model(Transaction).id],
             reason="test",
             valid=True,
@@ -363,3 +368,69 @@ class TestTransactions(TestCase):
         self.assertTrue(Alias.objects.filter(name="test_updated_alias").exists())
         response = self.client.delete("/api/note/alias/" + str(alias.pk) + "/")
         self.assertEqual(response.status_code, 204)
+
+
+class TestNoteAPI(TestAPI):
+    def setUp(self) -> None:
+        super().setUp()
+
+        membership = Membership.objects.create(club=Club.objects.get(name="BDE"), user=self.user)
+        membership.roles.add(Role.objects.get(name="Respo info"))
+        membership.save()
+        Membership.objects.create(club=Club.objects.get(name="Kfet"), user=self.user)
+        self.user.note.last_negative = timezone.now()
+        self.user.note.save()
+
+        self.transaction = Transaction.objects.create(
+            source=Note.objects.first(),
+            destination=self.user.note,
+            amount=4200,
+            reason="Test transaction",
+        )
+        self.user.note.refresh_from_db()
+        Alias.objects.create(note=self.user.note, name="I am a ¢omplex alias")
+
+        self.category = TemplateCategory.objects.create(name="Test")
+        self.template = TransactionTemplate.objects.create(
+            name="Test",
+            destination=Club.objects.get(name="BDE").note,
+            category=self.category,
+            amount=100,
+            description="Test template",
+        )
+
+    def test_alias_api(self):
+        """
+        Load Alias API page and test all filters and permissions
+        """
+        self.check_viewset(AliasViewSet, "/api/note/alias/")
+
+    def test_consumer_api(self):
+        """
+        Load Consumer API page and test all filters and permissions
+        """
+        self.check_viewset(ConsumerViewSet, "/api/note/consumer/")
+
+    def test_note_api(self):
+        """
+        Load Note API page and test all filters and permissions
+        """
+        self.check_viewset(NotePolymorphicViewSet, "/api/note/note/")
+
+    def test_template_category_api(self):
+        """
+        Load TemplateCategory API page and test all filters and permissions
+        """
+        self.check_viewset(TemplateCategoryViewSet, "/api/note/transaction/category/")
+
+    def test_transaction_template_api(self):
+        """
+        Load TemplateTemplate API page and test all filters and permissions
+        """
+        self.check_viewset(TransactionTemplateViewSet, "/api/note/transaction/template/")
+
+    def test_transaction_api(self):
+        """
+        Load Transaction API page and test all filters and permissions
+        """
+        self.check_viewset(TransactionViewSet, "/api/note/transaction/transaction/")

@@ -313,6 +313,7 @@ class Membership(models.Model):
 
     roles = models.ManyToManyField(
         "permission.Role",
+        related_name="memberships",
         verbose_name=_("roles"),
     )
 

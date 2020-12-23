@@ -15,29 +15,37 @@ from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
     TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
-from ..models.notes import Note, Alias
+from ..models.notes import Note, Alias, NoteUser, NoteClub, NoteSpecial
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
 class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
-    The djangorestframework plugin will get all `Note` objects (with polymorhism), serialize it to JSON with the given serializer,
+    The djangorestframework plugin will get all `Note` objects (with polymorhism),
+    serialize it to JSON with the given serializer,
     then render it on /api/note/note/
     """
-    queryset = Note.objects.all()
+    queryset = Note.objects.order_by('id')
     serializer_class = NotePolymorphicSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['polymorphic_ctype', 'is_active', ]
-    search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model', ]
-    ordering_fields = ['alias__name', 'alias__normalized_name']
+    filterset_fields = ['alias__name', 'polymorphic_ctype', 'is_active', 'balance', 'last_negative', 'created_at', ]
+    search_fields = ['$alias__normalized_name', '$alias__name', '$polymorphic_ctype__model',
+                     '$noteuser__user__last_name', '$noteuser__user__first_name', '$noteuser__user__email',
+                     '$noteuser__user__email', '$noteclub__club__email', ]
+    ordering_fields = ['alias__name', 'alias__normalized_name', 'balance', 'created_at', ]
 
     def get_queryset(self):
         """
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        queryset = super().get_queryset().distinct()
+        user = self.request.user
+        get_current_session().setdefault("permission_mask", 42)
+        queryset = self.queryset.filter(PermissionBackend.filter_queryset(user, Note, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteUser, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteClub, "view")
+                                        | PermissionBackend.filter_queryset(user, NoteSpecial, "view")).distinct()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
@@ -55,12 +63,12 @@ class AliasViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
     then render it on /api/aliases/
     """
-    queryset = Alias.objects.all()
+    queryset = Alias.objects
     serializer_class = AliasSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note']
-    ordering_fields = ['name', 'normalized_name']
+    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name', ]
 
     def get_serializer_class(self):
         serializer_class = self.serializer_class
@@ -106,12 +114,12 @@ class AliasViewSet(ReadProtectedModelViewSet):
 
 
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
-    queryset = Alias.objects.all()
+    queryset = Alias.objects
     serializer_class = ConsumerSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note']
-    ordering_fields = ['name', 'normalized_name']
+    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    ordering_fields = ['name', 'normalized_name', ]
 
     def get_queryset(self):
         """
@@ -157,10 +165,11 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/category/
     """
-    queryset = TemplateCategory.objects.order_by("name").all()
+    queryset = TemplateCategory.objects.order_by('name')
     serializer_class = TemplateCategorySerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['$name', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['name', 'templates', 'templates__name']
+    search_fields = ['$name', '$templates__name', ]
 
 
 class TransactionTemplateViewSet(viewsets.ModelViewSet):
@@ -169,11 +178,12 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/template/
     """
-    queryset = TransactionTemplate.objects.order_by("name").all()
+    queryset = TransactionTemplate.objects.order_by('name')
     serializer_class = TransactionTemplateSerializer
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    filterset_fields = ['name', 'amount', 'display', 'category', ]
-    search_fields = ['$name', ]
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['name', 'amount', 'display', 'category', 'category__name', ]
+    search_fields = ['$name', '$category__name', ]
+    ordering_fields = ['amount', ]
 
 
 class TransactionViewSet(ReadProtectedModelViewSet):
@@ -182,13 +192,17 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Transaction` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/transaction/
     """
-    queryset = Transaction.objects.order_by("-created_at").all()
+    queryset = Transaction.objects.order_by('-created_at')
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ["source", "source_alias", "destination", "destination_alias", "quantity",
-                        "polymorphic_ctype", "amount", "created_at", ]
-    search_fields = ['$reason', ]
-    ordering_fields = ['created_at', 'amount']
+    filterset_fields = ['source', 'source_alias', 'source__alias__name', 'source__alias__normalized_name',
+                        'destination', 'destination_alias', 'destination__alias__name',
+                        'destination__alias__normalized_name', 'quantity', 'polymorphic_ctype', 'amount',
+                        'created_at', 'valid', 'invalidity_reason', ]
+    search_fields = ['$reason', '$source_alias', '$source__alias__name', '$source__alias__normalized_name',
+                     '$destination_alias', '$destination__alias__name', '$destination__alias__normalized_name',
+                     '$invalidity_reason', ]
+    ordering_fields = ['created_at', 'amount', ]
 
     def get_queryset(self):
         user = self.request.user

@@ -256,7 +256,7 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
         context["aliases"] = AliasTable(
-            note.alias_set.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view")).distinct().all())
+            note.alias.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view")).distinct().all())
         context["can_create"] = PermissionBackend.check_perm(self.request.user, "note.add_alias", Alias(
             note=context["object"].note,
             name="",
@@ -458,7 +458,7 @@ class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
-        context["aliases"] = AliasTable(note.alias_set.filter(
+        context["aliases"] = AliasTable(note.alias.filter(
             PermissionBackend.filter_queryset(self.request.user, Alias, "view")).distinct().all())
         context["can_create"] = PermissionBackend.check_perm(self.request.user, "note.add_alias", Alias(
             note=context["object"].note,

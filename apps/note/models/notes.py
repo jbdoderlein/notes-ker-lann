@@ -248,6 +248,7 @@ class Alias(models.Model):
     note = models.ForeignKey(
         Note,
         on_delete=models.PROTECT,
+        related_name="alias",
     )
 
     class Meta:

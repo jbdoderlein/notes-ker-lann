@@ -16,10 +16,11 @@ class InvoiceViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Invoice` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/invoice/
     """
-    queryset = Invoice.objects.order_by("id").all()
+    queryset = Invoice.objects.order_by('id')
     serializer_class = InvoiceSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['bde', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['bde', 'object', 'description', 'name', 'address', 'date', 'acquitted', 'locked', ]
+    search_fields = ['$object', '$description', '$name', '$address', ]
 
 
 class ProductViewSet(ReadProtectedModelViewSet):
@@ -28,10 +29,11 @@ class ProductViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Product` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/product/
     """
-    queryset = Product.objects.order_by("invoice_id", "id").all()
+    queryset = Product.objects.order_by('invoice_id', 'id')
     serializer_class = ProductSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['$designation', ]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['invoice', 'designation', 'quantity', 'amount', ]
+    search_fields = ['$designation', '$invoice__object', ]
 
 
 class RemittanceTypeViewSet(ReadProtectedModelViewSet):
@@ -40,8 +42,11 @@ class RemittanceTypeViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `RemittanceType` objects, serialize it to JSON with the given serializer
     then render it on /api/treasury/remittance_type/
     """
-    queryset = RemittanceType.objects.order_by("id")
+    queryset = RemittanceType.objects.order_by('id')
     serializer_class = RemittanceTypeSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['note', ]
+    search_fields = ['$note__special_type', ]
 
 
 class RemittanceViewSet(ReadProtectedModelViewSet):
@@ -50,8 +55,11 @@ class RemittanceViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Remittance` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/remittance/
     """
-    queryset = Remittance.objects.order_by("id")
+    queryset = Remittance.objects.order_by('id')
     serializer_class = RemittanceSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['date', 'remittance_type', 'comment', 'closed', 'transaction_proxies__transaction', ]
+    search_fields = ['$remittance_type__note__special_type', '$comment', ]
 
 
 class SogeCreditViewSet(ReadProtectedModelViewSet):
@@ -60,5 +68,10 @@ class SogeCreditViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `SogeCredit` objects, serialize it to JSON with the given serializer,
     then render it on /api/treasury/soge_credit/
     """
-    queryset = SogeCredit.objects.order_by("id")
+    queryset = SogeCredit.objects.order_by('id')
     serializer_class = SogeCreditSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['user', 'user__last_name', 'user__first_name', 'user__email', 'user__note__alias__name',
+                        'user__note__alias__normalized_name', 'transactions', 'credit_transaction', ]
+    search_fields = ['$user__last_name', '$user__first_name', '$user__email', '$user__note__alias__name',
+                     '$user__note__alias__normalized_name', ]
