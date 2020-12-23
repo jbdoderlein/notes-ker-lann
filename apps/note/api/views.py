@@ -26,7 +26,7 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
     serialize it to JSON with the given serializer,
     then render it on /api/note/note/
     """
-    queryset = Note.objects.all()
+    queryset = Note.objects.order_by('id')
     serializer_class = NotePolymorphicSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['alias__name', 'polymorphic_ctype', 'is_active', 'balance', 'last_negative', 'created_at', ]
@@ -58,7 +58,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
     then render it on /api/aliases/
     """
-    queryset = Alias.objects.all()
+    queryset = Alias.objects
     serializer_class = AliasSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
@@ -109,7 +109,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
 
 
 class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
-    queryset = Alias.objects.all()
+    queryset = Alias.objects
     serializer_class = ConsumerSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
@@ -160,7 +160,7 @@ class TemplateCategoryViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `TemplateCategory` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/category/
     """
-    queryset = TemplateCategory.objects.order_by("name").all()
+    queryset = TemplateCategory.objects.order_by('name')
     serializer_class = TemplateCategorySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'templates', 'templates__name']
@@ -173,7 +173,7 @@ class TransactionTemplateViewSet(viewsets.ModelViewSet):
     The djangorestframework plugin will get all `TransactionTemplate` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/template/
     """
-    queryset = TransactionTemplate.objects.order_by("name").all()
+    queryset = TransactionTemplate.objects.order_by('name')
     serializer_class = TransactionTemplateSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['name', 'amount', 'display', 'category', 'category__name', ]
@@ -187,7 +187,7 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Transaction` objects, serialize it to JSON with the given serializer,
     then render it on /api/note/transaction/transaction/
     """
-    queryset = Transaction.objects.order_by("-created_at").all()
+    queryset = Transaction.objects.order_by('-created_at')
     serializer_class = TransactionPolymorphicSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['source', 'source_alias', 'source__alias__name', 'source__alias__normalized_name',

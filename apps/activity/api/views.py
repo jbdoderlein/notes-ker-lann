@@ -15,7 +15,7 @@ class ActivityTypeViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `ActivityType` objects, serialize it to JSON with the given serializer,
     then render it on /api/activity/type/
     """
-    queryset = ActivityType.objects.all()
+    queryset = ActivityType.objects.order_by('id')
     serializer_class = ActivityTypeSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'manage_entries', 'can_invite', 'guest_entry_fee', ]
@@ -27,7 +27,7 @@ class ActivityViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Activity` objects, serialize it to JSON with the given serializer,
     then render it on /api/activity/activity/
     """
-    queryset = Activity.objects.all()
+    queryset = Activity.objects.order_by('id')
     serializer_class = ActivitySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'description', 'activity_type', 'location', 'creater', 'organizer', 'attendees_club',
@@ -45,7 +45,7 @@ class GuestViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Guest` objects, serialize it to JSON with the given serializer,
     then render it on /api/activity/guest/
     """
-    queryset = Guest.objects.all()
+    queryset = Guest.objects.order_by('id')
     serializer_class = GuestSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['activity', 'activity__name', 'last_name', 'first_name', 'inviter', 'inviter__alias__name',
@@ -60,7 +60,7 @@ class EntryViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Entry` objects, serialize it to JSON with the given serializer,
     then render it on /api/activity/entry/
     """
-    queryset = Entry.objects.all()
+    queryset = Entry.objects.order_by('id')
     serializer_class = EntrySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['activity', 'time', 'note', 'guest', ]

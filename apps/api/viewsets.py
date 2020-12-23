@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth.models import User
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from permission.backends import PermissionBackend
 from note_kfet.middlewares import get_current_session
@@ -48,12 +49,13 @@ class UserViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `User` objects, serialize it to JSON with the given serializer,
-    then render it on /api/users/
+    then render it on /api/user/
     """
-    queryset = User.objects.all()
+    queryset = User.objects
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active', ]
+    filterset_fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'is_active',
+                        'note__alias__name', 'note__alias__normalized_name', ]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -106,7 +108,10 @@ class ContentTypeViewSet(ReadOnlyModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `User` objects, serialize it to JSON with the given serializer,
-    then render it on /api/users/
+    then render it on /api/models/
     """
-    queryset = ContentType.objects.all()
+    queryset = ContentType.objects.order_by('id')
     serializer_class = ContentTypeSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['id', 'app_label', 'model', ]
+    search_fields = ['$app_label', '$model', ]

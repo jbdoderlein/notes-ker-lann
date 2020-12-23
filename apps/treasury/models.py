@@ -257,6 +257,7 @@ class SpecialTransactionProxy(models.Model):
         Remittance,
         on_delete=models.PROTECT,
         null=True,
+        related_name="transaction_proxies",
         verbose_name=_("Remittance"),
     )
 

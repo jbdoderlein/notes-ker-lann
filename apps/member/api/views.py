@@ -15,14 +15,14 @@ class ProfileViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Profile` objects, serialize it to JSON with the given serializer,
     then render it on /api/members/profile/
     """
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.order_by('id')
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['user', 'user__first_name', 'user__last_name', 'user__username', 'user__email',
                         'user__note__alias__name', 'user__note__alias__normalized_name', 'phone_number', "section",
                         'department', 'promotion', 'address', 'paid', 'ml_events_registration', 'ml_sport_registration',
                         'ml_art_registration', 'report_frequency', 'email_confirmed', 'registration_valid', ]
-    search_fields = ['$user__first_name' '$user__last_name', '$user__username', '$user__email',
+    search_fields = ['$user__first_name', '$user__last_name', '$user__username', '$user__email',
                      '$user__note__alias__name', '$user__note__alias__normalized_name', ]
 
 
@@ -32,7 +32,7 @@ class ClubViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Club` objects, serialize it to JSON with the given serializer,
     then render it on /api/members/club/
     """
-    queryset = Club.objects.all()
+    queryset = Club.objects.order_by('id')
     serializer_class = ClubSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'email', 'note__alias__name', 'note__alias__normalized_name', 'parent_club',
@@ -47,7 +47,7 @@ class MembershipViewSet(ReadProtectedModelViewSet):
     The djangorestframework plugin will get all `Membership` objects, serialize it to JSON with the given serializer,
     then render it on /api/members/membership/
     """
-    queryset = Membership.objects.all()
+    queryset = Membership.objects.order_by('id')
     serializer_class = MembershipSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ['club__name', 'club__email', 'club__note__alias__name', 'club__note__alias__normalized_name',

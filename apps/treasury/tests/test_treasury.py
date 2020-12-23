@@ -1,6 +1,7 @@
 # Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from api.tests import TestAPI
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -8,7 +9,10 @@ from django.test import TestCase
 from django.urls import reverse
 from member.models import Membership, Club
 from note.models import SpecialTransaction, NoteSpecial, Transaction
-from treasury.models import Invoice, Product, Remittance, RemittanceType, SogeCredit
+
+from ..api.views import InvoiceViewSet, ProductViewSet, RemittanceViewSet, RemittanceTypeViewSet, \
+    SogeCreditViewSet
+from ..models import Invoice, Product, Remittance, RemittanceType, SogeCredit
 
 
 class TestInvoices(TestCase):
@@ -399,3 +403,62 @@ class TestSogeCredits(TestCase):
         """
         response = self.client.get("/api/treasury/soge_credit/")
         self.assertEqual(response.status_code, 200)
+
+
+class TestTreasuryAPI(TestAPI):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.invoice = Invoice.objects.create(
+            id=1,
+            object="Object",
+            description="Description",
+            name="Me",
+            address="Earth",
+            acquitted=False,
+        )
+        self.product = Product.objects.create(
+            invoice=self.invoice,
+            designation="Product",
+            quantity=3,
+            amount=3.14,
+        )
+
+        self.credit = SpecialTransaction.objects.create(
+            source=NoteSpecial.objects.get(special_type="Chèque"),
+            destination=self.user.note,
+            amount=4200,
+            reason="Credit",
+            last_name="TOTO",
+            first_name="Toto",
+            bank="Société générale",
+        )
+
+        self.remittance = Remittance.objects.create(
+            remittance_type=RemittanceType.objects.get(),
+            comment="Test remittance",
+            closed=False,
+        )
+        self.credit.specialtransactionproxy.remittance = self.remittance
+        self.credit.specialtransactionproxy.save()
+
+        self.kfet = Club.objects.get(name="Kfet")
+        self.bde = self.kfet.parent_club
+
+        self.kfet_membership = Membership(
+            user=self.user,
+            club=self.kfet,
+        )
+        self.kfet_membership._force_renew_parent = True
+        self.kfet_membership._soge = True
+        self.kfet_membership.save()
+
+    def test_treasury_api(self):
+        """
+        Load API pages for the treasury app and test all filters
+        """
+        self.check_viewset(InvoiceViewSet, "/api/treasury/invoice/")
+        self.check_viewset(ProductViewSet, "/api/treasury/product/")
+        self.check_viewset(RemittanceViewSet, "/api/treasury/remittance/")
+        self.check_viewset(RemittanceTypeViewSet, "/api/treasury/remittance_type/")
+        self.check_viewset(SogeCreditViewSet, "/api/treasury/soge_credit/")

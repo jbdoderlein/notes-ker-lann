@@ -4,16 +4,19 @@
 import subprocess
 from datetime import timedelta, date
 
+from api.tests import TestAPI
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from member.models import Membership
+from member.models import Membership, Club
 from note.models import NoteClub, SpecialTransaction
 from treasury.models import SogeCredit
 
+from ..api.views import BusViewSet, BusTeamViewSet, WEIClubViewSet, WEIMembershipViewSet, WEIRegistrationViewSet, \
+    WEIRoleViewSet
 from ..forms import CurrentSurvey, WEISurveyAlgorithm, WEISurvey
 from ..models import WEIClub, Bus, BusTeam, WEIRole, WEIRegistration, WEIMembership
 
@@ -807,3 +810,72 @@ class TestWEISurveyAlgorithm(TestCase):
 
     def test_survey_algorithm(self):
         CurrentSurvey.get_algorithm_class()().run_algorithm()
+
+
+class TestWeiAPI(TestAPI):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.year = timezone.now().year
+        self.wei = WEIClub.objects.create(
+            name="Test WEI",
+            email="gc.wei@example.com",
+            parent_club_id=2,
+            membership_fee_paid=12500,
+            membership_fee_unpaid=5500,
+            membership_start=date(self.year, 1, 1),
+            membership_end=date(self.year, 12, 31),
+            membership_duration=396,
+            year=self.year,
+            date_start=date.today() + timedelta(days=2),
+            date_end=date(self.year, 12, 31),
+        )
+        NoteClub.objects.create(club=self.wei)
+        self.bus = Bus.objects.create(
+            name="Test Bus",
+            wei=self.wei,
+            description="Test Bus",
+        )
+        self.team = BusTeam.objects.create(
+            name="Test Team",
+            bus=self.bus,
+            color=0xFFFFFF,
+            description="Test Team",
+        )
+        self.registration = WEIRegistration.objects.create(
+            user_id=self.user.id,
+            wei_id=self.wei.id,
+            soge_credit=True,
+            caution_check=True,
+            birth_date=date(2000, 1, 1),
+            gender="nonbinary",
+            clothing_cut="male",
+            clothing_size="XL",
+            health_issues="I am a bot",
+            emergency_contact_name="Pikachu",
+            emergency_contact_phone="+33123456789",
+            first_year=False,
+        )
+        Membership.objects.create(user=self.user, club=Club.objects.get(name="BDE"))
+        Membership.objects.create(user=self.user, club=Club.objects.get(name="Kfet"))
+        self.membership = WEIMembership.objects.create(
+            user=self.user,
+            club=self.wei,
+            fee=125,
+            bus=self.bus,
+            team=self.team,
+            registration=self.registration,
+        )
+        self.membership.roles.add(WEIRole.objects.last())
+        self.membership.save()
+
+    def test_wei_api(self):
+        """
+        Load API pages for the treasury app and test all filters
+        """
+        self.check_viewset(WEIClubViewSet, "/api/wei/club/")
+        self.check_viewset(BusViewSet, "/api/wei/bus/")
+        self.check_viewset(BusTeamViewSet, "/api/wei/team/")
+        self.check_viewset(WEIRoleViewSet, "/api/wei/role/")
+        self.check_viewset(WEIRegistrationViewSet, "/api/wei/registration/")
+        self.check_viewset(WEIMembershipViewSet, "/api/wei/membership/")

@@ -5,16 +5,19 @@ import hashlib
 import os
 from datetime import date, timedelta
 
+from api.tests import TestAPI
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Q
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from member.models import Club, Membership, Profile
 from note.models import Alias, NoteSpecial
 from permission.models import Role
 from treasury.models import SogeCredit
+
+from ..api.views import ClubViewSet, MembershipViewSet, ProfileViewSet
+from ..models import Club, Membership, Profile
 
 """
 Create some users and clubs and test that all pages are rendering properly
@@ -403,3 +406,36 @@ class TestMemberships(TestCase):
         self.user.password = "custom_nk15$1$" + salt + "|" + hashed
         self.user.save()
         self.assertTrue(self.user.check_password(password))
+
+
+class TestMemberAPI(TestAPI):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.user.profile.registration_valid = True
+        self.user.profile.email_confirmed = True
+        self.user.profile.phone_number = "0600000000"
+        self.user.profile.section = "1A0"
+        self.user.profile.department = "A0"
+        self.user.profile.address = "Earth"
+        self.user.profile.save()
+
+        self.club = Club.objects.create(
+            name="totoclub",
+            parent_club=Club.objects.get(name="BDE"),
+            membership_start=date(year=1970, month=1, day=1),
+            membership_end=date(year=2040, month=1, day=1),
+            membership_duration=365 * 10,
+        )
+        self.bde_membership = Membership.objects.create(user=self.user, club=Club.objects.get(name="BDE"))
+        self.membership = Membership.objects.create(user=self.user, club=self.club)
+        self.membership.roles.add(Role.objects.get(name="Bureau de club"))
+        self.membership.save()
+
+    def test_member_api(self):
+        """
+        Load API pages for the member app and test all filters
+        """
+        self.check_viewset(ClubViewSet, "/api/members/club/")
+        self.check_viewset(ProfileViewSet, "/api/members/profile/")
+        self.check_viewset(MembershipViewSet, "/api/members/membership/")
