@@ -39,10 +39,22 @@ La page ``/api/<model>/`` affiche la liste de tous les éléments enregistrés. 
 les attributs d'un objet uniquement.
 
 L'affichage des données peut se faire sous deux formes : via une interface HTML propre ou directement en affichant
-le JSON brut. Le changement peut se faire en ajoutant en paramètre de l'URL ``format=json`` ou ``format=api`, ou bien
-en plaçant en en-tête de la requête ``Accept: application/json`` ou ``text/html``.
+le JSON brut. Le changement peut se faire en ajoutant en paramètre de l'URL ``format=json`` ou ``format=api``, ou bien
+en plaçant en en-tête de la requête ``Accept: application/json`` ou ``Accept: text/html``.
 
 L'API Web propose des formulaires facilitant l'ajout et la modification d'éléments.
+
+S'authentifier
+~~~~~~~~~~~~~~
+
+L'authentification peut se faire soit par session en se connectant via la page de connexion classique,
+soit via un jeton d'authentification. Le jeton peut se récupérer via la page de son propre compte, en cliquant
+sur le bouton « `Accès API <https://note.crans.org/accounts/manage-auth-token/>`_ ». Il peut être révoqué et regénéré
+en un clic.
+
+Pour s'authentifier via ce jeton, il faut ajouter l'en-tête ``Authorization: Token <TOKEN>`` aux paramètres HTTP.
+
+En s'authentifiant par cette méthode, les masques de droit sont ignorés, les droits maximaux sont accordés.
 
 GET
 ~~~
