@@ -9,15 +9,17 @@ Applications de la NoteKfet2020
    note/index
    activity
    permission
-   api
+   ../api/index
    registration
    logs
    treasury
    wei
 
 La NoteKfet est un projet Django, décomposé en applications.
-Certaines Applications sont développées uniquement pour ce projet, et sont indispensables, d'autre sont packagé et sont installées comme dépendances.
-Enfin Des fonctionnalités annexes ont été rajouté, mais ne sont pas essentiel au déploiement de la NoteKfet; leur usage est cependant recommandé.
+Certaines Applications sont développées uniquement pour ce projet, et sont indispensables,
+d'autres sont packagesé et sont installées comme dépendances.
+Enfin des fonctionnalités annexes ont été rajouté, mais ne sont pas essentiel au déploiement de la NoteKfet;
+leur usage est cependant recommandé.
 
 Le front utilise le framework Bootstrap4 et quelques morceaux de javascript custom.
 
@@ -34,7 +36,7 @@ Applications indispensables
    La gestion des Activités (créations, gestion, entrée...)
 * `Permission <permission>`_ :
    Backend de droits, limites les pouvoirs des utilisateurs
-* `API <api>`_ :
+* `API <../api>`_ :
    API REST de la note, est notamment utilisée pour rendre la note dynamique
    (notamment la page de conso)
 * `Registration <registration>`_ :
@@ -54,7 +56,7 @@ Applications packagées
 * ``django_tables2``
     utiliser pour afficher des tables de données et les formater, en python plutôt qu'en HTML.
 * ``restframework``
-    Base de l'`API <api>`_.
+    Base de l'`API <../api>`_.
 
 Applications facultatives
 -------------------------

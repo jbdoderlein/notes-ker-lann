@@ -32,4 +32,4 @@ class RoleViewSet(ReadOnlyProtectedModelViewSet):
     serializer_class = RoleSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['name', 'permissions', 'for_club', 'memberships__user', ]
-    SearchFilter = ['$name', '$for_club__name', ]
+    search_fields = ['$name', '$for_club__name', ]

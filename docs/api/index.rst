@@ -1,6 +1,19 @@
 API
 ===
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Applications
+
+   activity
+   basic
+   logs
+   member
+   note
+   permission
+   treasury
+   wei
+
 La NoteKfet2020 dispose d'une API REST. Elle est accessible sur `/api/ <https://note.crans.org/api/>`_.
 Elle supporte les requêtes GET, POST, HEAD, PUT, PATCH et DELETE (peut varier selon les pages).
 

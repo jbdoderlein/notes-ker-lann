@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.forms',
     'django_filters',
+    'django_extensions',
 
     # API
     'rest_framework',
