@@ -3,11 +3,12 @@
   apt_repository:
     repo: deb http://{{ mirror }}/debian buster-backports main
     state: present
+  when: ansible_facts['distribution'] == "Debian"
 
 - name: Install note_kfet APT dependencies
   apt:
     update_cache: true
-    default_release: buster-backports
+    default_release: "{{ 'buster-backports' if ansible_facts['distribution'] == 'Debian' }}"
     install_recommends: false
     name:
       # Common tools

@@ -9,6 +9,11 @@
   retries: 3
   until: pkg_result is succeeded
 
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{note.server_name}}/cert.pem
+  register: letsencrypt_cert
+
 - name: Create /etc/letsencrypt/conf.d
   file:
     path: /etc/letsencrypt/conf.d
@@ -19,3 +24,17 @@
     src: "letsencrypt/conf.d/nk20.ini.j2"
     dest: "/etc/letsencrypt/conf.d/nk20.ini"
     mode: 0644
+
+- name: Stop services to allow certbot to generate a cert.
+  service:
+    name: nginx
+    state: stopped
+
+- name: Generate new certificate if one doesn't exist.
+  shell: "certbot certonly --non-interactive --config /etc/letsencrypt/conf.d/nk20.ini -d {{note.server_name}}"
+  when: letsencrypt_cert.stat.exists == False
+
+- name: Restart services to allow certbot to generate a cert.
+  service:
+    name: nginx
+    state: started

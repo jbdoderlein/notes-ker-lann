@@ -16,7 +16,7 @@
 
 - name: Use default env vars (should be updated!)
   template:
-    src: "env_example"
+    src: "env.j2"
     dest: "/var/www/note_kfet/.env"
     mode: 0644
     force: false
