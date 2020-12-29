@@ -36,3 +36,13 @@
     dest: /etc/cron.d/note
     owner: root
     group: root
+
+- name: Set default directory to /var/www/note_kfet
+  lineinfile:
+    path: /etc/skel/.bashrc
+    line: 'cd /var/www/note_kfet'
+
+- name: Automatically source Python virtual environment
+  lineinfile:
+    path: /etc/skel/.bashrc
+    line: 'source /var/www/note_kfet/env/bin/activate'
