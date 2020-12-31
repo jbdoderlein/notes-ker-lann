@@ -82,6 +82,7 @@ MIDDLEWARE = [
     'note_kfet.middlewares.SessionMiddleware',
     'note_kfet.middlewares.LoginByIPMiddleware',
     'note_kfet.middlewares.TurbolinksMiddleware',
+    'note_kfet.middlewares.ClacksMiddleware',
 ]
 
 ROOT_URLCONF = 'note_kfet.urls'
