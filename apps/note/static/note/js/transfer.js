@@ -302,7 +302,7 @@ $('#btn_transfer').click(function () {
             addMsg(interpolate(gettext('Warning, the emitter note %s is no more a BDE member.'), [source.name]), 'danger', 30000)
           }
           if (dest.note.membership && dest.note.membership.date_end < new Date().toISOString()) {
-            addMsg(interpolate(gettext('Warning, the destination note %s is no more a BDE member.'), [source.name]), 'danger', 30000)
+            addMsg(interpolate(gettext('Warning, the destination note %s is no more a BDE member.'), [dest.name]), 'danger', 30000)
           }
 
           if (!isNaN(source.note.balance)) {
