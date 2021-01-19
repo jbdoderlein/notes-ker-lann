@@ -1,6 +1,7 @@
 stages:
   - test
   - quality-assurance
+  - docs
 
 # Also fetch submodules
 variables:
@@ -62,3 +63,17 @@ linters:
 
   # Be nice to new contributors, but please use `tox`
   allow_failure: true
+
+# Compile documentation
+documentation:
+  stage: docs
+  image: sphinxdoc/sphinx
+  before_script:
+    - pip install sphinx-rtd-theme
+    - cd docs
+  script:
+    - make dirhtml
+  artifacts:
+    paths:
+      - docs/_build
+    expire_in: 1 day

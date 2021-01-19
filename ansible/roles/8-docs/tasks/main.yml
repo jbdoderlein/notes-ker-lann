@@ -1,0 +1,20 @@
+---
+- name: Install Sphinx and RTD theme
+  pip:
+    requirements: /var/www/note_kfet/docs/requirements.txt
+    virtualenv: /var/www/note_kfet/env
+    virtualenv_command: /usr/bin/python3 -m venv
+    virtualenv_site_packages: true
+  become_user: www-data
+
+- name: Create documentation directory with good permissions
+  file:
+    path: /var/www/documentation
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: u=rwx,g=rwxs,o=rx
+
+- name: Build HTML documentation
+  command: /var/www/note_kfet/env/bin/sphinx-build -b dirhtml /var/www/note_kfet/docs/ /var/www/documentation/
+  become_user: www-data

@@ -16,6 +16,9 @@ server {
     location /media  {
         alias /var/www/note_kfet/media;
     }
+    location /doc {
+        alias /var/www/documentation;
+    }
 
     # Send all non-media requests to the Django server.
     location / {
