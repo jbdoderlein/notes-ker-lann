@@ -16,7 +16,7 @@
 
 - name: Use default env vars (should be updated!)
   template:
-    src: "env_example"
+    src: "env.j2"
     dest: "/var/www/note_kfet/.env"
     mode: 0644
     force: false
@@ -36,3 +36,13 @@
     dest: /etc/cron.d/note
     owner: root
     group: root
+
+- name: Set default directory to /var/www/note_kfet
+  lineinfile:
+    path: /etc/skel/.bashrc
+    line: 'cd /var/www/note_kfet'
+
+- name: Automatically source Python virtual environment
+  lineinfile:
+    path: /etc/skel/.bashrc
+    line: 'source /var/www/note_kfet/env/bin/activate'

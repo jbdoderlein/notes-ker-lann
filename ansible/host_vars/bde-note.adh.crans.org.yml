@@ -3,3 +3,4 @@ note:
   server_name: note.crans.org
   git_branch: master
   cron_enabled: true
+  email: notekfet2020@lists.crans.org

@@ -3,12 +3,15 @@
 
 from datetime import timedelta
 
+from api.tests import TestAPI
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from activity.models import Activity, ActivityType, Guest, Entry
 from member.models import Club
+
+from ..api.views import ActivityTypeViewSet, ActivityViewSet, EntryViewSet, GuestViewSet
+from ..models import Activity, ActivityType, Guest, Entry
 
 
 class TestActivities(TestCase):
@@ -173,3 +176,58 @@ class TestActivities(TestCase):
         """
         response = self.client.get(reverse("activity:calendar_ics"))
         self.assertEqual(response.status_code, 200)
+
+
+class TestActivityAPI(TestAPI):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.activity = Activity.objects.create(
+            name="Activity",
+            description="This is a test activity\non two very very long lines\nbecause this is very important.",
+            location="Earth",
+            activity_type=ActivityType.objects.get(name="Pot"),
+            creater=self.user,
+            organizer=Club.objects.get(name="Kfet"),
+            attendees_club=Club.objects.get(name="Kfet"),
+            date_start=timezone.now(),
+            date_end=timezone.now() + timedelta(days=2),
+            valid=True,
+        )
+
+        self.guest = Guest.objects.create(
+            activity=self.activity,
+            inviter=self.user.note,
+            last_name="GUEST",
+            first_name="Guest",
+        )
+
+        self.entry = Entry.objects.create(
+            activity=self.activity,
+            note=self.user.note,
+            guest=self.guest,
+        )
+
+    def test_activity_api(self):
+        """
+        Load Activity API page and test all filters and permissions
+        """
+        self.check_viewset(ActivityViewSet, "/api/activity/activity/")
+
+    def test_activity_type_api(self):
+        """
+        Load ActivityType API page and test all filters and permissions
+        """
+        self.check_viewset(ActivityTypeViewSet, "/api/activity/type/")
+
+    def test_entry_api(self):
+        """
+        Load Entry API page and test all filters and permissions
+        """
+        self.check_viewset(EntryViewSet, "/api/activity/entry/")
+
+    def test_guest_api(self):
+        """
+        Load Guest API page and test all filters and permissions
+        """
+        self.check_viewset(GuestViewSet, "/api/activity/guest/")

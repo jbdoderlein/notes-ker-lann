@@ -85,7 +85,7 @@ class ProtectedCreateView(LoginRequiredMixin, CreateView):
     If not, a 403 error is displayed.
     """
 
-    def get_sample_object(self):
+    def get_sample_object(self):  # pragma: no cover
         """
         return a sample instance of the Model.
         It should be valid (can be stored properly in database), but must not collide with existing data.

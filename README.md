@@ -69,13 +69,31 @@ accessible depuis l'ensemble de votre réseau, pratique pour tester le rendu
 de la note sur un téléphone !
 
 ## Installation d'une instance de production
+Pour déployer facilement la note il est possible d'utiliser le playbook Ansible (sinon vous pouvez toujours le faire a la main, voir plus bas).
+### Avec ansible
+Il vous faudra un serveur sous debian ou ubuntu connecté à internet et que vous souhaiterez accéder à cette instance de la note sur `note.nomdedomaine.tld`.
+
+0. Installer Ansible sur votre machine personnelle.
+
+0. (bis) cloner le dépot sur votre machine personelle.
+
+1.  Copier le fichier `ansible/host_example`
+``` bash
+$ cp ansible/hosts_example ansible/hosts
+```
+et ajouter sous [dev] et/ou [prod] les serveurs sur lesquels vous souhaitez installer la note.
+2.  Créer un fichier `ansible/host_vars/<note.nomdedomaine.tld.yaml>` sur le modèle des fichiers existants dans `ansible/hosts` et compléter les variables nécessaires.
+
+3. lancer `ansible/base.yaml -l <nomdedomaine.tld.yaml>`
+4. Aller vous faire un café, ca peux durer un moment.
+
+### Installation manuelle
 
 **En production on souhaite absolument utiliser les modules Python packagées dans le gestionnaire de paquet.**
 Cela permet de mettre à jour facilement les dépendances critiques telles que Django.
 
 L'installation d'une instance de production néccessite **une installation de Debian Buster ou d'Ubuntu 20.04**.
 
-Pour aller vite vous pouvez lancer le Playbook Ansible fournit dans ce dépôt en l'adaptant.
 Sinon vous pouvez suivre les étapes décrites ci-dessous.
 
 0.  Sous Debian Buster, **activer Debian Backports.** En effet Django 2.2 LTS n'est que disponible dans les backports.

@@ -109,9 +109,6 @@ class SpecialTransactionTable(tables.Table):
                                               'a': {'class': 'btn btn-primary btn-danger'}
                                           }, )
 
-    def render_id(self, record):
-        return record.specialtransactionproxy.pk
-
     def render_amount(self, value):
         return pretty_money(value)
 
