@@ -1,5 +1,5 @@
 /*
-* If you are not using the main language, you should never see this file.
+* You should never see this file.
 * It is here only for compatibility reasons in case of the command `compilejsmessages` was never executed.
 * Please execute this command to generate translation strings.
 */
@@ -9,7 +9,14 @@
   var django = globals.django || (globals.django = {});
 
 
-  django.pluralidx = function(count) { return (count == 1) ? 0 : 1; };
+  django.pluralidx = function(n) {
+    var v=(n != 1);
+    if (typeof(v) == 'boolean') {
+      return v ? 1 : 0;
+    } else {
+      return v;
+    }
+  };
 
 
   /* gettext library */
@@ -66,41 +73,39 @@
     /* formatting library */
 
     django.formats = {
-    "DATETIME_FORMAT": "N j, Y, P",
+    "DATETIME_FORMAT": "j \\d\\e F \\d\\e Y \\a \\l\\a\\s H:i",
     "DATETIME_INPUT_FORMATS": [
+      "%d/%m/%Y %H:%M:%S",
+      "%d/%m/%Y %H:%M:%S.%f",
+      "%d/%m/%Y %H:%M",
+      "%d/%m/%y %H:%M:%S",
+      "%d/%m/%y %H:%M:%S.%f",
+      "%d/%m/%y %H:%M",
       "%Y-%m-%d %H:%M:%S",
       "%Y-%m-%d %H:%M:%S.%f",
       "%Y-%m-%d %H:%M",
-      "%Y-%m-%d",
-      "%m/%d/%Y %H:%M:%S",
-      "%m/%d/%Y %H:%M:%S.%f",
-      "%m/%d/%Y %H:%M",
-      "%m/%d/%Y",
-      "%m/%d/%y %H:%M:%S",
-      "%m/%d/%y %H:%M:%S.%f",
-      "%m/%d/%y %H:%M",
-      "%m/%d/%y"
+      "%Y-%m-%d"
     ],
-    "DATE_FORMAT": "N j, Y",
+    "DATE_FORMAT": "j \\d\\e F \\d\\e Y",
     "DATE_INPUT_FORMATS": [
-      "%Y-%m-%d",
-      "%m/%d/%Y",
-      "%m/%d/%y"
+      "%d/%m/%Y",
+      "%d/%m/%y",
+      "%Y-%m-%d"
     ],
-    "DECIMAL_SEPARATOR": ".",
-    "FIRST_DAY_OF_WEEK": 0,
-    "MONTH_DAY_FORMAT": "F j",
+    "DECIMAL_SEPARATOR": ",",
+    "FIRST_DAY_OF_WEEK": 1,
+    "MONTH_DAY_FORMAT": "j \\d\\e F",
     "NUMBER_GROUPING": 3,
-    "SHORT_DATETIME_FORMAT": "m/d/Y P",
-    "SHORT_DATE_FORMAT": "m/d/Y",
-    "THOUSAND_SEPARATOR": ",",
-    "TIME_FORMAT": "P",
+    "SHORT_DATETIME_FORMAT": "d/m/Y H:i",
+    "SHORT_DATE_FORMAT": "d/m/Y",
+    "THOUSAND_SEPARATOR": ".",
+    "TIME_FORMAT": "H:i",
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S",
       "%H:%M:%S.%f",
       "%H:%M"
     ],
-    "YEAR_MONTH_FORMAT": "F Y"
+    "YEAR_MONTH_FORMAT": "F \\d\\e Y"
   };
 
     django.get_format = function(format_type) {
