@@ -12,4 +12,5 @@ Des informations complémentaires sont également disponibles sur le `Wiki Crans
    :caption: Développement de la NK20
 
    apps/index
+   documentation
    external_services/index
