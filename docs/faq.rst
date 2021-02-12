@@ -1,0 +1,115 @@
+Foire aux questions
+===================
+
+Je suis trésorier d'un club, qu'ai-je le droit de faire ?
+---------------------------------------------------------
+
+.. note::
+   Être trésorier d'un club donne la responsabilité de gérer la trésorerie du
+   club, et donc de gérer sa note. Vous obtenez donc le droit d'effectuer
+   n'importe quelle transaction via la note en provenance ou à destination de
+   la note de votre club. Vous pouvez également gérer les adhésions de votre club,
+   en permettant à n'importe quel adhérent BDE de rejoindre votre club, en prélevant
+   d'éventuels frais d'adhésion. Les paramètres du club peuvent être également modifiés.
+
+.. danger::
+   Avoir des droits sur la Note Kfet ne signifie pas que vous devez les utiliser.
+   Chaque opération nécessitant des droits doit être fait pour une bonne raison,
+   et doit avoir un lien avec votre club. Vous n'avez par exemple pas le droit
+   d'aller récupérer des informations personnelles d'adhérents pour une raison
+   personnelle. En revanche, faire le lien entre nom/prénom et nom de note est
+   bien sûr permis pour faciliter des transferts. Tout abus de droits constaté
+   pourra mener à des sanctions prises par le bureau du BDE.
+
+.. warning::
+   Une fonctionnalité pour permettre de gérer plus proprement les remboursements
+   entre amis est en cours de développement. Temporairement et pour des raisons
+   de confort, les trésoriers de clubs ont le droit de prélever n'importe quelle
+   adhérente vers n'importe quelle autre note adhérente, tant que la source ne
+   descend pas sous ``- 50 €``. Ces droits seront retirés d'ici quelques semaines.
+
+
+Après passation, je suis trésorier d'un club. Comment récupérer mes droits note ?
+---------------------------------------------------------------------------------
+
+.. note::
+   Tu dois pour cela contacter les trésoriers BDE (voir ci-dessous). Ils vous
+   expliqueront en détails vos droits et vos interdits et vous donneront les
+   droits requis.
+
+
+Je souhaite contacter un trésorier
+----------------------------------
+
+.. note::
+   Pour contacter un trésorier, il te suffit d'envoyer un mail à l'adresse
+   `tresorerie.bde@lists.crans.org <tresorerie.bde@lists.crans.org>`_. Pense bien
+   à donner ton nom de note, voire à envoyer un scan de ta carte d'identité si ta
+   demande concerne un virement entre le compte du BDE et ton propre compte.
+
+
+J'ai trouvé un bug, comment le signaler ?
+-----------------------------------------
+
+.. note::
+   La Note Kfet est développée bénévolement par des membres du BDE. Malgré tous nos
+   efforts pour fournir une plateforme sans erreur et la plus ergonomique possible.
+   Toutefois, il n'est évidemment pas exclu que des bugs soient présents :)
+
+   Pour nous soumettre un bug, tu peux envoyer un mail à
+   `notekfet2020@lists.crans.org <notekfet2020@lists.crans.org>`_
+
+   Tu peux sinon ouvrir une issue sur `Gitlab <https://gitlab.crans.org/bde/nk20>`_.
+
+   N'hésite pas à venir en discuter avec nous à la Kfet, ou bien sur
+   `l'IRC du Crans <https://irc.crans.org/web>`_ sur le canal ``#note`` !
+
+   Le même processus s'applique en cas de demande de fonctionnalités.
+
+
+Je souhaite contribuer
+----------------------
+
+.. note::
+   La Note Kfet est essentiellement développée par des responsables informatiques du
+   BDE de l'ENS Paris-Saclay. Toutefois, si vous souhaitez contribuer, vous pouvez
+   bien sûr le faire en accord avec la licence GPLv3 avec laquelle la Note Kfet est
+   distribuée. Pour cela, si vous êtes adhérent Crans, vous pouvez proposer une
+   demande de fusion de votre code. Si ce n'est pas le cas, vous pouvez envoyer un
+   mail à `notekfet2020@lists.crans.org <notekfet2020@lists.crans.org>`_.
+   Dans les deux cas, merci de rejoindre le canal ``#note`` sur IRC :)
+
+
+Contributeurs
+-------------
+
+.. note::
+   La version 2020 de la Note Kfet a été développée sous le mandat de la
+   Saper[list]popette. Son développement a commencé à l'été 2019. Après un mois de beta
+   à l'été 2020, son déploiement en production s'est fait le samedi 5 septembre 2020.
+
+   Elle succède à presque 6 années de la
+   `Note Kfet 2015 <https://wiki.crans.org/NoteKfet/NoteKfet2015>`_, alors en production
+   depuis le 6 octobre 2014.
+
+   Liste des contributeurs majeurs, par ordre alphabétique :
+
+   * Pierre-André « PAC » COMBY
+   * Yohann « ÿnérant » D'ANELLO
+   * Benjamin « esum » GRAILLOT
+   * Alexandre « erdnaxe » IOOSS
+
+
+Hébergement
+-----------
+
+.. note::
+   En accord entre de l'ENS Paris-Saclay et le Crans, l'instance de production présente
+   sur `<https://note.crans.org/>`_ est hébergée sur l'un des serveurs du Crans.
+   Les données sont hébergées à l'adresse :
+
+   .. code::
+
+      Association Crans
+      4 Avenue des Sciences
+      91190 Gif-sur-Yvette

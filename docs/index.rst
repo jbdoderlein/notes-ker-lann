@@ -13,4 +13,5 @@ Des informations complémentaires sont également disponibles sur le `Wiki Crans
 
    apps/index
    documentation
+   faq
    external_services/index
