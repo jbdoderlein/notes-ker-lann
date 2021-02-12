@@ -19,8 +19,8 @@ Une permission est un Model Django dont les principaux attributs sont :
 * ``model`` : Le model sur lequel cette permission va s'appliquer
 * ``type``  : Les différents types d'interaction sont : voir (``view``), modifier (``change``), ajouter (``add``)
   et supprimer (``delete``).
-* ``query`` : Requete sur la cible, encodé en JSON, traduit en un Q object (cf [Query](#compilation-de-la-query)
-* ``field`` : le champ cible qui pourra etre modifié. (tous les champs si vide)
+* ``query`` : Requête sur la cible, encodé en JSON, traduit en un Q object (cf `Query <#compilation-de-la-query>`_)
+* ``field`` : le champ cible qui pourra être modifié. (tous les champs si vide)
 
 Pour savoir si un utilisateur a le droit sur un modèle ou non, la requête est compilée (voir ci-dessous) en un filtre
 de requête dans la base de données, un objet de la classe ``Q`` (En SQL l'objet Q s'interprete comme tout ce qui suit

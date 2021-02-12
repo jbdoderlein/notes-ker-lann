@@ -114,7 +114,7 @@ Les filtres disponibles sont indiqués sur chacune des pages de documentation.
 Le résultat est déjà par défaut filtré par droits : seuls les éléments que l'utilisateur à le droit de voir sont affichés.
 Cela est possible grâce à la structure des permissions, générant justement des filtres de requêtes de base de données.
 
-Une requête à l'adresse ``/api/<model>/pk/`` affiche directement les informations du modèle demandé au format JSON.
+Une requête à l'adresse ``/api/<model>/<pk>/`` affiche directement les informations du modèle demandé au format JSON.
 
 POST
 ~~~~
