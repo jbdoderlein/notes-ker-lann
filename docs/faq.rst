@@ -1,6 +1,68 @@
 Foire aux questions
 ===================
 
+Des transactions anormales sont apparues sur mon compte.
+--------------------------------------------------------
+
+.. note::
+   Tu dois immédiatement contacter les trésoriers du BDE (voir ci-dessous) pour
+   signaler l'incident. Précise bien ton nom de note, l'heure de la transaction
+   ainsi que l'alias utilisé pour faire la transaction (en plaçant ta souris sur
+   ton pseudo sur la ligne de transaction, l'alias utilisé apparaît). La raison
+   la plus courante est que tu as un alias qui est trop proche d'un autre d'une
+   autre personne. Même si la Note Kfet 2020 essaie d'éviter ça, tu es invité⋅e
+   à supprimer l'alias problématique, ou tout du moins t'assurer que la confusion
+   ne puisse plus arriver.
+
+
+Je souhaite consommer mais le solde de ma note est insuffisant
+--------------------------------------------------------------
+
+.. note::
+   Le BDE ne fait pas crédit à ses adhérents. Il est de ton devoir de t'assurer
+   d'avoir en permanence un solde positif sur ta note. Les permanenciers à la
+   Kfet ont la possibilité de refuser une consommation qui fait passer en négatif,
+   et ont obligation de refuser si la consommation est alcoolisée, en accord avec
+   la règlementation en vigueur.
+
+   Les trésoriers connaissent la liste des personnes en situation irrégulière et
+   n'hésiteront pas à faire des rappels pour recharger la note.
+
+
+Comment recharger ma note ?
+---------------------------
+
+.. note::
+   Le solde de la note peut être rechargé soit par espèces, par chèque à l'ordre
+   de l'amicale des élèves de l'ENS Cachan, par carte bancaire via un terminal
+   de paiement électronique ou encore par virement bancaire, dont les coordonnées
+   sont à demander auprès des trésoriers BDE.
+
+   Les trois premières options sont à faire directement dans la Kfet.
+
+
+Je pars en stage / en vacances. Puis-je bloquer ma note ?
+---------------------------------------------------------
+
+.. note::
+   Bien sûr : il te suffit de te rendre sur ton compte et de cliquer sur le bouton
+   dédié. Ta note ne sera plus affichée par les autres personnes et les transferts
+   seront impossibles, sauf pour les trésoriers BDE et respo info.
+
+   Il est toutefois de ton devoir de rembourser tout ce que tu dois.
+
+
+Quelle est la limite maximale au nombre d'alias d'une note ?
+------------------------------------------------------------
+
+.. note::
+   Certains parlent d'une dizaine d'alias par note.
+
+   Sois conscient⋅e qu'ajouter des alias ne peut qu'augmenter la probabilité de
+   collisions avec une autre note, et peut aussi retarder la livraison de ta
+   commande lors d'un perm bouffe.
+
+
 Je suis trésorier d'un club, qu'ai-je le droit de faire ?
 ---------------------------------------------------------
 
@@ -27,6 +89,19 @@ Je suis trésorier d'un club, qu'ai-je le droit de faire ?
    de confort, les trésoriers de clubs ont le droit de prélever n'importe quelle
    adhérente vers n'importe quelle autre note adhérente, tant que la source ne
    descend pas sous ``- 50 €``. Ces droits seront retirés d'ici quelques semaines.
+
+
+Je suis trésorier d'un club, je n'arrive pas à voir le solde du club / faire des transactions
+---------------------------------------------------------------------------------------------------
+
+.. note::
+   As-tu bien vérifié que tu t'es connecté⋅e initialement avec tous tes droits ?
+   Sinon, si tes droits sont tout récents, tu dois te déconnecter et te reconnecter
+   pour que tes droits soient bien pris en compte.
+
+   La Note permet de se connecter avec différents filtres de permission afin de
+   pouvoir prêter son ordinateur avec une session ouverte pour faire quelques
+   opérations en empêchant l'accès à des opérations trop sensibles.
 
 
 Après passation, je suis trésorier d'un club. Comment récupérer mes droits note ?
@@ -111,5 +186,6 @@ Hébergement
    .. code::
 
       Association Crans
+      ENS Paris-Saclay
       4 Avenue des Sciences
       91190 Gif-sur-Yvette
