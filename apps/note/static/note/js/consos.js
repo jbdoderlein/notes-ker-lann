@@ -223,13 +223,14 @@ function consume (source, source_alias, dest, quantity, amount, reason, type, ca
         const newBalance = source.balance - quantity * amount
         if (newBalance <= -5000) {
           addMsg(interpolate(gettext('Warning, the transaction from the note %s succeed, ' +
-              'but the emitter note %s is very negative.', [source_alias, source_alias])), 'danger', 30000)
+              'but the emitter note %s is very negative.'), [source_alias, source_alias]), 'danger', 30000)
         } else if (newBalance < 0) {
           addMsg(interpolate(gettext('Warning, the transaction from the note %s succeed, ' +
-              'but the emitter note %s is negative.', [source_alias, source_alias])), 'warning', 30000)
+              'but the emitter note %s is negative.'), [source_alias, source_alias]), 'warning', 30000)
         }
         if (source.membership && source.membership.date_end < new Date().toISOString()) {
-          addMsg(interpolate(gettext('Warning, the emitter note %s is no more a BDE member.', [source_alias])), 'danger', 30000)
+          addMsg(interpolate(gettext('Warning, the emitter note %s is no more a BDE member.'), [source_alias]),
+              'danger', 30000)
         }
       }
       reset()
