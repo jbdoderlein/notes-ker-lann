@@ -104,6 +104,23 @@ Je suis trésorier d'un club, je n'arrive pas à voir le solde du club / faire d
    opérations en empêchant l'accès à des opérations trop sensibles.
 
 
+Je suis trésorier d'un club. Puis-je créer un bouton ?
+------------------------------------------------------
+
+.. note::
+   Oui bien sûr ! Tant qu'il redirige bien vers la note de ton club.
+
+   Pour cela, rends-toi à la page `</note/buttons/>`_ pour afficher la liste des
+   boutons, puis tu auras accès à l'interface pour créer un bouton. Une fois le
+   bouton créé, il apparaîtra dans l'onglet ``Consommations``.
+
+   Il faut noter que tant qu'il n'y a pas de boutons visibles pour ton club, tu
+   n'auras pas accès à l'interface de consommations, et tu devras nécessairement
+   cliquer sur le lien ci-dessus pour accéder à l'interface d'édition des boutons.
+   Une fois qu'un bouton pour ton club est visible, l'interface consommations
+   devient accessible.
+
+
 Après passation, je suis trésorier d'un club. Comment récupérer mes droits note ?
 ---------------------------------------------------------------------------------
 
