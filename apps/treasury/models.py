@@ -381,9 +381,14 @@ class SogeCredit(models.Model):
             tr.valid = True
             tr.created_at = timezone.now()
             tr.save()
-        self.credit_transaction.valid = False
-        self.credit_transaction.reason += " (invalide)"
-        self.credit_transaction.save()
+        if self.credit_transaction:
+            # If the soge credit is deleted while the user is not validated yet,
+            # there is not credit transaction.
+            # There is a credit transaction iff the user declares that no bank account
+            # was opened after the validation of the account.
+            self.credit_transaction.valid = False
+            self.credit_transaction.reason += " (invalide)"
+            self.credit_transaction.save()
         super().delete(**kwargs)
 
     class Meta:
