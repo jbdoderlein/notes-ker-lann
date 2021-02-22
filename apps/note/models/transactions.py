@@ -223,7 +223,8 @@ class Transaction(PolymorphicModel):
         # Check that the amounts stay between big integer bounds
         diff_source, diff_dest = self.validate()
 
-        if not self.source.is_active or not self.destination.is_active:
+        if not (hasattr(self, '_force_save') and self._force_save) \
+                and (not self.source.is_active or not self.destination.is_active):
             raise ValidationError(_("The transaction can't be saved since the source note "
                                     "or the destination note is not active."))
 
@@ -271,7 +272,7 @@ class RecurrentTransaction(Transaction):
     )
 
     def clean(self):
-        if self.template.destination != self.destination:
+        if self.template.destination != self.destination and not (hasattr(self, '_force_save') and self._force_save):
             raise ValidationError(
                 _("The destination of this transaction must equal to the destination of the template."))
         return super().clean()

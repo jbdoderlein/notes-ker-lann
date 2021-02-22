@@ -43,4 +43,5 @@ def delete_transaction(instance, **_kwargs):
     """
     if not hasattr(instance, "_no_signal"):
         instance.valid = False
+        instance._force_save = True
         instance.save()
