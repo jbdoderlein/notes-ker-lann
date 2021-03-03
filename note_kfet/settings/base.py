@@ -273,3 +273,6 @@ PIC_RATIO = 1
 # Custom phone number format
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'FR'
+
+# We add custom information to CAS, in order to give a normalized name to other services
+CAS_AUTH_CLASS = 'member.auth.CustomAuthUser'
