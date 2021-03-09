@@ -134,8 +134,6 @@ class PermissionBackend(ModelBackend):
             return False
 
         sess = get_current_session()
-        if sess is not None and sess.session_key is None:
-            return False
 
         if user_obj.is_superuser and sess.get("permission_mask", -1) >= 42:
             return True
