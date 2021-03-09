@@ -48,6 +48,6 @@ app_name = 'api'
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url('^', include(router.urls)),
-    url('me', UserInformationView.as_view()),
+    url('^me/', UserInformationView.as_view()),
     url('^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
