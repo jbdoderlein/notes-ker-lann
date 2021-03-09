@@ -8,6 +8,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from member.api.serializers import ProfileSerializer, MembershipSerializer
+from note.api.serializers import NoteSerializer
 from note.models import Alias
 
 
@@ -47,6 +48,8 @@ class OAuthSerializer(serializers.ModelSerializer):
 
     profile = ProfileSerializer()
 
+    note = NoteSerializer()
+
     memberships = serializers.SerializerMethodField()
 
     def get_normalized_name(self, obj):
@@ -69,5 +72,6 @@ class OAuthSerializer(serializers.ModelSerializer):
             'is_active',
             'is_staff',
             'profile',
+            'note',
             'memberships',
         )
