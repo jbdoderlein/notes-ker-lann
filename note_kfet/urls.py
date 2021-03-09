@@ -45,6 +45,11 @@ if "oauth2_provider" in settings.INSTALLED_APPS:
         path('o/', include('oauth2_provider.urls', namespace='oauth2_provider'))
     )
 
+if "cas_server" in settings.INSTALLED_APPS:
+    urlpatterns.append(
+        path('cas/', include('cas_server.urls', namespace='cas_server'))
+    )
+
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns = [
