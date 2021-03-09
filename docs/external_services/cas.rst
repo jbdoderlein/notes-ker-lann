@@ -14,8 +14,8 @@ installé soit par PIP soit sur une machine Debian via
 ``apt install python3-django-cas-server``.
 
 On ajoute ensuite ``cas_server`` aux applications Django installées. On n'oublie pas ni
-d'appliquer les migrations (``./manage.py migrate``) ni de collecter les fichiers statiques
-(``./manage.py collectstatic``).
+d'appliquer les migrations (``./manage.py migrate``) ni de collecter les fichiers
+statiques (``./manage.py collectstatic``).
 
 On enregistre les routes dans ``note_kfet/urls.py`` :
 
