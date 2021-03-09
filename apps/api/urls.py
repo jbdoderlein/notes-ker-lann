@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from rest_framework import routers
 
+from .views import UserInformationView
 from .viewsets import ContentTypeViewSet, UserViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -47,5 +48,6 @@ app_name = 'api'
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url('^', include(router.urls)),
+    url('me', UserInformationView.as_view()),
     url('^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
