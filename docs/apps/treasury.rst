@@ -217,5 +217,6 @@ Exemple de validation de crédit Société générale d'un étudiant non payé "
 Diagramme des modèles
 ---------------------
 
-.. image:: /_static/img/graphs/treasury.svg
+.. image:: ../_static/img/graphs/treasury.svg
+   :width: 960
    :alt: Graphe de l'application trésorerie

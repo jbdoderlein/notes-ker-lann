@@ -48,3 +48,10 @@ Exemple de Changelog, pour la création d'une transaction de 42424242 centimes d
 
 S'il est préférable de passer en console Postgresql pour parcourir les logs, ils sont trouvables via l'API dans
 ``/api/logs``, sous réserve d'avoir les droits suffisants (ie. être respo info).
+
+
+Graphe
+~~~~~~
+
+.. image:: ../_static/img/graphs/logs.svg
+  :alt: Logs graphe

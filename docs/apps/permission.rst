@@ -147,5 +147,5 @@ modifiés en comparant l'ancienne et la nouvele instance.
 Graphe des modèles
 ------------------
 
-.. image:: /_static/img/graphs/permission.svg
+.. image:: ../_static/img/graphs/permission.svg
    :alt: Graphe de l'application permission
