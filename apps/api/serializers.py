@@ -6,7 +6,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.utils import timezone
 from rest_framework import serializers
-
 from member.api.serializers import ProfileSerializer, MembershipSerializer
 from note.api.serializers import NoteSerializer
 from note.models import Alias
