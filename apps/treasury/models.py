@@ -132,7 +132,9 @@ class Product(models.Model):
         verbose_name=_("Designation"),
     )
 
-    quantity = models.FloatField(
+    quantity = models.DecimalField(
+        decimal_places=2,
+        max_digits=7,
         verbose_name=_("Quantity"),
         validators=[MinValueValidator(0)],
     )
