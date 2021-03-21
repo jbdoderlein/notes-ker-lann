@@ -3,6 +3,7 @@
 
 import json
 from datetime import datetime, date
+from decimal import Decimal
 from urllib.parse import quote_plus
 from warnings import warn
 
@@ -152,6 +153,8 @@ class TestAPI(TestCase):
                 value = value.isoformat()
             elif isinstance(value, ImageFieldFile):
                 value = value.name
+            elif isinstance(value, Decimal):
+                value = str(value)
             query = json.dumps({field.name: value})
 
             # Create sample permission
