@@ -43,3 +43,73 @@ confirmation apparaîtra et la transaction apparaîtra dans l'historique ci-dess
 
 .. image:: _static/img/create_transaction.png
    :alt: Créer une transaction
+
+
+Consulter ses données personnelles
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La Note Kfet sert non seulement à faire des transactions d'argent virtuel au sein
+du BDE, mais aussi à permettre au BDE et à ses clubs de gérer leurs adhérents.
+À cet effet, diverses informations personnelles sont collectées par la Note.
+
+Pour accéder à votre compte, une fois connecté⋅e, rendez-vous dans le menu en haut
+à droite où se trouve votre pseudo. Votre solde est par ailleurs affiché à côté
+de votre pseudo.
+
+L'interface est divisée en trois parties :
+
+ * Vos données personnelles dans la partie de gauche
+ * Vos adhésions actives (si existantes) dans la partie haute
+ * Vos transactions récentes dans la partie basse
+
+Vous pouvez modifier vos données personnelles que la Note possède sur vous en
+cliquant à tout moment sur le bouton « Modifier le profil ». Les informations
+présentes sont :
+
+ * Nom
+ * Prénom
+ * Pseudo
+ * Adresse e-mail
+ * Numéro de téléphone
+ * Section
+ * Département
+ * Promotion
+ * Adresse
+ * Élève/étudiant
+ * Inscription aux listes de diffusion du BDE, du BDA et du BDS
+
+Les trois premières informations sont obligatoires pour pouvoir vous contacter
+et pouvoir tenir un registre d'adhérent.
+
+Le numéro de téléphone et l'adresse ne sont utilisés uniquement en cas d'urgence,
+notamment en cas de WEI, et ne sont pas des champs obligatoires. De plus,
+promotion, département et section ne sont utilisés sérieusement que en cas
+de WEI, et ne sont pas utilisés sinon.
+
+La distinction élève/étudiant permet de distinguer les achats qui peuvent avoir
+des prix différents pour les élèves et pour les étudiants, notamment en cas de
+transferts d'argent, de WEI ou d'adhésion à certains clubs.
+
+Hormis le pseudo, toutes ces informations ont un caractère confidentiel qui les
+rend privées et inaccessible aux utilisateurs. Les trésoriers BDE et les respos
+info ont accès à toutes les informations (en cas de besoin uniquement, le cas
+contraire est considéré comme de l'abus de droit qui est punissable), et les
+trésoriers de club ont accès au nom et au prénom afin de faciliter l'association
+à un nom de note.
+
+Dans la partie informations personnelles, il est également possible de modifier
+la liste de ses alias (voir la section sur les alias), et de voir son propre
+solde. Il est enfin possible de modifier l'image associée à la note, qui n'a
+quant à elle pas de caractère privée puisqu'elle est affichée à chaque recherche
+de nom de note.
+
+Le tableau des adhésions actives sur la partie du haut contient l'ensemble des
+clubs auxquels vous êtes adhérent⋅es, avec les dates de début, de fin, votre
+rôle au sein du club (généralement simple membre, mais cela peut également
+être trésorier⋅ère par exemple) ainsi que la cotisation que vous avez éventuellement
+payée au club.
+
+L'historique des transactions contient l'ensemble des transactions qui ont fait
+intervenir votre note, triées par date décroissante. Il est possible en cliquant
+sur le lien « Historique des transactions » d'avoir un meilleur aperçu, notamment
+pour pouvoir filtrer des transactions.
