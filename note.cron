@@ -1,6 +1,9 @@
 # {{ ansible_managed }}
 # Les cronjobs dont a besoin la Note Kfet
 
+# Envoi des mails aux respos info
+MAILTO=notekfet2020@lists.crans.org
+
 # m  h   dom mon dow     user   command
 # Envoyer les mails en attente
  *   *     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail -c 1
