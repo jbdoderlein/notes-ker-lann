@@ -5,7 +5,7 @@
 if [ -z ${NOTE_URL+x} ]; then
   echo "Warning: your env files are not configurated."
 else
-  sed -i -e "s/example.com/$DOMAIN/g" /var/www/note_kfet/apps/member/fixtures/initial.json
+  sed -i -e "s/example.com/$NOTE_URL/g" /var/www/note_kfet/apps/member/fixtures/initial.json
   sed -i -e "s/localhost/$NOTE_URL/g" /var/www/note_kfet/note_kfet/fixtures/initial.json
   sed -i -e "s/\"\.\*\"/\"https?:\/\/$NOTE_URL\/.*\"/g" /var/www/note_kfet/note_kfet/fixtures/cas.json
   sed -i -e "s/REPLACEME/La Note Kfet \\\\ud83c\\\\udf7b/g" /var/www/note_kfet/note_kfet/fixtures/cas.json
