@@ -15,5 +15,6 @@ Des informations complémentaires sont également disponibles sur le `Wiki Crans
    getting_started
    apps/index
    documentation
+   install-dev
    faq
    external_services/index
