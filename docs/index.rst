@@ -17,5 +17,6 @@ Des informations complémentaires sont également disponibles sur le `Wiki Crans
    install-dev
    install
    documentation
+   scripts
    faq
    external_services/index
