@@ -46,7 +46,7 @@ Applications indispensables
 Applications packagées
 ----------------------
 * ``polymorphic``
-    Utiliser pour la création de models polymorphiques (``Note`` et ``Transaction`` notamment) cf [Note](Note).
+    Utiliser pour la création de models polymorphiques (``Note`` et ``Transaction`` notamment) cf `Note <note>`_.
 
     L'utilisation des models polymorphiques est détaillé sur la documentation du package:
     `<https://django-polymorphic.readthedocs.io/en/stable/>`_

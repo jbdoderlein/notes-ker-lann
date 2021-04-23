@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Note Kfet 2020'
-copyright = '2020, BDE ENS Paris-Saclay'
+copyright = '2020-2021, BDE ENS Paris-Saclay'
 author = 'BDE ENS Paris-Saclay'
 
 # The full version, including alpha/beta/rc tags

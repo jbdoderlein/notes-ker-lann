@@ -16,7 +16,7 @@ MAILTO=notekfet2020@lists.crans.org
 # Mettre à jour le wiki (modification sans (dé)validation, activités passées)
  30  5     *   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py refresh_activities --raw --human --comment refresh --wiki -v 0
 # Spammer les gens en négatif
- 00  5     *   *   2     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --spam -v 0
+ 00  5     *   *   2     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --spam --negative-amount 0 -v 0
 # Envoyer le rapport mensuel aux trésoriers et respos info
  00  8     6   *   *     root   cd /var/www/note_kfet && env/bin/python manage.py send_mail_to_negative_balances --report --add-years 1 -v 0
 # Envoyer les rapports aux gens

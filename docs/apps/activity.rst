@@ -74,7 +74,7 @@ ne dépende pas de cette application, on procède de cette manière.
 Graphe
 ~~~~~~
 
-.. image:: /_static/img/graphs/activity.svg
+.. image:: ../_static/img/graphs/activity.svg
    :alt: Graphe de l'application activités
 
 UI

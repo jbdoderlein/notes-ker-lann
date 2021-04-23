@@ -279,7 +279,8 @@ Le cahier des charges initial est disponible [sur le Wiki Crans](https://wiki.cr
 La documentation des classes et fonctions est directement dans le code et est explorable à partir de la partie documentation de l'interface d'administration de Django.
 **Commentez votre code !**
 
-La documentation plus haut niveau sur le développement est disponible sur [le Wiki associé au dépôt Git](https://gitlab.crans.org/bde/nk20/-/wikis/home).
+La documentation plus haut niveau sur le développement et sur l'utilisation
+est disponible sur <https://note.crans.org/doc> et également dans le dossier `docs`.
 
 ## FAQ
 
