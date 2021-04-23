@@ -602,3 +602,39 @@ pour générer le certificat, voir la partie ``certbot``. La configuration du fi
 ``.env`` sera également à faire à la main.
 
 Cependant, pour mettre à jour, lancer cette commande suffit.
+
+
+Copier une base de données
+--------------------------
+
+On peut vouloir périodiquement copier la base de données de production vers le serveur
+de développement, afin de travailler avec des données à jour.
+
+On aura besoin de pouvoir accéder aux deux bases de données. On commence donc si ce n'est
+pas déjà fait par créer un utilisateur sur les deux serveurs :
+
+.. code:: bash
+
+   ynerant@bde-note:~$ sudo -u postgres createuser -l ynerant
+
+On réinitialise **sur le serveur de développement** la base de données présente, en
+éteignant tout d'abord le serveur Web :
+
+.. code:: bash
+
+   ynerant@bde-note-dev:~$ sudo systemctl stop uwsgi
+   ynerant@bde-note-dev:~$ sudo -u postgres dropdb note_db
+   ynerant@bde-note-dev:~$ sudo -u postgres createdb -O note note_db
+
+Et on copie enfin la base de données, en une seule ligne via SSH :
+
+.. code:: bash
+
+   ynerant@bde-note:~$ pg_dump note_db | ssh note-dev.crans.org "psql note_db -f -"
+
+On peut enfin redémarrer le serveur Web. Les données ont bien été copiées.
+
+.. caution::
+
+   On ne copiera **jamais** des données d'adhérent⋅e⋅s sur une machine personnelle.
+   Ce type d'opération doit s'effectuer impérativement entre des serveurs du BDE.
