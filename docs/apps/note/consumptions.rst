@@ -9,7 +9,8 @@ Elle est disponible à l'adresse ``/note/consos/``, et l'onglet n'est visible qu
 moins un bouton. L'affichage, comme tout le reste de la page, est géré avec Boostrap 4.
 Les boutons que l'utilisateur a le droit de voir sont triés par catégorie.
 
-## Sélection des consommations
+Sélection des consommations
+---------------------------
 
 Lorsque l'utilisateur commence à taper un nom de note, un appel à l'API sur la page ``/api/note/alias`` est fait,
 récupérant les 20 premiers aliases en accord avec la requête. Quand l'utilisateur survole un alias, un appel à la page

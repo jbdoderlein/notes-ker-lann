@@ -93,7 +93,7 @@ génère en effet automatiquement une transaction de l'utilisateur vers le club 
 Graphe
 ------
 
-.. image:: /_static/img/graphs/member.svg
+.. image:: ../_static/img/graphs/member.svg
    :alt: Graphe de l'application member
 
 Adhésions
@@ -109,15 +109,15 @@ de fin d'adhésion.
 
 On peut ajouter une adhésion à un utilisateur dans un club à tout non adhérent de ce club. La personne en charge
 d'adhérer quelqu'un choisit l'utilisateur, les rôles au sein du club et la date de début d'adhésion. Cette date de
-début d'adhésion doit se situer entre les champs ``club``.``membership_start`` et ``club``.``membership_end``,
-si ces champs sont non nuls. Si ``club``.``parent_club`` n'est pas nul, l'utilisateur doit être membre de ce club.
-Le montant de la cotisation est fixé en fonction du statut normalien de l'utilisateur (``club``.``membership_fee_paid``
-centimes pour les élèves et ``club``.``membership_fee_unpaid`` centimes pour les étudiants). La date de fin est calculée
+début d'adhésion doit se situer entre les champs ``club.membership_start`` et ``club.membership_end``,
+si ces champs sont non nuls. Si ``club.parent_club`` n'est pas nul, l'utilisateur doit être membre de ce club.
+Le montant de la cotisation est fixé en fonction du statut normalien de l'utilisateur (``club.membership_fee_paid``
+centimes pour les élèves et ``club.membership_fee_unpaid`` centimes pour les étudiants). La date de fin est calculée
 comme ce qui suit :
 
-* Si ``club``.``membership_duration`` est non nul, alors ``date_end`` = ``date_start`` + ``club.membership_duration``
+* Si ``club.membership_duration`` est non nul, alors ``date_end`` = ``date_start`` + ``club.membership_duration``
 * Sinon ``club``, ``date_end`` = ``date_start`` + 424242 jours (suffisant pour tenir au moins une vie)
-* Si ``club``.``membership_end`` est non nul, alors ``date_end`` = min(``date_end``, ``club``.``membership_end``)
+* Si ``club.membership_end`` est non nul, alors ``date_end`` = min(``date_end``, ``club.membership_end``)
 
 Si l'utilisateur n'est pas membre du club ``Kfet``, l'adhésion n'est pas possible si le solde disponible sur sa note est
 insuffisant. Une fois toute ces contraintes vérifiées, l'adhésion est créée. Une transaction de type
@@ -127,13 +127,14 @@ Réadhésions
 ~~~~~~~~~~~
 
 Pour les clubs nécessitant des adhésions (de durée limitée), il est possible de réadhérer au bout d'un an. Dès lors
-que le jour actuel est après ``club``.``membership_start`` + 1 an, ``club``.``membership_start`` et
-``club``.membership_end`` sont incrémentés d'un an.
+que le jour actuel est après ``club.membership_start`` + 1 an, ``club.membership_start`` et
+``club.membership_end`` sont incrémentés d'un an.
 
 Il est possible de réadhérer si :
-* ``membership``.``date_start`` <= ``today`` <= ``membership``.``date_end`` (l'adhésion en cours est valide)
-* ``membership``.``date_start`` < ``club``.``membership_start`` (si la date de début d'adhésion du club est postérieure à la date de début d'adhésion, qui a donc été mise à jour, on a changé d'année)
-* Il n'y a pas encore de réadhésion (pas d'adhésion au même club vérifiant ``new_membership``.``date_start`` >= ``club``.``membership_start``)
+
+* ``membership.date_start`` <= ``today`` <= ``membership.date_end`` (l'adhésion en cours est valide)
+* ``membership.date_start`` < ``club.membership_start`` (si la date de début d'adhésion du club est postérieure à la date de début d'adhésion, qui a donc été mise à jour, on a changé d'année)
+* Il n'y a pas encore de réadhésion (pas d'adhésion au même club vérifiant ``new_membership.date_start`` >= ``club.membership_start``)
 
 Un bouton ``Réadhérer`` apparaît dans la liste des adhésions si le droit est permis et si ces contraintes sont vérifiées.
 En réadhérant, une nouvelle adhésion est créée pour l'utilisateur avec les mêmes rôles, commençant le lendemain de la

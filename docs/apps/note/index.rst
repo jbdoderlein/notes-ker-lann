@@ -19,5 +19,6 @@ transferts/dons entre notes est détaillé sur la page `Transferts <transactions
 Graphe
 ------
 
-.. image:: /_static/img/graphs/note.svg
+.. image:: ../../_static/img/graphs/note.svg
+   :width: 960
    :alt: Graphe de l'application note

@@ -5,6 +5,7 @@ from datetime import date
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from django.db.models import Q
 from django.template.loader import render_to_string
@@ -131,12 +132,15 @@ class Product(models.Model):
         verbose_name=_("Designation"),
     )
 
-    quantity = models.PositiveIntegerField(
-        verbose_name=_("Quantity")
+    quantity = models.DecimalField(
+        decimal_places=2,
+        max_digits=7,
+        verbose_name=_("Quantity"),
+        validators=[MinValueValidator(0)],
     )
 
     amount = models.IntegerField(
-        verbose_name=_("Unit price")
+        verbose_name=_("Unit price"),
     )
 
     @property

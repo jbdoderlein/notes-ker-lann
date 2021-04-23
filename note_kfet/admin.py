@@ -52,3 +52,9 @@ if "rest_framework" in settings.INSTALLED_APPS:
     from rest_framework.authtoken.admin import *
     from rest_framework.authtoken.models import *
     admin_site.register(Token, TokenAdmin)
+
+if "cas_server" in settings.INSTALLED_APPS:
+    from cas_server.admin import *
+    from cas_server.models import *
+    admin_site.register(ServicePattern, ServicePatternAdmin)
+    admin_site.register(FederatedIendityProvider, FederatedIendityProviderAdmin)

@@ -12,7 +12,7 @@ def read_env():
     directory.
     """
     try:
-        with open('.env') as f:
+        with open(os.path.join(BASE_DIR, '.env')) as f:
             content = f.read()
     except IOError:
         content = ''
@@ -30,6 +30,7 @@ def read_env():
 
 
 # Try to load environment variables from project .env
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 read_env()
 
 # Load base settings

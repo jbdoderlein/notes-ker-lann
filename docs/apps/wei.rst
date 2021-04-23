@@ -113,7 +113,8 @@ Graphe des modèles
 
 Pour une meilleure compréhension, le graphe des modèles de l'application ``member`` ont été ajoutés au schéma.
 
-.. image:: /_static/img/graphs/wei.svg
+.. image:: ../_static/img/graphs/wei.svg
+   :width: 960
    :alt: Graphe des modèles de l'application WEI
 
 Fonctionnement

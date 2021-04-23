@@ -1,6 +1,7 @@
 beautifulsoup4~=4.7.1
 Django~=2.2.15
 django-bootstrap-datepicker-plus~=3.0.5
+django-cas-server~=1.2.0
 django-colorfield~=0.3.2
 django-crispy-forms~=1.7.2
 django-extensions~=2.1.4
