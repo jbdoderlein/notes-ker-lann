@@ -746,6 +746,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             # When we renew the BDE membership, we update the profile section
             # that should happens at least once a year.
             user.profile.section = user.profile.section_generated
+            user.profile._force_save = True
             user.profile.save()
 
         # Credit note before the membership is created.
