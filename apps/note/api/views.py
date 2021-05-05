@@ -74,7 +74,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
         serializer_class = self.serializer_class
         if self.request.method in ['PUT', 'PATCH']:
             # alias owner cannot be change once establish
-            setattr(serializer_class.Meta, 'read_only_fields', ('note',))
+            serializer_class.Meta.read_only_fields = ('note',)
         return serializer_class
 
     def destroy(self, request, *args, **kwargs):
