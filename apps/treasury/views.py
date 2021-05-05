@@ -210,7 +210,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             del tex
 
             # The file has to be rendered twice
-            for ignored in range(2):
+            for _ignored in range(2):
                 error = subprocess.Popen(
                     ["/usr/bin/xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,
