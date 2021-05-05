@@ -82,7 +82,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
         try:
             self.perform_destroy(instance)
         except ValidationError as e:
-            return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
+            return Response({e.code: str(e)}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
