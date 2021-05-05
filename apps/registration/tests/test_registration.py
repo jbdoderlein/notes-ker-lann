@@ -196,8 +196,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=False,
-            join_Kfet=False,
+            join_bde=False,
+            join_kfet=False,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -210,8 +210,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=False,
-            join_Kfet=True,
+            join_bde=False,
+            join_kfet=True,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -224,8 +224,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="J'ai pas d'argent",
-            join_BDE=True,
-            join_Kfet=True,
+            join_bde=True,
+            join_kfet=True,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -238,8 +238,8 @@ class TestValidateRegistration(TestCase):
             last_name="",
             first_name="",
             bank="",
-            join_BDE=True,
-            join_Kfet=True,
+            join_bde=True,
+            join_kfet=True,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -255,8 +255,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=True,
-            join_Kfet=False,
+            join_bde=True,
+            join_kfet=False,
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -281,8 +281,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=True,
-            join_Kfet=False,
+            join_bde=True,
+            join_kfet=False,
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.user.profile.refresh_from_db()
@@ -317,8 +317,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=True,
-            join_Kfet=True,
+            join_bde=True,
+            join_kfet=True,
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.user.profile.refresh_from_db()
@@ -353,8 +353,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             bank="Société générale",
-            join_BDE=True,
-            join_Kfet=True,
+            join_bde=True,
+            join_kfet=True,
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.user.profile.refresh_from_db()

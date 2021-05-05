@@ -261,26 +261,26 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
         bank = form.cleaned_data["bank"]
-        join_BDE = form.cleaned_data["join_BDE"]
-        join_Kfet = form.cleaned_data["join_Kfet"]
+        join_bde = form.cleaned_data["join_bde"]
+        join_kfet = form.cleaned_data["join_kfet"]
 
         if soge:
             # If Société Générale pays the inscription, the user joins the two clubs
-            join_BDE = True
-            join_Kfet = True
+            join_bde = True
+            join_kfet = True
 
-        if not join_BDE:
-            form.add_error('join_BDE', _("You must join the BDE."))
+        if not join_bde:
+            form.add_error('join_bde', _("You must join the BDE."))
             return super().form_invalid(form)
 
         fee = 0
         bde = Club.objects.get(name="BDE")
         bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
-        if join_BDE:
+        if join_bde:
             fee += bde_fee
         kfet = Club.objects.get(name="Kfet")
         kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        if join_Kfet:
+        if join_kfet:
             fee += kfet_fee
 
         if soge:
@@ -338,7 +338,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 valid=True,
             )
 
-        if join_BDE:
+        if join_bde:
             # Create membership for the user to the BDE starting today
             membership = Membership(
                 club=bde,
@@ -352,7 +352,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             membership.roles.add(Role.objects.get(name="Adhérent BDE"))
             membership.save()
 
-        if join_Kfet:
+        if join_kfet:
             # Create membership for the user to the Kfet starting today
             membership = Membership(
                 club=kfet,
