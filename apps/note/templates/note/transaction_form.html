@@ -57,7 +57,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 <ul class="list-group list-group-flush" id="source_note_list">
                 </ul>
                 <div class="card-body">
-                    <select id="credit_type" class="custom-select d-none">
+                    <select id="credit_type" class="form-control custom-select d-none">
                         {% for special_type in special_types %}
                             <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
                         {% endfor %}
@@ -84,7 +84,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 <ul class="list-group list-group-flush" id="dest_note_list">
                 </ul>
                 <div class="card-body">
-                    <select id="debit_type" class="custom-select d-none">
+                    <select id="debit_type" class="form-control custom-select d-none">
                         {% for special_type in special_types %}
                             <option value="{{ special_type.id }}">{{ special_type.special_type }}</option>
                         {% endfor %}
