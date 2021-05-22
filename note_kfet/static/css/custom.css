@@ -81,16 +81,30 @@ body {
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .btn-outline-primary:not(:disabled):not(.disabled):active {
     color: #fff;
-    background-color: rgb(0, 119, 139);
-    border-color: rgb(0, 119, 139);
+    background-color: rgb(18, 67, 46);
+    border-color: rgb(18, 67, 46);
 }
 
 .btn-outline-primary {
-    color: rgb(0, 119, 139);
+    color: rgb(18, 67, 46);
     background-color: rgba(248, 249, 250, 0.9);
-    border-color: rgb(0, 119, 139);
+    border-color: rgb(18, 67, 46);
 }
 
 .turbolinks-progress-bar {
-    background-color: #01D3FB;
+    background-color: #12432E;
+}
+
+.btn-primary:hover,
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active {
+    color: #fff;
+    background-color: rgb(18, 67, 46);
+    border-color: rgb(18, 67, 46);
+}
+
+.btn-primary {
+    color: rgba(248, 249, 250, 0.9); 
+    background-color: rgb(28, 114, 10);
+    border-color: rgb(18, 67, 46);
 }
