@@ -7,8 +7,8 @@
  * @returns {string}
  */
 function pretty_money (value) {
-  if (value % 100 === 0) { return (value < 0 ? '- ' : '') + Math.floor(Math.abs(value) / 100) + ' €' } else {
-    return (value < 0 ? '- ' : '') + Math.floor(Math.abs(value) / 100) + '.' +
+  if (value % 100 === 0) { return (value < 0 ? '- ' : '') + Math.round(Math.abs(value) / 100) + ' €' } else {
+    return (value < 0 ? '- ' : '') + Math.round(Math.abs(value) / 100) + '.' +
             (Math.abs(value) % 100 < 10 ? '0' : '') + (Math.abs(value) % 100) + ' €'
   }
 }
