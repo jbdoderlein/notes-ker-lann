@@ -3,7 +3,6 @@
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
-
 from treasury.models import SogeCredit
 
 

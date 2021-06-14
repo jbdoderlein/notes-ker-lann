@@ -101,14 +101,14 @@ class ValidationForm(forms.Form):
         required=False,
     )
 
-    join_BDE = forms.BooleanField(
+    join_bde = forms.BooleanField(
         label=_("Join BDE Club"),
         required=False,
         initial=True,
     )
 
     # The user can join the Kfet club at the inscription
-    join_Kfet = forms.BooleanField(
+    join_kfet = forms.BooleanField(
         label=_("Join Kfet Club"),
         required=False,
         initial=True,

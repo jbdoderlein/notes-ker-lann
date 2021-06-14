@@ -9,6 +9,7 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
     """
     Create a unique token generator to confirm email addresses.
     """
+
     def _make_hash_value(self, user, timestamp):
         """
         Hash the user's primary key and some user state that's sure to change
@@ -23,9 +24,18 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
         """
         # Truncate microseconds so that tokens are consistent even if the
         # database doesn't support microseconds.
-        login_timestamp = '' if user.last_login is None else user.last_login.replace(microsecond=0, tzinfo=None)
-        return str(user.pk) + str(user.email) + str(user.profile.email_confirmed)\
-               + str(login_timestamp) + str(timestamp)
+        login_timestamp = (
+            ""
+            if user.last_login is None
+            else user.last_login.replace(microsecond=0, tzinfo=None)
+        )
+        return (
+            str(user.pk)
+            + str(user.email)
+            + str(user.profile.email_confirmed)
+            + str(login_timestamp)
+            + str(timestamp)
+        )
 
 
 email_validation_token = AccountActivationTokenGenerator()
