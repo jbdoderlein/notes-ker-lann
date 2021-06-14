@@ -282,20 +282,19 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee = 0
         bde = Club.objects.get(name="BDE")
         bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
-        if join_bde:
-            fee += bde_fee
+        # This is mandatory.
+        fee += bde_fee if join_bde else 0
         kfet = Club.objects.get(name="Kfet")
         kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        if join_kfet:
-            fee += kfet_fee
+        # Add extra fee for the full membership
+        fee += kfet_fee if join_kfet else 0
 
-        if soge:
-            # If the bank pays, then we don't credit now. Treasurers will validate the transaction
-            # and credit the note later.
-            credit_type = None
+        # If the bank pays, then we don't credit now. Treasurers will validate the transaction
+        # and credit the note later.
+        credit_type = None if soge else credit_type
 
-        if credit_type is None:
-            credit_amount = 0
+        # If the user does not select any payment method, then no credit will be performed.
+        credit_amount = 0 if credit_type is None else credit_amount
 
         if fee > credit_amount and not soge:
             # Check if the user credits enough money
