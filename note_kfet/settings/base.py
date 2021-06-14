@@ -245,6 +245,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
+# OAuth2 Provider
+OAUTH2_PROVIDER = {
+    'SCOPES_BACKEND_CLASS': 'permission.scopes.PermissionScopes',
+}
+
 # Take control on how widget templates are sourced
 # See https://docs.djangoproject.com/en/2.2/ref/forms/renderers/#templatessetting
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
