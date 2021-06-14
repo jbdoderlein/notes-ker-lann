@@ -348,7 +348,7 @@ class SpecialTransaction(Transaction):
         first_name = form.cleaned_data["first_name"]
         bank = form.cleaned_data["bank"]
 
-        error = True
+        error = False
 
         if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
             if not last_name:

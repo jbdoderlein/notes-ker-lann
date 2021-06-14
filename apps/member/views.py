@@ -671,9 +671,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                            .format(form.instance.club.membership_end))
             error = True
 
-        if credit_amount:
+        if credit_amount and not SpecialTransaction.validate_payment_form(form):
             # Check that special information for payment are filled
-            error = SpecialTransaction.validate_payment_form(form) or error
+            error = True
 
         return not error
 
