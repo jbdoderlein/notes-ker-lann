@@ -248,9 +248,13 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
     @transaction.atomic
     def form_valid(self, form):
+        """
+        Finally validate the registration, with creating the membership.
+        """
         user = self.get_object()
 
         if Alias.objects.filter(normalized_name=Alias.normalize(user.username)).exists():
+            # Don't try to hack an existing account.
             form.add_error(None, _("An alias with a similar name already exists."))
             return self.form_invalid(form)
 
@@ -265,14 +269,16 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         join_kfet = form.cleaned_data["join_kfet"]
 
         if soge:
-            # If Société Générale pays the inscription, the user joins the two clubs
+            # If Société Générale pays the inscription, the user automatically joins the two clubs.
             join_bde = True
             join_kfet = True
 
         if not join_bde:
+            # This software belongs to the BDE.
             form.add_error('join_bde', _("You must join the BDE."))
             return super().form_invalid(form)
 
+        # Calculate required registration fee
         fee = 0
         bde = Club.objects.get(name="BDE")
         bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
@@ -298,15 +304,9 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                            .format(pretty_money(fee)))
             return self.form_invalid(form)
 
-        if credit_type is not None and credit_amount > 0:
-            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
-                if not last_name:
-                    form.add_error('last_name', _("This field is required."))
-                if not first_name:
-                    form.add_error('first_name', _("This field is required."))
-                if not bank and credit_type.special_type == "Chèque":
-                    form.add_error('bank', _("This field is required."))
-                return self.form_invalid(form)
+        # Check that payment information are filled, like last name and first name
+        if credit_type is not None and credit_amount > 0 and SpecialTransaction.validate_payment_form(form):
+            return self.form_invalid(form)
 
         # Save the user and finally validate the registration
         # Saving the user creates the associated note

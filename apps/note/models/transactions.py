@@ -333,6 +333,36 @@ class SpecialTransaction(Transaction):
         self.clean()
         super().save(*args, **kwargs)
 
+    @staticmethod
+    def validate_payment_form(form):
+        """
+        Ensure that last name and first name are filled for a form that creates a SpecialTransaction,
+        and check that if the user pays with a check, then the bank field is filled.
+
+        Return True iff there is no error.
+        Whenever there is an error, they are inserted in the form errors.
+        """
+
+        credit_type = form.cleaned_data["credit_type"]
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        bank = form.cleaned_data["bank"]
+
+        error = True
+
+        if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
+            if not last_name:
+                form.add_error('last_name', _("This field is required."))
+                error = True
+            if not first_name:
+                form.add_error('first_name', _("This field is required."))
+                error = True
+            if not bank and credit_type.special_type == "Chèque":
+                form.add_error('bank', _("This field is required."))
+                error = True
+
+        return not error
+
     class Meta:
         verbose_name = _("Special transaction")
         verbose_name_plural = _("Special transactions")

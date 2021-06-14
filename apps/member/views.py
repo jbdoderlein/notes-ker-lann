@@ -625,9 +625,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         # Retrieve form data
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
-        last_name = form.cleaned_data["last_name"]
-        first_name = form.cleaned_data["first_name"]
-        bank = form.cleaned_data["bank"]
         soge = form.cleaned_data["soge"] and not user.profile.soge and (club.name == "BDE" or club.name == "Kfet")
 
         if not credit_type:
@@ -675,16 +672,8 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             error = True
 
         if credit_amount:
-            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
-                if not last_name:
-                    form.add_error('last_name', _("This field is required."))
-                    error = True
-                if not first_name:
-                    form.add_error('first_name', _("This field is required."))
-                    error = True
-                if not bank and credit_type.special_type == "Chèque":
-                    form.add_error('bank', _("This field is required."))
-                    error = True
+            # Check that special information for payment are filled
+            error = SpecialTransaction.validate_payment_form(form) or error
 
         return not error
 
