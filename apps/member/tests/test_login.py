@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 from django.conf import settings
 from django.contrib.auth.models import User

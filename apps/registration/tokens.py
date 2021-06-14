@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copied from https://gitlab.crans.org/bombar/codeflix/-/blob/master/codeflix/codeflix/tokens.py
 
