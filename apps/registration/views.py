@@ -304,7 +304,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             return self.form_invalid(form)
 
         # Check that payment information are filled, like last name and first name
-        if credit_type is not None and credit_amount > 0 and SpecialTransaction.validate_payment_form(form):
+        if credit_type is not None and credit_amount > 0 and not SpecialTransaction.validate_payment_form(form):
             return self.form_invalid(form)
 
         # Save the user and finally validate the registration
