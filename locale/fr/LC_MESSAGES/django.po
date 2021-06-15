@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 14:06+0200\n"
+"POT-Creation-Date: 2021-06-15 21:17+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -956,8 +956,8 @@ msgstr "Verrouiller de force"
 msgid ""
 "Are you sure you want to unlock this note? Transactions will be re-enabled."
 msgstr ""
-"Êtes-vous sûr⋅e de vouloir déverrouiller cette note ? Les transactions seront "
-"à nouveau possible."
+"Êtes-vous sûr⋅e de vouloir déverrouiller cette note ? Les transactions "
+"seront à nouveau possible."
 
 #: apps/member/templates/member/club_alias.html:10
 #: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:253
@@ -1802,6 +1802,25 @@ msgstr "Requête :"
 #: apps/permission/templates/permission/all_rights.html:92
 msgid "No associated permission"
 msgstr "Pas de permission associée"
+
+#: apps/permission/templates/permission/scopes.html:8
+msgid "Available scopes"
+msgstr "Scopes disponibles"
+
+#: apps/permission/templates/permission/scopes.html:42
+#: note_kfet/templates/oauth2_provider/application_list.html:18
+msgid "No applications defined"
+msgstr "Pas d'application définie"
+
+#: apps/permission/templates/permission/scopes.html:43
+#: note_kfet/templates/oauth2_provider/application_list.html:19
+msgid "Click here"
+msgstr "Cliquez ici"
+
+#: apps/permission/templates/permission/scopes.html:43
+#: note_kfet/templates/oauth2_provider/application_list.html:19
+msgid "if you want to register a new one"
+msgstr "si vous voulez en enregistrer une nouvelle"
 
 #: apps/permission/views.py:72
 #, python-brace-format
@@ -3133,11 +3152,10 @@ msgstr "Il n'y a pas de résultat."
 
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:8
 msgid "Are you sure to delete the application"
-msgstr ""
-"Êtes-vous sûr⋅e de vouloir supprimer l'application"
+msgstr "Êtes-vous sûr⋅e de vouloir supprimer l'application"
 
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:17
-#: note_kfet/templates/oauth2_provider/authorize.html:27
+#: note_kfet/templates/oauth2_provider/authorize.html:28
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -3174,18 +3192,6 @@ msgstr "Modifier l'application"
 msgid "Your applications"
 msgstr "Vos applications"
 
-#: note_kfet/templates/oauth2_provider/application_list.html:18
-msgid "No applications defined"
-msgstr "Pas d'application définie"
-
-#: note_kfet/templates/oauth2_provider/application_list.html:19
-msgid "Click here"
-msgstr "Cliquez ici"
-
-#: note_kfet/templates/oauth2_provider/application_list.html:19
-msgid "if you want to register a new one"
-msgstr "si vous voulez en enregistrer une nouvelle"
-
 #: note_kfet/templates/oauth2_provider/application_list.html:24
 msgid "New Application"
 msgstr "Nouvelle application"
@@ -3195,7 +3201,7 @@ msgid "Register a new application"
 msgstr "Enregistrer une nouvelle application"
 
 #: note_kfet/templates/oauth2_provider/authorize.html:9
-#: note_kfet/templates/oauth2_provider/authorize.html:28
+#: note_kfet/templates/oauth2_provider/authorize.html:29
 msgid "Authorize"
 msgstr "Autoriser"
 
@@ -3203,7 +3209,7 @@ msgstr "Autoriser"
 msgid "Application requires following permissions:"
 msgstr "L'application requiert les permissions suivantes :"
 
-#: note_kfet/templates/oauth2_provider/authorize.html:35
+#: note_kfet/templates/oauth2_provider/authorize.html:36
 #: note_kfet/templates/oauth2_provider/authorized-oob.html:15
 msgid "Error:"
 msgstr "Erreur :"
@@ -3218,8 +3224,7 @@ msgstr "Merci de retourner à votre application et entrez ce code :"
 
 #: note_kfet/templates/oauth2_provider/authorized-token-delete.html:9
 msgid "Are you sure you want to delete this token?"
-msgstr ""
-"Êtes-vous sûr⋅e de vouloir supprimer ce jeton ?"
+msgstr "Êtes-vous sûr⋅e de vouloir supprimer ce jeton ?"
 
 #: note_kfet/templates/oauth2_provider/authorized-tokens.html:7
 msgid "Tokens"

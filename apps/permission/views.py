@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from collections import OrderedDict
 from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -141,5 +141,28 @@ class RightsView(TemplateView):
             context["special_memberships_table"] = RightsTable(special_memberships, prefix="clubs-")
             context["superusers"] = SuperuserTable(User.objects.filter(is_superuser=True).order_by("last_name").all(),
                                                    prefix="superusers-")
+
+        return context
+
+
+class ScopesView(LoginRequiredMixin, TemplateView):
+    template_name = "permission/scopes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        from oauth2_provider.models import Application
+        from .scopes import PermissionScopes
+
+        scopes = PermissionScopes()
+        context["scopes"] = {}
+        all_scopes = scopes.get_all_scopes()
+        for app in Application.objects.filter(Q(user=self.request.user) | Q(client_type='public')).all():
+            available_scopes = scopes.get_available_scopes(app)
+            context["scopes"][app] = OrderedDict()
+            items = [(k, v) for (k, v) in all_scopes.items() if k in available_scopes]
+            items.sort(key=lambda x: (int(x[0].split("_")[1]), int(x[0].split("_")[0])))
+            for k, v in items:
+                context["scopes"][app][k] = v
 
         return context

@@ -12,14 +12,15 @@
             <form id="authorizationForm" method="post">
                 <div class="card-body">
                     <p>{% trans "Application requires following permissions:" %}</p>
-                    {% csrf_token %}
-                    {{ form|crispy }}
 
                     <ul>
                         {% for scope in scopes_descriptions %}
                             <li>{{ scope }}</li>
                         {% endfor %}
                     </ul>
+
+                    {% csrf_token %}
+                    {{ form|crispy }}
                 </div>
                 <div class="card-footer text-center">
                     <div class="control-group">
