@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from oauth2_provider.scopes import BaseScopes
-
 from member.models import Club
 
 from .backends import PermissionBackend
