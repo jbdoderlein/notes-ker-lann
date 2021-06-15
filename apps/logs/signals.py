@@ -83,7 +83,7 @@ def save_object(sender, instance, **kwargs):
             ip = request.META.get('REMOTE_ADDR')
 
         if not user.is_authenticated:
-            # For registration purposes
+            # For registration and OAuth2 purposes
             user = None
 
     # noinspection PyProtectedMember
@@ -159,6 +159,10 @@ def delete_object(sender, instance, **kwargs):
             ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
         else:
             ip = request.META.get('REMOTE_ADDR')
+
+        if not user.is_authenticated:
+            # For registration and OAuth2 purposes
+            user = None
 
     # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
     class CustomSerializer(ModelSerializer):

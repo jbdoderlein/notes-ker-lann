@@ -24,7 +24,6 @@ class ReadProtectedModelViewSet(ModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        self.request.session.setdefault("permission_mask", 42)
         return self.queryset.filter(PermissionBackend.filter_queryset(self.request, self.model, "view")).distinct()
 
 
@@ -38,7 +37,6 @@ class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        self.request.session.setdefault("permission_mask", 42)
         return self.queryset.filter(PermissionBackend.filter_queryset(self.request, self.model, "view")).distinct()
 
 

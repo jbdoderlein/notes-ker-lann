@@ -16,6 +16,9 @@ EXCLUDED = [
     'contenttypes.contenttype',
     'logs.changelog',
     'migrations.migration',
+    'oauth2_provider.accesstoken',
+    'oauth2_provider.grant',
+    'oauth2_provider.refreshtoken',
     'sessions.session',
 ]
 

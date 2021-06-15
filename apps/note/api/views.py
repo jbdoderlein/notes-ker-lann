@@ -39,7 +39,6 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        self.request.session.setdefault("permission_mask", 42)
         queryset = self.queryset.filter(PermissionBackend.filter_queryset(self.request, Note, "view")
                                         | PermissionBackend.filter_queryset(self.request, NoteUser, "view")
                                         | PermissionBackend.filter_queryset(self.request, NoteClub, "view")
@@ -204,6 +203,5 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     ordering_fields = ['created_at', 'amount', ]
 
     def get_queryset(self):
-        self.request.session.setdefault("permission_mask", 42)
         return self.model.objects.filter(PermissionBackend.filter_queryset(self.request, self.model, "view"))\
             .order_by("created_at", "id")
