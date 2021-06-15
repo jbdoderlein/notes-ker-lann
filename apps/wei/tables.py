@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 from .models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership
@@ -85,7 +85,7 @@ class WEIRegistrationTable(tables.Table):
 
     def render_validate(self, record):
         hasperm = PermissionBackend.check_perm(
-            get_current_authenticated_user(), "wei.add_weimembership", WEIMembership(
+            get_current_request(), "wei.add_weimembership", WEIMembership(
                 club=record.wei,
                 user=record.user,
                 date_start=date.today(),
@@ -110,7 +110,7 @@ class WEIRegistrationTable(tables.Table):
                            f"title=\"{tooltip}\" href=\"{url}\">{text}</a>")
 
     def render_delete(self, record):
-        hasperm = PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record)
+        hasperm = PermissionBackend.check_perm(get_current_request(), "wei.delete_weimembership", record)
         return _("Delete") if hasperm else format_html("<span class='no-perm'></span>")
 
     class Meta:

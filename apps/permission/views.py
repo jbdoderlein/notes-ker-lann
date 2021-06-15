@@ -28,7 +28,7 @@ class ProtectQuerysetMixin:
     """
     def get_queryset(self, filter_permissions=True, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view")).distinct()\
+        return qs.filter(PermissionBackend.filter_queryset(self.request, qs.model, "view")).distinct()\
             if filter_permissions else qs
 
     def get_object(self, queryset=None):
@@ -53,7 +53,7 @@ class ProtectQuerysetMixin:
         # We could also delete the field, but some views might be affected.
         meta = form.instance._meta
         for key in form.base_fields:
-            if not PermissionBackend.check_perm(self.request.user,
+            if not PermissionBackend.check_perm(self.request,
                                                 f"{meta.app_label}.change_{meta.model_name}_" + key, self.object):
                 form.fields[key].widget = HiddenInput()
 
@@ -101,7 +101,7 @@ class ProtectedCreateView(LoginRequiredMixin, CreateView):
         # noinspection PyProtectedMember
         app_label, model_name = model_class._meta.app_label, model_class._meta.model_name.lower()
         perm = app_label + ".add_" + model_name
-        if not PermissionBackend.check_perm(request.user, perm, self.get_sample_object()):
+        if not PermissionBackend.check_perm(request, perm, self.get_sample_object()):
             raise PermissionDenied(_("You don't have the permission to add an instance of model "
                                      "{app_label}.{model_name}.").format(app_label=app_label, model_name=model_name))
         return super().dispatch(request, *args, **kwargs)

@@ -4,12 +4,12 @@
 from datetime import date
 
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F
 from django.utils import timezone
 from note.models import Note, NoteUser, NoteClub, NoteSpecial
-from note_kfet.middlewares import get_current_session
+from note_kfet.middlewares import get_current_request
 from member.models import Membership, Club
 
 from .decorators import memoize
@@ -33,7 +33,7 @@ class PermissionBackend(ModelBackend):
         :param t: The type of the permissions: view, change, add or delete
         :return: The queryset of the permissions of the user (memoized) grouped by clubs
         """
-        if isinstance(user, AnonymousUser):
+        if not user.is_authenticated:
             # Unauthenticated users have no permissions
             return Permission.objects.none()
 
@@ -43,7 +43,8 @@ class PermissionBackend(ModelBackend):
 
         for membership in memberships:
             for role in membership.roles.all():
-                for perm in role.permissions.filter(type=t, mask__rank__lte=get_current_session().get("permission_mask", -1)).all():
+                for perm in role.permissions.filter(
+                        type=t, mask__rank__lte=get_current_request().session.get("permission_mask", -1)).all():
                     if not perm.permanent:
                         if membership.date_start > date.today() or membership.date_end < date.today():
                             continue
@@ -88,20 +89,22 @@ class PermissionBackend(ModelBackend):
 
     @staticmethod
     @memoize
-    def filter_queryset(user, model, t, field=None):
+    def filter_queryset(request, model, t, field=None):
         """
         Filter a queryset by considering the permissions of a given user.
-        :param user: The owner of the permissions that are fetched
+        :param request: The current request
         :param model: The concerned model of the queryset
         :param t: The type of modification (view, add, change, delete)
         :param field: The field of the model to test, if concerned
         :return: A query that corresponds to the filter to give to a queryset
         """
-        if user is None or isinstance(user, AnonymousUser):
+        user = request.user
+
+        if user is None or not user.is_authenticated:
             # Anonymous users can't do anything
             return Q(pk=-1)
 
-        if user.is_superuser and get_current_session().get("permission_mask", -1) >= 42:
+        if user.is_superuser and get_current_request().session.get("permission_mask", -1) >= 42:
             # Superusers have all rights
             return Q()
 
@@ -122,7 +125,7 @@ class PermissionBackend(ModelBackend):
 
     @staticmethod
     @memoize
-    def check_perm(user_obj, perm, obj=None):
+    def check_perm(request, perm, obj=None):
         """
         Check is the given user has the permission over a given object.
         The result is then memoized.
@@ -130,10 +133,12 @@ class PermissionBackend(ModelBackend):
         primary key, the result is not memoized. Moreover, the right could change
         (e.g. for a transaction, the balance of the user could change)
         """
-        if user_obj is None or isinstance(user_obj, AnonymousUser):
+        user_obj = request.user
+
+        if user_obj is None or not user_obj.is_authenticated:
             return False
 
-        sess = get_current_session()
+        sess = request.session
 
         if user_obj.is_superuser and sess.get("permission_mask", -1) >= 42:
             return True
@@ -152,7 +157,10 @@ class PermissionBackend(ModelBackend):
         return False
 
     def has_perm(self, user_obj, perm, obj=None):
-        return PermissionBackend.check_perm(user_obj, perm, obj)
+        # Warning: this does not check that user_obj has the permission,
+        # but if the current request has the permission.
+        # This function is implemented for backward compatibility, and should not be used.
+        return PermissionBackend.check_perm(get_current_request(), perm, obj)
 
     def has_module_perms(self, user_obj, app_label):
         return False

@@ -107,7 +107,7 @@ class InvoiceListView(LoginRequiredMixin, SingleTableView):
             name="",
             address="",
         )
-        if not PermissionBackend.check_perm(self.request.user, "treasury.add_invoice", sample_invoice):
+        if not PermissionBackend.check_perm(self.request, "treasury.add_invoice", sample_invoice):
             raise PermissionDenied(_("You are not able to see the treasury interface."))
         return super().dispatch(request, *args, **kwargs)
 
@@ -194,7 +194,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         pk = kwargs["pk"]
-        invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request.user, Invoice, "view")).get(pk=pk)
+        invoice = Invoice.objects.filter(PermissionBackend.filter_queryset(request, Invoice, "view")).get(pk=pk)
         tex = invoice.tex
 
         try:
@@ -259,7 +259,7 @@ class RemittanceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
 
         context["table"] = RemittanceTable(
             data=Remittance.objects.filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all())
+                PermissionBackend.filter_queryset(self.request, Remittance, "view")).all())
         context["special_transactions"] = SpecialTransactionTable(data=SpecialTransaction.objects.none())
 
         return context
@@ -281,7 +281,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
             remittance_type_id=1,
             comment="",
         )
-        if not PermissionBackend.check_perm(self.request.user, "treasury.add_remittance", sample_remittance):
+        if not PermissionBackend.check_perm(self.request, "treasury.add_remittance", sample_remittance):
             raise PermissionDenied(_("You are not able to see the treasury interface."))
         return super().dispatch(request, *args, **kwargs)
 
@@ -290,7 +290,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
 
         opened_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=False).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+                PermissionBackend.filter_queryset(self.request, Remittance, "view")).all(),
             prefix="opened-remittances-",
         )
         opened_remittances.paginate(page=self.request.GET.get("opened-remittances-page", 1), per_page=10)
@@ -298,7 +298,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
 
         closed_remittances = RemittanceTable(
             data=Remittance.objects.filter(closed=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+                PermissionBackend.filter_queryset(self.request, Remittance, "view")).all(),
             prefix="closed-remittances-",
         )
         closed_remittances.paginate(page=self.request.GET.get("closed-remittances-page", 1), per_page=10)
@@ -307,7 +307,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
         no_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance=None).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+                PermissionBackend.filter_queryset(self.request, Remittance, "view")).all(),
             exclude=('remittance_remove', ),
             prefix="no-remittance-",
         )
@@ -317,7 +317,7 @@ class RemittanceListView(LoginRequiredMixin, TemplateView):
         with_remittance_tr = SpecialTransactionTable(
             data=SpecialTransaction.objects.filter(source__in=NoteSpecial.objects.filter(~Q(remittancetype=None)),
                                                    specialtransactionproxy__remittance__closed=False).filter(
-                PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all(),
+                PermissionBackend.filter_queryset(self.request, Remittance, "view")).all(),
             exclude=('remittance_add', ),
             prefix="with-remittance-",
         )
@@ -342,7 +342,7 @@ class RemittanceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView)
         context = super().get_context_data(**kwargs)
 
         data = SpecialTransaction.objects.filter(specialtransactionproxy__remittance=self.object).filter(
-            PermissionBackend.filter_queryset(self.request.user, Remittance, "view")).all()
+            PermissionBackend.filter_queryset(self.request, Remittance, "view")).all()
         context["special_transactions"] = SpecialTransactionTable(
             data=data,
             exclude=('remittance_add', 'remittance_remove', ) if self.object.closed else ('remittance_add', ))

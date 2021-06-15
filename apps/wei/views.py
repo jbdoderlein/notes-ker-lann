@@ -57,7 +57,7 @@ class WEIListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["can_create_wei"] = PermissionBackend.check_perm(self.request.user, "wei.add_weiclub", WEIClub(
+        context["can_create_wei"] = PermissionBackend.check_perm(self.request, "wei.add_weiclub", WEIClub(
             name="",
             email="weiclub@example.com",
             year=0,
@@ -112,7 +112,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club = context["club"]
 
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note)) \
-            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view")) \
+            .filter(PermissionBackend.filter_queryset(self.request, Transaction, "view")) \
             .order_by('-created_at', '-id')
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
@@ -121,13 +121,13 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club_member = WEIMembership.objects.filter(
             club=club,
             date_end__gte=date.today(),
-        ).filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
+        ).filter(PermissionBackend.filter_queryset(self.request, WEIMembership, "view"))
         membership_table = WEIMembershipTable(data=club_member, prefix="membership-")
         membership_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
         context['member_list'] = membership_table
 
         pre_registrations = WEIRegistration.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, WEIRegistration, "view")).filter(
+            PermissionBackend.filter_queryset(self.request, WEIRegistration, "view")).filter(
             membership=None,
             wei=club
         )
@@ -142,7 +142,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             my_registration = None
         context["my_registration"] = my_registration
 
-        buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request.user, Bus, "view")) \
+        buses = Bus.objects.filter(PermissionBackend.filter_queryset(self.request, Bus, "view")) \
             .filter(wei=self.object).annotate(count=Count("memberships")).order_by("name")
         bus_table = BusTable(data=buses, prefix="bus-")
         context['buses'] = bus_table
@@ -167,7 +167,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
                 emergency_contact_phone="No",
             )
             context["can_add_first_year_member"] = PermissionBackend \
-                .check_perm(self.request.user, "wei.add_weiregistration", empty_fy_registration)
+                .check_perm(self.request, "wei.add_weiregistration", empty_fy_registration)
 
             # Check if the user has the right to create a registration of a random old member.
             empty_old_registration = WEIRegistration(
@@ -180,13 +180,13 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
                 emergency_contact_phone="No",
             )
             context["can_add_any_member"] = PermissionBackend \
-                .check_perm(self.request.user, "wei.add_weiregistration", empty_old_registration)
+                .check_perm(self.request, "wei.add_weiregistration", empty_old_registration)
 
         empty_bus = Bus(
             wei=club,
             name="",
         )
-        context["can_add_bus"] = PermissionBackend.check_perm(self.request.user, "wei.add_bus", empty_bus)
+        context["can_add_bus"] = PermissionBackend.check_perm(self.request, "wei.add_bus", empty_bus)
 
         context["not_first_year"] = WEIMembership.objects.filter(user=self.request.user).exists()
 
@@ -370,13 +370,13 @@ class BusManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["club"] = self.object.wei
 
         bus = self.object
-        teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request.user, BusTeam, "view")) \
+        teams = BusTeam.objects.filter(PermissionBackend.filter_queryset(self.request, BusTeam, "view")) \
             .filter(bus=bus).annotate(count=Count("memberships")).order_by("name")
         teams_table = BusTeamTable(data=teams, prefix="team-")
         context["teams"] = teams_table
 
         memberships = WEIMembership.objects.filter(PermissionBackend.filter_queryset(
-            self.request.user, WEIMembership, "view")).filter(bus=bus)
+            self.request, WEIMembership, "view")).filter(bus=bus)
         memberships_table = WEIMembershipTable(data=memberships, prefix="membership-")
         memberships_table.paginate(per_page=20, page=self.request.GET.get("membership-page", 1))
         context["memberships"] = memberships_table
@@ -469,7 +469,7 @@ class BusTeamManageView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["club"] = self.object.bus.wei
 
         memberships = WEIMembership.objects.filter(PermissionBackend.filter_queryset(
-            self.request.user, WEIMembership, "view")).filter(team=self.object)
+            self.request, WEIMembership, "view")).filter(team=self.object)
         memberships_table = WEIMembershipTable(data=memberships, prefix="membership-")
         memberships_table.paginate(per_page=20, page=self.request.GET.get("membership-page", 1))
         context["memberships"] = memberships_table
@@ -659,7 +659,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
                                                 data=self.request.POST if self.request.POST else None)
             for field_name, field in membership_form.fields.items():
                 if not PermissionBackend.check_perm(
-                        self.request.user, "wei.change_membership_" + field_name, self.object.membership):
+                        self.request, "wei.change_membership_" + field_name, self.object.membership):
                     field.widget = HiddenInput()
             del membership_form.fields["credit_type"]
             del membership_form.fields["credit_amount"]
@@ -668,7 +668,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             del membership_form.fields["bank"]
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
-                self.request.user, "wei.change_weiregistration_information_json", self.object):
+                self.request, "wei.change_weiregistration_information_json", self.object):
             choose_bus_form = WEIChooseBusForm(
                 self.request.POST if self.request.POST else dict(
                     bus=Bus.objects.filter(pk__in=self.object.information["preferred_bus_pk"]).all(),
@@ -704,7 +704,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             membership_form.save()
         # If it is not validated and if this is an old member, then we update the choices
         elif not form.instance.first_year and PermissionBackend.check_perm(
-                self.request.user, "wei.change_weiregistration_information_json", self.object):
+                self.request, "wei.change_weiregistration_information_json", self.object):
             choose_bus_form = WEIChooseBusForm(self.request.POST)
             if not choose_bus_form.is_valid():
                 return self.form_invalid(form)
@@ -726,7 +726,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             survey = CurrentSurvey(self.object)
             if not survey.is_complete():
                 return reverse_lazy("wei:wei_survey", kwargs={"pk": self.object.pk})
-        if PermissionBackend.check_perm(self.request.user, "wei.add_weimembership", WEIMembership(
+        if PermissionBackend.check_perm(self.request, "wei.add_weimembership", WEIMembership(
             club=self.object.wei,
             user=self.object.user,
             date_start=date.today(),
@@ -753,7 +753,7 @@ class WEIDeleteRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Delete
         if today > wei.membership_end:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
 
-        if not PermissionBackend.check_perm(self.request.user, "wei.delete_weiregistration", object):
+        if not PermissionBackend.check_perm(self.request, "wei.delete_weiregistration", object):
             raise PermissionDenied(_("You don't have the right to delete this WEI registration."))
 
         return super().dispatch(request, *args, **kwargs)
@@ -1049,7 +1049,7 @@ class MemberListRenderView(LoginRequiredMixin, View):
     """
 
     def get_queryset(self, **kwargs):
-        qs = WEIMembership.objects.filter(PermissionBackend.filter_queryset(self.request.user, WEIMembership, "view"))
+        qs = WEIMembership.objects.filter(PermissionBackend.filter_queryset(self.request, WEIMembership, "view"))
         qs = qs.filter(club__pk=self.kwargs["wei_pk"]).order_by(
             Lower('bus__name'),
             Lower('team__name'),

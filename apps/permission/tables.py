@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django_tables2 import A
 from member.models import Membership
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 
@@ -20,7 +20,7 @@ class RightsTable(tables.Table):
     def render_user(self, value):
         # If the user has the right, link the displayed user with the page of its detail.
         s = value.username
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "auth.view_user", value):
+        if PermissionBackend.check_perm(get_current_request(), "auth.view_user", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:user_detail', kwargs={"pk": value.pk}), name=s)
         return s
@@ -28,7 +28,7 @@ class RightsTable(tables.Table):
     def render_club(self, value):
         # If the user has the right, link the displayed user with the page of its detail.
         s = value.name
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_club", value):
+        if PermissionBackend.check_perm(get_current_request(), "member.view_club", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:club_detail', kwargs={"pk": value.pk}), name=s)
 
@@ -42,7 +42,7 @@ class RightsTable(tables.Table):
                                      | Q(name="Bureau de club"))
                                      & Q(weirole__isnull=True))).all()
         s = ", ".join(str(role) for role in roles)
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
+        if PermissionBackend.check_perm(get_current_request(), "member.change_membership_roles", record):
             s = format_html("<a href='" + str(reverse_lazy("member:club_manage_roles", kwargs={"pk": record.pk}))
                             + "'>" + s + "</a>")
         return s

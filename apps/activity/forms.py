@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from member.models import Club
 from note.models import Note, NoteUser
 from note_kfet.inputs import Autocomplete, DateTimePickerInput
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 from .models import Activity, Guest
@@ -24,7 +24,7 @@ class ActivityForm(forms.ModelForm):
         self.fields["attendees_club"].initial = Club.objects.get(name="Kfet")
         self.fields["attendees_club"].widget.attrs["placeholder"] = "Kfet"
         clubs = list(Club.objects.filter(PermissionBackend
-                                         .filter_queryset(get_current_authenticated_user(), Club, "view")).all())
+                                         .filter_queryset(get_current_request(), Club, "view")).all())
         shuffle(clubs)
         self.fields["organizer"].widget.attrs["placeholder"] = ", ".join(club.name for club in clubs[:4]) + ", ..."
 

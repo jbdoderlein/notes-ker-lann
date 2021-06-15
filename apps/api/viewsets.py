@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from permission.backends import PermissionBackend
-from note_kfet.middlewares import get_current_session
 from note.models import Alias
 
 from .serializers import UserSerializer, ContentTypeSerializer
@@ -25,9 +24,8 @@ class ReadProtectedModelViewSet(ModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        user = self.request.user
-        get_current_session().setdefault("permission_mask", 42)
-        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
+        self.request.session.setdefault("permission_mask", 42)
+        return self.queryset.filter(PermissionBackend.filter_queryset(self.request, self.model, "view")).distinct()
 
 
 class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
@@ -40,9 +38,8 @@ class ReadOnlyProtectedModelViewSet(ReadOnlyModelViewSet):
         self.model = ContentType.objects.get_for_model(self.serializer_class.Meta.model).model_class()
 
     def get_queryset(self):
-        user = self.request.user
-        get_current_session().setdefault("permission_mask", 42)
-        return self.queryset.filter(PermissionBackend.filter_queryset(user, self.model, "view")).distinct()
+        self.request.session.setdefault("permission_mask", 42)
+        return self.queryset.filter(PermissionBackend.filter_queryset(self.request, self.model, "view")).distinct()
 
 
 class UserViewSet(ReadProtectedModelViewSet):

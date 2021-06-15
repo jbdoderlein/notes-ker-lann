@@ -2,13 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from threading import local
-from typing import Optional
 
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.contrib.sessions.backends.db import SessionStore
-from django.http import HttpRequest
 
 REQUEST_ATTR_NAME = getattr(settings, 'LOCAL_REQUEST_ATTR_NAME', '_current_request')
 
@@ -19,41 +16,8 @@ def _set_current_request(request=None):
     setattr(_thread_locals, REQUEST_ATTR_NAME, request)
 
 
-def get_current_request() -> Optional[HttpRequest]:
+def get_current_request():
     return getattr(_thread_locals, REQUEST_ATTR_NAME, None)
-
-
-def get_current_user() -> Optional[User]:
-    request = get_current_request()
-    if request is None:
-        return None
-    return request.user
-
-
-def get_current_session() -> Optional[SessionStore]:
-    request = get_current_request()
-    if request is None:
-        return None
-    return request.session
-
-
-def get_current_ip() -> Optional[str]:
-    request = get_current_request()
-
-    if request is None:
-        return None
-    elif 'HTTP_X_REAL_IP' in request.META:
-        return request.META.get('HTTP_X_REAL_IP')
-    elif 'HTTP_X_FORWARDED_FOR' in request.META:
-        return request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
-    return request.META.get('REMOTE_ADDR')
-
-
-def get_current_authenticated_user():
-    current_user = get_current_user()
-    if not current_user or not current_user.is_authenticated:
-        return None
-    return current_user
 
 
 class SessionMiddleware(object):

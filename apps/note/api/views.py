@@ -10,7 +10,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSet
-from note_kfet.middlewares import get_current_session
 from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
@@ -40,12 +39,12 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
         Parse query and apply filters.
         :return: The filtered set of requested notes
         """
-        user = self.request.user
-        get_current_session().setdefault("permission_mask", 42)
-        queryset = self.queryset.filter(PermissionBackend.filter_queryset(user, Note, "view")
-                                        | PermissionBackend.filter_queryset(user, NoteUser, "view")
-                                        | PermissionBackend.filter_queryset(user, NoteClub, "view")
-                                        | PermissionBackend.filter_queryset(user, NoteSpecial, "view")).distinct()
+        self.request.session.setdefault("permission_mask", 42)
+        queryset = self.queryset.filter(PermissionBackend.filter_queryset(self.request, Note, "view")
+                                        | PermissionBackend.filter_queryset(self.request, NoteUser, "view")
+                                        | PermissionBackend.filter_queryset(self.request, NoteClub, "view")
+                                        | PermissionBackend.filter_queryset(self.request, NoteSpecial, "view"))\
+            .distinct()
 
         alias = self.request.query_params.get("alias", ".*")
         queryset = queryset.filter(
@@ -205,7 +204,6 @@ class TransactionViewSet(ReadProtectedModelViewSet):
     ordering_fields = ['created_at', 'amount', ]
 
     def get_queryset(self):
-        user = self.request.user
-        get_current_session().setdefault("permission_mask", 42)
-        return self.model.objects.filter(PermissionBackend.filter_queryset(user, self.model, "view"))\
+        self.request.session.setdefault("permission_mask", 42)
+        return self.model.objects.filter(PermissionBackend.filter_queryset(self.request, self.model, "view"))\
             .order_by("created_at", "id")

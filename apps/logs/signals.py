@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.renderers import JSONRenderer
 from rest_framework.serializers import ModelSerializer
 from note.models import NoteUser, Alias
-from note_kfet.middlewares import get_current_authenticated_user, get_current_ip
+from note_kfet.middlewares import get_current_request
 
 from .models import Changelog
 
@@ -57,9 +57,9 @@ def save_object(sender, instance, **kwargs):
     previous = instance._previous
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
-    user, ip = get_current_authenticated_user(), get_current_ip()
+    request = get_current_request()
 
-    if user is None:
+    if request is None:
         # Si la modification n'a pas été faite via le client Web, on suppose que c'est du à `manage.py`
         # On récupère alors l'utilisateur·trice connecté·e à la VM, et on récupère la note associée
         # IMPORTANT : l'utilisateur dans la VM doit être un des alias note du respo info
@@ -71,9 +71,23 @@ def save_object(sender, instance, **kwargs):
         # else:
         if note.exists():
             user = note.get().user
+        else:
+            user = None
+    else:
+        user = request.user
+        if 'HTTP_X_REAL_IP' in request.META:
+            ip = request.META.get('HTTP_X_REAL_IP')
+        elif 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        if not user.is_authenticated:
+            # For registration purposes
+            user = None
 
     # noinspection PyProtectedMember
-    if user is not None and instance._meta.label_lower == "auth.user" and previous:
+    if request is not None and instance._meta.label_lower == "auth.user" and previous:
         # On n'enregistre pas les connexions
         if instance.last_login != previous.last_login:
             return
@@ -121,9 +135,9 @@ def delete_object(sender, instance, **kwargs):
         return
 
     # Si un utilisateur est connecté, on récupère l'utilisateur courant ainsi que son adresse IP
-    user, ip = get_current_authenticated_user(), get_current_ip()
+    request = get_current_request()
 
-    if user is None:
+    if request is None:
         # Si la modification n'a pas été faite via le client Web, on suppose que c'est du à `manage.py`
         # On récupère alors l'utilisateur·trice connecté·e à la VM, et on récupère la note associée
         # IMPORTANT : l'utilisateur dans la VM doit être un des alias note du respo info
@@ -135,6 +149,16 @@ def delete_object(sender, instance, **kwargs):
         # else:
         if note.exists():
             user = note.get().user
+        else:
+            user = None
+    else:
+        user = request.user
+        if 'HTTP_X_REAL_IP' in request.META:
+            ip = request.META.get('HTTP_X_REAL_IP')
+        elif 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
 
     # On crée notre propre sérialiseur JSON pour pouvoir sauvegarder les modèles
     class CustomSerializer(ModelSerializer):
