@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>{% trans "Authorize" %} {{ application.name }} ?</h3>
+        </div>
+        {% if not error %}
+            <form id="authorizationForm" method="post">
+                <div class="card-body">
+                    <p>{% trans "Application requires following permissions:" %}</p>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                    <ul>
+                        {% for scope in scopes_descriptions %}
+                            <li>{{ scope }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" class="btn btn-large" value="{% trans "Cancel" %}"/>
+                            <input type="submit" class="btn btn-large btn-primary" name="allow" value="{% trans "Authorize" %}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <div class="card-body">
+                <h2>{% trans "Error:" %} {{ error.error }}</h2>
+                <p>{{ error.description }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

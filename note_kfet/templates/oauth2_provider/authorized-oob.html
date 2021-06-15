@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+Success code={{code}}
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h3 class="card-header text-center">
+            {% if not error %}
+               {% trans "Success" %}
+            {% else %}
+                {% trans "Error:" %} {{ error.error }}
+            {% endif %}
+        </h3>
+
+        <div class="card-body">
+            {% if not error %}
+                <p>{% trans "Please return to your application and enter this code:" %}</p>
+
+                <p><code>{{ code }}</code></p>
+            {% else %}
+                <p>{{ error.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

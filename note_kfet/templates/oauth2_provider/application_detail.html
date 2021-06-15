@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>{{ application.name }}</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-xl-6">{% trans "Client id" %}</dt>
+                <dd class="col-xl-6"><input class="form-control" type="text" value="{{ application.client_id }}" readonly></dd>
+
+                <dt class="col-xl-6">{% trans "Client secret" %}</dt>
+                <dd class="col-xl-6"><input class="form-control" type="text" value="{{ application.client_secret }}" readonly></dd>
+
+                <dt class="col-xl-6">{% trans "Client type" %}</dt>
+                <dd class="col-xl-6">{{ application.client_type }}</dd>
+
+                <dt class="col-xl-6">{% trans "Authorization Grant Type" %}</dt>
+                <dd class="col-xl-6">{{ application.authorization_grant_type }}</dd>
+
+                <dt class="col-xl-6">{% trans "Redirect Uris" %}</dt>
+                <dd class="col-xl-6"><textarea class="form-control" readonly>{{ application.redirect_uris }}</textarea></dd>
+            </dl>
+
+        </div>
+        <div class="card-footer text-center">
+            <a class="btn btn-secondary" href="{% url "oauth2_provider:list" %}">{% trans "Go Back" %}</a>
+            <a class="btn btn-primary" href="{% url "oauth2_provider:update" application.id %}">{% trans "Edit" %}</a>
+            <a class="btn btn-danger" href="{% url "oauth2_provider:delete" application.id %}">{% trans "Delete" %}</a>
+        </div>
+    </div>
+{% endblock content %}

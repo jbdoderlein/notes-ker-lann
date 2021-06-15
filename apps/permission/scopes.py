@@ -3,6 +3,7 @@
 
 from oauth2_provider.scopes import BaseScopes
 from member.models import Club
+from note_kfet.middlewares import get_current_request
 
 from .backends import PermissionBackend
 from .models import Permission
@@ -22,14 +23,12 @@ class PermissionScopes(BaseScopes):
     def get_available_scopes(self, application=None, request=None, *args, **kwargs):
         if not application:
             return []
-        user = application.user
         return [f"{p.id}_{p.membership.club.id}"
                 for t in Permission.PERMISSION_TYPES
-                for p in PermissionBackend.get_raw_permissions(user, t[0])]
+                for p in PermissionBackend.get_raw_permissions(get_current_request(), t[0])]
 
     def get_default_scopes(self, application=None, request=None, *args, **kwargs):
         if not application:
             return []
-        user = application.user
         return [f"{p.id}_{p.membership.club.id}"
-                for p in PermissionBackend.get_raw_permissions(user, 'view')]
+                for p in PermissionBackend.get_raw_permissions(get_current_request(), 'view')]

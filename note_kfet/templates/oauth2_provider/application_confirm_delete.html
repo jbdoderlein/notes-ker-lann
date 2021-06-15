@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>{% trans "Are you sure to delete the application" %} {{ application.name }}?</h3>
+        </div>
+        <div class="card-footer text-center">
+
+            <form method="post" action="{% url 'oauth2_provider:delete' application.pk %}">
+                {% csrf_token %}
+
+                <div class="control-group">
+                    <div class="controls">
+                        <a class="btn btn-secondary btn-large" href="{% url "oauth2_provider:list" %}">{% trans "Cancel" %}</a>
+                        <input type="submit" class="btn btn-large btn-danger" name="allow" value="{% trans "Delete" %}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
