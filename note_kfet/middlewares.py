@@ -1,41 +1,57 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from threading import local
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import User
 from django.contrib.sessions.backends.db import SessionStore
+from django.http import HttpRequest
 
-from threading import local
-
-USER_ATTR_NAME = getattr(settings, 'LOCAL_USER_ATTR_NAME', '_current_user')
-SESSION_ATTR_NAME = getattr(settings, 'LOCAL_SESSION_ATTR_NAME', '_current_session')
-IP_ATTR_NAME = getattr(settings, 'LOCAL_IP_ATTR_NAME', '_current_ip')
+REQUEST_ATTR_NAME = getattr(settings, 'LOCAL_REQUEST_ATTR_NAME', '_current_request')
 
 _thread_locals = local()
 
 
-def _set_current_user_and_ip(user=None, session=None, ip=None):
-    setattr(_thread_locals, USER_ATTR_NAME, user)
-    setattr(_thread_locals, SESSION_ATTR_NAME, session)
-    setattr(_thread_locals, IP_ATTR_NAME, ip)
+def _set_current_request(request=None):
+    setattr(_thread_locals, REQUEST_ATTR_NAME, request)
 
 
-def get_current_user() -> User:
-    return getattr(_thread_locals, USER_ATTR_NAME, None)
+def get_current_request() -> Optional[HttpRequest]:
+    return getattr(_thread_locals, REQUEST_ATTR_NAME, None)
 
 
-def get_current_session() -> SessionStore:
-    return getattr(_thread_locals, SESSION_ATTR_NAME, None)
+def get_current_user() -> Optional[User]:
+    request = get_current_request()
+    if request is None:
+        return None
+    return request.user
 
 
-def get_current_ip() -> str:
-    return getattr(_thread_locals, IP_ATTR_NAME, None)
+def get_current_session() -> Optional[SessionStore]:
+    request = get_current_request()
+    if request is None:
+        return None
+    return request.session
+
+
+def get_current_ip() -> Optional[str]:
+    request = get_current_request()
+
+    if request is None:
+        return None
+    elif 'HTTP_X_REAL_IP' in request.META:
+        return request.META.get('HTTP_X_REAL_IP')
+    elif 'HTTP_X_FORWARDED_FOR' in request.META:
+        return request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
+    return request.META.get('REMOTE_ADDR')
 
 
 def get_current_authenticated_user():
     current_user = get_current_user()
-    if isinstance(current_user, AnonymousUser):
+    if not current_user or not current_user.is_authenticated:
         return None
     return current_user
 
@@ -49,8 +65,6 @@ class SessionMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        user = request.user
-
         # If we authenticate through a token to connect to the API, then we query the good user
         if 'HTTP_AUTHORIZATION' in request.META and request.path.startswith("/api"):
             token = request.META.get('HTTP_AUTHORIZATION')
@@ -60,20 +74,14 @@ class SessionMiddleware(object):
                 if Token.objects.filter(key=token).exists():
                     token_obj = Token.objects.get(key=token)
                     user = token_obj.user
+                    request.user = user
                     session = request.session
                     session["permission_mask"] = 42
                     session.save()
 
-        if 'HTTP_X_REAL_IP' in request.META:
-            ip = request.META.get('HTTP_X_REAL_IP')
-        elif 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META.get('HTTP_X_FORWARDED_FOR').split(', ')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-
-        _set_current_user_and_ip(user, request.session, ip)
+        _set_current_request(request)
         response = self.get_response(request)
-        _set_current_user_and_ip(None, None, None)
+        _set_current_request(None)
 
         return response
 

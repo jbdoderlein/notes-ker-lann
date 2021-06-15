@@ -21,7 +21,7 @@ from rest_framework.authtoken.models import Token
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
-from note_kfet.middlewares import _set_current_user_and_ip
+from note_kfet.middlewares import _set_current_request
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
@@ -41,7 +41,8 @@ class CustomLoginView(LoginView):
     @transaction.atomic
     def form_valid(self, form):
         logout(self.request)
-        _set_current_user_and_ip(form.get_user(), self.request.session, None)
+        self.request.user = form.get_user()
+        _set_current_request(self.request)
         self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
         return super().form_valid(form)
 
