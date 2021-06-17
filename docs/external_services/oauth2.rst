@@ -78,6 +78,22 @@ Il vous suffit de donner à votre application :
 N'hésitez pas à consulter la page `<https://note.crans.org/api/me/>`_ pour s'imprégner
 du format renvoyé.
 
+.. warning::
+
+   Un petit mot sur les scopes : tel qu'implémenté, une scope est une permission unitaire
+   (telle que décrite dans le modèle ``Permission``) associée à un club. Ainsi, un jeton
+   a accès à une scope si et seulement si le/la propriétaire du jeton dispose d'une adhésion
+   courante dans le club lié à la scope qui lui octroie cette permission.
+
+   Par exemple, un jeton pourra avoir accès à la permission de créer des transactions en lien
+   avec un club si et seulement si le propriétaire du jeton est trésorier du club.
+
+   La vérification des droits du propriétaire est faite systématiquement, afin de ne pas
+   faire confiance au jeton en cas de droits révoqués à son propriétaire.
+
+   Vous pouvez donc contrôler le plus finement possible les permissions octroyées à vos
+   jetons.
+
 Avec Django-allauth
 ###################
 
