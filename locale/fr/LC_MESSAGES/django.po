@@ -3218,7 +3218,7 @@ msgid ""
 "link templates and convert permissions to scope numbers with the permissions "
 "that you want to grant for your application."
 msgstr ""
-"Vous pouvez aller <a href=\"%(scopes_url)s\"ici</a> pour générer des modèles "
+"Vous pouvez aller <a href=\"%(scopes_url)s\">ici</a> pour générer des modèles "
 "de liens d'autorisation et convertir des permissions en identifiants de "
 "scopes avec les permissions que vous souhaitez attribuer à votre application."
 

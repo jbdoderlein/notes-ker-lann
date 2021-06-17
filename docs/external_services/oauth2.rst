@@ -5,19 +5,10 @@ L'authentification `OAuth2 <https://fr.wikipedia.org/wiki/OAuth>`_ est supporté
 Note Kfet. Elle offre l'avantage non seulement d'identifier les utilisateurs, mais aussi
 de transmettre des informations à un service tiers tels que des informations personnelles,
 le solde de la note ou encore les adhésions de l'utilisateur, en l'avertissant sur
-quelles données sont effectivement collectées.
+quelles données sont effectivement collectées. Ainsi, il est possible de développer des
+appplications tierces qui peuvent se baser sur les données de la Note Kfet ou encore
+faire des transactions.
 
-.. danger::
-   L'implémentation actuelle ne permet pas de choisir quels droits on offre. Se connecter
-   par OAuth2 offre actuellement exactement les mêmes permissions que l'on n'aurait
-   normalement, avec le masque le plus haut, y compris en écriture.
-
-   Faites alors très attention lorsque vous vous connectez à un service tiers via OAuth2,
-   et contrôlez bien exactement ce que l'application fait de vos données, à savoir si
-   elle ignore bien tout ce dont elle n'a pas besoin.
-
-   À l'avenir, la fenêtre d'authentification pourra vous indiquer clairement quels
-   paramètres sont collectés.
 
 Configuration du serveur
 ------------------------
@@ -44,7 +35,15 @@ l'authentification OAuth2. On adapte alors la configuration pour permettre cela 
        ...
    }
 
-On ajoute les routes dans ``urls.py`` :
+On a ensuite besoin de définir nos propres scopes afin d'avoir des permissions fines :
+
+.. code:: python
+
+   OAUTH2_PROVIDER = {
+       'SCOPES_BACKEND_CLASS': 'permission.scopes.PermissionScopes',
+   }
+
+On ajoute enfin les routes dans ``urls.py`` :
 
 .. code:: python
 
@@ -58,8 +57,7 @@ L'OAuth2 est désormais prêt à être utilisé.
 Configuration client
 --------------------
 
-Contrairement au `CAS <cas>`_, n'importe qui peut en théorie créer une application OAuth2.
-En théorie, car pour l'instant les permissions ne leur permettent pas.
+Contrairement au `CAS <cas>`_, n'importe qui peut créer une application OAuth2.
 
 Pour créer une application, il faut se rendre à la page
 `/o/applications/ <https://note.crans.org/o/applications/>`_. Dans ``client type``,
@@ -72,10 +70,10 @@ Il vous suffit de donner à votre application :
 
 * L'identifiant client (client-ID)
 * La clé secrète
-* Les scopes : sous-ensemble de ``[read, write]`` (ignoré pour l'instant, cf premier paragraphe)
+* Les scopes, qui peuvent être récupérées sur cette page : `<https://note.crans.org/permission/scopes/>`_
 * L'URL d'autorisation : `<https://note.crans.org/o/authorize/>`_
 * L'URL d'obtention de jeton : `<https://note.crans.org/o/token/>`_
-* L'URL de récupération des informations de l'utilisateur : `<https://note.crans.org/api/me/>`_
+* Si besoin, l'URL de récupération des informations de l'utilisateur : `<https://note.crans.org/api/me/>`_
 
 N'hésitez pas à consulter la page `<https://note.crans.org/api/me/>`_ pour s'imprégner
 du format renvoyé.
@@ -131,3 +129,97 @@ alors autant le faire via un shell python :
 Si vous avez bien configuré ``django-allauth``, vous êtes désormais prêts par à vous
 connecter via la note :) Par défaut, nom, prénom, pseudo et adresse e-mail sont
 récupérés. Les autres données sont stockées mais inutilisées.
+
+
+Application personnalisée
+#########################
+
+Ce modèle vous permet de créer vos propres applications à interfacer avec la Note Kfet.
+
+Commencez par créer une application : `<https://note.crans.org/o/applications/register>`_.
+Dans ``Client type``, choisissez ``Confidential`` si des informations confidentielles sont
+amenées à transiter, sinon ``public``. Choisissez ``Authorization code`` dans
+``Authorization grant type``.
+
+Dans ``Redirect uris``, vous devez insérer l'ensemble des URL autorisées à être redirigées
+à la suite d'une autorisation OAuth2. La première URL entrée sera l'URL par défaut dans le
+cas où elle n'est pas explicitement indiquée lors de l'autorisation.
+
+.. note::
+
+   À des fins de tests, il est possible de laisser `<http://localhost/>`_ pour faire des
+   appels à la main en récupérant le jeton d'autorisation.
+
+Lorsqu'un client veut s'authentifier via la Note Kfet, il va devoir accéder à une page
+d'authentification. La page d'autorisation est `<https://note.crans.org/o/authorize/>`_,
+c'est sur cette page qu'il faut rediriger les utilisateurs. Il faut mettre en paramètre GET :
+
+* ``client_id`` : l'identifiant client de l'application (public) ;
+* ``response_type`` : mettre ``code`` ;
+* ``scope`` : l'ensemble des scopes demandés, séparés par des espaces. Ces scopes peuvent
+  être récupérés sur la page `<https://note.crans.org/permission/scopes/>`_.
+* ``redirect_uri`` : l'URL sur laquelle rediriger qui récupérera le code d'accès. Doit être
+  autorisée par l'application. À des fins de test, peut être `<http://localhost/>`_.
+* ``state`` : optionnel, peut être utilisé pour permettre au client de détecter des requêtes
+  provenant d'autres sites.
+
+Sur cette page, les permissions demandées seront listées, et l'utilisateur aura le choix
+d'accepter ou non. Dans les deux cas, l'utilisateur sera redirigée vers ``redirect_uri``,
+avec pour paramètre GET soit le message d'erreur, soit un paramètre ``code`` correspondant
+au code d'autorisation.
+
+Une fois ce code d'autorisation récupéré, il faut désormais récupérer le jeton d'accès.
+Il faut pour cela aller sur l'URL `<https://note.crans.org/o/token/>`_, effectuer une
+requête POST avec pour arguments :
+
+* ``client_id`` ;
+* ``client_secret`` ;
+* ``grant_type`` : mettre ``authorization_code`` ;
+* ``code`` : le code généré.
+
+À noter que le code fourni n'est disponible que pendant quelques secondes.
+
+À des fins de tests, on peut envoyer la requête avec ``curl`` :
+
+.. code:: bash
+
+   curl -X POST https://note.crans.org/o/token/ -d "client_id=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&grant_type=authorization_code&code=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+Le serveur renverra si tout se passe bien une réponse JSON :
+
+.. code:: json
+
+   {
+       "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+       "expires_in": 36000,
+       "token_type": "Bearer",
+       "scope": "1_1 1_2",
+       "refresh_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+   }
+
+On note donc 2 jetons différents : un d'accès et un de rafraîchissement. Le jeton d'accès
+est celui qui sera donné à l'API pour s'authentifier, et qui expire au bout de quelques
+heures.
+
+Il suffit désormais d'ajouter l'en-tête ``Authorization: Bearer ACCESS_TOKEN`` pour se
+connecter à la note grâce à ce jeton d'accès.
+
+Pour tester :
+
+.. code:: bash
+
+   curl https://note.crans.org/api/me -H "Authorization: Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+En cas d'expiration de ce jeton d'accès, il est possible de le renouveler grâce au jeton
+de rafraichissement à usage unique. Il suffit pour cela de refaire une requête sur la page
+`<https://note.crans.org/o/token/>`_ avec pour paramètres :
+
+* ``client_id`` ;
+* ``client_secret`` ;
+* ``grant_type`` : mettre ``refresh_token`` ;
+* ``refresh_token`` : le jeton de rafraîchissement.
+
+Le serveur vous fournira alors une nouvelle paire de jetons, comme précédemment.
+À noter qu'un jeton de rafraîchissement est à usage unique.
+
+N'hésitez pas à vous renseigner sur OAuth2 pour plus d'informations.
