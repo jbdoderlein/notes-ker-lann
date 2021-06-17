@@ -127,7 +127,7 @@ class PermissionBackend(ModelBackend):
             user = request.user
 
         if user is None or user.is_anonymous:
-            # Anonymous users can't do asetdefaultnything
+            # Anonymous users can't do anything
             return Q(pk=-1)
 
         if user.is_superuser and request.session.get("permission_mask", -1) >= 42:
