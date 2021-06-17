@@ -39,3 +39,11 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        {# Small hack to have the remove the allow checkbox and replace it with the button #}
+        {# Django oauth toolkit does simply not render the wdiget since it is not hidden, and create directly the button #}
+        document.getElementById('div_id_allow').parentElement.remove()
+    </script>
+{% endblock %}

@@ -1053,17 +1053,49 @@ msgstr "Changer le mot de passe"
 msgid "API token"
 msgstr "Accès API"
 
-#: apps/member/templates/member/manage_auth_tokens.html:19
+#: apps/member/templates/member/manage_auth_tokens.html:12
+msgid "Token authentication"
+msgstr "Authentification par jeton"
+
+#: apps/member/templates/member/manage_auth_tokens.html:28
 msgid "Token"
 msgstr "Jeton"
 
-#: apps/member/templates/member/manage_auth_tokens.html:26
+#: apps/member/templates/member/manage_auth_tokens.html:35
 msgid "Created"
 msgstr "Créé le"
 
-#: apps/member/templates/member/manage_auth_tokens.html:34
+#: apps/member/templates/member/manage_auth_tokens.html:39
+msgid "Warning"
+msgstr "Attention"
+
+#: apps/member/templates/member/manage_auth_tokens.html:44
 msgid "Regenerate token"
 msgstr "Regénérer le jeton"
+
+#: apps/member/templates/member/manage_auth_tokens.html:53
+msgid "OAuth2 authentication"
+msgstr "Authentification OAuth2"
+
+#: apps/member/templates/member/manage_auth_tokens.html:79
+msgid "Authorization:"
+msgstr "Autorisation :"
+
+#: apps/member/templates/member/manage_auth_tokens.html:83
+msgid "Token:"
+msgstr "Jeton :"
+
+#: apps/member/templates/member/manage_auth_tokens.html:87
+msgid "Revoke Token:"
+msgstr "Révoquer le jeton :"
+
+#: apps/member/templates/member/manage_auth_tokens.html:91
+msgid "Introspect Token:"
+msgstr "Introspection :"
+
+#: apps/member/templates/member/manage_auth_tokens.html:97
+msgid "Show my applications"
+msgstr "Voir mes applications"
 
 #: apps/member/templates/member/picture_update.html:35
 msgid "Nevermind"
@@ -1482,7 +1514,7 @@ msgstr "Pas de motif spécifié"
 #: apps/wei/tables.py:74 apps/wei/tables.py:114
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:18
-#: note_kfet/templates/oauth2_provider/application_detail.html:31
+#: note_kfet/templates/oauth2_provider/application_detail.html:39
 #: note_kfet/templates/oauth2_provider/authorized-token-delete.html:12
 msgid "Delete"
 msgstr "Supprimer"
@@ -1493,7 +1525,7 @@ msgstr "Supprimer"
 #: apps/wei/templates/wei/bus_detail.html:20
 #: apps/wei/templates/wei/busteam_detail.html:20
 #: apps/wei/templates/wei/busteam_detail.html:40
-#: note_kfet/templates/oauth2_provider/application_detail.html:30
+#: note_kfet/templates/oauth2_provider/application_detail.html:38
 msgid "Edit"
 msgstr "Éditer"
 
@@ -1808,17 +1840,17 @@ msgid "Available scopes"
 msgstr "Scopes disponibles"
 
 #: apps/permission/templates/permission/scopes.html:42
-#: note_kfet/templates/oauth2_provider/application_list.html:18
+#: note_kfet/templates/oauth2_provider/application_list.html:24
 msgid "No applications defined"
 msgstr "Pas d'application définie"
 
 #: apps/permission/templates/permission/scopes.html:43
-#: note_kfet/templates/oauth2_provider/application_list.html:19
+#: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "Click here"
 msgstr "Cliquez ici"
 
 #: apps/permission/templates/permission/scopes.html:43
-#: note_kfet/templates/oauth2_provider/application_list.html:19
+#: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "if you want to register a new one"
 msgstr "si vous voulez en enregistrer une nouvelle"
 
@@ -3180,6 +3212,17 @@ msgid "Redirect Uris"
 msgstr "URIs de redirection"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:29
+#, python-format
+msgid ""
+"You can go <a href=\"%(scopes_url)s\">here</a> to generate authorization "
+"link templates and convert permissions to scope numbers with the permissions "
+"that you want to grant for your application."
+msgstr ""
+"Vous pouvez aller <a href=\"%(scopes_url)s\"ici</a> pour générer des modèles "
+"de liens d'autorisation et convertir des permissions en identifiants de "
+"scopes avec les permissions que vous souhaitez attribuer à votre application."
+
+#: note_kfet/templates/oauth2_provider/application_detail.html:37
 #: note_kfet/templates/oauth2_provider/application_form.html:23
 msgid "Go Back"
 msgstr "Retour en arrière"
@@ -3192,9 +3235,21 @@ msgstr "Modifier l'application"
 msgid "Your applications"
 msgstr "Vos applications"
 
-#: note_kfet/templates/oauth2_provider/application_list.html:24
+#: note_kfet/templates/oauth2_provider/application_list.html:11
+msgid ""
+"You can find on this page the list of the applications that you already "
+"registered."
+msgstr ""
+"Vous pouvez trouver sur cette page la liste des applications que vous avez "
+"déjà enregistrées."
+
+#: note_kfet/templates/oauth2_provider/application_list.html:30
 msgid "New Application"
 msgstr "Nouvelle application"
+
+#: note_kfet/templates/oauth2_provider/application_list.html:31
+msgid "Authorized Tokens"
+msgstr "Jetons autorisés"
 
 #: note_kfet/templates/oauth2_provider/application_registration_form.html:5
 msgid "Register a new application"

@@ -7,6 +7,12 @@
             <h3>{% trans "Your applications" %}</h3>
         </div>
         <div class="card-body">
+            <div class="alert alert-info">
+                {% blocktrans trimmed %}
+                    You can find on this page the list of the applications that you already registered.
+                {% endblocktrans %}
+            </div>
+
             {% if applications %}
                 <ul>
                     {% for application in applications %}
@@ -22,6 +28,7 @@
         </div>
         <div class="card-footer text-center">
             <a class="btn btn-success" href="{% url "oauth2_provider:register" %}">{% trans "New Application" %}</a>
+            <a class="btn btn-secondary" href="{% url "oauth2_provider:authorized-token-list" %}">{% trans "Authorized Tokens" %}</a>
         </div>
     </div>
 {% endblock content %}

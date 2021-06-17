@@ -157,7 +157,7 @@ class ScopesView(LoginRequiredMixin, TemplateView):
         scopes = PermissionScopes()
         context["scopes"] = {}
         all_scopes = scopes.get_all_scopes()
-        for app in Application.objects.filter(Q(user=self.request.user) | Q(client_type='public')).all():
+        for app in Application.objects.filter(user=self.request.user).all():
             available_scopes = scopes.get_available_scopes(app)
             context["scopes"][app] = OrderedDict()
             items = [(k, v) for (k, v) in all_scopes.items() if k in available_scopes]

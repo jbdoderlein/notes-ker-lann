@@ -57,16 +57,16 @@
                     let scope = ""
                     for (let element of elements) {
                         if (element.checked) {
-                            scope += element.value + "%20"
+                            scope += element.value + " "
                         }
                     }
 
-                    scope = scope.substr(0, scope.length - 3)
+                    scope = scope.substr(0, scope.length - 1)
 
                     document.getElementById("url-{{ app.name.lower }}").innerHTML = 'Scopes : ' + scope
-                        + '<br><a href="{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code&scope='+ scope
+                        + '<br><a href="{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code&scope='+ scope.replaceAll(' ', '%20')
                         + '" target="_blank">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code&scope='
-                        + scope + '</a>'
+                        + scope.replaceAll(' ', '%20') + '</a>'
                 }
             }
         {% endfor %}

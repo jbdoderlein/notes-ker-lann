@@ -12,7 +12,7 @@
                 <dd class="col-xl-6"><input class="form-control" type="text" value="{{ application.client_id }}" readonly></dd>
 
                 <dt class="col-xl-6">{% trans "Client secret" %}</dt>
-                <dd class="col-xl-6"><input class="form-control" type="text" value="{{ application.client_secret }}" readonly></dd>
+                <dd class="col-xl-6"><input class="form-control" type="text" value="****************************************************************" readonly></dd>
 
                 <dt class="col-xl-6">{% trans "Client type" %}</dt>
                 <dd class="col-xl-6">{{ application.client_type }}</dd>
@@ -23,6 +23,14 @@
                 <dt class="col-xl-6">{% trans "Redirect Uris" %}</dt>
                 <dd class="col-xl-6"><textarea class="form-control" readonly>{{ application.redirect_uris }}</textarea></dd>
             </dl>
+
+            <div class="alert alert-info">
+                {% url 'permission:scopes' as scopes_url %}
+                {% blocktrans trimmed %}
+                    You can go <a href="{{ scopes_url }}">here</a> to generate authorization link templates and convert
+                    permissions to scope numbers with the permissions that you want to grant for your application.
+                {% endblocktrans %}
+            </div>
 
         </div>
         <div class="card-footer text-center">
