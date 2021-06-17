@@ -48,7 +48,7 @@ class PermissionBackend(ModelBackend):
             user = request.user
 
             def permission_filter(membership_obj):
-                return Q(mask__rank__lte=request.session.get("permission_mask", -1))
+                return Q(mask__rank__lte=request.session.get("permission_mask", 42))
 
         if user.is_anonymous:
             # Unauthenticated users have no permissions
