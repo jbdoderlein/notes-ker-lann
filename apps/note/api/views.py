@@ -65,7 +65,8 @@ class AliasViewSet(ReadProtectedModelViewSet):
     serializer_class = AliasSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    filterset_fields = ['name', 'normalized_name', 'note', 'note__noteuser__user',
+                        'note__noteclub__club', 'note__polymorphic_ctype__model', ]
     ordering_fields = ['name', 'normalized_name', ]
 
     def get_serializer_class(self):
@@ -116,7 +117,8 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
     serializer_class = ConsumerSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['$normalized_name', '$name', '$note__polymorphic_ctype__model', ]
-    filterset_fields = ['note', 'note__noteuser__user', 'note__noteclub__club', 'note__polymorphic_ctype__model', ]
+    filterset_fields = ['name', 'normalized_name', 'note', 'note__noteuser__user',
+                        'note__noteclub__club', 'note__polymorphic_ctype__model', ]
     ordering_fields = ['name', 'normalized_name', ]
 
     def get_queryset(self):
