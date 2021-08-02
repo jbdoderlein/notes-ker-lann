@@ -1,7 +1,7 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
-from random import choice
+import time
+from random import Random
 
 from django import forms
 from django.db import transaction
@@ -35,7 +35,18 @@ class WEISurveyForm2021(forms.Form):
         """
         Filter the bus selector with the buses of the current WEI.
         """
-        words = [choice(WORDS) for _ in range(10)]
+        information = WEISurveyInformation2021(registration)
+        if not information.seed:
+            information.seed = int(1000 * time.time())
+            information.save(registration)
+            registration.save()
+
+        rng = Random(information.seed)
+
+        words = []
+        for _ in range(information.step + 1):
+            # Generate N times words
+            words = [rng.choice(WORDS) for _ in range(10)]
         words = [(w, w) for w in words]
         if self.data:
             self.fields["word"].choices = [(w, w) for w in WORDS]
@@ -59,6 +70,8 @@ class WEISurveyInformation2021(WEISurveyInformation):
     We store the id of the selected bus. We store only the name, but is not used in the selection:
     that's only for humans that try to read data.
     """
+    # Random seed that is stored at the first time to ensure that words are generated only once
+    seed = 0
     step = 0
 
     def __init__(self, registration):
@@ -125,5 +138,6 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     def run_algorithm(self):
         for registration in self.get_registrations():
             survey = self.get_survey_class()(registration)
-            survey.select_bus(choice(Bus.objects.all()))
+            rng = Random(survey.information.seed)
+            survey.select_bus(rng.choice(Bus.objects.all()))
             survey.save()
