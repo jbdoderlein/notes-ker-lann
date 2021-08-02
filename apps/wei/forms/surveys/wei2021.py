@@ -20,9 +20,9 @@ WORDS = ['Rap', 'Retro', 'DJ', 'Rock', 'Jazz', 'Chansons Populaires', 'Chansons 
          'Se lacher', 'Chill', 'Débile', 'Beauf', 'Bon enfant']
 
 
-class WEISurveyForm2020(forms.Form):
+class WEISurveyForm2021(forms.Form):
     """
-    Survey form for the year 2020.
+    Survey form for the year 2021.
     Members choose 20 words, from which we calculate the best associated bus.
     """
 
@@ -44,7 +44,7 @@ class WEISurveyForm2020(forms.Form):
         self.fields["word"].choices = words
 
 
-class WEIBusInformation2020(WEIBusInformation):
+class WEIBusInformation2021(WEIBusInformation):
     """
     For each word, the bus has a score
     """
@@ -54,7 +54,7 @@ class WEIBusInformation2020(WEIBusInformation):
         super().__init__(bus)
 
 
-class WEISurveyInformation2020(WEISurveyInformation):
+class WEISurveyInformation2021(WEISurveyInformation):
     """
     We store the id of the selected bus. We store only the name, but is not used in the selection:
     that's only for humans that try to read data.
@@ -67,21 +67,21 @@ class WEISurveyInformation2020(WEISurveyInformation):
         super().__init__(registration)
 
 
-class WEISurvey2020(WEISurvey):
+class WEISurvey2021(WEISurvey):
     """
-    Survey for the year 2020.
+    Survey for the year 2021.
     """
 
     @classmethod
     def get_year(cls):
-        return 2020
+        return 2021
 
     @classmethod
     def get_survey_information_class(cls):
-        return WEISurveyInformation2020
+        return WEISurveyInformation2021
 
     def get_form_class(self):
-        return WEISurveyForm2020
+        return WEISurveyForm2021
 
     def update_form(self, form):
         """
@@ -98,7 +98,7 @@ class WEISurvey2020(WEISurvey):
 
     @classmethod
     def get_algorithm_class(cls):
-        return WEISurveyAlgorithm2020
+        return WEISurveyAlgorithm2021
 
     def is_complete(self) -> bool:
         """
@@ -107,20 +107,20 @@ class WEISurvey2020(WEISurvey):
         return self.information.step == 20
 
 
-class WEISurveyAlgorithm2020(WEISurveyAlgorithm):
+class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     """
-    The algorithm class for the year 2020.
+    The algorithm class for the year 2021.
     For now, the algorithm is quite simple: the selected bus is the chosen bus.
     TODO: Improve this algorithm.
     """
 
     @classmethod
     def get_survey_class(cls):
-        return WEISurvey2020
+        return WEISurvey2021
 
     @classmethod
     def get_bus_information_class(cls):
-        return WEIBusInformation2020
+        return WEIBusInformation2021
 
     def run_algorithm(self):
         for registration in self.get_registrations():
