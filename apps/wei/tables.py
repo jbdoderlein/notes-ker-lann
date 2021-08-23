@@ -108,7 +108,7 @@ class WEIRegistrationTable(tables.Table):
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user__first_name', 'user__last_name', 'first_year',)
+        fields = ('user', 'user__first_name', 'user__last_name', 'first_year', 'caution_check',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -147,7 +147,7 @@ class WEIMembershipTable(tables.Table):
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user', 'user__last_name', 'user__first_name', 'registration__gender', 'user__profile__department',
-                  'year', 'bus', 'team', )
+                  'year', 'bus', 'team', 'registration__caution_check', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),

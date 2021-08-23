@@ -6,28 +6,32 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% load render_table from django_tables2 %}
 
 {% block profile_content %}
-    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/bus/équipe ...">
-    <hr>
+    <div class="card">
+    <div class="card-body">
+        <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note/bus/équipe ...">
+        <hr>
 
-    <div id="memberships_table">
-        {% if table.data %}
-            {% render_table table %}
-        {% else %}
-            <div class="alert alert-warning">
-                {% trans "There is no membership found with this pattern." %}
-            </div>
-        {% endif %}
+        <div id="memberships_table">
+            {% if table.data %}
+                {% render_table table %}
+            {% else %}
+                <div class="alert alert-warning">
+                    {% trans "There is no membership found with this pattern." %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 
-    <a href="{% url 'wei:wei_registrations' pk=club.pk %}">
-        <button class="btn btn-block btn-info">{% trans "View unvalidated registrations..." %}</button>
-    </a>
-
-    <hr>
-
-    <a href="{% url 'wei:wei_memberships_pdf' wei_pk=club.pk %}" data-turbolinks="false">
-        <button class="btn btn-block btn-danger"><i class="fa fa-file-pdf-o"></i> {% trans "View as PDF" %}</button>
-    </a>
+    <div class="card-footer text-center">
+        <a href="{% url 'wei:wei_registrations' pk=club.pk %}">
+            <button class="btn btn-block btn-info">{% trans "View unvalidated registrations..." %}</button>
+        </a>
+        <hr>
+        <a href="{% url 'wei:wei_memberships_pdf' wei_pk=club.pk %}" data-turbolinks="false">
+            <button class="btn btn-block btn-danger"><i class="fa fa-file-pdf-o"></i> {% trans "View as PDF" %}</button>
+        </a>
+    </div>
+    </div>
 {% endblock %}
 
 {% block extrajavascript %}
