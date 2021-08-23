@@ -918,10 +918,6 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
         if credit_type is None or registration.soge_credit:
             credit_amount = 0
 
-        if not registration.caution_check and not registration.first_year:
-            form.add_error('bus', _("This user didn't give her/his caution check."))
-            return super().form_invalid(form)
-
         if not registration.soge_credit and user.note.balance + credit_amount < fee:
             # Users must have money before registering to the WEI.
             form.add_error('bus',
