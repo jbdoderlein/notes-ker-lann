@@ -344,6 +344,8 @@ class BusUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = self.object.wei
+        context["information"] = CurrentSurvey.get_algorithm_class().get_bus_information(self.object)
+        self.object.save()
         return context
 
     def get_form(self, form_class=None):

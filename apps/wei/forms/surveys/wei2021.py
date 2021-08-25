@@ -10,14 +10,16 @@ from django.utils.translation import gettext_lazy as _
 from .base import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, WEIBusInformation
 from ...models import Bus
 
-
-# TODO: Use new words
-WORDS = ['Rap', 'Retro', 'DJ', 'Rock', 'Jazz', 'Chansons Populaires', 'Chansons Paillardes', 'Pop', 'Fanfare',
-         'Biere', 'Pastis', 'Vodka', 'Cocktails', 'Eau', 'Sirop', 'Jus de fruit', 'Binge Drinking', 'Rhum',
-         'Eau de vie', 'Apéro', 'Morning beer', 'Huit-six', 'Jeux de societé', 'Jeux de cartes', 'Danse', 'Karaoké',
-         'Bière Pong', 'Poker', 'Loup Garou', 'Films', "Jeux d'alcool", 'Sport', 'Rangées de cul', 'Chips', 'BBQ',
-         'Kebab', 'Saucisse', 'Vegan', 'Vege', 'LGBTIQ+', 'Dab', 'Solitaire', 'Séducteur', 'Sociale', 'Chanteur',
-         'Se lacher', 'Chill', 'Débile', 'Beauf', 'Bon enfant']
+WORDS = [
+    '13 organisé', '3ième mi temps', 'Années 2000', 'Apéro', 'BBQ', 'BP', 'Beauf', 'Binge drinking', 'Bon enfant',
+    'Cartouche', 'Catacombes', 'Chansons paillardes', 'Chansons populaires', 'Chanteur', 'Chartreuse', 'Chill',
+    'Core', 'DJ', 'Dancefloor', 'Danse', 'David Guetta', 'Disco', 'Eau de vie', 'Électro', 'Escalade', 'Familial',
+    'Fanfare', 'Fracassage', 'Féria', 'Hard rock', 'Hoeggarden', 'House', 'Huit-six', 'IPA', 'Inclusif', 'Inferno',
+    'Introverti', 'Jager bomb', 'Jazz', 'Jeux d\'alcool', 'Jeux de rôles', 'Jeux vidéo', 'Jul', 'Jus de fruit',
+    'Karaoké', 'LGBTQI+', 'Lady Gaga', 'Loup garou', 'Morning beer', 'Métal', 'Nuit blanche', 'Ovalie', 'Psychedelic',
+    'Pétanque',  'Rave', 'Reggae', 'Rhum', 'Ricard', 'Rock', 'Rosé', 'Rétro', 'Séducteur', 'Techno', 'Thérapie taxi',
+    'Théâtre', 'Trap', 'Turn up', 'Underground', 'Volley', 'Wati B', 'Zinédine Zidane',
+]
 
 
 class WEISurveyForm2021(forms.Form):
@@ -59,9 +61,12 @@ class WEIBusInformation2021(WEIBusInformation):
     """
     For each word, the bus has a score
     """
+    scores: dict
+
     def __init__(self, bus):
+        self.scores = {}
         for word in WORDS:
-            setattr(self, word, 0.0)
+            self.scores[word] = 0.0
         super().__init__(bus)
 
 

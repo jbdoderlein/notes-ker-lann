@@ -96,7 +96,7 @@ class Bus(models.Model):
         """
         Store information as a JSON string
         """
-        self.information_json = json.dumps(information)
+        self.information_json = json.dumps(information, indent=2)
 
     def __str__(self):
         return self.name
@@ -260,7 +260,7 @@ class WEIRegistration(models.Model):
         """
         Store information as a JSON string
         """
-        self.information_json = json.dumps(information)
+        self.information_json = json.dumps(information, indent=2)
 
     @property
     def is_validated(self):
