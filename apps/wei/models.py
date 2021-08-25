@@ -66,6 +66,11 @@ class Bus(models.Model):
         verbose_name=_("name"),
     )
 
+    size = models.IntegerField(
+        verbose_name=_("seat count in the bus"),
+        default=50,
+    )
+
     description = models.TextField(
         blank=True,
         default="",
