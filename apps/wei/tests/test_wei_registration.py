@@ -188,7 +188,9 @@ class TestWEIRegistration(TestCase):
         response = self.client.post(reverse("wei:add_bus", kwargs=dict(pk=self.wei.pk)), dict(
             wei=self.wei.id,
             name="Create Bus Test",
+            size=50,
             description="This bus was created.",
+            information_json="{}",
         ))
         qs = Bus.objects.filter(name="Create Bus Test")
         self.assertTrue(qs.exists())
@@ -218,7 +220,9 @@ class TestWEIRegistration(TestCase):
 
         response = self.client.post(reverse("wei:update_bus", kwargs=dict(pk=self.bus.pk)), dict(
             name="Update Bus Test",
+            size=40,
             description="This bus was updated.",
+            information_json="{}",
         ))
         qs = Bus.objects.filter(name="Update Bus Test", id=self.bus.id)
         self.assertRedirects(response, reverse("wei:manage_bus", kwargs=dict(pk=self.bus.pk)), 302, 200)
