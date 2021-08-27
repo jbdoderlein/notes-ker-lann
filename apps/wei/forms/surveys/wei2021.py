@@ -8,7 +8,6 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from .base import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, WEIBusInformation
-from ...models import Bus
 
 WORDS = [
     '13 organisé', '3ième mi temps', 'Années 2000', 'Apéro', 'BBQ', 'BP', 'Beauf', 'Binge drinking', 'Bon enfant',
@@ -124,12 +123,25 @@ class WEISurvey2021(WEISurvey):
         """
         return self.information.step == 20
 
+    def score(self, bus):
+        if not self.is_complete():
+            raise ValueError("Survey is not ended, can't calculate score")
+        bus_info = self.get_algorithm_class().get_bus_information(bus)
+        return sum(bus_info.scores[getattr(self.information, 'word' + str(i))] for i in range(1, 21)) / 20
+
+    def scores_per_bus(self):
+        return {bus: self.score(bus) for bus in self.get_algorithm_class().get_buses()}
+
+    def ordered_buses(self):
+        values = list(self.scores_per_bus().items())
+        values.sort(key=lambda item: -item[1])
+        return values
+
 
 class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     """
     The algorithm class for the year 2021.
-    For now, the algorithm is quite simple: the selected bus is the chosen bus.
-    TODO: Improve this algorithm.
+    We use Gale-Shapley algorithm to attribute 1y students into buses.
     """
 
     @classmethod
@@ -141,8 +153,43 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         return WEIBusInformation2021
 
     def run_algorithm(self):
-        for registration in self.get_registrations():
-            survey = self.get_survey_class()(registration)
-            rng = Random(survey.information.seed)
-            survey.select_bus(rng.choice(Bus.objects.all()))
-            survey.save()
+        """
+        Gale-Shapley algorithm implementation.
+        We modify it to allow buses to have multiple "weddings".
+        """
+        surveys = list(self.get_survey_class()(r) for r in self.get_registrations())  # All surveys
+        free_surveys = [s for s in surveys if not s.information.valid]  # Remaining surveys
+        while free_surveys:  # Some students are not affected
+            survey = free_surveys[0]
+            buses = survey.ordered_buses()  # Preferences of the student
+            for bus, _ in buses:
+                if self.get_bus_information(bus).has_free_seats(surveys):
+                    # Selected bus has free places. Put student in the bus
+                    survey.select_bus(bus)
+                    survey.save()
+                    free_surveys.remove(survey)
+                    break
+                else:
+                    # Current bus has not enough places. Remove the least preferred student from the bus if existing
+                    current_score = survey.score(bus)
+                    least_preferred_survey = None
+                    least_score = -1
+                    # Find the least student in the bus that has a lower score than the current student
+                    for survey2 in surveys:
+                        if not survey2.information.valid or survey2.information.get_selected_bus() != bus:
+                            continue
+                        score2 = survey2.score(bus)
+                        if current_score <= score2:  # Ignore better students
+                            continue
+                        if least_preferred_survey is None or score2 < least_score:
+                            least_preferred_survey = survey2
+                            least_score = score2
+
+                    if least_preferred_survey is not None:
+                        # Remove the least student from the bus and put the current student in.
+                        # If it does not exist, choose the next bus.
+                        least_preferred_survey.free()
+                        least_preferred_survey.save()
+                        survey.select_bus(bus)
+                        survey.save()
+                        break
