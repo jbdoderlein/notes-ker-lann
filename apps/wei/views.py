@@ -222,7 +222,7 @@ class WEIMembershipsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
             | Q(team__name__iregex=pattern)
         )
 
-        return qs[:20]
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -256,7 +256,7 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
                 | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
             )
 
-        return qs[:20]
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
