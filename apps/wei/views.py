@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -222,7 +222,7 @@ class WEIMembershipsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableVi
             | Q(team__name__iregex=pattern)
         )
 
-        return qs[:20]
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -256,7 +256,7 @@ class WEIRegistrationsView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTable
                 | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
             )
 
-        return qs[:20]
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -344,6 +344,8 @@ class BusUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["club"] = self.object.wei
+        context["information"] = CurrentSurvey.get_algorithm_class().get_bus_information(self.object)
+        self.object.save()
         return context
 
     def get_form(self, form_class=None):
@@ -816,22 +818,13 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             date_start__gte=bde.membership_start,
         ).exists()
 
-        fee = registration.wei.membership_fee_paid if registration.user.profile.paid \
-            else registration.wei.membership_fee_unpaid
-        if not context["kfet_member"]:
-            fee += kfet.membership_fee_paid if registration.user.profile.paid \
-                else kfet.membership_fee_unpaid
-        if not context["bde_member"]:
-            fee += bde.membership_fee_paid if registration.user.profile.paid \
-                else bde.membership_fee_unpaid
-
-        context["fee"] = fee
+        context["fee"] = registration.fee
 
         form = context["form"]
         if registration.soge_credit:
-            form.fields["credit_amount"].initial = fee
+            form.fields["credit_amount"].initial = registration.fee
         else:
-            form.fields["credit_amount"].initial = max(0, fee - registration.user.note.balance)
+            form.fields["credit_amount"].initial = max(0, registration.fee - registration.user.note.balance)
 
         return context
 
@@ -917,10 +910,6 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
 
         if credit_type is None or registration.soge_credit:
             credit_amount = 0
-
-        if not registration.caution_check and not registration.first_year:
-            form.add_error('bus', _("This user didn't give her/his caution check."))
-            return super().form_invalid(form)
 
         if not registration.soge_credit and user.note.balance + credit_amount < fee:
             # Users must have money before registering to the WEI.

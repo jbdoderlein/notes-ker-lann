@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import json
@@ -66,6 +66,11 @@ class Bus(models.Model):
         verbose_name=_("name"),
     )
 
+    size = models.IntegerField(
+        verbose_name=_("seat count in the bus"),
+        default=50,
+    )
+
     description = models.TextField(
         blank=True,
         default="",
@@ -91,7 +96,7 @@ class Bus(models.Model):
         """
         Store information as a JSON string
         """
-        self.information_json = json.dumps(information)
+        self.information_json = json.dumps(information, indent=2)
 
     def __str__(self):
         return self.name
@@ -255,7 +260,34 @@ class WEIRegistration(models.Model):
         """
         Store information as a JSON string
         """
-        self.information_json = json.dumps(information)
+        self.information_json = json.dumps(information, indent=2)
+
+    @property
+    def fee(self):
+        bde = Club.objects.get(pk=1)
+        kfet = Club.objects.get(pk=2)
+
+        kfet_member = Membership.objects.filter(
+            club_id=kfet.id,
+            user=self.user,
+            date_start__gte=kfet.membership_start,
+        ).exists()
+        bde_member = Membership.objects.filter(
+            club_id=bde.id,
+            user=self.user,
+            date_start__gte=bde.membership_start,
+        ).exists()
+
+        fee = self.wei.membership_fee_paid if self.user.profile.paid \
+            else self.wei.membership_fee_unpaid
+        if not kfet_member:
+            fee += kfet.membership_fee_paid if self.user.profile.paid \
+                else kfet.membership_fee_unpaid
+        if not bde_member:
+            fee += bde.membership_fee_paid if self.user.profile.paid \
+                else bde.membership_fee_unpaid
+
+        return fee
 
     @property
     def is_validated(self):

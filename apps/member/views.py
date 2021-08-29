@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from datetime import timedelta, date
@@ -625,9 +625,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         # Retrieve form data
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
-        last_name = form.cleaned_data["last_name"]
-        first_name = form.cleaned_data["first_name"]
-        bank = form.cleaned_data["bank"]
         soge = form.cleaned_data["soge"] and not user.profile.soge and (club.name == "BDE" or club.name == "Kfet")
 
         if not credit_type:
@@ -658,8 +655,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         if club.name != "Kfet" and club.parent_club and not Membership.objects.filter(
                 user=form.instance.user,
                 club=club.parent_club,
-                date_start__lte=timezone.now(),
-                date_end__gte=club.parent_club.membership_end,
+                date_start__gte=club.parent_club.membership_start,
         ).exists():
             form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
             error = True
@@ -674,17 +670,9 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                            .format(form.instance.club.membership_end))
             error = True
 
-        if credit_amount:
-            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
-                if not last_name:
-                    form.add_error('last_name', _("This field is required."))
-                    error = True
-                if not first_name:
-                    form.add_error('first_name', _("This field is required."))
-                    error = True
-                if not bank and credit_type.special_type == "Chèque":
-                    form.add_error('bank', _("This field is required."))
-                    error = True
+        if credit_amount and not SpecialTransaction.validate_payment_form(form):
+            # Check that special information for payment are filled
+            error = True
 
         return not error
 

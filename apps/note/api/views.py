@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf import settings
@@ -74,7 +74,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
         serializer_class = self.serializer_class
         if self.request.method in ['PUT', 'PATCH']:
             # alias owner cannot be change once establish
-            setattr(serializer_class.Meta, 'read_only_fields', ('note',))
+            serializer_class.Meta.read_only_fields = ('note',)
         return serializer_class
 
     def destroy(self, request, *args, **kwargs):
@@ -82,7 +82,7 @@ class AliasViewSet(ReadProtectedModelViewSet):
         try:
             self.perform_destroy(instance)
         except ValidationError as e:
-            return Response({e.code: e.message}, status.HTTP_400_BAD_REQUEST)
+            return Response({e.code: str(e)}, status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):

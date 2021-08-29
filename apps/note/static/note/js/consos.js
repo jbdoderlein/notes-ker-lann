@@ -1,4 +1,4 @@
-// Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+// Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // When a transaction is performed, lock the interface to prevent spam clicks.
@@ -28,7 +28,7 @@ $(document).ready(function () {
 
   // Switching in double consumptions mode should update the layout
   $('#double_conso').change(function () {
-    $('#consos_list_div').removeClass('d-none')
+    document.getElementById('consos_list_div').classList.remove('d-none')
     $('#infos_div').attr('class', 'col-sm-5 col-xl-6')
 
     const note_list_obj = $('#note_list')
@@ -37,7 +37,7 @@ $(document).ready(function () {
       note_list_obj.html('')
 
       buttons.forEach(function (button) {
-        $('#conso_button_' + button.id).click(function () {
+        document.getElementById(`conso_button_${button.id}`).addEventListener('click', () => {
           if (LOCK) { return }
           removeNote(button, 'conso_button', buttons, 'consos_list')()
         })
@@ -46,7 +46,7 @@ $(document).ready(function () {
   })
 
   $('#single_conso').change(function () {
-    $('#consos_list_div').addClass('d-none')
+    document.getElementById('consos_list_div').classList.add('d-none')
     $('#infos_div').attr('class', 'col-sm-5 col-md-4')
 
     const consos_list_obj = $('#consos_list')
@@ -68,9 +68,9 @@ $(document).ready(function () {
   })
 
   // Ensure we begin in single consumption. Fix issue with TurboLinks and BootstrapJS
-  $("label[for='double_conso']").removeClass('active')
+  document.querySelector("label[for='double_conso']").classList.remove('active')
 
-  $('#consume_all').click(consumeAll)
+  document.getElementById("consume_all").addEventListener('click', consumeAll)
 })
 
 notes = []
@@ -127,11 +127,10 @@ function addConso (dest, amount, type, category_id, category_name, template_id, 
       html += li('conso_button_' + button.id, button.name +
                 '<span class="badge badge-dark badge-pill">' + button.quantity + '</span>')
     })
+    document.getElementById(list).innerHTML = html
 
-    $('#' + list).html(html)
-
-    buttons.forEach(function (button) {
-      $('#conso_button_' + button.id).click(function () {
+    buttons.forEach((button) => {
+      document.getElementById(`conso_button_${button.id}`).addEventListener('click', () => {
         if (LOCK) { return }
         removeNote(button, 'conso_button', buttons, list)()
       })
@@ -146,12 +145,13 @@ function reset () {
   notes_display.length = 0
   notes.length = 0
   buttons.length = 0
-  $('#note_list').html('')
-  $('#consos_list').html('')
-  $('#note').val('')
-  $('#note').attr('data-original-title', '').tooltip('hide')
-  $('#profile_pic').attr('src', '/static/member/img/default_picture.png')
-  $('#profile_pic_link').attr('href', '#')
+  document.getElementById('note_list').innerHTML = ''
+  document.getElementById('consos_list').innerHTML = ''
+  document.getElementById('note').value = ''
+  document.getElementById('note').dataset.originTitle = ''
+  $('#note').tooltip('hide')
+  document.getElementById('profile_pic').src = '/static/member/img/default_picture.png'
+  document.getElementById('profile_pic_link').href = '#'
   refreshHistory()
   refreshBalance()
   LOCK = false
@@ -168,7 +168,7 @@ function consumeAll () {
   let error = false
 
   if (notes_display.length === 0) {
-    $('#note').addClass('is-invalid')
+    document.getElementById('note').classList.add('is-invalid')
     $('#note_list').html(li('', '<strong>Ajoutez des émetteurs.</strong>', 'text-danger'))
     error = true
   }

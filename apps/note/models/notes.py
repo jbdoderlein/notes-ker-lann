@@ -1,10 +1,9 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import unicodedata
 
 from django.conf import settings
-from django.conf.global_settings import DEFAULT_FROM_EMAIL
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
@@ -190,8 +189,8 @@ class NoteClub(Note):
     def send_mail_negative_balance(self):
         plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
         html = render_to_string("note/mails/negative_balance.html", dict(note=self))
-        send_mail("[Note Kfet] Passage en négatif (club {})".format(self.club.name), plain_text, DEFAULT_FROM_EMAIL,
-                  [self.club.email], html_message=html)
+        send_mail("[Note Kfet] Passage en négatif (club {})".format(self.club.name), plain_text,
+                  settings.DEFAULT_FROM_EMAIL, [self.club.email], html_message=html)
 
 
 class NoteSpecial(Note):

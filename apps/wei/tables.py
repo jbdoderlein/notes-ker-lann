@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from datetime import date
@@ -43,6 +43,7 @@ class WEIRegistrationTable(tables.Table):
 
     edit = tables.LinkColumn(
         'wei:wei_update_registration',
+        orderable=False,
         args=[A('pk')],
         verbose_name=_("Edit"),
         text=_("Edit"),
@@ -53,18 +54,14 @@ class WEIRegistrationTable(tables.Table):
             }
         }
     )
-    validate = tables.LinkColumn(
-        'wei:validate_registration',
-        args=[A('pk')],
+
+    validate = tables.Column(
         verbose_name=_("Validate"),
-        text=_("Validate"),
+        orderable=False,
+        accessor=A('pk'),
         attrs={
             'th': {
                 'id': 'validate-membership-header'
-            },
-            'a': {
-                'class': 'btn btn-success',
-                'data-type': 'validate-membership'
             }
         }
     )
@@ -72,6 +69,7 @@ class WEIRegistrationTable(tables.Table):
     delete = tables.LinkColumn(
         'wei:wei_delete_registration',
         args=[A('pk')],
+        orderable=False,
         verbose_name=_("delete"),
         text=_("Delete"),
         attrs={
@@ -96,7 +94,20 @@ class WEIRegistrationTable(tables.Table):
                 registration=record,
             )
         )
-        return _("Validate") if hasperm else format_html("<span class='no-perm'></span>")
+        if not hasperm:
+            return format_html("<span class='no-perm'></span>")
+
+        url = reverse_lazy('wei:validate_registration', args=(record.pk,))
+        text = _('Validate')
+        if record.fee > record.user.note.balance:
+            btn_class = 'btn-secondary'
+            tooltip = _("The user does not have enough money.")
+        else:
+            btn_class = 'btn-success'
+            tooltip = _("The user has enough money, you can validate the registration.")
+
+        return format_html(f"<a class=\"btn {btn_class}\" data-type='validate-membership' data-toggle=\"tooltip\" "
+                           f"title=\"{tooltip}\" href=\"{url}\">{text}</a>")
 
     def render_delete(self, record):
         hasperm = PermissionBackend.check_perm(get_current_authenticated_user(), "wei.delete_weimembership", record)
@@ -108,7 +119,8 @@ class WEIRegistrationTable(tables.Table):
         }
         model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('user', 'user__first_name', 'user__last_name', 'first_year',)
+        fields = ('user', 'user__first_name', 'user__last_name', 'first_year', 'caution_check',
+                  'edit', 'validate', 'delete',)
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
@@ -147,7 +159,7 @@ class WEIMembershipTable(tables.Table):
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user', 'user__last_name', 'user__first_name', 'registration__gender', 'user__profile__department',
-                  'year', 'bus', 'team', )
+                  'year', 'bus', 'team', 'registration__caution_check', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),

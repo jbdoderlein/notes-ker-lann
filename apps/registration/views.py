@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from django.conf import settings
@@ -248,9 +248,13 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
     @transaction.atomic
     def form_valid(self, form):
+        """
+        Finally validate the registration, with creating the membership.
+        """
         user = self.get_object()
 
         if Alias.objects.filter(normalized_name=Alias.normalize(user.username)).exists():
+            # Don't try to hack an existing account.
             form.add_error(None, _("An alias with a similar name already exists."))
             return self.form_invalid(form)
 
@@ -261,35 +265,36 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
         bank = form.cleaned_data["bank"]
-        join_BDE = form.cleaned_data["join_BDE"]
-        join_Kfet = form.cleaned_data["join_Kfet"]
+        join_bde = form.cleaned_data["join_bde"]
+        join_kfet = form.cleaned_data["join_kfet"]
 
         if soge:
-            # If Société Générale pays the inscription, the user joins the two clubs
-            join_BDE = True
-            join_Kfet = True
+            # If Société Générale pays the inscription, the user automatically joins the two clubs.
+            join_bde = True
+            join_kfet = True
 
-        if not join_BDE:
-            form.add_error('join_BDE', _("You must join the BDE."))
+        if not join_bde:
+            # This software belongs to the BDE.
+            form.add_error('join_bde', _("You must join the BDE."))
             return super().form_invalid(form)
 
+        # Calculate required registration fee
         fee = 0
         bde = Club.objects.get(name="BDE")
         bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
-        if join_BDE:
-            fee += bde_fee
+        # This is mandatory.
+        fee += bde_fee if join_bde else 0
         kfet = Club.objects.get(name="Kfet")
         kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        if join_Kfet:
-            fee += kfet_fee
+        # Add extra fee for the full membership
+        fee += kfet_fee if join_kfet else 0
 
-        if soge:
-            # If the bank pays, then we don't credit now. Treasurers will validate the transaction
-            # and credit the note later.
-            credit_type = None
+        # If the bank pays, then we don't credit now. Treasurers will validate the transaction
+        # and credit the note later.
+        credit_type = None if soge else credit_type
 
-        if credit_type is None:
-            credit_amount = 0
+        # If the user does not select any payment method, then no credit will be performed.
+        credit_amount = 0 if credit_type is None else credit_amount
 
         if fee > credit_amount and not soge:
             # Check if the user credits enough money
@@ -298,15 +303,9 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                            .format(pretty_money(fee)))
             return self.form_invalid(form)
 
-        if credit_type is not None and credit_amount > 0:
-            if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
-                if not last_name:
-                    form.add_error('last_name', _("This field is required."))
-                if not first_name:
-                    form.add_error('first_name', _("This field is required."))
-                if not bank and credit_type.special_type == "Chèque":
-                    form.add_error('bank', _("This field is required."))
-                return self.form_invalid(form)
+        # Check that payment information are filled, like last name and first name
+        if credit_type is not None and credit_amount > 0 and not SpecialTransaction.validate_payment_form(form):
+            return self.form_invalid(form)
 
         # Save the user and finally validate the registration
         # Saving the user creates the associated note
@@ -338,7 +337,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 valid=True,
             )
 
-        if join_BDE:
+        if join_bde:
             # Create membership for the user to the BDE starting today
             membership = Membership(
                 club=bde,
@@ -352,7 +351,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             membership.roles.add(Role.objects.get(name="Adhérent BDE"))
             membership.save()
 
-        if join_Kfet:
+        if join_kfet:
             # Create membership for the user to the Kfet starting today
             membership = Membership(
                 club=kfet,

@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
@@ -210,7 +210,7 @@ class InvoiceRenderView(LoginRequiredMixin, View):
             del tex
 
             # The file has to be rendered twice
-            for ignored in range(2):
+            for _ignored in range(2):
                 error = subprocess.Popen(
                     ["/usr/bin/xelatex", "-interaction=nonstopmode", "invoice-{}.tex".format(pk)],
                     cwd=tmp_dir,

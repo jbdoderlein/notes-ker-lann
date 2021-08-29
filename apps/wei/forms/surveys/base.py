@@ -1,12 +1,12 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from typing import Optional
+from typing import Optional, List
 
 from django.db.models import QuerySet
 from django.forms import Form
 
-from ...models import WEIClub, WEIRegistration, Bus
+from ...models import WEIClub, WEIRegistration, Bus, WEIMembership
 
 
 class WEISurveyInformation:
@@ -50,6 +50,15 @@ class WEIBusInformation:
         self.bus.information = d
         self.bus.save()
 
+    def free_seats(self, surveys: List["WEISurvey"] = None):
+        size = self.bus.size
+        already_occupied = WEIMembership.objects.filter(bus=self.bus).count()
+        valid_surveys = sum(1 for survey in surveys if survey.information.valid) if surveys else 0
+        return size - already_occupied - valid_surveys
+
+    def has_free_seats(self, surveys=None):
+        return self.free_seats(surveys) > 0
+
 
 class WEISurveyAlgorithm:
     """
@@ -83,7 +92,7 @@ class WEISurveyAlgorithm:
         """
         Queryset of all buses of the associated wei.
         """
-        return Bus.objects.filter(wei__year=cls.get_survey_class().get_year())
+        return Bus.objects.filter(wei__year=cls.get_survey_class().get_year(), size__gt=0)
 
     @classmethod
     def get_bus_information(cls, bus):
@@ -192,3 +201,11 @@ class WEISurvey:
         self.information.selected_bus_pk = bus.pk
         self.information.selected_bus_name = bus.name
         self.information.valid = True
+
+    def free(self) -> None:
+        """
+        Unselect the select bus.
+        """
+        self.information.selected_bus_pk = None
+        self.information.selected_bus_name = None
+        self.information.valid = False

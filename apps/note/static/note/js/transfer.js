@@ -243,7 +243,7 @@ $('#btn_transfer').click(function () {
     error = true
   }
 
-  const amount = Math.floor(100 * amount_field.val())
+  const amount = Math.round(100 * amount_field.val())
   if (amount > 2147483647) {
     amount_field.addClass('is-invalid')
     $('#amount-required').html('<strong>' + gettext('The amount must stay under 21,474,836.47 €.') + '</strong>')

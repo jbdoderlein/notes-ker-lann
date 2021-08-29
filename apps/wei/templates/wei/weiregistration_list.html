@@ -6,22 +6,28 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% load render_table from django_tables2 %}
 
 {% block profile_content %}
-    <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
-    <hr>
+    <div class="card">
+    <div class="card-body">
+        <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+        <hr>
 
-    <div id="registrations_table">
-        {% if table.data %}
-            {% render_table table %}
-        {% else %}
-            <div class="alert alert-warning">
-                {% trans "There is no pre-registration found with this pattern." %}
-            </div>
-        {% endif %}
+        <div id="registrations_table">
+            {% if table.data %}
+                {% render_table table %}
+            {% else %}
+                <div class="alert alert-warning">
+                    {% trans "There is no pre-registration found with this pattern." %}
+                </div>
+            {% endif %}
+        </div>
     </div>
 
-    <a href="{% url 'wei:wei_memberships' pk=club.pk %}">
-        <button class="btn btn-block btn-info">{% trans "View validated memberships..." %}</button>
-    </a>
+    <div class="card-footer text-center">
+        <a href="{% url 'wei:wei_memberships' pk=club.pk %}">
+            <button class="btn btn-block btn-info">{% trans "View validated memberships..." %}</button>
+        </a>
+    </div>
+    </div>
 {% endblock %}
 
 {% block extrajavascript %}

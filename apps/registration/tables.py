@@ -1,9 +1,8 @@
-# Copyright (C) 2018-2020 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
-
 from treasury.models import SogeCredit
 
 

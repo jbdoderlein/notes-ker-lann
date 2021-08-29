@@ -159,10 +159,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     <div class="alert alert-danger">
                         {% trans "You are not a BDE member anymore. Please renew your membership if you want to use the note." %}
                     </div>
-                {% elif not user|is_member:"Kfet" %}
-                    <div class="alert alert-warning">
-                        {% trans "You are not a Kfet member, so you can't use your note account." %}
-                    </div>
                 {% endif %}
 
                 {% if not user.profile.email_confirmed %}
