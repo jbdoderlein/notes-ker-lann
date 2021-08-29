@@ -3495,7 +3495,7 @@
 		"model": "permission.role",
 		"pk": 20,
 		"fields": {
-			"for_club": 2,
+			"for_club": 1,
 			"name": "PC Kfet",
 			"permissions": [
 				6,
