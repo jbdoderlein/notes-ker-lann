@@ -1235,7 +1235,7 @@
 			"type": "view",
 			"mask": 1,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "Voir le dernier WEI"
 		}
 	},
@@ -1267,7 +1267,7 @@
 			"type": "add",
 			"mask": 1,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "M'inscrire au dernier WEI"
 		}
 	},
@@ -1331,7 +1331,7 @@
 			"type": "view",
 			"mask": 1,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "Voir ma propre inscription WEI"
 		}
 	},
@@ -1379,7 +1379,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "soge_credit",
-			"permanent": false,
+			"permanent": true,
 			"description": "Indiquer si mon inscription WEI est payée par la Société générale tant qu'elle n'est pas validée"
 		}
 	},
@@ -1427,7 +1427,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "birth_date",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier la date de naissance de ma propre inscription WEI"
 		}
 	},
@@ -1459,7 +1459,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "gender",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier le genre de ma propre inscription WEI"
 		}
 	},
@@ -1491,7 +1491,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "health_issues",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier mes problèmes de santé de mon inscription WEI"
 		}
 	},
@@ -1523,7 +1523,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_name",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier le nom du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
@@ -1555,7 +1555,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "emergency_contact_phone",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier le téléphone du contact en cas d'urgence de mon inscription WEI"
 		}
 	},
@@ -1699,7 +1699,7 @@
 			"type": "add",
 			"mask": 3,
 			"field": "",
-			"permanent": false,
+			"permanent": true,
 			"description": "Créer une adhésion WEI pour le dernier WEI"
 		}
 	},
@@ -2003,7 +2003,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "clothing_cut",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier ma coupe de vêtements de mon inscription WEI"
 		}
 	},
@@ -2035,7 +2035,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "clothing_size",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier la taille de vêtements de mon inscription WEI"
 		}
 	},
@@ -2243,7 +2243,7 @@
 			"type": "change",
 			"mask": 1,
 			"field": "information_json",
-			"permanent": false,
+			"permanent": true,
 			"description": "Modifier mes préférences en terme de bus et d'équipe si mon inscription n'est pas validée et que je suis en 2A+"
 		}
 	},
@@ -3495,7 +3495,7 @@
 		"model": "permission.role",
 		"pk": 20,
 		"fields": {
-			"for_club": 2,
+			"for_club": 1,
 			"name": "PC Kfet",
 			"permissions": [
 				6,

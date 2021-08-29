@@ -655,8 +655,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         if club.name != "Kfet" and club.parent_club and not Membership.objects.filter(
                 user=form.instance.user,
                 club=club.parent_club,
-                date_start__lte=timezone.now(),
-                date_end__gte=club.parent_club.membership_end,
+                date_start__gte=club.parent_club.membership_start,
         ).exists():
             form.add_error('user', _('User is not a member of the parent club') + ' ' + club.parent_club.name)
             error = True
