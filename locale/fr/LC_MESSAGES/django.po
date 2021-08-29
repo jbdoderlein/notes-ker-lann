@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-25 23:24+0200\n"
+"POT-Creation-Date: 2021-08-29 14:06+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -461,7 +461,7 @@ msgstr "créer"
 
 #: apps/logs/models.py:65 apps/note/tables.py:165 apps/note/tables.py:201
 #: apps/permission/models.py:127 apps/treasury/tables.py:38
-#: apps/wei/tables.py:75
+#: apps/wei/tables.py:73
 msgid "delete"
 msgstr "supprimer"
 
@@ -508,7 +508,7 @@ msgstr "rôles"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/apps.py:14 apps/wei/tables.py:181 apps/wei/tables.py:212
+#: apps/member/apps.py:14 apps/wei/tables.py:193 apps/wei/tables.py:224
 msgid "member"
 msgstr "adhérent"
 
@@ -1137,7 +1137,7 @@ msgstr "Modifier le club"
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:642 apps/wei/views.py:924
+#: apps/member/views.py:642 apps/wei/views.py:917
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1443,8 +1443,8 @@ msgstr ""
 "mode de paiement et un utilisateur ou un club"
 
 #: apps/note/models/transactions.py:355 apps/note/models/transactions.py:358
-#: apps/note/models/transactions.py:361 apps/wei/views.py:929
-#: apps/wei/views.py:933
+#: apps/note/models/transactions.py:361 apps/wei/views.py:922
+#: apps/wei/views.py:926
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
@@ -1479,13 +1479,13 @@ msgstr "Pas de motif spécifié"
 #: apps/note/tables.py:169 apps/note/tables.py:203 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
-#: apps/wei/tables.py:76 apps/wei/tables.py:103
+#: apps/wei/tables.py:74 apps/wei/tables.py:114
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
 msgid "Delete"
 msgstr "Supprimer"
 
 #: apps/note/tables.py:197 apps/note/templates/note/conso_form.html:132
-#: apps/wei/tables.py:47 apps/wei/tables.py:48
+#: apps/wei/tables.py:48 apps/wei/tables.py:49
 #: apps/wei/templates/wei/base.html:89
 #: apps/wei/templates/wei/bus_detail.html:20
 #: apps/wei/templates/wei/busteam_detail.html:20
@@ -2363,7 +2363,7 @@ msgstr ""
 "demande de crédit."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:63
-#: apps/wei/tables.py:59 apps/wei/tables.py:60 apps/wei/tables.py:99
+#: apps/wei/tables.py:59 apps/wei/tables.py:101
 msgid "Validate"
 msgstr "Valider"
 
@@ -2429,7 +2429,7 @@ msgid "WEI"
 msgstr "WEI"
 
 #: apps/wei/forms/registration.py:51 apps/wei/models.py:118
-#: apps/wei/models.py:288
+#: apps/wei/models.py:315
 msgid "bus"
 msgstr "bus"
 
@@ -2467,7 +2467,7 @@ msgstr "Sélectionnez les rôles qui vous intéressent."
 msgid "This team doesn't belong to the given bus."
 msgstr "Cette équipe n'appartient pas à ce bus."
 
-#: apps/wei/forms/surveys/wei2021.py:30
+#: apps/wei/forms/surveys/wei2021.py:31
 msgid "Choose a word:"
 msgstr "Choisissez un mot :"
 
@@ -2593,44 +2593,52 @@ msgstr ""
 "Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
 "1A), encodées en JSON"
 
-#: apps/wei/models.py:277
+#: apps/wei/models.py:304
 msgid "WEI User"
 msgstr "Participant au WEI"
 
-#: apps/wei/models.py:278
+#: apps/wei/models.py:305
 msgid "WEI Users"
 msgstr "Participants au WEI"
 
-#: apps/wei/models.py:298
+#: apps/wei/models.py:325
 msgid "team"
 msgstr "équipe"
 
-#: apps/wei/models.py:308
+#: apps/wei/models.py:335
 msgid "WEI registration"
 msgstr "Inscription au WEI"
 
-#: apps/wei/models.py:312
+#: apps/wei/models.py:339
 msgid "WEI membership"
 msgstr "Adhésion au WEI"
 
-#: apps/wei/models.py:313
+#: apps/wei/models.py:340
 msgid "WEI memberships"
 msgstr "Adhésions au WEI"
 
-#: apps/wei/tables.py:127
+#: apps/wei/tables.py:104
+msgid "The user does not have enough money."
+msgstr "L'utilisateur n'a pas assez d'argent."
+
+#: apps/wei/tables.py:107
+msgid "The user has enough money, you can validate the registration."
+msgstr "L'utilisateur a assez d'argent, l'inscription est possible."
+
+#: apps/wei/tables.py:139
 msgid "Year"
 msgstr "Année"
 
-#: apps/wei/tables.py:165 apps/wei/templates/wei/bus_detail.html:32
+#: apps/wei/tables.py:177 apps/wei/templates/wei/bus_detail.html:32
 #: apps/wei/templates/wei/busteam_detail.html:50
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/tables.py:174 apps/wei/tables.py:215
+#: apps/wei/tables.py:186 apps/wei/tables.py:227
 msgid "Members count"
 msgstr "Nombre de membres"
 
-#: apps/wei/tables.py:181 apps/wei/tables.py:212
+#: apps/wei/tables.py:193 apps/wei/tables.py:224
 msgid "members"
 msgstr "adhérents"
 
@@ -2650,11 +2658,11 @@ msgstr "Prix du WEI (étudiants)"
 msgid "WEI list"
 msgstr "Liste des WEI"
 
-#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:508
+#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:510
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:576
+#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:578
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
@@ -2683,8 +2691,8 @@ msgstr "Télécharger au format PDF"
 
 #: apps/wei/templates/wei/survey.html:11
 #: apps/wei/templates/wei/survey_closed.html:11
-#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:980
-#: apps/wei/views.py:1035 apps/wei/views.py:1045
+#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:973
+#: apps/wei/views.py:1028 apps/wei/views.py:1038
 msgid "Survey WEI"
 msgstr "Questionnaire WEI"
 
@@ -2902,31 +2910,31 @@ msgstr "Ajouter un nouveau bus"
 msgid "Update bus"
 msgstr "Modifier le bus"
 
-#: apps/wei/views.py:364
+#: apps/wei/views.py:366
 msgid "Manage bus"
 msgstr "Gérer le bus"
 
-#: apps/wei/views.py:391
+#: apps/wei/views.py:393
 msgid "Create new team"
 msgstr "Créer une nouvelle équipe"
 
-#: apps/wei/views.py:431
+#: apps/wei/views.py:433
 msgid "Update team"
 msgstr "Modifier l'équipe"
 
-#: apps/wei/views.py:462
+#: apps/wei/views.py:464
 msgid "Manage WEI team"
 msgstr "Gérer l'équipe WEI"
 
-#: apps/wei/views.py:484
+#: apps/wei/views.py:486
 msgid "Register first year student to the WEI"
 msgstr "Inscrire un 1A au WEI"
 
-#: apps/wei/views.py:530 apps/wei/views.py:611
+#: apps/wei/views.py:532 apps/wei/views.py:613
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:535
+#: apps/wei/views.py:537
 msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
@@ -2934,27 +2942,27 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:552
+#: apps/wei/views.py:554
 msgid "Register old student to the WEI"
 msgstr "Inscrire un 2A+ au WEI"
 
-#: apps/wei/views.py:595 apps/wei/views.py:684
+#: apps/wei/views.py:597 apps/wei/views.py:686
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:641
+#: apps/wei/views.py:643
 msgid "Update WEI Registration"
 msgstr "Modifier l'inscription WEI"
 
-#: apps/wei/views.py:744
+#: apps/wei/views.py:746
 msgid "Delete WEI registration"
 msgstr "Supprimer l'inscription WEI"
 
-#: apps/wei/views.py:755
+#: apps/wei/views.py:757
 msgid "You don't have the right to delete this WEI registration."
 msgstr "Vous n'avez pas la permission de supprimer cette inscription au WEI."
 
-#: apps/wei/views.py:774
+#: apps/wei/views.py:776
 msgid "Validate WEI registration"
 msgstr "Valider l'inscription WEI"
 

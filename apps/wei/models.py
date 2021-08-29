@@ -263,6 +263,33 @@ class WEIRegistration(models.Model):
         self.information_json = json.dumps(information, indent=2)
 
     @property
+    def fee(self):
+        bde = Club.objects.get(pk=1)
+        kfet = Club.objects.get(pk=2)
+
+        kfet_member = Membership.objects.filter(
+            club_id=kfet.id,
+            user=self.user,
+            date_start__gte=kfet.membership_start,
+        ).exists()
+        bde_member = Membership.objects.filter(
+            club_id=bde.id,
+            user=self.user,
+            date_start__gte=bde.membership_start,
+        ).exists()
+
+        fee = self.wei.membership_fee_paid if self.user.profile.paid \
+            else self.wei.membership_fee_unpaid
+        if not kfet_member:
+            fee += kfet.membership_fee_paid if self.user.profile.paid \
+                else kfet.membership_fee_unpaid
+        if not bde_member:
+            fee += bde.membership_fee_paid if self.user.profile.paid \
+                else bde.membership_fee_unpaid
+
+        return fee
+
+    @property
     def is_validated(self):
         try:
             return self.membership is not None

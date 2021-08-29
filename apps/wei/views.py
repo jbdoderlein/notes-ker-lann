@@ -818,22 +818,13 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             date_start__gte=bde.membership_start,
         ).exists()
 
-        fee = registration.wei.membership_fee_paid if registration.user.profile.paid \
-            else registration.wei.membership_fee_unpaid
-        if not context["kfet_member"]:
-            fee += kfet.membership_fee_paid if registration.user.profile.paid \
-                else kfet.membership_fee_unpaid
-        if not context["bde_member"]:
-            fee += bde.membership_fee_paid if registration.user.profile.paid \
-                else bde.membership_fee_unpaid
-
-        context["fee"] = fee
+        context["fee"] = registration.fee
 
         form = context["form"]
         if registration.soge_credit:
-            form.fields["credit_amount"].initial = fee
+            form.fields["credit_amount"].initial = registration.fee
         else:
-            form.fields["credit_amount"].initial = max(0, fee - registration.user.note.balance)
+            form.fields["credit_amount"].initial = max(0, registration.fee - registration.user.note.balance)
 
         return context
 
