@@ -190,6 +190,9 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
                         # If it does not exist, choose the next bus.
                         least_preferred_survey.free()
                         least_preferred_survey.save()
+                        free_surveys.append(least_preferred_survey)
                         survey.select_bus(bus)
                         survey.save()
                         break
+            else:
+                raise ValueError(f"User {survey.registration.user} has no free seat")
