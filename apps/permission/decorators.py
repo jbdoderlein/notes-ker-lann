@@ -5,7 +5,7 @@ from functools import lru_cache
 from time import time
 
 from django.contrib.sessions.models import Session
-from note_kfet.middlewares import get_current_session
+from note_kfet.middlewares import get_current_request
 
 
 def memoize(f):
@@ -48,11 +48,11 @@ def memoize(f):
             last_collect = time()
 
         # If there is no session, then we don't memoize anything.
-        sess = get_current_session()
-        if sess is None or sess.session_key is None:
+        request = get_current_request()
+        if request is None or request.session is None or request.session.session_key is None:
             return f(*args, **kwargs)
 
-        sess_key = sess.session_key
+        sess_key = request.session.session_key
         if sess_key not in sess_funs:
             # lru_cache makes the job of memoization
             # We store only the 512 latest data per session. It has to be enough.

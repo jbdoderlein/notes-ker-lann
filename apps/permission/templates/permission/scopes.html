@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>{% trans "Available scopes" %}</h2>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="accordionApps">
+                {% for app, app_scopes in scopes.items %}
+                    <div class="card">
+                        <div class="card-header" id="app-{{ app.name.lower }}-title">
+                            <a class="text-decoration-none collapsed" href="#" data-toggle="collapse"
+                               data-target="#app-{{ app.name.lower }}" aria-expanded="false"
+                               aria-controls="app-{{ app.name.lower }}">
+                                {{ app.name }}
+                            </a>
+                        </div>
+                        <div class="collapse" id="app-{{ app.name.lower }}" aria-labelledby="app-{{ app.name.lower }}" data-target="#accordionApps">
+                            <div class="card-body">
+                                {% for scope_id, scope_desc in app_scopes.items %}
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="scope-{{ app.name.lower }}-{{ scope_id }}">
+                                            <input type="checkbox" id="scope-{{ app.name.lower }}-{{ scope_id }}"
+                                                   name="scope-{{ app.name.lower }}" class="checkboxinput form-check-input" value="{{ scope_id }}">
+                                            {{ scope_desc }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                                <p id="url-{{ app.name.lower }}">
+                                    <a href="{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code" target="_blank">
+                                        {{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>
+                        {% trans "No applications defined" %}.
+                        <a href="{% url 'oauth2_provider:register' %}">{% trans "Click here" %}</a> {% trans "if you want to register a new one" %}.
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        {% for app in scopes.keys %}
+            let elements = document.getElementsByName("scope-{{ app.name.lower }}");
+            for (let element of elements) {
+                element.onchange = function (event) {
+                    let scope = ""
+                    for (let element of elements) {
+                        if (element.checked) {
+                            scope += element.value + " "
+                        }
+                    }
+
+                    scope = scope.substr(0, scope.length - 1)
+
+                    document.getElementById("url-{{ app.name.lower }}").innerHTML = 'Scopes : ' + scope
+                        + '<br><a href="{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code&scope='+ scope.replaceAll(' ', '%20')
+                        + '" target="_blank">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:authorize' %}?client_id={{ app.client_id }}&response_type=code&scope='
+                        + scope.replaceAll(' ', '%20') + '</a>'
+                }
+            }
+        {% endfor %}
+    </script>
+{% endblock %}

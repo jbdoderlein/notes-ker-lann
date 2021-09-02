@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from collections import OrderedDict
 from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,7 +28,7 @@ class ProtectQuerysetMixin:
     """
     def get_queryset(self, filter_permissions=True, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(PermissionBackend.filter_queryset(self.request.user, qs.model, "view")).distinct()\
+        return qs.filter(PermissionBackend.filter_queryset(self.request, qs.model, "view")).distinct()\
             if filter_permissions else qs
 
     def get_object(self, queryset=None):
@@ -53,7 +53,7 @@ class ProtectQuerysetMixin:
         # We could also delete the field, but some views might be affected.
         meta = form.instance._meta
         for key in form.base_fields:
-            if not PermissionBackend.check_perm(self.request.user,
+            if not PermissionBackend.check_perm(self.request,
                                                 f"{meta.app_label}.change_{meta.model_name}_" + key, self.object):
                 form.fields[key].widget = HiddenInput()
 
@@ -101,7 +101,7 @@ class ProtectedCreateView(LoginRequiredMixin, CreateView):
         # noinspection PyProtectedMember
         app_label, model_name = model_class._meta.app_label, model_class._meta.model_name.lower()
         perm = app_label + ".add_" + model_name
-        if not PermissionBackend.check_perm(request.user, perm, self.get_sample_object()):
+        if not PermissionBackend.check_perm(request, perm, self.get_sample_object()):
             raise PermissionDenied(_("You don't have the permission to add an instance of model "
                                      "{app_label}.{model_name}.").format(app_label=app_label, model_name=model_name))
         return super().dispatch(request, *args, **kwargs)
@@ -141,5 +141,28 @@ class RightsView(TemplateView):
             context["special_memberships_table"] = RightsTable(special_memberships, prefix="clubs-")
             context["superusers"] = SuperuserTable(User.objects.filter(is_superuser=True).order_by("last_name").all(),
                                                    prefix="superusers-")
+
+        return context
+
+
+class ScopesView(LoginRequiredMixin, TemplateView):
+    template_name = "permission/scopes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        from oauth2_provider.models import Application
+        from .scopes import PermissionScopes
+
+        scopes = PermissionScopes()
+        context["scopes"] = {}
+        all_scopes = scopes.get_all_scopes()
+        for app in Application.objects.filter(user=self.request.user).all():
+            available_scopes = scopes.get_available_scopes(app)
+            context["scopes"][app] = OrderedDict()
+            items = [(k, v) for (k, v) in all_scopes.items() if k in available_scopes]
+            items.sort(key=lambda x: (int(x[0].split("_")[1]), int(x[0].split("_")[0])))
+            for k, v in items:
+                context["scopes"][app][k] = v
 
         return context

@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_polymorphic.serializers import PolymorphicSerializer
 from member.api.serializers import MembershipSerializer
 from member.models import Membership
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 from rest_framework.utils import model_meta
 
@@ -126,7 +126,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         """
         # If the user has no right to see the note, then we only display the note identifier
         return NotePolymorphicSerializer().to_representation(obj.note)\
-            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", obj.note)\
+            if PermissionBackend.check_perm(get_current_request(), "note.view_note", obj.note)\
             else dict(
             id=obj.note.id,
             name=str(obj.note),
@@ -142,7 +142,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
     def get_membership(self, obj):
         if isinstance(obj.note, NoteUser):
             memberships = Membership.objects.filter(
-                PermissionBackend.filter_queryset(get_current_authenticated_user(), Membership, "view")).filter(
+                PermissionBackend.filter_queryset(get_current_request(), Membership, "view")).filter(
                 user=obj.note.user,
                 club=2,  # Kfet
             ).order_by("-date_start")

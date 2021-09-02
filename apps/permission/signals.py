@@ -3,7 +3,7 @@
 
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 
@@ -16,6 +16,9 @@ EXCLUDED = [
     'contenttypes.contenttype',
     'logs.changelog',
     'migrations.migration',
+    'oauth2_provider.accesstoken',
+    'oauth2_provider.grant',
+    'oauth2_provider.refreshtoken',
     'sessions.session',
 ]
 
@@ -31,8 +34,8 @@ def pre_save_object(sender, instance, **kwargs):
     if hasattr(instance, "_force_save") or hasattr(instance, "_no_signal"):
         return
 
-    user = get_current_authenticated_user()
-    if user is None:
+    request = get_current_request()
+    if request is None:
         # Action performed on shell is always granted
         return
 
@@ -45,7 +48,7 @@ def pre_save_object(sender, instance, **kwargs):
         # We check if the user can change the model
 
         # If the user has all right on a model, then OK
-        if PermissionBackend.check_perm(user, app_label + ".change_" + model_name, instance):
+        if PermissionBackend.check_perm(request, app_label + ".change_" + model_name, instance):
             return
 
         # In the other case, we check if he/she has the right to change one field
@@ -58,7 +61,8 @@ def pre_save_object(sender, instance, **kwargs):
             # If the field wasn't modified, no need to check the permissions
             if old_value == new_value:
                 continue
-            if not PermissionBackend.check_perm(user, app_label + ".change_" + model_name + "_" + field_name, instance):
+            if not PermissionBackend.check_perm(request, app_label + ".change_" + model_name + "_" + field_name,
+                                                instance):
                 raise PermissionDenied(
                     _("You don't have the permission to change the field {field} on this instance of model"
                       " {app_label}.{model_name}.")
@@ -66,7 +70,7 @@ def pre_save_object(sender, instance, **kwargs):
                 )
     else:
         # We check if the user has right to add the object
-        has_perm = PermissionBackend.check_perm(user, app_label + ".add_" + model_name, instance)
+        has_perm = PermissionBackend.check_perm(request, app_label + ".add_" + model_name, instance)
 
         if not has_perm:
             raise PermissionDenied(
@@ -87,8 +91,8 @@ def pre_delete_object(instance, **kwargs):
         # Don't check permissions on force-deleted objects
         return
 
-    user = get_current_authenticated_user()
-    if user is None:
+    request = get_current_request()
+    if request is None:
         # Action performed on shell is always granted
         return
 
@@ -97,7 +101,7 @@ def pre_delete_object(instance, **kwargs):
     model_name = model_name_full[1]
 
     # We check if the user has rights to delete the object
-    if not PermissionBackend.check_perm(user, app_label + ".delete_" + model_name, instance):
+    if not PermissionBackend.check_perm(request, app_label + ".delete_" + model_name, instance):
         raise PermissionDenied(
             _("You don't have the permission to delete this instance of model {app_label}.{model_name}.")
             .format(app_label=app_label, model_name=model_name))

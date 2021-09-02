@@ -38,7 +38,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
     def get_queryset(self, **kwargs):
         # retrieves only Transaction that user has the right to see.
         return Transaction.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+            PermissionBackend.filter_queryset(self.request, Transaction, "view")
         ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
@@ -47,16 +47,16 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(Transaction).pk
         context['special_polymorphic_ctype'] = ContentType.objects.get_for_model(SpecialTransaction).pk
         context['special_types'] = NoteSpecial.objects\
-            .filter(PermissionBackend.filter_queryset(self.request.user, NoteSpecial, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request, NoteSpecial, "view"))\
             .order_by("special_type").all()
 
         # Add a shortcut for entry page for open activities
         if "activity" in settings.INSTALLED_APPS:
             from activity.models import Activity
             activities_open = Activity.objects.filter(open=True).filter(
-                PermissionBackend.filter_queryset(self.request.user, Activity, "view")).distinct().all()
+                PermissionBackend.filter_queryset(self.request, Activity, "view")).distinct().all()
             context["activities_open"] = [a for a in activities_open
-                                          if PermissionBackend.check_perm(self.request.user,
+                                          if PermissionBackend.check_perm(self.request,
                                                                           "activity.add_entry",
                                                                           Entry(activity=a,
                                                                                 note=self.request.user.note, ))]
@@ -159,7 +159,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
             return self.handle_no_permission()
 
         templates = TransactionTemplate.objects.filter(
-            PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+            PermissionBackend().filter_queryset(self.request, TransactionTemplate, "view")
         )
         if not templates.exists():
             raise PermissionDenied(_("You can't see any button."))
@@ -170,7 +170,7 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         restrict to the transaction history the user can see.
         """
         return Transaction.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, Transaction, "view")
+            PermissionBackend.filter_queryset(self.request, Transaction, "view")
         ).order_by("-created_at").all()[:20]
 
     def get_context_data(self, **kwargs):
@@ -180,13 +180,13 @@ class ConsoView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
         # for each category, find which transaction templates the user can see.
         for category in categories:
             category.templates_filtered = category.templates.filter(
-                PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+                PermissionBackend().filter_queryset(self.request, TransactionTemplate, "view")
             ).filter(display=True).order_by('name').all()
 
         context['categories'] = [cat for cat in categories if cat.templates_filtered]
         # some transactiontemplate are put forward to find them easily
         context['highlighted'] = TransactionTemplate.objects.filter(highlighted=True).filter(
-            PermissionBackend().filter_queryset(self.request.user, TransactionTemplate, "view")
+            PermissionBackend().filter_queryset(self.request, TransactionTemplate, "view")
         ).order_by('name').all()
         context['polymorphic_ctype'] = ContentType.objects.get_for_model(RecurrentTransaction).pk
 
@@ -209,7 +209,7 @@ class TransactionSearchView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView
         data = form.cleaned_data if form.is_valid() else {}
 
         transactions = Transaction.objects.annotate(total_amount=F("quantity") * F("amount")).filter(
-            PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
+            PermissionBackend.filter_queryset(self.request, Transaction, "view"))\
             .filter(Q(source=self.object) | Q(destination=self.object)).order_by('-created_at')
 
         if "source" in data and data["source"]:

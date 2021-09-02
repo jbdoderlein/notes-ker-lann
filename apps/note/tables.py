@@ -7,7 +7,7 @@ import django_tables2 as tables
 from django.utils.html import format_html
 from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 from .models.notes import Alias
@@ -88,16 +88,16 @@ class HistoryTable(tables.Table):
                 "class": lambda record:
                 str(record.valid).lower()
                 + (' validate' if record.source.is_active and record.destination.is_active and PermissionBackend
-                   .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record)
+                   .check_perm(get_current_request(), "note.change_transaction_invalidity_reason", record)
                    else ''),
                 "data-toggle": "tooltip",
                 "title": lambda record: (_("Click to invalidate") if record.valid else _("Click to validate"))
-                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                if PermissionBackend.check_perm(get_current_request(),
                                                 "note.change_transaction_invalidity_reason", record)
                 and record.source.is_active and record.destination.is_active else None,
                 "onclick": lambda record: 'de_validate(' + str(record.id) + ', ' + str(record.valid).lower()
                                           + ', "' + str(record.__class__.__name__) + '")'
-                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                if PermissionBackend.check_perm(get_current_request(),
                                                 "note.change_transaction_invalidity_reason", record)
                 and record.source.is_active and record.destination.is_active else None,
                 "onmouseover": lambda record: '$("#invalidity_reason_'
@@ -126,7 +126,7 @@ class HistoryTable(tables.Table):
         When the validation status is hovered, an input field is displayed to let the user specify an invalidity reason
         """
         has_perm = PermissionBackend \
-            .check_perm(get_current_authenticated_user(), "note.change_transaction_invalidity_reason", record)
+            .check_perm(get_current_request(), "note.change_transaction_invalidity_reason", record)
 
         val = "✔" if value else "✖"
 
@@ -165,7 +165,7 @@ class AliasTable(tables.Table):
                                        extra_context={"delete_trans": _('delete')},
                                        attrs={'td': {'class': lambda record: 'col-sm-1' + (
                                            ' d-none' if not PermissionBackend.check_perm(
-                                               get_current_authenticated_user(), "note.delete_alias",
+                                               get_current_request(), "note.delete_alias",
                                                record) else '')}}, verbose_name=_("Delete"), )
 
 
