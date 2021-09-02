@@ -230,9 +230,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
         kfet = Club.objects.get(name="Kfet")
         fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        # In 2020, for COVID-19 reasons, the BDE offered 80 € to each new member that opens a Sogé account,
-        # since there is no WEI.
-        fee += 8000
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
         ctx["declare_soge_account"] = SogeCredit.objects.filter(user=user).exists()
