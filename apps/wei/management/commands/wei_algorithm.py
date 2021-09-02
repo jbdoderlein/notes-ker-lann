@@ -5,7 +5,7 @@ from argparse import ArgumentParser, FileType
 from django.core.management import BaseCommand
 from django.db import transaction
 
-from wei.forms import CurrentSurvey
+from ...forms import CurrentSurvey
 
 
 class Command(BaseCommand):
