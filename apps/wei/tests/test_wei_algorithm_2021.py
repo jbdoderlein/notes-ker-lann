@@ -102,6 +102,6 @@ class TestWEIAlgorithm(TestCase):
             max_score = buses[0][1]
             penalty += (max_score - score) ** 2
 
-            self.assertLessEqual(max_score - score, 20)  # Always less than 20 % of tolerance
+            self.assertLessEqual(max_score - score, 25)  # Always less than 25 % of tolerance
 
         self.assertLessEqual(penalty / 100, 25)  # Tolerance of 5 %
