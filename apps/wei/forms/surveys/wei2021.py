@@ -16,7 +16,7 @@ WORDS = [
     'Fanfare', 'Fracassage', 'Féria', 'Hard rock', 'Hoeggarden', 'House', 'Huit-six', 'IPA', 'Inclusif', 'Inferno',
     'Introverti', 'Jager bomb', 'Jazz', 'Jeux d\'alcool', 'Jeux de rôles', 'Jeux vidéo', 'Jul', 'Jus de fruit',
     'Karaoké', 'LGBTQI+', 'Lady Gaga', 'Loup garou', 'Morning beer', 'Métal', 'Nuit blanche', 'Ovalie', 'Psychedelic',
-    'Pétanque',  'Rave', 'Reggae', 'Rhum', 'Ricard', 'Rock', 'Rosé', 'Rétro', 'Séducteur', 'Techno', 'Thérapie taxi',
+    'Pétanque', 'Rave', 'Reggae', 'Rhum', 'Ricard', 'Rock', 'Rosé', 'Rétro', 'Séducteur', 'Techno', 'Thérapie taxi',
     'Théâtre', 'Trap', 'Turn up', 'Underground', 'Volley', 'Wati B', 'Zinédine Zidane',
 ]
 
@@ -45,9 +45,9 @@ class WEISurveyForm2021(forms.Form):
         rng = Random(information.seed)
 
         words = []
-        for _ in range(information.step + 1):
+        for _ignored in range(information.step + 1):
             # Generate N times words
-            words = [rng.choice(WORDS) for _ in range(10)]
+            words = [rng.choice(WORDS) for _ignored2 in range(10)]
         words = [(w, w) for w in words]
         if self.data:
             self.fields["word"].choices = [(w, w) for w in WORDS]
@@ -162,7 +162,7 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         while free_surveys:  # Some students are not affected
             survey = free_surveys[0]
             buses = survey.ordered_buses()  # Preferences of the student
-            for bus, _ in buses:
+            for bus, _ignored in buses:
                 if self.get_bus_information(bus).has_free_seats(surveys):
                     # Selected bus has free places. Put student in the bus
                     survey.select_bus(bus)

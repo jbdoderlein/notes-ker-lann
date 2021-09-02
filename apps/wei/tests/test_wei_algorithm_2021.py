@@ -1,11 +1,13 @@
-import math
+# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import random
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from wei.forms.surveys.wei2021 import WEIBusInformation2021, WEISurvey2021, WORDS, WEISurveyInformation2021
-from wei.models import Bus, WEIClub, WEIRegistration
+from ..forms.surveys.wei2021 import WEIBusInformation2021, WEISurvey2021, WORDS, WEISurveyInformation2021
+from ..models import Bus, WEIClub, WEIRegistration
 
 
 class TestWEIAlgorithm(TestCase):
