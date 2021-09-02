@@ -6,7 +6,7 @@ import hashlib
 from django.conf import settings
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.utils.crypto import constant_time_compare
-from note_kfet.middlewares import get_current_authenticated_user, get_current_session
+from note_kfet.middlewares import get_current_request
 
 
 class CustomNK15Hasher(PBKDF2PasswordHasher):
@@ -24,16 +24,22 @@ class CustomNK15Hasher(PBKDF2PasswordHasher):
 
     def must_update(self, encoded):
         if settings.DEBUG:
-            current_user = get_current_authenticated_user()
+            # Small hack to let superusers to impersonate people.
+            # Don't change their password.
+            request = get_current_request()
+            current_user = request.user
             if current_user is not None and current_user.is_superuser:
                 return False
         return True
 
     def verify(self, password, encoded):
         if settings.DEBUG:
-            current_user = get_current_authenticated_user()
+            # Small hack to let superusers to impersonate people.
+            # If a superuser is already connected, let him/her log in as another person.
+            request = get_current_request()
+            current_user = request.user
             if current_user is not None and current_user.is_superuser\
-                    and get_current_session().get("permission_mask", -1) >= 42:
+                    and request.session.get("permission_mask", -1) >= 42:
                 return True
 
         if '|' in encoded:
@@ -51,8 +57,11 @@ class DebugSuperuserBackdoor(PBKDF2PasswordHasher):
 
     def verify(self, password, encoded):
         if settings.DEBUG:
-            current_user = get_current_authenticated_user()
+            # Small hack to let superusers to impersonate people.
+            # If a superuser is already connected, let him/her log in as another person.
+            request = get_current_request()
+            current_user = request.user
             if current_user is not None and current_user.is_superuser\
-                    and get_current_session().get("permission_mask", -1) >= 42:
+                    and request.session.get("permission_mask", -1) >= 42:
                 return True
         return super().verify(password, encoded)

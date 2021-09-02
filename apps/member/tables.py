@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from note.templatetags.pretty_money import pretty_money
-from note_kfet.middlewares import get_current_authenticated_user
+from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
 from .models import Club, Membership
@@ -51,19 +51,19 @@ class UserTable(tables.Table):
     def render_email(self, record, value):
         # Replace the email by a dash if the user can't see the profile detail
         # Replace also the URL
-        if not PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_profile", record.profile):
+        if not PermissionBackend.check_perm(get_current_request(), "member.view_profile", record.profile):
             value = "—"
             record.email = value
         return value
 
     def render_section(self, record, value):
         return value \
-            if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_profile", record.profile) \
+            if PermissionBackend.check_perm(get_current_request(), "member.view_profile", record.profile) \
             else "—"
 
     def render_balance(self, record, value):
         return pretty_money(value)\
-            if PermissionBackend.check_perm(get_current_authenticated_user(), "note.view_note", record.note) else "—"
+            if PermissionBackend.check_perm(get_current_request(), "note.view_note", record.note) else "—"
 
     class Meta:
         attrs = {
@@ -93,7 +93,7 @@ class MembershipTable(tables.Table):
     def render_user(self, value):
         # If the user has the right, link the displayed user with the page of its detail.
         s = value.username
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "auth.view_user", value):
+        if PermissionBackend.check_perm(get_current_request(), "auth.view_user", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:user_detail', kwargs={"pk": value.pk}), name=s)
 
@@ -102,7 +102,7 @@ class MembershipTable(tables.Table):
     def render_club(self, value):
         # If the user has the right, link the displayed club with the page of its detail.
         s = value.name
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.view_club", value):
+        if PermissionBackend.check_perm(get_current_request(), "member.view_club", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:club_detail', kwargs={"pk": value.pk}), name=s)
 
@@ -127,7 +127,7 @@ class MembershipTable(tables.Table):
                     date_end=date.today(),
                     fee=0,
                 )
-                if PermissionBackend.check_perm(get_current_authenticated_user(),
+                if PermissionBackend.check_perm(get_current_request(),
                                                 "member.add_membership", empty_membership):  # If the user has right
                     renew_url = reverse_lazy('member:club_renew_membership',
                                              kwargs={"pk": record.pk})
@@ -142,7 +142,7 @@ class MembershipTable(tables.Table):
         # If the user has the right to manage the roles, display the link to manage them
         roles = record.roles.all()
         s = ", ".join(str(role) for role in roles)
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "member.change_membership_roles", record):
+        if PermissionBackend.check_perm(get_current_request(), "member.change_membership_roles", record):
             s = format_html("<a href='" + str(reverse_lazy("member:club_manage_roles", kwargs={"pk": record.pk}))
                             + "'>" + s + "</a>")
         return s
@@ -165,7 +165,7 @@ class ClubManagerTable(tables.Table):
     def render_user(self, value):
         # If the user has the right, link the displayed user with the page of its detail.
         s = value.username
-        if PermissionBackend.check_perm(get_current_authenticated_user(), "auth.view_user", value):
+        if PermissionBackend.check_perm(get_current_request(), "auth.view_user", value):
             s = format_html("<a href={url}>{name}</a>",
                             url=reverse_lazy('member:user_detail', kwargs={"pk": value.pk}), name=s)
 

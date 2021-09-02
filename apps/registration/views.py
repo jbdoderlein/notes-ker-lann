@@ -66,9 +66,11 @@ class UserCreateView(CreateView):
         profile_form.instance.user = user
         profile = profile_form.save(commit=False)
         user.profile = profile
+        user._force_save = True
         user.save()
         user.refresh_from_db()
         profile.user = user
+        profile._force_save = True
         profile.save()
 
         user.profile.send_email_validation_link()
@@ -110,7 +112,9 @@ class UserValidateView(TemplateView):
             self.validlink = True
             user.is_active = user.profile.registration_valid or user.is_superuser
             user.profile.email_confirmed = True
+            user._force_save = True
             user.save()
+            user.profile._force_save = True
             user.profile.save()
         return self.render_to_response(self.get_context_data(), status=200 if self.validlink else 400)
 
@@ -230,9 +234,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
         kfet = Club.objects.get(name="Kfet")
         fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        # In 2020, for COVID-19 reasons, the BDE offered 80 € to each new member that opens a Sogé account,
-        # since there is no WEI.
-        fee += 8000
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
         ctx["declare_soge_account"] = SogeCredit.objects.filter(user=user).exists()
@@ -387,7 +388,7 @@ class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
         Delete the pre-registered user which id is given in the URL.
         """
         user = User.objects.filter(profile__registration_valid=False)\
-            .filter(PermissionBackend.filter_queryset(request.user, User, "change", "is_valid"))\
+            .filter(PermissionBackend.filter_queryset(request, User, "change", "is_valid"))\
             .get(pk=self.kwargs["pk"])
         # Delete associated soge credits before
         SogeCredit.objects.filter(user=user).delete()

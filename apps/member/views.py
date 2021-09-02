@@ -21,7 +21,7 @@ from rest_framework.authtoken.models import Token
 from note.models import Alias, NoteUser
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
-from note_kfet.middlewares import _set_current_user_and_ip
+from note_kfet.middlewares import _set_current_request
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
@@ -41,7 +41,8 @@ class CustomLoginView(LoginView):
     @transaction.atomic
     def form_valid(self, form):
         logout(self.request)
-        _set_current_user_and_ip(form.get_user(), self.request.session, None)
+        self.request.user = form.get_user()
+        _set_current_request(self.request)
         self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
         return super().form_valid(form)
 
@@ -70,7 +71,7 @@ class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form.fields['email'].required = True
         form.fields['email'].help_text = _("This address must be valid.")
 
-        if PermissionBackend.check_perm(self.request.user, "member.change_profile", context['user_object'].profile):
+        if PermissionBackend.check_perm(self.request, "member.change_profile", context['user_object'].profile):
             context['profile_form'] = self.profile_form(instance=context['user_object'].profile,
                                                         data=self.request.POST if self.request.POST else None)
             if not self.object.profile.report_frequency:
@@ -153,13 +154,13 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         history_list = \
             Transaction.objects.all().filter(Q(source=user.note) | Q(destination=user.note))\
             .order_by("-created_at")\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))
+            .filter(PermissionBackend.filter_queryset(self.request, Transaction, "view"))
         history_table = HistoryTable(history_list, prefix='transaction-')
         history_table.paginate(per_page=20, page=self.request.GET.get("transaction-page", 1))
         context['history_list'] = history_table
 
         club_list = Membership.objects.filter(user=user, date_end__gte=date.today() - timedelta(days=15))\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request, Membership, "view"))\
             .order_by("club__name", "-date_start")
         # Display only the most recent membership
         club_list = club_list.distinct("club__name")\
@@ -176,21 +177,20 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             modified_note.is_active = True
             modified_note.inactivity_reason = 'manual'
             context["can_lock_note"] = user.note.is_active and PermissionBackend\
-                                           .check_perm(self.request.user, "note.change_noteuser_is_active",
-                                                       modified_note)
+                                           .check_perm(self.request, "note.change_noteuser_is_active", modified_note)
             old_note = NoteUser.objects.select_for_update().get(pk=user.note.pk)
             modified_note.inactivity_reason = 'forced'
             modified_note._force_save = True
             modified_note.save()
             context["can_force_lock"] = user.note.is_active and PermissionBackend\
-                .check_perm(self.request.user, "note.change_note_is_active", modified_note)
+                .check_perm(self.request, "note.change_note_is_active", modified_note)
             old_note._force_save = True
             old_note._no_signal = True
             old_note.save()
             modified_note.refresh_from_db()
             modified_note.is_active = True
             context["can_unlock_note"] = not user.note.is_active and PermissionBackend\
-                .check_perm(self.request.user, "note.change_note_is_active", modified_note)
+                .check_perm(self.request, "note.change_note_is_active", modified_note)
 
         return context
 
@@ -237,7 +237,7 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pre_registered_users = User.objects.filter(PermissionBackend.filter_queryset(self.request.user, User, "view"))\
+        pre_registered_users = User.objects.filter(PermissionBackend.filter_queryset(self.request, User, "view"))\
             .filter(profile__registration_valid=False)
         context["can_manage_registrations"] = pre_registered_users.exists()
         return context
@@ -256,8 +256,8 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
         context["aliases"] = AliasTable(
-            note.alias.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view")).distinct().all())
-        context["can_create"] = PermissionBackend.check_perm(self.request.user, "note.add_alias", Alias(
+            note.alias.filter(PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct().all())
+        context["can_create"] = PermissionBackend.check_perm(self.request, "note.add_alias", Alias(
             note=context["object"].note,
             name="",
             normalized_name="",
@@ -382,7 +382,7 @@ class ClubListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["can_add_club"] = PermissionBackend.check_perm(self.request.user, "member.add_club", Club(
+        context["can_add_club"] = PermissionBackend.check_perm(self.request, "member.add_club", Club(
             name="",
             email="club@example.com",
         ))
@@ -404,7 +404,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         club = context["club"]
-        if PermissionBackend.check_perm(self.request.user, "member.change_club_membership_start", club):
+        if PermissionBackend.check_perm(self.request, "member.change_club_membership_start", club):
             club.update_membership_dates()
         # managers list
         managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club",
@@ -413,7 +413,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["managers"] = ClubManagerTable(data=managers, prefix="managers-")
         # transaction history
         club_transactions = Transaction.objects.all().filter(Q(source=club.note) | Q(destination=club.note))\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Transaction, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request, Transaction, "view"))\
             .order_by('-created_at')
         history_table = HistoryTable(club_transactions, prefix="history-")
         history_table.paginate(per_page=20, page=self.request.GET.get('history-page', 1))
@@ -422,7 +422,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         club_member = Membership.objects.filter(
             club=club,
             date_end__gte=date.today() - timedelta(days=15),
-        ).filter(PermissionBackend.filter_queryset(self.request.user, Membership, "view"))\
+        ).filter(PermissionBackend.filter_queryset(self.request, Membership, "view"))\
             .order_by("user__username", "-date_start")
         # Display only the most recent membership
         club_member = club_member.distinct("user__username")\
@@ -459,8 +459,8 @@ class ClubAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
         context["aliases"] = AliasTable(note.alias.filter(
-            PermissionBackend.filter_queryset(self.request.user, Alias, "view")).distinct().all())
-        context["can_create"] = PermissionBackend.check_perm(self.request.user, "note.add_alias", Alias(
+            PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct().all())
+        context["can_create"] = PermissionBackend.check_perm(self.request, "note.add_alias", Alias(
             note=context["object"].note,
             name="",
             normalized_name="",
@@ -535,7 +535,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         form = context['form']
 
         if "club_pk" in self.kwargs:  # We create a new membership.
-            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view"))\
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request, Club, "view"))\
                 .get(pk=self.kwargs["club_pk"], weiclub=None)
             form.fields['credit_amount'].initial = club.membership_fee_paid
             # Ensure that the user is member of the parent club and all its the family tree.
@@ -683,7 +683,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         """
         # Get the club that is concerned by the membership
         if "club_pk" in self.kwargs:  # get from url of new membership
-            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request.user, Club, "view")) \
+            club = Club.objects.filter(PermissionBackend.filter_queryset(self.request, Club, "view")) \
                 .get(pk=self.kwargs["club_pk"])
             user = form.instance.user
             old_membership = None
@@ -867,7 +867,7 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         club = Club.objects.filter(
-            PermissionBackend.filter_queryset(self.request.user, Club, "view")
+            PermissionBackend.filter_queryset(self.request, Club, "view")
         ).get(pk=self.kwargs["pk"])
         context["club"] = club
 

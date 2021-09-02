@@ -5,32 +5,98 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% load i18n %}
 
 {% block content %}
-<div class="alert alert-info">
-    <h4>À quoi sert un jeton d'authentification ?</h4>
+<div class="row mt-4">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3>{% trans "Token authentication" %}</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h4>À quoi sert un jeton d'authentification ?</h4>
 
-    Un jeton vous permet de vous connecter à <a href="/api/">l'API de la Note Kfet</a>.<br />
-    Il suffit pour cela d'ajouter en en-tête de vos requêtes <code>Authorization: Token &lt;TOKEN&gt;</code>
-    pour pouvoir vous identifier.<br /><br />
+                    Un jeton vous permet de vous connecter à <a href="/api/">l'API de la Note Kfet</a> via votre propre compte
+                    depuis un client externe.<br />
+                    Il suffit pour cela d'ajouter en en-tête de vos requêtes <code>Authorization: Token &lt;TOKEN&gt;</code>
+                    pour pouvoir vous identifier.<br /><br />
 
-    Une documentation de l'API arrivera ultérieurement.
+                    La documentation de l'API est disponible ici :
+                    <a href="/doc/api/">{{ request.scheme }}://{{ request.get_host }}/doc/api/</a>.
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>{%trans  'Token' %} :</strong>
+                    {% if 'show' in request.GET %}
+                    {{ token.key }} (<a href="?">cacher</a>)
+                    {% else %}
+                    <em>caché</em> (<a href="?show">montrer</a>)
+                    {% endif %}
+                    <br />
+                    <strong>{%trans  'Created' %} :</strong> {{ token.created }}
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>{% trans "Warning" %} :</strong> regénérer le jeton va révoquer tout accès autorisé à l'API via ce jeton !
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="?regenerate">
+                    <button class="btn btn-primary">{% trans 'Regenerate token' %}</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3>{% trans "OAuth2 authentication" %}</h3>
+            </div>
+            <div class="card-header">
+                <div class="alert alert-info">
+                    <p>
+                        La Note Kfet implémente également le protocole <a href="https://oauth.net/2/">OAuth2</a>, afin de
+                        permettre à des applications tierces d'interagir avec la Note en récoltant des informations
+                        (de connexion par exemple) voir en permettant des modifications à distance, par exemple lorsqu'il
+                        s'agit d'avoir un site marchand sur lequel faire des transactions via la Note Kfet.
+                    </p>
+
+                    <p>
+                        L'usage de ce protocole est recommandé pour tout usage non personnel, car permet de mieux cibler
+                        les droits dont on a besoin, en restreignant leur usage par jeton généré.
+                    </p>
+
+                    <p>
+                        La documentation vis-à-vis de l'usage de ce protocole est disponible ici :
+                        <a href="/doc/external_services/oauth2/">{{ request.scheme }}://{{ request.get_host }}/doc/external_services/oauth2/</a>.
+                    </p>
+                </div>
+
+                Liste des URL à communiquer à votre application :
+
+                <ul>
+                    <li>
+                        {% trans "Authorization:" %}
+                        <a href="{% url 'oauth2_provider:authorize' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:authorize' %}</a>
+                    </li>
+                    <li>
+                        {% trans "Token:" %}
+                        <a href="{% url 'oauth2_provider:authorize' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:token' %}</a>
+                    </li>
+                    <li>
+                        {% trans "Revoke Token:" %}
+                        <a href="{% url 'oauth2_provider:authorize' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:revoke-token' %}</a>
+                    </li>
+                    <li>
+                        {% trans "Introspect Token:" %}
+                        <a href="{% url 'oauth2_provider:authorize' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'oauth2_provider:introspect' %}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a class="btn btn-primary" href="{% url 'oauth2_provider:list' %}">{% trans "Show my applications" %}</a>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="alert alert-info">
-    <strong>{%trans  'Token' %} :</strong>
-    {% if 'show' in request.GET %}
-    {{ token.key }} (<a href="?">cacher</a>)
-    {% else %}
-    <em>caché</em> (<a href="?show">montrer</a>)
-    {% endif %}
-    <br />
-    <strong>{%trans  'Created' %} :</strong> {{ token.created }}
-</div>
-
-<div class="alert alert-warning">
-    <strong>Attention :</strong> regénérer le jeton va révoquer tout accès autorisé à l'API via ce jeton !
-</div>
-
-<a href="?regenerate">
-    <button class="btn btn-primary">{% trans 'Regenerate token' %}</button>
-</a>
 {% endblock %}

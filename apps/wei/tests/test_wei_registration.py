@@ -3,7 +3,6 @@
 
 import subprocess
 from datetime import timedelta, date
-from unittest import skip
 
 from api.tests import TestAPI
 from django.conf import settings
@@ -812,10 +811,6 @@ class TestWEISurveyAlgorithm(TestCase):
             first_year=True,
         )
         CurrentSurvey(self.registration).save()
-
-    @skip  # FIXME Write good unit tests
-    def test_survey_algorithm(self):
-        CurrentSurvey.get_algorithm_class()().run_algorithm()
 
 
 class TestWeiAPI(TestAPI):

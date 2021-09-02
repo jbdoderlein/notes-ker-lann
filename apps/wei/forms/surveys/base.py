@@ -53,7 +53,8 @@ class WEIBusInformation:
     def free_seats(self, surveys: List["WEISurvey"] = None):
         size = self.bus.size
         already_occupied = WEIMembership.objects.filter(bus=self.bus).count()
-        valid_surveys = sum(1 for survey in surveys if survey.information.valid) if surveys else 0
+        valid_surveys = sum(1 for survey in surveys if survey.information.valid
+                            and survey.information.get_selected_bus() == self.bus) if surveys else 0
         return size - already_occupied - valid_surveys
 
     def has_free_seats(self, surveys=None):

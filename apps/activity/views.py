@@ -74,12 +74,12 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
 
         upcoming_activities = Activity.objects.filter(date_end__gt=timezone.now())
         context['upcoming'] = ActivityTable(
-            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")),
+            data=upcoming_activities.filter(PermissionBackend.filter_queryset(self.request, Activity, "view")),
             prefix='upcoming-',
         )
 
         started_activities = Activity.objects\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request, Activity, "view"))\
             .filter(open=True, valid=True).all()
         context["started_activities"] = started_activities
 
@@ -98,7 +98,7 @@ class ActivityDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data()
 
         table = GuestTable(data=Guest.objects.filter(activity=self.object)
-                           .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view")))
+                           .filter(PermissionBackend.filter_queryset(self.request, Guest, "view")))
         context["guests"] = table
 
         context["activity_started"] = timezone.now() > timezone.localtime(self.object.date_start)
@@ -144,7 +144,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+        form.activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request, Activity, "view"))\
             .get(pk=self.kwargs["pk"])
         form.fields["inviter"].initial = self.request.user.note
         return form
@@ -152,7 +152,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
     @transaction.atomic
     def form_valid(self, form):
         form.instance.activity = Activity.objects\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view")).get(pk=self.kwargs["pk"])
+            .filter(PermissionBackend.filter_queryset(self.request, Activity, "view")).get(pk=self.kwargs["pk"])
         return super().form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -173,7 +173,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         activity = Activity.objects.get(pk=self.kwargs["pk"])
 
         sample_entry = Entry(activity=activity, note=self.request.user.note)
-        if not PermissionBackend.check_perm(self.request.user, "activity.add_entry", sample_entry):
+        if not PermissionBackend.check_perm(self.request, "activity.add_entry", sample_entry):
             raise PermissionDenied(_("You are not allowed to display the entry interface for this activity."))
 
         if not activity.activity_type.manage_entries:
@@ -191,7 +191,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         guest_qs = Guest.objects\
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
             .filter(activity=activity)\
-            .filter(PermissionBackend.filter_queryset(self.request.user, Guest, "view"))\
+            .filter(PermissionBackend.filter_queryset(self.request, Guest, "view"))\
             .order_by('last_name', 'first_name').distinct()
 
         if "search" in self.request.GET and self.request.GET["search"]:
@@ -230,7 +230,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         )
 
         # Filter with permission backend
-        note_qs = note_qs.filter(PermissionBackend.filter_queryset(self.request.user, Alias, "view"))
+        note_qs = note_qs.filter(PermissionBackend.filter_queryset(self.request, Alias, "view"))
 
         if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
@@ -256,7 +256,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         """
         context = super().get_context_data(**kwargs)
 
-        activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request.user, Activity, "view"))\
+        activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request, Activity, "view"))\
             .distinct().get(pk=self.kwargs["pk"])
         context["activity"] = activity
 
@@ -281,9 +281,9 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         context["notespecial_ctype"] = ContentType.objects.get_for_model(NoteSpecial).pk
 
         activities_open = Activity.objects.filter(open=True).filter(
-            PermissionBackend.filter_queryset(self.request.user, Activity, "view")).distinct().all()
+            PermissionBackend.filter_queryset(self.request, Activity, "view")).distinct().all()
         context["activities_open"] = [a for a in activities_open
-                                      if PermissionBackend.check_perm(self.request.user,
+                                      if PermissionBackend.check_perm(self.request,
                                                                       "activity.add_entry",
                                                                       Entry(activity=a, note=self.request.user.note,))]
 

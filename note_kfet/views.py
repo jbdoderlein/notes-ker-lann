@@ -19,11 +19,11 @@ class IndexView(LoginRequiredMixin, RedirectView):
         user = self.request.user
 
         # The account note will have the consumption page as default page
-        if not PermissionBackend.check_perm(user, "auth.view_user", user):
+        if not PermissionBackend.check_perm(self.request, "auth.view_user", user):
             return reverse("note:consos")
 
         # People that can see the alias BDE are Kfet members
-        if PermissionBackend.check_perm(user, "alias.view_alias", Alias.objects.get(name="BDE")):
+        if PermissionBackend.check_perm(self.request, "alias.view_alias", Alias.objects.get(name="BDE")):
             return reverse("note:transfer")
 
         # Non-Kfet members will don't see the transfer page, but their profile page
