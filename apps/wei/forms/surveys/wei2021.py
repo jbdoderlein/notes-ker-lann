@@ -47,7 +47,13 @@ class WEISurveyForm2021(forms.Form):
         words = []
         for _ignored in range(information.step + 1):
             # Generate N times words
-            words = [rng.choice(WORDS) for _ignored2 in range(10)]
+            words = None
+            preferred_words = {bus: [word for word in WORDS if WEIBusInformation2021(bus).scores[word] >= 50]
+                               for bus in WEISurveyAlgorithm2021.get_buses()}
+            while words is None or len(set(words)) != len(words):
+                # Ensure that there is no the same word 2 times
+                words = [rng.choice(words) for _ignored2, words in preferred_words.items()]
+            rng.shuffle(words)
         words = [(w, w) for w in words]
         if self.data:
             self.fields["word"].choices = [(w, w) for w in WORDS]
