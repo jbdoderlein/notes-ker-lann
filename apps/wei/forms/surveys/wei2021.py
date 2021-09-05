@@ -40,6 +40,7 @@ class WEISurveyForm2021(forms.Form):
         if not information.seed:
             information.seed = int(1000 * time.time())
             information.save(registration)
+            registration._force_save = True
             registration.save()
 
         rng = Random(information.seed)

@@ -487,9 +487,13 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
 
     def get_sample_object(self):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        if "myself" in self.request.path:
+            user = self.request.user
+        else:
+            user = User.objects.get(username="note")
         return WEIRegistration(
             wei=wei,
-            user=User.objects.get(username="note"),
+            user=user,
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
@@ -555,9 +559,13 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
 
     def get_sample_object(self):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        if "myself" in self.request.path:
+            user = self.request.user
+        else:
+            user = User.objects.get(username="note")
         return WEIRegistration(
             wei=wei,
-            user=User.objects.get(username="note"),
+            user=user,
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
