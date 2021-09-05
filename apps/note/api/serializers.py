@@ -12,7 +12,7 @@ from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 from rest_framework.utils import model_meta
 
-from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias
+from ..models.notes import Note, NoteClub, NoteSpecial, NoteUser, Alias, Trust
 from ..models.transactions import TransactionTemplate, Transaction, MembershipTransaction, TemplateCategory, \
     RecurrentTransaction, SpecialTransaction
 
@@ -75,6 +75,22 @@ class NoteUserSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return str(obj)
+
+
+class TrustSerializer(serializers.ModelSerializer):
+    """
+    REST API Serializer for Trusts.
+    The djangorestframework plugin will analyse the model `Trust` and parse all fields in the API.
+    """
+
+    class Meta:
+        model = Trust
+        fields = '__all__'
+
+    def validate(self, attrs):
+        instance = Trust(**attrs)
+        instance.clean()
+        return attrs
 
 
 class AliasSerializer(serializers.ModelSerializer):

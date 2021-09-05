@@ -1,0 +1,31 @@
+{% extends "member/base.html" %}
+{% comment %}
+SPDX-License-Identifier: GPL-3.0-or-later
+{% endcomment %}
+{% load static django_tables2 i18n %}
+
+{% block profile_content %}
+<div class="card bg-light">
+    <h3 class="card-header text-center">
+        {% trans "Note friendships" %}
+    </h3>
+    <div class="card-body">
+        {% if can_create %}
+            <form class="input-group" method="POST" id="form_trust">
+                {% csrf_token %}
+                <input type="hidden" name="trusting" value="{{ object.note.pk }}">
+                {%include "autocomplete_model.html" %}
+                <div class="input-group-append">
+                    <input type="submit" class="btn btn-success" value="{% trans "Add" %}">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    {% render_table trusting %}
+</div>
+{% endblock %}
+
+{% block extrajavascript %}
+<script src="{% static "member/js/trust.js" %}"></script>
+<script src="{% static "js/autocomplete_model.js" %}"></script>
+{% endblock%}

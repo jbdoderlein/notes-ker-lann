@@ -8,6 +8,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.db.models import Q, F
 from django.shortcuts import redirect
@@ -18,9 +19,9 @@ from django.views.generic import DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
-from note.models import Alias, NoteUser, NoteClub
+from note.models import Alias, NoteClub, NoteUser, Trust
 from note.models.transactions import Transaction, SpecialTransaction
-from note.tables import HistoryTable, AliasTable
+from note.tables import HistoryTable, AliasTable, TrustTable
 from note_kfet.middlewares import _set_current_request
 from permission.backends import PermissionBackend
 from permission.models import Role
@@ -241,6 +242,38 @@ class UserListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView):
             .filter(profile__registration_valid=False)
         context["can_manage_registrations"] = pre_registered_users.exists()
         return context
+
+
+class ProfileTrustView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
+    """
+    View and manage user trust relationships
+    """
+    model = User
+    template_name = 'member/profile_trust.html'
+    context_object_name = 'user_object'
+    extra_context = {"title":_("Note friendships")}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        note = context['object'].note
+        context["trusting"] = TrustTable(
+            note.trusting.filter(PermissionBackend.filter_queryset(self.request, Trust, "view")).distinct().all())
+        context["can_create"] = PermissionBackend.check_perm(self.request, "note.add_trust", Trust(
+            trusting=context["object"].note,
+            trusted=context["object"].note
+        ))
+        context["widget"] = {"name": "trusted",
+            "attrs": { "model_pk": ContentType.objects.get_for_model(Alias).pk,
+                "class": "autocomplete form-control",
+                "id": "trusted",
+                "resetable": True,
+                "api_url": "/api/note/alias/?note__polymorphic_ctype__model=noteuser",
+                "name_field": "name",
+                "placeholder": ""
+                }
+            }
+        return context
+
 
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):

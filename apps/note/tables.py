@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from note_kfet.middlewares import get_current_request
 from permission.backends import PermissionBackend
 
-from .models.notes import Alias
+from .models.notes import Alias, Trust
 from .models.transactions import Transaction, TransactionTemplate
 from .templatetags.pretty_money import pretty_money
 
@@ -146,6 +146,27 @@ class HistoryTable(tables.Table):
 DELETE_TEMPLATE = """
     <button id="{{ record.pk }}" class="btn btn-danger btn-sm" onclick="delete_button(this.id)"> {{ delete_trans }}</button>
 """
+
+
+class TrustTable(tables.Table):
+    class Meta:
+        attrs = {
+            'class': 'table table condensed table-striped',
+            'id': "trust_table"
+        }
+        model = Trust
+        fields = ("trusted",)
+        template_name = 'django_tables2/bootstrap4.html'
+
+    show_header = False
+    trusted = tables.Column(attrs={'td': {'class': 'text_center'}})
+
+    delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
+            extra_context={"delete_trans": _('delete')},
+            attrs={'td': {'class': lambda record: 'col-sm-1' + (' d-none'
+                if not PermissionBackend.check_perm(get_current_request(),
+                    "note.delete_trust", record) else '')}},
+            verbose_name =_("Delete"), )
 
 
 class AliasTable(tables.Table):

@@ -23,5 +23,6 @@ urlpatterns = [
     path('user/<int:pk>/update/', views.UserUpdateView.as_view(), name="user_update_profile"),
     path('user/<int:pk>/update_pic/', views.ProfilePictureUpdateView.as_view(), name="user_update_pic"),
     path('user/<int:pk>/aliases/', views.ProfileAliasView.as_view(), name="user_alias"),
+    path('user/<int:pk>/trust', views.ProfileTrustView.as_view(), name="user_trust"),
     path('manage-auth-token/', views.ManageAuthTokens.as_view(), name='auth_token'),
 ]

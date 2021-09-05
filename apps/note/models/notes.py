@@ -229,15 +229,20 @@ class Trust(models.Model):
         Note,
         on_delete=models.CASCADE,
         related_name='trusting',
-        verbose_name=('trusting')
+        verbose_name=_('trusting')
     )
 
     trusted = models.ForeignKey(
         Note,
         on_delete=models.CASCADE,
         related_name='trusted',
-        verbose_name=('trusted')
+        verbose_name=_('trusted')
     )
+
+    class Meta:
+        verbose_name = _("frienship")
+        verbose_name_plural = _("friendships")
+        unique_together = ("trusting", "trusted")
 
 
 class Alias(models.Model):

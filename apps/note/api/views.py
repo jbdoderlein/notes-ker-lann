@@ -14,8 +14,9 @@ from api.viewsets import ReadProtectedModelViewSet, ReadOnlyProtectedModelViewSe
 from permission.backends import PermissionBackend
 
 from .serializers import NotePolymorphicSerializer, AliasSerializer, ConsumerSerializer,\
-    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer
-from ..models.notes import Note, Alias, NoteUser, NoteClub, NoteSpecial
+    TemplateCategorySerializer, TransactionTemplateSerializer, TransactionPolymorphicSerializer, \
+    TrustSerializer
+from ..models.notes import Note, Alias, NoteUser, NoteClub, NoteSpecial, Trust
 from ..models.transactions import TransactionTemplate, Transaction, TemplateCategory
 
 
@@ -56,11 +57,41 @@ class NotePolymorphicViewSet(ReadProtectedModelViewSet):
         return queryset.order_by("id")
 
 
+class TrustViewSet(ReadProtectedModelViewSet):
+    """
+    REST Trust View set.
+    The djangorestframework plugin will get all `Trust` objects, serialize it to JSON with the given serializer,
+    then render it on /api/note/trust/
+    """
+    queryset = Trust.objects
+    serializer_class = TrustSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    search_fields = ['$trusting__alias__name', '$trusting__alias__normalized_name',
+            '$trusted__alias__name', '$trusted__alias__normalized_name']
+    filterset_fields = ['trusting', 'trusting__noteuser__user', 'trusted', 'trusted__noteuser__user',]
+    ordering_fields = ['trusting', 'trusted', ]
+
+    def get_serializer_class(self):
+        serializer_class = self.serializer_class
+        if self.request.method in ['PUT', 'PATCH']:
+            # trust relationship can't change people involved
+            serializer_class.Meta.read_only_fields = ('trusting', 'trusting',)
+        return serializer_class
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        try:
+            self.perform_destroy(instance)
+        except ValidationError as e:
+            return Response({e.code: str(e)}, status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class AliasViewSet(ReadProtectedModelViewSet):
     """
     REST API View set.
     The djangorestframework plugin will get all `Alias` objects, serialize it to JSON with the given serializer,
-    then render it on /api/aliases/
+    then render it on /api/note/aliases/
     """
     queryset = Alias.objects
     serializer_class = AliasSerializer
