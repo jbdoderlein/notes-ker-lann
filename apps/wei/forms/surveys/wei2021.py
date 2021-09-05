@@ -43,28 +43,29 @@ class WEISurveyForm2021(forms.Form):
             registration._force_save = True
             registration.save()
 
-        rng = Random(information.seed)
-
-        words = None
-        # Update seed
-        rng.randint(0, information.step)
-
-        buses = WEISurveyAlgorithm2021.get_buses()
-        scores = sum((list(WEIBusInformation2021(bus).scores.values()) for bus in buses), [])
-        average_score = sum(scores) / len(scores)
-
-        preferred_words = {bus: [word for word in WORDS
-                                 if WEIBusInformation2021(bus).scores[word] >= average_score]
-                           for bus in buses}
-        while words is None or len(set(words)) != len(words):
-            # Ensure that there is no the same word 2 times
-            words = [rng.choice(words) for _ignored2, words in preferred_words.items()]
-        rng.shuffle(words)
-        words = [(w, w) for w in words]
         if self.data:
             self.fields["word"].choices = [(w, w) for w in WORDS]
             if self.is_valid():
                 return
+
+        rng = Random((information.step + 1) * information.seed)
+
+        words = None
+
+        buses = WEISurveyAlgorithm2021.get_buses()
+        informations = {bus: WEIBusInformation2021(bus) for bus in buses}
+        scores = sum((list(informations[bus].scores.values()) for bus in buses), [])
+        average_score = sum(scores) / len(scores)
+
+        preferred_words = {bus: [word for word in WORDS
+                                 if informations[bus].scores[word] >= average_score]
+                           for bus in buses}
+        while words is None or len(set(words)) != len(words):
+            print("toto")
+            # Ensure that there is no the same word 2 times
+            words = [rng.choice(words) for _ignored2, words in preferred_words.items()]
+        rng.shuffle(words)
+        words = [(w, w) for w in words]
         self.fields["word"].choices = words
 
 
