@@ -11,7 +11,10 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from member.models import Club, Membership
 from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction, NoteUser
+from wei.models import WEIClub
 
 
 class Invoice(models.Model):
@@ -304,6 +307,40 @@ class SogeCredit(models.Model):
     def amount(self):
         return self.credit_transaction.total if self.valid \
             else sum(transaction.total for transaction in self.transactions.all())
+
+    def update_transactions(self):
+        """
+        The Sogé credit may be created after the user already paid its memberships.
+        We query transactions and update the credit, if it is unvalid.
+        """
+        if self.valid:
+            return
+
+        bde = Club.objects.get(name="BDE")
+        kfet = Club.objects.get(name="Kfet")
+        wei = WEIClub.objects.order_by('-year').first()
+        bde_qs = Membership.objects.filter(user=self.user, club=bde, date_start__gte=bde.membership_start)
+        kfet_qs = Membership.objects.filter(user=self.user, club=kfet, date_start__gte=kfet.membership_start)
+        wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
+
+        if bde_qs.exists():
+            m = bde_qs.get()
+            if m.transaction not in self.transactions.all():
+                self.transactions.add(m.transaction)
+
+        if kfet_qs.exists():
+            m = kfet_qs.get()
+            if m.transaction not in self.transactions.all():
+                self.transactions.add(m.transaction)
+
+        if wei_qs.exists():
+            m = wei_qs.get()
+            if m.transaction not in self.transactions.all():
+                self.transactions.add(m.transaction)
+
+        for tr in self.transactions.all():
+            tr.valid = False
+            tr.save()
 
     def invalidate(self):
         """

@@ -364,8 +364,11 @@ class WEIMembership(Membership):
                 # to treasurers.
                 transaction.refresh_from_db()
                 from treasury.models import SogeCredit
-                soge_credit = SogeCredit.objects.get_or_create(user=self.user)[0]
+                soge_credit, created = SogeCredit.objects.get_or_create(user=self.user)
                 soge_credit.refresh_from_db()
                 transaction.save()
                 soge_credit.transactions.add(transaction)
+                soge_credit.save()
+
+                soge_credit.update_transactions()
                 soge_credit.save()
