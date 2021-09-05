@@ -49,9 +49,13 @@ class WEISurveyForm2021(forms.Form):
         # Update seed
         rng.randint(0, information.step)
 
-        preferred_words = {bus: [word for word in WORDS if bus.size > 0
-                                 and WEIBusInformation2021(bus).scores[word] >= 50]
-                           for bus in WEISurveyAlgorithm2021.get_buses()}
+        buses = WEISurveyAlgorithm2021.get_buses()
+        scores = sum((list(WEIBusInformation2021(bus).scores.values()) for bus in buses), [])
+        average_score = sum(scores) / len(scores)
+
+        preferred_words = {bus: [word for word in WORDS
+                                 if WEIBusInformation2021(bus).scores[word] >= average_score]
+                           for bus in buses}
         while words is None or len(set(words)) != len(words):
             # Ensure that there is no the same word 2 times
             words = [rng.choice(words) for _ignored2, words in preferred_words.items()]
