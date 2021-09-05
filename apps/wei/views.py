@@ -489,7 +489,7 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         return WEIRegistration(
             wei=wei,
-            user=self.request.user,
+            user=User.objects.get(username="note"),
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
@@ -557,7 +557,7 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
         return WEIRegistration(
             wei=wei,
-            user=self.request.user,
+            user=User.objects.get(username="note"),
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
