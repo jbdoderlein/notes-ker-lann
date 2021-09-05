@@ -704,7 +704,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].disabled = True
-        if not self.object.first_year:
+        # The auto-json-format may cause issues with the default field remove
+        if not PermissionBackend.check_perm(self.request, 'wei.change_weiregistration_information_json', self.object):
             del form.fields["information_json"]
         return form
 
