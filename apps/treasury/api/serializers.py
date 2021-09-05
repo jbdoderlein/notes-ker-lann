@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+from django.db import transaction
 from rest_framework import serializers
 from note.api.serializers import SpecialTransactionSerializer
 
@@ -67,6 +67,14 @@ class SogeCreditSerializer(serializers.ModelSerializer):
     REST API Serializer for SogeCredit types.
     The djangorestframework plugin will analyse the model `SogeCredit` and parse all fields in the API.
     """
+
+    @transaction.atomic
+    def save(self, **kwargs):
+        # Update soge transactions after creating a credit
+        instance = super().save(**kwargs)
+        instance.update_transactions()
+        instance.save()
+        return instance
 
     class Meta:
         model = SogeCredit

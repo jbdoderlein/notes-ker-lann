@@ -289,6 +289,7 @@ class SogeCredit(models.Model):
     transactions = models.ManyToManyField(
         MembershipTransaction,
         related_name="+",
+        blank=True,
         verbose_name=_("membership transactions"),
     )
 
@@ -313,7 +314,7 @@ class SogeCredit(models.Model):
         The Sogé credit may be created after the user already paid its memberships.
         We query transactions and update the credit, if it is unvalid.
         """
-        if self.valid:
+        if self.valid or not self.pk:
             return
 
         bde = Club.objects.get(name="BDE")
@@ -402,7 +403,8 @@ class SogeCredit(models.Model):
             self.credit_transaction.amount = self.amount
             self.credit_transaction._force_save = True
             self.credit_transaction.save()
-        super().save(*args, **kwargs)
+
+        return super().save(*args, **kwargs)
 
     def delete(self, **kwargs):
         """
