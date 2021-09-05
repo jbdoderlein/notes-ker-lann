@@ -170,6 +170,7 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         We modify it to allow buses to have multiple "weddings".
         """
         surveys = list(self.get_survey_class()(r) for r in self.get_registrations())  # All surveys
+        surveys = [s for s in surveys if s.is_complete()]
         free_surveys = [s for s in surveys if not s.information.valid]  # Remaining surveys
         while free_surveys:  # Some students are not affected
             survey = free_surveys[0]
