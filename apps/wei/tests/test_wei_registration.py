@@ -84,6 +84,13 @@ class TestWEIRegistration(TestCase):
             wei=self.wei,
             description="Test Bus",
         )
+
+        # Setup the bus
+        bus_info = CurrentSurvey.get_algorithm_class().get_bus_information(self.bus)
+        bus_info.scores["Jus de fruit"] = 70
+        bus_info.save()
+        self.bus.save()
+
         self.team = BusTeam.objects.create(
             name="Test Team",
             bus=self.bus,
@@ -759,58 +766,6 @@ class TestDefaultWEISurvey(TestCase):
 
         self.assertEqual(CurrentSurvey.get_algorithm_class().get_survey_class(), CurrentSurvey)
         self.assertEqual(CurrentSurvey.get_year(), 2021)
-
-
-class TestWEISurveyAlgorithm(TestCase):
-    """
-    Run the WEI Algorithm.
-    TODO: Improve this test with some test data once the algorithm will be implemented.
-    """
-    fixtures = ("initial",)
-
-    def setUp(self) -> None:
-        self.year = timezone.now().year
-        self.wei = WEIClub.objects.create(
-            name="Test WEI",
-            email="gc.wei@example.com",
-            parent_club_id=2,
-            membership_fee_paid=12500,
-            membership_fee_unpaid=5500,
-            membership_start=date(self.year, 1, 1),
-            membership_end=date(self.year, 12, 31),
-            year=self.year,
-            date_start=date.today() + timedelta(days=2),
-            date_end=date(self.year, 12, 31),
-        )
-        NoteClub.objects.create(club=self.wei)
-        self.bus = Bus.objects.create(
-            name="Test Bus",
-            wei=self.wei,
-            description="Test Bus",
-        )
-        self.team = BusTeam.objects.create(
-            name="Test Team",
-            bus=self.bus,
-            color=0xFFFFFF,
-            description="Test Team",
-        )
-
-        self.user = User.objects.create(username="toto")
-        self.registration = WEIRegistration.objects.create(
-            user_id=self.user.id,
-            wei_id=self.wei.id,
-            soge_credit=True,
-            caution_check=True,
-            birth_date=date(2000, 1, 1),
-            gender="nonbinary",
-            clothing_cut="male",
-            clothing_size="XL",
-            health_issues="I am a bot",
-            emergency_contact_name="Pikachu",
-            emergency_contact_phone="+33123456789",
-            first_year=True,
-        )
-        CurrentSurvey(self.registration).save()
 
 
 class TestWeiAPI(TestAPI):

@@ -487,9 +487,16 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
 
     def get_sample_object(self):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        if "myself" in self.request.path:
+            user = self.request.user
+        else:
+            # To avoid unique validation issues, we use an account that can't join the WEI.
+            # In development mode, the note account may not exist, we use a random user (may fail)
+            user = User.objects.get(username="note") \
+                if User.objects.filter(username="note").exists() else User.objects.first()
         return WEIRegistration(
             wei=wei,
-            user=self.request.user,
+            user=user,
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
@@ -555,9 +562,16 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
 
     def get_sample_object(self):
         wei = WEIClub.objects.get(pk=self.kwargs["wei_pk"])
+        if "myself" in self.request.path:
+            user = self.request.user
+        else:
+            # To avoid unique validation issues, we use an account that can't join the WEI.
+            # In development mode, the note account may not exist, we use a random user (may fail)
+            user = User.objects.get(username="note") \
+                if User.objects.filter(username="note").exists() else User.objects.first()
         return WEIRegistration(
             wei=wei,
-            user=self.request.user,
+            user=user,
             first_year=True,
             birth_date="1970-01-01",
             gender="No",
