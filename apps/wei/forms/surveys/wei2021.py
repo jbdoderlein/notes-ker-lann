@@ -61,7 +61,6 @@ class WEISurveyForm2021(forms.Form):
                                  if informations[bus].scores[word] >= average_score]
                            for bus in buses}
         while words is None or len(set(words)) != len(words):
-            print("toto")
             # Ensure that there is no the same word 2 times
             words = [rng.choice(words) for _ignored2, words in preferred_words.items()]
         rng.shuffle(words)
