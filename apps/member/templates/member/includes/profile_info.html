@@ -39,13 +39,13 @@
         <dt class="col-xl-6">{% trans 'address'|capfirst %}</dt>
         <dd class="col-xl-6">{{ user_object.profile.address }}</dd>
 
-        {% if user_object.note and "note.view_note"|has_perm:user_object.note %}
-        <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
-        <dd class="col-xl-6">{{ user_object.note.balance | pretty_money }}</dd>
-
         <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
         <dd class="col-xl-6">{{ user_object.profile.paid|yesno }}</dd>
-        {% endif %}
+    {% endif %}
+
+    {% if user_object.note and "note.view_note"|has_perm:user_object.note %}
+        <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
+        <dd class="col-xl-6">{{ user_object.note.balance | pretty_money }}</dd>
     {% endif %}
 </dl>
 
