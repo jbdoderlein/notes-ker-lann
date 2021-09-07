@@ -132,7 +132,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             wei=club
         )
         pre_registrations_table = WEIRegistrationTable(data=pre_registrations, prefix="pre-registration-")
-        pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('pre-registration-page', 1))
         context['pre_registrations'] = pre_registrations_table
 
         my_registration = WEIRegistration.objects.filter(wei=club, user=self.request.user)
