@@ -61,6 +61,12 @@ def pre_save_object(sender, instance, **kwargs):
             # If the field wasn't modified, no need to check the permissions
             if old_value == new_value:
                 continue
+
+            if app_label == 'auth' and model_name == 'user' and field.name == 'password' and request.user.is_anonymous:
+                # We must ignore password changes from anonymous users since it can be done by people that forgot
+                # their password. We trust password change form.
+                continue
+
             if not PermissionBackend.check_perm(request, app_label + ".change_" + model_name + "_" + field_name,
                                                 instance):
                 raise PermissionDenied(
