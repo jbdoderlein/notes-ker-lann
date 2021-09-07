@@ -372,3 +372,11 @@ class WEIMembership(Membership):
 
                 soge_credit.update_transactions()
                 soge_credit.save()
+
+                if soge_credit.valid and \
+                        soge_credit.credit_transaction.total != sum(tr.total for tr in soge_credit.transactions.all()):
+                    # The credit is already validated, but we add a new transaction (eg. for the WEI).
+                    # Then we invalidate the transaction, update the credit transaction amount
+                    # and re-validate the credit.
+                    soge_credit.validate(True)
+                    soge_credit.save()
