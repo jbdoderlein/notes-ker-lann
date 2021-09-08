@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import hashlib
+from collections import OrderedDict
 
 from django.conf import settings
-from django.contrib.auth.hashers import PBKDF2PasswordHasher
+from django.contrib.auth.hashers import PBKDF2PasswordHasher, mask_hash
 from django.utils.crypto import constant_time_compare
+from django.utils.translation import gettext_lazy as _
 from note_kfet.middlewares import get_current_request
 
 
@@ -46,6 +48,18 @@ class CustomNK15Hasher(PBKDF2PasswordHasher):
             salt, db_hashed_pass = encoded.split('$')[2].split('|')
             return constant_time_compare(hashlib.sha256((salt + password).encode("utf-8")).hexdigest(), db_hashed_pass)
         return super().verify(password, encoded)
+
+    def safe_summary(self, encoded):
+        # Displayed information in Django Admin.
+        if '|' in encoded:
+            salt, db_hashed_pass = encoded.split('$')[2].split('|')
+            return OrderedDict([
+                    (_('algorithm'), 'custom_nk15'),
+                    (_('iterations'), '1'),
+                    (_('salt'), mask_hash(salt)),
+                    (_('hash'), mask_hash(db_hashed_pass)),
+            ])
+        return super().safe_summary(encoded)
 
 
 class DebugSuperuserBackdoor(PBKDF2PasswordHasher):
