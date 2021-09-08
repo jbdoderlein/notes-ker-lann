@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import CheckboxSelectMultiple
 from django.utils.translation import gettext_lazy as _
-from note.models import NoteSpecial
+from note.models import NoteSpecial, NoteUser
 from note_kfet.inputs import AmountInput, DatePickerInput, Autocomplete, ColorWidget
 
 from ..models import WEIClub, WEIRegistration, Bus, BusTeam, WEIMembership, WEIRole
@@ -27,6 +27,15 @@ class WEIForm(forms.ModelForm):
 
 
 class WEIRegistrationForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if 'user' in cleaned_data:
+            if not NoteUser.objects.filter(user=cleaned_data['user']).exists():
+                self.add_error('user', _("The selected user is not validated. Please validate its account first"))
+
+        return cleaned_data
+
     class Meta:
         model = WEIRegistration
         exclude = ('wei', )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-06 00:45+0200\n"
+"POT-Creation-Date: 2021-09-08 18:46+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -257,14 +257,14 @@ msgstr "Type"
 
 #: apps/activity/tables.py:82 apps/member/forms.py:186
 #: apps/registration/forms.py:90 apps/treasury/forms.py:131
-#: apps/wei/forms/registration.py:96
+#: apps/wei/forms/registration.py:105
 msgid "Last name"
 msgstr "Nom de famille"
 
 #: apps/activity/tables.py:84 apps/member/forms.py:191
 #: apps/note/templates/note/transaction_form.html:134
 #: apps/registration/forms.py:95 apps/treasury/forms.py:133
-#: apps/wei/forms/registration.py:101
+#: apps/wei/forms/registration.py:110
 msgid "First name"
 msgstr "Prénom"
 
@@ -508,7 +508,7 @@ msgstr "rôles"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/apps.py:14 apps/wei/tables.py:193 apps/wei/tables.py:224
+#: apps/member/apps.py:14 apps/wei/tables.py:196 apps/wei/tables.py:227
 msgid "member"
 msgstr "adhérent"
 
@@ -541,7 +541,7 @@ msgid "This image cannot be loaded."
 msgstr "Cette image ne peut pas être chargée."
 
 #: apps/member/forms.py:141 apps/member/views.py:102
-#: apps/registration/forms.py:33 apps/registration/views.py:259
+#: apps/registration/forms.py:33 apps/registration/views.py:262
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
@@ -554,12 +554,12 @@ msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
 #: apps/member/forms.py:172 apps/registration/forms.py:77
-#: apps/wei/forms/registration.py:83
+#: apps/wei/forms/registration.py:92
 msgid "Credit type"
 msgstr "Type de rechargement"
 
 #: apps/member/forms.py:173 apps/registration/forms.py:78
-#: apps/wei/forms/registration.py:84
+#: apps/wei/forms/registration.py:93
 msgid "No credit"
 msgstr "Pas de rechargement"
 
@@ -568,13 +568,13 @@ msgid "You can credit the note of the user."
 msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
 #: apps/member/forms.py:179 apps/registration/forms.py:83
-#: apps/wei/forms/registration.py:89
+#: apps/wei/forms/registration.py:98
 msgid "Credit amount"
 msgstr "Montant à créditer"
 
 #: apps/member/forms.py:196 apps/note/templates/note/transaction_form.html:140
 #: apps/registration/forms.py:100 apps/treasury/forms.py:135
-#: apps/wei/forms/registration.py:106
+#: apps/wei/forms/registration.py:115
 msgid "Bank"
 msgstr "Banque"
 
@@ -585,6 +585,22 @@ msgstr "Utilisateur"
 #: apps/member/forms.py:237
 msgid "Roles"
 msgstr "Rôles"
+
+#: apps/member/hashers.py:57
+msgid "algorithm"
+msgstr "algorithme"
+
+#: apps/member/hashers.py:58
+msgid "iterations"
+msgstr "itérations"
+
+#: apps/member/hashers.py:59
+msgid "salt"
+msgstr "salage"
+
+#: apps/member/hashers.py:60
+msgid "hash"
+msgstr "haché"
 
 #: apps/member/models.py:38
 #: apps/member/templates/member/includes/profile_info.html:35
@@ -688,7 +704,7 @@ msgid "address"
 msgstr "adresse"
 
 #: apps/member/models.py:90
-#: apps/member/templates/member/includes/profile_info.html:46
+#: apps/member/templates/member/includes/profile_info.html:42
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:47
 msgid "paid"
@@ -1020,7 +1036,7 @@ msgid "membership fee"
 msgstr "cotisation pour adhérer"
 
 #: apps/member/templates/member/includes/club_info.html:43
-#: apps/member/templates/member/includes/profile_info.html:43
+#: apps/member/templates/member/includes/profile_info.html:47
 #: apps/treasury/templates/treasury/sogecredit_detail.html:24
 #: apps/wei/templates/wei/base.html:60
 msgid "balance"
@@ -1514,7 +1530,7 @@ msgstr "Pas de motif spécifié"
 #: apps/note/tables.py:169 apps/note/tables.py:203 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
-#: apps/wei/tables.py:74 apps/wei/tables.py:114
+#: apps/wei/tables.py:74 apps/wei/tables.py:117
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:18
 #: note_kfet/templates/oauth2_provider/application_detail.html:39
@@ -1770,7 +1786,7 @@ msgstr "s'applique au club"
 msgid "role permissions"
 msgstr "permissions par rôles"
 
-#: apps/permission/signals.py:67
+#: apps/permission/signals.py:73
 #, python-brace-format
 msgid ""
 "You don't have the permission to change the field {field} on this instance "
@@ -1779,7 +1795,7 @@ msgstr ""
 "Vous n'avez pas la permission de modifier le champ {field} sur l'instance du "
 "modèle {app_label}.{model_name}."
 
-#: apps/permission/signals.py:77 apps/permission/views.py:105
+#: apps/permission/signals.py:83 apps/permission/views.py:105
 #, python-brace-format
 msgid ""
 "You don't have the permission to add an instance of model {app_label}."
@@ -1788,7 +1804,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle {app_label}."
 "{model_name}."
 
-#: apps/permission/signals.py:106
+#: apps/permission/signals.py:112
 #, python-brace-format
 msgid ""
 "You don't have the permission to delete this instance of model {app_label}."
@@ -2035,50 +2051,50 @@ msgstr "L'équipe de la Note Kfet."
 msgid "Register new user"
 msgstr "Enregistrer un nouvel utilisateur"
 
-#: apps/registration/views.py:95
+#: apps/registration/views.py:98
 msgid "Email validation"
 msgstr "Validation de l'adresse mail"
 
-#: apps/registration/views.py:97
+#: apps/registration/views.py:100
 msgid "Validate email"
 msgstr "Valider l'adresse e-mail"
 
-#: apps/registration/views.py:141
+#: apps/registration/views.py:144
 msgid "Email validation unsuccessful"
 msgstr "La validation de l'adresse mail a échoué"
 
-#: apps/registration/views.py:152
+#: apps/registration/views.py:155
 msgid "Email validation email sent"
 msgstr "L'email de vérification de l'adresse email a bien été envoyé"
 
-#: apps/registration/views.py:160
+#: apps/registration/views.py:163
 msgid "Resend email validation link"
 msgstr "Renvoyer le lien de validation"
 
-#: apps/registration/views.py:178
+#: apps/registration/views.py:181
 msgid "Pre-registered users list"
 msgstr "Liste des utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:202
+#: apps/registration/views.py:205
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:215
+#: apps/registration/views.py:218
 msgid "Registration detail"
 msgstr "Détails de l'inscription"
 
-#: apps/registration/views.py:279
+#: apps/registration/views.py:282
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
-#: apps/registration/views.py:303
+#: apps/registration/views.py:306
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:384
+#: apps/registration/views.py:387
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
@@ -2494,12 +2510,18 @@ msgstr "Gérer les crédits de la Société générale"
 msgid "WEI"
 msgstr "WEI"
 
-#: apps/wei/forms/registration.py:51 apps/wei/models.py:118
+#: apps/wei/forms/registration.py:35
+msgid "The selected user is not validated. Please validate its account first"
+msgstr ""
+"L'utilisateur sélectionné n'est pas validé. Merci de d'abord valider son "
+"compte."
+
+#: apps/wei/forms/registration.py:60 apps/wei/models.py:118
 #: apps/wei/models.py:315
 msgid "bus"
 msgstr "bus"
 
-#: apps/wei/forms/registration.py:52
+#: apps/wei/forms/registration.py:61
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
@@ -2508,11 +2530,11 @@ msgstr ""
 "attribuer un bus et une équipe, en particulier si vous êtes un électron "
 "libre."
 
-#: apps/wei/forms/registration.py:59
+#: apps/wei/forms/registration.py:68
 msgid "Team"
 msgstr "Équipe"
 
-#: apps/wei/forms/registration.py:61
+#: apps/wei/forms/registration.py:70
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
@@ -2520,16 +2542,16 @@ msgstr ""
 "Laissez ce champ vide si vous ne serez pas dans une équipe (staff, chef de "
 "bus ou électron libre)"
 
-#: apps/wei/forms/registration.py:67 apps/wei/forms/registration.py:77
+#: apps/wei/forms/registration.py:76 apps/wei/forms/registration.py:86
 #: apps/wei/models.py:153
 msgid "WEI Roles"
 msgstr "Rôles au WEI"
 
-#: apps/wei/forms/registration.py:68
+#: apps/wei/forms/registration.py:77
 msgid "Select the roles that you are interested in."
 msgstr "Sélectionnez les rôles qui vous intéressent."
 
-#: apps/wei/forms/registration.py:113
+#: apps/wei/forms/registration.py:122
 msgid "This team doesn't belong to the given bus."
 msgstr "Cette équipe n'appartient pas à ce bus."
 
@@ -2688,23 +2710,29 @@ msgid "The user does not have enough money."
 msgstr "L'utilisateur n'a pas assez d'argent."
 
 #: apps/wei/tables.py:107
+msgid "The user is in first year, and the repartition algorithm didn't run."
+msgstr ""
+"L'utilisateur est en première année, et l'algorithme de répartition n'a pas "
+"tourné."
+
+#: apps/wei/tables.py:110
 msgid "The user has enough money, you can validate the registration."
 msgstr "L'utilisateur a assez d'argent, l'inscription est possible."
 
-#: apps/wei/tables.py:139
+#: apps/wei/tables.py:142
 msgid "Year"
 msgstr "Année"
 
-#: apps/wei/tables.py:177 apps/wei/templates/wei/bus_detail.html:32
+#: apps/wei/tables.py:180 apps/wei/templates/wei/bus_detail.html:32
 #: apps/wei/templates/wei/busteam_detail.html:50
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/tables.py:186 apps/wei/tables.py:227
+#: apps/wei/tables.py:189 apps/wei/tables.py:230
 msgid "Members count"
 msgstr "Nombre de membres"
 
-#: apps/wei/tables.py:193 apps/wei/tables.py:224
+#: apps/wei/tables.py:196 apps/wei/tables.py:227
 msgid "members"
 msgstr "adhérents"
 
