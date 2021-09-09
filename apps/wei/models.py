@@ -364,8 +364,19 @@ class WEIMembership(Membership):
                 # to treasurers.
                 transaction.refresh_from_db()
                 from treasury.models import SogeCredit
-                soge_credit = SogeCredit.objects.get_or_create(user=self.user)[0]
+                soge_credit, created = SogeCredit.objects.get_or_create(user=self.user)
                 soge_credit.refresh_from_db()
                 transaction.save()
                 soge_credit.transactions.add(transaction)
                 soge_credit.save()
+
+                soge_credit.update_transactions()
+                soge_credit.save()
+
+                if soge_credit.valid and \
+                        soge_credit.credit_transaction.total != sum(tr.total for tr in soge_credit.transactions.all()):
+                    # The credit is already validated, but we add a new transaction (eg. for the WEI).
+                    # Then we invalidate the transaction, update the credit transaction amount
+                    # and re-validate the credit.
+                    soge_credit.validate(True)
+                    soge_credit.save()

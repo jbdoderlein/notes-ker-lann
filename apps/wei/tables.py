@@ -99,9 +99,12 @@ class WEIRegistrationTable(tables.Table):
 
         url = reverse_lazy('wei:validate_registration', args=(record.pk,))
         text = _('Validate')
-        if record.fee > record.user.note.balance:
+        if record.fee > record.user.note.balance and not record.soge_credit:
             btn_class = 'btn-secondary'
             tooltip = _("The user does not have enough money.")
+        elif record.first_year and 'selected_bus_pk' not in record.information:
+            btn_class = 'btn-info'
+            tooltip = _("The user is in first year, and the repartition algorithm didn't run.")
         else:
             btn_class = 'btn-success'
             tooltip = _("The user has enough money, you can validate the registration.")

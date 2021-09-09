@@ -132,7 +132,7 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             wei=club
         )
         pre_registrations_table = WEIRegistrationTable(data=pre_registrations, prefix="pre-registration-")
-        pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('membership-page', 1))
+        pre_registrations_table.paginate(per_page=20, page=self.request.GET.get('pre-registration-page', 1))
         context['pre_registrations'] = pre_registrations_table
 
         my_registration = WEIRegistration.objects.filter(wei=club, user=self.request.user)
@@ -510,6 +510,10 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         # We can't register someone once the WEI is started and before the membership start date
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        # Don't register twice
+        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+            obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
+            return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -585,6 +589,10 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         # We can't register someone once the WEI is started and before the membership start date
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        # Don't register twice
+        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+            obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
+            return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -683,12 +691,14 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request, "wei.change_weiregistration_information_json", self.object):
+            information = self.object.information
+            d = dict(
+                bus=Bus.objects.filter(pk__in=information["preferred_bus_pk"]).all(),
+                team=BusTeam.objects.filter(pk__in=information["preferred_team_pk"]).all(),
+                roles=WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all(),
+            ) if 'preferred_bus_pk' in information else dict()
             choose_bus_form = WEIChooseBusForm(
-                self.request.POST if self.request.POST else dict(
-                    bus=Bus.objects.filter(pk__in=self.object.information["preferred_bus_pk"]).all(),
-                    team=BusTeam.objects.filter(pk__in=self.object.information["preferred_team_pk"]).all(),
-                    roles=WEIRole.objects.filter(pk__in=self.object.information["preferred_roles_pk"]).all(),
-                )
+                self.request.POST if self.request.POST else d
             )
             choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"])
             choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])
@@ -704,7 +714,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields["user"].disabled = True
-        if not self.object.first_year:
+        # The auto-json-format may cause issues with the default field remove
+        if not PermissionBackend.check_perm(self.request, 'wei.change_weiregistration_information_json', self.object):
             del form.fields["information_json"]
         return form
 
@@ -964,12 +975,11 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             membership.roles.set(WEIRole.objects.filter(name="1A").all())
             membership.save()
 
-        ret = super().form_valid(form)
-
+        membership.save()
         membership.refresh_from_db()
         membership.roles.add(WEIRole.objects.get(name="Adhérent WEI"))
 
-        return ret
+        return super().form_valid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 21:17+0200\n"
+"POT-Creation-Date: 2021-09-08 18:46+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -111,7 +111,7 @@ msgid "type"
 msgstr "type"
 
 #: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:305
-#: apps/note/models/notes.py:148 apps/treasury/models.py:283
+#: apps/note/models/notes.py:148 apps/treasury/models.py:286
 #: apps/wei/models.py:165 apps/wei/templates/wei/survey.html:15
 msgid "user"
 msgstr "utilisateur"
@@ -251,20 +251,20 @@ msgstr "Entré le "
 msgid "remove"
 msgstr "supprimer"
 
-#: apps/activity/tables.py:80 apps/note/forms.py:68 apps/treasury/models.py:197
+#: apps/activity/tables.py:80 apps/note/forms.py:68 apps/treasury/models.py:200
 msgid "Type"
 msgstr "Type"
 
 #: apps/activity/tables.py:82 apps/member/forms.py:186
-#: apps/registration/forms.py:90 apps/treasury/forms.py:130
-#: apps/wei/forms/registration.py:96
+#: apps/registration/forms.py:90 apps/treasury/forms.py:131
+#: apps/wei/forms/registration.py:105
 msgid "Last name"
 msgstr "Nom de famille"
 
 #: apps/activity/tables.py:84 apps/member/forms.py:191
 #: apps/note/templates/note/transaction_form.html:134
-#: apps/registration/forms.py:95 apps/treasury/forms.py:132
-#: apps/wei/forms/registration.py:101
+#: apps/registration/forms.py:95 apps/treasury/forms.py:133
+#: apps/wei/forms/registration.py:110
 msgid "First name"
 msgstr "Prénom"
 
@@ -327,7 +327,7 @@ msgstr "Entrée effectuée !"
 #: apps/member/templates/member/add_members.html:46
 #: apps/member/templates/member/club_form.html:16
 #: apps/note/templates/note/transactiontemplate_form.html:18
-#: apps/treasury/forms.py:88 apps/treasury/forms.py:142
+#: apps/treasury/forms.py:89 apps/treasury/forms.py:143
 #: apps/treasury/templates/treasury/invoice_form.html:74
 #: apps/wei/templates/wei/bus_form.html:17
 #: apps/wei/templates/wei/busteam_form.html:17
@@ -508,7 +508,7 @@ msgstr "rôles"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/apps.py:14 apps/wei/tables.py:193 apps/wei/tables.py:224
+#: apps/member/apps.py:14 apps/wei/tables.py:196 apps/wei/tables.py:227
 msgid "member"
 msgstr "adhérent"
 
@@ -540,8 +540,8 @@ msgstr "Taille maximale : 2 Mo"
 msgid "This image cannot be loaded."
 msgstr "Cette image ne peut pas être chargée."
 
-#: apps/member/forms.py:141 apps/member/views.py:100
-#: apps/registration/forms.py:33 apps/registration/views.py:254
+#: apps/member/forms.py:141 apps/member/views.py:102
+#: apps/registration/forms.py:33 apps/registration/views.py:262
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
@@ -554,12 +554,12 @@ msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
 #: apps/member/forms.py:172 apps/registration/forms.py:77
-#: apps/wei/forms/registration.py:83
+#: apps/wei/forms/registration.py:92
 msgid "Credit type"
 msgstr "Type de rechargement"
 
 #: apps/member/forms.py:173 apps/registration/forms.py:78
-#: apps/wei/forms/registration.py:84
+#: apps/wei/forms/registration.py:93
 msgid "No credit"
 msgstr "Pas de rechargement"
 
@@ -568,13 +568,13 @@ msgid "You can credit the note of the user."
 msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
 #: apps/member/forms.py:179 apps/registration/forms.py:83
-#: apps/wei/forms/registration.py:89
+#: apps/wei/forms/registration.py:98
 msgid "Credit amount"
 msgstr "Montant à créditer"
 
 #: apps/member/forms.py:196 apps/note/templates/note/transaction_form.html:140
-#: apps/registration/forms.py:100 apps/treasury/forms.py:134
-#: apps/wei/forms/registration.py:106
+#: apps/registration/forms.py:100 apps/treasury/forms.py:135
+#: apps/wei/forms/registration.py:115
 msgid "Bank"
 msgstr "Banque"
 
@@ -585,6 +585,22 @@ msgstr "Utilisateur"
 #: apps/member/forms.py:237
 msgid "Roles"
 msgstr "Rôles"
+
+#: apps/member/hashers.py:57
+msgid "algorithm"
+msgstr "algorithme"
+
+#: apps/member/hashers.py:58
+msgid "iterations"
+msgstr "itérations"
+
+#: apps/member/hashers.py:59
+msgid "salt"
+msgstr "salage"
+
+#: apps/member/hashers.py:60
+msgid "hash"
+msgstr "haché"
 
 #: apps/member/models.py:38
 #: apps/member/templates/member/includes/profile_info.html:35
@@ -688,7 +704,7 @@ msgid "address"
 msgstr "adresse"
 
 #: apps/member/models.py:90
-#: apps/member/templates/member/includes/profile_info.html:46
+#: apps/member/templates/member/includes/profile_info.html:42
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:47
 msgid "paid"
@@ -835,7 +851,7 @@ msgstr "Le rôle {role} ne s'applique pas au club {club}."
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:443 apps/member/views.py:661
+#: apps/member/models.py:443 apps/member/views.py:660
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
@@ -944,7 +960,8 @@ msgstr ""
 "déverrouiller lui-même."
 
 #: apps/member/templates/member/base.html:110
-#: apps/member/templates/member/base.html:137 apps/treasury/forms.py:90
+#: apps/member/templates/member/base.html:137 apps/treasury/forms.py:91
+#: apps/treasury/templates/treasury/sogecredit_list.html:72
 msgid "Close"
 msgstr "Fermer"
 
@@ -968,6 +985,8 @@ msgstr "Alias de la note"
 #: apps/member/templates/member/club_alias.html:20
 #: apps/member/templates/member/profile_alias.html:19
 #: apps/treasury/tables.py:99
+#: apps/treasury/templates/treasury/sogecredit_list.html:34
+#: apps/treasury/templates/treasury/sogecredit_list.html:73
 msgid "Add"
 msgstr "Ajouter"
 
@@ -1017,7 +1036,7 @@ msgid "membership fee"
 msgstr "cotisation pour adhérer"
 
 #: apps/member/templates/member/includes/club_info.html:43
-#: apps/member/templates/member/includes/profile_info.html:43
+#: apps/member/templates/member/includes/profile_info.html:47
 #: apps/treasury/templates/treasury/sogecredit_detail.html:24
 #: apps/wei/templates/wei/base.html:60
 msgid "balance"
@@ -1133,7 +1152,7 @@ msgstr "Inscriptions"
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:138
+#: apps/member/views.py:139
 msgid "Profile detail"
 msgstr "Détails de l'utilisateur"
 
@@ -1169,7 +1188,7 @@ msgstr "Modifier le club"
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:642 apps/wei/views.py:917
+#: apps/member/views.py:642 apps/wei/views.py:932
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1177,19 +1196,19 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:665
+#: apps/member/views.py:664
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:670
+#: apps/member/views.py:669
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:816
+#: apps/member/views.py:815
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
 
-#: apps/member/views.py:841
+#: apps/member/views.py:840
 msgid "Members of the club"
 msgstr "Membres du club"
 
@@ -1475,8 +1494,8 @@ msgstr ""
 "mode de paiement et un utilisateur ou un club"
 
 #: apps/note/models/transactions.py:355 apps/note/models/transactions.py:358
-#: apps/note/models/transactions.py:361 apps/wei/views.py:922
-#: apps/wei/views.py:926
+#: apps/note/models/transactions.py:361 apps/wei/views.py:937
+#: apps/wei/views.py:941
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
@@ -1492,7 +1511,7 @@ msgstr "Transactions de crédit/retrait"
 msgid "membership transaction"
 msgstr "transaction d'adhésion"
 
-#: apps/note/models/transactions.py:385 apps/treasury/models.py:289
+#: apps/note/models/transactions.py:385 apps/treasury/models.py:293
 msgid "membership transactions"
 msgstr "transactions d'adhésion"
 
@@ -1511,7 +1530,7 @@ msgstr "Pas de motif spécifié"
 #: apps/note/tables.py:169 apps/note/tables.py:203 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
-#: apps/wei/tables.py:74 apps/wei/tables.py:114
+#: apps/wei/tables.py:74 apps/wei/tables.py:117
 #: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:18
 #: note_kfet/templates/oauth2_provider/application_detail.html:39
@@ -1599,14 +1618,14 @@ msgid "Action"
 msgstr "Action"
 
 #: apps/note/templates/note/transaction_form.html:112
-#: apps/treasury/forms.py:136 apps/treasury/tables.py:67
+#: apps/treasury/forms.py:137 apps/treasury/tables.py:67
 #: apps/treasury/tables.py:132
 #: apps/treasury/templates/treasury/remittance_form.html:23
 msgid "Amount"
 msgstr "Montant"
 
 #: apps/note/templates/note/transaction_form.html:128
-#: apps/treasury/models.py:52
+#: apps/treasury/models.py:55
 msgid "Name"
 msgstr "Nom"
 
@@ -1767,7 +1786,7 @@ msgstr "s'applique au club"
 msgid "role permissions"
 msgstr "permissions par rôles"
 
-#: apps/permission/signals.py:67
+#: apps/permission/signals.py:73
 #, python-brace-format
 msgid ""
 "You don't have the permission to change the field {field} on this instance "
@@ -1776,7 +1795,7 @@ msgstr ""
 "Vous n'avez pas la permission de modifier le champ {field} sur l'instance du "
 "modèle {app_label}.{model_name}."
 
-#: apps/permission/signals.py:77 apps/permission/views.py:105
+#: apps/permission/signals.py:83 apps/permission/views.py:105
 #, python-brace-format
 msgid ""
 "You don't have the permission to add an instance of model {app_label}."
@@ -1785,7 +1804,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle {app_label}."
 "{model_name}."
 
-#: apps/permission/signals.py:106
+#: apps/permission/signals.py:112
 #, python-brace-format
 msgid ""
 "You don't have the permission to delete this instance of model {app_label}."
@@ -2032,50 +2051,50 @@ msgstr "L'équipe de la Note Kfet."
 msgid "Register new user"
 msgstr "Enregistrer un nouvel utilisateur"
 
-#: apps/registration/views.py:95
+#: apps/registration/views.py:98
 msgid "Email validation"
 msgstr "Validation de l'adresse mail"
 
-#: apps/registration/views.py:97
+#: apps/registration/views.py:100
 msgid "Validate email"
 msgstr "Valider l'adresse e-mail"
 
-#: apps/registration/views.py:141
+#: apps/registration/views.py:144
 msgid "Email validation unsuccessful"
 msgstr "La validation de l'adresse mail a échoué"
 
-#: apps/registration/views.py:152
+#: apps/registration/views.py:155
 msgid "Email validation email sent"
 msgstr "L'email de vérification de l'adresse email a bien été envoyé"
 
-#: apps/registration/views.py:160
+#: apps/registration/views.py:163
 msgid "Resend email validation link"
 msgstr "Renvoyer le lien de validation"
 
-#: apps/registration/views.py:178
+#: apps/registration/views.py:181
 msgid "Pre-registered users list"
 msgstr "Liste des utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:202
+#: apps/registration/views.py:205
 msgid "Unregistered users"
 msgstr "Utilisateurs en attente d'inscription"
 
-#: apps/registration/views.py:215
+#: apps/registration/views.py:218
 msgid "Registration detail"
 msgstr "Détails de l'inscription"
 
-#: apps/registration/views.py:278
+#: apps/registration/views.py:282
 msgid "You must join the BDE."
 msgstr "Vous devez adhérer au BDE."
 
-#: apps/registration/views.py:302
+#: apps/registration/views.py:306
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Le montant crédité est trop faible pour adhérer, il doit être au minimum de "
 "{}"
 
-#: apps/registration/views.py:383
+#: apps/registration/views.py:387
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
@@ -2083,145 +2102,145 @@ msgstr "Invalider l'inscription"
 msgid "Treasury"
 msgstr "Trésorerie"
 
-#: apps/treasury/forms.py:25 apps/treasury/models.py:91
+#: apps/treasury/forms.py:26 apps/treasury/models.py:94
 #: apps/treasury/templates/treasury/invoice_form.html:22
 msgid "This invoice is locked and can no longer be edited."
 msgstr "Cette facture est verrouillée et ne peut plus être éditée."
 
-#: apps/treasury/forms.py:99
+#: apps/treasury/forms.py:100
 msgid "Remittance is already closed."
 msgstr "La remise est déjà fermée."
 
-#: apps/treasury/forms.py:104
+#: apps/treasury/forms.py:105
 msgid "You can't change the type of the remittance."
 msgstr "Vous ne pouvez pas changer le type de la remise."
 
-#: apps/treasury/forms.py:124 apps/treasury/models.py:265
+#: apps/treasury/forms.py:125 apps/treasury/models.py:268
 #: apps/treasury/tables.py:97 apps/treasury/tables.py:105
 #: apps/treasury/templates/treasury/invoice_list.html:16
 #: apps/treasury/templates/treasury/remittance_list.html:16
-#: apps/treasury/templates/treasury/sogecredit_list.html:16
+#: apps/treasury/templates/treasury/sogecredit_list.html:17
 msgid "Remittance"
 msgstr "Remise"
 
-#: apps/treasury/forms.py:125
+#: apps/treasury/forms.py:126
 msgid "No attached remittance"
 msgstr "Pas de remise associée"
 
-#: apps/treasury/models.py:24
+#: apps/treasury/models.py:27
 msgid "Invoice identifier"
 msgstr "Numéro de facture"
 
-#: apps/treasury/models.py:38
+#: apps/treasury/models.py:41
 msgid "BDE"
 msgstr "BDE"
 
-#: apps/treasury/models.py:43
+#: apps/treasury/models.py:46
 msgid "Object"
 msgstr "Objet"
 
-#: apps/treasury/models.py:47
+#: apps/treasury/models.py:50
 msgid "Description"
 msgstr "Description"
 
-#: apps/treasury/models.py:56
+#: apps/treasury/models.py:59
 msgid "Address"
 msgstr "Adresse"
 
-#: apps/treasury/models.py:61 apps/treasury/models.py:191
+#: apps/treasury/models.py:64 apps/treasury/models.py:194
 msgid "Date"
 msgstr "Date"
 
-#: apps/treasury/models.py:65
+#: apps/treasury/models.py:68
 msgid "Acquitted"
 msgstr "Acquittée"
 
-#: apps/treasury/models.py:70
+#: apps/treasury/models.py:73
 msgid "Locked"
 msgstr "Verrouillée"
 
-#: apps/treasury/models.py:71
+#: apps/treasury/models.py:74
 msgid "An invoice can't be edited when it is locked."
 msgstr "Une facture ne peut plus être modifiée si elle est verrouillée."
 
-#: apps/treasury/models.py:77
+#: apps/treasury/models.py:80
 msgid "tex source"
 msgstr "fichier TeX source"
 
-#: apps/treasury/models.py:111 apps/treasury/models.py:127
+#: apps/treasury/models.py:114 apps/treasury/models.py:130
 msgid "invoice"
 msgstr "facture"
 
-#: apps/treasury/models.py:112
+#: apps/treasury/models.py:115
 msgid "invoices"
 msgstr "factures"
 
-#: apps/treasury/models.py:115
+#: apps/treasury/models.py:118
 #, python-brace-format
 msgid "Invoice #{id}"
 msgstr "Facture n°{id}"
 
-#: apps/treasury/models.py:132
+#: apps/treasury/models.py:135
 msgid "Designation"
 msgstr "Désignation"
 
-#: apps/treasury/models.py:138
+#: apps/treasury/models.py:141
 msgid "Quantity"
 msgstr "Quantité"
 
-#: apps/treasury/models.py:143
+#: apps/treasury/models.py:146
 msgid "Unit price"
 msgstr "Prix unitaire"
 
-#: apps/treasury/models.py:159
+#: apps/treasury/models.py:162
 msgid "product"
 msgstr "produit"
 
-#: apps/treasury/models.py:160
+#: apps/treasury/models.py:163
 msgid "products"
 msgstr "produits"
 
-#: apps/treasury/models.py:180
+#: apps/treasury/models.py:183
 msgid "remittance type"
 msgstr "type de remise"
 
-#: apps/treasury/models.py:181
+#: apps/treasury/models.py:184
 msgid "remittance types"
 msgstr "types de remises"
 
-#: apps/treasury/models.py:202
+#: apps/treasury/models.py:205
 msgid "Comment"
 msgstr "Commentaire"
 
-#: apps/treasury/models.py:207
+#: apps/treasury/models.py:210
 msgid "Closed"
 msgstr "Fermée"
 
-#: apps/treasury/models.py:211
+#: apps/treasury/models.py:214
 msgid "remittance"
 msgstr "remise"
 
-#: apps/treasury/models.py:212
+#: apps/treasury/models.py:215
 msgid "remittances"
 msgstr "remises"
 
-#: apps/treasury/models.py:245
+#: apps/treasury/models.py:248
 msgid "Remittance #{:d}: {}"
 msgstr "Remise n°{:d} : {}"
 
-#: apps/treasury/models.py:269
+#: apps/treasury/models.py:272
 msgid "special transaction proxy"
 msgstr "proxy de transaction spéciale"
 
-#: apps/treasury/models.py:270
+#: apps/treasury/models.py:273
 msgid "special transaction proxies"
 msgstr "proxys de transactions spéciales"
 
-#: apps/treasury/models.py:295
+#: apps/treasury/models.py:299
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:379
+#: apps/treasury/models.py:418
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2229,16 +2248,16 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:399
+#: apps/treasury/models.py:438
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:400
+#: apps/treasury/models.py:439
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
-#: apps/treasury/models.py:403
+#: apps/treasury/models.py:442
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédit de la société générale pour l'utilisateur {user}"
@@ -2250,7 +2269,7 @@ msgstr "Facture n°{:d}"
 #: apps/treasury/tables.py:25
 #: apps/treasury/templates/treasury/invoice_list.html:13
 #: apps/treasury/templates/treasury/remittance_list.html:13
-#: apps/treasury/templates/treasury/sogecredit_list.html:13
+#: apps/treasury/templates/treasury/sogecredit_list.html:14
 msgid "Invoice"
 msgstr "Facture"
 
@@ -2267,12 +2286,12 @@ msgid "Yes"
 msgstr "Oui"
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:10
-#: apps/treasury/views.py:179
+#: apps/treasury/views.py:180
 msgid "Delete invoice"
 msgstr "Supprimer la facture"
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:15
-#: apps/treasury/views.py:183
+#: apps/treasury/views.py:184
 msgid "This invoice is locked and can't be deleted."
 msgstr "Cette facture est verrouillée et ne peut pas être supprimée."
 
@@ -2306,7 +2325,7 @@ msgstr "Retirer produit"
 
 #: apps/treasury/templates/treasury/invoice_list.html:19
 #: apps/treasury/templates/treasury/remittance_list.html:19
-#: apps/treasury/templates/treasury/sogecredit_list.html:19
+#: apps/treasury/templates/treasury/sogecredit_list.html:20
 msgid "Société générale credits"
 msgstr "Crédits de la Société générale"
 
@@ -2426,54 +2445,62 @@ msgstr "Valider"
 msgid "Return to credit list"
 msgstr "Retour à la liste des crédits"
 
-#: apps/treasury/templates/treasury/sogecredit_list.html:34
+#: apps/treasury/templates/treasury/sogecredit_list.html:40
 msgid "Filter with unvalidated credits only"
 msgstr "Filtrer avec uniquement les crédits non valides"
 
-#: apps/treasury/templates/treasury/sogecredit_list.html:44
+#: apps/treasury/templates/treasury/sogecredit_list.html:50
 msgid "There is no matched user that have asked for a Société générale credit."
 msgstr ""
 "Il n'y a pas d'utilisateur trouvé ayant demandé un crédit de la Société "
 "générale."
 
-#: apps/treasury/views.py:39
+#: apps/treasury/templates/treasury/sogecredit_list.html:63
+msgid "Add credit from the Société générale"
+msgstr "Ajouter un crédit de la Société générale"
+
+#: apps/treasury/templates/treasury/sogecredit_list.html:109
+msgid "Credit successfully registered"
+msgstr "Le crédit a bien été enregistré"
+
+#: apps/treasury/views.py:40
 msgid "Create new invoice"
 msgstr "Créer une nouvelle facture"
 
-#: apps/treasury/views.py:96
+#: apps/treasury/views.py:97
 msgid "Invoices list"
 msgstr "Liste des factures"
 
-#: apps/treasury/views.py:111 apps/treasury/views.py:285
-#: apps/treasury/views.py:411
+#: apps/treasury/views.py:112 apps/treasury/views.py:286
+#: apps/treasury/views.py:412
 msgid "You are not able to see the treasury interface."
 msgstr "Vous n'êtes pas autorisé à voir l'interface de trésorerie."
 
-#: apps/treasury/views.py:121
+#: apps/treasury/views.py:122
 msgid "Update an invoice"
 msgstr "Modifier la facture"
 
-#: apps/treasury/views.py:246
+#: apps/treasury/views.py:247
 msgid "Create a new remittance"
 msgstr "Créer une nouvelle remise"
 
-#: apps/treasury/views.py:273
+#: apps/treasury/views.py:274
 msgid "Remittances list"
 msgstr "Liste des remises"
 
-#: apps/treasury/views.py:336
+#: apps/treasury/views.py:337
 msgid "Update a remittance"
 msgstr "Modifier la remise"
 
-#: apps/treasury/views.py:359
+#: apps/treasury/views.py:360
 msgid "Attach a transaction to a remittance"
 msgstr "Joindre une transaction à une remise"
 
-#: apps/treasury/views.py:403
+#: apps/treasury/views.py:404
 msgid "List of credits from the Société générale"
 msgstr "Liste des crédits de la Société générale"
 
-#: apps/treasury/views.py:443
+#: apps/treasury/views.py:449
 msgid "Manage credits from the Société générale"
 msgstr "Gérer les crédits de la Société générale"
 
@@ -2483,12 +2510,18 @@ msgstr "Gérer les crédits de la Société générale"
 msgid "WEI"
 msgstr "WEI"
 
-#: apps/wei/forms/registration.py:51 apps/wei/models.py:118
+#: apps/wei/forms/registration.py:35
+msgid "The selected user is not validated. Please validate its account first"
+msgstr ""
+"L'utilisateur sélectionné n'est pas validé. Merci de d'abord valider son "
+"compte."
+
+#: apps/wei/forms/registration.py:60 apps/wei/models.py:118
 #: apps/wei/models.py:315
 msgid "bus"
 msgstr "bus"
 
-#: apps/wei/forms/registration.py:52
+#: apps/wei/forms/registration.py:61
 msgid ""
 "This choice is not definitive. The WEI organizers are free to attribute for "
 "you a bus and a team, in particular if you are a free eletron."
@@ -2497,11 +2530,11 @@ msgstr ""
 "attribuer un bus et une équipe, en particulier si vous êtes un électron "
 "libre."
 
-#: apps/wei/forms/registration.py:59
+#: apps/wei/forms/registration.py:68
 msgid "Team"
 msgstr "Équipe"
 
-#: apps/wei/forms/registration.py:61
+#: apps/wei/forms/registration.py:70
 msgid ""
 "Leave this field empty if you won't be in a team (staff, bus chief, free "
 "electron)"
@@ -2509,16 +2542,16 @@ msgstr ""
 "Laissez ce champ vide si vous ne serez pas dans une équipe (staff, chef de "
 "bus ou électron libre)"
 
-#: apps/wei/forms/registration.py:67 apps/wei/forms/registration.py:77
+#: apps/wei/forms/registration.py:76 apps/wei/forms/registration.py:86
 #: apps/wei/models.py:153
 msgid "WEI Roles"
 msgstr "Rôles au WEI"
 
-#: apps/wei/forms/registration.py:68
+#: apps/wei/forms/registration.py:77
 msgid "Select the roles that you are interested in."
 msgstr "Sélectionnez les rôles qui vous intéressent."
 
-#: apps/wei/forms/registration.py:113
+#: apps/wei/forms/registration.py:122
 msgid "This team doesn't belong to the given bus."
 msgstr "Cette équipe n'appartient pas à ce bus."
 
@@ -2677,23 +2710,29 @@ msgid "The user does not have enough money."
 msgstr "L'utilisateur n'a pas assez d'argent."
 
 #: apps/wei/tables.py:107
+msgid "The user is in first year, and the repartition algorithm didn't run."
+msgstr ""
+"L'utilisateur est en première année, et l'algorithme de répartition n'a pas "
+"tourné."
+
+#: apps/wei/tables.py:110
 msgid "The user has enough money, you can validate the registration."
 msgstr "L'utilisateur a assez d'argent, l'inscription est possible."
 
-#: apps/wei/tables.py:139
+#: apps/wei/tables.py:142
 msgid "Year"
 msgstr "Année"
 
-#: apps/wei/tables.py:177 apps/wei/templates/wei/bus_detail.html:32
+#: apps/wei/tables.py:180 apps/wei/templates/wei/bus_detail.html:32
 #: apps/wei/templates/wei/busteam_detail.html:50
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/tables.py:186 apps/wei/tables.py:227
+#: apps/wei/tables.py:189 apps/wei/tables.py:230
 msgid "Members count"
 msgstr "Nombre de membres"
 
-#: apps/wei/tables.py:193 apps/wei/tables.py:224
+#: apps/wei/tables.py:196 apps/wei/tables.py:227
 msgid "members"
 msgstr "adhérents"
 
@@ -2713,11 +2752,11 @@ msgstr "Prix du WEI (étudiants)"
 msgid "WEI list"
 msgstr "Liste des WEI"
 
-#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:510
+#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:517
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:578
+#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:592
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
@@ -2746,8 +2785,8 @@ msgstr "Télécharger au format PDF"
 
 #: apps/wei/templates/wei/survey.html:11
 #: apps/wei/templates/wei/survey_closed.html:11
-#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:973
-#: apps/wei/views.py:1028 apps/wei/views.py:1038
+#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:988
+#: apps/wei/views.py:1043 apps/wei/views.py:1053
 msgid "Survey WEI"
 msgstr "Questionnaire WEI"
 
@@ -2985,11 +3024,11 @@ msgstr "Gérer l'équipe WEI"
 msgid "Register first year student to the WEI"
 msgstr "Inscrire un 1A au WEI"
 
-#: apps/wei/views.py:532 apps/wei/views.py:613
+#: apps/wei/views.py:539 apps/wei/views.py:627
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:537
+#: apps/wei/views.py:544
 msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
@@ -2997,27 +3036,27 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:554
+#: apps/wei/views.py:561
 msgid "Register old student to the WEI"
 msgstr "Inscrire un 2A+ au WEI"
 
-#: apps/wei/views.py:597 apps/wei/views.py:686
+#: apps/wei/views.py:611 apps/wei/views.py:700
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:643
+#: apps/wei/views.py:657
 msgid "Update WEI Registration"
 msgstr "Modifier l'inscription WEI"
 
-#: apps/wei/views.py:746
+#: apps/wei/views.py:761
 msgid "Delete WEI registration"
 msgstr "Supprimer l'inscription WEI"
 
-#: apps/wei/views.py:757
+#: apps/wei/views.py:772
 msgid "You don't have the right to delete this WEI registration."
 msgstr "Vous n'avez pas la permission de supprimer cette inscription au WEI."
 
-#: apps/wei/views.py:776
+#: apps/wei/views.py:791
 msgid "Validate WEI registration"
 msgstr "Valider l'inscription WEI"
 
@@ -3141,13 +3180,7 @@ msgstr ""
 "Vous n'êtes plus adhérent BDE. Merci de réadhérer si vous voulez profiter de "
 "la note."
 
-#: note_kfet/templates/base.html:164
-msgid "You are not a Kfet member, so you can't use your note account."
-msgstr ""
-"Vous n'êtes pas adhérent Kfet, vous ne pouvez par conséquent pas utiliser "
-"votre compte note."
-
-#: note_kfet/templates/base.html:170
+#: note_kfet/templates/base.html:166
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3155,7 +3188,7 @@ msgstr ""
 "Votre adresse e-mail n'est pas validée. Merci de vérifier votre boîte mail "
 "et de cliquer sur le lien de validation."
 
-#: note_kfet/templates/base.html:176
+#: note_kfet/templates/base.html:172
 msgid ""
 "You declared that you opened a bank account in the Société générale. The "
 "bank did not validate the creation of the account to the BDE, so the "
@@ -3170,7 +3203,7 @@ msgstr ""
 "durer quelques jours. Merci de vous assurer de bien aller au bout de vos "
 "démarches."
 
-#: note_kfet/templates/base.html:199
+#: note_kfet/templates/base.html:195
 msgid "Contact us"
 msgstr "Nous contacter"
 
@@ -3218,9 +3251,10 @@ msgid ""
 "link templates and convert permissions to scope numbers with the permissions "
 "that you want to grant for your application."
 msgstr ""
-"Vous pouvez aller <a href=\"%(scopes_url)s\">ici</a> pour générer des modèles "
-"de liens d'autorisation et convertir des permissions en identifiants de "
-"scopes avec les permissions que vous souhaitez attribuer à votre application."
+"Vous pouvez aller <a href=\"%(scopes_url)s\">ici</a> pour générer des "
+"modèles de liens d'autorisation et convertir des permissions en identifiants "
+"de scopes avec les permissions que vous souhaitez attribuer à votre "
+"application."
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:37
 #: note_kfet/templates/oauth2_provider/application_form.html:23
@@ -3400,3 +3434,8 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
+
+#~ msgid "You are not a Kfet member, so you can't use your note account."
+#~ msgstr ""
+#~ "Vous n'êtes pas adhérent Kfet, vous ne pouvez par conséquent pas utiliser "
+#~ "votre compte note."

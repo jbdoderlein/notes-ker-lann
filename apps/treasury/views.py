@@ -25,7 +25,8 @@ from note_kfet.settings.base import BASE_DIR
 from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
-from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, LinkTransactionToRemittanceForm
+from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, \
+    LinkTransactionToRemittanceForm, SogeCreditForm
 from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
 from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
 
@@ -432,6 +433,11 @@ class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableVi
             qs = qs.filter(credit_transaction__valid=False)
 
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SogeCreditForm(self.request.POST or None)
+        return context
 
 
 class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormView, DetailView):

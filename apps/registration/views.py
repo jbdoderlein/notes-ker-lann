@@ -85,6 +85,9 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        # Direct access to validation menu if we have the right to validate it
+        if PermissionBackend.check_perm(self.request, 'auth.view_user', self.object):
+            return reverse_lazy('registration:future_user_detail', args=(self.object.pk,))
         return reverse_lazy('registration:email_validation_sent')
 
 

@@ -3,6 +3,7 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
 {% load render_table from django_tables2 %}
+{% load crispy_forms_filters %}
 {% load i18n %}
 
 {% block content %}
@@ -27,7 +28,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {{ title }}
     </h3>
     <div class="card-body">
-        <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+        <div class="input-group">
+            <input id="searchbar" type="text" class="form-control" placeholder="Nom/prénom/note ...">
+            <div class="input-group-append">
+                <button id="add_sogecredit" class="btn btn-success" data-toggle="modal" data-target="#add-sogecredit-modal">{% trans "Add" %}</button>
+            </div>
+        </div>
         <div class="form-check">
             <label for="invalid_only" class="form-check-label">
                 <input id="invalid_only" name="invalid_only" type="checkbox" class="checkboxinput form-check-input" checked>
@@ -47,28 +53,65 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {% endif %}
     </div>
 </div>
+
+{# Popup to add new Soge credits manually if needed #}
+<div class="modal fade" id="add-sogecredit-modal" tabindex="-1" role="dialog" aria-labelledby="addSogeCredit"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lockNote">{% trans "Add credit from the Société générale" %}</h5>
+                <button type="button" class="close btn-modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form|crispy }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">{% trans "Close" %}</button>
+                <button type="button" class="btn btn-success btn-modal" data-dismiss="modal" onclick="addSogeCredit()">{% trans "Add" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extrajavascript %}
 <script type="text/javascript">
-    $(document).ready(function () {
-        let old_pattern = null;
-        let searchbar_obj = $("#searchbar");
-        let invalid_only_obj = $("#invalid_only");
+    let old_pattern = null;
+    let searchbar_obj = $("#searchbar");
+    let invalid_only_obj = $("#invalid_only");
 
-        function reloadTable() {
-            let pattern = searchbar_obj.val();
+    function reloadTable() {
+        let pattern = searchbar_obj.val();
 
-            $("#credits_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + (
-                invalid_only_obj.is(':checked') ? "" : "&valid=1") + " #credits_table");
+        $("#credits_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + (
+            invalid_only_obj.is(':checked') ? "" : "&valid=1") + " #credits_table");
 
-            $(".table-row").click(function () {
-                window.document.location = $(this).data("href");
-            });
-        }
+        $(".table-row").click(function () {
+            window.document.location = $(this).data("href");
+        });
+    }
 
-        searchbar_obj.keyup(reloadTable);
-        invalid_only_obj.change(reloadTable);
-    });
+    searchbar_obj.keyup(reloadTable);
+    invalid_only_obj.change(reloadTable);
+
+    function addSogeCredit() {
+        let user_pk = $('#id_user_pk').val()
+        if (!user_pk)
+            return
+
+        $.post('/api/treasury/soge_credit/?format=json', {
+            csrfmiddlewaretoken: CSRF_TOKEN,
+            user: user_pk,
+        }).done(function() {
+            addMsg("{% trans "Credit successfully registered" %}", 'success', 10000)
+            reloadTable()
+        }).fail(function (xhr) {
+            errMsg(xhr.responseJSON, 30000)
+            reloadTable()
+        })
+    }
 </script>
 {% endblock %}
