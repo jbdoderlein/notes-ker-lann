@@ -973,12 +973,11 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             membership.roles.set(WEIRole.objects.filter(name="1A").all())
             membership.save()
 
-        ret = super().form_valid(form)
-
+        membership.save()
         membership.refresh_from_db()
         membership.roles.add(WEIRole.objects.get(name="Adhérent WEI"))
 
-        return ret
+        return super().form_valid(form)
 
     def get_success_url(self):
         self.object.refresh_from_db()
