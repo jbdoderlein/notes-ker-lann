@@ -159,6 +159,10 @@ class PermissionBackend(ModelBackend):
         primary key, the result is not memoized. Moreover, the right could change
         (e.g. for a transaction, the balance of the user could change)
         """
+        # Requested by a shell
+        if request is None:
+            return False
+
         user_obj = request.user
         sess = request.session
 

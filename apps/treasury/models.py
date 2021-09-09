@@ -3,6 +3,7 @@
 
 from datetime import date
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -11,6 +12,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from member.models import Club, Membership
 from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction, NoteUser
 
 
@@ -286,6 +288,7 @@ class SogeCredit(models.Model):
     transactions = models.ManyToManyField(
         MembershipTransaction,
         related_name="+",
+        blank=True,
         verbose_name=_("membership transactions"),
     )
 
@@ -304,6 +307,42 @@ class SogeCredit(models.Model):
     def amount(self):
         return self.credit_transaction.total if self.valid \
             else sum(transaction.total for transaction in self.transactions.all())
+
+    def update_transactions(self):
+        """
+        The Sogé credit may be created after the user already paid its memberships.
+        We query transactions and update the credit, if it is unvalid.
+        """
+        if self.valid or not self.pk:
+            return
+
+        bde = Club.objects.get(name="BDE")
+        kfet = Club.objects.get(name="Kfet")
+        bde_qs = Membership.objects.filter(user=self.user, club=bde, date_start__gte=bde.membership_start)
+        kfet_qs = Membership.objects.filter(user=self.user, club=kfet, date_start__gte=kfet.membership_start)
+
+        if bde_qs.exists():
+            m = bde_qs.get()
+            if m.transaction not in self.transactions.all():
+                self.transactions.add(m.transaction)
+
+        if kfet_qs.exists():
+            m = kfet_qs.get()
+            if m.transaction not in self.transactions.all():
+                self.transactions.add(m.transaction)
+
+        if 'wei' in settings.INSTALLED_APPS:
+            from wei.models import WEIClub
+            wei = WEIClub.objects.order_by('-year').first()
+            wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
+            if wei_qs.exists():
+                m = wei_qs.get()
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
+
+        for tr in self.transactions.all():
+            tr.valid = False
+            tr.save()
 
     def invalidate(self):
         """
@@ -365,7 +404,8 @@ class SogeCredit(models.Model):
             self.credit_transaction.amount = self.amount
             self.credit_transaction._force_save = True
             self.credit_transaction.save()
-        super().save(*args, **kwargs)
+
+        return super().save(*args, **kwargs)
 
     def delete(self, **kwargs):
         """

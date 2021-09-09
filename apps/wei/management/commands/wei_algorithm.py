@@ -28,7 +28,8 @@ class Command(BaseCommand):
 
         output = options['output']
         registrations = algorithm.get_registrations()
-        per_bus = {bus: [r for r in registrations if r.information['selected_bus_pk'] == bus.pk]
+        per_bus = {bus: [r for r in registrations if 'selected_bus_pk' in r.information
+                         and r.information['selected_bus_pk'] == bus.pk]
                    for bus in algorithm.get_buses()}
         for bus, members in per_bus.items():
             output.write(bus.name + "\n")

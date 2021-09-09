@@ -57,7 +57,7 @@ class Profile(models.Model):
             ('A1', _("Mathematics (A1)")),
             ('A2', _("Physics (A2)")),
             ("A'2", _("Applied physics (A'2)")),
-            ('A''2', _("Chemistry (A''2)")),
+            ("A''2", _("Chemistry (A''2)")),
             ('A3', _("Biology (A3)")),
             ('B1234', _("SAPHIRE (B1234)")),
             ('B1', _("Mechanics (B1)")),

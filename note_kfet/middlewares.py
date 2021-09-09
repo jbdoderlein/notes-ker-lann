@@ -75,7 +75,7 @@ class LoginByIPMiddleware(object):
             else:
                 ip = request.META.get('REMOTE_ADDR')
 
-            qs = User.objects.filter(password=f"ipbased${ip}")
+            qs = User.objects.filter(password__iregex=f"ipbased\\$.*\\^{ip}\\$.*")
             if qs.exists():
                 login(request, qs.get())
                 session = request.session

@@ -4,11 +4,12 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
-from note_kfet.inputs import AmountInput
+from note_kfet.inputs import AmountInput, Autocomplete
 
-from .models import Invoice, Product, Remittance, SpecialTransactionProxy
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
 
 
 class InvoiceForm(forms.ModelForm):
@@ -161,3 +162,19 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
     class Meta:
         model = SpecialTransactionProxy
         fields = ('remittance', )
+
+
+class SogeCreditForm(forms.ModelForm):
+    class Meta:
+        model = SogeCredit
+        fields = ('user', )
+        widgets = {
+            "user": Autocomplete(
+                User,
+                attrs={
+                    'api_url': '/api/user/',
+                    'name_field': 'username',
+                    'placeholder': 'Nom ...',
+                },
+            ),
+        }
