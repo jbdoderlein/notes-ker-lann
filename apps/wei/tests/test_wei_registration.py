@@ -65,8 +65,6 @@ class TestWEIRegistration(TestCase):
         sess["permission_mask"] = 42
         sess.save()
 
-        NoteUser.objects.create(user=self.user)
-
         self.year = timezone.now().year
         self.wei = WEIClub.objects.create(
             name="Test WEI",
@@ -304,6 +302,7 @@ class TestWEIRegistration(TestCase):
         self.assertEqual(response.status_code, 200)
 
         user = User.objects.create(username="toto", email="toto@example.com")
+        NoteUser.objects.create(user=user)
 
         # Try with an invalid form
         response = self.client.post(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)), dict(
@@ -370,7 +369,7 @@ class TestWEIRegistration(TestCase):
             last_name="toto",
             bank="Société générale",
         ))
-        response = self.client.get(reverse("wei:wei_register_2A_myself", kwargs=dict(wei_pk=self.wei.pk)))
+        response = self.client.get(reverse("wei:wei_register_2A", kwargs=dict(wei_pk=self.wei.pk)))
         self.assertEqual(response.status_code, 200)
 
         # Check that if the WEI is started, we can't register anyone
@@ -386,10 +385,8 @@ class TestWEIRegistration(TestCase):
         response = self.client.get(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(reverse("wei:wei_register_1A_myself", kwargs=dict(wei_pk=self.wei.pk)))
-        self.assertEqual(response.status_code, 200)
-
         user = User.objects.create(username="toto", email="toto@example.com")
+        NoteUser.objects.create(user=user)
         response = self.client.post(reverse("wei:wei_register_1A", kwargs=dict(wei_pk=self.wei.pk)), dict(
             user=user.id,
             soge_credit=True,
@@ -468,6 +465,24 @@ class TestWEIRegistration(TestCase):
 
         response = self.client.get(reverse("wei:wei_survey", kwargs=dict(pk=registration.pk)))
         self.assertRedirects(response, reverse("wei:wei_closed", kwargs=dict(pk=self.wei.pk)), 302, 200)
+
+    def test_register_myself(self):
+        """
+        Try to register myself to the WEI, and check redirections.
+        """
+        response = self.client.get(reverse('wei:wei_register_1A_myself', args=(self.wei.pk,)))
+        self.assertRedirects(response, reverse('wei:wei_update_registration', args=(self.registration.pk,)))
+
+        response = self.client.get(reverse('wei:wei_register_2A_myself', args=(self.wei.pk,)))
+        self.assertRedirects(response, reverse('wei:wei_update_registration', args=(self.registration.pk,)))
+
+        self.registration.delete()
+
+        response = self.client.get(reverse('wei:wei_register_1A_myself', args=(self.wei.pk,)))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('wei:wei_register_2A_myself', args=(self.wei.pk,)))
+        self.assertEqual(response.status_code, 200)
 
     def test_wei_survey_ended(self):
         """

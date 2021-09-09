@@ -691,12 +691,14 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request, "wei.change_weiregistration_information_json", self.object):
+            information = self.object.information
+            d = dict(
+                    bus=Bus.objects.filter(pk__in=information["preferred_bus_pk"]).all(),
+                    team=BusTeam.objects.filter(pk__in=information["preferred_team_pk"]).all(),
+                    roles=WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all(),
+            ) if 'preferred_bus_pk' in information else dict()
             choose_bus_form = WEIChooseBusForm(
-                self.request.POST if self.request.POST else dict(
-                    bus=Bus.objects.filter(pk__in=self.object.information["preferred_bus_pk"]).all(),
-                    team=BusTeam.objects.filter(pk__in=self.object.information["preferred_team_pk"]).all(),
-                    roles=WEIRole.objects.filter(pk__in=self.object.information["preferred_roles_pk"]).all(),
-                )
+                self.request.POST if self.request.POST else d
             )
             choose_bus_form.fields["bus"].queryset = Bus.objects.filter(wei=context["club"])
             choose_bus_form.fields["team"].queryset = BusTeam.objects.filter(bus__wei=context["club"])
