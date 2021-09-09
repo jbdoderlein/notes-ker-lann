@@ -511,7 +511,8 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
         # Don't register twice
-        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+        if 'myself' in self.request.path and not self.request.user.is_anonymous \
+                and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
             obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
             return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
@@ -590,7 +591,8 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
         # Don't register twice
-        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+        if 'myself' in self.request.path and not self.request.user.is_anonymous \
+                and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
             obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
             return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
