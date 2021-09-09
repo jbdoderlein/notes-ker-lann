@@ -138,7 +138,7 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         try:
             re.compile(alias)
             valid_regex = True
-        except re.error:
+        except (re.error, TypeError):
             valid_regex = False
         suffix = '__iregex' if valid_regex else '__istartswith'
         alias_prefix = '^' if valid_regex else ''
