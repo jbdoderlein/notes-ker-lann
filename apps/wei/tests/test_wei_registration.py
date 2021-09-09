@@ -12,7 +12,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from member.models import Membership, Club
-from note.models import NoteClub, SpecialTransaction
+from note.models import NoteClub, SpecialTransaction, NoteUser
 from treasury.models import SogeCredit
 
 from ..api.views import BusViewSet, BusTeamViewSet, WEIClubViewSet, WEIMembershipViewSet, WEIRegistrationViewSet, \
@@ -64,6 +64,8 @@ class TestWEIRegistration(TestCase):
         sess = self.client.session
         sess["permission_mask"] = 42
         sess.save()
+
+        NoteUser.objects.create(user=self.user)
 
         self.year = timezone.now().year
         self.wei = WEIClub.objects.create(
