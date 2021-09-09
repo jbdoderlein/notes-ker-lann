@@ -54,10 +54,10 @@ class CustomNK15Hasher(PBKDF2PasswordHasher):
         if '|' in encoded:
             salt, db_hashed_pass = encoded.split('$')[2].split('|')
             return OrderedDict([
-                    (_('algorithm'), 'custom_nk15'),
-                    (_('iterations'), '1'),
-                    (_('salt'), mask_hash(salt)),
-                    (_('hash'), mask_hash(db_hashed_pass)),
+                (_('algorithm'), 'custom_nk15'),
+                (_('iterations'), '1'),
+                (_('salt'), mask_hash(salt)),
+                (_('hash'), mask_hash(db_hashed_pass)),
             ])
         return super().safe_summary(encoded)
 

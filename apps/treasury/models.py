@@ -3,6 +3,7 @@
 
 from datetime import date
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -11,10 +12,8 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
 from member.models import Club, Membership
 from note.models import NoteSpecial, SpecialTransaction, MembershipTransaction, NoteUser
-from wei.models import WEIClub
 
 
 class Invoice(models.Model):
@@ -319,10 +318,8 @@ class SogeCredit(models.Model):
 
         bde = Club.objects.get(name="BDE")
         kfet = Club.objects.get(name="Kfet")
-        wei = WEIClub.objects.order_by('-year').first()
         bde_qs = Membership.objects.filter(user=self.user, club=bde, date_start__gte=bde.membership_start)
         kfet_qs = Membership.objects.filter(user=self.user, club=kfet, date_start__gte=kfet.membership_start)
-        wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
 
         if bde_qs.exists():
             m = bde_qs.get()
@@ -334,10 +331,14 @@ class SogeCredit(models.Model):
             if m.transaction not in self.transactions.all():
                 self.transactions.add(m.transaction)
 
-        if wei_qs.exists():
-            m = wei_qs.get()
-            if m.transaction not in self.transactions.all():
-                self.transactions.add(m.transaction)
+        if 'wei' in settings.INSTALLED_APPS:
+            from wei.models import WEIClub
+            wei = WEIClub.objects.order_by('-year').first()
+            wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
+            if wei_qs.exists():
+                m = wei_qs.get()
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
 
         for tr in self.transactions.all():
             tr.valid = False

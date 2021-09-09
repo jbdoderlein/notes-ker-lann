@@ -693,9 +693,9 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
                 self.request, "wei.change_weiregistration_information_json", self.object):
             information = self.object.information
             d = dict(
-                    bus=Bus.objects.filter(pk__in=information["preferred_bus_pk"]).all(),
-                    team=BusTeam.objects.filter(pk__in=information["preferred_team_pk"]).all(),
-                    roles=WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all(),
+                bus=Bus.objects.filter(pk__in=information["preferred_bus_pk"]).all(),
+                team=BusTeam.objects.filter(pk__in=information["preferred_team_pk"]).all(),
+                roles=WEIRole.objects.filter(pk__in=information["preferred_roles_pk"]).all(),
             ) if 'preferred_bus_pk' in information else dict()
             choose_bus_form = WEIChooseBusForm(
                 self.request.POST if self.request.POST else d
