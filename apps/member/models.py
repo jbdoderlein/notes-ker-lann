@@ -74,7 +74,7 @@ class Profile(models.Model):
 
     promotion = models.PositiveSmallIntegerField(
         null=True,
-        default=datetime.date.today().year,
+        default=datetime.date.today().year if datetime.date.today().month >= 8 else datetime.date.today().year - 1,
         verbose_name=_("promotion"),
         help_text=_("Year of entry to the school (None if not ENS student)"),
     )
