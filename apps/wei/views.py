@@ -510,6 +510,10 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         # We can't register someone once the WEI is started and before the membership start date
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        # Don't register twice
+        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+            obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
+            return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -585,6 +589,10 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         # We can't register someone once the WEI is started and before the membership start date
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
+        # Don't register twice
+        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+            obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
+            return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
