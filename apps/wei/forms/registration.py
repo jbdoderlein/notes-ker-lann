@@ -144,6 +144,20 @@ class WEIMembershipForm(forms.ModelForm):
         }
 
 
+class WEIMembership1AForm(WEIMembershipForm):
+    """
+    Used to confirm registrations of first year members without choosing a bus now.
+    """
+    roles = None
+
+    def clean(self):
+        return super(forms.ModelForm, self).clean()
+
+    class Meta:
+        model = WEIMembership
+        fields = ('credit_type', 'credit_amount', 'last_name', 'first_name', 'bank',)
+
+
 class BusForm(forms.ModelForm):
     class Meta:
         model = Bus

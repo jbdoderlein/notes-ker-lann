@@ -102,9 +102,9 @@ class WEIRegistrationTable(tables.Table):
         if record.fee > record.user.note.balance and not record.soge_credit:
             btn_class = 'btn-secondary'
             tooltip = _("The user does not have enough money.")
-        elif record.first_year and 'selected_bus_pk' not in record.information:
+        elif record.first_year:
             btn_class = 'btn-info'
-            tooltip = _("The user is in first year, and the repartition algorithm didn't run.")
+            tooltip = _("The user is in first year. You may validate the credit, the algorithm will run later.")
         else:
             btn_class = 'btn-success'
             tooltip = _("The user has enough money, you can validate the registration.")

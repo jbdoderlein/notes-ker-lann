@@ -32,7 +32,8 @@ from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms.registration import WEIChooseBusForm
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
-from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm, CurrentSurvey
+from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembership1AForm, \
+    WEIMembershipForm, CurrentSurvey
 from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
 
 
@@ -799,7 +800,6 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
     Validate WEI Registration
     """
     model = WEIMembership
-    form_class = WEIMembershipForm
     extra_context = {"title": _("Validate WEI registration")}
 
     def get_sample_object(self):
@@ -855,6 +855,12 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return context
 
+    def get_form_class(self):
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        if registration.first_year and 'sleected_bus_pk' not in registration.information:
+            return WEIMembership1AForm
+        return WEIMembershipForm
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
@@ -870,25 +876,27 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             form.fields["bank"].disabled = True
             form.fields["bank"].initial = "Société générale"
 
-        form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
-        if registration.first_year:
-            # Use the results of the survey to fill initial data
-            # A first year has no other role than "1A"
-            del form.fields["roles"]
-            survey = CurrentSurvey(registration)
-            if survey.information.valid:
-                form.fields["bus"].initial = survey.information.get_selected_bus()
-        else:
-            # Use the choice of the member to fill initial data
-            information = registration.information
-            if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
-                form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
-            if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
-                form["team"].initial = BusTeam.objects.get(pk=information["preferred_team_pk"][0])
-            if "preferred_roles_pk" in information:
-                form["roles"].initial = WEIRole.objects.filter(
-                    Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
-                ).all()
+        if 'bus' in form.fields:
+            # For 2A+ and hardcoded 1A
+            form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
+            if registration.first_year:
+                # Use the results of the survey to fill initial data
+                # A first year has no other role than "1A"
+                del form.fields["roles"]
+                survey = CurrentSurvey(registration)
+                if survey.information.valid:
+                    form.fields["bus"].initial = survey.information.get_selected_bus()
+            else:
+                # Use the choice of the member to fill initial data
+                information = registration.information
+                if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
+                    form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
+                if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
+                    form["team"].initial = BusTeam.objects.get(pk=information["preferred_team_pk"][0])
+                if "preferred_roles_pk" in information:
+                    form["roles"].initial = WEIRole.objects.filter(
+                        Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
+                    ).all()
         return form
 
     @transaction.atomic
