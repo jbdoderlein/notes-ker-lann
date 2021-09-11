@@ -680,17 +680,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         context["club"] = self.object.wei
 
         if self.object.is_validated:
-            membership_form = WEIMembershipForm(instance=self.object.membership,
-                                                data=self.request.POST if self.request.POST else None)
-            for field_name, field in membership_form.fields.items():
-                if not PermissionBackend.check_perm(
-                        self.request, "wei.change_membership_" + field_name, self.object.membership):
-                    field.widget = HiddenInput()
-            del membership_form.fields["credit_type"]
-            del membership_form.fields["credit_amount"]
-            del membership_form.fields["first_name"]
-            del membership_form.fields["last_name"]
-            del membership_form.fields["bank"]
+            membership_form = self.get_membership_form(instance=self.object.membership,
+                                                       data=self.request.POST)
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request, "wei.change_weiregistration_information_json", self.object):
@@ -722,11 +713,24 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             del form.fields["information_json"]
         return form
 
+    def get_membership_form(self, data=None, instance=None):
+        membership_form = WEIMembershipForm(data if data else None, instance=instance)
+        del membership_form.fields["credit_type"]
+        del membership_form.fields["credit_amount"]
+        del membership_form.fields["first_name"]
+        del membership_form.fields["last_name"]
+        del membership_form.fields["bank"]
+        for field_name, field in list(membership_form.fields.items()):
+            if not PermissionBackend.check_perm(
+                    self.request, "wei.change_weimembership_" + field_name, self.object.membership):
+                del membership_form.fields[field_name]
+        return membership_form
+
     @transaction.atomic
     def form_valid(self, form):
         # If the membership is already validated, then we update the bus and the team (and the roles)
         if form.instance.is_validated:
-            membership_form = WEIMembershipForm(self.request.POST, instance=form.instance.membership)
+            membership_form = self.get_membership_form(self.request.POST, form.instance.membership)
             if not membership_form.is_valid():
                 return self.form_invalid(form)
             membership_form.save()

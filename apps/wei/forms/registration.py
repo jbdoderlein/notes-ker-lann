@@ -118,7 +118,8 @@ class WEIMembershipForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data["team"] is not None and cleaned_data["team"].bus != cleaned_data["bus"]:
+        if 'team' in cleaned_data and cleaned_data["team"] is not None \
+                and cleaned_data["team"].bus != cleaned_data["bus"]:
             self.add_error('bus', _("This team doesn't belong to the given bus."))
         return cleaned_data
 
