@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
+from .views import CurrentWEIDetailView, WEI1AListView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
     WEIRegistrationsView, WEIMembershipsView, MemberListRenderView,\
     BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
     WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIDeleteRegistrationView,\
@@ -24,6 +24,7 @@ urlpatterns = [
          name="wei_memberships_bus_pdf"),
     path('detail/<int:wei_pk>/memberships/pdf/<int:bus_pk>/<int:team_pk>/', MemberListRenderView.as_view(),
          name="wei_memberships_team_pdf"),
+    path('bus-1A-list/<int:pk>/', WEI1AListView.as_view(), name="wei_1A_list"),
     path('add-bus/<int:pk>/', BusCreateView.as_view(), name="add_bus"),
     path('manage-bus/<int:pk>/', BusManageView.as_view(), name="manage_bus"),
     path('update-bus/<int:pk>/', BusUpdateView.as_view(), name="update_bus"),

@@ -48,8 +48,7 @@ class WEIRegistrationForm(forms.ModelForm):
                     'placeholder': 'Nom ...',
                 },
             ),
-            "birth_date": DatePickerInput(options={'defaultDate': '2000-01-01',
-                                                   'minDate': '1900-01-01',
+            "birth_date": DatePickerInput(options={'minDate': '1900-01-01',
                                                    'maxDate': '2100-01-01'}),
         }
 

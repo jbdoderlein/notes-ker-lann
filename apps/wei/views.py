@@ -13,7 +13,6 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Q, Count
 from django.db.models.functions.text import Lower
-from django.forms import HiddenInput
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -34,7 +33,8 @@ from .forms.registration import WEIChooseBusForm
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
 from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembership1AForm, \
     WEIMembershipForm, CurrentSurvey
-from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
+from .tables import BusRepartitionTable, BusTable, BusTeamTable, WEITable, WEIRegistrationTable, \
+    WEIRegistration1ATable, WEIMembershipTable
 
 
 class CurrentWEIDetailView(LoginRequiredMixin, RedirectView):
@@ -1160,3 +1160,25 @@ class MemberListRenderView(LoginRequiredMixin, View):
             shutil.rmtree(tmp_dir)
 
         return response
+
+
+class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
+    model = WEIRegistration
+    template_name = "wei/1A_list.html"
+    table_class = WEIRegistration1ATable
+    extra_context = {"title": _("Attribute buses to first year members")}
+
+    def dispatch(self, request, *args, **kwargs):
+        self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self, filter_permissions=True, **kwargs):
+        qs = super().get_queryset(filter_permissions, **kwargs)
+        qs = qs.filter(first_year=True)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['club'] = self.club
+        context['bus_repartition_table'] = BusRepartitionTable(Bus.objects.filter(wei=self.club, size__gt=0).all())
+        return context
