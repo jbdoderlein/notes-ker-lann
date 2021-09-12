@@ -1174,7 +1174,8 @@ class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
 
     def get_queryset(self, filter_permissions=True, **kwargs):
         qs = super().get_queryset(filter_permissions, **kwargs)
-        qs = qs.filter(first_year=True)
+        qs = qs.filter(first_year=True, membership__isnull=False)
+        qs = qs.order_by('membership__bus')
         return qs
 
     def get_context_data(self, **kwargs):

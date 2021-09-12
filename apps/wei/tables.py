@@ -193,7 +193,7 @@ class WEIRegistration1ATable(tables.Table):
         model = WEIMembership
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user', 'user__last_name', 'user__first_name', 'gender',
-                  'user__profile__department', 'preferred_bus', )
+                  'user__profile__department', 'preferred_bus', 'membership__bus', )
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
