@@ -172,7 +172,7 @@ class WEIMembershipTable(tables.Table):
 
 class WEIRegistration1ATable(tables.Table):
     user = tables.LinkColumn(
-        'wei:wei_update_registration',
+        'wei:wei_bus_1A',
         args=[A('pk')],
     )
 

@@ -1182,3 +1182,20 @@ class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
         context['club'] = self.club
         context['bus_repartition_table'] = BusRepartitionTable(Bus.objects.filter(wei=self.club, size__gt=0).all())
         return context
+
+
+class WEIAttributeBus1AView(ProtectQuerysetMixin, DetailView):
+    model = WEIRegistration
+    template_name = "wei/attribute_bus_1A.html"
+    extra_context = {"title": _("Attribute bus")}
+
+    def get_queryset(self, filter_permissions=True, **kwargs):
+        qs = super().get_queryset(filter_permissions, **kwargs)
+        qs = qs.filter(first_year=True)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['club'] = self.object.wei
+        context['survey'] = CurrentSurvey(self.object)
+        return context
