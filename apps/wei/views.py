@@ -13,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Q, Count
 from django.db.models.functions.text import Lower
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -1175,7 +1175,7 @@ class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
     def get_queryset(self, filter_permissions=True, **kwargs):
         qs = super().get_queryset(filter_permissions, **kwargs)
         qs = qs.filter(first_year=True, membership__isnull=False)
-        qs = qs.order_by('membership__bus')
+        qs = qs.order_by('-membership__bus')
         return qs
 
     def get_context_data(self, **kwargs):
@@ -1200,3 +1200,15 @@ class WEIAttributeBus1AView(ProtectQuerysetMixin, DetailView):
         context['club'] = self.object.wei
         context['survey'] = CurrentSurvey(self.object)
         return context
+
+
+class WEIAttributeBus1ANextView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        wei = WEIClub.objects.filter(pk=self.kwargs['pk'])
+        if not wei.exists():
+            raise Http404
+        wei = wei.get()
+        qs = WEIRegistration.objects.filter(wei=wei, membership__isnull=False, membership__bus__isnull=True)
+        if qs.exists():
+            return reverse_lazy('wei:wei_bus_1A', args=(qs.first().pk, ))
+        return reverse_lazy('wei_1A_list', args=(wei.pk, ))

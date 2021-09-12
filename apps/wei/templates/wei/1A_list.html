@@ -12,7 +12,7 @@
         <div class="card-body">
             {% render_table bus_repartition_table %}
             <hr>
-            <a href="#" class="btn btn-block btn-success">{% trans "Start attribution!" %}</a>
+            <a href="{% url 'wei:wei_bus_1A_next' pk=club.pk %}" class="btn btn-block btn-success">{% trans "Start attribution!" %}</a>
             <hr>
             {% render_table table %}
         </div>

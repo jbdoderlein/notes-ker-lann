@@ -49,7 +49,7 @@
             <hr>
 
             {% for bus, score in survey.ordered_buses %}
-                <button class="btn btn-{% if bus.pk == survey.information.selected_bus_pk %}success{% else %}light{% endif %}">
+                <button class="btn btn-{% if bus.pk == survey.information.selected_bus_pk %}success{% else %}light{% endif %}" onclick="choose_bus({{ bus.pk }})">
                     {{ bus }} ({{ score|floatformat:2 }}) : {{ bus.memberships.count }} / {{ bus.size }}
                 </button>
             {% endfor %}
@@ -57,4 +57,32 @@
             <a href="{% url 'wei:wei_1A_list' pk=object.wei.pk %}" class="btn btn-block btn-info">{% trans "Back to main list" %}</a>
         </div>
     </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        function choose_bus(bus_id) {
+            let valid_buses = [{% for bus, score in survey.ordered_buses %}{{ bus.pk }}, {% endfor %}];
+            if (valid_buses.indexOf(bus_id) === -1) {
+                console.log("Invalid chosen bus")
+                return
+            }
+
+            $.ajax({
+                url: "/api/wei/membership/{{ object.membership.id }}/",
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "X-CSRFTOKEN": CSRF_TOKEN
+                },
+                data: {
+                    bus: bus_id,
+                }
+            }).done(function () {
+                window.location = "{% url 'wei:wei_bus_1A_next' pk=object.wei.pk %}"
+            }).fail(function (xhr) {
+                errMsg(xhr.responseJSON)
+            })
+        }
+    </script>
 {% endblock %}
