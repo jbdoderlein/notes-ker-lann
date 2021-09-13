@@ -13,8 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Q, Count
 from django.db.models.functions.text import Lower
-from django.forms import HiddenInput
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -32,8 +31,10 @@ from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms.registration import WEIChooseBusForm
 from .models import WEIClub, WEIRegistration, WEIMembership, Bus, BusTeam, WEIRole
-from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembershipForm, CurrentSurvey
-from .tables import WEITable, WEIRegistrationTable, BusTable, BusTeamTable, WEIMembershipTable
+from .forms import WEIForm, WEIRegistrationForm, BusForm, BusTeamForm, WEIMembership1AForm, \
+    WEIMembershipForm, CurrentSurvey
+from .tables import BusRepartitionTable, BusTable, BusTeamTable, WEITable, WEIRegistrationTable, \
+    WEIRegistration1ATable, WEIMembershipTable
 
 
 class CurrentWEIDetailView(LoginRequiredMixin, RedirectView):
@@ -511,7 +512,8 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
         # Don't register twice
-        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+        if 'myself' in self.request.path and not self.request.user.is_anonymous \
+                and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
             obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
             return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
@@ -590,7 +592,8 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         if today >= wei.date_start or today < wei.membership_start:
             return redirect(reverse_lazy('wei:wei_closed', args=(wei.pk,)))
         # Don't register twice
-        if 'myself' in self.request.path and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
+        if 'myself' in self.request.path and not self.request.user.is_anonymous \
+                and WEIRegistration.objects.filter(wei=wei, user=self.request.user).exists():
             obj = WEIRegistration.objects.get(wei=wei, user=self.request.user)
             return redirect(reverse_lazy('wei:wei_update_registration', args=(obj.pk,)))
         return super().dispatch(request, *args, **kwargs)
@@ -677,17 +680,8 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         context["club"] = self.object.wei
 
         if self.object.is_validated:
-            membership_form = WEIMembershipForm(instance=self.object.membership,
-                                                data=self.request.POST if self.request.POST else None)
-            for field_name, field in membership_form.fields.items():
-                if not PermissionBackend.check_perm(
-                        self.request, "wei.change_membership_" + field_name, self.object.membership):
-                    field.widget = HiddenInput()
-            del membership_form.fields["credit_type"]
-            del membership_form.fields["credit_amount"]
-            del membership_form.fields["first_name"]
-            del membership_form.fields["last_name"]
-            del membership_form.fields["bank"]
+            membership_form = self.get_membership_form(instance=self.object.membership,
+                                                       data=self.request.POST)
             context["membership_form"] = membership_form
         elif not self.object.first_year and PermissionBackend.check_perm(
                 self.request, "wei.change_weiregistration_information_json", self.object):
@@ -719,11 +713,24 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
             del form.fields["information_json"]
         return form
 
+    def get_membership_form(self, data=None, instance=None):
+        membership_form = WEIMembershipForm(data if data else None, instance=instance)
+        del membership_form.fields["credit_type"]
+        del membership_form.fields["credit_amount"]
+        del membership_form.fields["first_name"]
+        del membership_form.fields["last_name"]
+        del membership_form.fields["bank"]
+        for field_name, _field in list(membership_form.fields.items()):
+            if not PermissionBackend.check_perm(
+                    self.request, "wei.change_weimembership_" + field_name, self.object.membership):
+                del membership_form.fields[field_name]
+        return membership_form
+
     @transaction.atomic
     def form_valid(self, form):
         # If the membership is already validated, then we update the bus and the team (and the roles)
         if form.instance.is_validated:
-            membership_form = WEIMembershipForm(self.request.POST, instance=form.instance.membership)
+            membership_form = self.get_membership_form(self.request.POST, form.instance.membership)
             if not membership_form.is_valid():
                 return self.form_invalid(form)
             membership_form.save()
@@ -797,7 +804,6 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
     Validate WEI Registration
     """
     model = WEIMembership
-    form_class = WEIMembershipForm
     extra_context = {"title": _("Validate WEI registration")}
 
     def get_sample_object(self):
@@ -853,6 +859,12 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
 
         return context
 
+    def get_form_class(self):
+        registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
+        if registration.first_year and 'sleected_bus_pk' not in registration.information:
+            return WEIMembership1AForm
+        return WEIMembershipForm
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         registration = WEIRegistration.objects.get(pk=self.kwargs["pk"])
@@ -868,25 +880,27 @@ class WEIValidateRegistrationView(ProtectQuerysetMixin, ProtectedCreateView):
             form.fields["bank"].disabled = True
             form.fields["bank"].initial = "Société générale"
 
-        form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
-        if registration.first_year:
-            # Use the results of the survey to fill initial data
-            # A first year has no other role than "1A"
-            del form.fields["roles"]
-            survey = CurrentSurvey(registration)
-            if survey.information.valid:
-                form.fields["bus"].initial = survey.information.get_selected_bus()
-        else:
-            # Use the choice of the member to fill initial data
-            information = registration.information
-            if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
-                form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
-            if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
-                form["team"].initial = BusTeam.objects.get(pk=information["preferred_team_pk"][0])
-            if "preferred_roles_pk" in information:
-                form["roles"].initial = WEIRole.objects.filter(
-                    Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
-                ).all()
+        if 'bus' in form.fields:
+            # For 2A+ and hardcoded 1A
+            form.fields["bus"].widget.attrs["api_url"] = "/api/wei/bus/?wei=" + str(registration.wei.pk)
+            if registration.first_year:
+                # Use the results of the survey to fill initial data
+                # A first year has no other role than "1A"
+                del form.fields["roles"]
+                survey = CurrentSurvey(registration)
+                if survey.information.valid:
+                    form.fields["bus"].initial = survey.information.get_selected_bus()
+            else:
+                # Use the choice of the member to fill initial data
+                information = registration.information
+                if "preferred_bus_pk" in information and len(information["preferred_bus_pk"]) == 1:
+                    form["bus"].initial = Bus.objects.get(pk=information["preferred_bus_pk"][0])
+                if "preferred_team_pk" in information and len(information["preferred_team_pk"]) == 1:
+                    form["team"].initial = BusTeam.objects.get(pk=information["preferred_team_pk"][0])
+                if "preferred_roles_pk" in information:
+                    form["roles"].initial = WEIRole.objects.filter(
+                        Q(pk__in=information["preferred_roles_pk"]) | Q(name="Adhérent WEI")
+                    ).all()
         return form
 
     @transaction.atomic
@@ -1146,3 +1160,62 @@ class MemberListRenderView(LoginRequiredMixin, View):
             shutil.rmtree(tmp_dir)
 
         return response
+
+
+class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
+    model = WEIRegistration
+    template_name = "wei/1A_list.html"
+    table_class = WEIRegistration1ATable
+    extra_context = {"title": _("Attribute buses to first year members")}
+
+    def dispatch(self, request, *args, **kwargs):
+        self.club = WEIClub.objects.get(pk=self.kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self, filter_permissions=True, **kwargs):
+        qs = super().get_queryset(filter_permissions, **kwargs)
+        qs = qs.filter(first_year=True, membership__isnull=False)
+        qs = qs.order_by('-membership__bus')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['club'] = self.club
+        context['bus_repartition_table'] = BusRepartitionTable(Bus.objects.filter(wei=self.club, size__gt=0).all())
+        return context
+
+
+class WEIAttributeBus1AView(ProtectQuerysetMixin, DetailView):
+    model = WEIRegistration
+    template_name = "wei/attribute_bus_1A.html"
+    extra_context = {"title": _("Attribute bus")}
+
+    def get_queryset(self, filter_permissions=True, **kwargs):
+        qs = super().get_queryset(filter_permissions, **kwargs)
+        qs = qs.filter(first_year=True)
+        return qs
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if 'selected_bus_pk' not in obj.information:
+            return redirect(reverse_lazy('wei:wei_survey', args=(obj.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['club'] = self.object.wei
+        context['survey'] = CurrentSurvey(self.object)
+        return context
+
+
+class WEIAttributeBus1ANextView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        wei = WEIClub.objects.filter(pk=self.kwargs['pk'])
+        if not wei.exists():
+            raise Http404
+        wei = wei.get()
+        qs = WEIRegistration.objects.filter(wei=wei, membership__isnull=False, membership__bus__isnull=True)
+        qs = qs.filter(information_json__contains='selected_bus_pk')  # not perfect, but works...
+        if qs.exists():
+            return reverse_lazy('wei:wei_bus_1A', args=(qs.first().pk, ))
+        return reverse_lazy('wei_1A_list', args=(wei.pk, ))

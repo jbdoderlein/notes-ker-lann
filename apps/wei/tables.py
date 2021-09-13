@@ -4,6 +4,7 @@
 from datetime import date
 
 import django_tables2 as tables
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -102,9 +103,9 @@ class WEIRegistrationTable(tables.Table):
         if record.fee > record.user.note.balance and not record.soge_credit:
             btn_class = 'btn-secondary'
             tooltip = _("The user does not have enough money.")
-        elif record.first_year and 'selected_bus_pk' not in record.information:
+        elif record.first_year:
             btn_class = 'btn-info'
-            tooltip = _("The user is in first year, and the repartition algorithm didn't run.")
+            tooltip = _("The user is in first year. You may validate the credit, the algorithm will run later.")
         else:
             btn_class = 'btn-success'
             tooltip = _("The user has enough money, you can validate the registration.")
@@ -166,6 +167,35 @@ class WEIMembershipTable(tables.Table):
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
+        }
+
+
+class WEIRegistration1ATable(tables.Table):
+    user = tables.LinkColumn(
+        'wei:wei_bus_1A',
+        args=[A('pk')],
+    )
+
+    preferred_bus = tables.Column(
+        verbose_name=_('preferred bus').capitalize,
+        accessor='pk',
+        orderable=False,
+    )
+
+    def render_preferred_bus(self, record):
+        information = record.information
+        return information['selected_bus_name'] if 'selected_bus_name' in information else "—"
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        model = WEIRegistration
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('user', 'user__last_name', 'user__first_name', 'gender',
+                  'user__profile__department', 'preferred_bus', 'membership__bus', )
+        row_attrs = {
+            'class': lambda record: '' if 'selected_bus_pk' in record.information else 'bg-danger',
         }
 
 
@@ -244,4 +274,67 @@ class BusTeamTable(tables.Table):
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
             'data-href': lambda record: reverse_lazy('wei:manage_bus_team', args=(record.pk, ))
+        }
+
+
+class BusRepartitionTable(tables.Table):
+    name = tables.Column(
+        verbose_name=_("name").capitalize,
+        accessor='name',
+    )
+
+    suggested_first_year = tables.Column(
+        verbose_name=_("suggested first year").capitalize,
+        accessor='pk',
+        orderable=False,
+    )
+
+    validated_first_year = tables.Column(
+        verbose_name=_("validated first year").capitalize,
+        accessor='pk',
+        orderable=False,
+    )
+
+    validated_staff = tables.Column(
+        verbose_name=_("validated staff").capitalize,
+        accessor='pk',
+        orderable=False,
+    )
+
+    size = tables.Column(
+        verbose_name=_("seat count in the bus").capitalize,
+        accessor='size',
+    )
+
+    free_seats = tables.Column(
+        verbose_name=_("free seats").capitalize,
+        accessor='pk',
+        orderable=False,
+    )
+
+    def render_suggested_first_year(self, record):
+        registrations = WEIRegistration.objects.filter(Q(membership__isnull=True) | Q(membership__bus__isnull=True),
+                                                       first_year=True, wei=record.wei)
+        registrations = [r for r in registrations if 'selected_bus_pk' in r.information]
+        return sum(1 for r in registrations if r.information['selected_bus_pk'] == record.pk)
+
+    def render_validated_first_year(self, record):
+        return WEIRegistration.objects.filter(first_year=True, membership__bus=record).count()
+
+    def render_validated_staff(self, record):
+        return WEIRegistration.objects.filter(first_year=False, membership__bus=record).count()
+
+    def render_free_seats(self, record):
+        return record.size - self.render_validated_staff(record) - self.render_validated_first_year(record)
+
+    class Meta:
+        attrs = {
+            'class': 'table table-condensed table-striped table-hover'
+        }
+        models = Bus
+        template_name = 'django_tables2/bootstrap4.html'
+        fields = ('name', )
+        row_attrs = {
+            'class': 'table-row',
+            'id': lambda record: "row-" + str(record.pk),
         }

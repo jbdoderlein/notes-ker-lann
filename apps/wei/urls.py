@@ -3,12 +3,11 @@
 
 from django.urls import path
 
-from .views import CurrentWEIDetailView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView,\
-    WEIRegistrationsView, WEIMembershipsView, MemberListRenderView,\
-    BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView,\
-    WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, WEIDeleteRegistrationView,\
-    WEIValidateRegistrationView, WEISurveyView, WEISurveyEndView, WEIClosedView
-
+from .views import CurrentWEIDetailView, WEI1AListView, WEIListView, WEICreateView, WEIDetailView, WEIUpdateView, \
+    WEIRegistrationsView, WEIMembershipsView, MemberListRenderView, \
+    BusCreateView, BusManageView, BusUpdateView, BusTeamCreateView, BusTeamManageView, BusTeamUpdateView, \
+    WEIAttributeBus1AView, WEIAttributeBus1ANextView, WEIRegister1AView, WEIRegister2AView, WEIUpdateRegistrationView, \
+    WEIDeleteRegistrationView, WEIValidateRegistrationView, WEISurveyView, WEISurveyEndView, WEIClosedView
 
 app_name = 'wei'
 urlpatterns = [
@@ -24,6 +23,7 @@ urlpatterns = [
          name="wei_memberships_bus_pdf"),
     path('detail/<int:wei_pk>/memberships/pdf/<int:bus_pk>/<int:team_pk>/', MemberListRenderView.as_view(),
          name="wei_memberships_team_pdf"),
+    path('bus-1A/list/<int:pk>/', WEI1AListView.as_view(), name="wei_1A_list"),
     path('add-bus/<int:pk>/', BusCreateView.as_view(), name="add_bus"),
     path('manage-bus/<int:pk>/', BusManageView.as_view(), name="manage_bus"),
     path('update-bus/<int:pk>/', BusUpdateView.as_view(), name="update_bus"),
@@ -40,4 +40,6 @@ urlpatterns = [
     path('survey/<int:pk>/', WEISurveyView.as_view(), name="wei_survey"),
     path('survey/<int:pk>/end/', WEISurveyEndView.as_view(), name="wei_survey_end"),
     path('detail/<int:pk>/closed/', WEIClosedView.as_view(), name="wei_closed"),
+    path('bus-1A/<int:pk>/', WEIAttributeBus1AView.as_view(), name="wei_bus_1A"),
+    path('bus-1A/next/<int:pk>/', WEIAttributeBus1ANextView.as_view(), name="wei_bus_1A_next"),
 ]
