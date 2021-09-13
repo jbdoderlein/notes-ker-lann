@@ -191,6 +191,10 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
 
         context["not_first_year"] = WEIMembership.objects.filter(user=self.request.user).exists()
 
+        qs = WEIMembership.objects.filter(club=club, registration__first_year=True, bus__isnull=True)
+        context["can_validate_1a"] = PermissionBackend.check_perm(
+            self.request, "wei.change_weimembership_bus", qs.first()) if qs.exists() else False
+
         return context
 
 
@@ -1181,7 +1185,10 @@ class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['club'] = self.club
-        context['bus_repartition_table'] = BusRepartitionTable(Bus.objects.filter(wei=self.club, size__gt=0).all())
+        context['bus_repartition_table'] = BusRepartitionTable(
+            Bus.objects.filter(wei=self.club, size__gt=0)
+                       .filter(PermissionBackend.filter_queryset(self.request, Bus, "view"))
+                       .all())
         return context
 
 

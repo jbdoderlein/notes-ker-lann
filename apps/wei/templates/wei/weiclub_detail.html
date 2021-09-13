@@ -95,7 +95,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 </div>
 {% endif %}
 
-    {% if can_validate_1a or True %}
+    {% if can_validate_1a %}
         <a href="{% url 'wei:wei_1A_list' pk=object.pk %}" class="btn btn-block btn-info">{% trans "Attribute buses" %}</a>
     {% endif %}
 {% endblock %}
