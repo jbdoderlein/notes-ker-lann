@@ -1218,4 +1218,4 @@ class WEIAttributeBus1ANextView(LoginRequiredMixin, RedirectView):
         qs = qs.filter(information_json__contains='selected_bus_pk')  # not perfect, but works...
         if qs.exists():
             return reverse_lazy('wei:wei_bus_1A', args=(qs.first().pk, ))
-        return reverse_lazy('wei_1A_list', args=(wei.pk, ))
+        return reverse_lazy('wei:wei_1A_list', args=(wei.pk, ))
