@@ -720,7 +720,7 @@ class WEIUpdateRegistrationView(ProtectQuerysetMixin, LoginRequiredMixin, Update
         del membership_form.fields["first_name"]
         del membership_form.fields["last_name"]
         del membership_form.fields["bank"]
-        for field_name, field in list(membership_form.fields.items()):
+        for field_name, _field in list(membership_form.fields.items()):
             if not PermissionBackend.check_perm(
                     self.request, "wei.change_weimembership_" + field_name, self.object.membership):
                 del membership_form.fields[field_name]

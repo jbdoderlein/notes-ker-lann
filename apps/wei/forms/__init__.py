@@ -5,6 +5,6 @@ from .registration import WEIForm, WEIRegistrationForm, WEIMembership1AForm, WEI
 from .surveys import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, CurrentSurvey
 
 __all__ = [
-    'WEIForm', 'WEIRegistrationForm', 'WEIMembesrhip1AForm', 'WEIMembershipForm', 'BusForm', 'BusTeamForm',
+    'WEIForm', 'WEIRegistrationForm', 'WEIMembership1AForm', 'WEIMembershipForm', 'BusForm', 'BusTeamForm',
     'WEISurvey', 'WEISurveyInformation', 'WEISurveyAlgorithm', 'CurrentSurvey',
 ]
