@@ -2,6 +2,7 @@
 
 \usepackage{fontspec}
 \usepackage[margin=1.5cm]{geometry}
+\usepackage{longtable}
 
 \begin{document}
 \begin{center}
@@ -19,7 +20,7 @@
 
 \begin{center}
 \footnotesize
-\begin{tabular}{ccccccccc}
+\begin{longtable}{ccccccccc}
 \textbf{Nom} & \textbf{Prénom} & \textbf{Date de naissance} & \textbf{Genre} & \textbf{Section}
  & \textbf{Bus} & \textbf{Équipe} & \textbf{Rôles} \\
 {% for membership in memberships %}
@@ -27,20 +28,20 @@
 & {{ membership.registration.get_gender_display|safe }} & {{ membership.user.profile.section_generated|safe }} & {{ membership.bus.name|safe }}
 & {% if membership.team %}{{ membership.team.name|safe }}{% else %}--{% endif %} & {{ membership.roles.first|safe }} \\
 {% endfor %}
-\end{tabular}
+\end{longtable}
 \end{center}
 
 \footnotesize
 Section = Année à l'ENS + code du département
 
 \begin{center}
-\begin{tabular}{ccccccccc}
+\begin{longtable}{ccccccccc}
 \textbf{Code} & A0 & A1 & A2 & A'2 & A''2 & A3 & B1234 & B1 \\
 \textbf{Département} & Informatique & Maths & Physique & Physique appliquée & Chimie & Biologie & SAPHIRE & Mécanique \\
 \hline
 \textbf{Code} & B2 & B3 & B4 & C & D2 & D3 & E & EXT \\
 \textbf{Département} & Génie civil & Génie mécanique & EEA & Design & Éco-gestion & Sciences sociales & Anglais & Extérieur
-\end{tabular}
+\end{longtable}
 \end{center}
 
 \end{document}
