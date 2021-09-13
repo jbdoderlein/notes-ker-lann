@@ -50,7 +50,7 @@
 
             {% for bus, score in survey.ordered_buses %}
                 <button class="btn btn-{% if bus.pk == survey.information.selected_bus_pk %}success{% else %}light{% endif %}" onclick="choose_bus({{ bus.pk }})">
-                    {{ bus }} ({{ score|floatformat:2 }}) : {{ bus.memberships.count }} / {{ bus.size }}
+                    {{ bus }} ({{ score|floatformat:2 }}) : {{ bus.memberships.count }}+{{ bus.suggested_first_year }} / {{ bus.size }}
                 </button>
             {% endfor %}
 

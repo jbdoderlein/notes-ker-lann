@@ -7,6 +7,7 @@ from datetime import date
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from member.models import Club, Membership
@@ -97,6 +98,13 @@ class Bus(models.Model):
         Store information as a JSON string
         """
         self.information_json = json.dumps(information, indent=2)
+
+    @property
+    def suggested_first_year(self):
+        registrations = WEIRegistration.objects.filter(Q(membership__isnull=True) | Q(membership__bus__isnull=True),
+                                                       first_year=True, wei=self.wei)
+        registrations = [r for r in registrations if 'selected_bus_pk' in r.information]
+        return sum(1 for r in registrations if r.information['selected_bus_pk'] == self.pk)
 
     def __str__(self):
         return self.name
