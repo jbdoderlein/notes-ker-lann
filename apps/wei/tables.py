@@ -190,13 +190,12 @@ class WEIRegistration1ATable(tables.Table):
         attrs = {
             'class': 'table table-condensed table-striped table-hover'
         }
-        model = WEIMembership
+        model = WEIRegistration
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('user', 'user__last_name', 'user__first_name', 'gender',
                   'user__profile__department', 'preferred_bus', 'membership__bus', )
         row_attrs = {
-            'class': 'table-row',
-            'id': lambda record: "row-" + str(record.pk),
+            'class': lambda record: '' if 'selected_bus_pk' in record.information else 'bg-danger',
         }
 
 

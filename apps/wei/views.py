@@ -1195,6 +1195,12 @@ class WEIAttributeBus1AView(ProtectQuerysetMixin, DetailView):
         qs = qs.filter(first_year=True)
         return qs
 
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if 'selected_bus_pk' not in obj.information:
+            return redirect(reverse_lazy('wei:wei_survey', args=(obj.pk,)))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['club'] = self.object.wei
@@ -1209,6 +1215,7 @@ class WEIAttributeBus1ANextView(LoginRequiredMixin, RedirectView):
             raise Http404
         wei = wei.get()
         qs = WEIRegistration.objects.filter(wei=wei, membership__isnull=False, membership__bus__isnull=True)
+        qs = qs.filter(information_json__contains='selected_bus_pk')  # not perfect, but works...
         if qs.exists():
             return reverse_lazy('wei:wei_bus_1A', args=(qs.first().pk, ))
         return reverse_lazy('wei_1A_list', args=(wei.pk, ))
