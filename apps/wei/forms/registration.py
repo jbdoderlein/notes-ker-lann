@@ -48,8 +48,7 @@ class WEIRegistrationForm(forms.ModelForm):
                     'placeholder': 'Nom ...',
                 },
             ),
-            "birth_date": DatePickerInput(options={'defaultDate': '2000-01-01',
-                                                   'minDate': '1900-01-01',
+            "birth_date": DatePickerInput(options={'minDate': '1900-01-01',
                                                    'maxDate': '2100-01-01'}),
         }
 
@@ -118,7 +117,8 @@ class WEIMembershipForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data["team"] is not None and cleaned_data["team"].bus != cleaned_data["bus"]:
+        if 'team' in cleaned_data and cleaned_data["team"] is not None \
+                and cleaned_data["team"].bus != cleaned_data["bus"]:
             self.add_error('bus', _("This team doesn't belong to the given bus."))
         return cleaned_data
 
@@ -142,6 +142,20 @@ class WEIMembershipForm(forms.ModelForm):
                 resetable=True,
             ),
         }
+
+
+class WEIMembership1AForm(WEIMembershipForm):
+    """
+    Used to confirm registrations of first year members without choosing a bus now.
+    """
+    roles = None
+
+    def clean(self):
+        return super(forms.ModelForm, self).clean()
+
+    class Meta:
+        model = WEIMembership
+        fields = ('credit_type', 'credit_amount', 'last_name', 'first_name', 'bank',)
 
 
 class BusForm(forms.ModelForm):

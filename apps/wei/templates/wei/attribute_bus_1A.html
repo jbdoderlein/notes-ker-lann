@@ -1,0 +1,88 @@
+{% extends "wei/base.html" %}
+
+{% load i18n %}
+
+{% block profile_content %}
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>{% trans "Bus attribution" %}</h3>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-xl-6">{% trans 'user'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.user }}</dd>
+
+                <dt class="col-xl-6">{% trans 'last name'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.user.last_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'first name'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.user.first_name }}</dd>
+
+                <dt class="col-xl-6">{% trans 'gender'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.get_gender_display }}</dd>
+
+                <dt class="col-xl-6">{% trans 'department'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.user.profile.get_department_display }}</dd>
+
+                <dt class="col-xl-6">{% trans 'health issues'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ object.health_issues|default:"—" }}</dd>
+
+                <dt class="col-xl-6">{% trans 'suggested bus'|capfirst %}</dt>
+                <dd class="col-xl-6">{{ survey.information.selected_bus_name }}</dd>
+            </dl>
+
+            <div class="card">
+                <div class="card-header">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#raw-survey">{% trans "View raw survey information" %}</button>
+                </div>
+                <div class="collapse" id="raw-survey">
+                    <dl class="row">
+                        {% for key, value in survey.registration.information.items %}
+                            <dt class="col-xl-6">{{ key }}</dt>
+                            <dd class="col-xl-6">{{ value }}</dd>
+                        {% endfor %}
+                    </dl>
+                </div>
+            </div>
+
+            <hr>
+
+            {% for bus, score in survey.ordered_buses %}
+                <button class="btn btn-{% if bus.pk == survey.information.selected_bus_pk %}success{% else %}light{% endif %}" onclick="choose_bus({{ bus.pk }})">
+                    {{ bus }} ({{ score|floatformat:2 }}) : {{ bus.memberships.count }}+{{ bus.suggested_first_year }} / {{ bus.size }}
+                </button>
+            {% endfor %}
+
+            <a href="{% url 'wei:wei_1A_list' pk=object.wei.pk %}" class="btn btn-block btn-info">{% trans "Back to main list" %}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrajavascript %}
+    <script>
+        function choose_bus(bus_id) {
+            let valid_buses = [{% for bus, score in survey.ordered_buses %}{{ bus.pk }}, {% endfor %}];
+            if (valid_buses.indexOf(bus_id) === -1) {
+                console.log("Invalid chosen bus")
+                return
+            }
+
+            $.ajax({
+                url: "/api/wei/membership/{{ object.membership.id }}/",
+                type: "PATCH",
+                dataType: "json",
+                headers: {
+                    "X-CSRFTOKEN": CSRF_TOKEN
+                },
+                data: {
+                    bus: bus_id,
+                }
+            }).done(function () {
+                window.location = "{% url 'wei:wei_bus_1A_next' pk=object.wei.pk %}"
+            }).fail(function (xhr) {
+                errMsg(xhr.responseJSON)
+            })
+        }
+    </script>
+{% endblock %}
