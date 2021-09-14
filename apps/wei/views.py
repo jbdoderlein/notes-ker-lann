@@ -7,6 +7,7 @@ import subprocess
 from datetime import date, timedelta
 from tempfile import mkdtemp
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -555,6 +556,12 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
                                          " participated to a WEI."))
                 return self.form_invalid(form)
 
+        if 'treasury' in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            form.instance.soge_credit = \
+                form.instance.soge_credit \
+                or SogeCredit.objects.filter(user=form.instance.user, credit_transaction__valid=False).exists()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -655,6 +662,12 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         information["preferred_roles_name"] = [role.name for role in choose_bus_form.cleaned_data["roles"]]
         form.instance.information = information
         form.instance.save()
+
+        if 'treasury' in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            form.instance.soge_credit = \
+                form.instance.soge_credit \
+                or SogeCredit.objects.filter(user=form.instance.user, credit_transaction__valid=False).exists()
 
         return super().form_valid(form)
 
