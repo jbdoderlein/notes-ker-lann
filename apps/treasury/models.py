@@ -432,6 +432,7 @@ class SogeCredit(models.Model):
             # was opened after the validation of the account.
             self.credit_transaction.valid = False
             self.credit_transaction.reason += " (invalide)"
+            self.credit_transaction._force_save = True
             self.credit_transaction.save()
         super().delete(**kwargs)
 
