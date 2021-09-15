@@ -1913,10 +1913,10 @@ msgstr "Cet email est déjà pris."
 
 #: apps/registration/forms.py:49
 msgid ""
-"I declare that I opened a bank account in the Société générale with the BDE "
+"I declare that I opened or I will open soon a bank account in the Société générale with the BDE "
 "partnership."
 msgstr ""
-"Je déclare avoir ouvert un compte à la société générale avec le partenariat "
+"Je déclare avoir ouvert ou ouvrir prochainement un compte à la société générale avec le partenariat "
 "du BDE."
 
 #: apps/registration/forms.py:50
