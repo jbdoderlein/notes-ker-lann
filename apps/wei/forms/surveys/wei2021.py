@@ -171,7 +171,7 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     def get_bus_information_class(cls):
         return WEIBusInformation2021
 
-    def run_algorithm(self):
+    def run_algorithm(self, display_tqdm=False):
         """
         Gale-Shapley algorithm implementation.
         We modify it to allow buses to have multiple "weddings".
@@ -196,11 +196,26 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
             free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
             quotas[bus] = 4 + int(non_men_total / registrations.count() * free_seats)
 
-        # Repartition for non men people first
-        self.make_repartition(non_men, quotas)
-        self.make_repartition(men)
+        tqdm_obj = None
+        if display_tqdm:
+            from tqdm import tqdm
+            tqdm_obj = tqdm(total=len(non_men), desc="Non-hommes")
 
-    def make_repartition(self, surveys, quotas=None):
+        # Repartition for non men people first
+        self.make_repartition(non_men, quotas, tqdm_obj=tqdm_obj)
+
+        if display_tqdm:
+            tqdm_obj.close()
+
+            from tqdm import tqdm
+            tqdm_obj = tqdm(total=len(men), desc="Hommes")
+
+        self.make_repartition(men, tqdm_obj=tqdm_obj)
+
+        if display_tqdm:
+            tqdm_obj.close()
+
+    def make_repartition(self, surveys, quotas=None, tqdm_obj=None):
         free_surveys = surveys.copy()  # Remaining surveys
         while free_surveys:  # Some students are not affected
             survey = free_surveys[0]
@@ -235,6 +250,11 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
                         free_surveys.append(least_preferred_survey)
                         survey.select_bus(bus)
                         survey.save()
+                        free_surveys.remove(survey)
                         break
             else:
                 raise ValueError(f"User {survey.registration.user} has no free seat")
+
+            if tqdm_obj is not None:
+                tqdm_obj.n = len(surveys) - len(free_surveys)
+                tqdm_obj.refresh()
