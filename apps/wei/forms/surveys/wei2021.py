@@ -139,12 +139,25 @@ class WEISurvey2021(WEISurvey):
         """
         return self.information.step == 20
 
+    @classmethod
+    @lru_cache()
+    def word_mean(cls, word):
+        """
+        Calculate the mid-score given by all buses.
+        """
+        buses = cls.get_algorithm_class().get_buses()
+        return sum([cls.get_algorithm_class().get_bus_information(bus).scores[word] for bus in buses]) / buses.count()
+
     @lru_cache()
     def score(self, bus):
         if not self.is_complete():
             raise ValueError("Survey is not ended, can't calculate score")
+
         bus_info = self.get_algorithm_class().get_bus_information(bus)
-        return sum(bus_info.scores[getattr(self.information, 'word' + str(i))] for i in range(1, 21)) / 20
+        # Score is the given score by the bus subtracted to the mid-score of the buses.
+        s = sum(bus_info.scores[getattr(self.information, 'word' + str(i))]
+                - self.word_mean(getattr(self.information, 'word' + str(i))) for i in range(1, 21)) / 20
+        return s
 
     @lru_cache()
     def scores_per_bus(self):
@@ -209,8 +222,6 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
             free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
             free_seats -= sum(1 for s in non_men if s.information.selected_bus_pk == bus.pk)
             quotas[bus] = free_seats
-
-        print(quotas)
 
         if display_tqdm:
             tqdm_obj.close()
