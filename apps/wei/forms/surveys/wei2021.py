@@ -7,9 +7,11 @@ from random import Random
 
 from django import forms
 from django.db import transaction
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .base import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, WEIBusInformation
+from ...models import WEIMembership
 
 WORDS = [
     '13 organisé', '3ième mi temps', 'Années 2000', 'Apéro', 'BBQ', 'BP', 'Beauf', 'Binge drinking', 'Bon enfant',
@@ -178,12 +180,33 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         surveys = [s for s in surveys if s.is_complete()]  # Don't consider invalid surveys
         # Don't manage hardcoded people
         surveys = [s for s in surveys if not hasattr(s.information, 'hardcoded') or not s.information.hardcoded]
-        free_surveys = [s for s in surveys if not s.information.valid]  # Remaining surveys
+
+        # Reset previous algorithm run
+        for survey in surveys:
+            survey.free()
+            survey.save()
+
+        non_men = [s for s in surveys if s.registration.gender != 'male']
+        men = [s for s in surveys if s.registration.gender == 'male']
+
+        quotas = {}
+        registrations = self.get_registrations()
+        non_men_total = registrations.filter(~Q(gender='male')).count()
+        for bus in self.get_buses():
+            free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
+            quotas[bus] = 4 + int(non_men_total / registrations.count() * free_seats)
+
+        # Repartition for non men people first
+        self.make_repartition(non_men, quotas)
+        self.make_repartition(men)
+
+    def make_repartition(self, surveys, quotas=None):
+        free_surveys = surveys.copy()  # Remaining surveys
         while free_surveys:  # Some students are not affected
             survey = free_surveys[0]
             buses = survey.ordered_buses()  # Preferences of the student
-            for bus, _ignored in buses:
-                if self.get_bus_information(bus).has_free_seats(surveys):
+            for bus, current_score in buses:
+                if self.get_bus_information(bus).has_free_seats(surveys, quotas):
                     # Selected bus has free places. Put student in the bus
                     survey.select_bus(bus)
                     survey.save()
@@ -191,7 +214,6 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
                     break
                 else:
                     # Current bus has not enough places. Remove the least preferred student from the bus if existing
-                    current_score = survey.score(bus)
                     least_preferred_survey = None
                     least_score = -1
                     # Find the least student in the bus that has a lower score than the current student
