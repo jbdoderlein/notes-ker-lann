@@ -204,13 +204,21 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         # Repartition for non men people first
         self.make_repartition(non_men, quotas, tqdm_obj=tqdm_obj)
 
+        quotas = {}
+        for bus in self.get_buses():
+            free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
+            free_seats -= sum(1 for s in non_men if s.information.selected_bus_pk == bus.pk)
+            quotas[bus] = free_seats
+
+        print(quotas)
+
         if display_tqdm:
             tqdm_obj.close()
 
             from tqdm import tqdm
             tqdm_obj = tqdm(total=len(men), desc="Hommes")
 
-        self.make_repartition(men, tqdm_obj=tqdm_obj)
+        self.make_repartition(men, quotas, tqdm_obj=tqdm_obj)
 
         if display_tqdm:
             tqdm_obj.close()
