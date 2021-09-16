@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+import datetime
 from datetime import date
 
 from django.conf import settings
@@ -305,8 +305,16 @@ class SogeCredit(models.Model):
 
     @property
     def amount(self):
-        return self.credit_transaction.total if self.valid \
-            else sum(transaction.total for transaction in self.transactions.all())
+        if self.valid:
+            return self.credit_transaction.total
+        amount = sum(transaction.total for transaction in self.transactions.all())
+        if 'wei' in settings.INSTALLED_APPS:
+            from wei.models import WEIMembership
+            if not WEIMembership.objects.filter(club__weiclub__year=datetime.date.today().year, user=self.user)\
+                    .exists():
+                # 80 € for people that don't go to WEI
+                amount += 8000
+        return amount
 
     def update_transactions(self):
         """
