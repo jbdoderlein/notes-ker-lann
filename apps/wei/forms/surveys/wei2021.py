@@ -1,6 +1,8 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 import time
+from functools import lru_cache
 from random import Random
 
 from django import forms
@@ -135,15 +137,18 @@ class WEISurvey2021(WEISurvey):
         """
         return self.information.step == 20
 
+    @lru_cache()
     def score(self, bus):
         if not self.is_complete():
             raise ValueError("Survey is not ended, can't calculate score")
         bus_info = self.get_algorithm_class().get_bus_information(bus)
         return sum(bus_info.scores[getattr(self.information, 'word' + str(i))] for i in range(1, 21)) / 20
 
+    @lru_cache()
     def scores_per_bus(self):
         return {bus: self.score(bus) for bus in self.get_algorithm_class().get_buses()}
 
+    @lru_cache()
     def ordered_buses(self):
         values = list(self.scores_per_bus().items())
         values.sort(key=lambda item: -item[1])
