@@ -331,13 +331,15 @@ class SogeCredit(models.Model):
 
         if bde_qs.exists():
             m = bde_qs.get()
-            if m.transaction not in self.transactions.all():
-                self.transactions.add(m.transaction)
+            if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
 
         if kfet_qs.exists():
             m = kfet_qs.get()
-            if m.transaction not in self.transactions.all():
-                self.transactions.add(m.transaction)
+            if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
 
         if 'wei' in settings.INSTALLED_APPS:
             from wei.models import WEIClub
@@ -345,8 +347,9 @@ class SogeCredit(models.Model):
             wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
             if wei_qs.exists():
                 m = wei_qs.get()
-                if m.transaction not in self.transactions.all():
-                    self.transactions.add(m.transaction)
+                if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                    if m.transaction not in self.transactions.all():
+                        self.transactions.add(m.transaction)
 
         for tr in self.transactions.all():
             tr.valid = False
