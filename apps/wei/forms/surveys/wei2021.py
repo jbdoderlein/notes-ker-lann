@@ -207,6 +207,9 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         non_men_total = registrations.filter(~Q(gender='male')).count()
         for bus in self.get_buses():
             free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
+            # Remove hardcoded people
+            free_seats -= WEIMembership.objects.filter(bus=bus, registration__first_year=True,
+                                                       registration__information_json__icontains="hardcoded").count()
             quotas[bus] = 4 + int(non_men_total / registrations.count() * free_seats)
 
         tqdm_obj = None
@@ -221,6 +224,9 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
         for bus in self.get_buses():
             free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
             free_seats -= sum(1 for s in non_men if s.information.selected_bus_pk == bus.pk)
+            # Remove hardcoded people
+            free_seats -= WEIMembership.objects.filter(bus=bus, registration__first_year=True,
+                                                       registration__information_json__icontains="hardcoded").count()
             quotas[bus] = free_seats
 
         if display_tqdm:
