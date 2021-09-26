@@ -193,6 +193,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
                     <span class="text-muted mr-1">
                         <a href="mailto:{{ "CONTACT_EMAIL" | getenv }}"
                            class="text-muted">{% trans "Contact us" %}</a> &mdash;
+                        <a href="mailto:{{ "SUPPORT_EMAIL" | getenv }}"
+                           class="text-muted">{% trans "Technical Support" %}</a> &mdash;
                     </span>
                     {% csrf_token %}
                     <select title="language" name="language"
