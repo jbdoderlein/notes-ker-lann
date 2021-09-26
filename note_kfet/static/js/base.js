@@ -96,7 +96,11 @@ function displayStyle (note) {
   if (!note) { return '' }
   const balance = note.balance
   var css = ''
-  if (balance < -5000) { css += ' text-danger bg-dark' } else if (balance < -1000) { css += ' text-danger' } else if (balance < 0) { css += ' text-warning' } else if (!note.email_confirmed) { css += ' text-white bg-primary' } else if (!note.is_active || (note.membership && note.membership.date_end < new Date().toISOString())) { css += 'text-white bg-info' }
+  if (balance < -5000) { css += ' text-danger bg-dark' } 
+  else if (balance < -1000) { css += ' text-danger' } 
+  else if (balance < 0) { css += ' text-warning' }
+  if (!note.email_confirmed) { css += ' bg-primary' }
+  else if (!note.is_active || (note.membership && note.membership.date_end < new Date().toISOString())) { css += ' bg-info' }
   return css
 }
 
