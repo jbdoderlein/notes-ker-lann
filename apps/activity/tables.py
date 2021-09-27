@@ -1,7 +1,9 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 from django_tables2 import A
@@ -52,8 +54,8 @@ class GuestTable(tables.Table):
     def render_entry(self, record):
         if record.has_entry:
             return str(_("Entered on ") + str(_("{:%Y-%m-%d %H:%M:%S}").format(record.entry.time, )))
-        return format_html('<button id="{id}" class="btn btn-danger btn-sm" onclick="remove_guest(this.id)"> '
-                           '{delete_trans}</button>'.format(id=record.id, delete_trans=_("remove").capitalize()))
+        return mark_safe('<button id="{id}" class="btn btn-danger btn-sm" onclick="remove_guest(this.id)"> '
+                         '{delete_trans}</button>'.format(id=record.id, delete_trans=_("remove").capitalize()))
 
 
 def get_row_class(record):
@@ -91,7 +93,7 @@ class EntryTable(tables.Table):
         if hasattr(record, 'username'):
             username = record.username
             if username != value:
-                return format_html(value + " <em>aka.</em> " + username)
+                return mark_safe(escape(value) + " <em>aka.</em> " + escape(username))
         return value
 
     def render_balance(self, value):
