@@ -46,7 +46,8 @@ class SignUpForm(UserCreationForm):
 
 class DeclareSogeAccountOpenedForm(forms.Form):
     soge_account = forms.BooleanField(
-        label=_("I declare that I opened a bank account in the Société générale with the BDE partnership."),
+        label=_("I declare that I opened or I will open soon a bank account in the Société générale with the BDE \
+         partnership."),
         help_text=_("Warning: this engages you to open your bank account. If you finally decides to don't open your "
                     "account, you will have to pay the BDE membership."),
         required=False,

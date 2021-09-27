@@ -1,6 +1,6 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+import datetime
 from datetime import date
 
 from django.conf import settings
@@ -305,8 +305,16 @@ class SogeCredit(models.Model):
 
     @property
     def amount(self):
-        return self.credit_transaction.total if self.valid \
-            else sum(transaction.total for transaction in self.transactions.all())
+        if self.valid:
+            return self.credit_transaction.total
+        amount = sum(transaction.total for transaction in self.transactions.all())
+        if 'wei' in settings.INSTALLED_APPS:
+            from wei.models import WEIMembership
+            if not WEIMembership.objects.filter(club__weiclub__year=datetime.date.today().year, user=self.user)\
+                    .exists():
+                # 80 € for people that don't go to WEI
+                amount += 8000
+        return amount
 
     def update_transactions(self):
         """
@@ -323,13 +331,15 @@ class SogeCredit(models.Model):
 
         if bde_qs.exists():
             m = bde_qs.get()
-            if m.transaction not in self.transactions.all():
-                self.transactions.add(m.transaction)
+            if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
 
         if kfet_qs.exists():
             m = kfet_qs.get()
-            if m.transaction not in self.transactions.all():
-                self.transactions.add(m.transaction)
+            if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                if m.transaction not in self.transactions.all():
+                    self.transactions.add(m.transaction)
 
         if 'wei' in settings.INSTALLED_APPS:
             from wei.models import WEIClub
@@ -337,8 +347,9 @@ class SogeCredit(models.Model):
             wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
             if wei_qs.exists():
                 m = wei_qs.get()
-                if m.transaction not in self.transactions.all():
-                    self.transactions.add(m.transaction)
+                if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
+                    if m.transaction not in self.transactions.all():
+                        self.transactions.add(m.transaction)
 
         for tr in self.transactions.all():
             tr.valid = False
@@ -432,6 +443,7 @@ class SogeCredit(models.Model):
             # was opened after the validation of the account.
             self.credit_transaction.valid = False
             self.credit_transaction.reason += " (invalide)"
+            self.credit_transaction._force_save = True
             self.credit_transaction.save()
         super().delete(**kwargs)
 

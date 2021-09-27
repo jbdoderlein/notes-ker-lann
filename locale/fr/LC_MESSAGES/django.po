@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-12 19:30+0200\n"
+"POT-Creation-Date: 2021-09-13 23:26+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -56,7 +56,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/note/models/transactions.py:46 apps/note/models/transactions.py:301
 #: apps/permission/models.py:330
 #: apps/registration/templates/registration/future_profile_detail.html:16
-#: apps/wei/models.py:66 apps/wei/models.py:123 apps/wei/tables.py:283
+#: apps/wei/models.py:67 apps/wei/models.py:131 apps/wei/tables.py:282
 #: apps/wei/templates/wei/base.html:26
 #: apps/wei/templates/wei/weimembership_form.html:14
 msgid "name"
@@ -91,7 +91,7 @@ msgstr "types d'activité"
 #: apps/activity/models.py:68
 #: apps/activity/templates/activity/includes/activity_info.html:19
 #: apps/note/models/transactions.py:81 apps/permission/models.py:110
-#: apps/permission/models.py:189 apps/wei/models.py:77 apps/wei/models.py:134
+#: apps/permission/models.py:189 apps/wei/models.py:78 apps/wei/models.py:142
 msgid "description"
 msgstr "description"
 
@@ -112,7 +112,7 @@ msgstr "type"
 
 #: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:305
 #: apps/note/models/notes.py:148 apps/treasury/models.py:285
-#: apps/wei/models.py:165 apps/wei/templates/wei/attribute_bus_1A.html:13
+#: apps/wei/models.py:173 apps/wei/templates/wei/attribute_bus_1A.html:13
 #: apps/wei/templates/wei/survey.html:15
 msgid "user"
 msgstr "utilisateur"
@@ -511,7 +511,7 @@ msgstr "rôles"
 msgid "fee"
 msgstr "cotisation"
 
-#: apps/member/apps.py:14 apps/wei/tables.py:227 apps/wei/tables.py:258
+#: apps/member/apps.py:14 apps/wei/tables.py:226 apps/wei/tables.py:257
 msgid "member"
 msgstr "adhérent"
 
@@ -1913,10 +1913,10 @@ msgstr "Cet email est déjà pris."
 
 #: apps/registration/forms.py:49
 msgid ""
-"I declare that I opened a bank account in the Société générale with the BDE "
+"I declare that I opened or I will open soon a bank account in the Société générale with the BDE "
 "partnership."
 msgstr ""
-"Je déclare avoir ouvert un compte à la société générale avec le partenariat "
+"Je déclare avoir ouvert ou ouvrir prochainement un compte à la société générale avec le partenariat "
 "du BDE."
 
 #: apps/registration/forms.py:50
@@ -2508,8 +2508,8 @@ msgstr "Liste des crédits de la Société générale"
 msgid "Manage credits from the Société générale"
 msgstr "Gérer les crédits de la Société générale"
 
-#: apps/wei/apps.py:10 apps/wei/models.py:49 apps/wei/models.py:50
-#: apps/wei/models.py:61 apps/wei/models.py:172
+#: apps/wei/apps.py:10 apps/wei/models.py:50 apps/wei/models.py:51
+#: apps/wei/models.py:62 apps/wei/models.py:180
 #: note_kfet/templates/base.html:103
 msgid "WEI"
 msgstr "WEI"
@@ -2520,8 +2520,8 @@ msgstr ""
 "L'utilisateur sélectionné n'est pas validé. Merci de d'abord valider son "
 "compte."
 
-#: apps/wei/forms/registration.py:59 apps/wei/models.py:118
-#: apps/wei/models.py:315
+#: apps/wei/forms/registration.py:59 apps/wei/models.py:126
+#: apps/wei/models.py:323
 msgid "bus"
 msgstr "bus"
 
@@ -2547,7 +2547,7 @@ msgstr ""
 "bus ou électron libre)"
 
 #: apps/wei/forms/registration.py:75 apps/wei/forms/registration.py:85
-#: apps/wei/models.py:153
+#: apps/wei/models.py:161
 msgid "WEI Roles"
 msgstr "Rôles au WEI"
 
@@ -2563,123 +2563,123 @@ msgstr "Cette équipe n'appartient pas à ce bus."
 msgid "Choose a word:"
 msgstr "Choisissez un mot :"
 
-#: apps/wei/models.py:24 apps/wei/templates/wei/base.html:36
+#: apps/wei/models.py:25 apps/wei/templates/wei/base.html:36
 msgid "year"
 msgstr "année"
 
-#: apps/wei/models.py:28 apps/wei/templates/wei/base.html:30
+#: apps/wei/models.py:29 apps/wei/templates/wei/base.html:30
 msgid "date start"
 msgstr "début"
 
-#: apps/wei/models.py:32 apps/wei/templates/wei/base.html:33
+#: apps/wei/models.py:33 apps/wei/templates/wei/base.html:33
 msgid "date end"
 msgstr "fin"
 
-#: apps/wei/models.py:70 apps/wei/tables.py:306
+#: apps/wei/models.py:71 apps/wei/tables.py:305
 msgid "seat count in the bus"
 msgstr "nombre de sièges dans le bus"
 
-#: apps/wei/models.py:82
+#: apps/wei/models.py:83
 msgid "survey information"
 msgstr "informations sur le questionnaire"
 
-#: apps/wei/models.py:83
+#: apps/wei/models.py:84
 msgid "Information about the survey for new members, encoded in JSON"
 msgstr ""
 "Informations sur le sondage pour les nouveaux membres, encodées en JSON"
 
-#: apps/wei/models.py:105
+#: apps/wei/models.py:113
 msgid "Bus"
 msgstr "Bus"
 
-#: apps/wei/models.py:106 apps/wei/templates/wei/weiclub_detail.html:51
+#: apps/wei/models.py:114 apps/wei/templates/wei/weiclub_detail.html:51
 msgid "Buses"
 msgstr "Bus"
 
-#: apps/wei/models.py:127
+#: apps/wei/models.py:135
 msgid "color"
 msgstr "couleur"
 
-#: apps/wei/models.py:128
+#: apps/wei/models.py:136
 msgid "The color of the T-Shirt, stored with its number equivalent"
 msgstr ""
 "La couleur du T-Shirt, stocké sous la forme de son équivalent numérique"
 
-#: apps/wei/models.py:142
+#: apps/wei/models.py:150
 msgid "Bus team"
 msgstr "Équipe de bus"
 
-#: apps/wei/models.py:143
+#: apps/wei/models.py:151
 msgid "Bus teams"
 msgstr "Équipes de bus"
 
-#: apps/wei/models.py:152
+#: apps/wei/models.py:160
 msgid "WEI Role"
 msgstr "Rôle au WEI"
 
-#: apps/wei/models.py:177
+#: apps/wei/models.py:185
 msgid "Credit from Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/wei/models.py:182
+#: apps/wei/models.py:190
 msgid "Caution check given"
 msgstr "Chèque de caution donné"
 
-#: apps/wei/models.py:186 apps/wei/templates/wei/weimembership_form.html:64
+#: apps/wei/models.py:194 apps/wei/templates/wei/weimembership_form.html:64
 msgid "birth date"
 msgstr "date de naissance"
 
-#: apps/wei/models.py:192 apps/wei/models.py:202
+#: apps/wei/models.py:200 apps/wei/models.py:210
 msgid "Male"
 msgstr "Homme"
 
-#: apps/wei/models.py:193 apps/wei/models.py:203
+#: apps/wei/models.py:201 apps/wei/models.py:211
 msgid "Female"
 msgstr "Femme"
 
-#: apps/wei/models.py:194
+#: apps/wei/models.py:202
 msgid "Non binary"
 msgstr "Non-binaire"
 
-#: apps/wei/models.py:196 apps/wei/templates/wei/attribute_bus_1A.html:22
+#: apps/wei/models.py:204 apps/wei/templates/wei/attribute_bus_1A.html:22
 #: apps/wei/templates/wei/weimembership_form.html:55
 msgid "gender"
 msgstr "genre"
 
-#: apps/wei/models.py:205 apps/wei/templates/wei/weimembership_form.html:58
+#: apps/wei/models.py:213 apps/wei/templates/wei/weimembership_form.html:58
 msgid "clothing cut"
 msgstr "coupe de vêtement"
 
-#: apps/wei/models.py:218 apps/wei/templates/wei/weimembership_form.html:61
+#: apps/wei/models.py:226 apps/wei/templates/wei/weimembership_form.html:61
 msgid "clothing size"
 msgstr "taille de vêtement"
 
-#: apps/wei/models.py:224 apps/wei/templates/wei/attribute_bus_1A.html:28
+#: apps/wei/models.py:232 apps/wei/templates/wei/attribute_bus_1A.html:28
 #: apps/wei/templates/wei/weimembership_form.html:67
 msgid "health issues"
 msgstr "problèmes de santé"
 
-#: apps/wei/models.py:229 apps/wei/templates/wei/weimembership_form.html:70
+#: apps/wei/models.py:237 apps/wei/templates/wei/weimembership_form.html:70
 msgid "emergency contact name"
 msgstr "nom du contact en cas d'urgence"
 
-#: apps/wei/models.py:234 apps/wei/templates/wei/weimembership_form.html:73
+#: apps/wei/models.py:242 apps/wei/templates/wei/weimembership_form.html:73
 msgid "emergency contact phone"
 msgstr "téléphone du contact en cas d'urgence"
 
-#: apps/wei/models.py:239 apps/wei/templates/wei/weimembership_form.html:52
+#: apps/wei/models.py:247 apps/wei/templates/wei/weimembership_form.html:52
 msgid "first year"
 msgstr "première année"
 
-#: apps/wei/models.py:240
+#: apps/wei/models.py:248
 msgid "Tells if the user is new in the school."
 msgstr "Indique si l'utilisateur est nouveau dans l'école."
 
-#: apps/wei/models.py:245
+#: apps/wei/models.py:253
 msgid "registration information"
 msgstr "informations sur l'inscription"
 
-#: apps/wei/models.py:246
+#: apps/wei/models.py:254
 msgid ""
 "Information about the registration (buses for old members, survey for the "
 "new members), encoded in JSON"
@@ -2687,27 +2687,27 @@ msgstr ""
 "Informations sur l'inscription (bus pour les 2A+, questionnaire pour les "
 "1A), encodées en JSON"
 
-#: apps/wei/models.py:304
+#: apps/wei/models.py:312
 msgid "WEI User"
 msgstr "Participant au WEI"
 
-#: apps/wei/models.py:305
+#: apps/wei/models.py:313
 msgid "WEI Users"
 msgstr "Participants au WEI"
 
-#: apps/wei/models.py:325
+#: apps/wei/models.py:333
 msgid "team"
 msgstr "équipe"
 
-#: apps/wei/models.py:335
+#: apps/wei/models.py:343
 msgid "WEI registration"
 msgstr "Inscription au WEI"
 
-#: apps/wei/models.py:339
+#: apps/wei/models.py:347
 msgid "WEI membership"
 msgstr "Adhésion au WEI"
 
-#: apps/wei/models.py:340
+#: apps/wei/models.py:348
 msgid "WEI memberships"
 msgstr "Adhésions au WEI"
 
@@ -2735,32 +2735,32 @@ msgstr "Année"
 msgid "preferred bus"
 msgstr "bus préféré"
 
-#: apps/wei/tables.py:211 apps/wei/templates/wei/bus_detail.html:32
+#: apps/wei/tables.py:210 apps/wei/templates/wei/bus_detail.html:32
 #: apps/wei/templates/wei/busteam_detail.html:50
 msgid "Teams"
 msgstr "Équipes"
 
-#: apps/wei/tables.py:220 apps/wei/tables.py:261
+#: apps/wei/tables.py:219 apps/wei/tables.py:260
 msgid "Members count"
 msgstr "Nombre de membres"
 
-#: apps/wei/tables.py:227 apps/wei/tables.py:258
+#: apps/wei/tables.py:226 apps/wei/tables.py:257
 msgid "members"
 msgstr "adhérents"
 
-#: apps/wei/tables.py:288
+#: apps/wei/tables.py:287
 msgid "suggested first year"
 msgstr "1A suggérés"
 
-#: apps/wei/tables.py:294
+#: apps/wei/tables.py:293
 msgid "validated first year"
 msgstr "1A validés"
 
-#: apps/wei/tables.py:300
+#: apps/wei/tables.py:299
 msgid "validated staff"
 msgstr "2A+ validés"
 
-#: apps/wei/tables.py:311
+#: apps/wei/tables.py:310
 msgid "free seats"
 msgstr "sièges libres"
 
@@ -3116,7 +3116,7 @@ msgstr "Valider l'inscription WEI"
 msgid "Attribute buses to first year members"
 msgstr "Répartir les 1A dans les bus"
 
-#: apps/wei/views.py:1190
+#: apps/wei/views.py:1191
 msgid "Attribute bus"
 msgstr "Attribuer un bus"
 
@@ -3252,16 +3252,15 @@ msgstr ""
 msgid ""
 "You declared that you opened a bank account in the Société générale. The "
 "bank did not validate the creation of the account to the BDE, so the "
-"registration bonus of 80 € is not credited and the membership is not paid "
-"yet. This verification procedure may last a few days. Please make sure that "
-"you go to the end of the account creation."
+"membership and the WEI are not paid yet. This verification procedure may "
+"last a few days. Please make sure that you go to the end of the account "
+"creation."
 msgstr ""
 "Vous avez déclaré que vous avez ouvert un compte bancaire à la société "
 "générale. La banque n'a pas encore validé la création du compte auprès du "
-"BDE, le bonus d'inscription de 80 € n'a donc pas encore été créditée et "
-"l'adhésion n'est pas encore payée. Cette procédure de vérification peut "
-"durer quelques jours. Merci de vous assurer de bien aller au bout de vos "
-"démarches."
+"BDE, l'adhésion et le WEI ne sont donc pas encore payés. Cette procédure de "
+"vérification peut durer quelques jours. Merci de vous assurer de bien aller "
+"au bout de vos démarches."
 
 #: note_kfet/templates/base.html:195
 msgid "Contact us"

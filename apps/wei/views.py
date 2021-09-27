@@ -7,6 +7,7 @@ import subprocess
 from datetime import date, timedelta
 from tempfile import mkdtemp
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -190,6 +191,10 @@ class WEIDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context["can_add_bus"] = PermissionBackend.check_perm(self.request, "wei.add_bus", empty_bus)
 
         context["not_first_year"] = WEIMembership.objects.filter(user=self.request.user).exists()
+
+        qs = WEIMembership.objects.filter(club=club, registration__first_year=True, bus__isnull=True)
+        context["can_validate_1a"] = PermissionBackend.check_perm(
+            self.request, "wei.change_weimembership_bus", qs.first()) if qs.exists() else False
 
         return context
 
@@ -551,6 +556,12 @@ class WEIRegister1AView(ProtectQuerysetMixin, ProtectedCreateView):
                                          " participated to a WEI."))
                 return self.form_invalid(form)
 
+        if 'treasury' in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            form.instance.soge_credit = \
+                form.instance.soge_credit \
+                or SogeCredit.objects.filter(user=form.instance.user, credit_transaction__valid=False).exists()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -651,6 +662,12 @@ class WEIRegister2AView(ProtectQuerysetMixin, ProtectedCreateView):
         information["preferred_roles_name"] = [role.name for role in choose_bus_form.cleaned_data["roles"]]
         form.instance.information = information
         form.instance.save()
+
+        if 'treasury' in settings.INSTALLED_APPS:
+            from treasury.models import SogeCredit
+            form.instance.soge_credit = \
+                form.instance.soge_credit \
+                or SogeCredit.objects.filter(user=form.instance.user, credit_transaction__valid=False).exists()
 
         return super().form_valid(form)
 
@@ -1181,7 +1198,10 @@ class WEI1AListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['club'] = self.club
-        context['bus_repartition_table'] = BusRepartitionTable(Bus.objects.filter(wei=self.club, size__gt=0).all())
+        context['bus_repartition_table'] = BusRepartitionTable(
+            Bus.objects.filter(wei=self.club, size__gt=0)
+                       .filter(PermissionBackend.filter_queryset(self.request, Bus, "view"))
+                       .all())
         return context
 
 
@@ -1218,4 +1238,4 @@ class WEIAttributeBus1ANextView(LoginRequiredMixin, RedirectView):
         qs = qs.filter(information_json__contains='selected_bus_pk')  # not perfect, but works...
         if qs.exists():
             return reverse_lazy('wei:wei_bus_1A', args=(qs.first().pk, ))
-        return reverse_lazy('wei_1A_list', args=(wei.pk, ))
+        return reverse_lazy('wei:wei_1A_list', args=(wei.pk, ))

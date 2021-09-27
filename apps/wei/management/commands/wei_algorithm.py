@@ -24,7 +24,15 @@ class Command(BaseCommand):
         sid = transaction.savepoint()
 
         algorithm = CurrentSurvey.get_algorithm_class()()
-        algorithm.run_algorithm()
+
+        try:
+            from tqdm import tqdm
+            del tqdm
+            display_tqdm = True
+        except ImportError:
+            display_tqdm = False
+
+        algorithm.run_algorithm(display_tqdm=display_tqdm)
 
         output = options['output']
         registrations = algorithm.get_registrations()
@@ -34,8 +42,13 @@ class Command(BaseCommand):
         for bus, members in per_bus.items():
             output.write(bus.name + "\n")
             output.write("=" * len(bus.name) + "\n")
+            _order = -1
             for r in members:
-                output.write(r.user.username + "\n")
+                survey = CurrentSurvey(r)
+                for _order, (b, _score) in enumerate(survey.ordered_buses()):
+                    if b == bus:
+                        break
+                output.write(f"{r.user.username} ({_order + 1})\n")
             output.write("\n")
 
         if not options['doit']:

@@ -50,15 +50,19 @@ class WEIBusInformation:
         self.bus.information = d
         self.bus.save()
 
-    def free_seats(self, surveys: List["WEISurvey"] = None):
-        size = self.bus.size
-        already_occupied = WEIMembership.objects.filter(bus=self.bus).count()
+    def free_seats(self, surveys: List["WEISurvey"] = None, quotas=None):
+        if not quotas:
+            size = self.bus.size
+            already_occupied = WEIMembership.objects.filter(bus=self.bus).count()
+            quotas = {self.bus: size - already_occupied}
+
+        quota = quotas[self.bus]
         valid_surveys = sum(1 for survey in surveys if survey.information.valid
                             and survey.information.get_selected_bus() == self.bus) if surveys else 0
-        return size - already_occupied - valid_surveys
+        return quota - valid_surveys
 
-    def has_free_seats(self, surveys=None):
-        return self.free_seats(surveys) > 0
+    def has_free_seats(self, surveys=None, quotas=None):
+        return self.free_seats(surveys, quotas) > 0
 
 
 class WEISurveyAlgorithm:
@@ -86,14 +90,20 @@ class WEISurveyAlgorithm:
         """
         Queryset of all first year registrations
         """
-        return WEIRegistration.objects.filter(wei__year=cls.get_survey_class().get_year(), first_year=True)
+        if not hasattr(cls, '_registrations'):
+            cls._registrations = WEIRegistration.objects.filter(wei__year=cls.get_survey_class().get_year(),
+                                                                first_year=True).all()
+
+        return cls._registrations
 
     @classmethod
     def get_buses(cls) -> QuerySet:
         """
         Queryset of all buses of the associated wei.
         """
-        return Bus.objects.filter(wei__year=cls.get_survey_class().get_year(), size__gt=0)
+        if not hasattr(cls, '_buses'):
+            cls._buses = Bus.objects.filter(wei__year=cls.get_survey_class().get_year(), size__gt=0).all()
+        return cls._buses
 
     @classmethod
     def get_bus_information(cls, bus):
@@ -135,7 +145,10 @@ class WEISurvey:
         """
         The WEI associated to this kind of survey.
         """
-        return WEIClub.objects.get(year=cls.get_year())
+        if not hasattr(cls, '_wei'):
+            cls._wei = WEIClub.objects.get(year=cls.get_year())
+
+        return cls._wei
 
     @classmethod
     def get_survey_information_class(cls):
@@ -210,3 +223,15 @@ class WEISurvey:
         self.information.selected_bus_pk = None
         self.information.selected_bus_name = None
         self.information.valid = False
+
+    @classmethod
+    def clear_cache(cls):
+        """
+        Clear stored information.
+        """
+        if hasattr(cls, '_wei'):
+            del cls._wei
+        if hasattr(cls.get_algorithm_class(), '_registrations'):
+            del cls.get_algorithm_class()._registrations
+        if hasattr(cls.get_algorithm_class(), '_buses'):
+            del cls.get_algorithm_class()._buses

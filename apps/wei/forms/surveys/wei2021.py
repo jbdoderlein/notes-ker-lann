@@ -1,13 +1,17 @@
 # Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 import time
+from functools import lru_cache
 from random import Random
 
 from django import forms
 from django.db import transaction
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .base import WEISurvey, WEISurveyInformation, WEISurveyAlgorithm, WEIBusInformation
+from ...models import WEIMembership
 
 WORDS = [
     '13 organisé', '3ième mi temps', 'Années 2000', 'Apéro', 'BBQ', 'BP', 'Beauf', 'Binge drinking', 'Bon enfant',
@@ -135,19 +139,40 @@ class WEISurvey2021(WEISurvey):
         """
         return self.information.step == 20
 
+    @classmethod
+    @lru_cache()
+    def word_mean(cls, word):
+        """
+        Calculate the mid-score given by all buses.
+        """
+        buses = cls.get_algorithm_class().get_buses()
+        return sum([cls.get_algorithm_class().get_bus_information(bus).scores[word] for bus in buses]) / buses.count()
+
+    @lru_cache()
     def score(self, bus):
         if not self.is_complete():
             raise ValueError("Survey is not ended, can't calculate score")
-        bus_info = self.get_algorithm_class().get_bus_information(bus)
-        return sum(bus_info.scores[getattr(self.information, 'word' + str(i))] for i in range(1, 21)) / 20
 
+        bus_info = self.get_algorithm_class().get_bus_information(bus)
+        # Score is the given score by the bus subtracted to the mid-score of the buses.
+        s = sum(bus_info.scores[getattr(self.information, 'word' + str(i))]
+                - self.word_mean(getattr(self.information, 'word' + str(i))) for i in range(1, 21)) / 20
+        return s
+
+    @lru_cache()
     def scores_per_bus(self):
         return {bus: self.score(bus) for bus in self.get_algorithm_class().get_buses()}
 
+    @lru_cache()
     def ordered_buses(self):
         values = list(self.scores_per_bus().items())
         values.sort(key=lambda item: -item[1])
         return values
+
+    @classmethod
+    def clear_cache(cls):
+        cls.word_mean.cache_clear()
+        return super().clear_cache()
 
 
 class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
@@ -164,19 +189,72 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     def get_bus_information_class(cls):
         return WEIBusInformation2021
 
-    def run_algorithm(self):
+    def run_algorithm(self, display_tqdm=False):
         """
         Gale-Shapley algorithm implementation.
         We modify it to allow buses to have multiple "weddings".
         """
         surveys = list(self.get_survey_class()(r) for r in self.get_registrations())  # All surveys
-        surveys = [s for s in surveys if s.is_complete()]
-        free_surveys = [s for s in surveys if not s.information.valid]  # Remaining surveys
+        surveys = [s for s in surveys if s.is_complete()]  # Don't consider invalid surveys
+        # Don't manage hardcoded people
+        surveys = [s for s in surveys if not hasattr(s.information, 'hardcoded') or not s.information.hardcoded]
+
+        # Reset previous algorithm run
+        for survey in surveys:
+            survey.free()
+            survey.save()
+
+        non_men = [s for s in surveys if s.registration.gender != 'male']
+        men = [s for s in surveys if s.registration.gender == 'male']
+
+        quotas = {}
+        registrations = self.get_registrations()
+        non_men_total = registrations.filter(~Q(gender='male')).count()
+        for bus in self.get_buses():
+            free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
+            # Remove hardcoded people
+            free_seats -= WEIMembership.objects.filter(bus=bus, registration__first_year=True,
+                                                       registration__information_json__icontains="hardcoded").count()
+            quotas[bus] = 4 + int(non_men_total / registrations.count() * free_seats)
+
+        tqdm_obj = None
+        if display_tqdm:
+            from tqdm import tqdm
+            tqdm_obj = tqdm(total=len(non_men), desc="Non-hommes")
+
+        # Repartition for non men people first
+        self.make_repartition(non_men, quotas, tqdm_obj=tqdm_obj)
+
+        quotas = {}
+        for bus in self.get_buses():
+            free_seats = bus.size - WEIMembership.objects.filter(bus=bus, registration__first_year=False).count()
+            free_seats -= sum(1 for s in non_men if s.information.selected_bus_pk == bus.pk)
+            # Remove hardcoded people
+            free_seats -= WEIMembership.objects.filter(bus=bus, registration__first_year=True,
+                                                       registration__information_json__icontains="hardcoded").count()
+            quotas[bus] = free_seats
+
+        if display_tqdm:
+            tqdm_obj.close()
+
+            from tqdm import tqdm
+            tqdm_obj = tqdm(total=len(men), desc="Hommes")
+
+        self.make_repartition(men, quotas, tqdm_obj=tqdm_obj)
+
+        if display_tqdm:
+            tqdm_obj.close()
+
+        # Clear cache information after running algorithm
+        WEISurvey2021.clear_cache()
+
+    def make_repartition(self, surveys, quotas=None, tqdm_obj=None):
+        free_surveys = surveys.copy()  # Remaining surveys
         while free_surveys:  # Some students are not affected
             survey = free_surveys[0]
             buses = survey.ordered_buses()  # Preferences of the student
-            for bus, _ignored in buses:
-                if self.get_bus_information(bus).has_free_seats(surveys):
+            for bus, current_score in buses:
+                if self.get_bus_information(bus).has_free_seats(surveys, quotas):
                     # Selected bus has free places. Put student in the bus
                     survey.select_bus(bus)
                     survey.save()
@@ -184,7 +262,6 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
                     break
                 else:
                     # Current bus has not enough places. Remove the least preferred student from the bus if existing
-                    current_score = survey.score(bus)
                     least_preferred_survey = None
                     least_score = -1
                     # Find the least student in the bus that has a lower score than the current student
@@ -206,6 +283,11 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
                         free_surveys.append(least_preferred_survey)
                         survey.select_bus(bus)
                         survey.save()
+                        free_surveys.remove(survey)
                         break
             else:
                 raise ValueError(f"User {survey.registration.user} has no free seat")
+
+            if tqdm_obj is not None:
+                tqdm_obj.n = len(surveys) - len(free_surveys)
+                tqdm_obj.refresh()
