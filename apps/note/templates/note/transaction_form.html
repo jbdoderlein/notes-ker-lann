@@ -10,21 +10,25 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {# bandeau transfert/crédit/débit/activité #}
     <div class="row">
         <div class="col-xl-12">
-            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-                <label for="type_transfer" class="btn btn-sm btn-outline-primary active">
-                    <input type="radio" name="transaction_type" id="type_transfer">
-                    {% trans "Transfer" %}
-                </label>
-                {% if "note.notespecial"|not_empty_model_list %}
-                    <label for="type_credit" class="btn btn-sm btn-outline-primary">
-                        <input type="radio" name="transaction_type" id="type_credit">
-                        {% trans "Credit" %}
+            <div class="btn-group btn-block">
+                <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+                    <label for="type_transfer" class="btn btn-sm btn-outline-primary active">
+                        <input type="radio" name="transaction_type" id="type_transfer">
+                        {% trans "Transfer" %}
                     </label>
-                    <label for="type_debit" class="btn btn-sm btn-outline-primary">
-                        <input type="radio" name="transaction_type" id="type_debit">
-                        {% trans "Debit" %}
-                    </label>
-                {% endif %}
+                    {% if "note.notespecial"|not_empty_model_list %}
+                        <label for="type_credit" class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="transaction_type" id="type_credit">
+                            {% trans "Credit" %}
+                        </label>
+                        <label for="type_debit" class="btn btn-sm btn-outline-primary">
+                            <input type="radio" name="transaction_type" id="type_debit">
+                            {% trans "Debit" %}
+                        </label>
+                    {% endif %}
+                </div>
+
+                {# Add shortcuts for opened activites if necessary #}
                 {% for activity in activities_open %}
                     <a href="{% url "activity:activity_entry" pk=activity.pk %}" class="btn btn-sm btn-outline-primary">
                         {% trans "Entries" %} {{ activity.name }}
