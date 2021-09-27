@@ -53,7 +53,7 @@ class TransactionCreateView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTabl
         # Add a shortcut for entry page for open activities
         if "activity" in settings.INSTALLED_APPS:
             from activity.models import Activity
-            activities_open = Activity.objects.filter(open=True).filter(
+            activities_open = Activity.objects.filter(open=True, activity_type__manage_entries=True).filter(
                 PermissionBackend.filter_queryset(self.request, Activity, "view")).distinct().all()
             context["activities_open"] = [a for a in activities_open
                                           if PermissionBackend.check_perm(self.request,
