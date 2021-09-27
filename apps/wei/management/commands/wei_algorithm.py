@@ -27,6 +27,7 @@ class Command(BaseCommand):
 
         try:
             from tqdm import tqdm
+            del tqdm
             display_tqdm = True
         except ImportError:
             display_tqdm = False
@@ -41,13 +42,13 @@ class Command(BaseCommand):
         for bus, members in per_bus.items():
             output.write(bus.name + "\n")
             output.write("=" * len(bus.name) + "\n")
-            order = -1
+            _order = -1
             for r in members:
                 survey = CurrentSurvey(r)
-                for order, (b, _score) in enumerate(survey.ordered_buses()):
+                for _order, (b, _score) in enumerate(survey.ordered_buses()):
                     if b == bus:
                         break
-                output.write(f"{r.user.username} ({order + 1})\n")
+                output.write(f"{r.user.username} ({_order + 1})\n")
             output.write("\n")
 
         if not options['doit']:
