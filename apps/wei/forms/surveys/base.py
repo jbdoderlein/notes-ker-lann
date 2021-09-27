@@ -223,3 +223,15 @@ class WEISurvey:
         self.information.selected_bus_pk = None
         self.information.selected_bus_name = None
         self.information.valid = False
+
+    @classmethod
+    def clear_cache(cls):
+        """
+        Clear stored information.
+        """
+        if hasattr(cls, '_wei'):
+            del cls._wei
+        if hasattr(cls.get_algorithm_class(), '_registrations'):
+            del cls.get_algorithm_class()._registrations
+        if hasattr(cls.get_algorithm_class(), '_buses'):
+            del cls.get_algorithm_class()._buses

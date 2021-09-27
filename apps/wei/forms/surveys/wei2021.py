@@ -169,6 +169,11 @@ class WEISurvey2021(WEISurvey):
         values.sort(key=lambda item: -item[1])
         return values
 
+    @classmethod
+    def clear_cache(cls):
+        cls.word_mean.cache_clear()
+        return super().clear_cache()
+
 
 class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
     """
@@ -239,6 +244,9 @@ class WEISurveyAlgorithm2021(WEISurveyAlgorithm):
 
         if display_tqdm:
             tqdm_obj.close()
+
+        # Clear cache information after running algorithm
+        WEISurvey2021.clear_cache()
 
     def make_repartition(self, surveys, quotas=None, tqdm_obj=None):
         free_surveys = surveys.copy()  # Remaining surveys
