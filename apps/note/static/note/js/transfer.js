@@ -222,6 +222,13 @@ $(document).ready(function () {
   })
 })
 
+// Make transfer when pressing Enter on the amount section
+$('#amount, #reason, #last_name, #first_name, #bank').keypress((event) => {
+  if (event.originalEvent.charCode === 13) {
+    $('#btn_transfer').click()
+  }
+})
+
 $('#btn_transfer').click(function () {
   if (LOCK) { return }
 
