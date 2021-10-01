@@ -31,7 +31,8 @@ class ClubTable(tables.Table):
         row_attrs = {
             'class': 'table-row',
             'id': lambda record: "row-" + str(record.pk),
-            'data-href': lambda record: record.pk
+            'data-href': lambda record: record.pk,
+            'style':'cursor:pointer',
         }
 
 
@@ -74,7 +75,8 @@ class UserTable(tables.Table):
         model = User
         row_attrs = {
             'class': 'table-row',
-            'data-href': lambda record: record.pk
+            'data-href': lambda record: record.pk,
+            'style':'cursor:pointer',
         }
 
 
