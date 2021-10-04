@@ -355,14 +355,14 @@ $('#btn_transfer').click(function () {
               destination_alias: dest.name
             }).done(function () {
             addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
-                [pretty_money(source.quantity * dest.quantity * amount), source.name, + dest.name, gettext('insufficient funds')]), 'danger', 10000)
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, gettext('insufficient funds')]), 'danger', 10000)
             reset()
           }).fail(function (err) {
             const errObj = JSON.parse(err.responseText)
             let error = errObj.detail ? errObj.detail : errObj.non_field_errors
             if (!error) { error = err.responseText }
             addMsg(interpolate(gettext('Transfer of %s from %s to %s failed: %s'),
-                [pretty_money(source.quantity * dest.quantity * amount), source.name, + dest.name, error]), 'danger')
+                [pretty_money(source.quantity * dest.quantity * amount), source.name, dest.name, error]), 'danger')
             LOCK = false
           })
         })
