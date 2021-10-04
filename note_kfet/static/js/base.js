@@ -381,11 +381,11 @@ function de_validate (id, validated, resourcetype) {
  * @param callback Function to call
  * @param wait Debounced milliseconds
  */
-function debounce (callback, wait) {
-  let timeout
+let debounce_timeout
+function debounce (callback, wait=500) {
   return (...args) => {
     const context = this
-    clearTimeout(timeout)
-    timeout = setTimeout(() => callback.apply(context, args), wait)
+    clearTimeout(debounce_timeout)
+    debounce_timeout = setTimeout(() => callback.apply(context, args), wait)
   }
 }
