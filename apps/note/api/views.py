@@ -67,8 +67,8 @@ class TrustViewSet(ReadProtectedModelViewSet):
     serializer_class = TrustSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
     search_fields = ['$trusting__alias__name', '$trusting__alias__normalized_name',
-            '$trusted__alias__name', '$trusted__alias__normalized_name']
-    filterset_fields = ['trusting', 'trusting__noteuser__user', 'trusted', 'trusted__noteuser__user',]
+                     '$trusted__alias__name', '$trusted__alias__normalized_name']
+    filterset_fields = ['trusting', 'trusting__noteuser__user', 'trusted', 'trusted__noteuser__user']
     ordering_fields = ['trusting', 'trusted', ]
 
     def get_serializer_class(self):

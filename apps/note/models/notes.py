@@ -244,6 +244,10 @@ class Trust(models.Model):
         verbose_name_plural = _("friendships")
         unique_together = ("trusting", "trusted")
 
+    def __str__(self):
+        return _("Friendship between {trusting} and{trusted}").format(
+            trusting=str(self.trusting), trusted=str(self.trusted))
+
 
 class Alias(models.Model):
     """

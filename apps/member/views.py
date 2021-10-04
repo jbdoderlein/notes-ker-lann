@@ -251,7 +251,7 @@ class ProfileTrustView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
     model = User
     template_name = 'member/profile_trust.html'
     context_object_name = 'user_object'
-    extra_context = {"title":_("Note friendships")}
+    extra_context = {"title": _("Note friendships")}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -262,18 +262,19 @@ class ProfileTrustView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             trusting=context["object"].note,
             trusted=context["object"].note
         ))
-        context["widget"] = {"name": "trusted",
-            "attrs": { "model_pk": ContentType.objects.get_for_model(Alias).pk,
+        context["widget"] = {
+            "name": "trusted",
+            "attrs": {
+                "model_pk": ContentType.objects.get_for_model(Alias).pk,
                 "class": "autocomplete form-control",
                 "id": "trusted",
                 "resetable": True,
                 "api_url": "/api/note/alias/?note__polymorphic_ctype__model=noteuser",
                 "name_field": "name",
                 "placeholder": ""
-                }
             }
+        }
         return context
-
 
 
 class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):

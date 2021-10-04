@@ -161,12 +161,16 @@ class TrustTable(tables.Table):
     show_header = False
     trusted = tables.Column(attrs={'td': {'class': 'text_center'}})
 
-    delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
-            extra_context={"delete_trans": _('delete')},
-            attrs={'td': {'class': lambda record: 'col-sm-1' + (' d-none'
-                if not PermissionBackend.check_perm(get_current_request(),
-                    "note.delete_trust", record) else '')}},
-            verbose_name =_("Delete"), )
+    delete_col = tables.TemplateColumn(
+        template_code=DELETE_TEMPLATE,
+        extra_context={"delete_trans": _('delete')},
+        attrs={
+            'td': {
+                'class': lambda record: 'col-sm-1'
+                + (' d-none' if not PermissionBackend.check_perm(
+                    get_current_request(), "note.delete_trust", record)
+                   else '')}},
+        verbose_name=_("Delete"),)
 
 
 class AliasTable(tables.Table):
