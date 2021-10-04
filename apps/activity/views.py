@@ -66,8 +66,8 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
     ordering = ('-date_start',)
     extra_context = {"title": _("Activities")}
 
-    def get_queryset(self):
-        return super().get_queryset().distinct()
+    def get_queryset(self, **kwargs):
+        return super().get_queryset(**kwargs).distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -78,9 +78,7 @@ class ActivityListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableView
             prefix='upcoming-',
         )
 
-        started_activities = Activity.objects\
-            .filter(PermissionBackend.filter_queryset(self.request, Activity, "view"))\
-            .filter(open=True, valid=True).all()
+        started_activities = self.get_queryset().filter(open=True, valid=True).distinct().all()
         context["started_activities"] = started_activities
 
         return context
