@@ -190,7 +190,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             .annotate(balance=F("inviter__balance"), note_name=F("inviter__user__username"))\
             .filter(activity=activity)\
             .filter(PermissionBackend.filter_queryset(self.request, Guest, "view"))\
-            .order_by('last_name', 'first_name').distinct()
+            .order_by('last_name', 'first_name')
 
         if "search" in self.request.GET and self.request.GET["search"]:
             pattern = self.request.GET["search"]
@@ -204,7 +204,7 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
             )
         else:
             guest_qs = guest_qs.none()
-        return guest_qs
+        return guest_qs.distinct()
 
     def get_invited_note(self, activity):
         """
