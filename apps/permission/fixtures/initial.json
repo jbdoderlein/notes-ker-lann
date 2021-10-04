@@ -2968,6 +2968,118 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 190,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{\"trusting\": [\"user\", \"note\"]}",
+			"type": "delete",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une amitié à sa note"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 191,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{\"trusting\": [\"user\", \"note\"]}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter une amitié à sa note"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 192,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{\"trusting__is_active\": true}",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Ajouter une amitié à une note non bloquée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 193,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{\"trusting__is_active\": true}",
+			"type": "delete",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Supprimer une amitié à une note non bloquée"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 194,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{}",
+			"type": "view",
+			"mask": 3,
+			"field": "",
+			"permanent": false,
+			"description": "Voir toutes les amitiés, y compris celles des non adhérents"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 195,
+		"fields": {
+			"model": [
+				"note",
+				"trust"
+			],
+			"query": "{\"trusting__noteuser__user\": [\"user\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Voir ses propres amitiés, pour toujours"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 196,
+		"fields": {
+			"model": [
+				"note",
+				"transaction"
+			],
+			"query": "[\"AND\", {\"source__trusting__trusted\": [\"user\", \"note\"]}, [\"OR\", {\"source__balance__gte\": {\"F\": [\"MUL\", [\"F\", \"amount\"], [\"F\", \"quantity\"]]}}, {\"valid\": false}]]",
+			"type": "add",
+			"mask": 1,
+			"field": "",
+			"permanent": false,
+			"description": "Transférer de l'argent depuis une note amie en restant positif"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -3001,7 +3113,11 @@
 				186,
 				187,
 				188,
-				189
+				189,
+                190,
+                191,
+                195,
+                196
 			]
 		}
 	},
@@ -3042,7 +3158,9 @@
 				158,
 				159,
 				160,
-				179
+				179,
+                189,
+                190
 			]
 		}
 	},
@@ -3192,7 +3310,10 @@
 				176,
 				177,
 				178,
-				183
+                188,
+				183,
+                186,
+                187
 			]
 		}
 	},
@@ -3386,7 +3507,14 @@
 				186,
 				187,
 				188,
-				189
+				189,
+                190,
+                191,
+                192,
+                193,
+                194,
+                195,
+                196
 			]
 		}
 	},
