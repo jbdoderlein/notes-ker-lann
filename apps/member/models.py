@@ -413,6 +413,12 @@ class Membership(models.Model):
         """
         Calculate fee and end date before saving the membership and creating the transaction if needed.
         """
+        # Ensure that club membership dates are valid
+        old_membership_start = self.club.membership_start
+        self.club.update_membership_dates()
+        if self.club.membership_start != old_membership_start:
+            self.club.save()
+
         created = not self.pk
         if not created:
             for role in self.roles.all():

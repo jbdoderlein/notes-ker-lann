@@ -111,12 +111,12 @@
 				"note",
 				"alias"
 			],
-			"query": "[\"AND\", [\"OR\", {\"note__noteuser__user__memberships__club__name\": \"Kfet\", \"note__noteuser__user__memberships__date_start__lte\": [\"today\"], \"note__noteuser__user__memberships__date_end__gte\": [\"today\"]}, {\"note__noteclub__isnull\": false}], {\"note__is_active\": true}]",
+			"query": "[\"AND\", [\"OR\", {\"note__noteuser__user__memberships__club__name\": \"BDE\", \"note__noteuser__user__memberships__date_start__lte\": [\"today\"], \"note__noteuser__user__memberships__date_end__gte\": [\"today\"]}, {\"note__noteclub__isnull\": false}], {\"note__is_active\": true}]",
 			"type": "view",
 			"mask": 1,
 			"field": "",
 			"permanent": false,
-			"description": "Voir les aliases des notes des clubs et des adhérents du club Kfet"
+			"description": "Voir les aliases des notes des clubs et des adhérents du club BDE"
 		}
 	},
 	{
@@ -3048,6 +3048,7 @@
 				31,
 				32,
 				33,
+				43,
 				51,
 				53,
 				54,

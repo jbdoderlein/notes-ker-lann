@@ -19,8 +19,8 @@ def create_bde_and_kfet(apps, schema_editor):
         membership_fee_paid=500,
         membership_fee_unpaid=500,
         membership_duration=396,
-        membership_start="2020-08-01",
-        membership_end="2021-09-30",
+        membership_start="2021-08-01",
+        membership_end="2022-09-30",
     )
     Club.objects.get_or_create(
         id=2,
@@ -31,8 +31,8 @@ def create_bde_and_kfet(apps, schema_editor):
         membership_fee_paid=3500,
         membership_fee_unpaid=3500,
         membership_duration=396,
-        membership_start="2020-08-01",
-        membership_end="2021-09-30",
+        membership_start="2021-08-01",
+        membership_end="2022-09-30",
     )
 
     NoteClub.objects.get_or_create(

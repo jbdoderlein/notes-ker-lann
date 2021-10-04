@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 23:26+0200\n"
+"POT-Creation-Date: 2021-09-28 17:02+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -23,28 +23,32 @@ msgstr ""
 msgid "activity"
 msgstr "activité"
 
-#: apps/activity/forms.py:35 apps/activity/models.py:132
+#: apps/activity/forms.py:34
+msgid "The note of this club is inactive."
+msgstr "La note du club est inactive."
+
+#: apps/activity/forms.py:41 apps/activity/models.py:132
 msgid "The end date must be after the start date."
 msgstr "La date de fin doit être après celle de début."
 
-#: apps/activity/forms.py:76 apps/activity/models.py:270
+#: apps/activity/forms.py:82 apps/activity/models.py:270
 msgid "You can't invite someone once the activity is started."
 msgstr ""
 "Vous ne pouvez pas inviter quelqu'un une fois que l'activité a démarré."
 
-#: apps/activity/forms.py:79 apps/activity/models.py:273
+#: apps/activity/forms.py:85 apps/activity/models.py:273
 msgid "This activity is not validated yet."
 msgstr "Cette activité n'est pas encore validée."
 
-#: apps/activity/forms.py:89 apps/activity/models.py:281
+#: apps/activity/forms.py:95 apps/activity/models.py:281
 msgid "This person has been already invited 5 times this year."
 msgstr "Cette personne a déjà été invitée 5 fois cette année."
 
-#: apps/activity/forms.py:93 apps/activity/models.py:285
+#: apps/activity/forms.py:99 apps/activity/models.py:285
 msgid "This person is already invited."
 msgstr "Cette personne est déjà invitée."
 
-#: apps/activity/forms.py:97 apps/activity/models.py:289
+#: apps/activity/forms.py:103 apps/activity/models.py:289
 msgid "You can't invite more than 3 people to this activity."
 msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 
@@ -195,7 +199,7 @@ msgstr "Entrée de la note {note} pour l'activité « {activity} »"
 msgid "Already entered on "
 msgstr "Déjà rentré le "
 
-#: apps/activity/models.py:202 apps/activity/tables.py:54
+#: apps/activity/models.py:202 apps/activity/tables.py:56
 msgid "{:%Y-%m-%d %H:%M:%S}"
 msgstr "{:%d/%m/%Y %H:%M:%S}"
 
@@ -234,48 +238,48 @@ msgstr "invités"
 msgid "Invitation"
 msgstr "Invitation"
 
-#: apps/activity/tables.py:25
+#: apps/activity/tables.py:27
 msgid "The activity is currently open."
 msgstr "Cette activité est actuellement ouverte."
 
-#: apps/activity/tables.py:26
+#: apps/activity/tables.py:28
 msgid "The validation of the activity is pending."
 msgstr "La validation de cette activité est en attente."
 
-#: apps/activity/tables.py:41 apps/treasury/tables.py:107
+#: apps/activity/tables.py:43 apps/treasury/tables.py:107
 msgid "Remove"
 msgstr "Supprimer"
 
-#: apps/activity/tables.py:54
+#: apps/activity/tables.py:56
 msgid "Entered on "
 msgstr "Entré le "
 
-#: apps/activity/tables.py:56
+#: apps/activity/tables.py:58
 msgid "remove"
 msgstr "supprimer"
 
-#: apps/activity/tables.py:80 apps/note/forms.py:68 apps/treasury/models.py:199
+#: apps/activity/tables.py:82 apps/note/forms.py:68 apps/treasury/models.py:199
 msgid "Type"
 msgstr "Type"
 
-#: apps/activity/tables.py:82 apps/member/forms.py:186
-#: apps/registration/forms.py:90 apps/treasury/forms.py:131
+#: apps/activity/tables.py:84 apps/member/forms.py:186
+#: apps/registration/forms.py:91 apps/treasury/forms.py:131
 #: apps/wei/forms/registration.py:104
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: apps/activity/tables.py:84 apps/member/forms.py:191
-#: apps/note/templates/note/transaction_form.html:134
-#: apps/registration/forms.py:95 apps/treasury/forms.py:133
+#: apps/activity/tables.py:86 apps/member/forms.py:191
+#: apps/note/templates/note/transaction_form.html:138
+#: apps/registration/forms.py:96 apps/treasury/forms.py:133
 #: apps/wei/forms/registration.py:109
 msgid "First name"
 msgstr "Prénom"
 
-#: apps/activity/tables.py:86 apps/note/models/notes.py:86
+#: apps/activity/tables.py:88 apps/note/models/notes.py:86
 msgid "Note"
 msgstr "Note"
 
-#: apps/activity/tables.py:88 apps/member/tables.py:49
+#: apps/activity/tables.py:90 apps/member/tables.py:49
 msgid "Balance"
 msgstr "Solde du compte"
 
@@ -289,26 +293,26 @@ msgstr "Invité supprimé"
 
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:257
-#: apps/note/templates/note/transaction_form.html:16
-#: apps/note/templates/note/transaction_form.html:148
+#: apps/note/templates/note/transaction_form.html:17
+#: apps/note/templates/note/transaction_form.html:152
 #: note_kfet/templates/base.html:73
 msgid "Transfer"
 msgstr "Virement"
 
 #: apps/activity/templates/activity/activity_entry.html:18
 #: apps/note/models/transactions.py:317
-#: apps/note/templates/note/transaction_form.html:21
+#: apps/note/templates/note/transaction_form.html:22
 msgid "Credit"
 msgstr "Crédit"
 
 #: apps/activity/templates/activity/activity_entry.html:21
 #: apps/note/models/transactions.py:317
-#: apps/note/templates/note/transaction_form.html:25
+#: apps/note/templates/note/transaction_form.html:26
 msgid "Debit"
 msgstr "Débit"
 
 #: apps/activity/templates/activity/activity_entry.html:27
-#: apps/note/templates/note/transaction_form.html:30
+#: apps/note/templates/note/transaction_form.html:34
 msgid "Entries"
 msgstr "Entrées"
 
@@ -548,20 +552,20 @@ msgstr "Cette image ne peut pas être chargée."
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
 
-#: apps/member/forms.py:165 apps/registration/forms.py:70
+#: apps/member/forms.py:165 apps/registration/forms.py:71
 msgid "Inscription paid by Société Générale"
 msgstr "Inscription payée par la Société générale"
 
-#: apps/member/forms.py:167 apps/registration/forms.py:72
+#: apps/member/forms.py:167 apps/registration/forms.py:73
 msgid "Check this case if the Société Générale paid the inscription."
 msgstr "Cochez cette case si la Société Générale a payé l'inscription."
 
-#: apps/member/forms.py:172 apps/registration/forms.py:77
+#: apps/member/forms.py:172 apps/registration/forms.py:78
 #: apps/wei/forms/registration.py:91
 msgid "Credit type"
 msgstr "Type de rechargement"
 
-#: apps/member/forms.py:173 apps/registration/forms.py:78
+#: apps/member/forms.py:173 apps/registration/forms.py:79
 #: apps/wei/forms/registration.py:92
 msgid "No credit"
 msgstr "Pas de rechargement"
@@ -570,13 +574,13 @@ msgstr "Pas de rechargement"
 msgid "You can credit the note of the user."
 msgstr "Vous pouvez créditer la note de l'utilisateur avant l'adhésion."
 
-#: apps/member/forms.py:179 apps/registration/forms.py:83
+#: apps/member/forms.py:179 apps/registration/forms.py:84
 #: apps/wei/forms/registration.py:97
 msgid "Credit amount"
 msgstr "Montant à créditer"
 
-#: apps/member/forms.py:196 apps/note/templates/note/transaction_form.html:140
-#: apps/registration/forms.py:100 apps/treasury/forms.py:135
+#: apps/member/forms.py:196 apps/note/templates/note/transaction_form.html:144
+#: apps/registration/forms.py:101 apps/treasury/forms.py:135
 #: apps/wei/forms/registration.py:114
 msgid "Bank"
 msgstr "Banque"
@@ -1192,7 +1196,7 @@ msgstr "Modifier le club"
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:642 apps/wei/views.py:956
+#: apps/member/views.py:642 apps/wei/views.py:973
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1247,7 +1251,7 @@ msgstr "Source"
 msgid "Destination"
 msgstr "Destination"
 
-#: apps/note/forms.py:74 apps/note/templates/note/transaction_form.html:119
+#: apps/note/forms.py:74 apps/note/templates/note/transaction_form.html:123
 msgid "Reason"
 msgstr "Raison"
 
@@ -1498,8 +1502,8 @@ msgstr ""
 "mode de paiement et un utilisateur ou un club"
 
 #: apps/note/models/transactions.py:355 apps/note/models/transactions.py:358
-#: apps/note/models/transactions.py:361 apps/wei/views.py:961
-#: apps/wei/views.py:965
+#: apps/note/models/transactions.py:361 apps/wei/views.py:978
+#: apps/wei/views.py:982
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
@@ -1553,7 +1557,7 @@ msgid "Edit"
 msgstr "Éditer"
 
 #: apps/note/templates/note/conso_form.html:22
-#: apps/note/templates/note/transaction_form.html:44
+#: apps/note/templates/note/transaction_form.html:48
 msgid "Please select a note"
 msgstr "Sélectionnez une note"
 
@@ -1562,8 +1566,8 @@ msgid "Consum"
 msgstr "Consommer"
 
 #: apps/note/templates/note/conso_form.html:43
-#: apps/note/templates/note/transaction_form.html:65
-#: apps/note/templates/note/transaction_form.html:92
+#: apps/note/templates/note/transaction_form.html:69
+#: apps/note/templates/note/transaction_form.html:96
 msgid "Name or alias..."
 msgstr "Pseudo ou alias ..."
 
@@ -1588,7 +1592,7 @@ msgid "Double consumptions"
 msgstr "Consommations doubles"
 
 #: apps/note/templates/note/conso_form.html:154
-#: apps/note/templates/note/transaction_form.html:159
+#: apps/note/templates/note/transaction_form.html:163
 msgid "Recent transactions history"
 msgstr "Historique des transactions récentes"
 
@@ -1603,45 +1607,45 @@ msgstr "Historique des transactions récentes"
 msgid "Mail generated by the Note Kfet on the"
 msgstr "Mail généré par la Note Kfet le"
 
-#: apps/note/templates/note/transaction_form.html:54
-#: apps/note/templates/note/transaction_form.html:174
+#: apps/note/templates/note/transaction_form.html:58
+#: apps/note/templates/note/transaction_form.html:178
 msgid "Select emitters"
 msgstr "Sélection des émetteurs"
 
-#: apps/note/templates/note/transaction_form.html:69
+#: apps/note/templates/note/transaction_form.html:73
 msgid "I am the emitter"
 msgstr "Je suis l'émetteur"
 
-#: apps/note/templates/note/transaction_form.html:81
-#: apps/note/templates/note/transaction_form.html:176
+#: apps/note/templates/note/transaction_form.html:85
+#: apps/note/templates/note/transaction_form.html:180
 msgid "Select receivers"
 msgstr "Sélection des destinataires"
 
-#: apps/note/templates/note/transaction_form.html:104
+#: apps/note/templates/note/transaction_form.html:108
 msgid "Action"
 msgstr "Action"
 
-#: apps/note/templates/note/transaction_form.html:112
+#: apps/note/templates/note/transaction_form.html:116
 #: apps/treasury/forms.py:137 apps/treasury/tables.py:67
 #: apps/treasury/tables.py:132
 #: apps/treasury/templates/treasury/remittance_form.html:23
 msgid "Amount"
 msgstr "Montant"
 
-#: apps/note/templates/note/transaction_form.html:128
+#: apps/note/templates/note/transaction_form.html:132
 #: apps/treasury/models.py:54
 msgid "Name"
 msgstr "Nom"
 
-#: apps/note/templates/note/transaction_form.html:173
+#: apps/note/templates/note/transaction_form.html:177
 msgid "Select emitter"
 msgstr "Sélection de l'émetteur"
 
-#: apps/note/templates/note/transaction_form.html:175
+#: apps/note/templates/note/transaction_form.html:179
 msgid "Select receiver"
 msgstr "Sélection du destinataire"
 
-#: apps/note/templates/note/transaction_form.html:177
+#: apps/note/templates/note/transaction_form.html:181
 msgid "Transfer type"
 msgstr "Type de transfert"
 
@@ -1913,13 +1917,13 @@ msgstr "Cet email est déjà pris."
 
 #: apps/registration/forms.py:49
 msgid ""
-"I declare that I opened or I will open soon a bank account in the Société générale with the BDE "
-"partnership."
+"I declare that I opened or I will open soon a bank account in the Société "
+"générale with the BDE partnership."
 msgstr ""
-"Je déclare avoir ouvert ou ouvrir prochainement un compte à la société générale avec le partenariat "
-"du BDE."
+"Je déclare avoir ouvert ou ouvrir prochainement un compte à la société "
+"générale avec le partenariat du BDE."
 
-#: apps/registration/forms.py:50
+#: apps/registration/forms.py:51
 msgid ""
 "Warning: this engages you to open your bank account. If you finally decides "
 "to don't open your account, you will have to pay the BDE membership."
@@ -1927,11 +1931,11 @@ msgstr ""
 "Attention : cocher cette case vous engage à ouvrir votre compte. Si vous "
 "décidez de ne pas le faire, vous devrez payer l'adhésion au BDE."
 
-#: apps/registration/forms.py:58
+#: apps/registration/forms.py:59
 msgid "Register to the WEI"
 msgstr "S'inscrire au WEI"
 
-#: apps/registration/forms.py:60
+#: apps/registration/forms.py:61
 msgid ""
 "Check this case if you want to register to the WEI. If you hesitate, you "
 "will be able to register later, after validating your account in the Kfet."
@@ -1940,11 +1944,11 @@ msgstr ""
 "pourrez toujours vous inscrire plus tard, après avoir validé votre compte à "
 "la Kfet."
 
-#: apps/registration/forms.py:105
+#: apps/registration/forms.py:106
 msgid "Join BDE Club"
 msgstr "Adhérer au club BDE"
 
-#: apps/registration/forms.py:112
+#: apps/registration/forms.py:113
 msgid "Join Kfet Club"
 msgstr "Adhérer au club Kfet"
 
@@ -2244,7 +2248,7 @@ msgstr "proxys de transactions spéciales"
 msgid "credit transaction"
 msgstr "transaction de crédit"
 
-#: apps/treasury/models.py:419
+#: apps/treasury/models.py:430
 msgid ""
 "This user doesn't have enough money to pay the memberships with its note. "
 "Please ask her/him to credit the note before invalidating this credit."
@@ -2252,16 +2256,16 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour payer les adhésions avec sa "
 "note. Merci de lui demander de recharger sa note avant d'invalider ce crédit."
 
-#: apps/treasury/models.py:439
+#: apps/treasury/models.py:451
 #: apps/treasury/templates/treasury/sogecredit_detail.html:10
 msgid "Credit from the Société générale"
 msgstr "Crédit de la Société générale"
 
-#: apps/treasury/models.py:440
+#: apps/treasury/models.py:452
 msgid "Credits from the Société générale"
 msgstr "Crédits de la Société générale"
 
-#: apps/treasury/models.py:443
+#: apps/treasury/models.py:455
 #, python-brace-format
 msgid "Soge credit for {user}"
 msgstr "Crédit de la société générale pour l'utilisateur {user}"
@@ -2559,7 +2563,7 @@ msgstr "Sélectionnez les rôles qui vous intéressent."
 msgid "This team doesn't belong to the given bus."
 msgstr "Cette équipe n'appartient pas à ce bus."
 
-#: apps/wei/forms/surveys/wei2021.py:31
+#: apps/wei/forms/surveys/wei2021.py:35
 msgid "Choose a word:"
 msgstr "Choisissez un mot :"
 
@@ -2804,11 +2808,11 @@ msgstr "Prix du WEI (étudiants)"
 msgid "WEI list"
 msgstr "Liste des WEI"
 
-#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:523
+#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:528
 msgid "Register 1A"
 msgstr "Inscrire un 1A"
 
-#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:603
+#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:614
 msgid "Register 2A+"
 msgstr "Inscrire un 2A+"
 
@@ -2837,8 +2841,8 @@ msgstr "Télécharger au format PDF"
 
 #: apps/wei/templates/wei/survey.html:11
 #: apps/wei/templates/wei/survey_closed.html:11
-#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:1011
-#: apps/wei/views.py:1066 apps/wei/views.py:1076
+#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:1028
+#: apps/wei/views.py:1083 apps/wei/views.py:1093
 msgid "Survey WEI"
 msgstr "Questionnaire WEI"
 
@@ -2883,7 +2887,7 @@ msgstr "Inscriptions non validées"
 msgid "Attribute buses"
 msgstr "Répartition dans les bus"
 
-#: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:78
+#: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:79
 msgid "Create WEI"
 msgstr "Créer un WEI"
 
@@ -3020,67 +3024,67 @@ msgstr "Il n'y a pas de pré-inscription en attente avec cette entrée."
 msgid "View validated memberships..."
 msgstr "Voir les adhésions validées ..."
 
-#: apps/wei/views.py:57
+#: apps/wei/views.py:58
 msgid "Search WEI"
 msgstr "Chercher un WEI"
 
-#: apps/wei/views.py:108
+#: apps/wei/views.py:109
 msgid "WEI Detail"
 msgstr "Détails du WEI"
 
-#: apps/wei/views.py:203
+#: apps/wei/views.py:208
 msgid "View members of the WEI"
 msgstr "Voir les membres du WEI"
 
-#: apps/wei/views.py:231
+#: apps/wei/views.py:236
 msgid "Find WEI Membership"
 msgstr "Trouver une adhésion au WEI"
 
-#: apps/wei/views.py:241
+#: apps/wei/views.py:246
 msgid "View registrations to the WEI"
 msgstr "Voir les inscriptions au WEI"
 
-#: apps/wei/views.py:265
+#: apps/wei/views.py:270
 msgid "Find WEI Registration"
 msgstr "Trouver une inscription au WEI"
 
-#: apps/wei/views.py:276
+#: apps/wei/views.py:281
 msgid "Update the WEI"
 msgstr "Modifier le WEI"
 
-#: apps/wei/views.py:297
+#: apps/wei/views.py:302
 msgid "Create new bus"
 msgstr "Ajouter un nouveau bus"
 
-#: apps/wei/views.py:335
+#: apps/wei/views.py:340
 msgid "Update bus"
 msgstr "Modifier le bus"
 
-#: apps/wei/views.py:367
+#: apps/wei/views.py:372
 msgid "Manage bus"
 msgstr "Gérer le bus"
 
-#: apps/wei/views.py:394
+#: apps/wei/views.py:399
 msgid "Create new team"
 msgstr "Créer une nouvelle équipe"
 
-#: apps/wei/views.py:434
+#: apps/wei/views.py:439
 msgid "Update team"
 msgstr "Modifier l'équipe"
 
-#: apps/wei/views.py:465
+#: apps/wei/views.py:470
 msgid "Manage WEI team"
 msgstr "Gérer l'équipe WEI"
 
-#: apps/wei/views.py:487
+#: apps/wei/views.py:492
 msgid "Register first year student to the WEI"
 msgstr "Inscrire un 1A au WEI"
 
-#: apps/wei/views.py:545 apps/wei/views.py:638
+#: apps/wei/views.py:550 apps/wei/views.py:649
 msgid "This user is already registered to this WEI."
 msgstr "Cette personne est déjà inscrite au WEI."
 
-#: apps/wei/views.py:550
+#: apps/wei/views.py:555
 msgid ""
 "This user can't be in her/his first year since he/she has already "
 "participated to a WEI."
@@ -3088,35 +3092,35 @@ msgstr ""
 "Cet utilisateur ne peut pas être en première année puisqu'il a déjà "
 "participé à un WEI."
 
-#: apps/wei/views.py:567
+#: apps/wei/views.py:578
 msgid "Register old student to the WEI"
 msgstr "Inscrire un 2A+ au WEI"
 
-#: apps/wei/views.py:622 apps/wei/views.py:704
+#: apps/wei/views.py:633 apps/wei/views.py:721
 msgid "You already opened an account in the Société générale."
 msgstr "Vous avez déjà ouvert un compte auprès de la société générale."
 
-#: apps/wei/views.py:668
+#: apps/wei/views.py:685
 msgid "Update WEI Registration"
 msgstr "Modifier l'inscription WEI"
 
-#: apps/wei/views.py:778
+#: apps/wei/views.py:795
 msgid "Delete WEI registration"
 msgstr "Supprimer l'inscription WEI"
 
-#: apps/wei/views.py:789
+#: apps/wei/views.py:806
 msgid "You don't have the right to delete this WEI registration."
 msgstr "Vous n'avez pas la permission de supprimer cette inscription au WEI."
 
-#: apps/wei/views.py:807
+#: apps/wei/views.py:824
 msgid "Validate WEI registration"
 msgstr "Valider l'inscription WEI"
 
-#: apps/wei/views.py:1169
+#: apps/wei/views.py:1186
 msgid "Attribute buses to first year members"
 msgstr "Répartir les 1A dans les bus"
 
-#: apps/wei/views.py:1191
+#: apps/wei/views.py:1211
 msgid "Attribute bus"
 msgstr "Attribuer un bus"
 
@@ -3265,6 +3269,10 @@ msgstr ""
 #: note_kfet/templates/base.html:195
 msgid "Contact us"
 msgstr "Nous contacter"
+
+#: note_kfet/templates/base.html:197
+msgid "Technical Support"
+msgstr "Support technique"
 
 #: note_kfet/templates/base_search.html:15
 msgid "Search by attribute such as name…"

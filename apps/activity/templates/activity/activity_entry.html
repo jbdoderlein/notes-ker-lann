@@ -63,7 +63,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
         refreshBalance();
     }
 
-    alias_obj.keyup(reloadTable);
+    alias_obj.keyup(function(event) {
+        let code = event.originalEvent.keyCode
+        if (65 <= code <= 122 || code === 13) {
+            debounce(reloadTable)()
+        }
+    });
 
     $(document).ready(init);
 

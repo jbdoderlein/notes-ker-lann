@@ -35,8 +35,9 @@ urlpatterns = [
     path('coffee/', include('django_htcpcp_tea.urls')),
 ]
 
-# During development, serve media files
+# During development, serve static and media files
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if "oauth2_provider" in settings.INSTALLED_APPS:

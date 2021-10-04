@@ -28,6 +28,12 @@ class ActivityForm(forms.ModelForm):
         shuffle(clubs)
         self.fields["organizer"].widget.attrs["placeholder"] = ", ".join(club.name for club in clubs[:4]) + ", ..."
 
+    def clean_organizer(self):
+        organizer = self.cleaned_data['organizer']
+        if not organizer.note.is_active:
+            self.add_error('organiser', _('The note of this club is inactive.'))
+        return organizer
+
     def clean_date_end(self):
         date_end = self.cleaned_data["date_end"]
         date_start = self.cleaned_data["date_start"]
