@@ -143,7 +143,7 @@ class ActivityInviteView(ProtectQuerysetMixin, ProtectedCreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.activity = Activity.objects.filter(PermissionBackend.filter_queryset(self.request, Activity, "view"))\
-            .get(pk=self.kwargs["pk"])
+            .filter(pk=self.kwargs["pk"]).first()
         form.fields["inviter"].initial = self.request.user.note
         return form
 
