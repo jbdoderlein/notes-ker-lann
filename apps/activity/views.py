@@ -168,6 +168,9 @@ class ActivityEntryView(LoginRequiredMixin, TemplateView):
         Don't display the entry interface if the user has no right to see it (no right to add an entry for itself),
         it is closed or doesn't manage entries.
         """
+        if not self.request.user.is_authenticated:
+            return self.handle_no_permission()
+
         activity = Activity.objects.get(pk=self.kwargs["pk"])
 
         sample_entry = Entry(activity=activity, note=self.request.user.note)
