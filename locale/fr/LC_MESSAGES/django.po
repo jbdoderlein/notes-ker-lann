@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-28 17:02+0200\n"
+"POT-Creation-Date: 2021-10-07 22:55+0200\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
@@ -279,7 +279,7 @@ msgstr "Prénom"
 msgid "Note"
 msgstr "Note"
 
-#: apps/activity/tables.py:90 apps/member/tables.py:49
+#: apps/activity/tables.py:90 apps/member/tables.py:50
 msgid "Balance"
 msgstr "Solde du compte"
 
@@ -320,13 +320,13 @@ msgstr "Entrées"
 msgid "Return to activity page"
 msgstr "Retour à la page de l'activité"
 
-#: apps/activity/templates/activity/activity_entry.html:89
-#: apps/activity/templates/activity/activity_entry.html:124
+#: apps/activity/templates/activity/activity_entry.html:94
+#: apps/activity/templates/activity/activity_entry.html:129
 msgid "Entry done, but caution: the user is not a Kfet member."
 msgstr ""
 "Entrée effectuée, mais attention : la personne n'est pas un adhérent Kfet."
 
-#: apps/activity/templates/activity/activity_entry.html:127
+#: apps/activity/templates/activity/activity_entry.html:132
 msgid "Entry done!"
 msgstr "Entrée effectuée !"
 
@@ -404,33 +404,33 @@ msgstr "Créer une nouvelle activité"
 msgid "Activities"
 msgstr "Activités"
 
-#: apps/activity/views.py:95
+#: apps/activity/views.py:93
 msgid "Activity detail"
 msgstr "Détails de l'activité"
 
-#: apps/activity/views.py:115
+#: apps/activity/views.py:113
 msgid "Update activity"
 msgstr "Modifier l'activité"
 
-#: apps/activity/views.py:142
+#: apps/activity/views.py:140
 msgid "Invite guest to the activity \"{}\""
 msgstr "Invitation pour l'activité « {} »"
 
-#: apps/activity/views.py:177
+#: apps/activity/views.py:178
 msgid "You are not allowed to display the entry interface for this activity."
 msgstr ""
 "Vous n'êtes pas autorisé à afficher l'interface des entrées pour cette "
 "activité."
 
-#: apps/activity/views.py:180
+#: apps/activity/views.py:181
 msgid "This activity does not support activity entries."
 msgstr "Cette activité ne requiert pas d'entrées."
 
-#: apps/activity/views.py:183
+#: apps/activity/views.py:184
 msgid "This activity is closed."
 msgstr "Cette activité est fermée."
 
-#: apps/activity/views.py:279
+#: apps/activity/views.py:280
 msgid "Entry for activity \"{}\""
 msgstr "Entrées pour l'activité « {} »"
 
@@ -466,7 +466,7 @@ msgstr "nouvelles données"
 msgid "create"
 msgstr "créer"
 
-#: apps/logs/models.py:65 apps/note/tables.py:165 apps/note/tables.py:201
+#: apps/logs/models.py:65 apps/note/tables.py:165 apps/note/tables.py:211
 #: apps/permission/models.py:127 apps/treasury/tables.py:38
 #: apps/wei/tables.py:74
 msgid "delete"
@@ -850,33 +850,33 @@ msgstr "l'adhésion commence le"
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:422
+#: apps/member/models.py:428
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:431 apps/member/views.py:651
+#: apps/member/models.py:437 apps/member/views.py:651
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:443 apps/member/views.py:660
+#: apps/member/models.py:449 apps/member/views.py:660
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:496
+#: apps/member/models.py:502
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:499 apps/note/models/transactions.py:389
+#: apps/member/models.py:505 apps/note/models/transactions.py:389
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:500
+#: apps/member/models.py:506
 msgid "memberships"
 msgstr "adhésions"
 
-#: apps/member/tables.py:137
+#: apps/member/tables.py:139
 msgid "Renew"
 msgstr "Renouveler"
 
@@ -1535,7 +1535,7 @@ msgstr "Cliquez pour valider"
 msgid "No reason specified"
 msgstr "Pas de motif spécifié"
 
-#: apps/note/tables.py:169 apps/note/tables.py:203 apps/treasury/tables.py:39
+#: apps/note/tables.py:169 apps/note/tables.py:213 apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
 #: apps/wei/tables.py:75 apps/wei/tables.py:118
@@ -1555,6 +1555,10 @@ msgstr "Supprimer"
 #: note_kfet/templates/oauth2_provider/application_detail.html:38
 msgid "Edit"
 msgstr "Éditer"
+
+#: apps/note/tables.py:201 apps/note/tables.py:224
+msgid "Hide/Show"
+msgstr "Afficher/Masquer"
 
 #: apps/note/templates/note/conso_form.html:22
 #: apps/note/templates/note/transaction_form.html:48
@@ -1684,6 +1688,18 @@ msgstr "le bouton a bien été supprimé "
 #: apps/note/templates/note/transactiontemplate_list.html:77
 msgid "Unable to delete button "
 msgstr "Impossible de supprimer le bouton "
+
+#: apps/note/templates/note/transactiontemplate_list.html:95
+msgid "Button hidden"
+msgstr "Bouton masqué"
+
+#: apps/note/templates/note/transactiontemplate_list.html:96
+msgid "Button displayed"
+msgstr "Bouton affiché"
+
+#: apps/note/templates/note/transactiontemplate_list.html:100
+msgid "An error occured"
+msgstr "Une erreur s'est produite"
 
 #: apps/note/views.py:36
 msgid "Transfer money"
@@ -3501,8 +3517,3 @@ msgstr ""
 "vous connecter. Vous devez vous rendre à la Kfet et payer les frais "
 "d'adhésion. Vous devez également valider votre adresse email en suivant le "
 "lien que vous avez reçu."
-
-#~ msgid "You are not a Kfet member, so you can't use your note account."
-#~ msgstr ""
-#~ "Vous n'êtes pas adhérent Kfet, vous ne pouvez par conséquent pas utiliser "
-#~ "votre compte note."

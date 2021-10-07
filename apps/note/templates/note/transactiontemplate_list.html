@@ -92,12 +92,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 },
                 success: function() {
                     if(displayed)
-                        addMsg('{% trans "Button hidden"%}', 'success')
-                    else addMsg('{% trans "Button displayed"%}', 'success')
+                        addMsg("{% trans "Button hidden"%}", 'success', 1000)
+                    else addMsg("{% trans "Button displayed"%}", 'success', 1000)
                     reloadTable()
                 },
                 error: function (err) {
-                    addMsg('{% trans "An error occured"%}', 'danger')
+                    addMsg("{% trans "An error occured"%}", 'danger')
                 }})
         }
 </script>
