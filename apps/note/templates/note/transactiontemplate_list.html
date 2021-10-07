@@ -31,28 +31,28 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 {% block extrajavascript %}
 <script type="text/javascript">
+    function refreshMatchedWords() {
+        $("tr").each(function() {
+            let pattern = $('#search_field').val();
+            if (pattern) {
+                $(this).find("td:eq(0), td:eq(1), td:eq(3), td:eq(6)").each(function () {
+                    $(this).html($(this).text().replace(new RegExp(pattern, 'i'), "<mark>$&</mark>"));
+                });
+            }
+        });
+    }
+
+    function reloadTable() {
+        let pattern = $('#search_field').val();
+        $("#buttons_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #buttons_table", refreshMatchedWords);
+    }
+
     $(document).ready(function() {
         let searchbar_obj = $("#search_field");
         let timer_on = false;
         let timer;
 
-        function refreshMatchedWords() {
-            $("tr").each(function() {
-                let pattern = searchbar_obj.val();
-                if (pattern) {
-                    $(this).find("td:eq(0), td:eq(1), td:eq(3), td:eq(6)").each(function () {
-                        $(this).html($(this).text().replace(new RegExp(pattern, 'i'), "<mark>$&</mark>"));
-                    });
-                }
-            });
-        }
-
         refreshMatchedWords();
-
-        function reloadTable() {
-            let pattern = searchbar_obj.val();
-            $("#buttons_table").load(location.pathname + "?search=" + pattern.replace(" ", "%20") + " #buttons_table", refreshMatchedWords);
-        }
 
         searchbar_obj.keyup(function() {
             if (timer_on)
@@ -77,5 +77,28 @@ SPDX-License-Identifier: GPL-3.0-or-later
               addMsg('{% trans "Unable to delete button "%} #' + button_id, 'danger')
           });
      }
+
+    // on click of button "hide/show", call the API
+    function hideshow(id, displayed) {
+            $.ajax({
+                url: '/api/note/transaction/template/' + id + '/',
+                type: 'PATCH',
+                dataType: 'json',
+                headers: {
+                    'X-CSRFTOKEN': CSRF_TOKEN
+                },
+                data: {
+                    display: !displayed
+                },
+                success: function() {
+                    if(displayed)
+                        addMsg('{% trans "Button hidden"%}', 'success')
+                    else addMsg('{% trans "Button displayed"%}', 'success')
+                    reloadTable()
+                },
+                error: function (err) {
+                    addMsg('{% trans "An error occured"%}', 'danger')
+                }})
+        }
 </script>
 {% endblock %}
