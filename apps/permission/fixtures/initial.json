@@ -2511,7 +2511,7 @@
 				"note",
 				"noteuser"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "is_active",
@@ -2527,7 +2527,7 @@
 				"note",
 				"noteuser"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "inactivity_reason",

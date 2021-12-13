@@ -174,7 +174,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             modified_note = NoteUser.objects.get(pk=user.note.pk)
             # Don't log these tests
             modified_note._no_signal = True
-            modified_note.is_active = True
+            modified_note.is_active = False
             modified_note.inactivity_reason = 'manual'
             context["can_lock_note"] = user.note.is_active and PermissionBackend\
                                            .check_perm(self.request, "note.change_noteuser_is_active", modified_note)
