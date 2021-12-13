@@ -198,14 +198,15 @@ class ButtonTable(tables.Table):
     )
 
     hideshow = tables.Column(
-            verbose_name= _("Hide/Show"),
-            accessor="pk",
-            attrs= {
-                'td': {
-                    'class': 'col-sm-1',
-                    'id': lambda record: "hideshow_" + str(record.pk),
-                    }
-                })
+        verbose_name=_("Hide/Show"),
+        accessor="pk",
+        attrs={
+            'td': {
+                'class': 'col-sm-1',
+                'id': lambda record: "hideshow_" + str(record.pk),
+            }
+        },
+    )
 
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
