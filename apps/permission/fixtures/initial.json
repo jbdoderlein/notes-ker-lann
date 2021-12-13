@@ -977,7 +977,7 @@
 			],
 			"query": "[\"OR\", {\"source\": [\"club\", \"note\"]}, {\"destination\": [\"club\", \"note\"]}]",
 			"type": "view",
-			"mask": 1,
+			"mask": 2,
 			"field": "",
 			"permanent": false,
 			"description": "Voir les transactions d'un club"
@@ -2511,7 +2511,7 @@
 				"note",
 				"noteuser"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "is_active",
@@ -2527,7 +2527,7 @@
 				"note",
 				"noteuser"
 			],
-			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"inactivity_reason\": null}]]",
+			"query": "[\"AND\", {\"user\": [\"user\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
 			"type": "change",
 			"mask": 1,
 			"field": "inactivity_reason",
@@ -2872,6 +2872,38 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 184,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "[\"AND\", {\"club\": [\"club\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
+			"type": "change",
+			"mask": 3,
+			"field": "is_active",
+			"permanent": true,
+			"description": "(Dé)bloquer la note de son club manuellement"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 185,
+		"fields": {
+			"model": [
+				"note",
+				"noteclub"
+			],
+			"query": "[\"AND\", {\"club\": [\"club\"]}, [\"OR\", {\"inactivity_reason\": \"manual\"}, {\"is_active\": true}]]",
+			"type": "change",
+			"mask": 3,
+			"field": "inactivity_reason",
+			"permanent": true,
+			"description": "(Dé)bloquer la note de son club et indiquer que cela a été fait manuellement"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -3010,7 +3042,9 @@
 				166,
 				167,
 				168,
-				182
+				182,
+				184,
+				185
 			]
 		}
 	},
@@ -3278,7 +3312,9 @@
 				180,
 				181,
 				182,
-				183
+				183,
+				184,
+				185
 			]
 		}
 	},
@@ -3338,7 +3374,8 @@
 				45,
 				46,
 				148,
-				149
+				149,
+				182
 			]
 		}
 	},

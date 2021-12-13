@@ -4,7 +4,7 @@
 import html
 
 import django_tables2 as tables
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from django_tables2.utils import A
 from django.utils.translation import gettext_lazy as _
 from note_kfet.middlewares import get_current_request
@@ -197,6 +197,17 @@ class ButtonTable(tables.Table):
         verbose_name=_("Edit"),
     )
 
+    hideshow = tables.Column(
+        verbose_name=_("Hide/Show"),
+        accessor="pk",
+        attrs={
+            'td': {
+                'class': 'col-sm-1',
+                'id': lambda record: "hideshow_" + str(record.pk),
+            }
+        },
+    )
+
     delete_col = tables.TemplateColumn(template_code=DELETE_TEMPLATE,
                                        extra_context={"delete_trans": _('delete')},
                                        attrs={'td': {'class': 'col-sm-1'}},
@@ -204,3 +215,16 @@ class ButtonTable(tables.Table):
 
     def render_amount(self, value):
         return pretty_money(value)
+
+    def order_category(self, queryset, is_descending):
+        return queryset.order_by(f"{'-' if is_descending else ''}category__name"), True
+
+    def render_hideshow(self, record):
+        val = '<button id="'
+        val += str(record.pk)
+        val += '" class="btn btn-secondary btn-sm" \
+            onclick="hideshow(' + str(record.id) + ',' + \
+            str(record.display).lower() + ')">'
+        val += str(_("Hide/Show"))
+        val += '</button>'
+        return mark_safe(val)

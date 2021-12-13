@@ -90,9 +90,9 @@ class TransactionTemplateListView(ProtectQuerysetMixin, LoginRequiredMixin, Sing
         if "search" in self.request.GET:
             pattern = self.request.GET["search"]
             qs = qs.filter(
-                Q(name__iregex="^" + pattern)
-                | Q(destination__club__name__iregex="^" + pattern)
-                | Q(category__name__iregex="^" + pattern)
+                Q(name__iregex=pattern)
+                | Q(destination__club__name__iregex=pattern)
+                | Q(category__name__iregex=pattern)
                 | Q(description__iregex=pattern)
             )
 

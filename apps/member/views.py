@@ -18,7 +18,7 @@ from django.views.generic import DetailView, UpdateView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_tables2.views import SingleTableView
 from rest_framework.authtoken.models import Token
-from note.models import Alias, NoteUser
+from note.models import Alias, NoteUser, NoteClub
 from note.models.transactions import Transaction, SpecialTransaction
 from note.tables import HistoryTable, AliasTable
 from note_kfet.middlewares import _set_current_request
@@ -174,7 +174,7 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             modified_note = NoteUser.objects.get(pk=user.note.pk)
             # Don't log these tests
             modified_note._no_signal = True
-            modified_note.is_active = True
+            modified_note.is_active = False
             modified_note.inactivity_reason = 'manual'
             context["can_lock_note"] = user.note.is_active and PermissionBackend\
                                            .check_perm(self.request, "note.change_noteuser_is_active", modified_note)
@@ -183,14 +183,14 @@ class UserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             modified_note._force_save = True
             modified_note.save()
             context["can_force_lock"] = user.note.is_active and PermissionBackend\
-                .check_perm(self.request, "note.change_note_is_active", modified_note)
+                .check_perm(self.request, "note.change_noteuser_is_active", modified_note)
             old_note._force_save = True
             old_note._no_signal = True
             old_note.save()
             modified_note.refresh_from_db()
             modified_note.is_active = True
             context["can_unlock_note"] = not user.note.is_active and PermissionBackend\
-                .check_perm(self.request, "note.change_note_is_active", modified_note)
+                .check_perm(self.request, "note.change_noteuser_is_active", modified_note)
 
         return context
 
@@ -256,7 +256,8 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
         context["aliases"] = AliasTable(
-            note.alias.filter(PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct().all())
+            note.alias.filter(PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct()
+            .order_by('normalized_name').all())
         context["can_create"] = PermissionBackend.check_perm(self.request, "note.add_alias", Alias(
             note=context["object"].note,
             name="",
@@ -403,9 +404,12 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         """
         context = super().get_context_data(**kwargs)
 
-        club = context["club"]
+        club = self.object
+        context["note"] = club.note
+
         if PermissionBackend.check_perm(self.request, "member.change_club_membership_start", club):
             club.update_membership_dates()
+
         # managers list
         managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club",
                                              date_start__lte=date.today(), date_end__gte=date.today())\
@@ -442,6 +446,29 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         )
         context["can_add_members"] = PermissionBackend()\
             .has_perm(self.request.user, "member.add_membership", empty_membership)
+
+        # Check permissions to see if the authenticated user can lock/unlock the note
+        with transaction.atomic():
+            modified_note = NoteClub.objects.get(pk=club.note.pk)
+            # Don't log these tests
+            modified_note._no_signal = True
+            modified_note.is_active = False
+            modified_note.inactivity_reason = 'manual'
+            context["can_lock_note"] = club.note.is_active and PermissionBackend \
+                .check_perm(self.request, "note.change_noteclub_is_active", modified_note)
+            old_note = NoteClub.objects.select_for_update().get(pk=club.note.pk)
+            modified_note.inactivity_reason = 'forced'
+            modified_note._force_save = True
+            modified_note.save()
+            context["can_force_lock"] = club.note.is_active and PermissionBackend \
+                .check_perm(self.request, "note.change_noteclub_is_active", modified_note)
+            old_note._force_save = True
+            old_note._no_signal = True
+            old_note.save()
+            modified_note.refresh_from_db()
+            modified_note.is_active = True
+            context["can_unlock_note"] = not club.note.is_active and PermissionBackend \
+                .check_perm(self.request, "note.change_noteclub_is_active", modified_note)
 
         return context
 

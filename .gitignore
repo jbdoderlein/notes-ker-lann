@@ -47,6 +47,7 @@ backups/
 env/
 venv/
 db.sqlite3
+shell.nix
 
 # ansibles customs host
 ansible/host_vars/*.yaml
