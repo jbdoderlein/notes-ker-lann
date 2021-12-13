@@ -256,7 +256,8 @@ class ProfileAliasView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         note = context['object'].note
         context["aliases"] = AliasTable(
-            note.alias.filter(PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct().all())
+            note.alias.filter(PermissionBackend.filter_queryset(self.request, Alias, "view")).distinct()
+            .order_by('normalized_name').all())
         context["can_create"] = PermissionBackend.check_perm(self.request, "note.add_alias", Alias(
             note=context["object"].note,
             name="",

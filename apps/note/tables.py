@@ -215,6 +215,9 @@ class ButtonTable(tables.Table):
     def render_amount(self, value):
         return pretty_money(value)
 
+    def order_category(self, queryset, is_descending):
+        return queryset.order_by(f"{'-' if is_descending else ''}category__name"), True
+
     def render_hideshow(self, record):
         val = '<button id="'
         val += str(record.pk)
