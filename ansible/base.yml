@@ -7,7 +7,7 @@
       prompt: "Password of the database (leave it blank to skip database init)"
       private: yes
   vars:
-    mirror: mirror.crans.org
+    mirror: eclats.crans.org
   roles:
     - 1-apt-basic
     - 2-nk20
