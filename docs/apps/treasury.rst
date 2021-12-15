@@ -86,7 +86,7 @@ Génération
 
 Les factures peuvent s'exporter au format PDF (là est tout leur intérêt). Pour cela, on utilise le template LaTeX
 présent à l'adresse suivante :
-`/templates/treasury/invoice_sample.tex <https://gitlab.crans.org/bde/nk20/-/tree/master/templates/treasury/invoice_sample.tex>`_
+`/templates/treasury/invoice_sample.tex <https://gitlab.crans.org/bde/nk20/-/tree/main/templates/treasury/invoice_sample.tex>`_
 
 On le remplit avec les données de la facture et les données du BDE, hard-codées. On copie le template rempli dans un
 ficher tex dans un dossier temporaire. On fait ensuite 2 appels à ``pdflatex`` pour générer la facture au format PDF.
