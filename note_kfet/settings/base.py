@@ -251,6 +251,7 @@ REST_FRAMEWORK = {
 OAUTH2_PROVIDER = {
     'SCOPES_BACKEND_CLASS': 'permission.scopes.PermissionScopes',
     'OAUTH2_VALIDATOR_CLASS': "permission.scopes.PermissionOAuth2Validator",
+    'REFRESH_TOKEN_EXPIRE_SECONDS': timedelta(days=14),
 }
 
 # Take control on how widget templates are sourced
