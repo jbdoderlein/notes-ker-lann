@@ -41,7 +41,13 @@ On a ensuite besoin de définir nos propres scopes afin d'avoir des permissions 
 
    OAUTH2_PROVIDER = {
        'SCOPES_BACKEND_CLASS': 'permission.scopes.PermissionScopes',
+       'OAUTH2_VALIDATOR_CLASS': "permission.scopes.PermissionOAuth2Validator",
+       'REFRESH_TOKEN_EXPIRE_SECONDS': timedelta(days=14),
    }
+
+Cela a pour effet d'avoir des scopes sous la forme ``PERMISSION_CLUB``,
+et de demander des scopes facultatives (voir plus bas).
+Un jeton de rafraîchissement expire de plus au bout de 14 jours, si non-renouvelé.
 
 On ajoute enfin les routes dans ``urls.py`` :
 
@@ -94,6 +100,27 @@ du format renvoyé.
    Vous pouvez donc contrôler le plus finement possible les permissions octroyées à vos
    jetons.
 
+.. danger::
+
+   Demander des scopes n'implique pas de les avoir.
+
+   Lorsque des scopes sont demandées par un client, la Note
+   va considérer l'ensemble des permissions accessibles parmi
+   ce qui est demandé. Dans vos programmes, vous devrez donc
+   vérifier les permissions acquises (communiquées lors de la
+   récupération du jeton d'accès à partir du grant code),
+   et prévoir un comportement dans le cas où des permissions
+   sont manquantes.
+
+   Cela offre un intérêt supérieur par rapport au protocole
+   OAuth2 classique, consistant à demander trop de permissions
+   et agir en conséquence.
+
+   Par exemple, vous pourriez demander la permission d'accéder
+   aux membres d'un club ou de faire des transactions, et agir
+   uniquement dans le cas où l'utilisateur connecté possède la
+   permission problématique.
+
 Avec Django-allauth
 ###################
 
@@ -116,12 +143,17 @@ installées (sur votre propre client), puis de bien ajouter l'application social
    SOCIALACCOUNT_PROVIDERS = {
        'notekfet': {
            # 'DOMAIN': 'note.crans.org',
+           'SCOPE': ['1_1', '2_1'],
        },
        ...
    }
 
 Le paramètre ``DOMAIN`` permet de changer d'instance de Note Kfet. Par défaut, il
 se connectera à ``note.crans.org`` si vous ne renseignez rien.
+
+Le paramètre ``SCOPE`` permet de définir les scopes à demander.
+Dans l'exemple ci-dessous, les permissions d'accéder à l'utilisateur
+et au profil sont demandées.
 
 En créant l'application sur la note, vous pouvez renseigner
 ``https://monsite.example.com/accounts/notekfet/login/callback/`` en URL de redirection,
