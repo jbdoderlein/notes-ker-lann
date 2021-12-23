@@ -7,6 +7,8 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
@@ -248,6 +250,7 @@ REST_FRAMEWORK = {
 # OAuth2 Provider
 OAUTH2_PROVIDER = {
     'SCOPES_BACKEND_CLASS': 'permission.scopes.PermissionScopes',
+    'OAUTH2_VALIDATOR_CLASS': "permission.scopes.PermissionOAuth2Validator",
 }
 
 # Take control on how widget templates are sourced
