@@ -7,8 +7,11 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from rest_framework import serializers
 from member.api.serializers import ProfileSerializer, MembershipSerializer
+from member.models import Membership
 from note.api.serializers import NoteSerializer
 from note.models import Alias
+from note_kfet.middlewares import get_current_request
+from permission.backends import PermissionBackend
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -45,18 +48,30 @@ class OAuthSerializer(serializers.ModelSerializer):
     """
     normalized_name = serializers.SerializerMethodField()
 
-    profile = ProfileSerializer()
+    profile = serializers.SerializerMethodField()
 
-    note = NoteSerializer()
+    note = serializers.SerializerMethodField()
 
     memberships = serializers.SerializerMethodField()
 
     def get_normalized_name(self, obj):
         return Alias.normalize(obj.username)
 
+    def get_profile(self, obj):
+        # Display the profile of the user only if we have rights to see it.
+        return ProfileSerializer().to_representation(obj.profile) \
+            if PermissionBackend.has_perm(get_current_request(), obj.profile, 'view') else None
+
+    def get_note(self, obj):
+        # Display the note of the user only if we have rights to see it.
+        return NoteSerializer().to_representation(obj.note) \
+            if PermissionBackend.has_perm(get_current_request(), obj.note, 'view') else None
+
     def get_memberships(self, obj):
+        # Display only memberships that we are allowed to see.
         return serializers.ListSerializer(child=MembershipSerializer()).to_representation(
-            obj.memberships.filter(date_start__lte=timezone.now(), date_end__gte=timezone.now()))
+            obj.memberships.filter(date_start__lte=timezone.now(), date_end__gte=timezone.now())
+                           .filter(PermissionBackend.filter_queryset(get_current_request(), Membership, 'view')))
 
     class Meta:
         model = User
