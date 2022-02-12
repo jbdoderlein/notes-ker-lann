@@ -782,7 +782,7 @@ class TestDefaultWEISurvey(TestCase):
         WEISurvey.update_form(None, None)
 
         self.assertEqual(CurrentSurvey.get_algorithm_class().get_survey_class(), CurrentSurvey)
-        self.assertEqual(CurrentSurvey.get_year(), 2021)
+        self.assertEqual(CurrentSurvey.get_year(), 2022)
 
 
 class TestWeiAPI(TestAPI):

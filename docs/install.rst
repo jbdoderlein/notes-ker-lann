@@ -88,7 +88,7 @@ On clone donc le dépôt en tant que ``www-data`` :
 
    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git /var/www/note_kfet
 
-Par défaut, le dépôt est configuré pour suivre la branche ``master``, qui est la branche
+Par défaut, le dépôt est configuré pour suivre la branche ``main``, qui est la branche
 stable, notamment installée sur `<https://note.crans.org/>`_. Pour changer de branche,
 notamment passer sur la branche ``beta`` sur un serveur de pré-production (un peu comme
 `<https://note-dev.crans.org/>`_), on peut faire :
@@ -587,7 +587,7 @@ Dans ce fichier, remplissez :
    ---
    note:
      server_name: note.crans.org
-     git_branch: master
+     git_branch: main
      cron_enabled: true
      email: notekfet2020@lists.crans.org
 
