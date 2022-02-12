@@ -264,10 +264,12 @@ class Club(models.Model):
         today = datetime.date.today()
 
         if (today - self.membership_start).days >= 365:
-            self.membership_start = datetime.date(self.membership_start.year + 1,
-                                                  self.membership_start.month, self.membership_start.day)
-            self.membership_end = datetime.date(self.membership_end.year + 1,
-                                                self.membership_end.month, self.membership_end.day)
+            if self.membership_start:
+                self.membership_start = datetime.date(self.membership_start.year + 1,
+                                                      self.membership_start.month, self.membership_start.day)
+            if self.membership_end:
+                self.membership_end = datetime.date(self.membership_end.year + 1,
+                                                    self.membership_end.month, self.membership_end.day)
             self._force_save = True
             self.save(force_update=True)
 
