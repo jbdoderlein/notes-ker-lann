@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2021 by BDE ENS Paris-Saclay
+# Copyright (C) 2018-2022 by BDE ENS Paris-Saclay
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import random
@@ -6,7 +6,7 @@ import random
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from ..forms.surveys.wei2021 import WEIBusInformation2021, WEISurvey2021, WORDS, WEISurveyInformation2021
+from ..forms.surveys.wei2022 import WEIBusInformation2022, WEISurvey2022, WORDS, WEISurveyInformation2022
 from ..models import Bus, WEIClub, WEIRegistration
 
 
@@ -21,18 +21,18 @@ class TestWEIAlgorithm(TestCase):
         Create some test data, with one WEI and 10 buses with random score attributions.
         """
         self.wei = WEIClub.objects.create(
-            name="WEI 2021",
-            email="wei2021@example.com",
-            date_start='2021-09-17',
-            date_end='2021-09-19',
-            year=2021,
+            name="WEI 2022",
+            email="wei2022@example.com",
+            date_start='2022-09-16',
+            date_end='2022-09-18',
+            year=2022,
         )
 
         self.buses = []
         for i in range(10):
             bus = Bus.objects.create(wei=self.wei, name=f"Bus {i}", size=10)
             self.buses.append(bus)
-            information = WEIBusInformation2021(bus)
+            information = WEIBusInformation2022(bus)
             for word in WORDS:
                 information.scores[word] = random.randint(0, 101)
             information.save()
@@ -51,7 +51,7 @@ class TestWEIAlgorithm(TestCase):
                 first_year=True,
                 birth_date='2000-01-01',
             )
-            information = WEISurveyInformation2021(registration)
+            information = WEISurveyInformation2022(registration)
             for j in range(1, 21):
                 setattr(information, f'word{j}', random.choice(WORDS))
             information.step = 20
@@ -59,11 +59,11 @@ class TestWEIAlgorithm(TestCase):
             registration.save()
 
         # Run algorithm
-        WEISurvey2021.get_algorithm_class()().run_algorithm()
+        WEISurvey2022.get_algorithm_class()().run_algorithm()
 
         # Ensure that everyone has its first choice
         for r in WEIRegistration.objects.filter(wei=self.wei).all():
-            survey = WEISurvey2021(r)
+            survey = WEISurvey2022(r)
             preferred_bus = survey.ordered_buses()[0][0]
             chosen_bus = survey.information.get_selected_bus()
             self.assertEqual(preferred_bus, chosen_bus)
@@ -81,7 +81,7 @@ class TestWEIAlgorithm(TestCase):
                 first_year=True,
                 birth_date='2000-01-01',
             )
-            information = WEISurveyInformation2021(registration)
+            information = WEISurveyInformation2022(registration)
             for j in range(1, 21):
                 setattr(information, f'word{j}', random.choice(WORDS))
             information.step = 20
@@ -89,7 +89,7 @@ class TestWEIAlgorithm(TestCase):
             registration.save()
 
         # Run algorithm
-        WEISurvey2021.get_algorithm_class()().run_algorithm()
+        WEISurvey2022.get_algorithm_class()().run_algorithm()
 
         penalty = 0
         # Ensure that everyone seems to be happy
@@ -98,7 +98,7 @@ class TestWEIAlgorithm(TestCase):
         # and the score of the attributed bus
         # We consider it acceptable if the mean of this distance is lower than 5 %
         for r in WEIRegistration.objects.filter(wei=self.wei).all():
-            survey = WEISurvey2021(r)
+            survey = WEISurvey2022(r)
             chosen_bus = survey.information.get_selected_bus()
             buses = survey.ordered_buses()
             score = min(v for bus, v in buses if bus == chosen_bus)
