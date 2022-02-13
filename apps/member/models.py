@@ -258,7 +258,7 @@ class Club(models.Model):
         This function is called each time the club detail view is displayed.
         Update the year of the membership dates.
         """
-        if not self.membership_start:
+        if not self.membership_start or not self.membership_end:
             return
 
         today = datetime.date.today()
