@@ -120,7 +120,7 @@ class MembershipTable(tables.Table):
                     club=record.club,
                     user=record.user,
                     date_start__gte=record.club.membership_start,
-                    date_end__lte=record.club.membership_end,
+                    date_end__lte=record.club.membership_end or date(9999, 12, 31),
             ).exists():  # If the renew is not yet performed
                 empty_membership = Membership(
                     club=record.club,
