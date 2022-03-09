@@ -60,12 +60,12 @@ class OAuthSerializer(serializers.ModelSerializer):
     def get_profile(self, obj):
         # Display the profile of the user only if we have rights to see it.
         return ProfileSerializer().to_representation(obj.profile) \
-            if PermissionBackend.has_perm(get_current_request(), obj.profile, 'view') else None
+            if PermissionBackend.check_perm(get_current_request(), 'member.view_profile', obj.profile) else None
 
     def get_note(self, obj):
         # Display the note of the user only if we have rights to see it.
         return NoteSerializer().to_representation(obj.note) \
-            if PermissionBackend.has_perm(get_current_request(), obj.note, 'view') else None
+            if PermissionBackend.check_perm(get_current_request(), 'note.view_note', obj.note) else None
 
     def get_memberships(self, obj):
         # Display only memberships that we are allowed to see.

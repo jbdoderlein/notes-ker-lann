@@ -2904,6 +2904,70 @@
 		}
 	},
 	{
+		"model": "permission.permission",
+		"pk": 186,
+		"fields": {
+			"model": [
+				"oauth2_provider",
+				"application"
+			],
+			"query": "{\"user\": [\"user\"]}",
+			"type": "view",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Voir ses applications OAuth2"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 187,
+		"fields": {
+			"model": [
+				"oauth2_provider",
+				"application"
+			],
+			"query": "{\"user\": [\"user\"]}",
+			"type": "create",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Créer une application OAuth2"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 188,
+		"fields": {
+			"model": [
+				"oauth2_provider",
+				"application"
+			],
+			"query": "{\"user\": [\"user\"]}",
+			"type": "change",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Modifier une application OAuth2"
+		}
+	},
+	{
+		"model": "permission.permission",
+		"pk": 189,
+		"fields": {
+			"model": [
+				"oauth2_provider",
+				"application"
+			],
+			"query": "{\"user\": [\"user\"]}",
+			"type": "delete",
+			"mask": 1,
+			"field": "",
+			"permanent": true,
+			"description": "Supprimer une application OAuth2"
+		}
+	},
+	{
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
@@ -2933,7 +2997,11 @@
 				126,
 				161,
 				162,
-				165
+				165,
+				186,
+				187,
+				188,
+				189
 			]
 		}
 	},
@@ -3314,7 +3382,11 @@
 				182,
 				183,
 				184,
-				185
+				185,
+				186,
+				187,
+				188,
+				189
 			]
 		}
 	},
