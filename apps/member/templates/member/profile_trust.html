@@ -5,7 +5,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% load static django_tables2 i18n %}
 
 {% block profile_content %}
-<div class="card bg-light">
+<div class="card bg-light mb-3">
     <h3 class="card-header text-center">
         {% trans "Note friendships" %}
     </h3>
@@ -22,6 +22,16 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {% endif %}
     </div>
     {% render_table trusting %}
+</div>
+
+<div class="alert alert-warning">
+    {% blocktrans trimmed %}
+        Adding someone as a friend enables them to initiate transactions coming
+        from your account (while keeping your balance positive). This is
+        designed to simplify using note kfet transfers to transfer money between
+        users. The intent is that one person can make all transfers for a group of
+        friends without needing additional rights among them.
+    {% endblocktrans %}
 </div>
 {% endblock %}
 
