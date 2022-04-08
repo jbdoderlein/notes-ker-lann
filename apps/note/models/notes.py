@@ -245,7 +245,7 @@ class Trust(models.Model):
         unique_together = ("trusting", "trusted")
 
     def __str__(self):
-        return _("Friendship between {trusting} and{trusted}").format(
+        return _("Friendship between {trusting} and {trusted}").format(
             trusting=str(self.trusting), trusted=str(self.trusted))
 
 
