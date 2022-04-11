@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-10 22:34+0200\n"
-"PO-Revision-Date: 2020-11-17 23:47+0100\n"
+"PO-Revision-Date: 2022-04-11 23:12+0200\n"
 "Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:151
 #: apps/activity/models.py:167
@@ -25,7 +25,7 @@ msgstr "actividad"
 
 #: apps/activity/forms.py:34
 msgid "The note of this club is inactive."
-msgstr ""
+msgstr "La note del club está inactiva."
 
 #: apps/activity/forms.py:41 apps/activity/models.py:132
 msgid "The end date must be after the start date."
@@ -593,21 +593,19 @@ msgstr "Papeles"
 
 #: apps/member/hashers.py:57
 msgid "algorithm"
-msgstr ""
+msgstr "algoritmo"
 
 #: apps/member/hashers.py:58
-#, fuzzy
-#| msgid "Registrations"
 msgid "iterations"
-msgstr "Registraciones"
+msgstr "iteraciones"
 
 #: apps/member/hashers.py:59
 msgid "salt"
-msgstr ""
+msgstr "sal"
 
 #: apps/member/hashers.py:60
 msgid "hash"
-msgstr ""
+msgstr "hash"
 
 #: apps/member/models.py:38
 #: apps/member/templates/member/includes/profile_info.html:43
@@ -1079,23 +1077,19 @@ msgstr "Cambiar la contraseña"
 #: apps/member/templates/member/includes/profile_info.html:28
 #: apps/note/models/notes.py:244
 msgid "friendships"
-msgstr ""
+msgstr "amistades"
 
 #: apps/member/templates/member/includes/profile_info.html:32
-#, fuzzy
-#| msgid "Manage aliases"
 msgid "Manage friendships"
-msgstr "Gestionar los alias"
+msgstr "Gestionar las amistades"
 
 #: apps/member/templates/member/includes/profile_info.html:63
 msgid "API token"
 msgstr "Acceso API"
 
 #: apps/member/templates/member/manage_auth_tokens.html:12
-#, fuzzy
-#| msgid "Central Authentication Service"
 msgid "Token authentication"
-msgstr "Servicio Central de Autentificación"
+msgstr "Token de autentificación"
 
 #: apps/member/templates/member/manage_auth_tokens.html:28
 msgid "Token"
@@ -1107,39 +1101,35 @@ msgstr "Creado el"
 
 #: apps/member/templates/member/manage_auth_tokens.html:39
 msgid "Warning"
-msgstr ""
+msgstr "Cuidado"
 
 #: apps/member/templates/member/manage_auth_tokens.html:44
 msgid "Regenerate token"
 msgstr "Regenerar token"
 
 #: apps/member/templates/member/manage_auth_tokens.html:53
-#, fuzzy
-#| msgid "Account activation"
 msgid "OAuth2 authentication"
-msgstr "Activación de la cuenta"
+msgstr "Autentificación OAuth2"
 
 #: apps/member/templates/member/manage_auth_tokens.html:79
 msgid "Authorization:"
-msgstr ""
+msgstr "Autorizaciones :"
 
 #: apps/member/templates/member/manage_auth_tokens.html:83
-#, fuzzy
-#| msgid "Token"
 msgid "Token:"
-msgstr "Token"
+msgstr "Token :"
 
 #: apps/member/templates/member/manage_auth_tokens.html:87
 msgid "Revoke Token:"
-msgstr ""
+msgstr "Token revocado :"
 
 #: apps/member/templates/member/manage_auth_tokens.html:91
 msgid "Introspect Token:"
-msgstr ""
+msgstr "Introspección :"
 
 #: apps/member/templates/member/manage_auth_tokens.html:97
 msgid "Show my applications"
-msgstr ""
+msgstr "Mostrar mis aplicaciones"
 
 #: apps/member/templates/member/picture_update.html:35
 msgid "Nevermind"
@@ -1167,7 +1157,7 @@ msgstr "Ver mis afiliaciones"
 
 #: apps/member/templates/member/profile_trust.html:10 apps/member/views.py:254
 msgid "Note friendships"
-msgstr ""
+msgstr "Amistades de note"
 
 #: apps/member/templates/member/profile_trust.html:28
 msgid ""
@@ -1177,6 +1167,10 @@ msgid ""
 "intent is that one person can make all transfers for a group of friends "
 "without needing additional rights among them."
 msgstr ""
+"Añadir alguien como amig@ permite a esta persona hacer transacciones de su "
+"note a la note de el (si su cuenta se queda en positivo). La meta es "
+"simplificar el reembolso entre amig@s por Note Kfet. Pues una persona puede "
+"crear todas la transacciones sin tener derechos particulares."
 
 #: apps/member/templates/member/profile_update.html:18
 msgid "Save Changes"
@@ -1398,20 +1392,20 @@ msgstr "notes especiales"
 
 #: apps/note/models/notes.py:232
 msgid "trusting"
-msgstr ""
+msgstr "note"
 
 #: apps/note/models/notes.py:239
 msgid "trusted"
-msgstr ""
+msgstr "amigo"
 
 #: apps/note/models/notes.py:243
 msgid "frienship"
-msgstr ""
+msgstr "amistad"
 
 #: apps/note/models/notes.py:248
 #, python-brace-format
 msgid "Friendship between {trusting} and {trusted}"
-msgstr ""
+msgstr "Amistad entre {trusting} y {trusted}"
 
 #: apps/note/models/notes.py:269
 msgid "Invalid alias"
@@ -1603,7 +1597,7 @@ msgstr "Editar"
 
 #: apps/note/tables.py:226 apps/note/tables.py:253
 msgid "Hide/Show"
-msgstr ""
+msgstr "Ocultar/Mostrar"
 
 #: apps/note/templates/note/conso_form.html:22
 #: apps/note/templates/note/transaction_form.html:48
@@ -1735,20 +1729,16 @@ msgid "Unable to delete button "
 msgstr "Imposible de suprimir el botón "
 
 #: apps/note/templates/note/transactiontemplate_list.html:95
-#, fuzzy
-#| msgid "Buttons list"
 msgid "Button hidden"
-msgstr "Lista de los botones"
+msgstr "Botón ocultado"
 
 #: apps/note/templates/note/transactiontemplate_list.html:96
-#, fuzzy
-#| msgid "Buttons list"
 msgid "Button displayed"
-msgstr "Lista de los botones"
+msgstr "Botón mostrado"
 
 #: apps/note/templates/note/transactiontemplate_list.html:100
 msgid "An error occured"
-msgstr ""
+msgstr "Un error ocurrió"
 
 #: apps/note/views.py:36
 msgid "Transfer money"
@@ -1935,17 +1925,17 @@ msgstr ""
 #: apps/permission/templates/permission/scopes.html:42
 #: note_kfet/templates/oauth2_provider/application_list.html:24
 msgid "No applications defined"
-msgstr ""
+msgstr "Ninguna aplicación definida"
 
 #: apps/permission/templates/permission/scopes.html:43
 #: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "Click here"
-msgstr ""
+msgstr "Pulsar aquí"
 
 #: apps/permission/templates/permission/scopes.html:43
 #: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "if you want to register a new one"
-msgstr ""
+msgstr "si quiere crear una nueva"
 
 #: apps/permission/views.py:72
 #, python-brace-format
@@ -1978,10 +1968,6 @@ msgid "This email address is already used."
 msgstr "Este correo electrónico ya esta utilizado."
 
 #: apps/registration/forms.py:49
-#, fuzzy
-#| msgid ""
-#| "I declare that I opened a bank account in the Société générale with the "
-#| "BDE partnership."
 msgid ""
 "I declare that I opened or I will open soon a bank account in the Société "
 "générale with the BDE partnership."
@@ -2528,16 +2514,12 @@ msgstr ""
 "No hay usuario encontrado cual pidió un crédito de la Société Générale."
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:63
-#, fuzzy
-#| msgid "Credit from the Société générale"
 msgid "Add credit from the Société générale"
-msgstr "Crédito de la Société Générale"
+msgstr "Anãdir un crédito de la Société Générale"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:109
-#, fuzzy
-#| msgid "button successfully deleted "
 msgid "Credit successfully registered"
-msgstr "botón suprimido con éxito "
+msgstr "Crédito creado con éxito"
 
 #: apps/treasury/views.py:40
 msgid "Create new invoice"
@@ -2589,6 +2571,7 @@ msgstr "WEI"
 #: apps/wei/forms/registration.py:35
 msgid "The selected user is not validated. Please validate its account first"
 msgstr ""
+"El usuario seleccionado no ha sido validado. Validar esta cuenta primero"
 
 #: apps/wei/forms/registration.py:59 apps/wei/models.py:126
 #: apps/wei/models.py:323
@@ -2646,10 +2629,8 @@ msgid "date end"
 msgstr "fecha de fin"
 
 #: apps/wei/models.py:71 apps/wei/tables.py:305
-#, fuzzy
-#| msgid "The user joined the bus"
 msgid "seat count in the bus"
-msgstr "El usuario se queda con el bus"
+msgstr "cantidad de asientos en el bus"
 
 #: apps/wei/models.py:83
 msgid "survey information"
@@ -2785,23 +2766,19 @@ msgstr "Afiliaciones al WEI"
 
 #: apps/wei/tables.py:105
 msgid "The user does not have enough money."
-msgstr ""
+msgstr "El usuario no tiene suficientemente dinero."
 
 #: apps/wei/tables.py:108
 msgid ""
 "The user is in first year. You may validate the credit, the algorithm will "
 "run later."
 msgstr ""
+"El usuario esta en primer año. Puede validar el crédito, el algoritmo se "
+"ejecutara más tarde."
 
 #: apps/wei/tables.py:111
-#, fuzzy
-#| msgid ""
-#| "The note has enough money (%(pretty_fee)s required), the registration is "
-#| "possible."
 msgid "The user has enough money, you can validate the registration."
-msgstr ""
-"La note tiene suficiente dinero (%(pretty_fee)s pedidos), la afiliación es "
-"posible."
+msgstr "La note tiene suficiente dinero, la afiliación es posible."
 
 #: apps/wei/tables.py:143
 msgid "Year"
@@ -2825,54 +2802,44 @@ msgid "members"
 msgstr "miembros"
 
 #: apps/wei/tables.py:287
-#, fuzzy
-#| msgid "first year"
 msgid "suggested first year"
-msgstr "primer año"
+msgstr "primer año sugerido"
 
 #: apps/wei/tables.py:293
-#, fuzzy
-#| msgid "first year"
 msgid "validated first year"
-msgstr "primer año"
+msgstr "primer año validado"
 
 #: apps/wei/tables.py:299
-#, fuzzy
-#| msgid "validate"
 msgid "validated staff"
-msgstr "validar"
+msgstr "staff validado"
 
 #: apps/wei/tables.py:310
 msgid "free seats"
-msgstr ""
+msgstr "asientos libres"
 
 #: apps/wei/templates/wei/1A_list.html:9
 msgid "Attribute first year members into buses"
-msgstr ""
+msgstr "Repartir los primer años en los buses"
 
 #: apps/wei/templates/wei/1A_list.html:15
 msgid "Start attribution!"
-msgstr ""
+msgstr "Empezar repartición !"
 
 #: apps/wei/templates/wei/attribute_bus_1A.html:8
 msgid "Bus attribution"
-msgstr ""
+msgstr "Repartición de los buses"
 
 #: apps/wei/templates/wei/attribute_bus_1A.html:31
 msgid "suggested bus"
-msgstr ""
+msgstr "bus sugerido"
 
 #: apps/wei/templates/wei/attribute_bus_1A.html:37
-#, fuzzy
-#| msgid "Raw survey information"
 msgid "View raw survey information"
-msgstr "Informaciones crudas del cuestionario"
+msgstr "Ver las informaciones crudas del cuestionario"
 
 #: apps/wei/templates/wei/attribute_bus_1A.html:57
-#, fuzzy
-#| msgid "Buttons list"
 msgid "Back to main list"
-msgstr "Lista de los botones"
+msgstr "Volver a la lista principal"
 
 #: apps/wei/templates/wei/base.html:44
 msgid "WEI fee (paid students)"
@@ -2966,7 +2933,7 @@ msgstr "Inscripciones sin validación"
 
 #: apps/wei/templates/wei/weiclub_detail.html:99
 msgid "Attribute buses"
-msgstr ""
+msgstr "Repartición en los buses"
 
 #: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:79
 msgid "Create WEI"
@@ -3197,11 +3164,11 @@ msgstr "Validar la inscripción WEI"
 
 #: apps/wei/views.py:1186
 msgid "Attribute buses to first year members"
-msgstr ""
+msgstr "Repartir los primer años en los buses"
 
 #: apps/wei/views.py:1211
 msgid "Attribute bus"
-msgstr ""
+msgstr "Repartir en un bus"
 
 #: note_kfet/settings/base.py:172
 msgid "German"
@@ -3329,13 +3296,6 @@ msgstr ""
 "clic en el enlace de validación."
 
 #: note_kfet/templates/base.html:171
-#, fuzzy
-#| msgid ""
-#| "You declared that you opened a bank account in the Société générale. The "
-#| "bank did not validate the creation of the account to the BDE, so the "
-#| "registration bonus of 80 € is not credited and the membership is not paid "
-#| "yet. This verification procedure may last a few days. Please make sure "
-#| "that you go to the end of the account creation."
 msgid ""
 "You declared that you opened a bank account in the Société générale. The "
 "bank did not validate the creation of the account to the BDE, so the "
@@ -3344,9 +3304,9 @@ msgid ""
 "creation."
 msgstr ""
 "Usted declaró que abrió una cuenta bancaria a la Société Générale. El banco "
-"no convalidó la cuenta al BDE, así que el bonus de 80€ no fue dado y la "
-"afiliación no está pagada. El proceso de convalidación puede durar unos "
-"días. Por favor comprueba que fue hasta el final de la creación de la cuenta."
+"no convalidó la cuenta al BDE, así que la afiliación y el WEI no están "
+"pagados. El proceso de convalidación puede durar unos días. Por favor "
+"comprueba que fue hasta el final de la creación de la cuenta."
 
 #: note_kfet/templates/base.html:194
 msgid "Contact us"
@@ -3354,7 +3314,7 @@ msgstr "Contactarnos"
 
 #: note_kfet/templates/base.html:196
 msgid "Technical Support"
-msgstr ""
+msgstr "Soporte técnico"
 
 #: note_kfet/templates/base_search.html:15
 msgid "Search by attribute such as name…"
@@ -3365,42 +3325,35 @@ msgid "There is no results."
 msgstr "No hay resultado."
 
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:8
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete this invoice? This action can't be undone."
 msgid "Are you sure to delete the application"
 msgstr ""
-"¿ Usted está seguro de querer suprimir esta factura ? Este acto es "
-"definitivo."
+"¿ Usted está seguro de querer suprimir esta aplicación ? Este acto es "
+"definitivo"
 
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:17
 #: note_kfet/templates/oauth2_provider/authorize.html:28
-#, fuzzy
-#| msgid "Balance"
 msgid "Cancel"
-msgstr "Saldo de la cuenta"
+msgstr "Anular"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:11
 msgid "Client id"
-msgstr ""
+msgstr "ID cliente"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:14
 msgid "Client secret"
-msgstr ""
+msgstr "Secreto cliente"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:17
-#, fuzzy
-#| msgid "Credit type"
 msgid "Client type"
-msgstr "Tipo de crédito"
+msgstr "Tipo de cliente"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:20
 msgid "Authorization Grant Type"
-msgstr ""
+msgstr "Tipo de autorización"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:23
 msgid "Redirect Uris"
-msgstr ""
+msgstr "URL de redirecto"
 
 #: note_kfet/templates/oauth2_provider/application_detail.html:29
 #, python-format
@@ -3413,82 +3366,68 @@ msgstr ""
 #: note_kfet/templates/oauth2_provider/application_detail.html:37
 #: note_kfet/templates/oauth2_provider/application_form.html:23
 msgid "Go Back"
-msgstr ""
+msgstr "Volver"
 
 #: note_kfet/templates/oauth2_provider/application_form.html:12
-#, fuzzy
-#| msgid "Email validation"
 msgid "Edit application"
-msgstr "Validación del correo electrónico"
+msgstr "Editar la aplicación"
 
 #: note_kfet/templates/oauth2_provider/application_list.html:7
 msgid "Your applications"
-msgstr ""
+msgstr "Sus aplicaciones"
 
 #: note_kfet/templates/oauth2_provider/application_list.html:11
 msgid ""
 "You can find on this page the list of the applications that you already "
 "registered."
 msgstr ""
+"Puede encontrar en esta pagina la lista de la aplicaciones que ya registró."
 
 #: note_kfet/templates/oauth2_provider/application_list.html:30
-#, fuzzy
-#| msgid "location"
 msgid "New Application"
-msgstr "ubicación"
+msgstr "Nueva aplicación"
 
 #: note_kfet/templates/oauth2_provider/application_list.html:31
 msgid "Authorized Tokens"
-msgstr ""
+msgstr "Tokens autorizados"
 
 #: note_kfet/templates/oauth2_provider/application_registration_form.html:5
-#, fuzzy
-#| msgid "Registrations"
 msgid "Register a new application"
-msgstr "Registraciones"
+msgstr "Registrar una nueva aplicación"
 
 #: note_kfet/templates/oauth2_provider/authorize.html:9
 #: note_kfet/templates/oauth2_provider/authorize.html:29
 msgid "Authorize"
-msgstr ""
+msgstr "Autorizar"
 
 #: note_kfet/templates/oauth2_provider/authorize.html:14
 msgid "Application requires following permissions:"
-msgstr ""
+msgstr "La aplicación necesita los derechos siguientes :"
 
 #: note_kfet/templates/oauth2_provider/authorize.html:36
 #: note_kfet/templates/oauth2_provider/authorized-oob.html:15
 msgid "Error:"
-msgstr ""
+msgstr "Error :"
 
 #: note_kfet/templates/oauth2_provider/authorized-oob.html:13
 msgid "Success"
-msgstr ""
+msgstr "Éxito"
 
 #: note_kfet/templates/oauth2_provider/authorized-oob.html:21
 msgid "Please return to your application and enter this code:"
-msgstr ""
+msgstr "Volver a su aplicación y entrar este código :"
 
 #: note_kfet/templates/oauth2_provider/authorized-token-delete.html:9
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete this invoice? This action can't be undone."
 msgid "Are you sure you want to delete this token?"
-msgstr ""
-"¿ Usted está seguro de querer suprimir esta factura ? Este acto es "
-"definitivo."
+msgstr "¿ Usted está seguro de querer suprimir este token ?"
 
 #: note_kfet/templates/oauth2_provider/authorized-tokens.html:7
-#, fuzzy
-#| msgid "Token"
 msgid "Tokens"
-msgstr "Token"
+msgstr "Tokens"
 
 #: note_kfet/templates/oauth2_provider/authorized-tokens.html:22
-#, fuzzy
-#| msgid "There is no closed remittance yet."
 msgid "There are no authorized tokens yet."
-msgstr "Por ahora no hay descuentos cerrados."
+msgstr "Por ahora no hay ningún token autorizado."
 
 #: note_kfet/templates/registration/logged_out.html:13
 msgid "Thanks for spending some quality time with the Web site today."
