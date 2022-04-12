@@ -65,7 +65,7 @@ mark {
 
 /* Last BDE colors */
 .bg-primary {
-    background-color: rgb(64, 0, 64) !important;
+    background-color: rgb(102, 83, 105) !important;
 }
 
 html {
@@ -81,14 +81,14 @@ body {
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .btn-outline-primary:not(:disabled):not(.disabled):active {
     color: #fff;
-    background-color: rgb(140, 50, 140);
-    border-color: rgb(140, 50, 140);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .btn-outline-primary {
-    color: rgb(140, 50, 140);
+    color: rgb(102, 83, 105);
     background-color: rgba(248, 249, 250, 0.9);
-    border-color: rgb(140, 50, 140);
+    border-color: rgb(102, 83, 105);
 }
 
 .turbolinks-progress-bar {
@@ -99,14 +99,14 @@ body {
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: #fff;
-    background-color: rgb(140, 50, 140);
-    border-color: rgb(140, 50, 140);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .btn-primary {
     color: rgba(248, 249, 250, 0.9); 
-    background-color: rgb(115, 15, 115);
-    border-color: rgb(140, 50, 140);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .border-primary {
@@ -114,7 +114,7 @@ body {
 }
 
 a {
-    color: rgb(115, 15, 115);
+    color: rgb(102, 83, 105);
 }
 
 a:hover {
