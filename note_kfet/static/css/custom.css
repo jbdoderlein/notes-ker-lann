@@ -65,7 +65,7 @@ mark {
 
 /* Last BDE colors */
 .bg-primary {
-    background-color: rgb(0, 0, 0) !important;
+    background-color: rgb(102, 83, 105) !important;
 }
 
 html {
@@ -81,14 +81,14 @@ body {
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .btn-outline-primary:not(:disabled):not(.disabled):active {
     color: #fff;
-    background-color: rgb(0,0, 0);
-    border-color: rgb(0,0, 0);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .btn-outline-primary {
-    color: rgb(0, 0, 0);
+    color: rgb(102, 83, 105);
     background-color: rgba(248, 249, 250, 0.9);
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(102, 83, 105);
 }
 
 .turbolinks-progress-bar {
@@ -99,35 +99,35 @@ body {
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: #fff;
-    background-color: rgb(0, 0, 0);
-    border-color: rgb(0, 0, 0);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .btn-primary {
     color: rgba(248, 249, 250, 0.9); 
-    background-color: rgb(0, 0, 0);
-    border-color: rgb(0, 0, 0);
+    background-color: rgb(102, 83, 105);
+    border-color: rgb(102, 83, 105);
 }
 
 .border-primary {
-    border-color: rgb(0, 0, 0) !important; 
+    border-color: rgb(115, 15, 115) !important; 
 }
 
 a {
-    color: rgb(100, 0, 0);
+    color: rgb(102, 83, 105);
 }
 
 a:hover {
-    color: rgb(150, 0, 0);
+    color: rgb(200, 30, 200);
 }
 
 .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(122, 163, 75, 0.25);
-    border-color: rgb(122, 163, 75);
+    box-shadow: 0 0 0 0.25rem rgba(200, 30, 200, 0.25);
+    border-color: rgb(200, 30, 200);
 }
 
 .btn-outline-primary.focus {
-  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(200, 30, 200, 0.5);
 }
 
 
