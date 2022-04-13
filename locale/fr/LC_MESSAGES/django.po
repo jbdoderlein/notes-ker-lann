@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-07 22:55+0200\n"
-"PO-Revision-Date: 2020-11-16 20:02+0000\n"
-"Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
+"POT-Creation-Date: 2022-04-10 22:34+0200\n"
+"PO-Revision-Date: 2022-04-11 22:05+0200\n"
+"Last-Translator: elkmaennchen <elkmaennchen@crans.org>\n"
 "Language-Team: French <http://translate.ynerant.fr/projects/nk20/nk20/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/activity/apps.py:10 apps/activity/models.py:151
 #: apps/activity/models.py:167
@@ -56,7 +56,7 @@ msgstr "Vous ne pouvez pas inviter plus de 3 personnes à cette activité."
 #: apps/member/models.py:199
 #: apps/member/templates/member/includes/club_info.html:4
 #: apps/member/templates/member/includes/profile_info.html:4
-#: apps/note/models/notes.py:231 apps/note/models/transactions.py:26
+#: apps/note/models/notes.py:263 apps/note/models/transactions.py:26
 #: apps/note/models/transactions.py:46 apps/note/models/transactions.py:301
 #: apps/permission/models.py:330
 #: apps/registration/templates/registration/future_profile_detail.html:16
@@ -114,7 +114,7 @@ msgstr "Lieu où l'activité est organisée, par exemple la Kfet."
 msgid "type"
 msgstr "type"
 
-#: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:305
+#: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:307
 #: apps/note/models/notes.py:148 apps/treasury/models.py:285
 #: apps/wei/models.py:173 apps/wei/templates/wei/attribute_bus_1A.html:13
 #: apps/wei/templates/wei/survey.html:15
@@ -295,7 +295,7 @@ msgstr "Invité supprimé"
 #: apps/note/models/transactions.py:257
 #: apps/note/templates/note/transaction_form.html:17
 #: apps/note/templates/note/transaction_form.html:152
-#: note_kfet/templates/base.html:73
+#: note_kfet/templates/base.html:72
 msgid "Transfer"
 msgstr "Virement"
 
@@ -388,7 +388,7 @@ msgid "validate"
 msgstr "valider"
 
 #: apps/activity/templates/activity/includes/activity_info.html:71
-#: apps/logs/models.py:64 apps/note/tables.py:195
+#: apps/logs/models.py:64 apps/note/tables.py:220
 msgid "edit"
 msgstr "modifier"
 
@@ -400,7 +400,7 @@ msgstr "Inviter"
 msgid "Create new activity"
 msgstr "Créer une nouvelle activité"
 
-#: apps/activity/views.py:67 note_kfet/templates/base.html:91
+#: apps/activity/views.py:67 note_kfet/templates/base.html:90
 msgid "Activities"
 msgstr "Activités"
 
@@ -466,9 +466,9 @@ msgstr "nouvelles données"
 msgid "create"
 msgstr "créer"
 
-#: apps/logs/models.py:65 apps/note/tables.py:165 apps/note/tables.py:211
-#: apps/permission/models.py:127 apps/treasury/tables.py:38
-#: apps/wei/tables.py:74
+#: apps/logs/models.py:65 apps/note/tables.py:166 apps/note/tables.py:190
+#: apps/note/tables.py:237 apps/permission/models.py:127
+#: apps/treasury/tables.py:38 apps/wei/tables.py:74
 msgid "delete"
 msgstr "supprimer"
 
@@ -507,11 +507,11 @@ msgstr "cotisation pour adhérer (normalien élève)"
 msgid "membership fee (unpaid students)"
 msgstr "cotisation pour adhérer (normalien étudiant)"
 
-#: apps/member/admin.py:65 apps/member/models.py:317
+#: apps/member/admin.py:65 apps/member/models.py:319
 msgid "roles"
 msgstr "rôles"
 
-#: apps/member/admin.py:66 apps/member/models.py:331
+#: apps/member/admin.py:66 apps/member/models.py:333
 msgid "fee"
 msgstr "cotisation"
 
@@ -547,7 +547,7 @@ msgstr "Taille maximale : 2 Mo"
 msgid "This image cannot be loaded."
 msgstr "Cette image ne peut pas être chargée."
 
-#: apps/member/forms.py:141 apps/member/views.py:102
+#: apps/member/forms.py:141 apps/member/views.py:103
 #: apps/registration/forms.py:33 apps/registration/views.py:262
 msgid "An alias with a similar name already exists."
 msgstr "Un alias avec un nom similaire existe déjà."
@@ -610,14 +610,14 @@ msgid "hash"
 msgstr "haché"
 
 #: apps/member/models.py:38
-#: apps/member/templates/member/includes/profile_info.html:35
+#: apps/member/templates/member/includes/profile_info.html:43
 #: apps/registration/templates/registration/future_profile_detail.html:40
 #: apps/wei/templates/wei/weimembership_form.html:44
 msgid "phone number"
 msgstr "numéro de téléphone"
 
 #: apps/member/models.py:45
-#: apps/member/templates/member/includes/profile_info.html:29
+#: apps/member/templates/member/includes/profile_info.html:37
 #: apps/registration/templates/registration/future_profile_detail.html:34
 #: apps/wei/templates/wei/weimembership_form.html:38
 msgid "section"
@@ -705,14 +705,14 @@ msgid "Year of entry to the school (None if not ENS student)"
 msgstr "Année d'entrée dans l'école (None si non-étudiant·e de l'ENS)"
 
 #: apps/member/models.py:83
-#: apps/member/templates/member/includes/profile_info.html:39
+#: apps/member/templates/member/includes/profile_info.html:47
 #: apps/registration/templates/registration/future_profile_detail.html:37
 #: apps/wei/templates/wei/weimembership_form.html:41
 msgid "address"
 msgstr "adresse"
 
 #: apps/member/models.py:90
-#: apps/member/templates/member/includes/profile_info.html:42
+#: apps/member/templates/member/includes/profile_info.html:50
 #: apps/registration/templates/registration/future_profile_detail.html:43
 #: apps/wei/templates/wei/weimembership_form.html:47
 msgid "paid"
@@ -784,7 +784,7 @@ msgstr "Activez votre compte Note Kfet"
 
 #: apps/member/models.py:204
 #: apps/member/templates/member/includes/club_info.html:55
-#: apps/member/templates/member/includes/profile_info.html:32
+#: apps/member/templates/member/includes/profile_info.html:40
 #: apps/registration/templates/registration/future_profile_detail.html:22
 #: apps/wei/templates/wei/base.html:70
 #: apps/wei/templates/wei/weimembership_form.html:20
@@ -833,46 +833,46 @@ msgstr ""
 "Date maximale d'une fin d'adhésion, après laquelle les adhérents doivent la "
 "renouveler."
 
-#: apps/member/models.py:286 apps/member/models.py:311
+#: apps/member/models.py:288 apps/member/models.py:313
 #: apps/note/models/notes.py:176
 msgid "club"
 msgstr "club"
 
-#: apps/member/models.py:287
+#: apps/member/models.py:289
 msgid "clubs"
 msgstr "clubs"
 
-#: apps/member/models.py:322
+#: apps/member/models.py:324
 msgid "membership starts on"
 msgstr "l'adhésion commence le"
 
-#: apps/member/models.py:326
+#: apps/member/models.py:328
 msgid "membership ends on"
 msgstr "l'adhésion finit le"
 
-#: apps/member/models.py:428
+#: apps/member/models.py:430
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Le rôle {role} ne s'applique pas au club {club}."
 
-#: apps/member/models.py:437 apps/member/views.py:651
+#: apps/member/models.py:439 apps/member/views.py:712
 msgid "User is already a member of the club"
 msgstr "L'utilisateur est déjà membre du club"
 
-#: apps/member/models.py:449 apps/member/views.py:660
+#: apps/member/models.py:451 apps/member/views.py:721
 msgid "User is not a member of the parent club"
 msgstr "L'utilisateur n'est pas membre du club parent"
 
-#: apps/member/models.py:502
+#: apps/member/models.py:504
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Adhésion de {user} pour le club {club}"
 
-#: apps/member/models.py:505 apps/note/models/transactions.py:389
+#: apps/member/models.py:507 apps/note/models/transactions.py:389
 msgid "membership"
 msgstr "adhésion"
 
-#: apps/member/models.py:506
+#: apps/member/models.py:508
 msgid "memberships"
 msgstr "adhésions"
 
@@ -924,7 +924,7 @@ msgid "Account #"
 msgstr "Compte n°"
 
 #: apps/member/templates/member/base.html:48
-#: apps/member/templates/member/base.html:62 apps/member/views.py:59
+#: apps/member/templates/member/base.html:62 apps/member/views.py:60
 #: apps/registration/templates/registration/future_profile_detail.html:48
 #: apps/wei/templates/wei/weimembership_form.html:117
 msgid "Update Profile"
@@ -985,13 +985,14 @@ msgstr ""
 "seront à nouveau possible."
 
 #: apps/member/templates/member/club_alias.html:10
-#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:253
-#: apps/member/views.py:456
+#: apps/member/templates/member/profile_alias.html:10 apps/member/views.py:287
+#: apps/member/views.py:517
 msgid "Note aliases"
 msgstr "Alias de la note"
 
 #: apps/member/templates/member/club_alias.html:20
 #: apps/member/templates/member/profile_alias.html:19
+#: apps/member/templates/member/profile_trust.html:19
 #: apps/treasury/tables.py:99
 #: apps/treasury/templates/treasury/sogecredit_list.html:34
 #: apps/treasury/templates/treasury/sogecredit_list.html:73
@@ -1044,7 +1045,7 @@ msgid "membership fee"
 msgstr "cotisation pour adhérer"
 
 #: apps/member/templates/member/includes/club_info.html:43
-#: apps/member/templates/member/includes/profile_info.html:47
+#: apps/member/templates/member/includes/profile_info.html:55
 #: apps/treasury/templates/treasury/sogecredit_detail.html:24
 #: apps/wei/templates/wei/base.html:60
 msgid "balance"
@@ -1052,7 +1053,7 @@ msgstr "solde du compte"
 
 #: apps/member/templates/member/includes/club_info.html:47
 #: apps/member/templates/member/includes/profile_info.html:20
-#: apps/note/models/notes.py:255 apps/wei/templates/wei/base.html:66
+#: apps/note/models/notes.py:287 apps/wei/templates/wei/base.html:66
 msgid "aliases"
 msgstr "alias"
 
@@ -1076,7 +1077,16 @@ msgstr "mot de passe"
 msgid "Change password"
 msgstr "Changer le mot de passe"
 
-#: apps/member/templates/member/includes/profile_info.html:55
+#: apps/member/templates/member/includes/profile_info.html:28
+#: apps/note/models/notes.py:244
+msgid "friendships"
+msgstr "amitiés"
+
+#: apps/member/templates/member/includes/profile_info.html:32
+msgid "Manage friendships"
+msgstr "Gérer les amitiés"
+
+#: apps/member/templates/member/includes/profile_info.html:63
 msgid "API token"
 msgstr "Accès API"
 
@@ -1148,6 +1158,23 @@ msgstr "Cliquez ici pour renvoyer un lien de validation."
 msgid "View my memberships"
 msgstr "Voir mes adhésions"
 
+#: apps/member/templates/member/profile_trust.html:10 apps/member/views.py:254
+msgid "Note friendships"
+msgstr "Amitiés note"
+
+#: apps/member/templates/member/profile_trust.html:28
+msgid ""
+"Adding someone as a friend enables them to initiate transactions coming from "
+"your account (while keeping your balance positive). This is designed to "
+"simplify using note kfet transfers to transfer money between users. The "
+"intent is that one person can make all transfers for a group of friends "
+"without needing additional rights among them."
+msgstr ""
+"Ajouter quelqu'un⋅e en ami⋅e lui permet de me prélever de l'argent (tant que "
+"ma note reste positive). Ceci sert à simplifier les remboursements entre "
+"ami⋅es via note. En effet, une personne peut effectuer tous les transferts "
+"sans posséder de droits supplémentaires."
+
 #: apps/member/templates/member/profile_update.html:18
 msgid "Save Changes"
 msgstr "Sauvegarder les changements"
@@ -1156,47 +1183,47 @@ msgstr "Sauvegarder les changements"
 msgid "Registrations"
 msgstr "Inscriptions"
 
-#: apps/member/views.py:72 apps/registration/forms.py:23
+#: apps/member/views.py:73 apps/registration/forms.py:23
 msgid "This address must be valid."
 msgstr "Cette adresse doit être valide."
 
-#: apps/member/views.py:139
+#: apps/member/views.py:140
 msgid "Profile detail"
 msgstr "Détails de l'utilisateur"
 
-#: apps/member/views.py:205
+#: apps/member/views.py:206
 msgid "Search user"
 msgstr "Chercher un utilisateur"
 
-#: apps/member/views.py:273
+#: apps/member/views.py:308
 msgid "Update note picture"
 msgstr "Modifier la photo de la note"
 
-#: apps/member/views.py:319
+#: apps/member/views.py:354
 msgid "Manage auth token"
 msgstr "Gérer les jetons d'authentification"
 
-#: apps/member/views.py:346
+#: apps/member/views.py:381
 msgid "Create new club"
 msgstr "Créer un nouveau club"
 
-#: apps/member/views.py:365
+#: apps/member/views.py:400
 msgid "Search club"
 msgstr "Chercher un club"
 
-#: apps/member/views.py:398
+#: apps/member/views.py:433
 msgid "Club detail"
 msgstr "Détails du club"
 
-#: apps/member/views.py:479
+#: apps/member/views.py:540
 msgid "Update club"
 msgstr "Modifier le club"
 
-#: apps/member/views.py:513
+#: apps/member/views.py:574
 msgid "Add new member to the club"
 msgstr "Ajouter un nouveau membre au club"
 
-#: apps/member/views.py:642 apps/wei/views.py:973
+#: apps/member/views.py:703 apps/wei/views.py:973
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1204,19 +1231,19 @@ msgstr ""
 "Cet utilisateur n'a pas assez d'argent pour rejoindre ce club et ne peut pas "
 "avoir un solde négatif."
 
-#: apps/member/views.py:664
+#: apps/member/views.py:725
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer après le {:%d/%m/%Y}."
 
-#: apps/member/views.py:669
+#: apps/member/views.py:730
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "L'adhésion doit commencer avant le {:%d/%m/%Y}."
 
-#: apps/member/views.py:815
+#: apps/member/views.py:876
 msgid "Manage roles of an user in the club"
 msgstr "Gérer les rôles d'un utilisateur dans le club"
 
-#: apps/member/views.py:840
+#: apps/member/views.py:901
 msgid "Members of the club"
 msgstr "Membres du club"
 
@@ -1234,7 +1261,7 @@ msgstr "destination"
 msgid "amount"
 msgstr "montant"
 
-#: apps/note/api/serializers.py:183 apps/note/api/serializers.py:189
+#: apps/note/api/serializers.py:199 apps/note/api/serializers.py:205
 #: apps/note/models/transactions.py:228
 msgid ""
 "The transaction can't be saved since the source note or the destination note "
@@ -1366,30 +1393,47 @@ msgstr "note spéciale"
 msgid "special notes"
 msgstr "notes spéciales"
 
-#: apps/note/models/notes.py:237
+#: apps/note/models/notes.py:232
+msgid "trusting"
+msgstr "note"
+
+#: apps/note/models/notes.py:239
+msgid "trusted"
+msgstr "ami"
+
+#: apps/note/models/notes.py:243
+msgid "frienship"
+msgstr "amitié"
+
+#: apps/note/models/notes.py:248
+#, python-brace-format
+msgid "Friendship between {trusting} and {trusted}"
+msgstr "Amitié entre {trusting} et {trusted}"
+
+#: apps/note/models/notes.py:269
 msgid "Invalid alias"
 msgstr "Alias invalide"
 
-#: apps/note/models/notes.py:254
+#: apps/note/models/notes.py:286
 msgid "alias"
 msgstr "alias"
 
-#: apps/note/models/notes.py:278
+#: apps/note/models/notes.py:310
 msgid "Alias is too long."
 msgstr "L'alias est trop long."
 
-#: apps/note/models/notes.py:281
+#: apps/note/models/notes.py:313
 msgid ""
 "This alias contains only complex character. Please use a more simple alias."
 msgstr ""
 "Cet alias ne contient que des caractères complexes. Merci d'utiliser un "
 "alias plus simple."
 
-#: apps/note/models/notes.py:285
+#: apps/note/models/notes.py:317
 msgid "An alias with a similar name already exists: {} "
 msgstr "Un alias avec un nom similaire existe déjà : {} "
 
-#: apps/note/models/notes.py:299
+#: apps/note/models/notes.py:331
 msgid "You can't delete your main alias."
 msgstr "Vous ne pouvez pas supprimer votre alias principal."
 
@@ -1535,7 +1579,8 @@ msgstr "Cliquez pour valider"
 msgid "No reason specified"
 msgstr "Pas de motif spécifié"
 
-#: apps/note/tables.py:169 apps/note/tables.py:213 apps/treasury/tables.py:39
+#: apps/note/tables.py:173 apps/note/tables.py:194 apps/note/tables.py:239
+#: apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
 #: apps/wei/tables.py:75 apps/wei/tables.py:118
@@ -1546,7 +1591,7 @@ msgstr "Pas de motif spécifié"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: apps/note/tables.py:197 apps/note/templates/note/conso_form.html:132
+#: apps/note/tables.py:222 apps/note/templates/note/conso_form.html:132
 #: apps/wei/tables.py:49 apps/wei/tables.py:50
 #: apps/wei/templates/wei/base.html:89
 #: apps/wei/templates/wei/bus_detail.html:20
@@ -1556,7 +1601,7 @@ msgstr "Supprimer"
 msgid "Edit"
 msgstr "Éditer"
 
-#: apps/note/tables.py:201 apps/note/tables.py:224
+#: apps/note/tables.py:226 apps/note/tables.py:253
 msgid "Hide/Show"
 msgstr "Afficher/Masquer"
 
@@ -1717,7 +1762,7 @@ msgstr "Chercher un bouton"
 msgid "Update button"
 msgstr "Modifier le bouton"
 
-#: apps/note/views.py:151 note_kfet/templates/base.html:67
+#: apps/note/views.py:151 note_kfet/templates/base.html:66
 msgid "Consumptions"
 msgstr "Consommations"
 
@@ -1915,7 +1960,7 @@ msgstr ""
 "Vous n'avez pas la permission d'ajouter une instance du modèle « {model} » "
 "avec ces paramètres. Merci de les corriger et de réessayer."
 
-#: apps/permission/views.py:112 note_kfet/templates/base.html:109
+#: apps/permission/views.py:112 note_kfet/templates/base.html:108
 msgid "Rights"
 msgstr "Droits"
 
@@ -2122,7 +2167,7 @@ msgstr ""
 msgid "Invalidate pre-registration"
 msgstr "Invalider l'inscription"
 
-#: apps/treasury/apps.py:12 note_kfet/templates/base.html:97
+#: apps/treasury/apps.py:12 note_kfet/templates/base.html:96
 msgid "Treasury"
 msgstr "Trésorerie"
 
@@ -2530,7 +2575,7 @@ msgstr "Gérer les crédits de la Société générale"
 
 #: apps/wei/apps.py:10 apps/wei/models.py:50 apps/wei/models.py:51
 #: apps/wei/models.py:62 apps/wei/models.py:180
-#: note_kfet/templates/base.html:103
+#: note_kfet/templates/base.html:102
 msgid "WEI"
 msgstr "WEI"
 
@@ -2538,7 +2583,7 @@ msgstr "WEI"
 msgid "The selected user is not validated. Please validate its account first"
 msgstr ""
 "L'utilisateur sélectionné n'est pas validé. Merci de d'abord valider son "
-"compte."
+"compte"
 
 #: apps/wei/forms/registration.py:59 apps/wei/models.py:126
 #: apps/wei/models.py:323
@@ -2579,7 +2624,7 @@ msgstr "Sélectionnez les rôles qui vous intéressent."
 msgid "This team doesn't belong to the given bus."
 msgstr "Cette équipe n'appartient pas à ce bus."
 
-#: apps/wei/forms/surveys/wei2021.py:35
+#: apps/wei/forms/surveys/wei2021.py:35 apps/wei/forms/surveys/wei2022.py:35
 msgid "Choose a word:"
 msgstr "Choisissez un mot :"
 
@@ -3140,19 +3185,19 @@ msgstr "Répartir les 1A dans les bus"
 msgid "Attribute bus"
 msgstr "Attribuer un bus"
 
-#: note_kfet/settings/base.py:161
+#: note_kfet/settings/base.py:172
 msgid "German"
 msgstr "Allemand"
 
-#: note_kfet/settings/base.py:162
+#: note_kfet/settings/base.py:173
 msgid "English"
 msgstr "Anglais"
 
-#: note_kfet/settings/base.py:163
+#: note_kfet/settings/base.py:174
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: note_kfet/settings/base.py:164
+#: note_kfet/settings/base.py:175
 msgid "French"
 msgstr "Français"
 
@@ -3209,7 +3254,7 @@ msgstr ""
 "erreur, qui sera corrigée rapidement. Vous pouvez désormais aller boire une "
 "bière."
 
-#: note_kfet/templates/autocomplete_model.html:14
+#: note_kfet/templates/autocomplete_model.html:15
 msgid "Reset"
 msgstr "Réinitialiser"
 
@@ -3217,34 +3262,34 @@ msgstr "Réinitialiser"
 msgid "The ENS Paris-Saclay BDE note."
 msgstr "La note du BDE de l'ENS Paris-Saclay."
 
-#: note_kfet/templates/base.html:79
+#: note_kfet/templates/base.html:78
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: note_kfet/templates/base.html:85
+#: note_kfet/templates/base.html:84
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:114
+#: note_kfet/templates/base.html:113
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:128
+#: note_kfet/templates/base.html:127
 msgid "My account"
 msgstr "Mon compte"
 
-#: note_kfet/templates/base.html:131
+#: note_kfet/templates/base.html:130
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: note_kfet/templates/base.html:139
+#: note_kfet/templates/base.html:138
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:28
 msgid "Sign up"
 msgstr "Inscription"
 
-#: note_kfet/templates/base.html:146
+#: note_kfet/templates/base.html:145
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
@@ -3252,7 +3297,7 @@ msgstr "Inscription"
 msgid "Log in"
 msgstr "Se connecter"
 
-#: note_kfet/templates/base.html:160
+#: note_kfet/templates/base.html:159
 msgid ""
 "You are not a BDE member anymore. Please renew your membership if you want "
 "to use the note."
@@ -3260,7 +3305,7 @@ msgstr ""
 "Vous n'êtes plus adhérent BDE. Merci de réadhérer si vous voulez profiter de "
 "la note."
 
-#: note_kfet/templates/base.html:166
+#: note_kfet/templates/base.html:165
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3268,7 +3313,7 @@ msgstr ""
 "Votre adresse e-mail n'est pas validée. Merci de vérifier votre boîte mail "
 "et de cliquer sur le lien de validation."
 
-#: note_kfet/templates/base.html:172
+#: note_kfet/templates/base.html:171
 msgid ""
 "You declared that you opened a bank account in the Société générale. The "
 "bank did not validate the creation of the account to the BDE, so the "
@@ -3282,11 +3327,11 @@ msgstr ""
 "vérification peut durer quelques jours. Merci de vous assurer de bien aller "
 "au bout de vos démarches."
 
-#: note_kfet/templates/base.html:195
+#: note_kfet/templates/base.html:194
 msgid "Contact us"
 msgstr "Nous contacter"
 
-#: note_kfet/templates/base.html:197
+#: note_kfet/templates/base.html:196
 msgid "Technical Support"
 msgstr "Support technique"
 

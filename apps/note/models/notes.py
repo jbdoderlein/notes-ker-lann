@@ -217,6 +217,38 @@ class NoteSpecial(Note):
         return self.special_type
 
 
+class Trust(models.Model):
+    """
+    A one-sided trust relationship bertween two users
+
+    If another user considers you as your friend, you can transfer money from
+    them
+    """
+
+    trusting = models.ForeignKey(
+        Note,
+        on_delete=models.CASCADE,
+        related_name='trusting',
+        verbose_name=_('trusting')
+    )
+
+    trusted = models.ForeignKey(
+        Note,
+        on_delete=models.CASCADE,
+        related_name='trusted',
+        verbose_name=_('trusted')
+    )
+
+    class Meta:
+        verbose_name = _("frienship")
+        verbose_name_plural = _("friendships")
+        unique_together = ("trusting", "trusted")
+
+    def __str__(self):
+        return _("Friendship between {trusting} and {trusted}").format(
+            trusting=str(self.trusting), trusted=str(self.trusted))
+
+
 class Alias(models.Model):
     """
     points toward  a :model:`note.NoteUser` or :model;`note.NoteClub` instance.

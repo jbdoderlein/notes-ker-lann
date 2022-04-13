@@ -13,21 +13,29 @@ $(document).ready(function () {
     $('#' + prefix + '_reset').removeClass('d-none')
 
     $.getJSON(api_url + (api_url.includes('?') ? '&' : '?') + 'format=json&search=^' + input + api_url_suffix, function (objects) {
-      let html = ''
+      let html = '<ul class="list-group list-group-flush" id="' + prefix + '_list">'
 
       objects.results.forEach(function (obj) {
         html += li(prefix + '_' + obj.id, obj[name_field])
       })
+      html += '</ul>'
 
-      const results_list = $('#' + prefix + '_list')
-      results_list.html(html)
+      target.tooltip({
+        html: true,
+        placement: 'bottom',
+        trigger: 'manual',
+        container: target.parent(),
+        fallbackPlacement: 'clockwise'
+      })
+
+      target.attr("data-original-title", html).tooltip("show")
 
       objects.results.forEach(function (obj) {
         $('#' + prefix + '_' + obj.id).click(function () {
           target.val(obj[name_field])
           $('#' + prefix + '_pk').val(obj.id)
 
-          results_list.html('')
+          target.tooltip("hide")
           target.removeClass('is-invalid')
           target.addClass('is-valid')
 
@@ -37,8 +45,8 @@ $(document).ready(function () {
         if (input === obj[name_field]) { $('#' + prefix + '_pk').val(obj.id) }
       })
 
-      if (results_list.children().length === 1 && e.originalEvent.keyCode >= 32) {
-        results_list.children().first().trigger('click')
+      if (objects.results.length === 1 && e.originalEvent.keyCode >= 32) {
+        $('#' + prefix + '_' + objects.results[0].id).trigger('click')
       }
     })
   })

@@ -25,6 +25,14 @@
         </a>
     </dd>
 
+    <dt class="col-xl-6">{% trans 'friendships'|capfirst %}</dt>
+    <dd class="col-xl-6">
+        <a class="badge badge-secondary" href="{% url 'member:user_trust' user_object.pk %}">
+            <i class="fa fa-edit"></i>
+            {% trans 'Manage friendships' %} ({{ user_object.note.trusting.all|length }})
+        </a>
+    </dd>
+
     {% if "member.view_profile"|has_perm:user_object.profile %}
         <dt class="col-xl-6">{% trans 'section'|capfirst %}</dt>
         <dd class="col-xl-6">{{ user_object.profile.section }}</dd>
