@@ -21,12 +21,19 @@ Bien que cela permette de créer une instance sur toutes les distributions,
     Il y a quelques dépendances qui ne sont pas trouvable dans PyPI.
     On donne ci-dessous l'exemple pour une distribution basée sur Debian, mais vous pouvez facilement adapter pour ArchLinux ou autre.
 
+    Debian :
     ```bash
     $ sudo apt update
     $ sudo apt install --no-install-recommends -y \
         ipython3 python3-setuptools python3-venv python3-dev \
         texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome git
     ```
+    ArchLinux :
+    ```bash
+    $ sudo pacman -Syu --noconfirm \
+        ipython3 python3-setuptools python3-venv python3-dev \
+        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome git
+    ``` TODO
 
 2.  **Clonage du dépot** là où vous voulez :
 
