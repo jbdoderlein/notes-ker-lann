@@ -30,10 +30,11 @@ Bien que cela permette de créer une instance sur toutes les distributions,
     ```
     ArchLinux :
     ```bash
-    $ sudo pacman -Syu --noconfirm \
-        ipython3 python3-setuptools python3-venv python3-dev \
-        texlive-xetex gettext libjs-bootstrap4 fonts-font-awesome git
-    ``` TODO
+    $ sudo pacman -S \
+        ipython python-setuptools \
+        texlive-bin gettext ttf-font-awesome git
+    $ paru -S python-django-bootstrap4 # AUR only
+    ```
 
 2.  **Clonage du dépot** là où vous voulez :
 
