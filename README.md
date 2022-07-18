@@ -33,7 +33,7 @@ Bien que cela permette de créer une instance sur toutes les distributions,
     $ sudo pacman -S \
         ipython python-setuptools \
         texlive-bin gettext ttf-font-awesome git
-    $ paru -S python-django-bootstrap4 # AUR only
+    $ paru -S bootstrap jquery # AUR only, need manuel install bootstrap4 and popper.js
     ```
 
 2.  **Clonage du dépot** là où vous voulez :
