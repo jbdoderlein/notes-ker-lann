@@ -53,22 +53,13 @@ class Profile(models.Model):
         max_length=8,
         verbose_name=_("department"),
         choices=[
-            ('A0', _("Informatics (A0)")),
-            ('A1', _("Mathematics (A1)")),
-            ('A2', _("Physics (A2)")),
-            ("A'2", _("Applied physics (A'2)")),
-            ("A''2", _("Chemistry (A''2)")),
-            ('A3', _("Biology (A3)")),
-            ('B1234', _("SAPHIRE (B1234)")),
-            ('B1', _("Mechanics (B1)")),
-            ('B2', _("Civil engineering (B2)")),
-            ('B3', _("Mechanical engineering (B3)")),
-            ('B4', _("EEA (B4)")),
-            ('C', _("Design (C)")),
-            ('D2', _("Economy-management (D2)")),
-            ('D3', _("Social sciences (D3)")),
-            ('E', _("English (E)")),
-            ('EXT', _("External (EXT)")),
+            ('INFO', _("Informatique")),
+            ('MATH', _("Mathématiques")),
+            ('DEM', _("Droit - économie - management")),
+            ('MECATRO', _("Mécatronique")),
+            ('2SEP', _("Sciences du sport et éducation physique")),
+            ('SE', _("Sciences pour l’Environnement")),
+            ('EXT', _("Externe")),
         ]
     )
 
@@ -98,8 +89,7 @@ class Profile(models.Model):
         max_length=2,
         choices=[
             ('', _("No")),
-            ('fr', _("Yes (receive them in french)")),
-            ('en', _("Yes (receive them in english)")),
+            ('fr', _("Yes")),
         ],
         verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
     )
@@ -150,13 +140,6 @@ class Profile(models.Model):
     @property
     def section_generated(self):
         return str(self.ens_year) + self.department
-
-    @property
-    def soge(self):
-        if "treasury" in settings.INSTALLED_APPS:
-            from treasury.models import SogeCredit
-            return SogeCredit.objects.filter(user=self.user, credit_transaction__isnull=False).exists()
-        return False
 
     class Meta:
         verbose_name = _('user profile')
@@ -360,8 +343,6 @@ class Membership(models.Model):
             )
             if hasattr(self, '_force_renew_parent') and self._force_renew_parent:
                 new_membership._force_renew_parent = True
-            if hasattr(self, '_soge') and self._soge:
-                new_membership._soge = True
             if hasattr(self, '_force_save') and self._force_save:
                 new_membership._force_save = True
             new_membership.save()
@@ -380,8 +361,6 @@ class Membership(models.Model):
             # Renew the previous membership of the parent club
             parent_membership = parent_membership.first()
             parent_membership._force_renew_parent = True
-            if hasattr(self, '_soge'):
-                parent_membership._soge = True
             if hasattr(self, '_force_save'):
                 parent_membership._force_save = True
             parent_membership.renew()
@@ -393,8 +372,7 @@ class Membership(models.Model):
                 date_start=self.date_start,
             )
             parent_membership._force_renew_parent = True
-            if hasattr(self, '_soge'):
-                parent_membership._soge = True
+
             if hasattr(self, '_force_save'):
                 parent_membership._force_save = True
             parent_membership.save()
@@ -479,26 +457,7 @@ class Membership(models.Model):
                 reason="Adhésion " + self.club.name,
             )
             transaction._force_save = True
-            if hasattr(self, '_soge') and "treasury" in settings.INSTALLED_APPS\
-                    and (self.club.name == "BDE" or self.club.name == "Kfet"
-                         or ("wei" in settings.INSTALLED_APPS and hasattr(self.club, "weiclub") and self.club.weiclub)):
-                # If the soge pays, then the transaction is unvalidated in a first time, then submitted for control
-                # to treasurers.
-                transaction.valid = False
-                from treasury.models import SogeCredit
-                if SogeCredit.objects.filter(user=self.user).exists():
-                    soge_credit = SogeCredit.objects.get(user=self.user)
-                else:
-                    soge_credit = SogeCredit(user=self.user)
-                    soge_credit._force_save = True
-                    soge_credit.save(force_insert=True)
-                    soge_credit.refresh_from_db()
-                transaction.save(force_insert=True)
-                transaction.refresh_from_db()
-                soge_credit.transactions.add(transaction)
-                soge_credit.save()
-            else:
-                transaction.save(force_insert=True)
+            transaction.save(force_insert=True)
 
     def __str__(self):
         return _("Membership of {user} for the club {club}").format(user=self.user.username, club=self.club.name, )

@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils import timezone
 from note.models import Alias, NoteSpecial
 from permission.models import Role
-from treasury.models import SogeCredit
+
 
 from ..api.views import ClubViewSet, MembershipViewSet, ProfileViewSet
 from ..models import Club, Membership, Profile
@@ -201,7 +201,6 @@ class TestMemberships(TestCase):
             response = self.client.post(reverse("member:club_add_member", args=(club.pk,)), data=dict(
                 user=user.pk,
                 date_start="{:%Y-%m-%d}".format(date.today()),
-                soge=False,
                 credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
                 credit_amount=4200,
                 last_name="TOTO",
@@ -240,7 +239,6 @@ class TestMemberships(TestCase):
             response = self.client.post(reverse("member:club_renew_membership", args=(membership.pk,)), data=dict(
                 user=user.pk,
                 date_start="{:%Y-%m-%d}".format(date.today()),
-                soge=bde_parent,
                 credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
                 credit_amount=14242,
                 last_name="TOTO",
@@ -252,35 +250,7 @@ class TestMemberships(TestCase):
             response = self.client.get(club.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-    def test_auto_join_kfet_when_join_bde_with_soge(self):
-        """
-        When we join the BDE club with a Soge registration, a Kfet membership is automatically created.
-        We check that it is the case.
-        """
-        user = User.objects.create(username="new1A")
-        user.profile.registration_valid = True
-        user.profile.email_confirmed = True
-        user.profile.save()
-        user.save()
-
-        bde = Club.objects.get(name="BDE")
-        kfet = Club.objects.get(name="Kfet")
-
-        response = self.client.post(reverse("member:club_add_member", args=(bde.pk,)), data=dict(
-            user=user.pk,
-            date_start="{:%Y-%m-%d}".format(date.today()),
-            soge=True,
-            credit_type=NoteSpecial.objects.get(special_type="Virement bancaire").id,
-            credit_amount=(bde.membership_fee_paid + kfet.membership_fee_paid) / 100,
-            last_name="TOTO",
-            first_name="Toto",
-            bank="Société générale",
-        ))
-        self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
-
-        self.assertTrue(Membership.objects.filter(user=user, club=bde).exists())
-        self.assertTrue(Membership.objects.filter(user=user, club=kfet).exists())
-        self.assertTrue(SogeCredit.objects.filter(user=user).exists())
+    
 
     def test_change_roles(self):
         """
@@ -327,11 +297,11 @@ class TestMemberships(TestCase):
             email="updated@example.com",
             phone_number="+33600000000",
             section="",
-            department="A0",
+            department="INFO",
             promotion=timezone.now().year,
             address="Earth",
             paid=True,
-            ml_events_registration="en",
+            ml_events_registration="",
             ml_sports_registration=True,
             ml_art_registration=True,
             report_frequency=7,
@@ -416,7 +386,7 @@ class TestMemberAPI(TestAPI):
         self.user.profile.email_confirmed = True
         self.user.profile.phone_number = "0600000000"
         self.user.profile.section = "1A0"
-        self.user.profile.department = "A0"
+        self.user.profile.department = "INFO"
         self.user.profile.address = "Earth"
         self.user.profile.save()
 
