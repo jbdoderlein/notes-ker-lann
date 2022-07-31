@@ -55,4 +55,3 @@ ansible/host_vars/*.yaml
 ansible/hosts
 
 apps/member/migrations
-apps/wei/migrations

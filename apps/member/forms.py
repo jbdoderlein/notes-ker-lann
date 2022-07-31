@@ -227,7 +227,7 @@ class MembershipRolesForm(forms.ModelForm):
     )
 
     roles = forms.ModelMultipleChoiceField(
-        queryset=Role.objects.filter(weirole=None).all(),
+        queryset=Role.objects.all(),
         label=_("Roles"),
         widget=CheckboxSelectMultiple(),
     )

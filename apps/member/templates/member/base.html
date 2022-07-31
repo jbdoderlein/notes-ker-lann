@@ -51,7 +51,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 {% if request.path_info != user_profile_url %}
                 <a class="btn btn-sm btn-primary" href="{{ user_profile_url }}">{% trans 'View Profile' %}</a>
                 {% endif %}
-                {% elif club and not club.weiclub %}
+                {% elif club %}
                 {% if can_add_members %}
                 <a class="btn btn-sm btn-success" href="{% url 'member:club_add_member' club_pk=club.pk %}"
                    data-turbolinks="false"> {% trans "Add member" %}</a>

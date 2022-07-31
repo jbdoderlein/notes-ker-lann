@@ -63,7 +63,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                            data-target="#collapse{{ role|slugify }}"
                            aria-expanded="true" aria-controls="collapse{{ role|slugify }}">
                             {{ role }}
-                            {% if role.weirole %}(<em>Pour le WEI</em>){% endif %}
                             {% if role.for_club %}(<em>Pour le club {{ role.for_club }} uniquement</em>){% endif %}
                             {% if role.clubs %}
                                 <small><span class="badge badge-success">{% trans "Owned" %} :

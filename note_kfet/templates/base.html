@@ -96,12 +96,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-credit-card"></i> {% trans 'Treasury' %}</a>
                         </li>
                     {% endif %}
-                    {% if "wei.weiclub"|not_empty_model_list %}
-                        <li class="nav-item">
-                            {% url 'wei:current_wei_detail' as url %}
-                            <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-bus"></i> {% trans 'WEI' %}</a>
-                        </li>
-                    {% endif %}
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             {% url 'permission:rights' as url %}

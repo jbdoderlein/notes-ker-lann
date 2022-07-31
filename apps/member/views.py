@@ -541,11 +541,6 @@ class ClubUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-
-        # Don't update a WEI club through this view
-        if "wei" in settings.INSTALLED_APPS:
-            qs = qs.filter(weiclub=None)
-
         return qs
 
     def get_success_url(self):
@@ -597,7 +592,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         if "club_pk" in self.kwargs:  # We create a new membership.
             club = Club.objects.filter(PermissionBackend.filter_queryset(self.request, Club, "view"))\
-                .get(pk=self.kwargs["club_pk"], weiclub=None)
+                .get(pk=self.kwargs["club_pk"])
             form.fields['credit_amount'].initial = club.membership_fee_paid
             # Ensure that the user is member of the parent club and all its the family tree.
             c = club
@@ -819,8 +814,7 @@ class ClubManageRolesView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
         form = super().get_form(form_class)
 
         club = self.object.club
-        form.fields['roles'].queryset = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
-                                                            & (Q(for_club__isnull=True) | Q(for_club=club))).all()
+        form.fields['roles'].queryset = Role.objects.filter((Q(for_club__isnull=True) | Q(for_club=club))).all()
 
         return form
 
@@ -866,8 +860,7 @@ class ClubMembersListView(ProtectQuerysetMixin, LoginRequiredMixin, SingleTableV
         ).get(pk=self.kwargs["pk"])
         context["club"] = club
 
-        applicable_roles = Role.objects.filter(Q(weirole__isnull=not hasattr(club, 'weiclub'))
-                                               & (Q(for_club__isnull=True) | Q(for_club=club))).all()
+        applicable_roles = Role.objects.filter((Q(for_club__isnull=True) | Q(for_club=club))).all()
         context["applicable_roles"] = applicable_roles
 
         context["only_active"] = "only_active" not in self.request.GET or self.request.GET["only_active"] != '0'

@@ -40,7 +40,7 @@ class RightsTable(tables.Table):
                                      | Q(name="Adhérent Kfet")
                                      | Q(name="Membre de club")
                                      | Q(name="Bureau de club"))
-                                     & Q(weirole__isnull=True))).all()
+                                     )).all()
         s = ", ".join(str(role) for role in roles)
         if PermissionBackend.check_perm(get_current_request(), "member.change_membership_roles", record):
             s = format_html("<a href='" + str(reverse_lazy("member:club_manage_roles", kwargs={"pk": record.pk}))

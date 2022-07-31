@@ -135,7 +135,7 @@ class RightsView(TemplateView):
                                                       | Q(name="Adhérent Kfet")
                                                       | Q(name="Membre de club")
                                                       | Q(name="Bureau de club"))
-                                                    & Q(weirole__isnull=True))))\
+                                                    )))\
                 .order_by("club__name", "user__last_name")\
                 .distinct().all()
             context["special_memberships_table"] = RightsTable(special_memberships, prefix="clubs-")

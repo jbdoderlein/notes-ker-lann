@@ -54,15 +54,6 @@ class DeclareSogeAccountOpenedForm(forms.Form):
     )
 
 
-class WEISignupForm(forms.Form):
-    wei_registration = forms.BooleanField(
-        label=_("Register to the WEI"),
-        required=False,
-        help_text=_("Check this case if you want to register to the WEI. If you hesitate, you will be able to register"
-                    " later, after validating your account in the Kfet."),
-    )
-
-
 class ValidationForm(forms.Form):
     """
     Validate the inscription of the new users and pay memberships.

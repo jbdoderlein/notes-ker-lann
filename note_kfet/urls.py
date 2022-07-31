@@ -20,7 +20,6 @@ urlpatterns = [
     path('registration/', include('registration.urls')),
     path('activity/', include('activity.urls')),
     path('treasury/', include('treasury.urls')),
-    path('wei/', include('wei.urls')),
 
     # Include Django Contrib and Core routers
     path('i18n/', include('django.conf.urls.i18n')),

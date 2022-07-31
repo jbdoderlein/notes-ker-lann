@@ -38,10 +38,6 @@ if "logs" in settings.INSTALLED_APPS:
     from logs.api.urls import register_logs_urls
     register_logs_urls(router, 'logs')
 
-if "wei" in settings.INSTALLED_APPS:
-    from wei.api.urls import register_wei_urls
-    register_wei_urls(router, 'wei')
-
 app_name = 'api'
 
 # Wire up our API using automatic URL routing.

@@ -76,7 +76,6 @@ INSTALLED_APPS = [
     'registration',
     'scripts',
     'treasury',
-    'wei',
 ]
 
 MIDDLEWARE = [

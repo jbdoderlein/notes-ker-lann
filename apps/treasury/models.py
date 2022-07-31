@@ -308,12 +308,6 @@ class SogeCredit(models.Model):
         if self.valid:
             return self.credit_transaction.total
         amount = sum(transaction.total for transaction in self.transactions.all())
-        if 'wei' in settings.INSTALLED_APPS:
-            from wei.models import WEIMembership
-            if not WEIMembership.objects.filter(club__weiclub__year=datetime.date.today().year, user=self.user)\
-                    .exists():
-                # 80 € for people that don't go to WEI
-                amount += 8000
         return amount
 
     def update_transactions(self):
@@ -340,16 +334,6 @@ class SogeCredit(models.Model):
             if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
                 if m.transaction not in self.transactions.all():
                     self.transactions.add(m.transaction)
-
-        if 'wei' in settings.INSTALLED_APPS:
-            from wei.models import WEIClub
-            wei = WEIClub.objects.order_by('-year').first()
-            wei_qs = Membership.objects.filter(user=self.user, club=wei, date_start__gte=wei.membership_start)
-            if wei_qs.exists():
-                m = wei_qs.get()
-                if MembershipTransaction.objects.filter(membership=m).exists():  # non-free membership
-                    if m.transaction not in self.transactions.all():
-                        self.transactions.add(m.transaction)
 
         for tr in self.transactions.all():
             tr.valid = False

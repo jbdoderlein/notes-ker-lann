@@ -161,7 +161,7 @@ class TestMemberships(TestCase):
 
         response = self.client.get(reverse("member:club_members", args=(self.club.pk,)) + "?search=toto&roles="
                                    + ",".join([str(role.pk) for role in
-                                               Role.objects.filter(weirole__isnull=True).all()]))
+                                               Role.objects.all()]))
         self.assertEqual(response.status_code, 200)
 
     def test_render_club_add_member(self):
