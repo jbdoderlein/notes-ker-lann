@@ -26,9 +26,9 @@ from permission.backends import PermissionBackend
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import InvoiceForm, ProductFormSet, ProductFormSetHelper, RemittanceForm, \
-    LinkTransactionToRemittanceForm, SogeCreditForm
-from .models import Invoice, Product, Remittance, SpecialTransactionProxy, SogeCredit
-from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable, SogeCreditTable
+    LinkTransactionToRemittanceForm
+from .models import Invoice, Product, Remittance, SpecialTransactionProxy
+from .tables import InvoiceTable, RemittanceTable, SpecialTransactionTable
 
 
 class InvoiceCreateView(ProtectQuerysetMixin, ProtectedCreateView):
@@ -393,70 +393,3 @@ class UnlinkTransactionToRemittanceView(LoginRequiredMixin, View):
         transaction.save()
 
         return redirect('treasury:remittance_list')
-
-
-class SogeCreditListView(LoginRequiredMixin, ProtectQuerysetMixin, SingleTableView):
-    """
-    List all Société Générale credits
-    """
-    model = SogeCredit
-    table_class = SogeCreditTable
-    extra_context = {"title": _("List of credits from the Société générale")}
-
-    def dispatch(self, request, *args, **kwargs):
-        # Check that the user is authenticated
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-
-        if not super().get_queryset().exists():
-            raise PermissionDenied(_("You are not able to see the treasury interface."))
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_queryset(self, **kwargs):
-        """
-        Filter the table with the given parameter.
-        :param kwargs:
-        :return:
-        """
-        qs = super().get_queryset()
-        if "search" in self.request.GET:
-            pattern = self.request.GET["search"]
-            if pattern:
-                qs = qs.filter(
-                    Q(user__first_name__iregex=pattern)
-                    | Q(user__last_name__iregex=pattern)
-                    | Q(user__note__alias__name__iregex="^" + pattern)
-                    | Q(user__note__alias__normalized_name__iregex="^" + Alias.normalize(pattern))
-                )
-
-        if "valid" not in self.request.GET or not self.request.GET["valid"]:
-            qs = qs.filter(credit_transaction__valid=False)
-
-        return qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = SogeCreditForm(self.request.POST or None)
-        return context
-
-
-class SogeCreditManageView(LoginRequiredMixin, ProtectQuerysetMixin, BaseFormView, DetailView):
-    """
-    Manage credits from the Société générale.
-    """
-    model = SogeCredit
-    form_class = Form
-    extra_context = {"title": _("Manage credits from the Société générale")}
-
-    @transaction.atomic
-    def form_valid(self, form):
-        if "validate" in form.data:
-            self.get_object().validate(True)
-        elif "delete" in form.data:
-            self.get_object().delete()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        if "validate" in self.request.POST:
-            return reverse_lazy('treasury:manage_soge_credit', args=(self.get_object().pk,))
-        return reverse_lazy('treasury:soge_credits')

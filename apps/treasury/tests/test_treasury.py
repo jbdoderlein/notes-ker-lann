@@ -10,9 +10,8 @@ from django.urls import reverse
 from member.models import Membership, Club
 from note.models import SpecialTransaction, NoteSpecial, Transaction
 
-from ..api.views import InvoiceViewSet, ProductViewSet, RemittanceViewSet, RemittanceTypeViewSet, \
-    SogeCreditViewSet
-from ..models import Invoice, Product, Remittance, RemittanceType, SogeCredit
+from ..api.views import InvoiceViewSet, ProductViewSet, RemittanceViewSet, RemittanceTypeViewSet
+from ..models import Invoice, Product, Remittance, RemittanceType
 
 
 class TestInvoices(TestCase):
@@ -296,112 +295,6 @@ class TestRemittances(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestSogeCredits(TestCase):
-    """
-    Check that credits from the Société générale are working correctly.
-    """
-
-    fixtures = ('initial',)
-
-    def setUp(self) -> None:
-        self.user = User.objects.create_superuser(
-            username="admintoto",
-            password="totototo",
-            email="admin@example.com",
-        )
-        self.client.force_login(self.user)
-        sess = self.client.session
-        sess["permission_mask"] = 42
-        sess.save()
-
-        self.kfet = Club.objects.get(name="Kfet")
-        self.bde = self.kfet.parent_club
-
-        self.kfet_membership = Membership(
-            user=self.user,
-            club=self.kfet,
-        )
-        self.kfet_membership._force_renew_parent = True
-        self.kfet_membership._soge = True
-        self.kfet_membership.save()
-
-    def test_admin_page(self):
-        """
-        Render the admin page.
-        """
-        response = self.client.get(reverse("admin:index") + "treasury/sogecredit/")
-        self.assertEqual(response.status_code, 200)
-
-    def test_sogecredit_list(self):
-        """
-        Display the list of all credits.
-        """
-        response = self.client.get(reverse("treasury:soge_credits"))
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("treasury:soge_credits") + "?search=toto&valid=")
-        self.assertEqual(response.status_code, 200)
-
-    def test_validate_soge_credit(self):
-        """
-        Try to validate a credit.
-        """
-        soge_credit = SogeCredit.objects.get(user=self.user)
-
-        response = self.client.get(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)), data=dict(
-            validate=True,
-        ))
-        self.assertRedirects(response, reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)), 302, 200)
-        soge_credit.refresh_from_db()
-        self.assertTrue(soge_credit.valid)
-        self.user.note.refresh_from_db()
-        self.assertEqual(
-            Transaction.objects.filter(Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
-        self.assertTrue(self.user.profile.soge)
-
-    def test_delete_soge_credit(self):
-        """
-        Try to invalidate a credit.
-        """
-        soge_credit = SogeCredit.objects.get(user=self.user)
-
-        response = self.client.get(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)))
-        self.assertEqual(response.status_code, 200)
-
-        self.assertRaises(ValidationError, self.client.post,
-                          reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)), data=dict(delete=True))
-
-        SpecialTransaction.objects.create(
-            source=NoteSpecial.objects.get(special_type="Carte bancaire"),
-            destination=self.user.note,
-            amount=self.bde.membership_fee_paid + self.kfet.membership_fee_paid,
-            quantity=1,
-            reason="Registration is not complete, pliz pay",
-            last_name="TOTO",
-            first_name="Toto",
-        )
-
-        response = self.client.post(reverse("treasury:manage_soge_credit", args=(soge_credit.pk,)),
-                                    data=dict(delete=True))
-        # 403 because no SogeCredit exists anymore, then a PermissionDenied is raised
-        self.assertRedirects(response, reverse("treasury:soge_credits"), 302, 403)
-        self.assertFalse(SogeCredit.objects.filter(pk=soge_credit.pk))
-        self.user.note.refresh_from_db()
-        self.assertEqual(self.user.note.balance, 0)
-        self.assertEqual(
-            Transaction.objects.filter(Q(source=self.user.note) | Q(destination=self.user.note)).count(), 4)
-        self.assertFalse(self.user.profile.soge)
-
-    def test_invoice_api(self):
-        """
-        Load some API pages
-        """
-        response = self.client.get("/api/treasury/soge_credit/")
-        self.assertEqual(response.status_code, 200)
-
-
 class TestTreasuryAPI(TestAPI):
     def setUp(self) -> None:
         super().setUp()
@@ -447,7 +340,6 @@ class TestTreasuryAPI(TestAPI):
             club=self.kfet,
         )
         self.kfet_membership._force_renew_parent = True
-        self.kfet_membership._soge = True
         self.kfet_membership.save()
 
     def test_invoice_api(self):
@@ -474,8 +366,3 @@ class TestTreasuryAPI(TestAPI):
         """
         self.check_viewset(RemittanceTypeViewSet, "/api/treasury/remittance_type/")
 
-    def test_sogecredit_api(self):
-        """
-        Load SogeCredit API page and test all filters and permissions
-        """
-        self.check_viewset(SogeCreditViewSet, "/api/treasury/soge_credit/")
