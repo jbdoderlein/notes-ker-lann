@@ -60,17 +60,8 @@ SPDX-License-Identifier: GPL-3.0-or-later
         });
     }
 
-    soge_field = $("#id_soge");
 
     function fillFields() {
-        let checked = soge_field.is(':checked');
-        if (!checked) {
-            $("input").attr('disabled', false);
-            $("#id_user").attr('disabled', true);
-            $("select").attr('disabled', false);
-            return;
-        }
-
         let credit_type = $("#id_credit_type");
         credit_type.attr('disabled', true);
         credit_type.val(4);
@@ -83,7 +74,5 @@ SPDX-License-Identifier: GPL-3.0-or-later
         bank.attr('disabled', true);
         bank.val('Société générale');
     }
-
-    soge_field.change(fillFields);
 </script>
 {% endblock %}

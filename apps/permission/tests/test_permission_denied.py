@@ -146,9 +146,6 @@ class TestPermissionDenied(TestCase):
         response = self.client.get(reverse("treasury:remittance_list"))
         self.assertEqual(response.status_code, 403)
 
-    def test_list_soge_credits(self):
-        response = self.client.get(reverse("treasury:soge_credits"))
-        self.assertEqual(response.status_code, 403)
 
 
 class TestLoginRedirect(TestCase):

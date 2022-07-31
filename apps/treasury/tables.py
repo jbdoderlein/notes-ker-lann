@@ -7,7 +7,7 @@ from django_tables2 import A
 from note.models import SpecialTransaction
 from note.templatetags.pretty_money import pretty_money
 
-from .models import Invoice, Remittance, SogeCredit
+from .models import Invoice, Remittance
 
 
 class InvoiceTable(tables.Table):
@@ -120,28 +120,3 @@ class SpecialTransactionTable(tables.Table):
         template_name = 'django_tables2/bootstrap4.html'
         fields = ('created_at', 'source', 'destination', 'last_name', 'first_name', 'bank', 'amount', 'reason',)
         order_by = ('-created_at',)
-
-
-class SogeCreditTable(tables.Table):
-    user = tables.LinkColumn(
-        'treasury:manage_soge_credit',
-        args=[A('pk')],
-    )
-
-    amount = tables.Column(
-        verbose_name=_("Amount"),
-    )
-
-    valid = tables.Column(
-        verbose_name=_("Valid"),
-    )
-
-    def render_amount(self, value):
-        return pretty_money(value)
-
-    def render_valid(self, value):
-        return _("Yes") if value else _("No")
-
-    class Meta:
-        model = SogeCredit
-        fields = ('user', 'user__last_name', 'user__first_name', 'amount', 'valid', )
