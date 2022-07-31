@@ -22,9 +22,8 @@ from note.templatetags.pretty_money import pretty_money
 from permission.backends import PermissionBackend
 from permission.models import Role
 from permission.views import ProtectQuerysetMixin
-from treasury.models import SogeCredit
 
-from .forms import SignUpForm, ValidationForm, DeclareSogeAccountOpenedForm
+from .forms import SignUpForm, ValidationForm
 from .tables import FutureUserTable
 from .tokens import email_validation_token
 
@@ -42,7 +41,6 @@ class UserCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form(self.request.POST if self.request.POST else None)
-        context["soge_form"] = DeclareSogeAccountOpenedForm(self.request.POST if self.request.POST else None)
         del context["profile_form"].fields["section"]
         del context["profile_form"].fields["report_frequency"]
         del context["profile_form"].fields["last_report"]
@@ -74,13 +72,6 @@ class UserCreateView(CreateView):
         profile.save()
 
         user.profile.send_email_validation_link()
-
-        soge_form = DeclareSogeAccountOpenedForm(self.request.POST)
-        if "soge_account" in soge_form.data and soge_form.data["soge_account"]:
-            # If the user declares that a bank account got opened, prepare the soge credit to warn treasurers
-            soge_credit = SogeCredit(user=user)
-            soge_credit._force_save = True
-            soge_credit.save()
 
         return super().form_valid(form)
 
@@ -239,8 +230,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
-        ctx["declare_soge_account"] = SogeCredit.objects.filter(user=user).exists()
-
         return ctx
 
     def get_form(self, form_class=None):
@@ -263,7 +252,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
             return self.form_invalid(form)
 
         # Get form data
-        soge = form.cleaned_data["soge"]
         credit_type = form.cleaned_data["credit_type"]
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
@@ -272,10 +260,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         join_bde = form.cleaned_data["join_bde"]
         join_kfet = form.cleaned_data["join_kfet"]
 
-        if soge:
-            # If Société Générale pays the inscription, the user automatically joins the two clubs.
-            join_bde = True
-            join_kfet = True
 
         if not join_bde:
             # This software belongs to the BDE.
@@ -295,12 +279,12 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
 
         # If the bank pays, then we don't credit now. Treasurers will validate the transaction
         # and credit the note later.
-        credit_type = None if soge else credit_type
+        credit_type = credit_type
 
         # If the user does not select any payment method, then no credit will be performed.
         credit_amount = 0 if credit_type is None else credit_amount
 
-        if fee > credit_amount and not soge:
+        if fee > credit_amount:
             # Check if the user credits enough money
             form.add_error('credit_type',
                            _("The entered amount is not enough for the memberships, should be at least {}")
@@ -320,13 +304,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         user.profile.save()
         user.refresh_from_db()
 
-        if not soge and SogeCredit.objects.filter(user=user).exists():
-            # If the user declared that a bank account was opened but in the validation form the SoGé case was
-            # unchecked, delete the associated credit
-            soge_credit = SogeCredit.objects.get(user=user)
-            soge_credit._force_delete = True
-            soge_credit.delete()
-
         if credit_type is not None and credit_amount > 0:
             # Credit the note
             SpecialTransaction.objects.create(
@@ -334,7 +311,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 destination=user.note,
                 quantity=1,
                 amount=credit_amount,
-                reason="Crédit " + ("Société générale" if soge else credit_type.special_type) + " (Inscription)",
+                reason="Crédit " +  credit_type.special_type + " (Inscription)",
                 last_name=last_name,
                 first_name=first_name,
                 bank=bank,
@@ -348,8 +325,6 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 user=user,
                 fee=bde_fee,
             )
-            if soge:
-                membership._soge = True
             membership.save()
             membership.refresh_from_db()
             membership.roles.add(Role.objects.get(name="Adhérent BDE"))
@@ -362,18 +337,13 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 user=user,
                 fee=kfet_fee,
             )
-            if soge:
-                membership._soge = True
+            
             membership.save()
             membership.refresh_from_db()
             membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
             membership.save()
 
-        if soge:
-            soge_credit = SogeCredit.objects.get(user=user)
-            # Update the credit transaction amount
-            soge_credit.save()
-
+        
         return ret
 
     def get_success_url(self):
@@ -393,8 +363,7 @@ class FutureUserInvalidateView(ProtectQuerysetMixin, LoginRequiredMixin, View):
         user = User.objects.filter(profile__registration_valid=False)\
             .filter(PermissionBackend.filter_queryset(request, User, "change", "is_valid"))\
             .get(pk=self.kwargs["pk"])
-        # Delete associated soge credits before
-        SogeCredit.objects.filter(user=user).delete()
+        
 
         user.delete()
 

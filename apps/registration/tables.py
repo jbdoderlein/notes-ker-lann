@@ -3,7 +3,6 @@
 
 import django_tables2 as tables
 from django.contrib.auth.models import User
-from treasury.models import SogeCredit
 
 
 class FutureUserTable(tables.Table):
@@ -22,7 +21,6 @@ class FutureUserTable(tables.Table):
         fields = ('last_name', 'first_name', 'username', 'email', )
         model = User
         row_attrs = {
-            'class': lambda record: 'table-row'
-                                    + (' bg-warning' if SogeCredit.objects.filter(user=record).exists() else ''),
+            'class': lambda record: 'table-row',
             'data-href': lambda record: record.pk
         }

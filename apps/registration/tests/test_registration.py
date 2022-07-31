@@ -10,7 +10,6 @@ from django.utils.http import urlsafe_base64_encode
 from member.models import Club, Membership
 from note.models import NoteUser, NoteSpecial, Transaction
 from registration.tokens import email_validation_token
-from treasury.models import SogeCredit
 
 """
 Check that pre-registrations and validations are working as well.
@@ -190,7 +189,6 @@ class TestValidateRegistration(TestCase):
 
         # BDE Membership is mandatory
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
             credit_amount=4200,
             last_name="TOTO",
@@ -204,7 +202,6 @@ class TestValidateRegistration(TestCase):
 
         # Same
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type="",
             credit_amount=0,
             last_name="TOTO",
@@ -218,7 +215,6 @@ class TestValidateRegistration(TestCase):
 
         # The BDE membership is not free
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
             credit_amount=0,
             last_name="TOTO",
@@ -232,7 +228,6 @@ class TestValidateRegistration(TestCase):
 
         # Last and first names are required for a credit
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
             credit_amount=4000,
             last_name="",
@@ -249,7 +244,6 @@ class TestValidateRegistration(TestCase):
         self.user.username = "admïntoto"
         self.user.save()
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
             credit_amount=500,
             last_name="TOTO",
@@ -275,7 +269,6 @@ class TestValidateRegistration(TestCase):
         self.user.profile.save()
 
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
             credit_amount=500,
             last_name="TOTO",
@@ -290,7 +283,6 @@ class TestValidateRegistration(TestCase):
         self.assertTrue(NoteUser.objects.filter(user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="BDE", user=self.user).exists())
         self.assertFalse(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
-        self.assertFalse(SogeCredit.objects.filter(user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
             Q(source=self.user.note) | Q(destination=self.user.note)).count(), 2)
 
@@ -311,7 +303,6 @@ class TestValidateRegistration(TestCase):
         self.user.profile.save()
 
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=False,
             credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
             credit_amount=4000,
             last_name="TOTO",
@@ -326,49 +317,12 @@ class TestValidateRegistration(TestCase):
         self.assertTrue(NoteUser.objects.filter(user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="BDE", user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
-        self.assertFalse(SogeCredit.objects.filter(user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
             Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
 
         response = self.client.get(self.user.profile.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_validate_kfet_registration_with_soge(self):
-        """
-        The user joins the BDE and the Kfet, but the membership is paid by the Société générale.
-        """
-        response = self.client.get(reverse("registration:future_user_detail", args=(self.user.pk,)))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(self.user.profile.get_absolute_url())
-        self.assertEqual(response.status_code, 404)
-
-        self.user.profile.email_confirmed = True
-        self.user.profile.save()
-
-        response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            soge=True,
-            credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
-            credit_amount=4000,
-            last_name="TOTO",
-            first_name="Toto",
-            bank="Société générale",
-            join_bde=True,
-            join_kfet=True,
-        ))
-        self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
-        self.user.profile.refresh_from_db()
-        self.assertTrue(self.user.profile.registration_valid)
-        self.assertTrue(NoteUser.objects.filter(user=self.user).exists())
-        self.assertTrue(Membership.objects.filter(club__name="BDE", user=self.user).exists())
-        self.assertTrue(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
-        self.assertTrue(SogeCredit.objects.filter(user=self.user).exists())
-        self.assertEqual(Transaction.objects.filter(
-            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
-        self.assertFalse(Transaction.objects.filter(valid=True).exists())
-
-        response = self.client.get(self.user.profile.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
 
     def test_invalidate_registration(self):
         """

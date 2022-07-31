@@ -44,15 +44,6 @@ class SignUpForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'username', 'email', )
 
 
-class DeclareSogeAccountOpenedForm(forms.Form):
-    soge_account = forms.BooleanField(
-        label=_("I declare that I opened or I will open soon a bank account in the Société générale with the BDE "
-                "partnership."),
-        help_text=_("Warning: this engages you to open your bank account. If you finally decides to don't open your "
-                    "account, you will have to pay the BDE membership."),
-        required=False,
-    )
-
 
 class WEISignupForm(forms.Form):
     wei_registration = forms.BooleanField(
@@ -67,11 +58,6 @@ class ValidationForm(forms.Form):
     """
     Validate the inscription of the new users and pay memberships.
     """
-    soge = forms.BooleanField(
-        label=_("Inscription paid by Société Générale"),
-        required=False,
-        help_text=_("Check this case if the Société Générale paid the inscription."),
-    )
 
     credit_type = forms.ModelChoiceField(
         queryset=NoteSpecial.objects,

@@ -5,7 +5,7 @@ from django.contrib import admin
 from note_kfet.admin import admin_site
 
 from .forms import ProductForm
-from .models import RemittanceType, Remittance, SogeCredit, Invoice, Product
+from .models import RemittanceType, Remittance, Invoice, Product
 
 
 @admin.register(RemittanceType, site=admin_site)
@@ -25,19 +25,6 @@ class RemittanceAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return not obj or (not obj.closed and super().has_change_permission(request, obj))
-
-
-@admin.register(SogeCredit, site=admin_site)
-class SogeCreditAdmin(admin.ModelAdmin):
-    """
-    Admin customisation for Remittance
-    """
-    list_display = ('user', 'valid',)
-    readonly_fields = ('transactions', 'credit_transaction',)
-
-    def has_add_permission(self, request):
-        # Don't create a credit manually
-        return False
 
 
 class ProductInline(admin.StackedInline):
