@@ -219,7 +219,7 @@ class NoteSpecial(Note):
 
 class Trust(models.Model):
     """
-    A one-sided trust relationship bertween two users
+    A one-sided trust relationship between two users
 
     If another user considers you as your friend, you can transfer money from
     them

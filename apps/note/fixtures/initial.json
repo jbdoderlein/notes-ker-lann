@@ -1,0 +1,57 @@
+[
+    {
+        "model": "note.templatecategory",
+        "pk": 1,
+        "fields": {
+            "name": "Soft"
+        }
+    },
+    {
+        "model": "note.templatecategory",
+        "pk": 2,
+        "fields": {
+            "name": "Alcool"
+        }
+    },
+    {
+        "model": "note.templatecategory",
+        "pk": 3,
+        "fields": {
+            "name": "Nourriture"
+        }
+    },
+    {
+        "model": "note.templatecategory",
+        "pk": 4,
+        "fields": {
+            "name": "Clubs"
+        }
+    },
+    {
+        "model": "note.templatecategory",
+        "pk": 5,
+        "fields": {
+            "name": "Goodies"
+        }
+    },
+    {
+        "model": "note.templatecategory",
+        "pk": 6,
+        "fields": {
+            "name": "Autre"
+        }
+    },
+    {
+        "model": "note.transactiontemplate",
+        "pk": 1,
+        "fields": {
+            "name": "Test Button",
+            "destination": 5,
+            "amount": 1,
+            "category": 6,
+            "display": false,
+            "highlighted": false,
+            "description": "Test button"
+        }
+    }
+]

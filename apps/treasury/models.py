@@ -28,14 +28,9 @@ class Invoice(models.Model):
 
     bde = models.CharField(
         max_length=32,
-        default='Saperlistpopette',
+        default='BDE',
         choices=(
-            ('Saperlistpopette', 'Saper[list]popette'),
-            ('Finalist', 'Fina[list]'),
-            ('Listorique', '[List]orique'),
-            ('Satellist', 'Satel[list]'),
-            ('Monopolist', 'Monopo[list]'),
-            ('Kataclist', 'Katac[list]'),
+            ('BDE', 'BDE'),
         ),
         verbose_name=_("BDE"),
     )
