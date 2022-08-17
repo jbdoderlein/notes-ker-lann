@@ -160,7 +160,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
             memberships = Membership.objects.filter(
                 PermissionBackend.filter_queryset(get_current_request(), Membership, "view")).filter(
                 user=obj.note.user,
-                club=2,  # Kfet
+                club=2,  # BDA
             ).order_by("-date_start")
             if memberships.exists():
                 return MembershipSerializer().to_representation(memberships.first())

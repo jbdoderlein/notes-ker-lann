@@ -118,5 +118,5 @@ class SpecialTransactionTable(tables.Table):
         }
         model = SpecialTransaction
         template_name = 'django_tables2/bootstrap4.html'
-        fields = ('created_at', 'source', 'destination', 'last_name', 'first_name', 'bank', 'amount', 'reason',)
+        fields = ('created_at', 'source', 'destination', 'last_name', 'first_name', 'amount', 'reason',)
         order_by = ('-created_at',)

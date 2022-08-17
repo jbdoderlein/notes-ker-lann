@@ -656,12 +656,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         if not credit_type:
             credit_amount = 0
 
-        if user.note.balance + credit_amount < fee and not Membership.objects.filter(
-                club__name="Kfet",
-                user=user,
-                date_start__lte=date.today(),
-                date_end__gte=date.today(),
-        ).exists():
+        if user.note.balance + credit_amount < fee:
             # Users without a valid Kfet membership can't have a negative balance.
             # TODO Send a notification to the user (with a mail?) to tell her/him to credit her/his note
             form.add_error('user',
@@ -678,7 +673,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
             error = True
 
         # Must join the parent club before joining this club, except for the Kfet club where it can be at the same time.
-        if club.name != "Kfet" and club.parent_club and not Membership.objects.filter(
+        if club.parent_club and not Membership.objects.filter(
                 user=form.instance.user,
                 club=club.parent_club,
                 date_start__gte=club.parent_club.membership_start,
@@ -726,7 +721,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
-        bank = form.cleaned_data["bank"]
 
 
         if credit_type is None:
@@ -750,7 +744,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         # Now, all is fine, the membership can be created.
 
-        if club.name == "BDE" or club.name == "Kfet":
+        if club.name == "BDE":
             # When we renew the BDE membership, we update the profile section
             # that should happens at least once a year.
             user.profile.section = user.profile.section_generated
@@ -767,7 +761,6 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
                 reason="Crédit " + credit_type.special_type + " (Adhésion " + club.name + ")",
                 last_name=last_name,
                 first_name=first_name,
-                bank=bank,
                 valid=True,
             )
             transaction._force_save = True
@@ -780,8 +773,10 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
         ret = super().form_valid(form)
 
         member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all() \
-            if club.name == "BDE" else Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all() \
-            if club.name == "Kfet"else Role.objects.filter(name="Membre de club").all()
+            if club.name == "BDE" else Role.objects.filter(Q(name="Adhérent BDA") | Q(name="Membre de club")).all() \
+            if club.name == "BDA" else Role.objects.filter(Q(name="Adhérent BDS") | Q(name="Membre de club")).all() \
+            if club.name == "BDS" else Role.objects.filter(name="Membre de club").all()
+
         # Set the same roles as before
         if old_membership:
             member_role = member_role.union(old_membership.roles.all())

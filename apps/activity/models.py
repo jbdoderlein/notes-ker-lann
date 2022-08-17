@@ -73,7 +73,7 @@ class Activity(models.Model):
         max_length=255,
         blank=True,
         default="",
-        help_text=_("Place where the activity is organized, eg. Kfet."),
+        help_text=_("Place where the activity is organized, eg. BDE."),
     )
 
     activity_type = models.ForeignKey(
@@ -102,7 +102,7 @@ class Activity(models.Model):
         on_delete=models.PROTECT,
         related_name='+',
         verbose_name=_('attendees club'),
-        help_text=_("Club that is authorized to join the activity. Mostly the Kfet club."),
+        help_text=_("Club that is authorized to join the activity."),
     )
 
     date_start = models.DateTimeField(

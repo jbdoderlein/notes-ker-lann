@@ -187,7 +187,6 @@ class TestRemittances(TestCase):
             reason="Credit",
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
         )
 
         self.second_credit = SpecialTransaction.objects.create(
@@ -197,7 +196,6 @@ class TestRemittances(TestCase):
             reason="Second credit",
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
         )
 
         self.remittance = Remittance.objects.create(
@@ -275,7 +273,6 @@ class TestRemittances(TestCase):
             remittance=self.remittance.pk,
             last_name="Last Name",
             first_name="First Name",
-            bank="Bank",
         ))
         self.assertRedirects(response, reverse("treasury:remittance_list"), 302, 200)
         self.credit.refresh_from_db()
@@ -320,8 +317,7 @@ class TestTreasuryAPI(TestAPI):
             amount=4200,
             reason="Credit",
             last_name="TOTO",
-            first_name="Toto",
-            bank="Société générale",
+            first_name="Toto"
         )
 
         self.remittance = Remittance.objects.create(
@@ -332,7 +328,7 @@ class TestTreasuryAPI(TestAPI):
         self.credit.specialtransactionproxy.remittance = self.remittance
         self.credit.specialtransactionproxy.save()
 
-        self.kfet = Club.objects.get(name="Kfet")
+        self.kfet = Club.objects.get(name="BDA")
         self.bde = self.kfet.parent_club
 
         self.kfet_membership = Membership(

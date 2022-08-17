@@ -132,8 +132,6 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
 
     first_name = forms.Field(label=_("First name"))
 
-    bank = forms.Field(label=_("Bank"))
-
     amount = forms.IntegerField(label=_("Amount"), min_value=0, widget=AmountInput(), disabled=True, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -148,7 +146,6 @@ class LinkTransactionToRemittanceForm(forms.ModelForm):
         cleaned_data = super().clean()
         self.instance.transaction.last_name = cleaned_data["last_name"]
         self.instance.transaction.first_name = cleaned_data["first_name"]
-        self.instance.transaction.bank = cleaned_data["bank"]
         return cleaned_data
 
     @transaction.atomic

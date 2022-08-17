@@ -13,29 +13,15 @@ SPDX-License-Identifier: GPL-3.0-or-later
         {% if additional_fee_renewal %}
         <div class="alert alert-warning">
             {% if renewal %}
-                {% if club.name == "Kfet" %} {# Auto-renewal #}
-                    {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
-                    The user is not a member of the club·s {{ clubs }}. An additional fee of {{ pretty_fee }}
-                    will be charged to renew automatically the membership in this/these club·s.
-                    {% endblocktrans %}
-                {% else %}
-                    {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
-                        The user is not a member of the club·s {{ clubs }}. Please create the required memberships,
-                        otherwise it will fail.
-                    {% endblocktrans %}
-                {% endif %}
+                {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
+                    The user is not a member of the club·s {{ clubs }}. Please create the required memberships,
+                    otherwise it will fail.
+                {% endblocktrans %}
             {% else %}
-                {% if club.name == "Kfet" %}
-                    {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
-                    This club has parents {{ clubs }}. An additional fee of {{ pretty_fee }}
-                    will be charged to adhere automatically to this/these club·s.
-                    {% endblocktrans %}
-                {% else %}
-                    {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
-                        This club has parents {{ clubs }}. Please make sure that the user is a member of this or these club·s,
-                        otherwise the creation of this membership will fail.
-                    {% endblocktrans %}
-                {% endif %}
+                {% blocktrans trimmed with clubs=clubs_renewal|join:", " pretty_fee=additional_fee_renewal|pretty_money %}
+                    This club has parents {{ clubs }}. Please make sure that the user is a member of this or these club·s,
+                    otherwise the creation of this membership will fail.
+                {% endblocktrans %}
             {% endif %}
         </div>
         {% endif %}
@@ -69,10 +55,6 @@ SPDX-License-Identifier: GPL-3.0-or-later
         let credit_amount = $("#id_credit_amount");
         credit_amount.attr('disabled', true);
         credit_amount.val('{{ total_fee }}');
-
-        let bank = $("#id_bank");
-        bank.attr('disabled', true);
-        bank.val('Société générale');
     }
 </script>
 {% endblock %}

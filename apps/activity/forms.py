@@ -20,9 +20,9 @@ from .models import Activity, Guest
 class ActivityForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # By default, the Kfet club is attended
-        self.fields["attendees_club"].initial = Club.objects.get(name="Kfet")
-        self.fields["attendees_club"].widget.attrs["placeholder"] = "Kfet"
+        # By default, the BDE club is attended
+        self.fields["attendees_club"].initial = Club.objects.get(name="BDE")
+        self.fields["attendees_club"].widget.attrs["placeholder"] = "BDE"
         clubs = list(Club.objects.filter(PermissionBackend
                                          .filter_queryset(get_current_request(), Club, "view")).all())
         shuffle(clubs)

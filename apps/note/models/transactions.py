@@ -306,11 +306,6 @@ class SpecialTransaction(Transaction):
         verbose_name=_("first_name"),
     )
 
-    bank = models.CharField(
-        max_length=255,
-        verbose_name=_("bank"),
-        blank=True,
-    )
 
     @property
     def type(self):
@@ -346,19 +341,15 @@ class SpecialTransaction(Transaction):
         credit_type = form.cleaned_data["credit_type"]
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
-        bank = form.cleaned_data["bank"]
 
         error = False
 
-        if not last_name or not first_name or (not bank and credit_type.special_type == "Chèque"):
+        if not last_name or not first_name:
             if not last_name:
                 form.add_error('last_name', _("This field is required."))
                 error = True
             if not first_name:
                 form.add_error('first_name', _("This field is required."))
-                error = True
-            if not bank and credit_type.special_type == "Chèque":
-                form.add_error('bank', _("This field is required."))
                 error = True
 
         return not error

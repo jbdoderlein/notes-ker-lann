@@ -148,29 +148,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
     <div class="{% block containertype %}container{% endblock %} my-3">
         <div id="messages">
             {% if user.is_authenticated %}
-                {% if not user|is_member:"BDE" %}
-                    <div class="alert alert-danger">
-                        {% trans "You are not a BDE member anymore. Please renew your membership if you want to use the note." %}
-                    </div>
-                {% endif %}
-
                 {% if not user.profile.email_confirmed %}
                     <div class="alert alert-warning">
                         {% trans "Your e-mail address is not validated. Please check your mail inbox and click on the validation link." %}
                     </div>
                 {% endif %}
             {% endif %}
-            {% if user.sogecredit and not user.sogecredit.valid %}
-                <div class="alert alert-info">
-                    {% blocktrans trimmed %}
-                    You declared that you opened a bank account in the Société générale. The bank did not validate
-                        the creation of the account to the BDE, so the membership and the WEI are not paid yet.
-                        This verification procedure may last a few days.
-                        Please make sure that you go to the end of the account creation.
-                    {% endblocktrans %}
-                </div>
-            {% endif %}
-            {# TODO Add banners #}
         </div>
         {% block content %}
             <p>Default content...</p>

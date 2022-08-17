@@ -74,20 +74,21 @@ class ValidationForm(forms.Form):
         required=False,
     )
 
-    bank = forms.CharField(
-        label=_("Bank"),
-        required=False,
-    )
-
     join_bde = forms.BooleanField(
         label=_("Join BDE Club"),
         required=False,
-        initial=True,
+        initial=False,
     )
 
-    # The user can join the Kfet club at the inscription
-    join_kfet = forms.BooleanField(
-        label=_("Join Kfet Club"),
+    join_bda = forms.BooleanField(
+        label=_("Join BDA Club"),
         required=False,
-        initial=True,
+        initial=False,
     )
+
+    join_bds = forms.BooleanField(
+        label=_("Join BDS Club"),
+        required=False,
+        initial=False,
+    )
+

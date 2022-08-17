@@ -179,20 +179,17 @@ class TestMemberships(TestCase):
 
         # We create a club without any parent and one club with parent BDE (that is the club Kfet)
         for bde_parent in False, True:
-            if bde_parent:
-                club = Club.objects.get(name="Kfet")
-            else:
-                club = Club.objects.create(
-                    name="Second club " + ("with BDE" if bde_parent else "without BDE"),
-                    parent_club=None,
-                    email="newclub@example.com",
-                    require_memberships=True,
-                    membership_fee_paid=1000,
-                    membership_fee_unpaid=500,
-                    membership_start=date.today(),
-                    membership_end=date.today() + timedelta(days=366),
-                    membership_duration=366,
-                )
+            club = Club.objects.create(
+                name="Second club " + ("with BDE" if bde_parent else "without BDE"),
+                parent_club=None,
+                email="newclub@example.com",
+                require_memberships=True,
+                membership_fee_paid=1000,
+                membership_fee_unpaid=500,
+                membership_start=date.today(),
+                membership_end=date.today() + timedelta(days=366),
+                membership_duration=366,
+            )
 
             response = self.client.get(reverse("member:club_add_member", args=(club.pk,)))
             self.assertEqual(response.status_code, 200)
@@ -204,8 +201,7 @@ class TestMemberships(TestCase):
                 credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
                 credit_amount=4200,
                 last_name="TOTO",
-                first_name="Toto",
-                bank="Le matelas",
+                first_name="Toto"
             ))
             self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
 
@@ -223,11 +219,6 @@ class TestMemberships(TestCase):
             self.assertEqual(response.status_code, 200)
 
             bde_membership = self.bde_membership
-            if bde_parent:
-                bde_membership = Membership.objects.get(club__name="BDE", user=user)
-                bde_membership.date_start = date(year=2000, month=1, day=1)
-                bde_membership.date_end = date(year=2000, month=12, day=31)
-                bde_membership.save()
 
             response = self.client.get(reverse("member:club_renew_membership", args=(bde_membership.pk,)))
             self.assertEqual(response.status_code, 200)
@@ -243,7 +234,6 @@ class TestMemberships(TestCase):
                 credit_amount=14242,
                 last_name="TOTO",
                 first_name="Toto",
-                bank="Bank",
             ))
             self.assertRedirects(response, user.profile.get_absolute_url(), 302, 200)
 

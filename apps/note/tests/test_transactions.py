@@ -34,7 +34,7 @@ class TestTransactions(TestCase):
         membership = Membership.objects.create(club=Club.objects.get(name="BDE"), user=self.user)
         membership.roles.add(Role.objects.get(name="Respo info"))
         membership.save()
-        Membership.objects.create(club=Club.objects.get(name="Kfet"), user=self.user)
+        Membership.objects.create(club=Club.objects.get(name="BDA"), user=self.user)
         self.user.note.refresh_from_db()
 
         self.second_user = User.objects.create(
@@ -377,7 +377,7 @@ class TestNoteAPI(TestAPI):
         membership = Membership.objects.create(club=Club.objects.get(name="BDE"), user=self.user)
         membership.roles.add(Role.objects.get(name="Respo info"))
         membership.save()
-        Membership.objects.create(club=Club.objects.get(name="Kfet"), user=self.user)
+        Membership.objects.create(club=Club.objects.get(name="BDA"), user=self.user)
         self.user.note.last_negative = timezone.now()
         self.user.note.save()
 

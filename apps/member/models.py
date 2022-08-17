@@ -381,9 +381,12 @@ class Membership(models.Model):
             if self.club.parent_club.name == "BDE":
                 parent_membership.roles.set(
                     Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all())
-            elif self.club.parent_club.name == "Kfet":
+            elif self.club.parent_club.name == "BDA":
                 parent_membership.roles.set(
-                    Role.objects.filter(Q(name="Adhérent Kfet") | Q(name="Membre de club")).all())
+                    Role.objects.filter(Q(name="Adhérent BDA") | Q(name="Membre de club")).all())
+            elif self.club.parent_club.name == "BDS":
+                parent_membership.roles.set(
+                    Role.objects.filter(Q(name="Adhérent BDS") | Q(name="Membre de club")).all())
             else:
                 parent_membership.roles.set(Role.objects.filter(name="Membre de club").all())
             parent_membership.save()

@@ -193,7 +193,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=4200,
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
             join_bde=False,
             join_kfet=False,
         ))
@@ -206,7 +205,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=0,
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
             join_bde=False,
             join_kfet=True,
         ))
@@ -219,7 +217,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=0,
             last_name="TOTO",
             first_name="Toto",
-            bank="J'ai pas d'argent",
             join_bde=True,
             join_kfet=True,
         ))
@@ -232,7 +229,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=4000,
             last_name="",
             first_name="",
-            bank="",
             join_bde=True,
             join_kfet=True,
         ))
@@ -248,7 +244,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=500,
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
             join_bde=True,
             join_kfet=False,
         ))
@@ -273,7 +268,6 @@ class TestValidateRegistration(TestCase):
             credit_amount=500,
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
             join_bde=True,
             join_kfet=False,
         ))
@@ -307,16 +301,17 @@ class TestValidateRegistration(TestCase):
             credit_amount=4000,
             last_name="TOTO",
             first_name="Toto",
-            bank="Société générale",
             join_bde=True,
-            join_kfet=True,
+            join_bda=True,
+            join_bds=True
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.user.profile.refresh_from_db()
         self.assertTrue(self.user.profile.registration_valid)
         self.assertTrue(NoteUser.objects.filter(user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="BDE", user=self.user).exists())
-        self.assertTrue(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
+        self.assertTrue(Membership.objects.filter(club__name="BDA", user=self.user).exists())
+        self.assertTrue(Membership.objects.filter(club__name="BDS", user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
             Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
 

@@ -225,9 +225,10 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         user = self.get_object()
         fee = 0
         bde = Club.objects.get(name="BDE")
-        fee += bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
-        kfet = Club.objects.get(name="Kfet")
-        fee += kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
+        bda = Club.objects.get(name="BDA")
+        bds = Club.objects.get(name="BDS")
+        for auto_club in [bde, bda, bds]:
+            fee += auto_club.membership_fee_paid if user.profile.paid else auto_club.membership_fee_unpaid
         ctx["total_fee"] = "{:.02f}".format(fee / 100, )
 
         return ctx
@@ -256,30 +257,20 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
         credit_amount = form.cleaned_data["credit_amount"]
         last_name = form.cleaned_data["last_name"]
         first_name = form.cleaned_data["first_name"]
-        bank = form.cleaned_data["bank"]
         join_bde = form.cleaned_data["join_bde"]
-        join_kfet = form.cleaned_data["join_kfet"]
+        join_bda = form.cleaned_data["join_bda"]
+        join_bds = form.cleaned_data["join_bds"]
 
-
-        if not join_bde:
-            # This software belongs to the BDE.
-            form.add_error('join_bde', _("You must join the BDE."))
-            return super().form_invalid(form)
 
         # Calculate required registration fee
         fee = 0
         bde = Club.objects.get(name="BDE")
-        bde_fee = bde.membership_fee_paid if user.profile.paid else bde.membership_fee_unpaid
-        # This is mandatory.
-        fee += bde_fee if join_bde else 0
-        kfet = Club.objects.get(name="Kfet")
-        kfet_fee = kfet.membership_fee_paid if user.profile.paid else kfet.membership_fee_unpaid
-        # Add extra fee for the full membership
-        fee += kfet_fee if join_kfet else 0
-
-        # If the bank pays, then we don't credit now. Treasurers will validate the transaction
-        # and credit the note later.
-        credit_type = credit_type
+        bda = Club.objects.get(name="BDA")
+        bds = Club.objects.get(name="BDS")
+        for auto_club, auto_join in zip([bde, bda, bds], [join_bde, join_bda, join_bds]):
+            bd_fee = auto_club.membership_fee_paid if user.profile.paid else auto_club.membership_fee_unpaid
+            fee += bd_fee if auto_join else 0
+    
 
         # If the user does not select any payment method, then no credit will be performed.
         credit_amount = 0 if credit_type is None else credit_amount
@@ -314,36 +305,23 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 reason="Crédit " +  credit_type.special_type + " (Inscription)",
                 last_name=last_name,
                 first_name=first_name,
-                bank=bank,
                 valid=True,
             )
+        for auto_club, auto_join, name in zip([bde, bda, bds], [join_bde, join_bda, join_bds], ["Adhérent BDE", "Adhérent BDA", "Adhérent BDS"]):
+            bd_fee = auto_club.membership_fee_paid if user.profile.paid else auto_club.membership_fee_unpaid
 
-        if join_bde:
-            # Create membership for the user to the BDE starting today
-            membership = Membership(
-                club=bde,
-                user=user,
-                fee=bde_fee,
-            )
-            membership.save()
-            membership.refresh_from_db()
-            membership.roles.add(Role.objects.get(name="Adhérent BDE"))
-            membership.save()
+            if auto_join:
+            # Create membership for the user to the BDEAS starting today
+                membership = Membership(
+                    club=auto_club,
+                    user=user,
+                    fee=bd_fee,
+                )
+                membership.save()
+                membership.refresh_from_db()
+                membership.roles.add(Role.objects.get(name=name))
+                membership.save()
 
-        if join_kfet:
-            # Create membership for the user to the Kfet starting today
-            membership = Membership(
-                club=kfet,
-                user=user,
-                fee=kfet_fee,
-            )
-            
-            membership.save()
-            membership.refresh_from_db()
-            membership.roles.add(Role.objects.get(name="Adhérent Kfet"))
-            membership.save()
-
-        
         return ret
 
     def get_success_url(self):

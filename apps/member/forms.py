@@ -186,11 +186,6 @@ class MembershipForm(forms.ModelForm):
         required=False,
     )
 
-    bank = forms.CharField(
-        label=_("Bank"),
-        required=False,
-    )
-
     class Meta:
         model = Membership
         fields = ('user', 'date_start')

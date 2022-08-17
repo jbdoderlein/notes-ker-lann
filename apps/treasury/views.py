@@ -174,7 +174,7 @@ class InvoiceUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
 
 class InvoiceDeleteView(ProtectQuerysetMixin, LoginRequiredMixin, DeleteView):
     """
-    Delete a non-validated WEI registration
+    Delete a non-validated registration
     """
     model = Invoice
     extra_context = {"title": _("Delete invoice")}
@@ -368,7 +368,6 @@ class LinkTransactionToRemittanceView(ProtectQuerysetMixin, LoginRequiredMixin, 
         form = context["form"]
         form.fields["last_name"].initial = self.object.transaction.last_name
         form.fields["first_name"].initial = self.object.transaction.first_name
-        form.fields["bank"].initial = self.object.transaction.bank
         form.fields["amount"].initial = self.object.transaction.amount
         form.fields["remittance"].queryset = form.fields["remittance"] \
             .queryset.filter(remittance_type__note=self.object.transaction.source)

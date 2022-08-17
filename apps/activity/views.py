@@ -340,7 +340,7 @@ UID:{md5((activity.name + "$" + str(activity.id) + str(activity.date_start)).enc
 SUMMARY;CHARSET=UTF-8:{self.multilines(activity.name, 75, 22)}
 DTSTART;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_start)}
 DTEND;TZID=Europe/Berlin:{"{:%Y%m%dT%H%M%S}".format(activity.date_end)}
-LOCATION:{self.multilines(activity.location, 75, 9) if activity.location else "Kfet"}
+LOCATION:{self.multilines(activity.location, 75, 9) if activity.location else "BDA"}
 DESCRIPTION;CHARSET=UTF-8:""" + self.multilines(activity.description.replace("\n", "\\n"), 75, 26) + """
  -- {activity.organizer.name}
 END:VEVENT
