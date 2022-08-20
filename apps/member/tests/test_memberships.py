@@ -49,7 +49,7 @@ class TestMemberships(TestCase):
         self.club = Club.objects.create(name="totoclub", parent_club=Club.objects.get(name="BDE"))
         self.bde_membership = Membership.objects.create(user=self.user, club=Club.objects.get(name="BDE"))
         self.membership = Membership.objects.create(user=self.user, club=self.club)
-        self.membership.roles.add(Role.objects.get(name="Bureau de club"))
+        self.membership.roles.add(Role.objects.get(name="Pr\u00e9sident\u00b7e"))
         self.membership.save()
 
     def test_admin_pages(self):
@@ -251,11 +251,11 @@ class TestMemberships(TestCase):
 
         response = self.client.post(reverse("member:club_manage_roles", args=(self.membership.pk,)), data=dict(
             roles=[role.id for role in Role.objects.filter(
-                Q(name="Membre de club") | Q(name="Trésorier·ère de club") | Q(name="Bureau de club")).all()],
+                Q(name="Trésorier·ère")).all()],
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.membership.refresh_from_db()
-        self.assertEqual(self.membership.roles.count(), 3)
+        self.assertEqual(self.membership.roles.count(), 1)
 
     def test_render_user_list(self):
         """
@@ -389,7 +389,7 @@ class TestMemberAPI(TestAPI):
         )
         self.bde_membership = Membership.objects.create(user=self.user, club=Club.objects.get(name="BDE"))
         self.membership = Membership.objects.create(user=self.user, club=self.club)
-        self.membership.roles.add(Role.objects.get(name="Bureau de club"))
+        self.membership.roles.add(Role.objects.get(name="Pr\u00e9sident\u00b7e"))
         self.membership.save()
 
     def test_club_api(self):

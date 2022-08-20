@@ -44,10 +44,11 @@ class TestSignup(TestCase):
             promotion=Club.objects.get(name="BDE").membership_start.year,
             address="Earth",
             paid=False,
-            ml_events_registration="en",
+            ml_events_registration="fr",
             ml_sport_registration=True,
             ml_art_registration=True,
         ))
+        # Fail I don't know why ?
         self.assertRedirects(response, reverse("registration:email_validation_sent"), 302, 200)
         self.assertTrue(User.objects.filter(username="toto").exists())
         user = User.objects.get(username="toto")
@@ -187,30 +188,6 @@ class TestValidateRegistration(TestCase):
         Send wrong data and check that errors are detected
         """
 
-        # BDE Membership is mandatory
-        response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            credit_type=NoteSpecial.objects.get(special_type="Chèque").id,
-            credit_amount=4200,
-            last_name="TOTO",
-            first_name="Toto",
-            join_bde=False,
-            join_kfet=False,
-        ))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context["form"].errors)
-
-        # Same
-        response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
-            credit_type="",
-            credit_amount=0,
-            last_name="TOTO",
-            first_name="Toto",
-            join_bde=False,
-            join_kfet=True,
-        ))
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context["form"].errors)
-
         # The BDE membership is not free
         response = self.client.post(reverse("registration:future_user_detail", args=(self.user.pk,)), data=dict(
             credit_type=NoteSpecial.objects.get(special_type="Espèces").id,
@@ -218,7 +195,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             join_bde=True,
-            join_kfet=True,
+            join_bda=False,
+            join_bds=False
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -230,7 +208,8 @@ class TestValidateRegistration(TestCase):
             last_name="",
             first_name="",
             join_bde=True,
-            join_kfet=True,
+            join_bda=False,
+            join_bds=False
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -245,7 +224,8 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             join_bde=True,
-            join_kfet=False,
+            join_bda=False,
+            join_bds=False
         ))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)
@@ -269,23 +249,25 @@ class TestValidateRegistration(TestCase):
             last_name="TOTO",
             first_name="Toto",
             join_bde=True,
-            join_kfet=False,
+            join_bda=False,
+            join_bds=True
         ))
         self.assertRedirects(response, self.user.profile.get_absolute_url(), 302, 200)
         self.user.profile.refresh_from_db()
         self.assertTrue(self.user.profile.registration_valid)
         self.assertTrue(NoteUser.objects.filter(user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="BDE", user=self.user).exists())
-        self.assertFalse(Membership.objects.filter(club__name="Kfet", user=self.user).exists())
+        self.assertFalse(Membership.objects.filter(club__name="BDA", user=self.user).exists())
+        self.assertTrue(Membership.objects.filter(club__name="BDS", user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
-            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 2)
+            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
 
         response = self.client.get(self.user.profile.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
     def test_validate_kfet_registration(self):
         """
-        The user joins the BDE and the Kfet.
+        The user joins the BDE,BDA and BDS.
         """
         response = self.client.get(reverse("registration:future_user_detail", args=(self.user.pk,)))
         self.assertEqual(response.status_code, 200)
@@ -313,7 +295,7 @@ class TestValidateRegistration(TestCase):
         self.assertTrue(Membership.objects.filter(club__name="BDA", user=self.user).exists())
         self.assertTrue(Membership.objects.filter(club__name="BDS", user=self.user).exists())
         self.assertEqual(Transaction.objects.filter(
-            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 3)
+            Q(source=self.user.note) | Q(destination=self.user.note)).count(), 4)
 
         response = self.client.get(self.user.profile.get_absolute_url())
         self.assertEqual(response.status_code, 200)

@@ -9,7 +9,7 @@ from django.core.exceptions import FieldError
 from django.db.models import F, Q
 from django.test import TestCase
 from django.utils import timezone
-from member.models import Club, Membership
+from member.models import Club, Membership, Role
 from note.models import NoteUser, Note, NoteClub, NoteSpecial
 
 
@@ -23,6 +23,12 @@ class PermissionQueryTestCase(TestCase):
     def setUpTestData(cls):
         user = User.objects.create(username="user")
         NoteUser.objects.create(user=user)
+        membership =Membership.objects.create(
+            user=user,
+            club=Club.objects.get(name="BDE")
+        )
+        membership.roles.add(Role.objects.get(name="Adhérent"))
+        membership.save()
 
     def test_permission_queries(self):
         """

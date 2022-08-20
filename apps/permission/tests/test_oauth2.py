@@ -58,7 +58,7 @@ class OAuth2TestCase(TestCase):
         # Create membership to validate permissions
         NoteUser.objects.create(user=self.user)
         membership = Membership.objects.create(user=self.user, club_id=bde.pk)
-        membership.roles.add(Role.objects.get(name="Adhérent BDE"))
+        membership.roles.add(Role.objects.get(name="Adhérent"))
         membership.save()
 
         # User is now a member and can now see its own user detail
@@ -85,7 +85,7 @@ class OAuth2TestCase(TestCase):
         bde = Club.objects.get(name="BDE")
         NoteUser.objects.create(user=self.user)
         membership = Membership.objects.create(user=self.user, club_id=bde.pk)
-        membership.roles.add(Role.objects.get(name="Adhérent BDE"))
+        membership.roles.add(Role.objects.get(name="Adhérent"))
         membership.save()
 
         resp = self.client.get(reverse('permission:scopes'))

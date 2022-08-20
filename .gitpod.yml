@@ -32,8 +32,10 @@ tasks:
     init : gp sync-await django
     command: python3 manage.py runserver 0.0.0.0:8000
 ports:
-  - port: 8000
-    onOpen: open-preview
+  - name: Web Dev Server
+    port: 8000
+    visibility: public
+  
   
 
 

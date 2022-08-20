@@ -36,7 +36,7 @@ class TestActivities(TestCase):
             name="Activity",
             description="This is a test activity\non two very very long lines\nbecause this is very important.",
             location="Earth",
-            activity_type=ActivityType.objects.get(name="Activit\u00e9 gratuite ouverte"),
+            activity_type=ActivityType.objects.get(name="Soir\u00e9e"),
             creater=self.user,
             organizer=Club.objects.get(name="BDE"),
             attendees_club=Club.objects.get(name="BDE"),

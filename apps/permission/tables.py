@@ -36,10 +36,7 @@ class RightsTable(tables.Table):
 
     def render_roles(self, record):
         # If the user has the right to manage the roles, display the link to manage them
-        roles = record.roles.filter((~(Q(name="Adhérent BDE")
-                                     | Q(name="Adhérent Kfet")
-                                     | Q(name="Membre de club")
-                                     | Q(name="Bureau de club"))
+        roles = record.roles.filter((~(Q(name="Adhérent"))
                                      )).all()
         s = ", ".join(str(role) for role in roles)
         if PermissionBackend.check_perm(get_current_request(), "member.change_membership_roles", record):

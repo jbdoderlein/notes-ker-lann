@@ -45,7 +45,7 @@ Une fois l'inscription validée, détail de ce qu'il se passe :
   `Trésorerie <treasury>`_ section crédits de la société générale). Nécessairement, le club Kfet doit être rejoint.
 * Sinon, on crédite la note du montant demandé par le nouveau membre (avec comme description "Crédit TYPE (Inscription)"
   où TYPE est le type de crédit), après avoir vérifié que le crédit est suffisant (on n'ouvre pas une note négative)
-* On adhère la personne au BDE, l'adhésion commence aujourd'hui. Il dispose d'un unique rôle : "Adhérent BDE",
+* On adhère la personne au BDE, l'adhésion commence aujourd'hui. Il dispose d'un unique rôle : "Adhérent",
   lui octroyant un faible nombre de permissions de base, telles que la visualisation de son compte.
 * On adhère la personne au club Kfet si cela est demandé, l'adhésion commence aujourd'hui. Il dispose d'un unique rôle :
   "Adhérent Kfet", lui octroyant un nombre un peu plus conséquent de permissions basiques, telles que la possibilité de

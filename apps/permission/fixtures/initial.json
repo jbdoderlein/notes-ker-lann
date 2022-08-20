@@ -1695,12 +1695,12 @@
 				"auth",
 				"user"
 			],
-			"query": "{\"memberships__club__name\": \"BDE\", \"memberships__roles__name\": \"Adhérent BDE\", \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
+			"query": "{\"memberships__club__name\": \"BDE\", \"memberships__roles__name\": \"Adhérent\", \"memberships__date_start__lte\": [\"today\"], \"memberships__date_end__gte\": [\"today\"]}",
 			"type": "view",
 			"mask": 2,
 			"field": "",
 			"permanent": false,
-			"description": "Voir n'importe quel utilisateur qui est adhérent BDE"
+			"description": "Voir n'importe quel utilisateur qui est adhérent"
 		}
 	},
 	{
@@ -1931,8 +1931,8 @@
 		"model": "permission.role",
 		"pk": 1,
 		"fields": {
-			"for_club": 1,
-			"name": "Adh\u00e9rent BDE",
+			"for_club": null,
+			"name": "Adh\u00e9rent",
 			"permissions": [
 				1,
 				2,
@@ -1972,60 +1972,8 @@
 		"model": "permission.role",
 		"pk": 2,
 		"fields": {
-			"for_club": 2,
-			"name": "Adh\u00e9rent Kfet",
-			"permissions": [
-				22,
-				34,
-				36,
-				39,
-				40,
-				152,
-				153,
-				154,
-				155,
-				156,
-				157,
-				158,
-				159,
-				160,
-				179,
-                189,
-                190
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 3,
-		"fields": {
 			"for_club": null,
-			"name": "Membre de club",
-			"permissions": [
-				22
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 4,
-		"fields": {
-			"for_club": null,
-			"name": "Bureau de club",
-			"permissions": [
-				47,
-				49,
-				50,
-				169
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 5,
-		"fields": {
-			"for_club": null,
-			"name": "Pr\u00e9sident\u00b7e de club",
+			"name": "Pr\u00e9sident\u00b7e",
 			"permissions": [
 				50,
 				62
@@ -2034,10 +1982,10 @@
 	},
 	{
 		"model": "permission.role",
-		"pk": 6,
+		"pk": 3,
 		"fields": {
 			"for_club": null,
-			"name": "Tr\u00e9sorier\u00b7\u00e8re de club",
+			"name": "Tr\u00e9sorier\u00b7\u00e8re",
 			"permissions": [
 				59,
 				19,
@@ -2047,7 +1995,6 @@
 				60,
 				61,
 				62,
-				150,
 				166,
 				167,
 				168,
@@ -2059,80 +2006,29 @@
 	},
 	{
 		"model": "permission.role",
-		"pk": 7,
+		"pk": 4,
 		"fields": {
-			"for_club": 1,
-			"name": "Pr\u00e9sident\u00b7e BDE",
+			"for_club": null,
+			"name": "Secr\u00e9taire",
 			"permissions": [
-				24,
-				25,
-				26,
-				27,
-				30,
-				33
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 8,
-		"fields": {
-			"for_club": 1,
-			"name": "Tr\u00e9sorier\u00b7\u00e8re BDE",
-			"permissions": [
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29,
-				30,
-				31,
-				32,
-				33,
-				43,
-				51,
-				53,
 				54,
 				55,
 				56,
 				57,
 				58,
-				63,
-				64,
-				65,
-				66,
-				67,
-				68,
-				69,
+				145,
 				146,
 				147,
-				150,
-				151,
-				163,
-				164,
-				170,
-				171,
-				172,
-				173,
-				174,
-				175,
 				176,
-				177,
-				178,
-                188,
-				183,
-                186,
-                187
+				177
 			]
 		}
 	},
 	{
 		"model": "permission.role",
-		"pk": 9,
+		"pk": 5,
 		"fields": {
-			"for_club": 1,
+			"for_club": null,
 			"name": "Respo info",
 			"permissions": [
 				1,
@@ -2254,126 +2150,6 @@
                 194,
                 195,
                 196
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 10,
-		"fields": {
-			"for_club": 2,
-			"name": "GC Kfet",
-			"permissions": [
-				32,
-				56,
-				58,
-				55,
-				57,
-				52,
-				23,
-				24,
-				25,
-				26,
-				27,
-				28,
-				29,
-				30,
-				31,
-				166,
-				167,
-				168,
-				170,
-				171,
-				176,
-				177,
-				178,
-				179,
-				180,
-				181,
-				182
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 11,
-		"fields": {
-			"for_club": 2,
-			"name": "Res[pot]",
-			"permissions": [
-				37,
-				38,
-				41,
-				42,
-				43,
-				44,
-				45,
-				46,
-				148,
-				149,
-				182
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 17,
-		"fields": {
-			"for_club": null,
-			"name": "1A",
-			"permissions": []
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 19,
-		"fields": {
-			"for_club": 1,
-			"name": "Secrétaire BDE",
-			"permissions": [
-				54,
-				55,
-				56,
-				57,
-				58,
-				145,
-				146,
-				147,
-				150,
-				176,
-				177
-			]
-		}
-	},
-	{
-		"model": "permission.role",
-		"pk": 20,
-		"fields": {
-			"for_club": 1,
-			"name": "PC Kfet",
-			"permissions": [
-				6,
-				22,
-				24,
-				25,
-				26,
-				27,
-				30,
-				49,
-				50,
-				55,
-				56,
-				57,
-				58,
-				147,
-				150,
-				166,
-				167,
-				168,
-				176,
-				177,
-				180,
-				181
 			]
 		}
 	}

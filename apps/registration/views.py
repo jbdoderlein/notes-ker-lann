@@ -307,7 +307,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 first_name=first_name,
                 valid=True,
             )
-        for auto_club, auto_join, name in zip([bde, bda, bds], [join_bde, join_bda, join_bds], ["Adhérent BDE", "Adhérent BDA", "Adhérent BDS"]):
+        for auto_club, auto_join in zip([bde, bda, bds], [join_bde, join_bda, join_bds]):
             bd_fee = auto_club.membership_fee_paid if user.profile.paid else auto_club.membership_fee_unpaid
 
             if auto_join:
@@ -319,7 +319,7 @@ class FutureUserDetailView(ProtectQuerysetMixin, LoginRequiredMixin, FormMixin, 
                 )
                 membership.save()
                 membership.refresh_from_db()
-                membership.roles.add(Role.objects.get(name=name))
+                membership.roles.add(Role.objects.get(name="Adhérent"))
                 membership.save()
 
         return ret

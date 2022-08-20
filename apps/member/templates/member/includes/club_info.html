@@ -1,4 +1,4 @@
-{% load i18n pretty_money perms %}
+{% load i18n pretty_money perms memberinfo %}
 
 <dl class="row">
     <dt class="col-xl-6">{% trans 'name'|capfirst %}</dt>
@@ -39,7 +39,7 @@
     {% endif %}
     {% endif %}
 
-    {% if "note.view_note"|has_perm:club.note %}
+    {% if "note.view_note"|has_perm:club.note and user|is_member:club %}
     <dt class="col-xl-6">{% trans 'balance'|capfirst %}</dt>
     <dd class="col-xl-6">{{ club.note.balance | pretty_money }}</dd>
     {% endif %}

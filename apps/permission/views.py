@@ -131,10 +131,7 @@ class RightsView(TemplateView):
             special_memberships = Membership.objects.filter(
                 date_start__lte=date.today(),
                 date_end__gte=date.today(),
-            ).filter(roles__in=Role.objects.filter((~(Q(name="Adhérent BDE")
-                                                      | Q(name="Adhérent Kfet")
-                                                      | Q(name="Membre de club")
-                                                      | Q(name="Bureau de club"))
+            ).filter(roles__in=Role.objects.filter((~(Q(name="Adhérent"))
                                                     )))\
                 .order_by("club__name", "user__last_name")\
                 .distinct().all()

@@ -445,7 +445,7 @@ class ClubDetailView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
             club.update_membership_dates()
 
         # managers list
-        managers = Membership.objects.filter(club=self.object, roles__name="Bureau de club",
+        managers = Membership.objects.filter(club=self.object, roles__name="Pr\u00e9sident\u00b7e",
                                              date_start__lte=date.today(), date_end__gte=date.today())\
             .order_by('user__last_name').all()
         context["managers"] = ClubManagerTable(data=managers, prefix="managers-")
@@ -744,7 +744,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         # Now, all is fine, the membership can be created.
 
-        if club.name == "BDE":
+        if club.name == "BDE" or club.name == "BDA" or club.name == "BDS":
             # When we renew the BDE membership, we update the profile section
             # that should happens at least once a year.
             user.profile.section = user.profile.section_generated
@@ -772,10 +772,7 @@ class ClubAddMemberView(ProtectQuerysetMixin, ProtectedCreateView):
 
         ret = super().form_valid(form)
 
-        member_role = Role.objects.filter(Q(name="Adhérent BDE") | Q(name="Membre de club")).all() \
-            if club.name == "BDE" else Role.objects.filter(Q(name="Adhérent BDA") | Q(name="Membre de club")).all() \
-            if club.name == "BDA" else Role.objects.filter(Q(name="Adhérent BDS") | Q(name="Membre de club")).all() \
-            if club.name == "BDS" else Role.objects.filter(name="Membre de club").all()
+        member_role = Role.objects.filter(Q(name="Adhérent")).all()
 
         # Set the same roles as before
         if old_membership:
