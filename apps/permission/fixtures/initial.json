@@ -1976,6 +1976,9 @@
 			"name": "Pr\u00e9sident\u00b7e",
 			"permissions": [
 				50,
+				59,
+				60,
+				61,
 				62
 			]
 		}
@@ -1987,11 +1990,11 @@
 			"for_club": null,
 			"name": "Tr\u00e9sorier\u00b7\u00e8re",
 			"permissions": [
-				59,
 				19,
 				20,
 				21,
 				27,
+				59,
 				60,
 				61,
 				62,
@@ -2011,11 +2014,15 @@
 			"for_club": null,
 			"name": "Secr\u00e9taire",
 			"permissions": [
+				21,
 				54,
 				55,
 				56,
 				57,
 				58,
+				59,
+				60,
+				61,
 				145,
 				146,
 				147,
