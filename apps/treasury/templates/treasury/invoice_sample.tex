@@ -47,18 +47,6 @@
     {% endfor %}
 }
 
-% Logo du BDE
-\AddToShipoutPicture*{
-    \put(0,0){
-        \parbox[b][\paperheight]{\paperwidth}{%
-            \vfill
-            \centering
-            \includegraphics[width=\textwidth]{../../apps/treasury/static/img/{{ obj.bde }}_bg.jpg}
-            \vfill
-        }
-    }
-}
-
 
 %%%%%%%%%%%%%%%%%%%%% A MODIFIER DANS LA FACTURE %%%%%%%%%%%%%%%%%%%%%
 % Infos Association
@@ -105,8 +93,8 @@
 
 \renewcommand{\headrulewidth}{0pt}
 \cfoot{
-    \small{\MonNom  ~--~ \MonAdresseRue ~ \MonAdresseVille ~--~ Téléphone : +33(0)6 89 88 56 50\newline
-     Site web : bde.ens-cachan.fr ~--~ E-mail : tresorerie.bde@lists.crans.org \newline Numéro SIRET : 399 485 838 00011
+    \small{\MonNom  ~--~ \MonAdresseRue ~ \MonAdresseVille ~--~ Téléphone : +33(0)6 00 00 00 00\newline
+     Site web : TODO ~--~ E-mail : TODO \newline Numéro SIRET : 000 000 000 00000
     }
 }
 

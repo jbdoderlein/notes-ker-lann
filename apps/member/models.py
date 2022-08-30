@@ -153,7 +153,7 @@ class Profile(models.Model):
         return str(self.user)
 
     def send_email_validation_link(self):
-        subject = "[Note Kfet] " + str(_("Activate your Note Kfet account"))
+        subject = "[Note Ker Lann] " + str(_("Activate your Note Ker Lann account"))
         token = email_validation_token.make_token(self.user)
         uid = urlsafe_base64_encode(force_bytes(self.user_id))
         message = loader.render_to_string('registration/mails/email_validation_email.txt',

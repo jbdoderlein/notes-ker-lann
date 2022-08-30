@@ -189,7 +189,7 @@ class NoteClub(Note):
     def send_mail_negative_balance(self):
         plain_text = render_to_string("note/mails/negative_balance.txt", dict(note=self))
         html = render_to_string("note/mails/negative_balance.html", dict(note=self))
-        send_mail("[Note Kfet] Passage en négatif (club {})".format(self.club.name), plain_text,
+        send_mail("[Note Ker Lann] Passage en négatif (club {})".format(self.club.name), plain_text,
                   settings.DEFAULT_FROM_EMAIL, [self.club.email], html_message=html)
 
 

@@ -31,8 +31,10 @@ class Invoice(models.Model):
         default='BDE',
         choices=(
             ('BDE', 'BDE'),
+            ('BDA', 'BDA'),
+            ('BDS', 'BDS'),
         ),
-        verbose_name=_("BDE"),
+        verbose_name=_("BD?"),
     )
 
     object = models.CharField(
@@ -89,10 +91,10 @@ class Invoice(models.Model):
 
         products = self.products.all()
 
-        self.place = "Gif-sur-Yvette"
-        self.my_name = "BDE ENS Cachan"
-        self.my_address_street = "4 avenue des Sciences"
-        self.my_city = "91190 Gif-sur-Yvette"
+        self.place = "Bruz"
+        self.my_name = f"{self.bde} ENS Rennes"
+        self.my_address_street = "14 avenue Robert Schumann"
+        self.my_city = "35170 Bruz"
         self.bank_code = 30003
         self.desk_code = 3894
         self.account_number = 37280662
