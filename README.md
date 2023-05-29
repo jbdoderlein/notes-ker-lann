@@ -39,7 +39,7 @@ Bien que cela permette de créer une instance sur toutes les distributions,
 2.  **Clonage du dépot** là où vous voulez :
 
     ```bash
-    $ git clone git@gitlab.crans.org:bde/nk20.git --recursive && cd nk20
+    $ git clone git@github.com:jbdoderlein/notes-ker-lann.git --recursive && cd notes-ker-lann
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -129,13 +129,13 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
         nginx python3-venv git acl
     ```
 
-2.  **Clonage du dépot** dans `/var/www/note_kfet`,
+2.  **Clonage du dépot** dans `/var/www/notes-ker-lann`,
 
     ```bash
-    $ sudo mkdir -p /var/www/note_kfet && cd /var/www/note_kfet
+    $ sudo mkdir -p /var/www/notes-ker-lann && cd /var/www/notes-ker-lann
     $ sudo chown www-data:www-data .
     $ sudo chmod g+rwx .
-    $ sudo -u www-data git clone https://gitlab.crans.org/bde/nk20.git --recursive
+    $ sudo -u www-data git clone https://github.com/jbdoderlein/notes-ker-lann.git --recursive
     ```
 
 3.  **Création d'un environment de travail Python décorrélé du système.**
@@ -152,19 +152,19 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
 
     ```bash
     $ cp nginx_note.conf_example nginx_note.conf
-    $ sudo ln -sf /var/www/note_kfet/nginx_note.conf /etc/nginx/sites-enabled/
+    $ sudo ln -sf /var/www/notes-ker-lann/nginx_note.conf /etc/nginx/sites-enabled/
     ```
 
     Si l'on a un emperor (plusieurs instance uwsgi):
 
     ```bash
-    $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/sites/
+    $ sudo ln -sf /var/www/notes-ker-lann/uwsgi_note.ini /etc/uwsgi/sites/
     ```
 
     Sinon si on est dans le cas habituel :
 
     ```bash
-    $ sudo ln -sf /var/www/note_kfet/uwsgi_note.ini /etc/uwsgi/apps-enabled/
+    $ sudo ln -sf /var/www/notes-ker-lann/uwsgi_note.ini /etc/uwsgi/apps-enabled/
     ```
   
     Le touch-reload est activé par défault, pour redémarrer la note il suffit donc de faire `touch uwsgi_note.ini`.
@@ -219,7 +219,7 @@ Sinon vous pouvez suivre les étapes décrites ci-dessous.
         DJANGO_DB_PASSWORD=CHANGE_ME
         DJANGO_DB_PORT=
         DJANGO_SECRET_KEY=CHANGE_ME
-        DJANGO_SETTINGS_MODULE="note_kfet.settings
+        DJANGO_SETTINGS_MODULE="notes-ker-lann.settings
         NOTE_URL=localhost # URL où accéder à la note
         CONTACT_EMAIL=tresorerie.bde@localhost
         # Le reste n'est utile qu'en production, pour configurer l'envoi des mails
@@ -247,21 +247,21 @@ Il est possible de travailler sur une instance Docker.
 Pour construire l'image Docker `nk20`,
 
 ```
-git clone https://gitlab.crans.org/bde/nk20/ --recursive && cd nk20
-docker build . -t nk20
+git clone https://github.com/jbdoderlein/notes-ker-lann.git/ --recursive && cd notes-ker-lann
+docker build . -t notes-ker-lann
 ```
 
-Ensuite pour lancer la note Kfet en tant que vous (option `-u`),
+Ensuite pour lancer la note de Ker Lann en tant que vous (option `-u`),
 l'exposer sur son port 80 (option `-p`) et monter le code en écriture (option `-v`),
 
 ```
-docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/note_kfet/" -p 80:8080 nk20
+docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/notes-ker-lann/" -p 80:8080 nk20
 ```
 
 Si vous souhaitez lancer une commande spéciale, vous pouvez l'ajouter à la fin, par exemple,
 
 ```
-docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/note_kfet/" -p 80:8080 nk20 python3 ./manage.py createsuperuser
+docker run -it --rm -u $(id -u):$(id -g) -v "$(pwd):/var/www/notes-ker-lann/" -p 80:8080 nk20 python3 ./manage.py createsuperuser
 ```
 
 #### Avec Docker Compose
@@ -271,15 +271,15 @@ On vous conseilles de faire un fichier d'environnement `.env` en prenant exemple
 Pour par exemple utiliser le Docker de la note Kfet avec Traefik pour réaliser le HTTPS,
 
 ```YAML
-nk20:
-  build: /chemin/vers/le/code/nk20
+notes-ker-lann:
+  build: /chemin/vers/le/code/notes-ker-lann
   volumes:
-    - /chemin/vers/le/code/nk20:/var/www/note_kfet/
-  env_file: /chemin/vers/le/code/nk20/.env
+    - /chemin/vers/le/code/notes-ker-lann:/var/www/notes-ker-lann/
+  env_file: /chemin/vers/le/code/notes-ker-lann/.env
   restart: always
   labels:
-    - "traefik.http.routers.nk20.rule=Host(`ndd.example.com`)"
-    - "traefik.http.services.nk20.loadbalancer.server.port=8080"
+    - "traefik.http.routers.notes-ker-lann.rule=Host(`ndd.example.com`)"
+    - "traefik.http.services.notes-ker-lann.loadbalancer.server.port=8080"
 ```
 
 ## Documentation
