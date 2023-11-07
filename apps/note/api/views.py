@@ -160,11 +160,13 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         """
 
         queryset = super().get_queryset().distinct()
+        
         # Sqlite doesn't support ORDER BY in subqueries
         queryset = queryset.order_by("name") \
             if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' else queryset
 
         alias = self.request.query_params.get("alias", None)
+        
         # Check if this is a valid regex. If not, we won't check regex
         try:
             re.compile(alias)
@@ -174,13 +176,14 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
         suffix = '__iregex' if valid_regex else '__istartswith'
         alias_prefix = '^' if valid_regex else ''
         queryset = queryset.prefetch_related('note')
-
+        
         if alias:
             # We match first an alias if it is matched without normalization,
             # then if the normalized pattern matches a normalized alias.
             queryset = queryset.filter(
                 **{f'name{suffix}': alias_prefix + alias}
-            ).union(
+            )
+            """.union(
                 queryset.filter(
                     Q(**{f'normalized_name{suffix}': alias_prefix + Alias.normalize(alias)})
                     & ~Q(**{f'name{suffix}': alias_prefix + alias})
@@ -191,12 +194,12 @@ class ConsumerViewSet(ReadOnlyProtectedModelViewSet):
                     & ~Q(**{f'normalized_name{suffix}': alias_prefix + Alias.normalize(alias)})
                     & ~Q(**{f'name{suffix}': alias_prefix + alias})
                 ),
-                all=True)
+                all=True)"""
 
         queryset = queryset if settings.DATABASES[queryset.db]["ENGINE"] == 'django.db.backends.postgresql' \
             else queryset.order_by("name")
 
-        return queryset.distinct()
+        return queryset#.distinct()
 
 
 class TemplateCategoryViewSet(ReadProtectedModelViewSet):

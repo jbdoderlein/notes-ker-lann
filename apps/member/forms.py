@@ -114,7 +114,7 @@ class ImageForm(forms.Form):
                 frame = frame.crop((x, y, x + w, y + h))
                 frame = frame.resize(
                     (settings.PIC_WIDTH, settings.PIC_RATIO * settings.PIC_WIDTH),
-                    Image.ANTIALIAS,
+                    Image.Resampling.LANCZOS,
                 )
                 frames.append(frame)
 
