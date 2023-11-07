@@ -25,8 +25,9 @@ admin_site.register(Site, SiteAdmin)
 
 # Add external apps model
 if "oauth2_provider" in settings.INSTALLED_APPS:
-    from oauth2_provider.admin import Application, ApplicationAdmin, Grant, \
-        GrantAdmin, AccessToken, AccessTokenAdmin, RefreshToken, RefreshTokenAdmin
+    from oauth2_provider.models import Application, Grant, AccessToken, RefreshToken
+    from oauth2_provider.admin import ApplicationAdmin, \
+        GrantAdmin,  AccessTokenAdmin,  RefreshTokenAdmin
     admin_site.register(Application, ApplicationAdmin)
     admin_site.register(Grant, GrantAdmin)
     admin_site.register(AccessToken, AccessTokenAdmin)
