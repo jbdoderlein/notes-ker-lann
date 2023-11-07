@@ -35,6 +35,22 @@ Bien que cela permette de créer une instance sur toutes les distributions,
         texlive-bin gettext ttf-font-awesome git
     $ paru -S bootstrap jquery # AUR only, need manuel install bootstrap4 and popper.js
     ```
+    Pour Arch il faut installer manuellement libjs-bootstrap4, popper.js et jquery par l'AUR : 
+    ```bash
+    yay -S jquery
+    ```
+    ```bash
+    mkdir temp
+    cd temp
+    curl http://fr.archive.ubuntu.com/ubuntu/pool/universe/p/popper.js/libjs-popper.js_1.16.1+ds-6_all.deb --output libjs-popper.js_1.16.1+ds-6_all.deb
+    curl http://fr.archive.ubuntu.com/ubuntu/pool/universe/t/twitter-bootstrap4/libjs-bootstrap4_4.6.1+dfsg1-4_all.deb -o libjs-bootstrap4_4.6.1+dfsg1-4_all.deb # Dl paquet Debian
+    ar vx libjs-bootstrap4_4.6.1+dfsg1-4_all.deb # Unpack deb
+    ar -xvf data.tar.zst # Extract files
+    ar vx libjs-popper.js_1.16.1+ds-6_all.deb # Unpack deb
+    ar -xvf data.tar.zst # Extract files
+    sudo cp -Rp usr/* /usr # Copy file to correct locations
+    ```
+    Proposer un packaging correct pour Arch de ce paquet serait une bonne idée.
 
 2.  **Clonage du dépot** là où vous voulez :
 
