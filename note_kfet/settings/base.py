@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # External apps
     'bootstrap_datepicker_plus',
     'colorfield',
+    'bootstrap4',
+    'crispy_bootstrap4',
     'crispy_forms',
     'django_htcpcp_tea',
     'django_tables2',
@@ -294,3 +296,5 @@ PHONENUMBER_DEFAULT_REGION = 'FR'
 
 # We add custom information to CAS, in order to give a normalized name to other services
 CAS_AUTH_CLASS = 'member.auth.CustomAuthUser'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 

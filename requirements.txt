@@ -15,3 +15,4 @@ django-tables2
 python-memcached
 phonenumbers
 Pillow
+crispy_bootstrap4

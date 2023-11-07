@@ -9,7 +9,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
            name="{{ widget.name }}"
            {# Other attributes are loaded  #}
            {% for name, value in widget.attrs.items %}
-                {% ifnotequal value False %}{{ name }}{% ifnotequal value True %}="{{ value|stringformat:'s' }}"{% endifnotequal %}{% endifnotequal %}
+                {% if value != False %}
+                    {{ name }}
+                    {% if value != True %}
+                        ="{{ value|stringformat:'s' }}"
+                    {% endif %}
+                {% endif %}
             {% endfor %}>
     <div class="input-group-append">
         <span class="input-group-text">€</span>
