@@ -48,7 +48,7 @@
         <dd class="col-xl-6">{{ user_object.profile.address }}</dd>
 
         <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
-        <dd class="col-xl-6">{{ user_object.profile.paid|yesno }}</dd>
+        <dd class="col-xl-6">{{ user_object.profile.paid|yesno:_("yes,no,maybe") }}</dd>
     {% endif %}
 
     {% if user_object.note and "note.view_note"|has_perm:user_object.note %}

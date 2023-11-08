@@ -41,7 +41,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <dd class="col-xl-6">{{ object.profile.phone_number }}</dd>
 
                         <dt class="col-xl-6">{% trans 'paid'|capfirst %}</dt>
-                        <dd class="col-xl-6">{{ object.profile.paid|yesno }}</dd>
+                        <dd class="col-xl-6">{{ object.profile.paid|yesno:_("yes,no,maybe") }}</dd>
                     </dl>
                 </div>
                 <div class="card-footer text-center">

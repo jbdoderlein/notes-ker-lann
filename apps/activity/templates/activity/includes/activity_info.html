@@ -40,7 +40,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <dd class="col-xl-6"><a href="{% url "member:club_detail" pk=activity.attendees_club.pk %}">{{ activity.attendees_club }}</a></dd>
 
             <dt class="col-xl-6">{% trans 'can invite'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ activity.activity_type.can_invite|yesno }}</dd>
+            <dd class="col-xl-6">{{ activity.activity_type.can_invite|yesno:_("yes,no,maybe") }}</dd>
 
             {% if activity.activity_type.can_invite %}
                 <dt class="col-xl-6">{% trans 'guest entry fee'|capfirst %}</dt>
@@ -48,10 +48,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
             {% endif %}
 
             <dt class="col-xl-6">{% trans 'valid'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ activity.valid|yesno }}</dd>
+            <dd class="col-xl-6">{{ activity.valid|yesno:_("yes,no,maybe") }}</dd>
 
             <dt class="col-xl-6">{% trans 'opened'|capfirst %}</dt>
-            <dd class="col-xl-6">{{ activity.open|yesno }}</dd>
+            <dd class="col-xl-6">{{ activity.open|yesno:_("yes,no,maybe") }}</dd>
         </dl>
     </div>
 
