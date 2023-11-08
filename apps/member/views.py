@@ -28,7 +28,7 @@ from permission.models import Role
 from permission.views import ProtectQuerysetMixin, ProtectedCreateView
 
 from .forms import UserForm, ProfileForm, ImageForm, ClubForm, MembershipForm,\
-    CustomAuthenticationForm, MembershipRolesForm
+    MembershipRolesForm, AuthenticationForm
 from .models import Club, Membership
 from .tables import ClubTable, UserTable, MembershipTable, ClubManagerTable
 
@@ -37,14 +37,14 @@ class CustomLoginView(LoginView):
     """
     Login view, where the user can select its permission mask.
     """
-    form_class = CustomAuthenticationForm
+    form_class = AuthenticationForm
 
     @transaction.atomic
     def form_valid(self, form):
         logout(self.request)
         self.request.user = form.get_user()
         _set_current_request(self.request)
-        self.request.session['permission_mask'] = form.cleaned_data['permission_mask'].rank
+        self.request.session['permission_mask'] = 42#form.cleaned_data['permission_mask'].rank
         return super().form_valid(form)
 
 
@@ -269,7 +269,7 @@ class ProfileTrustView(ProtectQuerysetMixin, LoginRequiredMixin, DetailView):
                 "class": "autocomplete form-control",
                 "id": "trusted",
                 "resetable": True,
-                "api_url": "/api/note/alias/?note__polymorphic_ctype__model=noteuser",
+                "api_url": "/api/note/alias/",
                 "name_field": "name",
                 "placeholder": ""
             }

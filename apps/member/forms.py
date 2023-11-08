@@ -19,14 +19,6 @@ from permission.models import PermissionMask, Role
 from .models import Profile, Club, Membership
 
 
-class CustomAuthenticationForm(AuthenticationForm):
-    permission_mask = forms.ModelChoiceField(
-        label=_("Permission mask"),
-        queryset=PermissionMask.objects.order_by("rank"),
-        empty_label=None,
-    )
-
-
 class UserForm(forms.ModelForm):
     def _get_validation_exclusions(self):
         # Django usernames can only contain letters, numbers, @, ., +, - and _.
