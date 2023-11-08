@@ -66,7 +66,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                             <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-coffee"></i> {% trans 'Consumptions' %}</a>
                         </li>
                     {% endif %}
-                    {% if user.is_authenticated and user|is_member:"Kfet" %}
+                    {% if user.is_authenticated and user|is_member:"Sinfonie" %}
                         <li class="nav-item">
                             {% url 'note:transfer' as url %}
                             <a class="nav-link {% if request.path_info == url %}active{% endif %}" href="{{ url }}"><i class="fa fa-exchange"></i> {% trans 'Transfer' %} </a>

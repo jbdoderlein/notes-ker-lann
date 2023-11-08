@@ -7,8 +7,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
 <input type="text"
    {% if widget.value != None and widget.value != "" %}value="{{ widget.value }}"{% endif %}
    name="{{ widget.name }}_name" autocomplete="off"
-    {% for name, value in widget.attrs.items %}
-        {% ifnotequal value False %}{{ name }}{% ifnotequal value True %}="{{ value|stringformat:'s' }}"{% endifnotequal %}{% endifnotequal %}
+   {% for name, value in widget.attrs.items %}
+        {% if value != False %}
+            {{ name }}
+            {% if value != True %}
+                ="{{ value|stringformat:'s' }}"
+            {% endif %}
+        {% endif %}
     {% endfor %}
     aria-describedby="{{widget.attrs.id}}_tooltip">
     {% if widget.resetable %}

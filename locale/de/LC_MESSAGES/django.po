@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-10 22:34+0200\n"
+"POT-Creation-Date: 2023-11-08 10:30+0100\n"
 "PO-Revision-Date: 2020-11-16 20:02+0000\n"
 "Last-Translator: Yohann D'ANELLO <ynerant@crans.org>\n"
 "Language-Team: German <http://translate.ynerant.fr/projects/nk20/nk20/de/>\n"
@@ -53,16 +53,13 @@ msgid "You can't invite more than 3 people to this activity."
 msgstr "Sie dürfen höchstens 3 Leute zu dieser Veranstaltung einladen."
 
 #: apps/activity/models.py:28 apps/activity/models.py:63
-#: apps/member/models.py:199
+#: apps/member/models.py:182
 #: apps/member/templates/member/includes/club_info.html:4
 #: apps/member/templates/member/includes/profile_info.html:4
 #: apps/note/models/notes.py:263 apps/note/models/transactions.py:26
 #: apps/note/models/transactions.py:46 apps/note/models/transactions.py:301
 #: apps/permission/models.py:330
 #: apps/registration/templates/registration/future_profile_detail.html:16
-#: apps/wei/models.py:67 apps/wei/models.py:131 apps/wei/tables.py:282
-#: apps/wei/templates/wei/base.html:26
-#: apps/wei/templates/wei/weimembership_form.html:14
 msgid "name"
 msgstr "Name"
 
@@ -95,7 +92,7 @@ msgstr "Vearnstaltungarte"
 #: apps/activity/models.py:68
 #: apps/activity/templates/activity/includes/activity_info.html:19
 #: apps/note/models/transactions.py:81 apps/permission/models.py:110
-#: apps/permission/models.py:189 apps/wei/models.py:78 apps/wei/models.py:142
+#: apps/permission/models.py:189
 msgid "description"
 msgstr "Beschreibung"
 
@@ -104,7 +101,9 @@ msgid "location"
 msgstr "Ort"
 
 #: apps/activity/models.py:76
-msgid "Place where the activity is organized, eg. Kfet."
+#, fuzzy
+#| msgid "Place where the activity is organized, eg. Kfet."
+msgid "Place where the activity is organized, eg. BDE."
 msgstr "Wo findet die Veranstaltung statt ? (z.B Kfet)."
 
 #: apps/activity/models.py:83
@@ -114,10 +113,8 @@ msgstr "Wo findet die Veranstaltung statt ? (z.B Kfet)."
 msgid "type"
 msgstr "Type"
 
-#: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:307
-#: apps/note/models/notes.py:148 apps/treasury/models.py:285
-#: apps/wei/models.py:173 apps/wei/templates/wei/attribute_bus_1A.html:13
-#: apps/wei/templates/wei/survey.html:15
+#: apps/activity/models.py:89 apps/logs/models.py:22 apps/member/models.py:290
+#: apps/note/models/notes.py:148
 msgid "user"
 msgstr "User"
 
@@ -138,7 +135,9 @@ msgid "attendees club"
 msgstr "Teilnehmer"
 
 #: apps/activity/models.py:105
-msgid "Club that is authorized to join the activity. Mostly the Kfet club."
+#, fuzzy
+#| msgid "Club that is authorized to join the activity. Mostly the Kfet club."
+msgid "Club that is authorized to join the activity."
 msgstr "Club die an die Veranstaltung teilnehmen können."
 
 #: apps/activity/models.py:109
@@ -209,7 +208,6 @@ msgstr "Kontostand ist im Rot."
 
 #: apps/activity/models.py:240
 #: apps/treasury/templates/treasury/sogecredit_detail.html:14
-#: apps/wei/templates/wei/attribute_bus_1A.html:16
 msgid "last name"
 msgstr "Nachname"
 
@@ -217,8 +215,6 @@ msgstr "Nachname"
 #: apps/member/templates/member/includes/profile_info.html:4
 #: apps/registration/templates/registration/future_profile_detail.html:16
 #: apps/treasury/templates/treasury/sogecredit_detail.html:17
-#: apps/wei/templates/wei/attribute_bus_1A.html:19
-#: apps/wei/templates/wei/weimembership_form.html:14
 msgid "first name"
 msgstr "Vorname"
 
@@ -258,20 +254,18 @@ msgstr "Eingetreten um "
 msgid "remove"
 msgstr "entfernen"
 
-#: apps/activity/tables.py:82 apps/note/forms.py:68 apps/treasury/models.py:199
+#: apps/activity/tables.py:82 apps/note/forms.py:68 apps/treasury/models.py:196
 msgid "Type"
 msgstr "Type"
 
-#: apps/activity/tables.py:84 apps/member/forms.py:186
-#: apps/registration/forms.py:91 apps/treasury/forms.py:131
-#: apps/wei/forms/registration.py:104
+#: apps/activity/tables.py:84 apps/member/forms.py:180
+#: apps/registration/forms.py:68 apps/treasury/forms.py:131
 msgid "Last name"
 msgstr "Nachname"
 
-#: apps/activity/tables.py:86 apps/member/forms.py:191
+#: apps/activity/tables.py:86 apps/member/forms.py:185
 #: apps/note/templates/note/transaction_form.html:138
-#: apps/registration/forms.py:96 apps/treasury/forms.py:133
-#: apps/wei/forms/registration.py:109
+#: apps/registration/forms.py:73 apps/treasury/forms.py:133
 msgid "First name"
 msgstr "Vorname"
 
@@ -296,19 +290,19 @@ msgstr "Gastliste"
 #: apps/activity/templates/activity/activity_entry.html:14
 #: apps/note/models/transactions.py:257
 #: apps/note/templates/note/transaction_form.html:17
-#: apps/note/templates/note/transaction_form.html:152
+#: apps/note/templates/note/transaction_form.html:146
 #: note_kfet/templates/base.html:72
 msgid "Transfer"
 msgstr "Überweisen"
 
 #: apps/activity/templates/activity/activity_entry.html:18
-#: apps/note/models/transactions.py:317
+#: apps/note/models/transactions.py:312
 #: apps/note/templates/note/transaction_form.html:22
 msgid "Credit"
 msgstr "Kredit"
 
 #: apps/activity/templates/activity/activity_entry.html:21
-#: apps/note/models/transactions.py:317
+#: apps/note/models/transactions.py:312
 #: apps/note/templates/note/transaction_form.html:26
 msgid "Debit"
 msgstr "Soll"
@@ -324,7 +318,7 @@ msgstr "Zurück zur Veranstaltungseite"
 
 #: apps/activity/templates/activity/activity_entry.html:94
 #: apps/activity/templates/activity/activity_entry.html:129
-msgid "Entry done, but caution: the user is not a Kfet member."
+msgid "Entry done, but caution: the user is not a member."
 msgstr ""
 
 #: apps/activity/templates/activity/activity_entry.html:132
@@ -334,15 +328,11 @@ msgid "Entry done!"
 msgstr "Eintrittseite"
 
 #: apps/activity/templates/activity/activity_form.html:16
-#: apps/member/templates/member/add_members.html:46
+#: apps/member/templates/member/add_members.html:32
 #: apps/member/templates/member/club_form.html:16
 #: apps/note/templates/note/transactiontemplate_form.html:18
-#: apps/treasury/forms.py:89 apps/treasury/forms.py:143
+#: apps/treasury/forms.py:89 apps/treasury/forms.py:141
 #: apps/treasury/templates/treasury/invoice_form.html:74
-#: apps/wei/templates/wei/bus_form.html:17
-#: apps/wei/templates/wei/busteam_form.html:17
-#: apps/wei/templates/wei/weiclub_form.html:17
-#: apps/wei/templates/wei/weiregistration_form.html:18
 msgid "Submit"
 msgstr "Vorlegen"
 
@@ -379,6 +369,9 @@ msgid "Entry page"
 msgstr "Eintrittseite"
 
 #: apps/activity/templates/activity/includes/activity_info.html:65
+#: env/lib/python3.11/site-packages/bootstrap4/components.py:17
+#: env/lib/python3.11/site-packages/bootstrap4/templates/bootstrap4/form_errors.html:3
+#: env/lib/python3.11/site-packages/bootstrap4/templates/bootstrap4/messages.html:4
 msgid "close"
 msgstr "Schlusss"
 
@@ -469,7 +462,7 @@ msgstr "schaffen"
 
 #: apps/logs/models.py:65 apps/note/tables.py:166 apps/note/tables.py:190
 #: apps/note/tables.py:237 apps/permission/models.py:127
-#: apps/treasury/tables.py:38 apps/wei/tables.py:74
+#: apps/treasury/tables.py:38
 msgid "delete"
 msgstr "entfernen"
 
@@ -498,25 +491,25 @@ msgstr "Changelogs"
 msgid "Changelog of type \"{action}\" for model {model} at {timestamp}"
 msgstr "Changelog \"{action}\" für Model {model} an {timestamp}"
 
-#: apps/member/admin.py:50 apps/member/models.py:226
+#: apps/member/admin.py:50 apps/member/models.py:209
 #: apps/member/templates/member/includes/club_info.html:34
 msgid "membership fee (paid students)"
 msgstr "Mitgliedschaftpreis (bezahlte Studenten)"
 
-#: apps/member/admin.py:51 apps/member/models.py:231
+#: apps/member/admin.py:51 apps/member/models.py:214
 #: apps/member/templates/member/includes/club_info.html:37
 msgid "membership fee (unpaid students)"
 msgstr "Mitgliedschaftpreis (unbezahlte Studenten)"
 
-#: apps/member/admin.py:65 apps/member/models.py:319
+#: apps/member/admin.py:65 apps/member/models.py:302
 msgid "roles"
 msgstr "Rollen"
 
-#: apps/member/admin.py:66 apps/member/models.py:333
+#: apps/member/admin.py:66 apps/member/models.py:316
 msgid "fee"
 msgstr "Preis"
 
-#: apps/member/apps.py:14 apps/wei/tables.py:226 apps/wei/tables.py:257
+#: apps/member/apps.py:14
 msgid "member"
 msgstr "Mitglied"
 
@@ -549,48 +542,31 @@ msgid "This image cannot be loaded."
 msgstr "Dieses Bild kann nicht geladen werden."
 
 #: apps/member/forms.py:141 apps/member/views.py:103
-#: apps/registration/forms.py:33 apps/registration/views.py:262
+#: apps/registration/forms.py:33 apps/registration/views.py:252
 msgid "An alias with a similar name already exists."
 msgstr "Ein ähnliches Alias ist schon benutzt."
 
-#: apps/member/forms.py:165 apps/registration/forms.py:71
-msgid "Inscription paid by Société Générale"
-msgstr "Mitgliedschaft von der Société Générale bezahlt"
-
-#: apps/member/forms.py:167 apps/registration/forms.py:73
-msgid "Check this case if the Société Générale paid the inscription."
-msgstr "Die Société Générale die Mitgliedschaft bezahlt."
-
-#: apps/member/forms.py:172 apps/registration/forms.py:78
-#: apps/wei/forms/registration.py:91
+#: apps/member/forms.py:166 apps/registration/forms.py:55
 msgid "Credit type"
 msgstr "Kredittype"
 
-#: apps/member/forms.py:173 apps/registration/forms.py:79
-#: apps/wei/forms/registration.py:92
+#: apps/member/forms.py:167 apps/registration/forms.py:56
 msgid "No credit"
 msgstr "Kein Kredit"
 
-#: apps/member/forms.py:175
+#: apps/member/forms.py:169
 msgid "You can credit the note of the user."
 msgstr "Sie dûrfen diese Note kreditieren."
 
-#: apps/member/forms.py:179 apps/registration/forms.py:84
-#: apps/wei/forms/registration.py:97
+#: apps/member/forms.py:173 apps/registration/forms.py:61
 msgid "Credit amount"
 msgstr "Kreditanzahl"
 
-#: apps/member/forms.py:196 apps/note/templates/note/transaction_form.html:144
-#: apps/registration/forms.py:101 apps/treasury/forms.py:135
-#: apps/wei/forms/registration.py:114
-msgid "Bank"
-msgstr "Bank"
-
-#: apps/member/forms.py:223
+#: apps/member/forms.py:212
 msgid "User"
 msgstr "User"
 
-#: apps/member/forms.py:237
+#: apps/member/forms.py:226
 msgid "Roles"
 msgstr "Rollen"
 
@@ -615,14 +591,12 @@ msgstr ""
 #: apps/member/models.py:38
 #: apps/member/templates/member/includes/profile_info.html:43
 #: apps/registration/templates/registration/future_profile_detail.html:40
-#: apps/wei/templates/wei/weimembership_form.html:44
 msgid "phone number"
 msgstr "Telefonnummer"
 
 #: apps/member/models.py:45
 #: apps/member/templates/member/includes/profile_info.html:37
 #: apps/registration/templates/registration/future_profile_detail.html:34
-#: apps/wei/templates/wei/weimembership_form.html:38
 msgid "section"
 msgstr "Section"
 
@@ -630,114 +604,79 @@ msgstr "Section"
 msgid "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 msgstr "e.g. \"1A0\", \"9A♥\", \"SAPHIRE\""
 
-#: apps/member/models.py:54 apps/wei/templates/wei/attribute_bus_1A.html:25
-#: apps/wei/templates/wei/weimembership_form.html:32
+#: apps/member/models.py:54
 msgid "department"
 msgstr "Fachabteilung"
 
 #: apps/member/models.py:56
-msgid "Informatics (A0)"
+#, fuzzy
+#| msgid "Informatics (A0)"
+msgid "Informatique"
 msgstr "Informatik (A0)"
 
 #: apps/member/models.py:57
-msgid "Mathematics (A1)"
+#, fuzzy
+#| msgid "Mathematics (A1)"
+msgid "Mathématiques"
 msgstr "Mathematik (A1)"
 
 #: apps/member/models.py:58
-msgid "Physics (A2)"
-msgstr "Physik (A2)"
-
-#: apps/member/models.py:59
-msgid "Applied physics (A'2)"
-msgstr "Angewandte Physik (A'2)"
-
-#: apps/member/models.py:60
-msgid "Chemistry (A''2)"
-msgstr "Chemie (A''2)"
-
-#: apps/member/models.py:61
-msgid "Biology (A3)"
-msgstr "Biologie (A3)"
-
-#: apps/member/models.py:62
-msgid "SAPHIRE (B1234)"
-msgstr "SAPHIRE (B1234)"
-
-#: apps/member/models.py:63
-msgid "Mechanics (B1)"
-msgstr "Mechanik (B1)"
-
-#: apps/member/models.py:64
-msgid "Civil engineering (B2)"
-msgstr "Bauingenieur (B2)"
-
-#: apps/member/models.py:65
-msgid "Mechanical engineering (B3)"
-msgstr "Mechanikingenieur (B3)"
-
-#: apps/member/models.py:66
-msgid "EEA (B4)"
-msgstr "Electrotechnik (B4)"
-
-#: apps/member/models.py:67
-msgid "Design (C)"
-msgstr "Design (C)"
-
-#: apps/member/models.py:68
-msgid "Economy-management (D2)"
+#, fuzzy
+#| msgid "Economy-management (D2)"
+msgid "Droit - économie - management"
 msgstr "Wirtschaftingenieure (D2)"
 
+#: apps/member/models.py:59
+msgid "Mécatronique"
+msgstr ""
+
+#: apps/member/models.py:60
+msgid "Sciences du sport et éducation physique"
+msgstr ""
+
+#: apps/member/models.py:61
+msgid "Sciences pour l’Environnement"
+msgstr ""
+
+#: apps/member/models.py:62
+msgid "Externe"
+msgstr ""
+
 #: apps/member/models.py:69
-msgid "Social sciences (D3)"
-msgstr "Sozialwissenschaften (D3)"
-
-#: apps/member/models.py:70
-msgid "English (E)"
-msgstr "English (E)"
-
-#: apps/member/models.py:71
-msgid "External (EXT)"
-msgstr "Extern (EXT)"
-
-#: apps/member/models.py:78
 msgid "promotion"
 msgstr "Promotion"
 
-#: apps/member/models.py:79
+#: apps/member/models.py:70
 msgid "Year of entry to the school (None if not ENS student)"
 msgstr "ENS Eintrittjahr (None wenn kein ENS Student)"
 
-#: apps/member/models.py:83
+#: apps/member/models.py:74
 #: apps/member/templates/member/includes/profile_info.html:47
 #: apps/registration/templates/registration/future_profile_detail.html:37
-#: apps/wei/templates/wei/weimembership_form.html:41
 msgid "address"
 msgstr "Adresse"
 
-#: apps/member/models.py:90
+#: apps/member/models.py:81
 #: apps/member/templates/member/includes/profile_info.html:50
 #: apps/registration/templates/registration/future_profile_detail.html:43
-#: apps/wei/templates/wei/weimembership_form.html:47
 msgid "paid"
 msgstr "bezahlt"
 
-#: apps/member/models.py:91
+#: apps/member/models.py:82
 msgid "Tells if the user receive a salary."
 msgstr "User ist bezahlt."
 
-#: apps/member/models.py:100 apps/treasury/tables.py:143
+#: apps/member/models.py:91
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:796
 msgid "No"
 msgstr "Nein"
 
-#: apps/member/models.py:101
-msgid "Yes (receive them in french)"
-msgstr "Ja (auf Fränzosich)"
+#: apps/member/models.py:92
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:795
+msgid "Yes"
+msgstr "Ja"
 
-#: apps/member/models.py:102
-msgid "Yes (receive them in english)"
-msgstr "Ja (auf English)"
-
-#: apps/member/models.py:104
+#: apps/member/models.py:94
 msgid ""
 "Register on the mailing list to stay informed of the events of the campus (1 "
 "mail/week)"
@@ -745,7 +684,7 @@ msgstr ""
 "Melden Sie sich auf der Mailingliste an, um über die Ereignisse des Campus "
 "informiert zu bleiben (1 Mail / Woche)"
 
-#: apps/member/models.py:109
+#: apps/member/models.py:99
 msgid ""
 "Register on the mailing list to stay informed of the sport events of the "
 "campus (1 mail/week)"
@@ -753,7 +692,7 @@ msgstr ""
 "Melden Sie sich auf der Mailingliste an, um über die Sportereignisse des "
 "Campus informiert zu bleiben (1 Mail / Woche)"
 
-#: apps/member/models.py:114
+#: apps/member/models.py:104
 msgid ""
 "Register on the mailing list to stay informed of the art events of the "
 "campus (1 mail/week)"
@@ -761,121 +700,121 @@ msgstr ""
 "Melden Sie sich auf der Mailingliste an, um über die Kunstereignisse des "
 "Campus informiert zu bleiben (1 Mail / Woche)"
 
-#: apps/member/models.py:118
+#: apps/member/models.py:108
 msgid "report frequency (in days)"
 msgstr "Bericht Frequenz (Tagen)"
 
-#: apps/member/models.py:123
+#: apps/member/models.py:113
 msgid "last report date"
 msgstr "letzen Bericht Datum"
 
-#: apps/member/models.py:128
+#: apps/member/models.py:118
 msgid "email confirmed"
 msgstr "email bestätigt"
 
-#: apps/member/models.py:133
+#: apps/member/models.py:123
 msgid "registration valid"
 msgstr "Anmeldung gültig"
 
-#: apps/member/models.py:162 apps/member/models.py:163
+#: apps/member/models.py:145 apps/member/models.py:146
 msgid "user profile"
 msgstr "Userprofile"
 
-#: apps/member/models.py:173
-msgid "Activate your Note Kfet account"
+#: apps/member/models.py:156
+#, fuzzy
+#| msgid "Activate your Note Kfet account"
+msgid "Activate your Note Ker Lann account"
 msgstr "Ihre Note Kfet Konto bestätigen"
 
-#: apps/member/models.py:204
+#: apps/member/models.py:187
 #: apps/member/templates/member/includes/club_info.html:55
 #: apps/member/templates/member/includes/profile_info.html:40
 #: apps/registration/templates/registration/future_profile_detail.html:22
-#: apps/wei/templates/wei/base.html:70
-#: apps/wei/templates/wei/weimembership_form.html:20
 msgid "email"
 msgstr "Email"
 
-#: apps/member/models.py:211
+#: apps/member/models.py:194
 msgid "parent club"
 msgstr "Urclub"
 
-#: apps/member/models.py:220
+#: apps/member/models.py:203
 msgid "require memberships"
 msgstr "erfordern Mitgliedschaft"
 
-#: apps/member/models.py:221
+#: apps/member/models.py:204
 msgid "Uncheck if this club don't require memberships."
 msgstr ""
 "Deaktivieren Sie diese Option, wenn für diesen Club keine Mitgliedschaft "
 "erforderlich ist."
 
-#: apps/member/models.py:237
+#: apps/member/models.py:220
 #: apps/member/templates/member/includes/club_info.html:26
 msgid "membership duration"
 msgstr "Mitgliedscahftzeit"
 
-#: apps/member/models.py:238
+#: apps/member/models.py:221
 msgid "The longest time (in days) a membership can last (NULL = infinite)."
 msgstr "Wie lang am höchsten eine Mitgliedschaft dauern kann."
 
-#: apps/member/models.py:245
+#: apps/member/models.py:228
 #: apps/member/templates/member/includes/club_info.html:16
 msgid "membership start"
 msgstr "Mitgliedschaftanfangsdatum"
 
-#: apps/member/models.py:246
+#: apps/member/models.py:229
 msgid "Date from which the members can renew their membership."
 msgstr "Ab wann kann man sein Mitgliedschaft erneuern."
 
-#: apps/member/models.py:252
+#: apps/member/models.py:235
 #: apps/member/templates/member/includes/club_info.html:21
 msgid "membership end"
 msgstr "Mitgliedschaftenddatum"
 
-#: apps/member/models.py:253
+#: apps/member/models.py:236
 msgid "Maximal date of a membership, after which members must renew it."
 msgstr ""
 "Maximales Datum einer Mitgliedschaft, nach dem Mitglieder es erneuern müssen."
 
-#: apps/member/models.py:288 apps/member/models.py:313
+#: apps/member/models.py:271 apps/member/models.py:296
 #: apps/note/models/notes.py:176
 msgid "club"
 msgstr "Club"
 
-#: apps/member/models.py:289
+#: apps/member/models.py:272
 msgid "clubs"
 msgstr "Clubs"
 
-#: apps/member/models.py:324
+#: apps/member/models.py:307
 msgid "membership starts on"
 msgstr "Mitgliedschaft fängt an"
 
-#: apps/member/models.py:328
+#: apps/member/models.py:311
 msgid "membership ends on"
 msgstr "Mitgliedschaft endet am"
 
-#: apps/member/models.py:430
+#: apps/member/models.py:404
 #, python-brace-format
 msgid "The role {role} does not apply to the club {club}."
 msgstr "Die Rolle {role} ist nicht erlaubt für das Club {club}."
 
-#: apps/member/models.py:439 apps/member/views.py:712
+#: apps/member/models.py:413 apps/member/views.py:672
 msgid "User is already a member of the club"
 msgstr "User ist schon ein Mitglied dieser club"
 
-#: apps/member/models.py:451 apps/member/views.py:721
+#: apps/member/models.py:425 apps/member/views.py:681
 msgid "User is not a member of the parent club"
 msgstr "User ist noch nicht Mitglied des Urclubs"
 
-#: apps/member/models.py:504
+#: apps/member/models.py:459
 #, python-brace-format
 msgid "Membership of {user} for the club {club}"
 msgstr "Mitgliedschaft von {user} für das Club {club}"
 
-#: apps/member/models.py:507 apps/note/models/transactions.py:389
+#: apps/member/models.py:462 apps/note/models/transactions.py:380
 msgid "membership"
 msgstr "Mitgliedschaft"
 
-#: apps/member/models.py:508
+#: apps/member/models.py:463
 msgid "memberships"
 msgstr "Mitgliedschaften"
 
@@ -883,18 +822,7 @@ msgstr "Mitgliedschaften"
 msgid "Renew"
 msgstr "Erneuern"
 
-#: apps/member/templates/member/add_members.html:17
-#, python-format
-msgid ""
-"The user is not a member of the club·s %(clubs)s. An additional fee of "
-"%(pretty_fee)s will be charged to renew automatically the membership in this/"
-"these club·s."
-msgstr ""
-"Dieser User ist noch nicht Mitglied von den Urclub %(clubs)s. Ein extra "
-"Beitrag von %(pretty_fee)s wurde bezahlt um die Mitgliedschaft von dieser/"
-"diesen Club zu erneuern."
-
-#: apps/member/templates/member/add_members.html:22
+#: apps/member/templates/member/add_members.html:16
 #, fuzzy, python-format
 #| msgid ""
 #| "The user is not a member of the club·s %(clubs)s. An additional fee of "
@@ -908,16 +836,7 @@ msgstr ""
 "Beitrag von %(pretty_fee)s wurde bezahlt um die Mitgliedschaft von dieser/"
 "diesen Club zu erneuern."
 
-#: apps/member/templates/member/add_members.html:29
-#, python-format
-msgid ""
-"This club has parents %(clubs)s. An additional fee of %(pretty_fee)s will be "
-"charged to adhere automatically to this/these club·s."
-msgstr ""
-"Dieses Club hat %(clubs)s als Urclub. Eine extra Beitrag von %(pretty_fee)s "
-"wurde bezahlt um Mitglied von dieser/diesen Club zu werden."
-
-#: apps/member/templates/member/add_members.html:34
+#: apps/member/templates/member/add_members.html:21
 #, python-format
 msgid ""
 "This club has parents %(clubs)s. Please make sure that the user is a member "
@@ -932,7 +851,6 @@ msgstr "Konto #"
 #: apps/member/templates/member/base.html:48
 #: apps/member/templates/member/base.html:62 apps/member/views.py:60
 #: apps/registration/templates/registration/future_profile_detail.html:48
-#: apps/wei/templates/wei/weimembership_form.html:117
 msgid "Update Profile"
 msgstr "Profile bearbeiten"
 
@@ -1006,7 +924,7 @@ msgid "Add"
 msgstr "Neue"
 
 #: apps/member/templates/member/club_detail.html:13
-#: apps/permission/templates/permission/all_rights.html:32
+#: apps/permission/templates/permission/all_rights.html:77
 msgid "Club managers"
 msgstr "Clubmanager"
 
@@ -1016,7 +934,6 @@ msgstr "Mitglied"
 
 #: apps/member/templates/member/club_detail.html:40
 #: apps/member/templates/member/profile_detail.html:32
-#: apps/wei/templates/wei/weiclub_detail.html:75
 msgid "Transaction history"
 msgstr "Transaktionvergangenheit"
 
@@ -1033,7 +950,6 @@ msgid "Filter roles:"
 msgstr "Rollen filter:"
 
 #: apps/member/templates/member/club_members.html:36
-#: apps/wei/templates/wei/weimembership_list.html:19
 msgid "There is no membership found with this pattern."
 msgstr "Keine Mitgliedschaft mit diesem pattern gefunden."
 
@@ -1046,20 +962,18 @@ msgid "days"
 msgstr "Tagen"
 
 #: apps/member/templates/member/includes/club_info.html:31
-#: apps/wei/templates/wei/base.html:40
 msgid "membership fee"
 msgstr "Mitgliedsachftpreis"
 
 #: apps/member/templates/member/includes/club_info.html:43
 #: apps/member/templates/member/includes/profile_info.html:55
 #: apps/treasury/templates/treasury/sogecredit_detail.html:24
-#: apps/wei/templates/wei/base.html:60
 msgid "balance"
 msgstr "Kontostand"
 
 #: apps/member/templates/member/includes/club_info.html:47
 #: apps/member/templates/member/includes/profile_info.html:20
-#: apps/note/models/notes.py:287 apps/wei/templates/wei/base.html:66
+#: apps/note/models/notes.py:287
 msgid "aliases"
 msgstr "Aliases"
 
@@ -1071,7 +985,6 @@ msgstr "Aliases bearbeiten"
 #: apps/member/templates/member/includes/profile_info.html:7
 #: apps/registration/templates/registration/future_profile_detail.html:19
 #: apps/treasury/templates/treasury/sogecredit_detail.html:20
-#: apps/wei/templates/wei/weimembership_form.html:17
 msgid "username"
 msgstr "Username"
 
@@ -1158,13 +1071,11 @@ msgstr "Beschneiden und hochladen"
 
 #: apps/member/templates/member/profile_detail.html:11
 #: apps/registration/templates/registration/future_profile_detail.html:28
-#: apps/wei/templates/wei/weimembership_form.html:26
 msgid "This user doesn't have confirmed his/her e-mail address."
 msgstr "Dieser User hat noch nicht sein email bestätigt."
 
 #: apps/member/templates/member/profile_detail.html:13
 #: apps/registration/templates/registration/future_profile_detail.html:29
-#: apps/wei/templates/wei/weimembership_form.html:27
 msgid "Click here to resend a validation link."
 msgstr "Click hier um eine Bestätigunglinke zu schicken."
 
@@ -1180,7 +1091,7 @@ msgstr ""
 msgid ""
 "Adding someone as a friend enables them to initiate transactions coming from "
 "your account (while keeping your balance positive). This is designed to "
-"simplify using note kfet transfers to transfer money between users. The "
+"simplify using note ker lann transfers to transfer money between users. The "
 "intent is that one person can make all transfers for a group of friends "
 "without needing additional rights among them."
 msgstr ""
@@ -1229,11 +1140,11 @@ msgstr "Club Details"
 msgid "Update club"
 msgstr "Club bearbeiten"
 
-#: apps/member/views.py:574
+#: apps/member/views.py:569
 msgid "Add new member to the club"
 msgstr "Neue Mitglieder"
 
-#: apps/member/views.py:703 apps/wei/views.py:973
+#: apps/member/views.py:663
 msgid ""
 "This user don't have enough money to join this club, and can't have a "
 "negative balance."
@@ -1241,19 +1152,19 @@ msgstr ""
 "Diese User hat nicht genug Geld um Mitglied zu werden, und darf nich im Rot "
 "sein."
 
-#: apps/member/views.py:725
+#: apps/member/views.py:685
 msgid "The membership must start after {:%m-%d-%Y}."
 msgstr "Die Mitgliedschaft muss nach {:%m-%d-Y} anfängen."
 
-#: apps/member/views.py:730
+#: apps/member/views.py:690
 msgid "The membership must begin before {:%m-%d-%Y}."
 msgstr "Die Mitgliedschaft muss vor {:%m-%d-Y} anfängen."
 
-#: apps/member/views.py:876
+#: apps/member/views.py:797
 msgid "Manage roles of an user in the club"
 msgstr "Rollen in diesen Club bearbeiten"
 
-#: apps/member/views.py:901
+#: apps/member/views.py:821
 msgid "Members of the club"
 msgstr "Mitlglieder dieses Club"
 
@@ -1292,7 +1203,7 @@ msgstr "Empfänger"
 msgid "Reason"
 msgstr "Grund"
 
-#: apps/note/forms.py:79 apps/treasury/tables.py:136
+#: apps/note/forms.py:79
 msgid "Valid"
 msgstr "Gültig"
 
@@ -1540,11 +1451,7 @@ msgstr "wiederkehrende Transaktionen"
 msgid "first_name"
 msgstr "Vorname"
 
-#: apps/note/models/transactions.py:311
-msgid "bank"
-msgstr "Bank"
-
-#: apps/note/models/transactions.py:328
+#: apps/note/models/transactions.py:323
 msgid ""
 "A special transaction is only possible between a Note associated to a "
 "payment method and a User or a Club"
@@ -1552,25 +1459,24 @@ msgstr ""
 "Eine Sondertransaktion ist nur zwischen einer Note, die einer "
 "Zahlungsmethode zugeordnet ist, und einem User oder einem Club möglich"
 
-#: apps/note/models/transactions.py:355 apps/note/models/transactions.py:358
-#: apps/note/models/transactions.py:361 apps/wei/views.py:978
-#: apps/wei/views.py:982
+#: apps/note/models/transactions.py:349 apps/note/models/transactions.py:352
+#: env/lib/python3.11/site-packages/django/forms/fields.py:91
 msgid "This field is required."
 msgstr "Dies ist ein Pflichtfeld."
 
-#: apps/note/models/transactions.py:367
+#: apps/note/models/transactions.py:358
 msgid "Special transaction"
 msgstr "Sondertransaktion"
 
-#: apps/note/models/transactions.py:368
+#: apps/note/models/transactions.py:359
 msgid "Special transactions"
 msgstr "Sondertranskationen"
 
-#: apps/note/models/transactions.py:384
+#: apps/note/models/transactions.py:375
 msgid "membership transaction"
 msgstr "Mitgliedschafttransaktion"
 
-#: apps/note/models/transactions.py:385 apps/treasury/models.py:292
+#: apps/note/models/transactions.py:376
 msgid "membership transactions"
 msgstr "Mitgliedschaftttransaktionen"
 
@@ -1590,8 +1496,10 @@ msgstr "Kein Grund gegeben"
 #: apps/treasury/tables.py:39
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:30
 #: apps/treasury/templates/treasury/sogecredit_detail.html:65
-#: apps/wei/tables.py:75 apps/wei/tables.py:118
-#: apps/wei/templates/wei/weiregistration_confirm_delete.html:31
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:499
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:13
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:38
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:7
 #: note_kfet/templates/oauth2_provider/application_confirm_delete.html:18
 #: note_kfet/templates/oauth2_provider/application_detail.html:39
 #: note_kfet/templates/oauth2_provider/authorized-token-delete.html:12
@@ -1599,11 +1507,7 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: apps/note/tables.py:222 apps/note/templates/note/conso_form.html:132
-#: apps/wei/tables.py:49 apps/wei/tables.py:50
-#: apps/wei/templates/wei/base.html:89
-#: apps/wei/templates/wei/bus_detail.html:20
-#: apps/wei/templates/wei/busteam_detail.html:20
-#: apps/wei/templates/wei/busteam_detail.html:40
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:37
 #: note_kfet/templates/oauth2_provider/application_detail.html:38
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1648,23 +1552,28 @@ msgid "Double consumptions"
 msgstr "Doppelte Modus"
 
 #: apps/note/templates/note/conso_form.html:154
-#: apps/note/templates/note/transaction_form.html:163
+#: apps/note/templates/note/transaction_form.html:157
 msgid "Recent transactions history"
 msgstr "Verlauf der letzten Transaktionen"
 
 #: apps/note/templates/note/mails/negative_balance.html:43
-#: apps/note/templates/note/mails/negative_balance.txt:25
 #: apps/note/templates/note/mails/negative_notes_report.html:46
-#: apps/note/templates/note/mails/negative_notes_report.txt:13
 #: apps/note/templates/note/mails/weekly_report.html:51
-#: apps/note/templates/note/mails/weekly_report.txt:32
 #: apps/registration/templates/registration/mails/email_validation_email.html:40
 #: apps/registration/templates/registration/mails/email_validation_email.txt:16
+#, fuzzy
+#| msgid "Mail generated by the Note Kfet on the"
+msgid "Mail generated by the Note Ker Lann on the"
+msgstr "Mail generiert vom Note Kfet auf dem"
+
+#: apps/note/templates/note/mails/negative_balance.txt:25
+#: apps/note/templates/note/mails/negative_notes_report.txt:13
+#: apps/note/templates/note/mails/weekly_report.txt:32
 msgid "Mail generated by the Note Kfet on the"
 msgstr "Mail generiert vom Note Kfet auf dem"
 
 #: apps/note/templates/note/transaction_form.html:58
-#: apps/note/templates/note/transaction_form.html:178
+#: apps/note/templates/note/transaction_form.html:172
 msgid "Select emitters"
 msgstr "Sender auswählen"
 
@@ -1673,7 +1582,7 @@ msgid "I am the emitter"
 msgstr "Ich bin der Sender"
 
 #: apps/note/templates/note/transaction_form.html:85
-#: apps/note/templates/note/transaction_form.html:180
+#: apps/note/templates/note/transaction_form.html:174
 msgid "Select receivers"
 msgstr "Empfänger auswählen"
 
@@ -1682,26 +1591,25 @@ msgid "Action"
 msgstr "Aktion"
 
 #: apps/note/templates/note/transaction_form.html:116
-#: apps/treasury/forms.py:137 apps/treasury/tables.py:67
-#: apps/treasury/tables.py:132
+#: apps/treasury/forms.py:135 apps/treasury/tables.py:67
 #: apps/treasury/templates/treasury/remittance_form.html:23
 msgid "Amount"
 msgstr "Anzahl"
 
 #: apps/note/templates/note/transaction_form.html:132
-#: apps/treasury/models.py:54
+#: apps/treasury/models.py:51
 msgid "Name"
 msgstr "Name"
 
-#: apps/note/templates/note/transaction_form.html:177
+#: apps/note/templates/note/transaction_form.html:171
 msgid "Select emitter"
 msgstr "Sender auswählen"
 
-#: apps/note/templates/note/transaction_form.html:179
+#: apps/note/templates/note/transaction_form.html:173
 msgid "Select receiver"
 msgstr "Empfänger auswählen"
 
-#: apps/note/templates/note/transaction_form.html:181
+#: apps/note/templates/note/transaction_form.html:175
 msgid "Transfer type"
 msgstr "Überweisungtype"
 
@@ -1840,7 +1748,7 @@ msgstr ""
 "Mitgliedschaft des Benutzers abgelaufen ist."
 
 #: apps/permission/models.py:183
-#: apps/permission/templates/permission/all_rights.html:89
+#: apps/permission/templates/permission/all_rights.html:56
 msgid "permanent"
 msgstr "permanent"
 
@@ -1891,61 +1799,56 @@ msgstr ""
 "Sie haben nicht die Berechtigung, eine Instanz von model {app_label}. "
 "{model_name} zulöschen."
 
-#: apps/permission/templates/permission/all_rights.html:12
-msgid "Users that have surnormal rights"
-msgstr "User die Oberberechtigung haben"
-
-#: apps/permission/templates/permission/all_rights.html:16
-msgid "Superusers have all rights on everything, to manage the website."
-msgstr "Superuser haben alle Berechtigung, um das Website zu handeln."
-
-#: apps/permission/templates/permission/all_rights.html:21
-msgid "Superusers"
-msgstr "Superusers"
-
-#: apps/permission/templates/permission/all_rights.html:45
+#: apps/permission/templates/permission/all_rights.html:13
 msgid "Roles description"
 msgstr "Rolle Beschreibung"
 
-#: apps/permission/templates/permission/all_rights.html:52
+#: apps/permission/templates/permission/all_rights.html:20
 msgid "Filter with roles that I have in at least one club"
 msgstr "Filtern Sie nach Rollen, die ich in mindestens einem Club habe"
 
-#: apps/permission/templates/permission/all_rights.html:69
+#: apps/permission/templates/permission/all_rights.html:36
 msgid "Owned"
 msgstr "Besetzt"
 
-#: apps/permission/templates/permission/all_rights.html:80
+#: apps/permission/templates/permission/all_rights.html:47
 msgid "Own this role in the clubs"
 msgstr "Besitze diese Rolle in den Clubs"
 
-#: apps/permission/templates/permission/all_rights.html:86
+#: apps/permission/templates/permission/all_rights.html:53
 msgid "Mask:"
 msgstr "Mask:"
 
-#: apps/permission/templates/permission/all_rights.html:86
+#: apps/permission/templates/permission/all_rights.html:53
 msgid "Query:"
 msgstr "Abfrage:"
 
-#: apps/permission/templates/permission/all_rights.html:92
+#: apps/permission/templates/permission/all_rights.html:59
 msgid "No associated permission"
 msgstr "Keine zugehörige Berechtigung"
+
+#: apps/permission/templates/permission/all_rights.html:71
+msgid "Users that have surnormal rights"
+msgstr "User die Oberberechtigung haben"
 
 #: apps/permission/templates/permission/scopes.html:8
 msgid "Available scopes"
 msgstr ""
 
 #: apps/permission/templates/permission/scopes.html:42
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
 #: note_kfet/templates/oauth2_provider/application_list.html:24
 msgid "No applications defined"
 msgstr ""
 
 #: apps/permission/templates/permission/scopes.html:43
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
 #: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "Click here"
 msgstr ""
 
 #: apps/permission/templates/permission/scopes.html:43
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
 #: note_kfet/templates/oauth2_provider/application_list.html:25
 msgid "if you want to register a new one"
 msgstr ""
@@ -1970,7 +1873,7 @@ msgstr ""
 "diesen Parametern zu erstellen. Bitte korrigieren Sie Ihre Daten und "
 "versuchen Sie es erneut."
 
-#: apps/permission/views.py:112 note_kfet/templates/base.html:108
+#: apps/permission/views.py:112 note_kfet/templates/base.html:102
 msgid "Rights"
 msgstr "Rechten"
 
@@ -1986,40 +1889,21 @@ msgstr "Anmeldung"
 msgid "This email address is already used."
 msgstr "Diese email adresse ist schon benutzt."
 
-#: apps/registration/forms.py:49
-#, fuzzy
-#| msgid "You already opened an account in the Société générale."
-msgid ""
-"I declare that I opened or I will open soon a bank account in the Société "
-"générale with the BDE partnership."
-msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
-
-#: apps/registration/forms.py:51
-msgid ""
-"Warning: this engages you to open your bank account. If you finally decides "
-"to don't open your account, you will have to pay the BDE membership."
-msgstr ""
-
-#: apps/registration/forms.py:59
-msgid "Register to the WEI"
-msgstr "Zu WEI anmelden"
-
-#: apps/registration/forms.py:61
-msgid ""
-"Check this case if you want to register to the WEI. If you hesitate, you "
-"will be able to register later, after validating your account in the Kfet."
-msgstr ""
-"Überprüfen Sie diesen Fall, wenn Sie sich beim WEI registrieren möchten. "
-"falls Zweifel, können Sie sich später nach Bestätigung Ihres Kontos im Kfet "
-"registrieren."
-
-#: apps/registration/forms.py:106
+#: apps/registration/forms.py:78
 msgid "Join BDE Club"
 msgstr "BDE Mitglieder werden"
 
-#: apps/registration/forms.py:113
-msgid "Join Kfet Club"
-msgstr "Kfet Mitglieder werden"
+#: apps/registration/forms.py:84
+#, fuzzy
+#| msgid "Join BDE Club"
+msgid "Join BDA Club"
+msgstr "BDE Mitglieder werden"
+
+#: apps/registration/forms.py:90
+#, fuzzy
+#| msgid "Join BDE Club"
+msgid "Join BDS Club"
+msgstr "BDE Mitglieder werden"
 
 #: apps/registration/templates/registration/email_validation_complete.html:15
 msgid "Your email have successfully been validated."
@@ -2031,8 +1915,11 @@ msgid "You can now <a href=\"%(login_url)s\">log in</a>."
 msgstr "Sie können sich jetz <a href=\"%(login_url)s\"> anmelden </a>."
 
 #: apps/registration/templates/registration/email_validation_complete.html:23
-msgid ""
-"You must pay now your membership in the Kfet to complete your registration."
+#, fuzzy
+#| msgid ""
+#| "You must pay now your membership in the Kfet to complete your "
+#| "registration."
+msgid "You must pay now your membership to complete your registration."
 msgstr ""
 "Sie müssen jetzt Ihre Mitgliedschaft im Kfet bezahlen, um Ihre Registrierung "
 "abzuschließen."
@@ -2057,11 +1944,18 @@ msgstr ""
 "aktivieren."
 
 #: apps/registration/templates/registration/email_validation_email_sent.html:17
-msgid "You must also go to the Kfet to pay your membership."
-msgstr "Sie müssen auch zum Kfet gehen, um Ihre Mitgliedschaft zu bezahlen."
+#, fuzzy
+#| msgid ""
+#| "You must pay now your membership in the Kfet to complete your "
+#| "registration."
+msgid ""
+"You must also pay your membership. A administrator will then activate your "
+"account"
+msgstr ""
+"Sie müssen jetzt Ihre Mitgliedschaft im Kfet bezahlen, um Ihre Registrierung "
+"abzuschließen."
 
 #: apps/registration/templates/registration/future_profile_detail.html:49
-#: apps/wei/templates/wei/weiregistration_confirm_delete.html:11
 msgid "Delete registration"
 msgstr "Registrierung löschen"
 
@@ -2069,22 +1963,19 @@ msgstr "Registrierung löschen"
 msgid "Validate account"
 msgstr "Konto validieren"
 
-#: apps/registration/templates/registration/future_profile_detail.html:62
-#, fuzzy
-#| msgid "You already opened an account in the Société générale."
-msgid ""
-"The user declared that he/she opened a bank account in the Société générale."
-msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
-
-#: apps/registration/templates/registration/future_profile_detail.html:71
-#: apps/wei/templates/wei/weimembership_form.html:127
-#: apps/wei/templates/wei/weimembership_form.html:186
+#: apps/registration/templates/registration/future_profile_detail.html:65
 msgid "Validate registration"
 msgstr "Registrierung validieren"
 
 #: apps/registration/templates/registration/future_user_list.html:9
 msgid "New user"
 msgstr "Neue User"
+
+#: apps/registration/templates/registration/mails/email_validation_email.html:7
+#, fuzzy
+#| msgid "Activate your Note Kfet account"
+msgid "Activation of your Note Ker Lann account"
+msgstr "Ihre Note Kfet Konto bestätigen"
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:12
 #: apps/registration/templates/registration/mails/email_validation_email.txt:3
@@ -2093,9 +1984,13 @@ msgstr "Hallo"
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:16
 #: apps/registration/templates/registration/mails/email_validation_email.txt:5
+#, fuzzy
+#| msgid ""
+#| "You recently registered on the Note Kfet. Please click on the link below "
+#| "to confirm your registration."
 msgid ""
-"You recently registered on the Note Kfet. Please click on the link below to "
-"confirm your registration."
+"You recently registered on the Note Ker Lann. Please click on the link below "
+"to confirm your registration."
 msgstr ""
 "Sie haben sich kürzlich beim Note Kfet registriert. Bitte klicken Sie auf "
 "den Link unten, um Ihre Registrierung zu bestätigen."
@@ -2111,9 +2006,13 @@ msgstr ""
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:30
 #: apps/registration/templates/registration/mails/email_validation_email.txt:11
+#, fuzzy
+#| msgid ""
+#| "After that, you'll have to wait that someone validates your account "
+#| "before you can log in. You will need to pay your membership in the Kfet."
 msgid ""
 "After that, you'll have to wait that someone validates your account before "
-"you can log in. You will need to pay your membership in the Kfet."
+"you can log in. You will need to pay your membership."
 msgstr ""
 "Danach müssen Sie warten, bis jemand Ihr Konto validiert, bevor Sie sich "
 "anmelden können. Sie müssen Ihre Mitgliedschaft im Kfet bezahlen."
@@ -2125,57 +2024,55 @@ msgstr "Danke"
 
 #: apps/registration/templates/registration/mails/email_validation_email.html:39
 #: apps/registration/templates/registration/mails/email_validation_email.txt:15
-msgid "The Note Kfet team."
+#, fuzzy
+#| msgid "The Note Kfet team."
+msgid "The Note Ker Lann team."
 msgstr "Die NoteKfet Team."
 
-#: apps/registration/views.py:40
+#: apps/registration/views.py:39
 msgid "Register new user"
 msgstr "Neuen User registrieren"
 
-#: apps/registration/views.py:98
+#: apps/registration/views.py:89
 msgid "Email validation"
 msgstr "Email validierung"
 
-#: apps/registration/views.py:100
+#: apps/registration/views.py:91
 msgid "Validate email"
 msgstr "Email validieren"
 
-#: apps/registration/views.py:144
+#: apps/registration/views.py:135
 msgid "Email validation unsuccessful"
 msgstr "Email validierung unerfolgreich"
 
-#: apps/registration/views.py:155
+#: apps/registration/views.py:146
 msgid "Email validation email sent"
 msgstr "Validierungsemail wurde gesendet"
 
-#: apps/registration/views.py:163
+#: apps/registration/views.py:154
 msgid "Resend email validation link"
 msgstr "E-Mail-Validierungslink erneut senden"
 
-#: apps/registration/views.py:181
+#: apps/registration/views.py:172
 msgid "Pre-registered users list"
 msgstr "Vorregistrierte Userliste"
 
-#: apps/registration/views.py:205
+#: apps/registration/views.py:196
 msgid "Unregistered users"
 msgstr "Unregistrierte Users"
 
-#: apps/registration/views.py:218
+#: apps/registration/views.py:209
 msgid "Registration detail"
 msgstr "Registrierung Detailen"
 
-#: apps/registration/views.py:282
-msgid "You must join the BDE."
-msgstr "Sie müssen die BDE beitreten."
-
-#: apps/registration/views.py:306
+#: apps/registration/views.py:281
 msgid ""
 "The entered amount is not enough for the memberships, should be at least {}"
 msgstr ""
 "Der eingegebene Betrag reicht für die Mitgliedschaft nicht aus, sollte "
 "mindestens {} betragen"
 
-#: apps/registration/views.py:387
+#: apps/registration/views.py:335
 msgid "Invalidate pre-registration"
 msgstr "Ungültige Vorregistrierung"
 
@@ -2183,7 +2080,7 @@ msgstr "Ungültige Vorregistrierung"
 msgid "Treasury"
 msgstr "Quaestor"
 
-#: apps/treasury/forms.py:26 apps/treasury/models.py:93
+#: apps/treasury/forms.py:26 apps/treasury/models.py:90
 #: apps/treasury/templates/treasury/invoice_form.html:22
 msgid "This invoice is locked and can no longer be edited."
 msgstr "Diese Rechnung ist gesperrt und kann nicht mehr bearbeitet werden."
@@ -2196,7 +2093,7 @@ msgstr "Überweisung ist bereits geschlossen."
 msgid "You can't change the type of the remittance."
 msgstr "Sie können die Art der Überweisung nicht ändern."
 
-#: apps/treasury/forms.py:125 apps/treasury/models.py:267
+#: apps/treasury/forms.py:125 apps/treasury/models.py:264
 #: apps/treasury/tables.py:97 apps/treasury/tables.py:105
 #: apps/treasury/templates/treasury/invoice_list.html:16
 #: apps/treasury/templates/treasury/remittance_list.html:16
@@ -2212,136 +2109,112 @@ msgstr "Keine beigefügte Überweisung"
 msgid "Invoice identifier"
 msgstr "Rechnungskennung"
 
-#: apps/treasury/models.py:40
-msgid "BDE"
+#: apps/treasury/models.py:37
+#, fuzzy
+#| msgid "BDE"
+msgid "BD?"
 msgstr "BDE"
 
-#: apps/treasury/models.py:45
+#: apps/treasury/models.py:42
 msgid "Object"
 msgstr "Objekt"
 
-#: apps/treasury/models.py:49
+#: apps/treasury/models.py:46
 msgid "Description"
 msgstr "Beschreibung"
 
-#: apps/treasury/models.py:58
+#: apps/treasury/models.py:55
 msgid "Address"
 msgstr "Adresse"
 
-#: apps/treasury/models.py:63 apps/treasury/models.py:193
+#: apps/treasury/models.py:60 apps/treasury/models.py:190
 msgid "Date"
 msgstr "Datum"
 
-#: apps/treasury/models.py:67
+#: apps/treasury/models.py:64
 msgid "Acquitted"
 msgstr "Bezahlt"
 
-#: apps/treasury/models.py:72
+#: apps/treasury/models.py:69
 msgid "Locked"
 msgstr "Gesperrt"
 
-#: apps/treasury/models.py:73
+#: apps/treasury/models.py:70
 msgid "An invoice can't be edited when it is locked."
 msgstr "Eine Rechnung kann nicht bearbeitet werden, wenn sie gesperrt ist."
 
-#: apps/treasury/models.py:79
+#: apps/treasury/models.py:76
 msgid "tex source"
 msgstr "Tex Quelle"
 
-#: apps/treasury/models.py:113 apps/treasury/models.py:129
+#: apps/treasury/models.py:110 apps/treasury/models.py:126
 msgid "invoice"
 msgstr "Rechnung"
 
-#: apps/treasury/models.py:114
+#: apps/treasury/models.py:111
 msgid "invoices"
 msgstr "Rechnungen"
 
-#: apps/treasury/models.py:117
+#: apps/treasury/models.py:114
 #, python-brace-format
 msgid "Invoice #{id}"
 msgstr "Rechnung #{id}"
 
-#: apps/treasury/models.py:134
+#: apps/treasury/models.py:131
 msgid "Designation"
 msgstr "Bezeichnung"
 
-#: apps/treasury/models.py:140
+#: apps/treasury/models.py:137
 msgid "Quantity"
 msgstr "Qualität"
 
-#: apps/treasury/models.py:145
+#: apps/treasury/models.py:142
 msgid "Unit price"
 msgstr "Einzelpreis"
 
-#: apps/treasury/models.py:161
+#: apps/treasury/models.py:158
 msgid "product"
 msgstr "Produkt"
 
-#: apps/treasury/models.py:162
+#: apps/treasury/models.py:159
 msgid "products"
 msgstr "Produkten"
 
-#: apps/treasury/models.py:182
+#: apps/treasury/models.py:179
 msgid "remittance type"
 msgstr "Überweisungstyp"
 
-#: apps/treasury/models.py:183
+#: apps/treasury/models.py:180
 msgid "remittance types"
 msgstr "Überweisungstypen"
 
-#: apps/treasury/models.py:204
+#: apps/treasury/models.py:201
 msgid "Comment"
 msgstr "Kommentar"
 
-#: apps/treasury/models.py:209
+#: apps/treasury/models.py:206
 msgid "Closed"
 msgstr "Geschlossen"
 
-#: apps/treasury/models.py:213
+#: apps/treasury/models.py:210
 msgid "remittance"
 msgstr "Überweisung"
 
-#: apps/treasury/models.py:214
+#: apps/treasury/models.py:211
 msgid "remittances"
 msgstr "Überweisungen"
 
-#: apps/treasury/models.py:247
+#: apps/treasury/models.py:244
 msgid "Remittance #{:d}: {}"
 msgstr "Überweisung #{:d}:{}"
 
-#: apps/treasury/models.py:271
+#: apps/treasury/models.py:268
 msgid "special transaction proxy"
 msgstr "spezielle Transaktion Proxy"
 
-#: apps/treasury/models.py:272
+#: apps/treasury/models.py:269
 msgid "special transaction proxies"
 msgstr "spezielle Transaktion Proxies"
-
-#: apps/treasury/models.py:298
-msgid "credit transaction"
-msgstr "Kredit Transaktion"
-
-#: apps/treasury/models.py:430
-msgid ""
-"This user doesn't have enough money to pay the memberships with its note. "
-"Please ask her/him to credit the note before invalidating this credit."
-msgstr ""
-"Dieser Benutzer hat nicht genug Geld, um die Mitgliedschaften mit seiner "
-"Note zu bezahlen."
-
-#: apps/treasury/models.py:451
-#: apps/treasury/templates/treasury/sogecredit_detail.html:10
-msgid "Credit from the Société générale"
-msgstr "Kredit von der Société générale"
-
-#: apps/treasury/models.py:452
-msgid "Credits from the Société générale"
-msgstr "Krediten von der Société générale"
-
-#: apps/treasury/models.py:455
-#, python-brace-format
-msgid "Soge credit for {user}"
-msgstr "Kredit von der Société générale für {user}"
 
 #: apps/treasury/tables.py:20
 msgid "Invoice #{:d}"
@@ -2361,10 +2234,6 @@ msgstr "Transaktionanzahl"
 #: apps/treasury/tables.py:70 apps/treasury/tables.py:72
 msgid "View"
 msgstr "Schauen"
-
-#: apps/treasury/tables.py:143
-msgid "Yes"
-msgstr "Ja"
 
 #: apps/treasury/templates/treasury/invoice_confirm_delete.html:10
 #: apps/treasury/views.py:180
@@ -2404,13 +2273,7 @@ msgstr "Produkt hinzufügen"
 msgid "Remove product"
 msgstr "Produkt entfernen"
 
-#: apps/treasury/templates/treasury/invoice_list.html:19
-#: apps/treasury/templates/treasury/remittance_list.html:19
-#: apps/treasury/templates/treasury/sogecredit_list.html:20
-msgid "Société générale credits"
-msgstr "Krediten von der Société générale"
-
-#: apps/treasury/templates/treasury/invoice_list.html:31
+#: apps/treasury/templates/treasury/invoice_list.html:28
 msgid "New invoice"
 msgstr "Neue Rechnung"
 
@@ -2430,42 +2293,46 @@ msgstr "Transaktionen"
 msgid "There is no transaction linked with this remittance."
 msgstr "Mit dieser Überweisung ist keine Transaktion verbunden."
 
-#: apps/treasury/templates/treasury/remittance_list.html:27
+#: apps/treasury/templates/treasury/remittance_list.html:24
 msgid "Opened remittances"
 msgstr "Geöffnete Überweisungen"
 
-#: apps/treasury/templates/treasury/remittance_list.html:34
+#: apps/treasury/templates/treasury/remittance_list.html:31
 msgid "There is no opened remittance."
 msgstr "Es gibt keine offene Überweisung."
 
-#: apps/treasury/templates/treasury/remittance_list.html:39
+#: apps/treasury/templates/treasury/remittance_list.html:36
 msgid "New remittance"
 msgstr "Neue Überweisung"
 
-#: apps/treasury/templates/treasury/remittance_list.html:45
+#: apps/treasury/templates/treasury/remittance_list.html:42
 msgid "Transfers without remittances"
 msgstr "Transfer ohne Überweisungen"
 
-#: apps/treasury/templates/treasury/remittance_list.html:52
+#: apps/treasury/templates/treasury/remittance_list.html:49
 msgid "There is no transaction without any linked remittance."
 msgstr "Mit dieser Überweisung ist keine Transaktion verbunden."
 
-#: apps/treasury/templates/treasury/remittance_list.html:60
+#: apps/treasury/templates/treasury/remittance_list.html:57
 msgid "Transfers with opened remittances"
 msgstr "Transfer mit geöffneten Überweisungen"
 
-#: apps/treasury/templates/treasury/remittance_list.html:67
+#: apps/treasury/templates/treasury/remittance_list.html:64
 msgid "There is no transaction with an opened linked remittance."
 msgstr ""
 "Es gibt keine Transaktion mit einer geöffneten verknüpften Überweisung."
 
-#: apps/treasury/templates/treasury/remittance_list.html:75
+#: apps/treasury/templates/treasury/remittance_list.html:72
 msgid "Closed remittances"
 msgstr "Geschlossene Überweisungen"
 
-#: apps/treasury/templates/treasury/remittance_list.html:82
+#: apps/treasury/templates/treasury/remittance_list.html:79
 msgid "There is no closed remittance yet."
 msgstr "Es gibt noch keine geschlossene Überweisung."
+
+#: apps/treasury/templates/treasury/sogecredit_detail.html:10
+msgid "Credit from the Société générale"
+msgstr "Kredit von der Société générale"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:35
 msgid "total amount"
@@ -2520,13 +2387,16 @@ msgstr ""
 "Kredit löschen."
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:63
-#: apps/wei/tables.py:60 apps/wei/tables.py:102
 msgid "Validate"
 msgstr "Validieren"
 
 #: apps/treasury/templates/treasury/sogecredit_detail.html:71
 msgid "Return to credit list"
 msgstr "Zurück zur Kreditlist"
+
+#: apps/treasury/templates/treasury/sogecredit_list.html:20
+msgid "Société générale credits"
+msgstr "Krediten von der Société générale"
 
 #: apps/treasury/templates/treasury/sogecredit_list.html:40
 msgid "Filter with unvalidated credits only"
@@ -2559,7 +2429,6 @@ msgid "Invoices list"
 msgstr "Rechnunglist"
 
 #: apps/treasury/views.py:112 apps/treasury/views.py:286
-#: apps/treasury/views.py:412
 msgid "You are not able to see the treasury interface."
 msgstr "Sie können die Quaestor-App nicht sehen."
 
@@ -2583,655 +2452,1484 @@ msgstr "Überweisung bearbeiten"
 msgid "Attach a transaction to a remittance"
 msgstr "Fügen Sie einer Überweisung eine Transaktion hinzu"
 
-#: apps/treasury/views.py:404
-msgid "List of credits from the Société générale"
-msgstr "Kreditliste von Société générale"
-
-#: apps/treasury/views.py:449
-msgid "Manage credits from the Société générale"
-msgstr "Krediten von der Société générale handeln"
-
-#: apps/wei/apps.py:10 apps/wei/models.py:50 apps/wei/models.py:51
-#: apps/wei/models.py:62 apps/wei/models.py:180
-#: note_kfet/templates/base.html:102
-msgid "WEI"
-msgstr "WEI"
-
-#: apps/wei/forms/registration.py:35
-msgid "The selected user is not validated. Please validate its account first"
+#: env/lib/python3.11/site-packages/django/contrib/messages/apps.py:15
+msgid "Messages"
 msgstr ""
 
-#: apps/wei/forms/registration.py:59 apps/wei/models.py:126
-#: apps/wei/models.py:323
-msgid "bus"
-msgstr "Bus"
+#: env/lib/python3.11/site-packages/django/contrib/sitemaps/apps.py:8
+msgid "Site Maps"
+msgstr ""
 
-#: apps/wei/forms/registration.py:60
+#: env/lib/python3.11/site-packages/django/contrib/staticfiles/apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/contrib/syndication/apps.py:7
+#, fuzzy
+#| msgid "Invitation"
+msgid "Syndication"
+msgstr "Einladung"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: env/lib/python3.11/site-packages/django/core/paginator.py:30
+msgid "…"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/paginator.py:50
+msgid "That page number is not an integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/paginator.py:52
+msgid "That page number is less than 1"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/paginator.py:54
+#, fuzzy
+#| msgid "There is no results."
+msgid "That page contains no results"
+msgstr "Es gibt keine Ergebnisse."
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:104
+#: env/lib/python3.11/site-packages/django/forms/fields.py:752
+msgid "Enter a valid URL."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:165
+msgid "Enter a valid integer."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:176
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: env/lib/python3.11/site-packages/django/core/validators.py:259
 msgid ""
-"This choice is not definitive. The WEI organizers are free to attribute for "
-"you a bus and a team, in particular if you are a free eletron."
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
 msgstr ""
-"Diese Wahl ist nicht endgültig. Den WEI-Organisatoren steht es frei, Ihnen "
-"einen Bus und ein Team zuzuweisen, insbesondere wenn Sie ein freies Elektron "
-"sind."
 
-#: apps/wei/forms/registration.py:67
-msgid "Team"
-msgstr "Team"
-
-#: apps/wei/forms/registration.py:69
+#: env/lib/python3.11/site-packages/django/core/validators.py:267
 msgid ""
-"Leave this field empty if you won't be in a team (staff, bus chief, free "
-"electron)"
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
 msgstr ""
-"Lassen Sie dieses Feld leer, wenn Sie nicht in einem Team sind (Mitarbeiter, "
-"Buschef, freies Elektron)"
 
-#: apps/wei/forms/registration.py:75 apps/wei/forms/registration.py:85
-#: apps/wei/models.py:161
-msgid "WEI Roles"
-msgstr "WEI Rollen"
+#: env/lib/python3.11/site-packages/django/core/validators.py:279
+#: env/lib/python3.11/site-packages/django/core/validators.py:287
+#: env/lib/python3.11/site-packages/django/core/validators.py:316
+msgid "Enter a valid IPv4 address."
+msgstr ""
 
-#: apps/wei/forms/registration.py:76
-msgid "Select the roles that you are interested in."
-msgstr "Wählen Sie die Rollen aus, an denen Sie interessiert sind."
+#: env/lib/python3.11/site-packages/django/core/validators.py:296
+#: env/lib/python3.11/site-packages/django/core/validators.py:317
+msgid "Enter a valid IPv6 address."
+msgstr ""
 
-#: apps/wei/forms/registration.py:122
-msgid "This team doesn't belong to the given bus."
-msgstr "Dieses Team gehört nicht zum angegebenen Bus."
+#: env/lib/python3.11/site-packages/django/core/validators.py:308
+#: env/lib/python3.11/site-packages/django/core/validators.py:315
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
 
-#: apps/wei/forms/surveys/wei2021.py:35 apps/wei/forms/surveys/wei2022.py:35
-msgid "Choose a word:"
-msgstr "Wählen Sie ein Wort:"
+#: env/lib/python3.11/site-packages/django/core/validators.py:351
+msgid "Enter only digits separated by commas."
+msgstr ""
 
-#: apps/wei/models.py:25 apps/wei/templates/wei/base.html:36
-msgid "year"
-msgstr "Jahr"
+#: env/lib/python3.11/site-packages/django/core/validators.py:357
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
 
-#: apps/wei/models.py:29 apps/wei/templates/wei/base.html:30
-msgid "date start"
-msgstr "Anfangsdatum"
+#: env/lib/python3.11/site-packages/django/core/validators.py:392
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
 
-#: apps/wei/models.py:33 apps/wei/templates/wei/base.html:33
-msgid "date end"
-msgstr "Abschlussdatum"
+#: env/lib/python3.11/site-packages/django/core/validators.py:401
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
 
-#: apps/wei/models.py:71 apps/wei/tables.py:305
-#, fuzzy
-#| msgid "The user joined the bus"
-msgid "seat count in the bus"
-msgstr "Der Benutzer ist dem Bus beigetreten"
+#: env/lib/python3.11/site-packages/django/core/validators.py:410
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
 
-#: apps/wei/models.py:83
-msgid "survey information"
-msgstr "Umfrage Infos"
-
-#: apps/wei/models.py:84
-msgid "Information about the survey for new members, encoded in JSON"
-msgstr "Informationen zur Umfrage für neue Mitglieder, codiert in JSON"
-
-#: apps/wei/models.py:113
-msgid "Bus"
-msgstr "Bus"
-
-#: apps/wei/models.py:114 apps/wei/templates/wei/weiclub_detail.html:51
-msgid "Buses"
-msgstr "Buses"
-
-#: apps/wei/models.py:135
-msgid "color"
-msgstr "Farbe"
-
-#: apps/wei/models.py:136
-msgid "The color of the T-Shirt, stored with its number equivalent"
-msgstr "Die Farbe des T-Shirts, gespeichert mit der entsprechenden Nummer"
-
-#: apps/wei/models.py:150
-msgid "Bus team"
-msgstr "Bus Team"
-
-#: apps/wei/models.py:151
-msgid "Bus teams"
-msgstr "Bus Teams"
-
-#: apps/wei/models.py:160
-msgid "WEI Role"
-msgstr "WEI Rolle"
-
-#: apps/wei/models.py:185
-msgid "Credit from Société générale"
-msgstr "Kredit von der Société générale"
-
-#: apps/wei/models.py:190
-msgid "Caution check given"
-msgstr "Caution check given"
-
-#: apps/wei/models.py:194 apps/wei/templates/wei/weimembership_form.html:64
-msgid "birth date"
-msgstr "Geburtsdatum"
-
-#: apps/wei/models.py:200 apps/wei/models.py:210
-msgid "Male"
-msgstr "Männlich"
-
-#: apps/wei/models.py:201 apps/wei/models.py:211
-msgid "Female"
-msgstr "Weiblich"
-
-#: apps/wei/models.py:202
-msgid "Non binary"
-msgstr "Nicht binär"
-
-#: apps/wei/models.py:204 apps/wei/templates/wei/attribute_bus_1A.html:22
-#: apps/wei/templates/wei/weimembership_form.html:55
-msgid "gender"
-msgstr "Geschlecht"
-
-#: apps/wei/models.py:213 apps/wei/templates/wei/weimembership_form.html:58
-msgid "clothing cut"
-msgstr "Kleidung Schnitt"
-
-#: apps/wei/models.py:226 apps/wei/templates/wei/weimembership_form.html:61
-msgid "clothing size"
-msgstr "Kleidergröße"
-
-#: apps/wei/models.py:232 apps/wei/templates/wei/attribute_bus_1A.html:28
-#: apps/wei/templates/wei/weimembership_form.html:67
-msgid "health issues"
-msgstr "Gesundheitsprobleme"
-
-#: apps/wei/models.py:237 apps/wei/templates/wei/weimembership_form.html:70
-msgid "emergency contact name"
-msgstr "Notfall-Kontakt"
-
-#: apps/wei/models.py:242 apps/wei/templates/wei/weimembership_form.html:73
-msgid "emergency contact phone"
-msgstr "Notfallkontakttelefon"
-
-#: apps/wei/models.py:247 apps/wei/templates/wei/weimembership_form.html:52
-msgid "first year"
-msgstr "Erste Jahr"
-
-#: apps/wei/models.py:248
-msgid "Tells if the user is new in the school."
-msgstr "Gibt an, ob der USer neu in der Schule ist."
-
-#: apps/wei/models.py:253
-msgid "registration information"
-msgstr "Registrierung Detailen"
-
-#: apps/wei/models.py:254
+#: env/lib/python3.11/site-packages/django/core/validators.py:420
+#, python-format
 msgid ""
-"Information about the registration (buses for old members, survey for the "
-"new members), encoded in JSON"
-msgstr ""
-"Informationen zur Registrierung (Busse für alte Mitglieder, Umfrage für neue "
-"Mitglieder), verschlüsselt in JSON"
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
 
-#: apps/wei/models.py:312
-msgid "WEI User"
-msgstr "WEI User"
-
-#: apps/wei/models.py:313
-msgid "WEI Users"
-msgstr "WEI Users"
-
-#: apps/wei/models.py:333
-msgid "team"
-msgstr "Team"
-
-#: apps/wei/models.py:343
-msgid "WEI registration"
-msgstr "WEI Registrierung"
-
-#: apps/wei/models.py:347
-msgid "WEI membership"
-msgstr "WEI Mitgliedschaft"
-
-#: apps/wei/models.py:348
-msgid "WEI memberships"
-msgstr "WEI Mitgliedschaften"
-
-#: apps/wei/tables.py:105
-msgid "The user does not have enough money."
-msgstr ""
-
-#: apps/wei/tables.py:108
+#: env/lib/python3.11/site-packages/django/core/validators.py:438
+#, python-format
 msgid ""
-"The user is in first year. You may validate the credit, the algorithm will "
-"run later."
-msgstr ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
 
-#: apps/wei/tables.py:111
+#: env/lib/python3.11/site-packages/django/core/validators.py:461
+#: env/lib/python3.11/site-packages/django/forms/fields.py:347
+#: env/lib/python3.11/site-packages/django/forms/fields.py:386
 #, fuzzy
-#| msgid ""
-#| "The note has enough money (%(pretty_fee)s required), the registration is "
-#| "possible."
-msgid "The user has enough money, you can validate the registration."
+#| msgid "phone number"
+msgid "Enter a number."
+msgstr "Telefonnummer"
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:463
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:468
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:473
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/core/validators.py:544
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
 msgstr ""
-"Die Note hat genug Geld (%(pretty_fee)s erforderlich), die Registrierung ist "
-"möglich."
 
-#: apps/wei/tables.py:143
-msgid "Year"
-msgstr "Jahr"
+#: env/lib/python3.11/site-packages/django/core/validators.py:605
+msgid "Null characters are not allowed."
+msgstr ""
 
-#: apps/wei/tables.py:180 apps/wei/templates/wei/weimembership_form.html:102
-msgid "preferred bus"
-msgstr "bevorzugter Bus"
-
-#: apps/wei/tables.py:210 apps/wei/templates/wei/bus_detail.html:32
-#: apps/wei/templates/wei/busteam_detail.html:50
-msgid "Teams"
-msgstr "Teams"
-
-#: apps/wei/tables.py:219 apps/wei/tables.py:260
-msgid "Members count"
-msgstr "Anzahl Mitgliedern"
-
-#: apps/wei/tables.py:226 apps/wei/tables.py:257
-msgid "members"
-msgstr "Mitglieder"
-
-#: apps/wei/tables.py:287
+#: env/lib/python3.11/site-packages/django/db/models/base.py:1423
+#: env/lib/python3.11/site-packages/django/forms/models.py:893
 #, fuzzy
-#| msgid "first year"
-msgid "suggested first year"
-msgstr "Erste Jahr"
+#| msgid "add"
+msgid "and"
+msgstr "hinzufügen"
 
-#: apps/wei/tables.py:293
+#: env/lib/python3.11/site-packages/django/db/models/base.py:1425
+#, fuzzy, python-format
+#| msgid "A template with this name already exist"
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr "Eine Vorlage mit diesem Namen ist bereits vorhanden"
+
+#: env/lib/python3.11/site-packages/django/db/models/constraints.py:17
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:128
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:129
 #, fuzzy
-#| msgid "first year"
-msgid "validated first year"
-msgstr "Erste Jahr"
+#| msgid "This image cannot be loaded."
+msgid "This field cannot be null."
+msgstr "Dieses Bild kann nicht geladen werden."
 
-#: apps/wei/tables.py:299
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:130
 #, fuzzy
-#| msgid "Unvalidated registrations"
-msgid "validated staff"
-msgstr "Unvalidierte Registrierungen"
+#| msgid "This image cannot be loaded."
+msgid "This field cannot be blank."
+msgstr "Dieses Bild kann nicht geladen werden."
 
-#: apps/wei/tables.py:310
-msgid "free seats"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:131
+#, fuzzy, python-format
+#| msgid "A template with this name already exist"
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "Eine Vorlage mit diesem Namen ist bereits vorhanden"
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:135
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
 
-#: apps/wei/templates/wei/1A_list.html:9
-msgid "Attribute first year members into buses"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:173
+#, python-format
+msgid "Field of type: %(field_type)s"
 msgstr ""
 
-#: apps/wei/templates/wei/1A_list.html:15
-msgid "Start attribution!"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1094
+#, python-format
+msgid "“%(value)s” value must be either True or False."
 msgstr ""
 
-#: apps/wei/templates/wei/attribute_bus_1A.html:8
-msgid "Bus attribution"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1095
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
 msgstr ""
 
-#: apps/wei/templates/wei/attribute_bus_1A.html:31
-msgid "suggested bus"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1097
+msgid "Boolean (Either True or False)"
 msgstr ""
 
-#: apps/wei/templates/wei/attribute_bus_1A.html:37
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1147
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1149
+msgid "String (unlimited)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1253
+msgid "Comma-separated integers"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1354
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1358
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1493
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1362
+msgid "Date (without time)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1489
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1497
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1502
+msgid "Date (with time)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1626
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1628
 #, fuzzy
-#| msgid "Raw survey information"
-msgid "View raw survey information"
-msgstr "Rohe Umfrageinformationen"
+#| msgid "phone number"
+msgid "Decimal number"
+msgstr "Telefonnummer"
 
-#: apps/wei/templates/wei/attribute_bus_1A.html:57
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1789
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1793
 #, fuzzy
-#| msgid "Buttons list"
-msgid "Back to main list"
-msgstr "Tastenliste"
+#| msgid "action"
+msgid "Duration"
+msgstr "Aktion"
 
-#: apps/wei/templates/wei/base.html:44
-msgid "WEI fee (paid students)"
-msgstr "WEI Preis (bezahlte Studenten)"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1845
+#, fuzzy
+#| msgid "address"
+msgid "Email address"
+msgstr "Adresse"
 
-#: apps/wei/templates/wei/base.html:47 apps/wei/templates/wei/base.html:54
-msgid "The BDE membership is included in the WEI registration."
-msgstr "Die BDE-Mitgliedschaft ist in der WEI-Registrierung enthalten."
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1870
+msgid "File path"
+msgstr ""
 
-#: apps/wei/templates/wei/base.html:51
-msgid "WEI fee (unpaid students)"
-msgstr "WEI Preis (unbezahlte Studenten)"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1948
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
 
-#: apps/wei/templates/wei/base.html:76
-msgid "WEI list"
-msgstr "WEI Liste"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1950
+#, fuzzy
+#| msgid "phone number"
+msgid "Floating point number"
+msgstr "Telefonnummer"
 
-#: apps/wei/templates/wei/base.html:81 apps/wei/views.py:528
-msgid "Register 1A"
-msgstr "1A Registrieren"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1990
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
 
-#: apps/wei/templates/wei/base.html:85 apps/wei/views.py:614
-msgid "Register 2A+"
-msgstr "2A+ Registrieren"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1992
+msgid "Integer"
+msgstr ""
 
-#: apps/wei/templates/wei/base.html:93
-msgid "Add bus"
-msgstr "Neue Bus"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2088
+msgid "Big (8 byte) integer"
+msgstr ""
 
-#: apps/wei/templates/wei/base.html:97
-msgid "View WEI"
-msgstr "WEI schauen"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2105
+msgid "Small integer"
+msgstr ""
 
-#: apps/wei/templates/wei/bus_detail.html:22
-#: apps/wei/templates/wei/busteam_detail.html:22
-msgid "Add team"
-msgstr "Neue Team"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2113
+#, fuzzy
+#| msgid "IP Address"
+msgid "IPv4 address"
+msgstr "IP Adresse"
 
-#: apps/wei/templates/wei/bus_detail.html:45
-msgid "Members"
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2144
+#, fuzzy
+#| msgid "IP Address"
+msgid "IP address"
+msgstr "IP Adresse"
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2237
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2238
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2240
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2291
+msgid "Positive big integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2306
+msgid "Positive integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2321
+msgid "Positive small integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2337
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2373
+msgid "Text"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2448
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2452
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2456
+msgid "Time"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2564
+msgid "URL"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2588
+msgid "Raw binary data"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2653
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2655
+#, fuzzy
+#| msgid "Invoice identifier"
+msgid "Universally unique identifier"
+msgstr "Rechnungskennung"
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/files.py:232
+msgid "File"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/files.py:393
+msgid "Image"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/json.py:26
+#, fuzzy
+#| msgid "Object"
+msgid "A JSON object"
+msgstr "Objekt"
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/json.py:28
+#, fuzzy
+#| msgid "This address must be valid."
+msgid "Value must be valid JSON."
+msgstr "Diese Adresse muss gültig sein."
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:919
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:921
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1212
+msgid "One-to-one relationship"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1269
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1271
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1319
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: env/lib/python3.11/site-packages/django/forms/boundfield.py:184
+msgid ":?.!"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:298
+#, fuzzy
+#| msgid "phone number"
+msgid "Enter a whole number."
+msgstr "Telefonnummer"
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:467
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1241
+msgid "Enter a valid date."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:490
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1242
+msgid "Enter a valid time."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:517
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:551
+#, fuzzy
+#| msgid "Email validation"
+msgid "Enter a valid duration."
+msgstr "Email validierung"
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:552
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:621
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:622
+msgid "No file was submitted."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:623
+msgid "The submitted file is empty."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:625
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:630
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:694
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:857
+#: env/lib/python3.11/site-packages/django/forms/fields.py:949
+#: env/lib/python3.11/site-packages/django/forms/models.py:1566
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:951
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1070
+#: env/lib/python3.11/site-packages/django/forms/models.py:1564
+msgid "Enter a list of values."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1071
+msgid "Enter a complete value."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1310
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1340
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: env/lib/python3.11/site-packages/django/forms/forms.py:98
+msgid ":"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/forms.py:244
+#: env/lib/python3.11/site-packages/django/forms/forms.py:328
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:63
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:67
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:72
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:484
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:491
+msgid "Order"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:886
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:891
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:898
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:907
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:1338
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:1429
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/models.py:1568
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/utils.py:226
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:463
+msgid "Clear"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:464
+#, fuzzy
+#| msgid "Current activity"
+msgid "Currently"
+msgstr "Aktuelle Veranstaltung"
+
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:465
+#, fuzzy
+#| msgid "change"
+msgid "Change"
+msgstr "bearbeiten"
+
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:794
+msgid "Unknown"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:861
+msgid "yes,no,maybe"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:891
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:908
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:910
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:912
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:914
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:916
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:918
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:73
+msgid "p.m."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:74
+msgid "a.m."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:79
+msgid "PM"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:80
+msgid "AM"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:152
+msgid "midnight"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:154
+msgid "noon"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:13
+msgid "Sunday"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:16
+msgid "Mon"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:18
+msgid "Wed"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
+msgid "Fri"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:21
+msgid "Sat"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:22
+msgid "Sun"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:25
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:26
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:27
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:28
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:29
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:30
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:31
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:32
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:33
+#, fuzzy
+#| msgid "member"
+msgid "September"
 msgstr "Mitglied"
 
-#: apps/wei/templates/wei/bus_detail.html:54
-#: apps/wei/templates/wei/busteam_detail.html:60
-#: apps/wei/templates/wei/weimembership_list.html:31
-msgid "View as PDF"
-msgstr "Als PDF schauen"
-
-#: apps/wei/templates/wei/survey.html:11
-#: apps/wei/templates/wei/survey_closed.html:11
-#: apps/wei/templates/wei/survey_end.html:11 apps/wei/views.py:1028
-#: apps/wei/views.py:1083 apps/wei/views.py:1093
-msgid "Survey WEI"
-msgstr "WEI Umfrage"
-
-#: apps/wei/templates/wei/survey.html:23
-msgid "Next"
-msgstr "Weiter"
-
-#: apps/wei/templates/wei/survey_closed.html:15
-msgid "The inscription for this WEI are now closed."
-msgstr "Die Inschrift für diese WEI ist nun geschlossen."
-
-#: apps/wei/templates/wei/survey_closed.html:19
-msgid "Return to WEI detail"
-msgstr "Zurück zur WEI Detaillen"
-
-#: apps/wei/templates/wei/survey_end.html:15
-msgid "The survey is now ended. Your answers have been saved."
-msgstr "Die Umfrage ist nun beendet. Ihre Antworten wurden gespeichert."
-
-#: apps/wei/templates/wei/weiclub_detail.html:32
-msgid "Register to the WEI! – 1A"
-msgstr "1A Registrieren"
-
-#: apps/wei/templates/wei/weiclub_detail.html:36
-msgid "Register to the WEI! – 2A+"
-msgstr "2A+ Registrieren"
-
-#: apps/wei/templates/wei/weiclub_detail.html:40
-msgid "Update my registration"
-msgstr "Meine Registrierung bearbeiten"
-
-#: apps/wei/templates/wei/weiclub_detail.html:63
-msgid "Members of the WEI"
-msgstr "Mitglied der WEI"
-
-#: apps/wei/templates/wei/weiclub_detail.html:89
-msgid "Unvalidated registrations"
-msgstr "Unvalidierte Registrierungen"
-
-#: apps/wei/templates/wei/weiclub_detail.html:99
-msgid "Attribute buses"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:34
+msgid "October"
 msgstr ""
 
-#: apps/wei/templates/wei/weiclub_list.html:14 apps/wei/views.py:79
-msgid "Create WEI"
-msgstr "Neue WEI"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:35
+#, fuzzy
+#| msgid "member"
+msgid "November"
+msgstr "Mitglied"
 
-#: apps/wei/templates/wei/weiclub_list.html:22
-msgid "WEI listing"
-msgstr "WEI List"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:36
+#, fuzzy
+#| msgid "member"
+msgid "December"
+msgstr "Mitglied"
 
-#: apps/wei/templates/wei/weimembership_form.html:10
-msgid "Review registration"
-msgstr "Registrierung schauen"
-
-#: apps/wei/templates/wei/weimembership_form.html:35
-msgid "ENS year"
-msgstr "ENS Jahr"
-
-#: apps/wei/templates/wei/weimembership_form.html:76
-msgid "Payment from Société générale"
-msgstr "Kredit von der Société générale"
-
-#: apps/wei/templates/wei/weimembership_form.html:80
-msgid "Suggested bus from the survey:"
-msgstr "Vorgeschlagener Bus aus der Umfrage:"
-
-#: apps/wei/templates/wei/weimembership_form.html:85
-msgid "Raw survey information"
-msgstr "Rohe Umfrageinformationen"
-
-#: apps/wei/templates/wei/weimembership_form.html:95
-msgid "The algorithm didn't run."
-msgstr "Der Algorithmus wurde nicht ausgeführt."
-
-#: apps/wei/templates/wei/weimembership_form.html:98
-msgid "caution check given"
-msgstr "Vorsichtsprüfung gegeben"
-
-#: apps/wei/templates/wei/weimembership_form.html:105
-msgid "preferred team"
-msgstr "bevorzugtes Team"
-
-#: apps/wei/templates/wei/weimembership_form.html:108
-msgid "preferred roles"
-msgstr "bevorzugte Rollen"
-
-#: apps/wei/templates/wei/weimembership_form.html:115
-#: apps/wei/templates/wei/weiregistration_confirm_delete.html:30
-msgid "Update registration"
-msgstr "Registrierung aktualisieren"
-
-#: apps/wei/templates/wei/weimembership_form.html:131
-msgid "The registration is already validated and can't be unvalidated."
+#: env/lib/python3.11/site-packages/django/utils/dates.py:39
+msgid "jan"
 msgstr ""
-"Die Registrierung ist bereits validiert und kann nicht ungültig gemacht "
-"werden."
 
-#: apps/wei/templates/wei/weimembership_form.html:132
-msgid "The user joined the bus"
-msgstr "Der Benutzer ist dem Bus beigetreten"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:40
+#, fuzzy
+#| msgid "fee"
+msgid "feb"
+msgstr "Preis"
 
-#: apps/wei/templates/wei/weimembership_form.html:133
-msgid "in the team"
-msgstr "In der Team"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:41
+msgid "mar"
+msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:134
-msgid "in no team (staff)"
-msgstr "In keinem Team (staff)"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:42
+msgid "apr"
+msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:134
-msgid "with the following roles:"
-msgstr "mit den folgenden Rollen:"
+#: env/lib/python3.11/site-packages/django/utils/dates.py:43
+msgid "may"
+msgstr ""
 
-#: apps/wei/templates/wei/weimembership_form.html:139
+#: env/lib/python3.11/site-packages/django/utils/dates.py:44
+msgid "jun"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:45
+msgid "jul"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:46
+msgid "aug"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:47
+msgid "sep"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:48
+#, fuzzy
+#| msgid "product"
+msgid "oct"
+msgstr "Produkt"
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:49
+msgid "nov"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:50
+msgid "dec"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:75
+#, fuzzy
+#| msgid "member"
+msgctxt "alt. month"
+msgid "September"
+msgstr "Mitglied"
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:77
+#, fuzzy
+#| msgid "member"
+msgctxt "alt. month"
+msgid "November"
+msgstr "Mitglied"
+
+#: env/lib/python3.11/site-packages/django/utils/dates.py:78
+#, fuzzy
+#| msgid "member"
+msgctxt "alt. month"
+msgid "December"
+msgstr "Mitglied"
+
+#: env/lib/python3.11/site-packages/django/utils/ipv6.py:8
+#, fuzzy
+#| msgid "This activity is not validated yet."
+msgid "This is not a valid IPv6 address."
+msgstr "Diese Veranstaltung ist noch nicht bestätigt."
+
+#: env/lib/python3.11/site-packages/django/utils/text.py:84
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/text.py:269
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: env/lib/python3.11/site-packages/django/utils/text.py:288
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:135
+msgid ", "
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:111
+msgid "Forbidden"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:112
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:116
 msgid ""
-"The WEI will be paid by Société générale. The membership will be created "
-"even if the bank didn't pay the BDE yet. The membership transaction will be "
-"created but will be invalid. You will have to validate it once the bank "
-"validated the creation of the account, or to change the payment method."
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
 msgstr ""
-"Das WEI wird von der Société générale bezahlt. Die Mitgliedschaft wird auch "
-"dann erstellt, wenn die Bank die BDE noch nicht bezahlt hat. Die "
-"Mitgliedschaftstransaktion wird erstellt, ist jedoch ungültig. Sie müssen es "
-"validieren, sobald die Bank die Erstellung des Kontos validiert hat, oder "
-"die Zahlungsmethode ändern."
 
-#: apps/wei/templates/wei/weimembership_form.html:149
+#: env/lib/python3.11/site-packages/django/views/csrf.py:122
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:127
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:136
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:142
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/csrf.py:148
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:44
+#, fuzzy
+#| msgid "No reason specified"
+msgid "No year specified"
+msgstr "Kein Grund gegeben"
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:64
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:115
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:214
+msgid "Date out of range"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:94
+#, fuzzy
+#| msgid "No reason specified"
+msgid "No month specified"
+msgstr "Kein Grund gegeben"
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:147
+#, fuzzy
+#| msgid "No reason specified"
+msgid "No day specified"
+msgstr "Kein Grund gegeben"
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:194
+#, fuzzy
+#| msgid "No reason specified"
+msgid "No week specified"
+msgstr "Kein Grund gegeben"
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:349
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:380
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:652
 #, python-format
 msgid ""
-"The note don't have enough money (%(balance)s, %(pretty_fee)s required). The "
-"registration may fail if you don't credit the note now."
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
 msgstr ""
-"Die Note hat nicht genug Geld (%(balance)s,%(pretty_fee)s erforderlich). Die "
-"Registrierung kann fehlschlagen, wenn Sie die Note jetzt nicht gutschreiben."
 
-#: apps/wei/templates/wei/weimembership_form.html:157
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:692
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:169
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/static.py:38
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/static.py:40
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/static.py:79
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:7
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:220
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:206
 #, python-format
 msgid ""
-"The note has enough money (%(pretty_fee)s required), the registration is "
-"possible."
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
-"Die Note hat genug Geld (%(pretty_fee)s erforderlich), die Registrierung ist "
-"möglich."
 
-#: apps/wei/templates/wei/weimembership_form.html:166
-msgid "The user didn't give her/his caution check."
-msgstr "Der User hat nicht sein Vorsichtsprüfung gegeben."
-
-#: apps/wei/templates/wei/weimembership_form.html:174
-msgid ""
-"This user is not a member of the Kfet club for the coming year. The "
-"membership will be processed automatically, the WEI registration includes "
-"the membership fee."
-msgstr ""
-"Dieser Benutzer ist für das kommende Jahr kein Mitglied des Kfet-Clubs. Die "
-"Mitgliedschaft wird automatisch bearbeitet, die WEI-Registrierung beinhaltet "
-"den Mitgliedsbeitrag."
-
-#: apps/wei/templates/wei/weimembership_list.html:27
-msgid "View unvalidated registrations..."
-msgstr "Nicht validierte Registrierungen anzeigen ..."
-
-#: apps/wei/templates/wei/weiregistration_confirm_delete.html:16
-msgid "This registration is already validated and can't be deleted."
-msgstr ""
-"Diese Registrierung ist bereits validiert und kann nicht gelöscht werden."
-
-#: apps/wei/templates/wei/weiregistration_confirm_delete.html:23
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:221
 #, python-format
 msgid ""
-"Are you sure you want to delete the registration of %(user)s for the WEI "
-"%(wei_name)s? This action can't be undone."
-msgstr ""
-"Möchten Sie die Registrierung von %(user)s für die WEI %(wei_name)s wirklich "
-"löschen? Diese Aktion kann nicht rückgängig gemacht werden."
-
-#: apps/wei/templates/wei/weiregistration_list.html:19
-msgid "There is no pre-registration found with this pattern."
-msgstr "Bei diesem Muster wurde keine Vorregistrierung gefunden."
-
-#: apps/wei/templates/wei/weiregistration_list.html:27
-msgid "View validated memberships..."
-msgstr "Validierte Mitgliedschaften anzeigen ..."
-
-#: apps/wei/views.py:58
-msgid "Search WEI"
-msgstr "WEI finden"
-
-#: apps/wei/views.py:109
-msgid "WEI Detail"
-msgstr "WEI Infos"
-
-#: apps/wei/views.py:208
-msgid "View members of the WEI"
-msgstr "Mitglied der WEI schauen"
-
-#: apps/wei/views.py:236
-msgid "Find WEI Membership"
-msgstr "WEI Mitgliedschaft finden"
-
-#: apps/wei/views.py:246
-msgid "View registrations to the WEI"
-msgstr "Mitglied der WEI schauen"
-
-#: apps/wei/views.py:270
-msgid "Find WEI Registration"
-msgstr "WEI Registrierung finden"
-
-#: apps/wei/views.py:281
-msgid "Update the WEI"
-msgstr "WEI bearbeiten"
-
-#: apps/wei/views.py:302
-msgid "Create new bus"
-msgstr "Neue Bus"
-
-#: apps/wei/views.py:340
-msgid "Update bus"
-msgstr "Bus bearbeiten"
-
-#: apps/wei/views.py:372
-msgid "Manage bus"
-msgstr "Bus ändern"
-
-#: apps/wei/views.py:399
-msgid "Create new team"
-msgstr "Neue Bus Team"
-
-#: apps/wei/views.py:439
-msgid "Update team"
-msgstr "Team bearbeiten"
-
-#: apps/wei/views.py:470
-msgid "Manage WEI team"
-msgstr "WEI Team bearbeiten"
-
-#: apps/wei/views.py:492
-msgid "Register first year student to the WEI"
-msgstr "Registrieren Sie den Erstsemester beim WEI"
-
-#: apps/wei/views.py:550 apps/wei/views.py:649
-msgid "This user is already registered to this WEI."
-msgstr "Dieser Benutzer ist bereits bei dieser WEI registriert."
-
-#: apps/wei/views.py:555
-msgid ""
-"This user can't be in her/his first year since he/she has already "
-"participated to a WEI."
-msgstr ""
-"Dieser Benutzer kann nicht in seinem ersten Jahr sein, da er bereits an "
-"einer WEI teilgenommen hat."
-
-#: apps/wei/views.py:578
-msgid "Register old student to the WEI"
-msgstr "Registrieren Sie einen alten Studenten beim WEI"
-
-#: apps/wei/views.py:633 apps/wei/views.py:721
-msgid "You already opened an account in the Société générale."
-msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
-
-#: apps/wei/views.py:685
-msgid "Update WEI Registration"
-msgstr "WEI Registrierung aktualisieren"
-
-#: apps/wei/views.py:795
-msgid "Delete WEI registration"
-msgstr "WEI Registrierung löschen"
-
-#: apps/wei/views.py:806
-msgid "You don't have the right to delete this WEI registration."
-msgstr "Sie haben nicht das Recht, diese WEI-Registrierung zu löschen."
-
-#: apps/wei/views.py:824
-msgid "Validate WEI registration"
-msgstr "Überprüfen Sie die WEI-Registrierung"
-
-#: apps/wei/views.py:1186
-msgid "Attribute buses to first year members"
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
 msgstr ""
 
-#: apps/wei/views.py:1211
-msgid "Attribute bus"
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:229
+msgid "Django Documentation"
 msgstr ""
 
-#: note_kfet/settings/base.py:172
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:230
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:238
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:239
+msgid "Get started with Django"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:247
+msgid "Django Community"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:248
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:69
+msgid "Confidential"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:70
+msgid "Public"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:79
+msgid "Authorization code"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:80
+msgid "Implicit"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:81
+#, fuzzy
+#| msgid "Reset my password"
+msgid "Resource owner password-based"
+msgstr "Mein Passwort zurücksetzen"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:82
+msgid "Client credentials"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:83
+msgid "OpenID connect hybrid"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:90
+msgid "No OIDC support"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:91
+msgid "RSA with SHA-2 256"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:92
+msgid "HMAC with SHA-2 256"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:107
+msgid "Allowed URIs list, space separated"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:111
+msgid "Allowed Post Logout URIs list, space separated"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:120
+msgid "Hashed on Save. Copy it now if this is a new secret."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:190
+#, python-brace-format
+msgid "Unauthorized redirect scheme: {scheme}"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:194
+#, python-brace-format
+msgid "redirect_uris cannot be empty with grant_type {grant_type}"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:200
+msgid "You must set OIDC_RSA_PRIVATE_KEY to use RSA algorithm"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/models.py:209
+msgid "You cannot use HS256 with public grants or clients"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/oauth2_validators.py:211
+#, fuzzy
+#| msgid "This address must be valid."
+msgid "The access token is invalid."
+msgstr "Diese Adresse muss gültig sein."
+
+#: env/lib/python3.11/site-packages/oauth2_provider/oauth2_validators.py:218
+msgid "The access token has expired."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/oauth2_validators.py:225
+msgid "The access token is valid but does not have enough scope."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:6
+#: note_kfet/templates/oauth2_provider/application_confirm_delete.html:8
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete this invoice? This action can't be undone."
+msgid "Are you sure to delete the application"
+msgstr ""
+"Möchten Sie diese Rechnung wirklich löschen? Diese Aktion kann nicht "
+"rückgängig gemacht werden."
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:12
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:29
+#: note_kfet/templates/oauth2_provider/application_confirm_delete.html:17
+#: note_kfet/templates/oauth2_provider/authorize.html:28
+#, fuzzy
+#| msgid "Balance"
+msgid "Cancel"
+msgstr "Kontostand"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:10
+#: note_kfet/templates/oauth2_provider/application_detail.html:11
+msgid "Client id"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:15
+#: note_kfet/templates/oauth2_provider/application_detail.html:14
+msgid "Client secret"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:20
+#: note_kfet/templates/oauth2_provider/application_detail.html:17
+#, fuzzy
+#| msgid "Credit type"
+msgid "Client type"
+msgstr "Kredittype"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:25
+#: note_kfet/templates/oauth2_provider/application_detail.html:20
+msgid "Authorization Grant Type"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:30
+#: note_kfet/templates/oauth2_provider/application_detail.html:23
+msgid "Redirect Uris"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:36
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:35
+#: note_kfet/templates/oauth2_provider/application_detail.html:37
+#: note_kfet/templates/oauth2_provider/application_form.html:23
+msgid "Go Back"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:9
+#: note_kfet/templates/oauth2_provider/application_form.html:12
+#, fuzzy
+#| msgid "Email validation"
+msgid "Edit application"
+msgstr "Email validierung"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:37
+msgid "Save"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:6
+#: note_kfet/templates/oauth2_provider/application_list.html:7
+msgid "Your applications"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:14
+#: note_kfet/templates/oauth2_provider/application_list.html:30
+#, fuzzy
+#| msgid "location"
+msgid "New Application"
+msgstr "Ort"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/application_registration_form.html:5
+#: note_kfet/templates/oauth2_provider/application_registration_form.html:5
+#, fuzzy
+#| msgid "Registrations"
+msgid "Register a new application"
+msgstr "Anmeldung"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:8
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:30
+#: note_kfet/templates/oauth2_provider/authorize.html:9
+#: note_kfet/templates/oauth2_provider/authorize.html:29
+msgid "Authorize"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:17
+msgid "Application requires the following permissions"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:6
+#: note_kfet/templates/oauth2_provider/authorized-token-delete.html:9
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete this invoice? This action can't be undone."
+msgid "Are you sure you want to delete this token?"
+msgstr ""
+"Möchten Sie diese Rechnung wirklich löschen? Diese Aktion kann nicht "
+"rückgängig gemacht werden."
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:6
+#: note_kfet/templates/oauth2_provider/authorized-tokens.html:7
+#, fuzzy
+#| msgid "Token"
+msgid "Tokens"
+msgstr "Token"
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:11
+msgid "revoke"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:19
+#: note_kfet/templates/oauth2_provider/authorized-tokens.html:22
+#, fuzzy
+#| msgid "There is no closed remittance yet."
+msgid "There are no authorized tokens yet."
+msgstr "Es gibt noch keine geschlossene Überweisung."
+
+#: note_kfet/settings/base.py:173
 msgid "German"
 msgstr "Deutsch"
 
-#: note_kfet/settings/base.py:173
+#: note_kfet/settings/base.py:174
 msgid "English"
 msgstr "English"
 
-#: note_kfet/settings/base.py:174
+#: note_kfet/settings/base.py:175
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: note_kfet/settings/base.py:175
+#: note_kfet/settings/base.py:176
 msgid "French"
 msgstr "Französich"
 
@@ -3303,26 +4001,26 @@ msgstr "Users"
 msgid "Clubs"
 msgstr "Clubs"
 
-#: note_kfet/templates/base.html:113
+#: note_kfet/templates/base.html:107
 msgid "Admin"
 msgstr "Admin"
 
-#: note_kfet/templates/base.html:127
+#: note_kfet/templates/base.html:121
 msgid "My account"
 msgstr "Mein Konto"
 
-#: note_kfet/templates/base.html:130
+#: note_kfet/templates/base.html:124
 msgid "Log out"
 msgstr "Abmelden"
 
-#: note_kfet/templates/base.html:138
+#: note_kfet/templates/base.html:132
 #: note_kfet/templates/registration/signup.html:6
 #: note_kfet/templates/registration/signup.html:11
 #: note_kfet/templates/registration/signup.html:28
 msgid "Sign up"
 msgstr "Registrieren"
 
-#: note_kfet/templates/base.html:145
+#: note_kfet/templates/base.html:139
 #: note_kfet/templates/registration/login.html:6
 #: note_kfet/templates/registration/login.html:15
 #: note_kfet/templates/registration/login.html:38
@@ -3330,13 +4028,7 @@ msgstr "Registrieren"
 msgid "Log in"
 msgstr "Anmelden"
 
-#: note_kfet/templates/base.html:159
-msgid ""
-"You are not a BDE member anymore. Please renew your membership if you want "
-"to use the note."
-msgstr ""
-
-#: note_kfet/templates/base.html:165
+#: note_kfet/templates/base.html:153
 msgid ""
 "Your e-mail address is not validated. Please check your mail inbox and click "
 "on the validation link."
@@ -3345,19 +4037,10 @@ msgstr ""
 "Posteingang und klicken Sie auf den Validierungslink."
 
 #: note_kfet/templates/base.html:171
-msgid ""
-"You declared that you opened a bank account in the Société générale. The "
-"bank did not validate the creation of the account to the BDE, so the "
-"membership and the WEI are not paid yet. This verification procedure may "
-"last a few days. Please make sure that you go to the end of the account "
-"creation."
-msgstr ""
-
-#: note_kfet/templates/base.html:194
 msgid "Contact us"
 msgstr "Kontakt"
 
-#: note_kfet/templates/base.html:196
+#: note_kfet/templates/base.html:173
 msgid "Technical Support"
 msgstr ""
 
@@ -3369,44 +4052,6 @@ msgstr "Suche nach Attributen wie Name…"
 msgid "There is no results."
 msgstr "Es gibt keine Ergebnisse."
 
-#: note_kfet/templates/oauth2_provider/application_confirm_delete.html:8
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete this invoice? This action can't be undone."
-msgid "Are you sure to delete the application"
-msgstr ""
-"Möchten Sie diese Rechnung wirklich löschen? Diese Aktion kann nicht "
-"rückgängig gemacht werden."
-
-#: note_kfet/templates/oauth2_provider/application_confirm_delete.html:17
-#: note_kfet/templates/oauth2_provider/authorize.html:28
-#, fuzzy
-#| msgid "Balance"
-msgid "Cancel"
-msgstr "Kontostand"
-
-#: note_kfet/templates/oauth2_provider/application_detail.html:11
-msgid "Client id"
-msgstr ""
-
-#: note_kfet/templates/oauth2_provider/application_detail.html:14
-msgid "Client secret"
-msgstr ""
-
-#: note_kfet/templates/oauth2_provider/application_detail.html:17
-#, fuzzy
-#| msgid "Credit type"
-msgid "Client type"
-msgstr "Kredittype"
-
-#: note_kfet/templates/oauth2_provider/application_detail.html:20
-msgid "Authorization Grant Type"
-msgstr ""
-
-#: note_kfet/templates/oauth2_provider/application_detail.html:23
-msgid "Redirect Uris"
-msgstr ""
-
 #: note_kfet/templates/oauth2_provider/application_detail.html:29
 #, python-format
 msgid ""
@@ -3415,46 +4060,14 @@ msgid ""
 "that you want to grant for your application."
 msgstr ""
 
-#: note_kfet/templates/oauth2_provider/application_detail.html:37
-#: note_kfet/templates/oauth2_provider/application_form.html:23
-msgid "Go Back"
-msgstr ""
-
-#: note_kfet/templates/oauth2_provider/application_form.html:12
-#, fuzzy
-#| msgid "Email validation"
-msgid "Edit application"
-msgstr "Email validierung"
-
-#: note_kfet/templates/oauth2_provider/application_list.html:7
-msgid "Your applications"
-msgstr ""
-
 #: note_kfet/templates/oauth2_provider/application_list.html:11
 msgid ""
 "You can find on this page the list of the applications that you already "
 "registered."
 msgstr ""
 
-#: note_kfet/templates/oauth2_provider/application_list.html:30
-#, fuzzy
-#| msgid "location"
-msgid "New Application"
-msgstr "Ort"
-
 #: note_kfet/templates/oauth2_provider/application_list.html:31
 msgid "Authorized Tokens"
-msgstr ""
-
-#: note_kfet/templates/oauth2_provider/application_registration_form.html:5
-#, fuzzy
-#| msgid "Registrations"
-msgid "Register a new application"
-msgstr "Anmeldung"
-
-#: note_kfet/templates/oauth2_provider/authorize.html:9
-#: note_kfet/templates/oauth2_provider/authorize.html:29
-msgid "Authorize"
 msgstr ""
 
 #: note_kfet/templates/oauth2_provider/authorize.html:14
@@ -3473,27 +4086,6 @@ msgstr ""
 #: note_kfet/templates/oauth2_provider/authorized-oob.html:21
 msgid "Please return to your application and enter this code:"
 msgstr ""
-
-#: note_kfet/templates/oauth2_provider/authorized-token-delete.html:9
-#, fuzzy
-#| msgid ""
-#| "Are you sure you want to delete this invoice? This action can't be undone."
-msgid "Are you sure you want to delete this token?"
-msgstr ""
-"Möchten Sie diese Rechnung wirklich löschen? Diese Aktion kann nicht "
-"rückgängig gemacht werden."
-
-#: note_kfet/templates/oauth2_provider/authorized-tokens.html:7
-#, fuzzy
-#| msgid "Token"
-msgid "Tokens"
-msgstr "Token"
-
-#: note_kfet/templates/oauth2_provider/authorized-tokens.html:22
-#, fuzzy
-#| msgid "There is no closed remittance yet."
-msgid "There are no authorized tokens yet."
-msgstr "Es gibt noch keine geschlossene Überweisung."
 
 #: note_kfet/templates/registration/logged_out.html:13
 msgid "Thanks for spending some quality time with the Web site today."
@@ -3596,17 +4188,606 @@ msgid "Reset my password"
 msgstr "Mein Passwort zurücksetzen"
 
 #: note_kfet/templates/registration/signup.html:15
+#, fuzzy
+#| msgid ""
+#| "If you already signed up, your registration is taken into account. The "
+#| "BDE must validate your account before your can log in. You have to go to "
+#| "the Kfet and pay the registration fee. You must also validate your email "
+#| "address by following the link you received."
 msgid ""
 "If you already signed up, your registration is taken into account. The BDE "
-"must validate your account before your can log in. You have to go to the "
-"Kfet and pay the registration fee. You must also validate your email address "
-"by following the link you received."
+"must validate your account before your can log in. You have to pay the "
+"registration fee. You must also validate your email address by following the "
+"link you received."
 msgstr ""
 "Wenn Sie sich bereits registriert haben, wird Ihre Registrierung "
 "berücksichtigt. Die BDE muss Ihr Konto validieren, bevor Sie sich anmelden "
 "können. Sie müssen zum Kfet gehen und die Registrierungbeitrag bezahlen. Sie "
 "müssen Ihre E-Mail-Adresse auch überprüfen, indem Sie dem Link folgen, den "
 "Sie erhalten haben."
+
+#~ msgid "Inscription paid by Société Générale"
+#~ msgstr "Mitgliedschaft von der Société Générale bezahlt"
+
+#~ msgid "Check this case if the Société Générale paid the inscription."
+#~ msgstr "Die Société Générale die Mitgliedschaft bezahlt."
+
+#~ msgid "Bank"
+#~ msgstr "Bank"
+
+#~ msgid "Physics (A2)"
+#~ msgstr "Physik (A2)"
+
+#~ msgid "Applied physics (A'2)"
+#~ msgstr "Angewandte Physik (A'2)"
+
+#~ msgid "Chemistry (A''2)"
+#~ msgstr "Chemie (A''2)"
+
+#~ msgid "Biology (A3)"
+#~ msgstr "Biologie (A3)"
+
+#~ msgid "SAPHIRE (B1234)"
+#~ msgstr "SAPHIRE (B1234)"
+
+#~ msgid "Mechanics (B1)"
+#~ msgstr "Mechanik (B1)"
+
+#~ msgid "Civil engineering (B2)"
+#~ msgstr "Bauingenieur (B2)"
+
+#~ msgid "Mechanical engineering (B3)"
+#~ msgstr "Mechanikingenieur (B3)"
+
+#~ msgid "EEA (B4)"
+#~ msgstr "Electrotechnik (B4)"
+
+#~ msgid "Design (C)"
+#~ msgstr "Design (C)"
+
+#~ msgid "Social sciences (D3)"
+#~ msgstr "Sozialwissenschaften (D3)"
+
+#~ msgid "English (E)"
+#~ msgstr "English (E)"
+
+#~ msgid "External (EXT)"
+#~ msgstr "Extern (EXT)"
+
+#~ msgid "Yes (receive them in french)"
+#~ msgstr "Ja (auf Fränzosich)"
+
+#~ msgid "Yes (receive them in english)"
+#~ msgstr "Ja (auf English)"
+
+#, python-format
+#~ msgid ""
+#~ "The user is not a member of the club·s %(clubs)s. An additional fee of "
+#~ "%(pretty_fee)s will be charged to renew automatically the membership in "
+#~ "this/these club·s."
+#~ msgstr ""
+#~ "Dieser User ist noch nicht Mitglied von den Urclub %(clubs)s. Ein extra "
+#~ "Beitrag von %(pretty_fee)s wurde bezahlt um die Mitgliedschaft von dieser/"
+#~ "diesen Club zu erneuern."
+
+#, python-format
+#~ msgid ""
+#~ "This club has parents %(clubs)s. An additional fee of %(pretty_fee)s will "
+#~ "be charged to adhere automatically to this/these club·s."
+#~ msgstr ""
+#~ "Dieses Club hat %(clubs)s als Urclub. Eine extra Beitrag von "
+#~ "%(pretty_fee)s wurde bezahlt um Mitglied von dieser/diesen Club zu werden."
+
+#~ msgid "bank"
+#~ msgstr "Bank"
+
+#~ msgid "Superusers have all rights on everything, to manage the website."
+#~ msgstr "Superuser haben alle Berechtigung, um das Website zu handeln."
+
+#~ msgid "Superusers"
+#~ msgstr "Superusers"
+
+#, fuzzy
+#~| msgid "You already opened an account in the Société générale."
+#~ msgid ""
+#~ "I declare that I opened or I will open soon a bank account in the Société "
+#~ "générale with the BDE partnership."
+#~ msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
+
+#~ msgid "Register to the WEI"
+#~ msgstr "Zu WEI anmelden"
+
+#~ msgid ""
+#~ "Check this case if you want to register to the WEI. If you hesitate, you "
+#~ "will be able to register later, after validating your account in the Kfet."
+#~ msgstr ""
+#~ "Überprüfen Sie diesen Fall, wenn Sie sich beim WEI registrieren möchten. "
+#~ "falls Zweifel, können Sie sich später nach Bestätigung Ihres Kontos im "
+#~ "Kfet registrieren."
+
+#~ msgid "Join Kfet Club"
+#~ msgstr "Kfet Mitglieder werden"
+
+#~ msgid "You must also go to the Kfet to pay your membership."
+#~ msgstr "Sie müssen auch zum Kfet gehen, um Ihre Mitgliedschaft zu bezahlen."
+
+#, fuzzy
+#~| msgid "You already opened an account in the Société générale."
+#~ msgid ""
+#~ "The user declared that he/she opened a bank account in the Société "
+#~ "générale."
+#~ msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
+
+#~ msgid "You must join the BDE."
+#~ msgstr "Sie müssen die BDE beitreten."
+
+#~ msgid "credit transaction"
+#~ msgstr "Kredit Transaktion"
+
+#~ msgid ""
+#~ "This user doesn't have enough money to pay the memberships with its note. "
+#~ "Please ask her/him to credit the note before invalidating this credit."
+#~ msgstr ""
+#~ "Dieser Benutzer hat nicht genug Geld, um die Mitgliedschaften mit seiner "
+#~ "Note zu bezahlen."
+
+#~ msgid "Credits from the Société générale"
+#~ msgstr "Krediten von der Société générale"
+
+#, python-brace-format
+#~ msgid "Soge credit for {user}"
+#~ msgstr "Kredit von der Société générale für {user}"
+
+#~ msgid "List of credits from the Société générale"
+#~ msgstr "Kreditliste von Société générale"
+
+#~ msgid "Manage credits from the Société générale"
+#~ msgstr "Krediten von der Société générale handeln"
+
+#~ msgid "WEI"
+#~ msgstr "WEI"
+
+#~ msgid "bus"
+#~ msgstr "Bus"
+
+#~ msgid ""
+#~ "This choice is not definitive. The WEI organizers are free to attribute "
+#~ "for you a bus and a team, in particular if you are a free eletron."
+#~ msgstr ""
+#~ "Diese Wahl ist nicht endgültig. Den WEI-Organisatoren steht es frei, "
+#~ "Ihnen einen Bus und ein Team zuzuweisen, insbesondere wenn Sie ein freies "
+#~ "Elektron sind."
+
+#~ msgid "Team"
+#~ msgstr "Team"
+
+#~ msgid ""
+#~ "Leave this field empty if you won't be in a team (staff, bus chief, free "
+#~ "electron)"
+#~ msgstr ""
+#~ "Lassen Sie dieses Feld leer, wenn Sie nicht in einem Team sind "
+#~ "(Mitarbeiter, Buschef, freies Elektron)"
+
+#~ msgid "WEI Roles"
+#~ msgstr "WEI Rollen"
+
+#~ msgid "Select the roles that you are interested in."
+#~ msgstr "Wählen Sie die Rollen aus, an denen Sie interessiert sind."
+
+#~ msgid "This team doesn't belong to the given bus."
+#~ msgstr "Dieses Team gehört nicht zum angegebenen Bus."
+
+#~ msgid "Choose a word:"
+#~ msgstr "Wählen Sie ein Wort:"
+
+#~ msgid "year"
+#~ msgstr "Jahr"
+
+#~ msgid "date start"
+#~ msgstr "Anfangsdatum"
+
+#~ msgid "date end"
+#~ msgstr "Abschlussdatum"
+
+#, fuzzy
+#~| msgid "The user joined the bus"
+#~ msgid "seat count in the bus"
+#~ msgstr "Der Benutzer ist dem Bus beigetreten"
+
+#~ msgid "survey information"
+#~ msgstr "Umfrage Infos"
+
+#~ msgid "Information about the survey for new members, encoded in JSON"
+#~ msgstr "Informationen zur Umfrage für neue Mitglieder, codiert in JSON"
+
+#~ msgid "Bus"
+#~ msgstr "Bus"
+
+#~ msgid "Buses"
+#~ msgstr "Buses"
+
+#~ msgid "color"
+#~ msgstr "Farbe"
+
+#~ msgid "The color of the T-Shirt, stored with its number equivalent"
+#~ msgstr "Die Farbe des T-Shirts, gespeichert mit der entsprechenden Nummer"
+
+#~ msgid "Bus team"
+#~ msgstr "Bus Team"
+
+#~ msgid "Bus teams"
+#~ msgstr "Bus Teams"
+
+#~ msgid "WEI Role"
+#~ msgstr "WEI Rolle"
+
+#~ msgid "Credit from Société générale"
+#~ msgstr "Kredit von der Société générale"
+
+#~ msgid "Caution check given"
+#~ msgstr "Caution check given"
+
+#~ msgid "birth date"
+#~ msgstr "Geburtsdatum"
+
+#~ msgid "Male"
+#~ msgstr "Männlich"
+
+#~ msgid "Female"
+#~ msgstr "Weiblich"
+
+#~ msgid "Non binary"
+#~ msgstr "Nicht binär"
+
+#~ msgid "gender"
+#~ msgstr "Geschlecht"
+
+#~ msgid "clothing cut"
+#~ msgstr "Kleidung Schnitt"
+
+#~ msgid "clothing size"
+#~ msgstr "Kleidergröße"
+
+#~ msgid "health issues"
+#~ msgstr "Gesundheitsprobleme"
+
+#~ msgid "emergency contact name"
+#~ msgstr "Notfall-Kontakt"
+
+#~ msgid "emergency contact phone"
+#~ msgstr "Notfallkontakttelefon"
+
+#~ msgid "first year"
+#~ msgstr "Erste Jahr"
+
+#~ msgid "Tells if the user is new in the school."
+#~ msgstr "Gibt an, ob der USer neu in der Schule ist."
+
+#~ msgid "registration information"
+#~ msgstr "Registrierung Detailen"
+
+#~ msgid ""
+#~ "Information about the registration (buses for old members, survey for the "
+#~ "new members), encoded in JSON"
+#~ msgstr ""
+#~ "Informationen zur Registrierung (Busse für alte Mitglieder, Umfrage für "
+#~ "neue Mitglieder), verschlüsselt in JSON"
+
+#~ msgid "WEI User"
+#~ msgstr "WEI User"
+
+#~ msgid "WEI Users"
+#~ msgstr "WEI Users"
+
+#~ msgid "team"
+#~ msgstr "Team"
+
+#~ msgid "WEI registration"
+#~ msgstr "WEI Registrierung"
+
+#~ msgid "WEI membership"
+#~ msgstr "WEI Mitgliedschaft"
+
+#~ msgid "WEI memberships"
+#~ msgstr "WEI Mitgliedschaften"
+
+#, fuzzy
+#~| msgid ""
+#~| "The note has enough money (%(pretty_fee)s required), the registration is "
+#~| "possible."
+#~ msgid "The user has enough money, you can validate the registration."
+#~ msgstr ""
+#~ "Die Note hat genug Geld (%(pretty_fee)s erforderlich), die Registrierung "
+#~ "ist möglich."
+
+#~ msgid "Year"
+#~ msgstr "Jahr"
+
+#~ msgid "preferred bus"
+#~ msgstr "bevorzugter Bus"
+
+#~ msgid "Teams"
+#~ msgstr "Teams"
+
+#~ msgid "Members count"
+#~ msgstr "Anzahl Mitgliedern"
+
+#~ msgid "members"
+#~ msgstr "Mitglieder"
+
+#, fuzzy
+#~| msgid "first year"
+#~ msgid "suggested first year"
+#~ msgstr "Erste Jahr"
+
+#, fuzzy
+#~| msgid "first year"
+#~ msgid "validated first year"
+#~ msgstr "Erste Jahr"
+
+#, fuzzy
+#~| msgid "Unvalidated registrations"
+#~ msgid "validated staff"
+#~ msgstr "Unvalidierte Registrierungen"
+
+#, fuzzy
+#~| msgid "Raw survey information"
+#~ msgid "View raw survey information"
+#~ msgstr "Rohe Umfrageinformationen"
+
+#, fuzzy
+#~| msgid "Buttons list"
+#~ msgid "Back to main list"
+#~ msgstr "Tastenliste"
+
+#~ msgid "WEI fee (paid students)"
+#~ msgstr "WEI Preis (bezahlte Studenten)"
+
+#~ msgid "The BDE membership is included in the WEI registration."
+#~ msgstr "Die BDE-Mitgliedschaft ist in der WEI-Registrierung enthalten."
+
+#~ msgid "WEI fee (unpaid students)"
+#~ msgstr "WEI Preis (unbezahlte Studenten)"
+
+#~ msgid "WEI list"
+#~ msgstr "WEI Liste"
+
+#~ msgid "Register 1A"
+#~ msgstr "1A Registrieren"
+
+#~ msgid "Register 2A+"
+#~ msgstr "2A+ Registrieren"
+
+#~ msgid "Add bus"
+#~ msgstr "Neue Bus"
+
+#~ msgid "View WEI"
+#~ msgstr "WEI schauen"
+
+#~ msgid "Add team"
+#~ msgstr "Neue Team"
+
+#~ msgid "Members"
+#~ msgstr "Mitglied"
+
+#~ msgid "View as PDF"
+#~ msgstr "Als PDF schauen"
+
+#~ msgid "Survey WEI"
+#~ msgstr "WEI Umfrage"
+
+#~ msgid "Next"
+#~ msgstr "Weiter"
+
+#~ msgid "The inscription for this WEI are now closed."
+#~ msgstr "Die Inschrift für diese WEI ist nun geschlossen."
+
+#~ msgid "Return to WEI detail"
+#~ msgstr "Zurück zur WEI Detaillen"
+
+#~ msgid "The survey is now ended. Your answers have been saved."
+#~ msgstr "Die Umfrage ist nun beendet. Ihre Antworten wurden gespeichert."
+
+#~ msgid "Register to the WEI! – 1A"
+#~ msgstr "1A Registrieren"
+
+#~ msgid "Register to the WEI! – 2A+"
+#~ msgstr "2A+ Registrieren"
+
+#~ msgid "Update my registration"
+#~ msgstr "Meine Registrierung bearbeiten"
+
+#~ msgid "Members of the WEI"
+#~ msgstr "Mitglied der WEI"
+
+#~ msgid "Unvalidated registrations"
+#~ msgstr "Unvalidierte Registrierungen"
+
+#~ msgid "Create WEI"
+#~ msgstr "Neue WEI"
+
+#~ msgid "WEI listing"
+#~ msgstr "WEI List"
+
+#~ msgid "Review registration"
+#~ msgstr "Registrierung schauen"
+
+#~ msgid "ENS year"
+#~ msgstr "ENS Jahr"
+
+#~ msgid "Payment from Société générale"
+#~ msgstr "Kredit von der Société générale"
+
+#~ msgid "Suggested bus from the survey:"
+#~ msgstr "Vorgeschlagener Bus aus der Umfrage:"
+
+#~ msgid "Raw survey information"
+#~ msgstr "Rohe Umfrageinformationen"
+
+#~ msgid "The algorithm didn't run."
+#~ msgstr "Der Algorithmus wurde nicht ausgeführt."
+
+#~ msgid "caution check given"
+#~ msgstr "Vorsichtsprüfung gegeben"
+
+#~ msgid "preferred team"
+#~ msgstr "bevorzugtes Team"
+
+#~ msgid "preferred roles"
+#~ msgstr "bevorzugte Rollen"
+
+#~ msgid "Update registration"
+#~ msgstr "Registrierung aktualisieren"
+
+#~ msgid "The registration is already validated and can't be unvalidated."
+#~ msgstr ""
+#~ "Die Registrierung ist bereits validiert und kann nicht ungültig gemacht "
+#~ "werden."
+
+#~ msgid "The user joined the bus"
+#~ msgstr "Der Benutzer ist dem Bus beigetreten"
+
+#~ msgid "in the team"
+#~ msgstr "In der Team"
+
+#~ msgid "in no team (staff)"
+#~ msgstr "In keinem Team (staff)"
+
+#~ msgid "with the following roles:"
+#~ msgstr "mit den folgenden Rollen:"
+
+#~ msgid ""
+#~ "The WEI will be paid by Société générale. The membership will be created "
+#~ "even if the bank didn't pay the BDE yet. The membership transaction will "
+#~ "be created but will be invalid. You will have to validate it once the "
+#~ "bank validated the creation of the account, or to change the payment "
+#~ "method."
+#~ msgstr ""
+#~ "Das WEI wird von der Société générale bezahlt. Die Mitgliedschaft wird "
+#~ "auch dann erstellt, wenn die Bank die BDE noch nicht bezahlt hat. Die "
+#~ "Mitgliedschaftstransaktion wird erstellt, ist jedoch ungültig. Sie müssen "
+#~ "es validieren, sobald die Bank die Erstellung des Kontos validiert hat, "
+#~ "oder die Zahlungsmethode ändern."
+
+#, python-format
+#~ msgid ""
+#~ "The note don't have enough money (%(balance)s, %(pretty_fee)s required). "
+#~ "The registration may fail if you don't credit the note now."
+#~ msgstr ""
+#~ "Die Note hat nicht genug Geld (%(balance)s,%(pretty_fee)s erforderlich). "
+#~ "Die Registrierung kann fehlschlagen, wenn Sie die Note jetzt nicht "
+#~ "gutschreiben."
+
+#, python-format
+#~ msgid ""
+#~ "The note has enough money (%(pretty_fee)s required), the registration is "
+#~ "possible."
+#~ msgstr ""
+#~ "Die Note hat genug Geld (%(pretty_fee)s erforderlich), die Registrierung "
+#~ "ist möglich."
+
+#~ msgid "The user didn't give her/his caution check."
+#~ msgstr "Der User hat nicht sein Vorsichtsprüfung gegeben."
+
+#~ msgid ""
+#~ "This user is not a member of the Kfet club for the coming year. The "
+#~ "membership will be processed automatically, the WEI registration includes "
+#~ "the membership fee."
+#~ msgstr ""
+#~ "Dieser Benutzer ist für das kommende Jahr kein Mitglied des Kfet-Clubs. "
+#~ "Die Mitgliedschaft wird automatisch bearbeitet, die WEI-Registrierung "
+#~ "beinhaltet den Mitgliedsbeitrag."
+
+#~ msgid "View unvalidated registrations..."
+#~ msgstr "Nicht validierte Registrierungen anzeigen ..."
+
+#~ msgid "This registration is already validated and can't be deleted."
+#~ msgstr ""
+#~ "Diese Registrierung ist bereits validiert und kann nicht gelöscht werden."
+
+#, python-format
+#~ msgid ""
+#~ "Are you sure you want to delete the registration of %(user)s for the WEI "
+#~ "%(wei_name)s? This action can't be undone."
+#~ msgstr ""
+#~ "Möchten Sie die Registrierung von %(user)s für die WEI %(wei_name)s "
+#~ "wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+
+#~ msgid "There is no pre-registration found with this pattern."
+#~ msgstr "Bei diesem Muster wurde keine Vorregistrierung gefunden."
+
+#~ msgid "View validated memberships..."
+#~ msgstr "Validierte Mitgliedschaften anzeigen ..."
+
+#~ msgid "Search WEI"
+#~ msgstr "WEI finden"
+
+#~ msgid "WEI Detail"
+#~ msgstr "WEI Infos"
+
+#~ msgid "View members of the WEI"
+#~ msgstr "Mitglied der WEI schauen"
+
+#~ msgid "Find WEI Membership"
+#~ msgstr "WEI Mitgliedschaft finden"
+
+#~ msgid "View registrations to the WEI"
+#~ msgstr "Mitglied der WEI schauen"
+
+#~ msgid "Find WEI Registration"
+#~ msgstr "WEI Registrierung finden"
+
+#~ msgid "Update the WEI"
+#~ msgstr "WEI bearbeiten"
+
+#~ msgid "Create new bus"
+#~ msgstr "Neue Bus"
+
+#~ msgid "Update bus"
+#~ msgstr "Bus bearbeiten"
+
+#~ msgid "Manage bus"
+#~ msgstr "Bus ändern"
+
+#~ msgid "Create new team"
+#~ msgstr "Neue Bus Team"
+
+#~ msgid "Update team"
+#~ msgstr "Team bearbeiten"
+
+#~ msgid "Manage WEI team"
+#~ msgstr "WEI Team bearbeiten"
+
+#~ msgid "Register first year student to the WEI"
+#~ msgstr "Registrieren Sie den Erstsemester beim WEI"
+
+#~ msgid "This user is already registered to this WEI."
+#~ msgstr "Dieser Benutzer ist bereits bei dieser WEI registriert."
+
+#~ msgid ""
+#~ "This user can't be in her/his first year since he/she has already "
+#~ "participated to a WEI."
+#~ msgstr ""
+#~ "Dieser Benutzer kann nicht in seinem ersten Jahr sein, da er bereits an "
+#~ "einer WEI teilgenommen hat."
+
+#~ msgid "Register old student to the WEI"
+#~ msgstr "Registrieren Sie einen alten Studenten beim WEI"
+
+#~ msgid "You already opened an account in the Société générale."
+#~ msgstr "Sie haben bereits ein Konto in der Société générale eröffnet."
+
+#~ msgid "Update WEI Registration"
+#~ msgstr "WEI Registrierung aktualisieren"
+
+#~ msgid "Delete WEI registration"
+#~ msgstr "WEI Registrierung löschen"
+
+#~ msgid "You don't have the right to delete this WEI registration."
+#~ msgstr "Sie haben nicht das Recht, diese WEI-Registrierung zu löschen."
+
+#~ msgid "Validate WEI registration"
+#~ msgstr "Überprüfen Sie die WEI-Registrierung"
 
 #~ msgid "This user didn't give her/his caution check."
 #~ msgstr "Dieser User hat seine / ihre Vorsicht nicht überprüft."
