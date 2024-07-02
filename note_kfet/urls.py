@@ -31,7 +31,7 @@ urlpatterns = [
     path('permission/', include('permission.urls')),
 
     # Make coffee
-    path('coffee/', include('django_htcpcp_tea.urls')),
+    #path('coffee/', include('django_htcpcp_tea.urls')),
 ]
 
 # During development, serve static and media files

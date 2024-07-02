@@ -16,3 +16,4 @@ python-memcached
 phonenumbers
 Pillow
 crispy_bootstrap4
+bootstrap4
