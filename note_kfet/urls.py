@@ -3,12 +3,14 @@
 
 from django.conf import settings
 from django.conf.urls.static import static
+import django.contrib.auth.views
 from django.urls import path, include
 from django.views.defaults import bad_request, permission_denied, page_not_found, server_error
-from member.views import CustomLoginView
+from member.views import CustomLoginView, logout_view
 
 from .admin import admin_site
 from .views import IndexView
+
 
 urlpatterns = [
     # Dev so redirect to something random
@@ -26,6 +28,7 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin_site.urls, name="admin"),
     path('accounts/login/', CustomLoginView.as_view()),
+    path('accounts/logout/', logout_view),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
     path('permission/', include('permission.urls')),
@@ -46,12 +49,6 @@ if "cas_server" in settings.INSTALLED_APPS:
     urlpatterns.append(
         path('cas/', include('cas_server.urls', namespace='cas_server'))
     )
-
-if "debug_toolbar" in settings.INSTALLED_APPS:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
 
 
 handler400 = bad_request

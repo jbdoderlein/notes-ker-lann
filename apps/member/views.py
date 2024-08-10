@@ -47,6 +47,9 @@ class CustomLoginView(LoginView):
         self.request.session['permission_mask'] = 42#form.cleaned_data['permission_mask'].rank
         return super().form_valid(form)
 
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 class UserUpdateView(ProtectQuerysetMixin, LoginRequiredMixin, UpdateView):
     """

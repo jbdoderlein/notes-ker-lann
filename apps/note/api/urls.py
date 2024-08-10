@@ -13,7 +13,7 @@ def register_note_urls(router, path):
     router.register(path + '/note', NotePolymorphicViewSet)
     router.register(path + '/alias', AliasViewSet)
     router.register(path + '/trust', TrustViewSet)
-    router.register(path + '/consumer', ConsumerViewSet)
+    router.register(path + '/consumer', ConsumerViewSet,"consumer")
 
     router.register(path + '/transaction/category', TemplateCategoryViewSet)
     router.register(path + '/transaction/transaction', TransactionViewSet)
