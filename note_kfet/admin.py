@@ -33,12 +33,6 @@ if "oauth2_provider" in settings.INSTALLED_APPS:
     admin_site.register(AccessToken, AccessTokenAdmin)
     admin_site.register(RefreshToken, RefreshTokenAdmin)
 
-if "django_htcpcp_tea" in settings.INSTALLED_APPS:
-    from django_htcpcp_tea.admin import *
-    from django_htcpcp_tea.models import *
-    admin_site.register(Pot, PotAdmin)
-    admin_site.register(TeaType, TeaTypeAdmin)
-    admin_site.register(Addition, AdditionAdmin)
 
 if "mailer" in settings.INSTALLED_APPS:
     from mailer.admin import *

@@ -29,9 +29,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
     path('permission/', include('permission.urls')),
-
-    # Make coffee
-    #path('coffee/', include('django_htcpcp_tea.urls')),
 ]
 
 # During development, serve static and media files
