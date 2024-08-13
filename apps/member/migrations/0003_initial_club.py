@@ -49,6 +49,18 @@ def create_initial_club(apps, schema_editor):
         membership_end="2023-09-30",
     )
 
+    Club.objects.get_or_create(
+        id=4,
+        name="Sinfonie",
+        email="tresorerie@sinfonie.com",
+        require_memberships=False,
+        membership_fee_paid=0,
+        membership_fee_unpaid=0,
+        membership_duration=396,
+        membership_start="2022-08-01",
+        membership_end="2023-09-30",
+    )
+
 
     NoteClub.objects.get_or_create(
         id=5,
@@ -88,7 +100,7 @@ def create_initial_club(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('member', '0002_auto_20220817_2253'),
+        ('member', '0002_initial'),
         ('note', '0002_special_note'),
     ]
 

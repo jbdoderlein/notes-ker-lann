@@ -92,3 +92,9 @@ class ValidationForm(forms.Form):
         initial=False,
     )
 
+    join_sinfonie = forms.BooleanField(
+        label=_("Join Sinfonie Club"),
+        required=False,
+        initial=False,
+    )
+

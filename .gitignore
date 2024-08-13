@@ -54,4 +54,3 @@ ansible/host_vars/*.yaml
 !ansible/host_vars/bde*
 ansible/hosts
 
-apps/member/migrations
