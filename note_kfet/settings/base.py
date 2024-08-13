@@ -221,8 +221,9 @@ MEDIA_URL = '/media/'
 EMAIL_BACKEND = 'mailer.backend.DbBackend'
 MAILER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False)
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', True)
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
-EMAIL_PORT = os.getenv('EMAIL_PORT', 25)
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
 EMAIL_HOST_USER = os.getenv('EMAIL_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', None)
 
@@ -235,7 +236,7 @@ DEFAULT_FROM_EMAIL = "NoteKfet2020 <" + SERVER_EMAIL + ">"
 cache_address = os.getenv("CACHE_ADDRESS", "127.0.0.1:11211")
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': cache_address,
     }
 }

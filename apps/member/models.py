@@ -43,7 +43,7 @@ class Profile(models.Model):
 
     section = models.CharField(
         verbose_name=_('section'),
-        help_text=_('e.g. "1A0", "9A♥", "SAPHIRE"'),
+        help_text=_('Auto generated'),
         max_length=255,
         blank=True,
         default="",
@@ -83,26 +83,6 @@ class Profile(models.Model):
         default=False,
     )
 
-    ml_events_registration = models.CharField(
-        blank=True,
-        default='',
-        max_length=2,
-        choices=[
-            ('', _("No")),
-            ('fr', _("Yes")),
-        ],
-        verbose_name=_("Register on the mailing list to stay informed of the events of the campus (1 mail/week)"),
-    )
-
-    ml_sport_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the sport events of the campus (1 mail/week)"),
-    )
-
-    ml_art_registration = models.BooleanField(
-        default=False,
-        verbose_name=_("Register on the mailing list to stay informed of the art events of the campus (1 mail/week)"),
-    )
 
     report_frequency = models.PositiveSmallIntegerField(
         verbose_name=_("report frequency (in days)"),

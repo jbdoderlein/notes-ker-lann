@@ -60,7 +60,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = '__all__'
-        exclude = ('user', 'email_confirmed', 'registration_valid', )
+        exclude = ('user', 'email_confirmed', 'registration_valid', 'section' )
 
 
 class ImageForm(forms.Form):
