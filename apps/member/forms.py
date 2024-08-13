@@ -20,11 +20,11 @@ from .models import Profile, Club, Membership
 
 
 class UserForm(forms.ModelForm):
-    def _get_validation_exclusions(self):
+    def get_validation_exclusions(self):
         # Django usernames can only contain letters, numbers, @, ., +, - and _.
         # We want to allow users to have uncommon and unpractical usernames:
         # That is their problem, and we have normalized aliases for us.
-        return super()._get_validation_exclusions() + ["username"]
+        return super().get_validation_exclusions() + ["username"]
 
     class Meta:
         model = User
