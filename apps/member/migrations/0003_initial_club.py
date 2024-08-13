@@ -77,6 +77,11 @@ def create_initial_club(apps, schema_editor):
         club_id=3,
         polymorphic_ctype_id=polymorphic_ctype_id,
     )
+    NoteClub.objects.get_or_create(
+        id=8,
+        club_id=4,
+        polymorphic_ctype_id=polymorphic_ctype_id,
+    )
 
     Alias.objects.get_or_create(
         id=5,
@@ -95,6 +100,12 @@ def create_initial_club(apps, schema_editor):
         note_id=7,
         name="BDS",
         normalized_name="bds",
+    )
+    Alias.objects.get_or_create(
+        id=8,
+        note_id=8,
+        name="Sinfonie",
+        normalized_name="sinfonie",
     )
 
 
