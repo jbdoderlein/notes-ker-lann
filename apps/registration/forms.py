@@ -10,6 +10,7 @@ from note_kfet.inputs import AmountInput
 
 
 class SignUpForm(UserCreationForm):
+    usable_password = None
     """
     Pre-register users with all information
     """

@@ -41,7 +41,6 @@ class UserCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = self.second_form(self.request.POST if self.request.POST else None)
-        del context["profile_form"].fields["section"]
         del context["profile_form"].fields["report_frequency"]
         del context["profile_form"].fields["last_report"]
 
