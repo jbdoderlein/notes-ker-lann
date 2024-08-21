@@ -3,6 +3,7 @@
 SPDX-License-Identifier: GPL-3.0-or-later
 {% endcomment %}
 {% load i18n perms %}
+{% load qr_code %}
 
 {# Use a fluid-width container #}
 {% block containertype %}container-fluid{% endblock %}
@@ -24,11 +25,14 @@ SPDX-License-Identifier: GPL-3.0-or-later
                 <a href="{% url 'member:user_update_pic' user_object.pk  %}">
                     <img src="{{ user_object.note.display_image.url }}" class="img-thumbnail mt-2">
                 </a>
+                {% qr_from_text user_object.username size="T" %}
                 {% elif club %}
                 <a href="{% url 'member:club_update_pic' club.pk  %}">
                     <img src="{{ club.note.display_image.url }}" class="img-thumbnail mt-2">
                 </a>
+                {% qr_from_text club.name size="T" %}
                 {% endif %}
+                
             </div>
             {% if note.inactivity_reason %}
                 <div class="alert alert-danger polymorphic-add-choice">

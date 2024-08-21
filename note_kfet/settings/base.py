@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'polymorphic',
     'oauth2_provider',
+    'qr_code',
 
     # Django contrib
     # Django Admin will autodiscover our apps for our custom admin site.
