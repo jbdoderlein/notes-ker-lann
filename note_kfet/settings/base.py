@@ -220,8 +220,8 @@ MEDIA_URL = '/media/'
 # Use mailer in production to place emails in a queue before sending them to avoid spam
 EMAIL_BACKEND = 'mailer.backend.DbBackend'
 MAILER_EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False)
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', True)
+EMAIL_USE_SSL = (os.getenv('EMAIL_USE_SSL', "False")=="True")
+EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', "True")=="True")
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.org')
 EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
 EMAIL_HOST_USER = os.getenv('EMAIL_USER', None)

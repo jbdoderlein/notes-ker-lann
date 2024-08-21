@@ -47,6 +47,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
                 <div class="card-body text-center p-2">
                     <span id="user_note"><i class="small">{% trans "Please select a note" %}</i></span>
                 </div>
+                <div id="qrreader"></div>
             </div>
         </div>
 
@@ -162,6 +163,53 @@ SPDX-License-Identifier: GPL-2.0-or-later
 {% endblock %}
 
 {% block extrajavascript %}
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // handle the scanned code as you like, for example:
+            // Add user if exist on sources_notes_display
+            $.getJSON('/api/note/consumer/?format=json&alias=' + decodedText + '&search=user|club',
+                function (consumers) {
+                    if (consumers.count > 0) {
+                        // Add the user to the list of sources
+                        let consumer = consumers.results[0];
+                        disp = {
+                            name: consumer.name,
+                            id: consumer.id,
+                            note: consumer.note,
+                            quantity: 1
+                          }
+                        sources_notes_display.push(disp);
+                        // Display
+                        const note_list = $('#' + 'source_note_list');
+                        let html = ''
+                        sources_notes_display.forEach(function (disp) {
+                        html += li('source_note' + '_' + disp.id,
+                            disp.name +
+                                            '<span class="badge badge-dark badge-pill">' +
+                                            disp.quantity + '</span>',
+                            displayStyle(disp.note))
+                        })
+
+                        // Emitters are displayed
+                        note_list.html(html)
+                    }
+                }
+            );
+            console.log(`Code matched = ${decodedText}`, decodedResult);
+          }
+          
+          function onScanFailure(error) {
+            // handle scan failure, usually better to ignore and keep scanning.
+            // for example:
+            console.warn(`Code scan error = ${error}`);
+          }
+          
+          let html5QrcodeScanner = new Html5QrcodeScanner(
+            "qrreader",
+            { fps: 10, qrbox: {width: 250, height: 250} },
+            /* verbose= */ false);
+          html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
     <script>
         TRANSFER_POLYMORPHIC_CTYPE = {{ polymorphic_ctype }};
         SPECIAL_TRANSFER_POLYMORPHIC_CTYPE = {{ special_polymorphic_ctype }};
