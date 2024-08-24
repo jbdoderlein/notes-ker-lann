@@ -21,6 +21,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
                         <div class="card-body text-center text-break p-2">
                             <span id="user_note"><i class="small">{% trans "Please select a note" %}</i></span>
                         </div>
+                        <div id="qrreader"></div>
                     </div>
                 </div>
 
@@ -159,6 +160,79 @@ SPDX-License-Identifier: GPL-3.0-or-later
 {% endblock %}
 
 {% block extrajavascript %}
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // handle the scanned code as you like, for example:
+            // Add user if exist on sources_notes_display
+            $.getJSON('/api/note/consumer/?format=json&alias=' + decodedText + '&search=user|club',
+                function (consumers) {
+                    if (consumers.count > 0) {
+                        // Add the user to the list of sources
+                        let consumer = consumers.results[0];
+                        // check if already in the list
+                        let found = false;
+                        notes_display.forEach(function (disp) {
+                            if (disp.id === consumer.id) {
+                                disp.quantity += 1;
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            let disp = {
+                                name: consumer.name,
+                                id: consumer.id,
+                                note: consumer.note,
+                                quantity: 1
+                            }
+                            notes_display.push(disp);
+                        }
+                        // Display
+                        const note_list = $('#' + 'note_list');
+                        let html = ''
+                        notes_display.forEach(function (disp) {
+                            html += li('note' + '_' + disp.id,
+                                disp.name +
+                                                '<span class="badge badge-dark badge-pill">' +
+                                                disp.quantity + '</span>',
+                                displayStyle(disp.note))
+                        })
+
+                        // Emitters are displayed
+                        note_list.html(html);
+
+
+                        // Add the hover and click events
+                        notes_display.forEach(function (disp) {
+                            const line_obj = $('#' + 'note' + '_' + disp.id)
+                            // Hover an emitter display also the profile picture
+                            line_obj.hover(function () {
+                              displayNote(disp.note, disp.name, 'user_note', 'profile_pic');
+                            })
+              
+                            // When an emitter is clicked, it is removed
+                            line_obj.click(removeNote(disp, 'note', notes_display, 'note_list', 'user_note', 'profile_pic'))
+                          })
+
+                        // Stop the scanner
+                        html5QrcodeScanner.clear();
+                        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                    }
+                }
+            );
+            console.log(`Code matched = ${decodedText}`, decodedResult);
+        }
+        
+        function onScanFailure(error) {}
+        // check if html5QrcodeScanner is already defined
+        if (typeof html5QrcodeScanner === 'undefined') {
+            var html5QrcodeScanner = null;
+        }
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "qrreader",
+            { fps: 10, qrbox: {width: 200, height: 200} },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
     <script type="text/javascript" src="{% static "note/js/consos.js" %}"></script>
     <script type="text/javascript">
         {% for button in highlighted %}
